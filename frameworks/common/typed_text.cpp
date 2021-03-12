@@ -126,6 +126,9 @@ float TypedText::GetAngleForArcLen(float len,
                                    UITextLanguageDirect direct,
                                    UIArcLabel::TextOrientation orientation)
 {
+    if (radius == 0) {
+        return 0;
+    }
     float realRadius =
         static_cast<float>((orientation == UIArcLabel::TextOrientation::OUTSIDE) ? (radius + height) : radius);
     float angle = static_cast<float>(len * SEMICIRCLE_IN_DEGREE) / (UI_PI * realRadius);
