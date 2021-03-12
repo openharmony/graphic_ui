@@ -138,8 +138,10 @@ void UIBoxProgress::GetBackgroundParam(Point& startPoint, int16_t& width, int16_
     const Style& style)
 {
     Rect rect = GetOrigRect();
-    startPoint.x = rect.GetLeft() + style_->borderWidth_ + style_->paddingLeft_;
-    startPoint.y = rect.GetTop() + style_->borderWidth_ + style_->paddingTop_;
+    // 2: Half of the gap
+    startPoint.x = rect.GetLeft() + style_->borderWidth_ + style_->paddingLeft_ + (GetWidth() - progressWidth_) / 2;
+    // 2: Half of the gap
+    startPoint.y = rect.GetTop() + style_->borderWidth_ + style_->paddingTop_ + (GetHeight() - progressHeight_) / 2;
 
     radius = 0;
     width = progressWidth_;
