@@ -249,6 +249,9 @@ int16_t TypedText::GetTextWidth(const char* text, uint16_t length, int16_t lette
 
 uint8_t TypedText::GetUTF8OneCharacterSize(const char* str)
 {
+    if (str == nullptr) {
+        return 0;
+    }
     if ((str[0] & 0x80) == 0) {
         return 1;
     } else if ((str[0] & 0xE0) == 0xC0) {
