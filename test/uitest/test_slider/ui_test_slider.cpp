@@ -408,13 +408,6 @@ void UITestSlider::UIKit_Slider_Test_SetOnDragCallback_016()
 }
 bool UITestSlider::OnClick(UIView& view, const ClickEvent& event)
 {
-    g_progress = 20; // 20: progress
-    g_step = 0;
-    g_width = 50;   // 50: width
-    g_height = 250; // 250: height
-    g_min = 0;
-    g_max = 100;      // 100: max
-    g_knobWidth = 50; // 50: knobWidth
     if (&view == resetBtn_) {
         slider_->LayoutCenterOfParent();
         g_progress = 20; // 20: progress
