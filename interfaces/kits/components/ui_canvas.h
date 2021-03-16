@@ -38,7 +38,7 @@
 
 #include "common/image.h"
 #include "components/ui_label.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 /**

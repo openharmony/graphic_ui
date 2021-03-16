@@ -15,7 +15,7 @@
 
 #include "common/input_device_manager.h"
 #include "common/task_manager.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 void InputDeviceManager::Init()

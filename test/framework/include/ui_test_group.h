@@ -17,7 +17,7 @@
 #define UI_TEST_GROUP_H
 
 #include "components/ui_view.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 class UITest;

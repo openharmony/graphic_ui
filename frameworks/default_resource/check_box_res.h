@@ -16,8 +16,8 @@
 #ifndef GRAPHIC_LITE_CHECK_BOX_RES_H
 #define GRAPHIC_LITE_CHECK_BOX_RES_H
 
-#include "image_info.h"
-#include "graphic_types.h"
+#include "gfx_utils/image_info.h"
+#include "gfx_utils/graphic_types.h"
 namespace OHOS {
 ImageInfo* GetCheckBoxOnInfo();
 ImageInfo* GetCheckBoxOffInfo();

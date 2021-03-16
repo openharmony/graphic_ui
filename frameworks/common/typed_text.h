@@ -20,7 +20,7 @@
 #ifndef _FONT_TOOL
 #include "components/ui_arc_label.h"
 #include "font/ui_font_header.h"
-#include "geometry2d.h"
+#include "gfx_utils/geometry2d.h"
 #endif
 
 namespace OHOS {

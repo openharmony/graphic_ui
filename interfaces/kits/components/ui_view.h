@@ -36,7 +36,6 @@
 #ifndef GRAPHIC_LITE_UI_VIEW_H
 #define GRAPHIC_LITE_UI_VIEW_H
 
-#include "color.h"
 #include "events/cancel_event.h"
 #include "events/click_event.h"
 #include "events/drag_event.h"
@@ -47,11 +46,12 @@
 #if ENABLE_ROTATE_INPUT
 #include "events/rotate_event.h"
 #endif
-#include "geometry2d.h"
-#include "graphic_log.h"
-#include "heap_base.h"
-#include "style.h"
-#include "transform.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/style.h"
+#include "gfx_utils/transform.h"
 
 namespace OHOS {
 /* Enumerates view types. */

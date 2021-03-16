@@ -35,7 +35,7 @@
 #ifndef GRAPHIC_LITE_SCREEN_H
 #define GRAPHIC_LITE_SCREEN_H
 
-#include "heap_base.h"
+#include "gfx_utils/heap_base.h"
 
 namespace OHOS {
 /**

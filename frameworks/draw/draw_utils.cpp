@@ -14,12 +14,12 @@
  */
 
 #include "draw/draw_utils.h"
-#include "color.h"
 #include "draw/draw_triangle.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
-#include "graphic_log.h"
-#include "graphic_math.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/graphic_math.h"
 #include "graphic_performance.h"
 #include "securec.h"
 

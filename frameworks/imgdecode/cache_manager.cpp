@@ -14,7 +14,7 @@
  */
 
 #include "imgdecode/cache_manager.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 #include "securec.h"
 

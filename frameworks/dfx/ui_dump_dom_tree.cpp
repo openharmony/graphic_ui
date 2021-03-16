@@ -31,8 +31,8 @@
 #include "components/ui_toggle_button.h"
 #include "components/ui_view.h"
 #include "draw/draw_image.h"
-#include "file.h"
-#include "graphic_log.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
 #endif // ENABLE_DEBUG
 namespace OHOS {
 #if ENABLE_DEBUG

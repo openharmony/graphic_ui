@@ -19,12 +19,12 @@
 #include "common/task_manager.h"
 #include "core/render_manager.h"
 #include "dfx/performance_task.h"
-#include "file.h"
 #include "font/ui_font.h"
 #if ENABLE_SHAPING
 #include "font/ui_text_shaping.h"
 #endif
-#include "graphic_log.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 #ifdef VERSION_STANDARD
 #include "dock/ohos/ohos_input_device.h"

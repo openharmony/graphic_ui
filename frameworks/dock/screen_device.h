@@ -16,12 +16,12 @@
 #ifndef GRAPHIC_LITE_SCREEN_DEVICE_H
 #define GRAPHIC_LITE_SCREEN_DEVICE_H
 
-#include "color.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/graphic_assert.h"
+#include "gfx_utils/rect.h"
 #include "graphic_semaphore.h"
-#include "graphic_assert.h"
-#include "rect.h"
 #if ENABLE_WINDOW
-#include "pixel_format_utils.h"
+#include "gfx_utils/pixel_format_utils.h"
 #endif
 
 namespace OHOS {

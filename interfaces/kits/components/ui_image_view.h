@@ -37,7 +37,7 @@
 
 #include "common/image.h"
 #include "components/ui_view.h"
-#include "graphic_types.h"
+#include "gfx_utils/graphic_types.h"
 #ifndef VERSION_LITE
 #include "animator/animator.h"
 #endif

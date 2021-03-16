@@ -18,7 +18,7 @@
 
 #include <cstdint>
 
-#include "list.h"
+#include "gfx_utils/list.h"
 #include "common/task.h"
 
 namespace OHOS {

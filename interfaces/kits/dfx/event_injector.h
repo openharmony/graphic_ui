@@ -37,8 +37,8 @@
 
 #include "graphic_config.h"
 #if ENABLE_DEBUG
-#include "heap_base.h"
-#include "input_event_info.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/input_event_info.h"
 namespace OHOS {
 /**
  * @ Enumerates the event types.

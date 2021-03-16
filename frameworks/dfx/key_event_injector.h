@@ -20,7 +20,7 @@
 #if ENABLE_DEBUG
 #include "dock/key_input_device.h"
 #include "events/key_event.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 class KeyEventInjector : public KeyInputDevice {

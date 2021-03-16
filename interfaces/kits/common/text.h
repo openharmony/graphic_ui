@@ -36,9 +36,9 @@
 #ifndef GRAPHIC_LITE_TEXT_H
 #define GRAPHIC_LITE_TEXT_H
 
-#include "geometry2d.h"
-#include "graphic_types.h"
-#include "style.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_types.h"
+#include "gfx_utils/style.h"
 
 namespace OHOS {
 /**

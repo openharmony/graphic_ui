@@ -16,9 +16,9 @@
 #include "common/typed_text.h"
 #include "font/ui_font.h"
 #include "font/ui_font_adaptor.h"
-#include "graphic_log.h"
-#include "mem_api.h"
-#include "transform.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/mem_api.h"
+#include "gfx_utils/transform.h"
 
 namespace OHOS {
 #ifndef _FONT_TOOL

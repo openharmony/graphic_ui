@@ -17,9 +17,9 @@
 #include "common/screen.h"
 #include "common/typed_text.h"
 #if ENABLE_DEBUG
-#include "graphic_assert.h"
+#include "gfx_utils/graphic_assert.h"
 #endif
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #if ENABLE_WINDOW
 #include "window/window.h"
 #endif

@@ -14,7 +14,7 @@
  */
 
 #include "dock/ohos/ohos_input_device.h"
-#include "input_event_info.h"
+#include "gfx_utils/input_event_info.h"
 #include "iwindows_manager.h"
 
 namespace OHOS {

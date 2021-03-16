@@ -19,7 +19,7 @@
 #include "graphic_config.h"
 #if ENABLE_DEBUG
 #include "dock/pointer_input_device.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 class PointEventInjector : public PointerInputDevice {

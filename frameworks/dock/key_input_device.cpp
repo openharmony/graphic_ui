@@ -15,7 +15,7 @@
 
 #include "dock/key_input_device.h"
 #include "components/root_view.h"
-#include "graphic_math.h"
+#include "gfx_utils/graphic_math.h"
 #include "hal_tick.h"
 
 namespace OHOS {

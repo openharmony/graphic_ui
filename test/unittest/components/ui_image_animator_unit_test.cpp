@@ -17,7 +17,7 @@
 
 #include <climits>
 #include <gtest/gtest.h>
-#include "file.h"
+#include "gfx_utils/file.h"
 #include "test_resource_config.h"
 
 using namespace testing::ext;

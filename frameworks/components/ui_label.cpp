@@ -15,7 +15,7 @@
 
 #include "components/ui_label.h"
 #include "font/ui_font.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "themes/theme_manager.h"
 
 namespace OHOS {

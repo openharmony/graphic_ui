@@ -36,8 +36,8 @@
 #ifndef GRAPHIC_LITE_EVENT_H
 #define GRAPHIC_LITE_EVENT_H
 
-#include "geometry2d.h"
-#include "graphic_types.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_types.h"
 
 namespace OHOS {
 class UIView;
