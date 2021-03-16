@@ -14,7 +14,7 @@
  */
 
 #include "font/glyphs_manager.h"
-#include "file.h"
+#include "gfx_utils/file.h"
 #include "securec.h"
 
 namespace OHOS {

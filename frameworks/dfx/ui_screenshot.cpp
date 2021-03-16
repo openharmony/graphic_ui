@@ -17,12 +17,12 @@
 
 #if ENABLE_DEBUG
 #include "iwindows_manager.h"
-#include "color.h"
 #include "common/screen.h"
 #include "draw/draw_utils.h"
-#include "file.h"
-#include "graphic_log.h"
-#include "image_info.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/image_info.h"
 #include "securec.h"
 
 namespace OHOS {

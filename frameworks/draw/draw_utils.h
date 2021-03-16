@@ -16,13 +16,13 @@
 #ifndef GRAPHIC_LITE_DRAW_UTILS_H
 #define GRAPHIC_LITE_DRAW_UTILS_H
 
-#include "color.h"
+#include "gfx_utils/color.h"
 #include "dock/screen_device_proxy.h"
 #include "common/text.h"
-#include "geometry2d.h"
-#include "graphic_types.h"
-#include "style.h"
-#include "transform.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_types.h"
+#include "gfx_utils/style.h"
+#include "gfx_utils/transform.h"
 
 namespace OHOS {
 #define SWAP_INT16(x, y)    \

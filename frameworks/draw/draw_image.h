@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "components/ui_view.h"
 #include "draw_utils.h"
-#include "geometry2d.h"
+#include "gfx_utils/geometry2d.h"
 
 namespace OHOS {
 class CacheEntry;

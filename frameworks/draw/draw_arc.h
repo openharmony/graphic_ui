@@ -18,10 +18,10 @@
 #include "common/image.h"
 #include "draw_image.h"
 #include "draw_utils.h"
-#include "graphic_math.h"
-#include "heap_base.h"
+#include "gfx_utils/graphic_math.h"
+#include "gfx_utils/heap_base.h"
 #include "imgdecode/cache_manager.h"
-#include "style.h"
+#include "gfx_utils/style.h"
 
 namespace OHOS {
 struct ArcInfo {

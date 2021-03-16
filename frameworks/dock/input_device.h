@@ -16,8 +16,8 @@
 #ifndef GRAPHIC_LITE_INPUT_DEVICE_H
 #define GRAPHIC_LITE_INPUT_DEVICE_H
 
-#include "input_event_info.h"
-#include "heap_base.h"
+#include "gfx_utils/input_event_info.h"
+#include "gfx_utils/heap_base.h"
 
 namespace OHOS {
 /**

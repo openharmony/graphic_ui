@@ -16,9 +16,9 @@
 #include "draw/draw_rect.h"
 #include "draw/draw_arc.h"
 #include "draw/draw_utils.h"
-#include "graphic_log.h"
-#include "graphic_math.h"
-#include "style.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/graphic_math.h"
+#include "gfx_utils/style.h"
 
 namespace OHOS {
 void DrawRect::Draw(const Rect& rect, const Rect& dirtyRect, const Style& style, OpacityType opaScale)

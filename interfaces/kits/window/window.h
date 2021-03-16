@@ -41,7 +41,7 @@
 #ifndef GRAPHIC_LITE_WINDOW_H
 #define GRAPHIC_LITE_WINDOW_H
 
-#include "color.h"
+#include "gfx_utils/color.h"
 #include "components/root_view.h"
 
 namespace OHOS {

@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-#include "file.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/mem_api.h"
 #include "imgdecode/file_img_decoder.h"
 #include "imgdecode/image_load.h"
-#include "mem_api.h"
 
 namespace OHOS {
 RetCode FileImgDecoder::Open(ImgResDsc& dsc)

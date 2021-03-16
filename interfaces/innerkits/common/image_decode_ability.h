@@ -15,7 +15,7 @@
 
 #ifndef GRAPHIC_LITE_IMAGEDECODE_ABILITY_H
 #define GRAPHIC_LITE_IMAGEDECODE_ABILITY_H
-#include "heap_base.h"
+#include "gfx_utils/heap_base.h"
 
 namespace OHOS {
 enum {

@@ -15,8 +15,8 @@
 
 #include "draw/draw_image.h"
 
-#include "color.h"
-#include "graphic_log.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 
 namespace OHOS {

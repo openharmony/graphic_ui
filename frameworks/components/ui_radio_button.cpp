@@ -20,7 +20,7 @@
 #include "draw/draw_arc.h"
 #include "draw/draw_image.h"
 #include "draw/draw_rect.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 #include "securec.h"
 

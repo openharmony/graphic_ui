@@ -36,7 +36,7 @@
 #define GRAPHIC_LITE_UI_DUMP_DOM_TREE_H
 
 #include "graphic_config.h"
-#include "heap_base.h"
+#include "gfx_utils/heap_base.h"
 #if ENABLE_DEBUG
 #include "cJSON.h"
 #include "components/ui_view.h"
