@@ -122,4 +122,6 @@ For details about how to use components and APIs of graphics, see the examples p
 
 [graphic_surface](https://gitee.com/openharmony/graphic_surface/blob/master/README.md)
 
+**graphic_ui**
+
 [graphic_utils](https://gitee.com/openharmony/graphic_utils/blob/master/README.md)

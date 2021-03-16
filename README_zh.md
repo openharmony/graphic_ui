@@ -122,4 +122,6 @@ foundation/graphic/ui/test/uitest中提供了图形所有组件和功能接口�
 
 [graphic_surface](https://gitee.com/openharmony/graphic_surface/blob/master/README_zh.md)
 
+**graphic_ui**
+
 [graphic_utils](https://gitee.com/openharmony/graphic_utils/blob/master/README_zh.md)
