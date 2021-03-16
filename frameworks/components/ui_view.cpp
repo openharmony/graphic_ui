@@ -31,6 +31,9 @@ UIView::UIView()
       needRedraw_(false),
       styleAllocFlag_(false),
       isIntercept_(true),
+#if ENABLE_FOCUS_MANAGER
+      focusable_(false),
+#endif
       opaScale_(OPA_OPAQUE),
       index_(0),
       id_(nullptr),
@@ -42,6 +45,9 @@ UIView::UIView()
       onLongPressListener_(nullptr),
       onDragListener_(nullptr),
       onTouchListener_(nullptr),
+#if ENABLE_FOCUS_MANAGER
+      onFocusListener_(nullptr),
+#endif
 #if ENABLE_ROTATE_INPUT
       onRotateListener_(nullptr),
 #endif
@@ -399,6 +405,22 @@ void UIView::GetTargetView(const Point& point, UIView** current, UIView** target
         *target = this;
     }
 }
+
+#if ENABLE_FOCUS_MANAGER
+void UIView::Focus()
+{
+    if (focusable_ && onFocusListener_ != nullptr) {
+        onFocusListener_->OnFocus(*this);
+    }
+}
+
+void UIView::Blur()
+{
+    if (onFocusListener_ != nullptr) {
+        onFocusListener_->OnBlur(*this);
+    }
+}
+#endif
 
 Rect UIView::GetRect() const
 {

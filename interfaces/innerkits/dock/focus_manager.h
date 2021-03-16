@@ -16,9 +16,23 @@
 #ifndef GRAPHIC_LITE_FOCUS_MANAGER_H
 #define GRAPHIC_LITE_FOCUS_MANAGER_H
 
-#include "components/ui_view.h"
-
+#include "graphic_config.h"
+#if ENABLE_FOCUS_MANAGER
+#include "components/ui_view_group.h"
 namespace OHOS {
+/**
+ * @brief Enumerates focus directions.
+ *
+ * @since 5.0
+ * @version 3.0
+ */
+enum : uint8_t {
+    FOCUS_DIRECTION_RIGHT,
+    FOCUS_DIRECTION_LEFT,
+    FOCUS_DIRECTION_UP,
+    FOCUS_DIRECTION_DOWN,
+};
+
 #if ENABLE_MOTOR
 /**
  * @brief 震动类型.
@@ -41,25 +55,59 @@ typedef void(*MotorFunc)(MotorType motorType);
 
 class FocusManager {
 public:
+    /**
+     * @brief Get the FocusManager's singleton.
+     *
+     * @return FocusManager's singleton.
+     * @since 5.0
+     * @version 3.0
+     */
     static FocusManager* GetInstance()
     {
         static FocusManager instance;
         return &instance;
     }
-    void ClearFocus()
-    {
-        view_ = nullptr;
-    }
 
+    /**
+     * @brief Clear the focus.
+     *
+     * @return Returns <b>true</b> if the operation is successful; returns <b>false</b> otherwise.
+     * @since 5.0
+     * @version 3.0
+     */
+    bool ClearFocus();
+
+    /**
+     * @brief Get the focused view.
+     *
+     * @return the focused view.
+     * @since 5.0
+     * @version 3.0
+     */
     UIView* GetFocusedView()
     {
-        return view_;
+        return focusView_;
     }
 
-    void RequestFocus(UIView* view)
-    {
-        view_ = view;
-    }
+    /**
+     * @brief Request the focus.
+     *
+     * @param view the focus.
+     * @return Returns <b>true</b> if the operation is successful; returns <b>false</b> otherwise.
+     * @since 5.0
+     * @version 3.0
+     */
+    bool RequestFocus(UIView* view);
+
+    /**
+     * @brief Request focus by direction.
+     *
+     * @param direction focus direction.
+     * @return Returns <b>true</b> if the operation is successful; returns <b>false</b> otherwise.
+     * @since 5.0
+     * @version 3.0
+     */
+    bool RequestFocusByDirection(uint8_t direction);
 
 #if ENABLE_MOTOR
     void RegisterMotorFunc(MotorFunc motorFunc)
@@ -74,12 +122,27 @@ public:
 #endif
 
 private:
-    FocusManager() : view_(nullptr) {}
+    FocusManager() : focusView_(nullptr), lastFocusView_(nullptr) {}
     ~FocusManager() {}
-    UIView* view_;
+
+    bool GetNextFocus(UIView* focusedView, UIView*& candidate, uint8_t direction);
+    bool GetNextFocus(UIView* focusedView, UIView*& candidate, UIView* view, uint8_t direction);
+    bool GetNextFocus(UIView* focusedView, UIView*& candidate, UIViewGroup* viewGroup, uint8_t direction);
+    bool IsAtSameCol(const Rect& rect1, const Rect& rect2);
+    bool IsAtSameRow(const Rect& rect1, const Rect& rect2);
+    bool CompareCandidates(UIView* focusedView, UIView*& candidate, UIView* current, uint8_t direction);
+    bool CompareCandidatesByUp(UIView* focusedView, UIView*& candidate, UIView* current);
+    bool CompareCandidatesByDown(UIView* focusedView, UIView*& candidate, UIView* current);
+    bool CompareCandidatesByLeft(UIView* focusedView, UIView*& candidate, UIView* current);
+    bool CompareCandidatesByRight(UIView* focusedView, UIView*& candidate, UIView* current);
+    bool CompareCandidatesDistance(const Rect& focused, const Rect& candidate, const Rect& current);
+
+    UIView* focusView_;
+    UIView* lastFocusView_;
 #if ENABLE_MOTOR
     MotorFunc motorFunc_ = nullptr;
 #endif
 };
 } // namespace OHOS
+#endif
 #endif // GRAPHIC_LITE_FOCUS_MANAGER_H

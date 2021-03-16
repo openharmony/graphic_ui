@@ -35,6 +35,9 @@ UISlider::UISlider()
     } else {
         knobStyle_ = &(StyleDefault::GetSliderKnobStyle());
     }
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
 }
 
 UISlider::~UISlider()

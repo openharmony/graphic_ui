@@ -66,6 +66,7 @@ SOURCES += \
     ../../../../frameworks/components/ui_toggle_button.cpp \
     ../../../../frameworks/components/ui_view.cpp \
     ../../../../frameworks/components/ui_view_group.cpp \
+    ../../../../frameworks/dock/focus_manager.cpp \
     ../../../../frameworks/core/render_manager.cpp \
     ../../../../frameworks/core/task_manager.cpp \
     ../../../../frameworks/default_resource/check_box_res.cpp \

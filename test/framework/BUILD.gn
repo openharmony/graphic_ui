@@ -26,6 +26,7 @@ static_library("framework") {
     "../uitest/test_draw_line/ui_test_draw_line.cpp",
     "../uitest/test_draw_rect/ui_test_draw_rect.cpp",
     "../uitest/test_event_injector/ui_test_event_injector.cpp",
+    "../uitest/test_focus_manager/ui_test_focus_manager.cpp",
     "../uitest/test_font/ui_test_font.cpp",
     "../uitest/test_image/ui_test_image.cpp",
     "../uitest/test_image_animator/ui_test_image_animator.cpp",

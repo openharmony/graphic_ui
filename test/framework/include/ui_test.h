@@ -50,13 +50,13 @@ public:
     virtual ~UITest() {}
 
     /**
-     * @brief Set up display enviroment.
+     * @brief Set up display environment.
      *
      */
     virtual void SetUp() = 0;
 
     /**
-     * @brief Tear down display enviroment.
+     * @brief Tear down display environment.
      *
      */
     virtual void TearDown() = 0;
