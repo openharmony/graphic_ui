@@ -17,19 +17,19 @@
 
 #if ENABLE_DEBUG
 #include "components/root_view.h"
-#include "components/ui_view.h"
+#include "components/ui_abstract_clock.h"
+#include "components/ui_abstract_progress.h"
+#include "components/ui_checkbox.h"
+#include "components/ui_image_view.h"
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
-#include "components/ui_checkbox.h"
-#include "components/ui_toggle_button.h"
-#include "components/ui_image_view.h"
-#include "components/ui_abstract_progress.h"
-#include "components/ui_scroll_view.h"
 #include "components/ui_list.h"
-#include "components/ui_abstract_clock.h"
 #include "components/ui_picker.h"
+#include "components/ui_scroll_view.h"
 #include "components/ui_swipe_view.h"
 #include "components/ui_time_picker.h"
+#include "components/ui_toggle_button.h"
+#include "components/ui_view.h"
 #include "draw/draw_image.h"
 #include "file.h"
 #include "graphic_log.h"
@@ -71,6 +71,100 @@ void UIDumpDomTree::AddImageViewSpecialField(const UIView* view, cJSON* usr) con
     }
 }
 
+void UIDumpDomTree::AddLabelField(const UIView* view, cJSON* usr) const
+{
+    const UILabel* tmpLabel = static_cast<const UILabel*>(view);
+    cJSON_AddStringToObject(usr, "text", tmpLabel->GetText());
+    tmpLabel = nullptr;
+}
+
+void UIDumpDomTree::AddLabelButtonField(const UIView* view, cJSON* usr) const
+{
+    const UILabelButton* tmpLabelButton = static_cast<const UILabelButton*>(view);
+    cJSON_AddStringToObject(usr, "text", tmpLabelButton->GetText());
+    tmpLabelButton = nullptr;
+}
+
+void UIDumpDomTree::AddCheckboxField(const UIView* view, cJSON* usr) const
+{
+    const UICheckBox* tmpCheckBox = static_cast<const UICheckBox*>(view);
+    if (tmpCheckBox->GetState()) {
+        cJSON_AddStringToObject(usr, "state", "UNSELECTED");
+    } else {
+        cJSON_AddStringToObject(usr, "state", "SELECTED");
+    }
+    tmpCheckBox = nullptr;
+}
+
+void UIDumpDomTree::AddToggleButtonField(const UIView* view, cJSON* usr) const
+{
+    const UIToggleButton* tmpToggleButton = static_cast<const UIToggleButton*>(view);
+    cJSON_AddBoolToObject(usr, "state", tmpToggleButton->GetState());
+    tmpToggleButton = nullptr;
+}
+
+void UIDumpDomTree::AddProgressField(const UIView* view, cJSON* usr) const
+{
+    const UIAbstractProgress* tmpAbstractProgress = static_cast<const UIAbstractProgress*>(view);
+    cJSON_AddNumberToObject(usr, "currValue", static_cast<double>(tmpAbstractProgress->GetValue()));
+    cJSON_AddNumberToObject(usr, "rangeMin", static_cast<double>(tmpAbstractProgress->GetRangeMin()));
+    cJSON_AddNumberToObject(usr, "rangeMax", static_cast<double>(tmpAbstractProgress->GetRangeMax()));
+    tmpAbstractProgress = nullptr;
+}
+
+void UIDumpDomTree::AddScrollViewField(const UIView* view, cJSON* usr) const
+{
+    const UIScrollView* tmpScrollView = static_cast<const UIScrollView*>(view);
+    cJSON_AddBoolToObject(usr, "xScrollable", tmpScrollView->GetHorizontalScrollState());
+    cJSON_AddBoolToObject(usr, "yScrollable", tmpScrollView->GetVerticalScrollState());
+    tmpScrollView = nullptr;
+}
+
+void UIDumpDomTree::AddListField(const UIView* view, cJSON* usr) const
+{
+    UIList* tmpList = static_cast<UIList*>(const_cast<UIView*>(view));
+    cJSON_AddBoolToObject(usr, "isLoopList", tmpList->GetLoopState());
+    UIView* selectView = tmpList->GetSelectView();
+    if (selectView != nullptr) {
+        cJSON_AddNumberToObject(usr, "selectedIndex", static_cast<double>(selectView->GetViewIndex()));
+        selectView = nullptr;
+    }
+    tmpList = nullptr;
+}
+
+void UIDumpDomTree::AddClockField(const UIView* view, cJSON* usr) const
+{
+    const UIAbstractClock* tmpAbstractClock = static_cast<const UIAbstractClock*>(view);
+    cJSON_AddNumberToObject(usr, "currentHour", static_cast<double>(tmpAbstractClock->GetCurrentHour()));
+    cJSON_AddNumberToObject(usr, "currentMinute", static_cast<double>(tmpAbstractClock->GetCurrentMinute()));
+    cJSON_AddNumberToObject(usr, "currentSecond", static_cast<double>(tmpAbstractClock->GetCurrentSecond()));
+    tmpAbstractClock = nullptr;
+}
+
+void UIDumpDomTree::AddPickerField(const UIView* view, cJSON* usr) const
+{
+    const UIPicker* tmpPicker = static_cast<const UIPicker*>(view);
+    cJSON_AddNumberToObject(usr, "selectedIndex", static_cast<double>(tmpPicker->GetSelected()));
+    tmpPicker = nullptr;
+}
+
+void UIDumpDomTree::AddSwipeViewField(const UIView* view, cJSON* usr) const
+{
+    const UISwipeView* tmpSwipeView = static_cast<const UISwipeView*>(view);
+    cJSON_AddNumberToObject(usr, "currentIndex", static_cast<double>(tmpSwipeView->GetCurrentPage()));
+    cJSON_AddNumberToObject(usr, "direction", static_cast<double>(tmpSwipeView->GetDirection()));
+    tmpSwipeView = nullptr;
+}
+
+void UIDumpDomTree::AddTimePickerField(const UIView* view, cJSON* usr) const
+{
+    const UITimePicker* tmpTimePicker = static_cast<const UITimePicker*>(view);
+    cJSON_AddStringToObject(usr, "selectedHour", tmpTimePicker->GetSelectHour());
+    cJSON_AddStringToObject(usr, "selectedMinute", tmpTimePicker->GetSelectMinute());
+    cJSON_AddStringToObject(usr, "selectedSecond", tmpTimePicker->GetSelectSecond());
+    tmpTimePicker = nullptr;
+}
+
 void UIDumpDomTree::AddSpecialField(const UIView* view, cJSON* usr) const
 {
     if ((view == nullptr) || (usr == nullptr)) {
@@ -78,98 +172,58 @@ void UIDumpDomTree::AddSpecialField(const UIView* view, cJSON* usr) const
     }
     switch (view->GetViewType()) {
         case UI_LABEL:
-        case UI_ARC_LABEL: {
-            const UILabel* tmpLabel = static_cast<const UILabel*>(view);
-            cJSON_AddStringToObject(usr, "text", tmpLabel->GetText());
-            tmpLabel = nullptr;
+        case UI_ARC_LABEL:
+            AddLabelField(view, usr);
             break;
-        }
-        case UI_LABEL_BUTTON: {
-            const UILabelButton* tmpLabelButton = static_cast<const UILabelButton*>(view);
-            cJSON_AddStringToObject(usr, "text", tmpLabelButton->GetText());
-            tmpLabelButton = nullptr;
+
+        case UI_LABEL_BUTTON:
+            AddLabelButtonField(view, usr);
             break;
-        }
+
         case UI_CHECK_BOX:
-        case UI_RADIO_BUTTON: {
-            const UICheckBox* tmpCheckBox = static_cast<const UICheckBox*>(view);
-            if (tmpCheckBox->GetState()) {
-                cJSON_AddStringToObject(usr, "state", "UNSELECTED");
-            } else {
-                cJSON_AddStringToObject(usr, "state", "SELECTED");
-            }
-            tmpCheckBox = nullptr;
+        case UI_RADIO_BUTTON:
+            AddCheckboxField(view, usr);
             break;
-        }
-        case UI_TOGGLE_BUTTON: {
-            const UIToggleButton* tmpToggleButton = static_cast<const UIToggleButton*>(view);
-            cJSON_AddBoolToObject(usr, "state", tmpToggleButton->GetState());
-            tmpToggleButton = nullptr;
+
+        case UI_TOGGLE_BUTTON:
+            AddToggleButtonField(view, usr);
             break;
-        }
-        case UI_IMAGE_VIEW: {
+        case UI_IMAGE_VIEW:
             AddImageViewSpecialField(view, usr);
             break;
-        }
+
         // case below are all progress, thus has same attr.
         case UI_BOX_PROGRESS:
         case UI_SLIDER:
-        case UI_CIRCLE_PROGRESS: {
-            const UIAbstractProgress* tmpAbstractProgress = static_cast<const UIAbstractProgress*>(view);
-            cJSON_AddNumberToObject(usr, "currValue", static_cast<double>(tmpAbstractProgress->GetValue()));
-            cJSON_AddNumberToObject(usr, "rangeMin", static_cast<double>(tmpAbstractProgress->GetRangeMin()));
-            cJSON_AddNumberToObject(usr, "rangeMax", static_cast<double>(tmpAbstractProgress->GetRangeMax()));
-            tmpAbstractProgress = nullptr;
+        case UI_CIRCLE_PROGRESS:
+            AddProgressField(view, usr);
             break;
-        }
-        case UI_SCROLL_VIEW: {
-            const UIScrollView* tmpScrollView = static_cast<const UIScrollView*>(view);
-            cJSON_AddBoolToObject(usr, "xScrollable", tmpScrollView->GetHorizontalScrollState());
-            cJSON_AddBoolToObject(usr, "yScrollable", tmpScrollView->GetVerticalScrollState());
-            tmpScrollView = nullptr;
+
+        case UI_SCROLL_VIEW:
+            AddScrollViewField(view, usr);
             break;
-        }
-        case UI_LIST: {
-            UIList* tmpList = static_cast<UIList*>(const_cast<UIView*>(view));
-            cJSON_AddBoolToObject(usr, "isLoopList", tmpList->GetLoopState());
-            UIView* selectView = tmpList->GetSelectView();
-            if (selectView != nullptr) {
-                cJSON_AddNumberToObject(usr, "selectedIndex", static_cast<double>(selectView->GetViewIndex()));
-                selectView = nullptr;
-            }
-            tmpList = nullptr;
+
+        case UI_LIST:
+            AddListField(view, usr);
             break;
-        }
+
         case UI_DIGITAL_CLOCK:
-        case UI_ANALOG_CLOCK: {
-            const UIAbstractClock* tmpAbstractClock = static_cast<const UIAbstractClock*>(view);
-            cJSON_AddNumberToObject(usr, "currentHour", static_cast<double>(tmpAbstractClock->GetCurrentHour()));
-            cJSON_AddNumberToObject(usr, "currentMinute", static_cast<double>(tmpAbstractClock->GetCurrentMinute()));
-            cJSON_AddNumberToObject(usr, "currentSecond", static_cast<double>(tmpAbstractClock->GetCurrentSecond()));
-            tmpAbstractClock = nullptr;
+        case UI_ANALOG_CLOCK:
+            AddClockField(view, usr);
             break;
-        }
-        case UI_PICKER: {
-            const UIPicker* tmpPicker = static_cast<const UIPicker*>(view);
-            cJSON_AddNumberToObject(usr, "selectedIndex", static_cast<double>(tmpPicker->GetSelected()));
-            tmpPicker = nullptr;
+
+        case UI_PICKER:
+            AddPickerField(view, usr);
             break;
-        }
-        case UI_SWIPE_VIEW: {
-            const UISwipeView* tmpSwipeView = static_cast<const UISwipeView*>(view);
-            cJSON_AddNumberToObject(usr, "currentIndex", static_cast<double>(tmpSwipeView->GetCurrentPage()));
-            cJSON_AddNumberToObject(usr, "direction", static_cast<double>(tmpSwipeView->GetDirection()));
-            tmpSwipeView = nullptr;
+
+        case UI_SWIPE_VIEW:
+            AddSwipeViewField(view, usr);
             break;
-        }
-        case UI_TIME_PICKER: {
-            const UITimePicker* tmpTimePicker = static_cast<const UITimePicker*>(view);
-            cJSON_AddStringToObject(usr, "selectedHour", tmpTimePicker->GetSelectHour());
-            cJSON_AddStringToObject(usr, "selectedMinute", tmpTimePicker->GetSelectMinute());
-            cJSON_AddStringToObject(usr, "selectedSecond", tmpTimePicker->GetSelectSecond());
-            tmpTimePicker = nullptr;
+
+        case UI_TIME_PICKER:
+            AddTimePickerField(view, usr);
             break;
-        }
+
         default:
             break;
     }
@@ -383,4 +437,4 @@ bool UIDumpDomTree::DumpDomTree(const char* id, const char* path)
     return false;
 #endif // ENABLE_DEBUG
 }
-}
+} // namespace OHOS

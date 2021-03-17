@@ -127,6 +127,17 @@ private:
     void AddNameField(UIViewType type, cJSON* usr) const;
     void AddCommonField(UIView* view, cJSON* usr) const;
     void AddImageViewSpecialField(const UIView* view, cJSON* usr) const;
+    void AddLabelField(const UIView* view, cJSON* usr) const;
+    void AddLabelButtonField(const UIView* view, cJSON* usr) const;
+    void AddCheckboxField(const UIView* view, cJSON* usr) const;
+    void AddToggleButtonField(const UIView* view, cJSON* usr) const;
+    void AddProgressField(const UIView* view, cJSON* usr) const;
+    void AddScrollViewField(const UIView* view, cJSON* usr) const;
+    void AddListField(const UIView* view, cJSON* usr) const;
+    void AddClockField(const UIView* view, cJSON* usr) const;
+    void AddPickerField(const UIView* view, cJSON* usr) const;
+    void AddSwipeViewField(const UIView* view, cJSON* usr) const;
+    void AddTimePickerField(const UIView* view, cJSON* usr) const;
     void AddSpecialField(const UIView* view, cJSON* usr) const;
     void OutputDomNode(UIView* view);
     void OutputDomTree(UIView* view, cJSON* usr);
