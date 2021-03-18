@@ -238,13 +238,15 @@ bool UIPicker::RefreshValues(int16_t start, int16_t end)
     if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_ || ((start == 0) && (end == 0))) {
         return false;
     }
-
+    uint16_t userSelectInndex = static_cast<PickerListScrollListener*>(listListener_)->GetSelectIndex();
     ClearList();
     InitTextAdapter();
     textAdapter_->SetData(start, end);
     maxCount_ = end - start + 1;
     RefreshList();
-    if (setSelectedIndex_) {
+    if (userSelectInndex) {
+        RefreshSelected(userSelectInndex);
+    } else if (setSelectedIndex_) {
         RefreshSelected(setSelectedIndex_);
     }
     return true;
@@ -255,7 +257,7 @@ bool UIPicker::RefreshValues(const char* value[], uint16_t count)
     if (value == nullptr || !isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
         return false;
     }
-
+    uint16_t userSelectInndex = static_cast<PickerListScrollListener*>(listListener_)->GetSelectIndex();
     ClearList();
     for (uint16_t i = 0; i < count; i++) {
         dataList_.PushBack(value[i]);
@@ -264,7 +266,9 @@ bool UIPicker::RefreshValues(const char* value[], uint16_t count)
     textAdapter_->SetData(&dataList_);
     maxCount_ = count;
     RefreshList();
-    if (setSelectedIndex_) {
+    if (userSelectInndex != 0) {
+        RefreshSelected(userSelectInndex);
+    } else if (setSelectedIndex_ != 0) {
         RefreshSelected(setSelectedIndex_);
     }
 
