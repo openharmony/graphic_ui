@@ -223,5 +223,6 @@ void WindowImpl::UpdateHalDisplayBuffer()
     gfxAlloc.width = config_.rect.GetWidth();
     gfxAlloc.height = config_.rect.GetHeight();
     gfxAlloc.pixelFormat = IMAGE_PIXEL_FORMAT_ARGB8888;
+    ScreenDeviceProxy::GetInstance()->SetFramebuffer(gfxAlloc.virAddr, ARGB8888, gfxAlloc.stride / sizeof(uint32_t));
 }
 } // namespace OHOS

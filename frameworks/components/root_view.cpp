@@ -396,8 +396,12 @@ void RootView::AddInvalidateRect(Rect& rect, UIView* view)
             invalidRects[0].Join(invalidRects[0], commonRect);
         }
 #else
-        invalidRect_.Join(invalidRect_, commonRect);
-        renderFlag_ = true;
+        if (!renderFlag_) {
+            invalidRect_ = commonRect;
+            renderFlag_ = true;
+        } else {
+            invalidRect_.Join(invalidRect_, commonRect);
+        }
 #endif
     }
 }
@@ -456,13 +460,16 @@ void RootView::Render()
     pthread_mutex_lock(&lock_);
 #endif
 
+    Rect mask;
 #if LOCAL_RENDER
     if (!invalidateMap_.empty()) {
-        RenderManager::RenderRect(GetRect(), this);
+        mask = GetRect();
+        RenderManager::RenderRect(mask, this);
         invalidateMap_.clear();
 #else
     if (renderFlag_) {
-        RenderManager::RenderRect(invalidRect_, this);
+        mask = invalidRect_;
+        RenderManager::RenderRect(mask, this);
         invalidRect_ = {0, 0, 0, 0};
         renderFlag_ = false;
 #endif
@@ -473,7 +480,7 @@ void RootView::Render()
             boundWindow_->Update();
         }
 #endif
-        ScreenDeviceProxy::GetInstance()->OnRenderFinish();
+        ScreenDeviceProxy::GetInstance()->OnRenderFinish(mask);
     }
 
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__

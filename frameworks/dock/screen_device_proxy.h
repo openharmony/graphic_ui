@@ -46,7 +46,7 @@ public:
 
     void OnFlushReady();
 
-    void OnRenderFinish();
+    void OnRenderFinish(const Rect& mask);
 
     bool HardwareFill(const Rect& fillArea,
                       uint32_t color,
@@ -108,14 +108,12 @@ public:
         }
     }
 
-#if ENABLE_FRAME_BUFFER
     void SetFramebuffer(uint8_t* addr, ColorMode mode, uint16_t width)
     {
         frameBufferAddr_ = addr;
         frameBufferWidth_ = width;
         frameBufferMode_ = mode;
     }
-#endif
 
     void SetAnimatorbuffer(uint8_t* addr, ColorMode mode, uint16_t width)
     {
@@ -160,18 +158,7 @@ public:
         if (useAnimatorBuff_) {
             return animatorBufferWidth_;
         }
-#if ENABLE_FRAME_BUFFER
         return frameBufferWidth_;
-#elif ENABLE_WINDOW
-        return gfxAlloc_.stride / sizeof(ColorType);
-#else
-        return bufferRect_.GetWidth();
-#endif
-    }
-
-    Rect& GetBufferRect()
-    {
-        return bufferRect_;
     }
 
     void SetScreenSize(uint16_t width, uint16_t height);
@@ -208,14 +195,10 @@ private:
     FlushSem flush_ = FlushSem(false);
     uint16_t width_ = HORIZONTAL_RESOLUTION;
     uint16_t height_ = VERTICAL_RESOLUTION;
-    uint8_t* buffer_ = nullptr;
-    Rect bufferRect_;
 
-#if ENABLE_FRAME_BUFFER
     uint8_t* frameBufferAddr_ = nullptr;
     uint16_t frameBufferWidth_ = 0;
     ColorMode frameBufferMode_ = ARGB8888;
-#endif
 
     uint8_t* animatorBufferAddr_ = nullptr;
     uint16_t animatorBufferWidth_ = 0;

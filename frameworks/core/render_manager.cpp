@@ -173,34 +173,12 @@ void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
         mask.Intersect(rect, winRect);
     }
 #endif
-    int32_t bufferHeight = ScreenDeviceProxy::GetInstance()->GetScreenArea() / mask.GetWidth();
-    if (bufferHeight > mask.GetHeight()) {
-        bufferHeight = mask.GetHeight();
-    }
-
-    Rect& bufferRect = ScreenDeviceProxy::GetInstance()->GetBufferRect();
-    bufferRect.SetLeft(mask.GetLeft());
-    bufferRect.SetRight(mask.GetRight());
-
-    int16_t bottom = mask.GetBottom();
-    for (int16_t bufferTop = mask.GetTop(); bufferTop <= bottom; bufferTop += bufferHeight) {
-        bufferRect.SetTop(bufferTop);
-        int16_t bufferBottom = bufferTop + bufferHeight - 1;
-        if (bufferBottom >= bottom) {
-            bufferRect.SetBottom(bottom);
-        } else {
-            bufferRect.SetBottom(bufferBottom);
-        }
 #if LOCAL_RENDER
-        rootView->DrawInvalidMap(bufferRect);
+    rootView->DrawInvalidMap(mask);
 #else
-        UIView* topView = rootView->GetTopUIView(bufferRect);
-        rootView->DrawTop(topView, bufferRect);
+    UIView* topView = rootView->GetTopUIView(mask);
+    rootView->DrawTop(topView, mask);
 #endif
-#if !ENABLE_WINDOW
-        ScreenDeviceProxy::GetInstance()->Flush();
-#endif
-    }
 }
 
 #if ENABLE_WINDOW
