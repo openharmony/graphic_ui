@@ -105,9 +105,10 @@ public:
         return (state_ != UNSELECTED);
     }
 
+protected:
+    void CalculateSize() override;
+
 private:
-    static constexpr int16_t DEFAULT_HOT_WIDTH = 46;
-    static constexpr int16_t DEFAULT_HOT_HEIGHT = 46;
     static constexpr int16_t DEFAULT_WIDTH = 32;
     static constexpr int16_t DEFAULT_CORNER_RADIUS = 11;
     static constexpr int16_t DEAFULT_RADIUS_DIFF = 2;
@@ -116,13 +117,9 @@ private:
     static constexpr uint8_t DEFAULT_BG_GREEN = 113;
     static constexpr uint8_t DEFAULT_BG_BLUE = 255;
 
-    int16_t width_;
-    int16_t height_;
     uint16_t corner_;
     uint16_t radius_;
     int16_t rectWidth_;
-
-    void CalculateSize();
 }; // class UIToggleButton
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_TOGGLE_BUTTON_H

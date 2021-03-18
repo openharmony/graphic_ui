@@ -70,7 +70,8 @@ void UITestBUTTON::UIKit_Check_Box_Test_001() const
         checkbox2->SetPosition(100, 30); // 100: x-coordinate, 30: y-coordinate
 
         UICheckBox* checkbox3 = new UICheckBox();
-        checkbox3->SetPosition(170, 30); // 170: x-coordinate, 30: y-coordinate
+        checkbox3->SetImages("", "");
+        checkbox3->SetPosition(170, 30, 100, 100); // 170: x-coordinate, 30: y-coordinate, 100 : width, 100 : height
 
         container_->Add(checkbox);
         container_->Add(checkbox2);

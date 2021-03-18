@@ -25,8 +25,7 @@
 #include "securec.h"
 
 namespace OHOS {
-UIRadioButton::UIRadioButton() : name_(nullptr), width_(DEFAULT_HOT_WIDTH), height_(DEFAULT_HOT_HEIGHT),
-                                 radiusBig_(DEFAULT_RADIUS_BIG), radiusSmall_(DEFAULT_RADIUS_SMALL),
+UIRadioButton::UIRadioButton() : name_(nullptr), radiusBig_(DEFAULT_RADIUS_BIG), radiusSmall_(DEFAULT_RADIUS_SMALL),
                                  lineWidth_(DEFAULT_LINE_WIDTH)
 {
     image_[UNSELECTED].SetSrc("");
@@ -34,8 +33,7 @@ UIRadioButton::UIRadioButton() : name_(nullptr), width_(DEFAULT_HOT_WIDTH), heig
     Resize(width_, height_);
 }
 
-UIRadioButton::UIRadioButton(const char* name) : name_(nullptr), width_(DEFAULT_HOT_WIDTH),
-                                                 height_(DEFAULT_HOT_HEIGHT), radiusBig_(DEFAULT_RADIUS_BIG),
+UIRadioButton::UIRadioButton(const char* name) : name_(nullptr), radiusBig_(DEFAULT_RADIUS_BIG),
                                                  radiusSmall_(DEFAULT_RADIUS_SMALL), lineWidth_(DEFAULT_LINE_WIDTH)
 {
     SetName(name);

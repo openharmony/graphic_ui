@@ -20,8 +20,7 @@
 #include "imgdecode/cache_manager.h"
 
 namespace OHOS {
-UIToggleButton::UIToggleButton() : width_(DEFAULT_HOT_WIDTH), height_(DEFAULT_HOT_WIDTH),
-                                   corner_(DEFAULT_CORNER_RADIUS), radius_(DEFAULT_CORNER_RADIUS - DEAFULT_RADIUS_DIFF),
+UIToggleButton::UIToggleButton() : corner_(DEFAULT_CORNER_RADIUS), radius_(DEFAULT_CORNER_RADIUS - DEAFULT_RADIUS_DIFF),
                                    rectWidth_(DEFAULT_WIDTH)
 {
     image_[UNSELECTED].SetSrc("");
