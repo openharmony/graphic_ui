@@ -30,6 +30,9 @@ bool MousewheelInput::Read(DeviceData &data)
 }
 void MousewheelInput::MousewheelHandler(QWheelEvent *event)
 {
+    if (event == nullptr) {
+        return;
+    }
     g_rotate += -event->delta() / 120; // 120 : Qt use 120 as one mousewheel step value
 }
 #endif

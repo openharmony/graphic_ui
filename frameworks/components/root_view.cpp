@@ -366,6 +366,7 @@ void RootView::OptimizeInvalidMap()
         OptimizeInvalidView(curview, background[opaStackCount - 1], renderedRects);
         curview = nullptr;
     } while (stackCount > 0);
+    renderedRects.Clear();
 }
 
 void RootView::DrawInvalidMap(const Rect& buffRect)

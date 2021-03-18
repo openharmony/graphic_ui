@@ -161,10 +161,10 @@ static constexpr uint8_t OPACITY_STEP_A4 = 17;
 
 TriangleEdge::TriangleEdge(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-    curX = static_cast<float>(x1);
-    curY = static_cast<float>(y1);
-    du = static_cast<float>(x2 - x1);
-    dv = static_cast<float>(y2 - y1);
+    curX = FO_TRANS_INTEGER_TO_FIXED(x1);
+    curY = FO_TRANS_INTEGER_TO_FIXED(y1);
+    du = FO_TRANS_INTEGER_TO_FIXED(x2 - x1);
+    dv = FO_TRANS_INTEGER_TO_FIXED(y2 - y1);
 }
 
 TriangleEdge::~TriangleEdge() {}
@@ -627,8 +627,8 @@ void DrawUtils::BlendWithSoftWare(const uint8_t* src,
 
 void DrawUtils::GetXAxisErrForJunctionLine(bool ignoreJunctionPoint,
                                            bool isRightPart,
-                                           int32_t& xMinErr,
-                                           int32_t& xMaxErr)
+                                           int16_t& xMinErr,
+                                           int16_t& xMaxErr)
 {
     xMinErr = 0;
     xMaxErr = 0;
@@ -649,34 +649,36 @@ void DrawUtils::GetTransformInitState(const TransformMap& transMap,
     int16_t x = trans.GetLeft();
     int16_t y = trans.GetTop();
 
-    init.duHorizon = transMap.invMatrix_.GetData()[0];
-    init.dvHorizon = transMap.invMatrix_.GetData()[1];
-    init.duVertical = transMap.invMatrix_.GetData()[3]; // 3:RSxy
-    init.dvVertical = transMap.invMatrix_.GetData()[4]; // 4:RSyy
+    init.duHorizon = FO_TRANS_FLOAT_TO_FIXED(transMap.invMatrix_.GetData()[0]);
+    init.dvHorizon = FO_TRANS_FLOAT_TO_FIXED(transMap.invMatrix_.GetData()[1]);
+    init.duVertical = FO_TRANS_FLOAT_TO_FIXED(transMap.invMatrix_.GetData()[3]); // 3:RSxy
+    init.dvVertical = FO_TRANS_FLOAT_TO_FIXED(transMap.invMatrix_.GetData()[4]); // 4:RSyy
 
     init.verticalU = (x - position.x) * init.duHorizon + (y - position.y) * init.duVertical +
-                     transMap.invMatrix_.GetData()[6]; // 6:TRSx
+                     FO_TRANS_FLOAT_TO_FIXED(transMap.invMatrix_.GetData()[6]); // 6:TRSx
     init.verticalV = (x - position.x) * init.dvHorizon + (y - position.y) * init.dvVertical +
-                     transMap.invMatrix_.GetData()[7]; // 7:TRSy
+                     FO_TRANS_FLOAT_TO_FIXED(transMap.invMatrix_.GetData()[7]); // 7:TRSy
 }
 
 inline void DrawUtils::StepToNextLine(TriangleEdge& edge1, TriangleEdge& edge2)
 {
-    edge1.curY++;
-    edge2.curY++;
-    edge1.curX += edge1.du / edge1.dv;
-    edge2.curX += edge2.du / edge2.dv;
+    edge1.curY += FIXED_NUM_1;
+    edge2.curY += FIXED_NUM_1;
+    edge1.curX += FO_DIV(edge1.du, edge1.dv);
+    edge2.curX += FO_DIV(edge2.du, edge2.dv);
 }
 
 void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
 {
-    int32_t maskLeft = in.mask.GetLeft();
-    int32_t maskRight = in.mask.GetRight();
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    int16_t maskLeft = in.mask.GetLeft();
+    int16_t maskRight = in.mask.GetRight();
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
-        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX), maskLeft);
-        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX), maskRight);
-        int16_t diffX = (xMin - static_cast<int32_t>(in.edge1.curX));
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX);
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX);
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+        int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
         in.init.verticalU += in.init.duHorizon * diffX;
         in.init.verticalV += in.init.dvHorizon * diffX;
 #if ENABLE_WINDOW
@@ -687,29 +689,30 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
             (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
              in.bufferPxSize);
 #endif
-        float u = in.init.verticalU;
-        float v = in.init.verticalV;
+        // parameters below are Q15 fixed-point number
+        int32_t u = in.init.verticalU;
+        int32_t v = in.init.verticalV;
+        // parameters above are Q15 fixed-point number
         for (int16_t x = xMin; x <= xMax; x++) {
-            const int16_t intU = static_cast<int16_t>(u);
-            const int16_t intV = static_cast<int16_t>(v);
-            if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
-                const int16_t intUPlus1 = intU + 1;
-                const int16_t intVPlus1 = intV + 1;
+            int16_t intU = FO_TO_INTEGER(u);
+            int16_t intV = FO_TO_INTEGER(v);
+            if ((u >= 0) && (intU < (in.info.header.width - 1)) && (v >= 0) && (intV < (in.info.header.height - 1))) {
+                int16_t intUPlus1 = intU + 1;
+                int16_t intVPlus1 = intV + 1;
                 OpacityType p1 = GetPxAlphaForAlphaImg(in.info, {intU, intV});
                 OpacityType p2 = GetPxAlphaForAlphaImg(in.info, {intUPlus1, intV});
                 OpacityType p3 = GetPxAlphaForAlphaImg(in.info, {intU, intVPlus1});
                 OpacityType p4 = GetPxAlphaForAlphaImg(in.info, {intUPlus1, intVPlus1});
-
-                const float decU = u - intU;
-                const float decV = v - intV;
-                const float decUMinus1 = 1.0f - decU;
-                const float decVMinus1 = 1.0f - decV;
-
-                const int32_t w1 = static_cast<int32_t>(decUMinus1 * decVMinus1 * 256.0f); // 256:shift 8 bit left
-                const int32_t w2 = static_cast<int32_t>(decU * decVMinus1 * 256.0f);       // 256:shift 8 bit left
-                const int32_t w3 = static_cast<int32_t>(decUMinus1 * decV * 256.0f);       // 256:shift 8 bit left
-                const int32_t w4 = static_cast<int32_t>(decU * decV * 256.0f);             // 256:shift 8 bit left
-
+                // parameters below are Q15 fixed-point number
+                int32_t decU = FO_DECIMAL(u);
+                int32_t decV = FO_DECIMAL(v);
+                int32_t decUMinus1 = FIXED_NUM_1 - decU;
+                int32_t decVMinus1 = FIXED_NUM_1 - decV;
+                int32_t w1 = FO_MUL(decUMinus1, decVMinus1);
+                int32_t w2 = FO_MUL(decU, decVMinus1);
+                int32_t w3 = FO_MUL(decUMinus1, decV);
+                int32_t w4 = FO_MUL(decU, decV);
+                // parameters above are Q15 fixed-point number
 #ifndef _LITEOS
                 const int32_t outA = p1 * w1 + p2 * w2 + p3 * w3 + p4 * w4;
 #else
@@ -717,7 +720,7 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
 #endif
                 Color32 result;
                 result.full = Color::ColorTo32(in.color);
-                result.alpha = static_cast<uint8_t>(outA >> 8); // 8:shift 8 bit right
+                result.alpha = FO_TO_INTEGER(outA);
                 COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, in.opaScale);
             }
             u += in.init.duHorizon;
@@ -727,7 +730,7 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
         StepToNextLine(in.edge1, in.edge2);
         in.init.verticalU += in.init.duVertical;
         in.init.verticalV += in.init.dvVertical;
-        int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
+        int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
         in.init.verticalU += in.init.duHorizon * deltaX;
         in.init.verticalV += in.init.dvHorizon * deltaX;
     }
@@ -737,8 +740,8 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
 {
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
-        int16_t xMin = static_cast<int16_t>(in.edge1.curX);
-        int16_t xMax = static_cast<int16_t>(in.edge2.curX);
+        int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
+        int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
 #if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
 #else
@@ -747,12 +750,14 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
             (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
              in.bufferPxSize);
 #endif
-        float u = in.init.verticalU;
-        float v = in.init.verticalV;
+        // parameters below are Q15 fixed-point number
+        int32_t u = in.init.verticalU;
+        int32_t v = in.init.verticalV;
+        // parameters above are Q15 fixed-point number
         for (int16_t x = xMin; x <= xMax; x++) {
-            const int16_t intU = static_cast<int16_t>(u);
-            const int16_t intV = static_cast<int16_t>(v);
-            if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
+            int16_t intU = FO_TO_INTEGER(u);
+            int16_t intV = FO_TO_INTEGER(v);
+            if ((u >= 0) && (intU < (in.info.header.width - 1)) && (v >= 0) && (intV < (in.info.header.height - 1))) {
 #ifndef _LITEOS
                 uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
 #else
@@ -766,15 +771,16 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
                 const Color16 p3 = *(reinterpret_cast<Color16*>(&imgHead[px1 + in.srcLineWidth]));
                 const Color16 p4 = *(reinterpret_cast<Color16*>(&imgHead[px1 + in.srcLineWidth + in.pixelSize]));
 
-                const float decU = u - intU;
-                const float decV = v - intV;
-                const float decUMinus1 = 1 - decU;
-                const float decVMinus1 = 1 - decV;
-
-                const int32_t w1 = static_cast<int32_t>(decUMinus1 * decVMinus1 * 256.0f); // 256:shift 8 bit left
-                const int32_t w2 = static_cast<int32_t>(decU * decVMinus1 * 256.0f);       // 256:shift 8 bit left
-                const int32_t w3 = static_cast<int32_t>(decUMinus1 * decV * 256.0f);       // 256:shift 8 bit left
-                const int32_t w4 = static_cast<int32_t>(decU * decV * 256.0f);             // 256:shift 8 bit left
+                // parameters below are Q15 fixed-point number
+                int32_t decU = FO_DECIMAL(u);
+                int32_t decV = FO_DECIMAL(v);
+                int32_t decUMinus1 = FIXED_NUM_1 - decU;
+                int32_t decVMinus1 = FIXED_NUM_1 - decV;
+                int32_t w1 = FO_MUL(decUMinus1, decVMinus1);
+                int32_t w2 = FO_MUL(decU, decVMinus1);
+                int32_t w3 = FO_MUL(decUMinus1, decV);
+                int32_t w4 = FO_MUL(decU, decV);
+                // parameters above are Q15 fixed-point number
 #ifndef _LITEOS
                 const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
                 const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
@@ -789,9 +795,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
 #endif
 
                 Color16 result;
-                result.red = static_cast<uint8_t>(outR >> 5);   // 5:shift 5 bit right
-                result.green = static_cast<uint8_t>(outG >> 6); // 6:shift 6 bit right
-                result.blue = static_cast<uint8_t>(outB >> 5);  // 5:shift 5 bit right
+                result.red = static_cast<uint8_t>(outR >>15); // 15: shift 15 bit right to convert fixed to int
+                result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
+                result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
                 if (in.opaScale == OPA_OPAQUE) {
                     COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, RGB565);
                 } else {
@@ -805,7 +811,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
         StepToNextLine(in.edge1, in.edge2);
         in.init.verticalU += in.init.duVertical;
         in.init.verticalV += in.init.dvVertical;
-        int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
+        int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
         in.init.verticalU += in.init.duHorizon * deltaX;
         in.init.verticalV += in.init.dvHorizon * deltaX;
     }
@@ -815,8 +821,8 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
 {
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
-        int16_t xMin = static_cast<int16_t>(in.edge1.curX);
-        int16_t xMax = static_cast<int16_t>(in.edge2.curX);
+        int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
+        int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
 #if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
 #else
@@ -825,11 +831,13 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
             (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
              in.bufferPxSize);
 #endif
-        float u = in.init.verticalU;
-        float v = in.init.verticalV;
+        // parameters below are Q15 fixed-point number
+        int32_t u = in.init.verticalU;
+        int32_t v = in.init.verticalV;
+        // parameters above are Q15 fixed-point number
         for (int16_t x = xMin; x <= xMax; x++) {
-            const int16_t intU = static_cast<int16_t>(u);
-            const int16_t intV = static_cast<int16_t>(v);
+            int16_t intU = FO_TO_INTEGER(u);
+            int16_t intV = FO_TO_INTEGER(v);
             if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
 #ifndef _LITEOS
                 uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
@@ -844,15 +852,16 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
                 const Color24 p3 = *(reinterpret_cast<Color24*>(&imgHead[px1 + in.srcLineWidth]));
                 const Color24 p4 = *(reinterpret_cast<Color24*>(&imgHead[px1 + in.srcLineWidth + in.pixelSize]));
 
-                const float decU = u - intU;
-                const float decV = v - intV;
-                const float decUMinus1 = 1 - decU;
-                const float decVMinus1 = 1 - decV;
-
-                const int32_t w1 = static_cast<int32_t>(decUMinus1 * decVMinus1 * 256.0f); // 256:shift 8 bit left
-                const int32_t w2 = static_cast<int32_t>(decU * decVMinus1 * 256.0f);       // 256:shift 8 bit left
-                const int32_t w3 = static_cast<int32_t>(decUMinus1 * decV * 256.0f);       // 256:shift 8 bit left
-                const int32_t w4 = static_cast<int32_t>(decU * decV * 256.0f);             // 256:shift 8 bit left
+                // parameters below are Q15 fixed-point number
+                int32_t decU = FO_DECIMAL(u);
+                int32_t decV = FO_DECIMAL(v);
+                int32_t decUMinus1 = FIXED_NUM_1 - decU;
+                int32_t decVMinus1 = FIXED_NUM_1 - decV;
+                int32_t w1 = FO_MUL(decUMinus1, decVMinus1);
+                int32_t w2 = FO_MUL(decU, decVMinus1);
+                int32_t w3 = FO_MUL(decUMinus1, decV);
+                int32_t w4 = FO_MUL(decU, decV);
+                // parameters above are Q15 fixed-point number
 #ifndef _LITEOS
                 const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
                 const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
@@ -867,9 +876,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
 #endif
 
                 Color24 result;
-                result.red = static_cast<uint8_t>(outR >> 8);   // 8:shift 8 bit right
-                result.green = static_cast<uint8_t>(outG >> 8); // 8:shift 8 bit right
-                result.blue = static_cast<uint8_t>(outB >> 8);  // 8:shift 8 bit right
+                result.red = static_cast<uint8_t>(outR >> 15); // 15: shift 15 bit right to convert fixed to int
+                result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
+                result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
                 if (in.opaScale == OPA_OPAQUE) {
                     COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, RGB888);
                 } else {
@@ -883,7 +892,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
         StepToNextLine(in.edge1, in.edge2);
         in.init.verticalU += in.init.duVertical;
         in.init.verticalV += in.init.dvVertical;
-        int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
+        int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
         in.init.verticalU += in.init.duHorizon * deltaX;
         in.init.verticalV += in.init.dvHorizon * deltaX;
     }
@@ -891,14 +900,16 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
 
 static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                    uint8_t* screenBuffer,
-                                                   int16_t len,
-                                                   float u,
-                                                   float v)
+                                                   int16_t len)
 {
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    // parameters below are Q15 fixed-point number
+    int32_t u = in.init.verticalU;
+    int32_t v = in.init.verticalV;
+    // parameters above are Q15 fixed-point number
     for (int16_t x = 0; x < len; ++x) {
-        const int16_t intU = static_cast<int16_t>(u);
-        const int16_t intV = static_cast<int16_t>(v);
+        int16_t intU = FO_TO_INTEGER(u);
+        int16_t intV = FO_TO_INTEGER(v);
         if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
 #ifndef _LITEOS
             uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
@@ -913,15 +924,17 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
             const ColorType p3 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.srcLineWidth]));
             const ColorType p4 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.srcLineWidth + in.pixelSize]));
 
-            const float decU = u - intU;
-            const float decV = v - intV;
-            const float decUMinus1 = 1 - decU;
-            const float decVMinus1 = 1 - decV;
+            // parameters below are Q15 fixed-point number
+            int32_t decU = FO_DECIMAL(u);
+            int32_t decV = FO_DECIMAL(v);
+            int32_t decUMinus1 = FIXED_NUM_1 - decU;
+            int32_t decVMinus1 = FIXED_NUM_1 - decV;
+            int32_t w1 = FO_MUL(decUMinus1, decVMinus1);
+            int32_t w2 = FO_MUL(decU, decVMinus1);
+            int32_t w3 = FO_MUL(decUMinus1, decV);
+            int32_t w4 = FO_MUL(decU, decV);
+            // parameters above are Q15 fixed-point number
 
-            const int32_t w1 = static_cast<int32_t>(decUMinus1 * decVMinus1 * 256.0f); // 256:shift 8 bit left
-            const int32_t w2 = static_cast<int32_t>(decU * decVMinus1 * 256.0f);       // 256:shift 8 bit left
-            const int32_t w3 = static_cast<int32_t>(decUMinus1 * decV * 256.0f);       // 256:shift 8 bit left
-            const int32_t w4 = static_cast<int32_t>(decU * decV * 256.0f);             // 256:shift 8 bit left
 #ifndef _LITEOS
             const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
             const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
@@ -938,10 +951,10 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
 #endif
 
             Color32 result;
-            result.red = static_cast<uint8_t>(outR >> 8);   // 8:shift 8 bit right
-            result.green = static_cast<uint8_t>(outG >> 8); // 8:shift 8 bit right
-            result.blue = static_cast<uint8_t>(outB >> 8);  // 8:shift 8 bit right
-            result.alpha = static_cast<uint8_t>(outA >> 8); // 8:shift 8 bit right
+            result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
+            result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
+            result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
+            result.alpha = static_cast<uint8_t>(outA >> 15); // 15: shift 15 bit right to convert fixed to int
             if ((in.opaScale == OPA_OPAQUE) && (result.alpha == OPA_OPAQUE)) {
                 COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
             } else {
@@ -962,20 +975,22 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
                                                        float v,
                                                        NeonBlendPipeLine& pipeLine)
 {
-    ColorType arrayp1[NEON_STEP_8] = {0};
-    ColorType arrayp2[NEON_STEP_8] = {0};
-    ColorType arrayp3[NEON_STEP_8] = {0};
-    ColorType arrayp4[NEON_STEP_8] = {0};
+    ColorType arrayp1[NEON_STEP_8] = {};
+    ColorType arrayp2[NEON_STEP_8] = {};
+    ColorType arrayp3[NEON_STEP_8] = {};
+    ColorType arrayp4[NEON_STEP_8] = {};
     float arrayU[NEON_STEP_8] = {0};
     float arrayV[NEON_STEP_8] = {0};
     int32_t arrayPx1[NEON_STEP_8] = {0};
     int16_t step = in.bufferPxSize * NEON_STEP_8;
+    float duHorizon = static_cast<float>(in.init.duHorizon) / FIXED_NUM_1;
+    float dvHorizon = static_cast<float>(in.init.dvHorizon) / FIXED_NUM_1;
     while (len >= NEON_STEP_8) {
         for (uint32_t i = 0; i < NEON_STEP_8; ++i) {
             arrayU[i] = u;
             arrayV[i] = v;
-            u += in.init.duHorizon;
-            v += in.init.dvHorizon;
+            u += duHorizon;
+            v += dvHorizon;
         }
         // Monotonically increasing or decreasing, so only judge the beginning and end.
         if ((arrayU[0] >= 0) && (arrayU[0] < in.info.header.width - 1) &&
@@ -1055,13 +1070,13 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
             vOutA = NeonMulDiv255(vdup_n_u8(in.opaScale), vOutA);
             pipeLine.Invoke(screenBuffer, vOutR, vOutG, vOutB, vOutA);
         } else {
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8, arrayU[0], arrayV[0]);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8);
         }
         screenBuffer += step;
         len -= NEON_STEP_8;
     }
     if (len > 0) {
-        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len, u, v);
+        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len);
     }
 }
 #endif
@@ -1073,20 +1088,21 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
 #endif
     int16_t maskLeft = in.mask.GetLeft();
     int16_t maskRight = in.mask.GetRight();
-    int32_t xMinErr = 0;
-    int32_t xMaxErr = 0;
+    int16_t xMinErr = 0;
+    int16_t xMaxErr = 0;
     GetXAxisErrForJunctionLine(in.ignoreJunctionPoint, in.isRightPart, xMinErr, xMaxErr);
 #ifdef ARM_NEON_OPT
     NeonBlendPipeLine pipeLine;
     pipeLine.Construct(bufferMode, ARGB8888);
 #endif
     for (int16_t y = in.yMin; y <= in.yMax; ++y) {
-        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX + xMinErr), maskLeft);
-        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX + xMaxErr), maskRight);
-        int16_t diffX = (xMin - static_cast<int32_t>(in.edge1.curX));
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX) + xMinErr;
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX) + xMaxErr;
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+        int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
         in.init.verticalU += in.init.duHorizon * diffX;
         in.init.verticalV += in.init.dvHorizon * diffX;
-
 #if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
 #else
@@ -1095,23 +1111,23 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
             (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
              in.bufferPxSize);
 #endif
-        float u = in.init.verticalU;
-        float v = in.init.verticalV;
 #ifdef ARM_NEON_OPT
         {
+            float u = static_cast<float>(in.init.verticalU) / FIXED_NUM_1;
+            float v = static_cast<float>(in.init.verticalV) / FIXED_NUM_1;
             DEBUG_PERFORMANCE_TRACE("DrawTriangleTrueColorBilinear8888_neon");
             DrawTriangleTrueColorBilinear8888InnerNeon(in, screenBuffer, xMax - xMin + 1, u, v, pipeLine);
         }
 #else
         {
             DEBUG_PERFORMANCE_TRACE("DrawTriangleTrueColorBilinear8888");
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, u, v);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1);
         }
 #endif
         StepToNextLine(in.edge1, in.edge2);
         in.init.verticalU += in.init.duVertical;
         in.init.verticalV += in.init.dvVertical;
-        int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
+        int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
         in.init.verticalU += in.init.duHorizon * deltaX;
         in.init.verticalV += in.init.dvHorizon * deltaX;
     }
@@ -1119,16 +1135,18 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
 
 void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
 {
+    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     int16_t maskLeft = in.mask.GetLeft();
     int16_t maskRight = in.mask.GetRight();
-    int32_t xMinErr = 0;
-    int32_t xMaxErr = 0;
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    int16_t xMinErr = 0;
+    int16_t xMaxErr = 0;
     GetXAxisErrForJunctionLine(in.ignoreJunctionPoint, in.isRightPart, xMinErr, xMaxErr);
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
-        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX + xMinErr), maskLeft);
-        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX + xMaxErr), maskRight);
-        int16_t diffX = (xMin - static_cast<int32_t>(in.edge1.curX));
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX) + xMinErr;
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX) + xMaxErr;
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+        int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
         in.init.verticalU += in.init.duHorizon * diffX;
         in.init.verticalV += in.init.dvHorizon * diffX;
 #if ENABLE_WINDOW
@@ -1139,12 +1157,14 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
             (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
              in.bufferPxSize);
 #endif
-        float u = in.init.verticalU;
-        float v = in.init.verticalV;
+        // parameters below are Q15 fixed-point number
+        int32_t u = in.init.verticalU;
+        int32_t v = in.init.verticalV;
+        // parameters above are Q15 fixed-point number
         for (int16_t x = xMin; x <= xMax; x++) {
-            const int16_t intU = static_cast<int16_t>(u);
-            const int16_t intV = static_cast<int16_t>(v);
-            if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
+            int16_t intU = FO_TO_INTEGER(u);
+            int16_t intV = FO_TO_INTEGER(v);
+            if ((u >= 0) && (intU < (in.info.header.width - 1)) && (v >= 0) && (intV < (in.info.header.height - 1))) {
 #ifndef _LITEOS
                 uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
 #else
@@ -1194,7 +1214,7 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
         StepToNextLine(in.edge1, in.edge2);
         in.init.verticalU += in.init.duVertical;
         in.init.verticalV += in.init.dvVertical;
-        int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
+        int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
         in.init.verticalU += in.init.duHorizon * deltaX;
         in.init.verticalV += in.init.dvHorizon * deltaX;
     }
@@ -1202,16 +1222,18 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
 
 void DrawUtils::DrawTriangleTransformPart(const TrianglePartInfo& part)
 {
-    part.edge1.curX += part.edge1.du * (part.yMin - part.edge1.curY) / part.edge1.dv;
-    part.edge1.curY = part.yMin;
-    part.edge2.curX += part.edge2.du * (part.yMin - part.edge2.curY) / part.edge2.dv;
-    part.edge2.curY = part.yMin;
-
+    // parameters below are Q15 fixed-point number
+    int32_t yMin = FO_TRANS_INTEGER_TO_FIXED(part.yMin);
+    part.edge1.curX += (static_cast<int64_t>(part.edge1.du) *  (yMin - part.edge1.curY) / part.edge1.dv);
+    part.edge1.curY = yMin;
+    part.edge2.curX += (static_cast<int64_t>(part.edge2.du) *  (yMin - part.edge2.curY) / part.edge2.dv);
+    part.edge2.curY = yMin;
     Rect line;
-    line.SetLeft(static_cast<int16_t>(part.edge1.curX));
-    line.SetRight(static_cast<int16_t>(part.edge1.curX));
-    line.SetTop(static_cast<int16_t>(part.edge1.curY));
-    line.SetBottom(static_cast<int16_t>(part.edge1.curY));
+    line.SetLeft(FO_TO_INTEGER(part.edge1.curX));
+    line.SetRight(FO_TO_INTEGER(part.edge1.curX));
+    line.SetTop(FO_TO_INTEGER(part.edge1.curY));
+    line.SetBottom(FO_TO_INTEGER(part.edge1.curY));
+    // parameters above are Q15 fixed-point number
     TransformInitState init;
     GetTransformInitState(part.transMap, part.position, line, init);
 

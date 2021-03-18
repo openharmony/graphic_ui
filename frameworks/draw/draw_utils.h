@@ -36,6 +36,15 @@ namespace OHOS {
     SWAP_INT16(x1, x2);             \
     SWAP_INT16(y1, y2);
 
+// FixedPointed Related definition.
+#define FIXED_NUM_1 32768
+#define FO_TRANS_FLOAT_TO_FIXED(f) (static_cast<int32_t>((f) * FIXED_NUM_1))
+#define FO_TRANS_INTEGER_TO_FIXED(f) ((static_cast<int32_t>(f)) << 15)
+#define FO_DIV(n1, n2) ((static_cast<int64_t>(n1) << 15) / (n2))
+#define FO_TO_INTEGER(n) ((n) >= 0 ? ((n) >> 15) : (((n) >> 15) + 1))
+#define FO_DECIMAL(n) ((n) >= 0 ? ((n) & 32767) : ((n) | (-32768)))
+#define FO_MUL(n1, n2) ((static_cast<int64_t>(n1) * (n2)) >> 15)
+
 struct EdgeSides {
     int16_t left;
     int16_t right;
@@ -79,22 +88,26 @@ struct LabelLetterInfo {
 };
 
 struct TransformInitState {
-    float verticalU;
-    float verticalV;
-    float duHorizon;
-    float dvHorizon;
-    float duVertical;
-    float dvVertical;
+    // parameters below are Q15 fixed-point number
+    int32_t verticalU;
+    int32_t verticalV;
+    int32_t duHorizon;
+    int32_t dvHorizon;
+    int32_t duVertical;
+    int32_t dvVertical;
+    // parameters above are Q15 fixed-point number
 };
 
 struct TriangleEdge {
     TriangleEdge() {}
     TriangleEdge(int16_t x1, int16_t y1, int16_t duInt, int16_t dvInt);
     ~TriangleEdge();
-    float curX = 0.0f;
-    float curY = 0.0f;
-    float du = 0.0f;
-    float dv = 0.0f;
+    // parameters below are Q15 fixed-point number
+    int32_t curX = 0;
+    int32_t curY = 0;
+    int32_t du = 0;
+    int32_t dv = 0;
+    // parameters above are Q15 fixed-point number
 };
 struct TransformDataInfo {
     ImageHeader header;
@@ -179,7 +192,7 @@ public:
     void DrawImage(const Rect& area, const Rect& mask, const uint8_t* image, OpacityType opa, uint8_t pxByteSize) const;
 
     static void
-        GetXAxisErrForJunctionLine(bool ignoreJunctionPoint, bool isRightPart, int32_t& xMinErr, int32_t& xMaxErr);
+        GetXAxisErrForJunctionLine(bool ignoreJunctionPoint, bool isRightPart, int16_t& xMinErr, int16_t& xMaxErr);
 
     static void GetTransformInitState(const TransformMap& transMap,
                                       const Point& position,
