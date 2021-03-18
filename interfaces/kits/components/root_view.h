@@ -46,8 +46,8 @@
 #include "components/ui_view_group.h"
 #include "events/key_event.h"
 #include "events/virtual_device_event.h"
-#include "vector.h"
-#include "list.h"
+#include "gfx_utils/vector.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 #if ENABLE_WINDOW

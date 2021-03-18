@@ -15,7 +15,7 @@
 
 #include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
 namespace OHOS {

@@ -15,7 +15,7 @@
 
 #include "draw/draw_line.h"
 #include "draw/draw_utils.h"
-#include "graphic_math.h"
+#include "gfx_utils/graphic_math.h"
 
 namespace OHOS {
 #define INCREASE_ACC(acc, accTemp, adj, step, dir)           \

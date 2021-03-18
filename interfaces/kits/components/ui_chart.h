@@ -38,7 +38,7 @@
 
 #include "components/ui_axis.h"
 #include "components/ui_view_group.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 class UIChart;

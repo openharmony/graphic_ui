@@ -17,7 +17,7 @@
 #include "common/screen.h"
 #include "components/ui_button.h"
 #include "components/ui_label_button.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 #include "test_resource_config.h"
 #include "ui_test.h"
 #include "ui_test_group.h"

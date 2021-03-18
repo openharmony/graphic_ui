@@ -26,11 +26,11 @@
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
 #include <climits>
-#include "file.h"
+#include "gfx_utils/file.h"
 #include "font/ui_font.h"
 #include <gtest/gtest.h>
 #include "graphic_config.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 #include "layout/grid_layout.h"
 #include <pthread.h>

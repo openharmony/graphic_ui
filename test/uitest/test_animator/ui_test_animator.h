@@ -21,7 +21,7 @@
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
-#include "sys_info.h"
+#include "gfx_utils/sys_info.h"
 #include "ui_test.h"
 
 namespace OHOS {

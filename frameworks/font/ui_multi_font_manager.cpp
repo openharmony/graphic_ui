@@ -17,7 +17,7 @@
 #include "common/typed_text.h"
 #include "font/ui_font.h"
 
-#include "mem_api.h"
+#include "gfx_utils/mem_api.h"
 #include "securec.h"
 #if ENABLE_SHAPING
 #include "font/ui_text_shaping.h"

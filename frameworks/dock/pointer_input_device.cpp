@@ -20,8 +20,8 @@
 #if ENABLE_AOD
 #include "events/aod_callback.h"
 #endif
-#include "graphic_log.h"
-#include "graphic_math.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/graphic_math.h"
 #if ENABLE_WINDOW
 #include "window/window.h"
 #endif

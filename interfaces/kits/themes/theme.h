@@ -36,7 +36,7 @@
 #define GRAPHIC_LITE_THEME_H
 
 #include "components/ui_view.h"
-#include "style.h"
+#include "gfx_utils/style.h"
 
 namespace OHOS {
 /**

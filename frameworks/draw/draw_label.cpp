@@ -19,7 +19,7 @@
 #include "draw/draw_utils.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 void DrawLabel::DrawTextOneLine(const LabelLineInfo& labelLine)

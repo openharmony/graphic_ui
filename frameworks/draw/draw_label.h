@@ -18,9 +18,9 @@
 
 #include "common/typed_text.h"
 #include "draw/draw_utils.h"
-#include "geometry2d.h"
-#include "heap_base.h"
-#include "style.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/style.h"
 
 namespace OHOS {
 class DrawLabel : public HeapBase {

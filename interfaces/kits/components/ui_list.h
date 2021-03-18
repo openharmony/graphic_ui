@@ -41,7 +41,7 @@
 #include "components/abstract_adapter.h"
 #include "components/ui_abstract_scroll.h"
 #include "dock/focus_manager.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 
 namespace OHOS {
 /**

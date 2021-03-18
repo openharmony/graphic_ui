@@ -16,7 +16,7 @@
 #include "components/ui_abstract_progress.h"
 #include "common/image.h"
 #include "draw/draw_utils.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 #include "themes/theme_manager.h"
 

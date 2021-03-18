@@ -32,7 +32,7 @@
 #include "dfx/ui_dump_dom_tree.h"
 #include "imgdecode/cache_manager.h"
 #include "test_resource_config.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 void UITestDumpDomTree::SetUp()

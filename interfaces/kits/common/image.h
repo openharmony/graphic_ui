@@ -35,10 +35,10 @@
 #ifndef GRAPHIC_LITE_IMAGE_H
 #define GRAPHIC_LITE_IMAGE_H
 
-#include "geometry2d.h"
-#include "heap_base.h"
-#include "image_info.h"
-#include "style.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/image_info.h"
+#include "gfx_utils/style.h"
 
 namespace OHOS {
 /**

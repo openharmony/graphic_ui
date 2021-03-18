@@ -16,8 +16,8 @@
 #include "common/image.h"
 #include "common/image_decode_ability.h"
 #include "draw/draw_image.h"
-#include "file.h"
-#include "graphic_log.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 #if ENABLE_JPEG_AND_PNG
 #include "jpeglib.h"

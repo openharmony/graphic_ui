@@ -14,9 +14,9 @@
  */
 
 #include "imgdecode/image_load.h"
-#include "file.h"
-#include "graphic_log.h"
-#include "mem_api.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/mem_api.h"
 
 namespace {
 const uint8_t BITMAP_ZIP_LEN = 3;

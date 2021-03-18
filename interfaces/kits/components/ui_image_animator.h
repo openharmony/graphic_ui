@@ -37,7 +37,7 @@
 
 #include "animator/animator.h"
 #include "components/ui_image_view.h"
-#include "graphic_types.h"
+#include "gfx_utils/graphic_types.h"
 
 namespace OHOS {
 /**

@@ -16,8 +16,8 @@
 #ifndef GRAPHIC_LITE_DRAW_LINE_H
 #define GRAPHIC_LITE_DRAW_LINE_H
 
-#include "color.h"
-#include "geometry2d.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/geometry2d.h"
 
 namespace OHOS {
 class DrawLine : public HeapBase {

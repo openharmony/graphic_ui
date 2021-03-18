@@ -18,9 +18,9 @@
 #include "draw/draw_image.h"
 #include "draw/draw_line.h"
 #include "draw/draw_rect.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
+#include "gfx_utils/style.h"
 #include "imgdecode/cache_manager.h"
-#include "style.h"
 #include "themes/theme.h"
 
 namespace OHOS {

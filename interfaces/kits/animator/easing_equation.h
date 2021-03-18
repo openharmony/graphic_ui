@@ -35,7 +35,7 @@
 #ifndef GRAPHIC_LITE_EASING_EQUATION_H
 #define GRAPHIC_LITE_EASING_EQUATION_H
 
-#include "heap_base.h"
+#include "gfx_utils/heap_base.h"
 #include <cstdint>
 
 namespace OHOS {

@@ -17,7 +17,7 @@
 #include <cstdio>
 #include "components/ui_view_group.h"
 #include "font/ui_font.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
 namespace OHOS {
