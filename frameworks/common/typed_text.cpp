@@ -143,13 +143,13 @@ void TypedText::GetArcLetterPos(const Point& arcCenter, uint16_t radius, float a
 
 uint32_t TypedText::GetNextLine(const char* text, int16_t letterSpace, int16_t maxWidth)
 {
-    uint32_t lastBreakPos = 0;
-    int16_t curW;
     uint32_t index = 0;
-    uint32_t tmp = 0;
-    if (GetWrapPoint(text, index)) {
+    if ((text == nullptr) || GetWrapPoint(text, index)) {
         return index;
     }
+    uint32_t lastBreakPos = 0;
+    int16_t curW;
+    uint32_t tmp = 0;
     while (true) {
         curW = TypedText::GetTextWidth(text, index, letterSpace);
         if (curW > maxWidth) {
