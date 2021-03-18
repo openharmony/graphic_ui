@@ -28,6 +28,9 @@
 #include "test_draw_line/ui_test_draw_line.h"
 #include "test_draw_rect/ui_test_draw_rect.h"
 #include "test_event_injector/ui_test_event_injector.h"
+#if ENABLE_FOCUS_MANAGER
+#include "test_focus_manager/ui_test_focus_manager.h"
+#endif
 #include "test_font/ui_test_font.h"
 #include "test_image/ui_test_image.h"
 #include "test_image_animator/ui_test_image_animator.h"
@@ -129,6 +132,9 @@ void UITestGroup::SetUpTestCase()
     testCaseList_.PushBack(TestCaseInfo{"UIQrcode", new UITestQrcode()});
 #ifndef VERSION_LITE
     testCaseList_.PushBack(TestCaseInfo{"Video", new UITestVideo()});
+#endif
+#if ENABLE_FOCUS_MANAGER
+    testCaseList_.PushBack(TestCaseInfo{"FocusManager", new UITestFocusManager()});
 #endif
 }
 

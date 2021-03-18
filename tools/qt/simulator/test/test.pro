@@ -37,6 +37,7 @@ SOURCES += \
     ../../../../test/uitest/test_draw_line/ui_test_draw_line.cpp \
     ../../../../test/uitest/test_draw_rect/ui_test_draw_rect.cpp \
     ../../../../test/uitest/test_event_injector/ui_test_event_injector.cpp \
+    ../../../../test/uitest/test_focus_manager/ui_test_focus_manager.cpp \
     ../../../../test/uitest/test_font/ui_test_font.cpp \
     ../../../../test/uitest/test_image/ui_test_image.cpp \
     ../../../../test/uitest/test_image_animator/ui_test_image_animator.cpp \
@@ -82,6 +83,7 @@ HEADERS += \
     ../../../../test/uitest/test_draw_line/ui_test_draw_line.h \
     ../../../../test/uitest/test_draw_rect/ui_test_draw_rect.h \
     ../../../../test/uitest/test_event_injector/ui_test_event_injector.h \
+    ../../../../test/uitest/test_focus_manager/ui_test_focus_manager.h \
     ../../../../test/uitest/test_font/ui_test_font.h \
     ../../../../test/uitest/test_image/ui_test_image.h \
     ../../../../test/uitest/test_image_animator/ui_test_image_animator.h \

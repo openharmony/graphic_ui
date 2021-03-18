@@ -108,6 +108,7 @@ shared_library("ui") {
     "frameworks/dfx/point_event_injector.cpp",
     "frameworks/dfx/ui_dump_dom_tree.cpp",
     "frameworks/dfx/ui_screenshot.cpp",
+    "frameworks/dock/focus_manager.cpp",
     "frameworks/dock/input_device.cpp",
     "frameworks/dock/key_input_device.cpp",
     "frameworks/dock/ohos/ohos_input_device.cpp",

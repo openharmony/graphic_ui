@@ -24,6 +24,9 @@ UIViewGroup::UIViewGroup()
       isDragging_(false), disallowIntercept_(false), isAutoSize_(false)
 {
     isViewGroup_ = true;
+#if ENABLE_FOCUS_MANAGER
+    isInterceptFocus_ = false;
+#endif
 }
 
 UIViewGroup::~UIViewGroup() {}

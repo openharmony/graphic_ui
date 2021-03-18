@@ -1478,6 +1478,107 @@ public:
      */
     virtual void ClearFocus();
 #endif
+#if ENABLE_FOCUS_MANAGER
+    /**
+     * @brief 设置视图是否可获焦.
+     *
+     * @param focusable 是否可获焦.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetFocusable(bool focusable)
+    {
+        focusable_ = focusable;
+    }
+
+    /**
+     * @brief 获取视图是否可获焦.
+     *
+     * @return 是否可获焦.
+     * @since 5.0
+     * @version 3.0
+     */
+    bool IsFocusable() const
+    {
+        return focusable_;
+    }
+
+    /**
+     * @brief 组件获焦响应
+     *
+     * @since 5.0
+     * @version 3.0
+     */
+    void Focus();
+
+    /**
+     * @brief 组件失焦响应
+     *
+     * @since 5.0
+     * @version 3.0
+     */
+    void Blur();
+
+    /**
+     * @brief 焦点改变事件监听类，开发者需要向视图组件注册该类实现事件的监听.
+     *
+     * @since 5.0
+     * @version 3.0
+     */
+    class OnFocusListener : public HeapBase {
+    public:
+        /**
+         * @brief 回调函数，视图获焦时触发.
+         * @param view 获焦的视图
+         * @since 5.0
+         * @version 3.0
+         */
+        virtual bool OnFocus(UIView& view)
+        {
+            return false;
+        }
+
+        /**
+         * @brief 回调函数，视图失焦时触发.
+         * @param view 失焦的视图
+         * @since 5.0
+         * @version 3.0
+         */
+        virtual bool OnBlur(UIView& view)
+        {
+            return false;
+        }
+
+        /**
+         * @brief 析构函数.
+         * @since 5.0
+         * @version 3.0
+         */
+        virtual ~OnFocusListener() {}
+    };
+
+    /**
+     * @brief 设置当前视图焦点改变事件监听者.
+     * @param onFocusListener 焦点改变事件监听者.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetOnFocusListener(OnFocusListener* onFocusListener)
+    {
+        onFocusListener_ = onFocusListener;
+    }
+
+    /**
+     * @brief 获取当前视图焦点改变事件监听者.
+     * @return 焦点改变事件监听者.
+     * @since 5.0
+     * @version 3.0
+     */
+    OnFocusListener* GetOnFocusListener() const
+    {
+        return onFocusListener_;
+    }
+#endif
 
 protected:
     bool touchable_ : 1;
@@ -1488,6 +1589,9 @@ protected:
     bool needRedraw_ : 1;
     bool styleAllocFlag_ : 1;
     bool isIntercept_ : 1;
+#if ENABLE_FOCUS_MANAGER
+    bool focusable_ : 1;
+#endif
     uint8_t opaScale_;
     int16_t index_;
     const char* id_;
@@ -1499,6 +1603,9 @@ protected:
     OnLongPressListener* onLongPressListener_;
     OnDragListener* onDragListener_;
     OnTouchListener* onTouchListener_;
+#if ENABLE_FOCUS_MANAGER
+    OnFocusListener* onFocusListener_;
+#endif
 #if ENABLE_ROTATE_INPUT
     OnRotateListener* onRotateListener_;
 #endif

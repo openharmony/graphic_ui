@@ -168,6 +168,9 @@ UIPicker::UIPicker()
 #if ENABLE_MOTOR
     list_.SetMotorType(MotorType::MOTOR_TYPE_TWO);
 #endif
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
     list_.SetLoopState(false);
     list_.EnableAutoAlign(true);
     list_.SetIntercept(false);

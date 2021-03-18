@@ -34,6 +34,9 @@ UIAbstractScroll::UIAbstractScroll()
     rotateFactor_ = 1;
     rotateThreshold_ = 1;
 #endif
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
     isViewGroup_ = true;
     touchable_ = true;
     draggable_ = true;

@@ -119,6 +119,9 @@ UIList::UIList()
 #if ENABLE_MOTOR
     motorType_ = MotorType::MOTOR_TYPE_ONE;
 #endif
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
     direction_ = VERTICAL;
     touchable_ = true;
     draggable_ = true;
@@ -144,6 +147,9 @@ UIList::UIList(uint8_t direction)
 #endif
 #if ENABLE_MOTOR
     motorType_ = MotorType::MOTOR_TYPE_ONE;
+#endif
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
 #endif
     direction_ = direction;
     touchable_ = true;

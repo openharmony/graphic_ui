@@ -210,6 +210,32 @@ public:
         isAutoSize_ = state;
     }
 
+#if ENABLE_FOCUS_MANAGER
+    /**
+     * @brief 设置组件是否拦截焦点.
+     *
+     * @param interceptFocus 是否拦截焦点.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetInterceptFocus(bool interceptFocus)
+    {
+        isInterceptFocus_ = interceptFocus;
+    }
+
+    /**
+     * @brief 获取组件是否拦截焦点.
+     *
+     * @return 是否为焦点.
+     * @since 5.0
+     * @version 3.0
+     */
+    bool IsInterceptFocus() const
+    {
+        return isInterceptFocus_;
+    }
+#endif
+
 protected:
     /**
      * @brief Obtains the rectangle area of a new view group after being adaptive to the size of all child views.
@@ -260,6 +286,9 @@ protected:
 
 private:
     void AutoResize();
+#if ENABLE_FOCUS_MANAGER
+    bool isInterceptFocus_ : 1;
+#endif
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_VIEW_GROUP_H

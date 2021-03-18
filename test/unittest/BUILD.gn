@@ -23,6 +23,7 @@ group("lite_graphic_ui_test") {
       ":graphic_test_dfx",
       ":graphic_test_dialog",
       ":graphic_test_events",
+      ":graphic_test_focus_manager",
       ":graphic_test_font",
       ":graphic_test_image",
       ":graphic_test_label",
@@ -283,5 +284,13 @@ if (ohos_build_type == "debug") {
     configs = [ ":graphic_test_config" ]
     deps = commonDeps
     sources = [ "rotate/ui_rotate_input_unit_test.cpp" ]
+  }
+
+  unittest("graphic_test_focus_manager") {
+    output_extension = "bin"
+    output_dir = "$root_out_dir/test/unittest/graphic"
+    configs = [ ":graphic_test_config" ]
+    deps = commonDeps
+    sources = [ "common/focus_manager_unit_test.cpp" ]
   }
 }

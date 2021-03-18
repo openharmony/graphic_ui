@@ -31,6 +31,9 @@ UIScrollView::UIScrollView()
     rotateFactor_ = 1;
     rotateThreshold_ = 4; // 4: which means 25% of half view size
 #endif
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
     direction_ = HORIZONTAL_AND_VERTICAL;
     xSlider_.SetVisible(false);
     ySlider_.SetVisible(false);
