@@ -99,8 +99,10 @@ int32_t UISlider::UpdateCurrentValue(const Point& knobPosition)
 {
     Point startPoint;
     Rect rect = GetOrigRect();
-    startPoint.x = rect.GetLeft() + style_->borderWidth_ + style_->paddingLeft_;
-    startPoint.y = rect.GetTop() + style_->borderWidth_ + style_->paddingTop_;
+    // 2: Half of the gap
+    startPoint.x = rect.GetLeft() + style_->borderWidth_ + style_->paddingLeft_ + (GetWidth() - progressWidth_) / 2;
+    // 2: Half of the gap
+    startPoint.y = rect.GetTop() + style_->borderWidth_ + style_->paddingTop_ + (GetHeight() - progressHeight_) / 2;
 
     int32_t value = curValue_;
     switch (direction_) {
