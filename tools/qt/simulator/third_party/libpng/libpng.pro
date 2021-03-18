@@ -29,7 +29,6 @@ SOURCES += \
     ../../../../../../../../third_party/libpng/pngrtran.c \
     ../../../../../../../../third_party/libpng/pngrutil.c \
     ../../../../../../../../third_party/libpng/pngset.c \
-    ../../../../../../../../third_party/libpng/pngtest.c \
     ../../../../../../../../third_party/libpng/pngtrans.c \
     ../../../../../../../../third_party/libpng/pngwio.c \
     ../../../../../../../../third_party/libpng/pngwrite.c \

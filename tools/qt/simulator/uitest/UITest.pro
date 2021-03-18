@@ -24,15 +24,16 @@ FORMS += \
     main_widget.ui
 
 LIBS += -L$$DESTDIR/libs \
+        -ltest \
+        -llibui \
         -lfreetype \
         -lharfbuzz \
         -licu \
-        -lzlib \
         -llibpng \
+        -lzlib \
         -llibjpeg \
         -lqrcodegen \
-        -llibui \
-        -ltest
+
 
 TRANSLATIONS += helloqt_zh_CN.ts
 
