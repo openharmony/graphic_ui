@@ -59,6 +59,7 @@ inline bool RootView::IntersectScreenRect(Rect& rect)
 }
 
 #if LOCAL_RENDER
+using namespace Graphic;
 static void DivideInvalidateRect(const Rect& originRect, Rect& leftoverRect, Vector<Rect>& splitRects)
 {
     Rect mask;
