@@ -57,6 +57,7 @@ bool CompareTools::CompareFile(const char* src, size_t length, uint8_t flag)
     default:
         break;
     }
+    return false;
 }
 
 bool CompareTools::SaveFile(const char* src, size_t length, uint8_t flag)
@@ -70,6 +71,7 @@ bool CompareTools::SaveFile(const char* src, size_t length, uint8_t flag)
     default:
         break;
     }
+    return false;
 }
 
 bool CompareTools::CompareBinary(const char* filePath, size_t length)
@@ -77,15 +79,15 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
     if (filePath == nullptr || length > DEFAULT_FILE_NAME_MAX_LENGTH) {
         return false;
     }
-    int32_t fd = open(filePath, O_RANDOM | O_BINARY);
-    if (fd < 0) {
+    FILE* fd = fopen(filePath, "rb");
+    if (fd == nullptr) {
         return false;
     }
     uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
-    uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode * sizeof(uint8_t);
+    uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode ;
     uint8_t* readBuf = reinterpret_cast<uint8_t*>(malloc(buffSize));
-    if (read(fd, readBuf, buffSize) < 0) {
+    if (fread(readBuf, buffSize, sizeof(uint8_t), fd) < 0) {
         return false;
     }
     for (int32_t i = 0; i < (buffSize / sizeof(uint8_t)); i++) {
@@ -94,7 +96,7 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
             return false;
         }
     }
-    close(fd);
+    fclose(fd);
     free(readBuf);
     return true;
 }
@@ -104,17 +106,17 @@ bool CompareTools::SaveFramBuffToBinary(const char* filePath, size_t length)
     if (filePath == nullptr || length > DEFAULT_FILE_NAME_MAX_LENGTH) {
         return false;
     }
-    int32_t fd = open(filePath, O_WRONLY | O_CREAT | O_BINARY);
-    if (fd < 0) {
+    FILE* fd = fopen(filePath, "wb+");
+    if (fd == nullptr) {
         return false;
     }
     uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
-    uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode * sizeof(uint8_t);
-    if (write(fd, frameBuf, buffSize) < 0) {
+    uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode ;
+    if (fwrite(frameBuf, buffSize, sizeof(uint8_t), fd) < 0) {
         return false;
     }
-    close(fd);
+    fclose(fd);
     return true;
 }
 
@@ -123,11 +125,11 @@ bool CompareTools::CheckFileExist(const char* filePath, size_t length)
     if (filePath == nullptr || length > DEFAULT_FILE_NAME_MAX_LENGTH) {
         return false;
     }
-    int32_t fd = open(filePath, O_RANDOM);
-    if (fd < 0) {
+    FILE* fd = fopen(filePath, "r");
+    if (fd == nullptr) {
         return false;
     }
-    close(fd);
+    fclose(fd);
     return true;
 }
 } // namespace OHOS
