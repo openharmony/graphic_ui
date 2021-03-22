@@ -154,7 +154,7 @@ bool UIScrollView::DragXInner(int16_t distance)
         reboundSize = 0;
     }
 
-    if (childRect.GetWidth() <= (GetWidth() - (scrollBlankSize_ << 1))) {
+    if (childRect.GetWidth() <= (GetWidth() - (scrollBlankSize_ << 1)) || !xScrollable_) {
         return false;
     }
 
@@ -193,7 +193,7 @@ bool UIScrollView::DragYInner(int16_t distance)
         reboundSize = 0;
     }
 
-    if (childRect.GetHeight() <= (GetHeight() - (scrollBlankSize_ << 1))) {
+    if (childRect.GetHeight() <= (GetHeight() - (scrollBlankSize_ << 1)) || !yScrollable_) {
         return false;
     }
 
