@@ -32,7 +32,7 @@
 #include "hals/gfx_engines.h"
 #endif
 
-#ifdef _LITEOS
+#if ENABLE_ARM_MATH
 #include "arm_math.h"
 #endif
 
@@ -713,10 +713,10 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
                 int32_t w3 = FO_MUL(decUMinus1, decV);
                 int32_t w4 = FO_MUL(decU, decV);
                 // parameters above are Q15 fixed-point number
-#ifndef _LITEOS
-                const int32_t outA = p1 * w1 + p2 * w2 + p3 * w3 + p4 * w4;
-#else
+#if ENABLE_ARM_MATH
                 const int32_t outA = __SMUAD(p1, w1) + __SMUAD(p2, w2) + __SMUAD(p3, w3) + __SMUAD(p4, w4);
+#else
+                const int32_t outA = p1 * w1 + p2 * w2 + p3 * w3 + p4 * w4;
 #endif
                 Color32 result;
                 result.full = Color::ColorTo32(in.color);
@@ -758,12 +758,12 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
             int16_t intU = FO_TO_INTEGER(u);
             int16_t intV = FO_TO_INTEGER(v);
             if ((u >= 0) && (intU < (in.info.header.width - 1)) && (v >= 0) && (intV < (in.info.header.height - 1))) {
-#ifndef _LITEOS
-                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
-#else
+#if ENABLE_ARM_MATH
                 uint32_t val1 = __SMUAD(intV, in.srcLineWidth);
                 uint32_t val2 = __SMUAD(intU, in.pixelSize);
                 uint32_t px1 = val1 + val2;
+#else
+                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
 #endif
                 uint8_t* imgHead = const_cast<uint8_t*>(in.info.data);
                 const Color16 p1 = *(reinterpret_cast<Color16*>(&imgHead[px1]));
@@ -781,17 +781,17 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
                 int32_t w3 = FO_MUL(decUMinus1, decV);
                 int32_t w4 = FO_MUL(decU, decV);
                 // parameters above are Q15 fixed-point number
-#ifndef _LITEOS
-                const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
-                const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
-                const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
-#else
+#if ENABLE_ARM_MATH
                 const int32_t outR =
                     __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
                 const int32_t outG =
                     __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
                 const int32_t outB =
                     __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
+#else
+                const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+                const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+                const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
 #endif
 
                 Color16 result;
@@ -839,12 +839,12 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
             int16_t intU = FO_TO_INTEGER(u);
             int16_t intV = FO_TO_INTEGER(v);
             if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
-#ifndef _LITEOS
-                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
-#else
+#if ENABLE_ARM_MATH
                 uint32_t val1 = __SMUAD(intV, in.srcLineWidth);
                 uint32_t val2 = __SMUAD(intU, in.pixelSize);
                 uint32_t px1 = val1 + val2;
+#else
+                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
 #endif
                 uint8_t* imgHead = const_cast<uint8_t*>(in.info.data);
                 const Color24 p1 = *(reinterpret_cast<Color24*>(&imgHead[px1]));
@@ -862,17 +862,17 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
                 int32_t w3 = FO_MUL(decUMinus1, decV);
                 int32_t w4 = FO_MUL(decU, decV);
                 // parameters above are Q15 fixed-point number
-#ifndef _LITEOS
-                const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
-                const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
-                const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
-#else
+#if ENABLE_ARM_MATH
                 const int32_t outR =
                     __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
                 const int32_t outG =
                     __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
                 const int32_t outB =
                     __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
+#else
+                const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+                const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+                const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
 #endif
 
                 Color24 result;
@@ -911,12 +911,12 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
         int16_t intU = FO_TO_INTEGER(u);
         int16_t intV = FO_TO_INTEGER(v);
         if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
-#ifndef _LITEOS
-            uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
-#else
+#if ENABLE_ARM_MATH
             uint32_t val1 = __SMUAD(intV, in.srcLineWidth);
             uint32_t val2 = __SMUAD(intU, in.pixelSize);
             uint32_t px1 = val1 + val2;
+#else
+            uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
 #endif
             uint8_t* imgHead = const_cast<uint8_t*>(in.info.data);
             const ColorType p1 = *(reinterpret_cast<ColorType*>(&imgHead[px1]));
@@ -935,12 +935,7 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
             int32_t w4 = FO_MUL(decU, decV);
             // parameters above are Q15 fixed-point number
 
-#ifndef _LITEOS
-            const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
-            const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
-            const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
-            const int32_t outA = p1.alpha * w1 + p2.alpha * w2 + p3.alpha * w3 + p4.alpha * w4;
-#else
+#if ENABLE_ARM_MATH
             const int32_t outR = __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
             const int32_t outG =
                 __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
@@ -948,6 +943,11 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                 __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
             const int32_t outA =
                 __SMUAD(p1.alpha, w1) + __SMUAD(p2.alpha, w2) + __SMUAD(p3.alpha, w3) + __SMUAD(p4.alpha, w4);
+#else
+            const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+            const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+            const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
+            const int32_t outA = p1.alpha * w1 + p2.alpha * w2 + p3.alpha * w3 + p4.alpha * w4;
 #endif
 
             Color32 result;
@@ -1165,12 +1165,12 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
             int16_t intU = FO_TO_INTEGER(u);
             int16_t intV = FO_TO_INTEGER(v);
             if ((u >= 0) && (intU < (in.info.header.width - 1)) && (v >= 0) && (intV < (in.info.header.height - 1))) {
-#ifndef _LITEOS
-                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
-#else
+#if ENABLE_ARM_MATH
                 uint32_t val1 = __SMUAD(intV, in.srcLineWidth);
                 uint32_t val2 = __SMUAD(intU, in.pixelSize);
                 uint32_t px1 = val1 + val2;
+#else
+                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
 #endif
                 uint8_t* imgHead = const_cast<uint8_t*>(in.info.data);
                 OpacityType opa = in.opaScale;
