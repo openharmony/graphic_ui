@@ -217,8 +217,17 @@ public:
 
 protected:
     virtual void ReverseState();
+    virtual void CalculateSize();
+    void SelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
+
+    static constexpr int16_t DEFAULT_HOT_WIDTH = 46;
+    static constexpr int16_t DEFAULT_HOT_HEIGHT = 46;
+    static constexpr int16_t DEFAULT_BORDER_WIDTH = 22;
     UICheckBoxState state_;
     OnChangeListener* onStateChangeListener_;
+    int16_t width_;
+    int16_t height_;
+    int16_t borderWidth_;
     Image image_[MAX_STATUS_NUM];
 };
 } // namespace OHOS

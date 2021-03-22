@@ -132,22 +132,19 @@ public:
         return name_;
     }
 
+protected:
+    void CalculateSize() override;
+
 private:
     void FindRadioButtonAndChangeState(UIView* view);
-    static constexpr int16_t DEFAULT_HOT_WIDTH = 46;
-    static constexpr int16_t DEFAULT_HOT_HEIGHT = 46;
     static constexpr int16_t DEFAULT_RADIUS_BIG = 11;
     static constexpr int16_t DEFAULT_RADIUS_SMALL = 6;
     static constexpr int16_t DEFAULT_LINE_WIDTH = 1;
 
     char* name_;
-    int16_t width_;
-    int16_t height_;
     uint16_t radiusBig_;
     uint16_t radiusSmall_;
     int16_t lineWidth_;
-
-    void CalculateSize();
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_RADIO_BUTTON_H
