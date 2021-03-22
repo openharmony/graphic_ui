@@ -19,7 +19,6 @@
 #include "components/ui_view.h"
 
 namespace OHOS {
-#define OHOS_GRAPHIC_UI_AUTO_TEST_SAVE
 class UIAutoTest {
 public:
     UIAutoTest() {}

@@ -36,11 +36,11 @@ void UIAutoTestRender::UIKit_Render_Test_Render_001()
     const char* fileName = "ui_test_render_001.bin";
     char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
     CompareTools::StrnCatPath(filePath, sizeof(filePath), fileName, strlen(fileName));
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST_SAVE
-    CompareTools::SaveFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
-#else 
-    CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST_SAVE
+    if (CompareTools::CheckFileExist(filePath, sizeof(filePath))) {
+        CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+    } else {
+        CompareTools::SaveFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+    }
     return;
 }
 
@@ -50,11 +50,11 @@ void UIAutoTestRender::UIKit_Render_Test_RenderMeasure_001()
     const char* fileName = "ui_test_render_measure_001.bin";
     char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};;
     CompareTools::StrnCatPath(filePath, DEFAULT_FILE_NAME_MAX_LENGTH, fileName, strlen(fileName));
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST_SAVE
-    CompareTools::SaveFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
-#else 
-    CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST_SAVE
+    if (CompareTools::CheckFileExist(filePath, sizeof(filePath))) {
+        CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+    } else {
+        CompareTools::SaveFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+    }
     return;
 }
 } // namespace OHOS
