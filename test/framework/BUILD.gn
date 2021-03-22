@@ -55,11 +55,16 @@ static_library("framework") {
     "../uitest/test_video/ui_test_video.cpp",
     "../uitest/test_view_percent/ui_test_view_percent.cpp",
     "../uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp",
+    "src/compare_tools.cpp",
     "src/test_ability.cpp",
     "src/test_case_list_adapter.cpp",
+    "src/ui_auto_test.cpp",
+    "src/ui_auto_test_group.cpp",
     "src/ui_test_app.cpp",
     "src/ui_test_group.cpp",
   ]
+  sources += [ "../uitest/test_render/ui_auto_test_render.cpp" ]
+
   include_dirs = [
     "include",
     "../uitest",

@@ -22,7 +22,7 @@
 #include "components/ui_list.h"
 #include "test_case_list_adapter.h"
 
-#define OHOS_GRAPHIC_UI_AUTO_TEST
+#define OHOS_GRAPHIC_UI_AUTO_TEST 0
 namespace OHOS {
     namespace {
         constexpr char* UI_TEST_MAIN_LIST_ID = "main_list";
