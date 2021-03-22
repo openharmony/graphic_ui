@@ -22,7 +22,12 @@
 #include "components/ui_list.h"
 #include "test_case_list_adapter.h"
 
+#define OHOS_GRAPHIC_UI_AUTO_TEST 0
 namespace OHOS {
+    namespace {
+        constexpr char* UI_TEST_MAIN_LIST_ID = "main_list";
+        constexpr char* UI_TEST_BACK_BUTTON_ID = "back_button";
+    }
 class UITestApp {
 public:
     static UITestApp* GetInstance()
@@ -49,5 +54,25 @@ private:
     UILabel* testCaseLabel_ = nullptr;
     UILabel* testLabel_ = nullptr;
 };
+
+#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
+class UIAutoTestApp {
+public:
+    static UIAutoTestApp* GetInstance()
+    {
+        static UIAutoTestApp instance;
+        return &instance;
+    }
+    void Start();
+private:
+    UIAutoTestApp() {}
+    ~UIAutoTestApp() {}
+
+    UIAutoTestApp(const UIAutoTestApp&) = delete;
+    UIAutoTestApp& operator=(const UIAutoTestApp&) = delete;
+    UIAutoTestApp(UIAutoTestApp&&) = delete;
+    UIAutoTestApp& operator=(UIAutoTestApp&&) = delete;
+};
+#endif // OHOS_GRAPHIC_UI_AUTO_TEST
 } // namespace OHOS
 #endif

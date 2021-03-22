@@ -15,9 +15,15 @@
 
 #include "ui_test_app.h"
 #include "common/screen.h"
+#include "compare_tools.h"
 #include "test_resource_config.h"
 #include "ui_test.h"
 #include "ui_test_group.h"
+#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
+#include "dfx/event_injector.h"
+#include "ui_auto_test_group.h"
+#include "ui_auto_test.h"
+#endif // OHOS_GRAPHIC_UI_AUTO_TEST
 
 namespace OHOS {
 void UITestApp::Start()
@@ -37,6 +43,7 @@ void UITestApp::Init()
         backBtn_->SetPosition(0, 0);
         backBtn_->Resize(163, 64); // 163: button width; 64: button height
         backBtn_->SetText("Back");
+        backBtn_->SetViewId(UI_TEST_BACK_BUTTON_ID);
         backBtn_->SetLablePosition(72, 0);                   // 72: button label x-coordinate
         backBtn_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: means font size
         backBtn_->SetImageSrc(TEST_BACK_LEFT_ARROW, TEST_BACK_LEFT_ARROW);
@@ -71,6 +78,7 @@ void UITestApp::Init()
         mainList_->SetPosition(24, deltaHeight); // 24: x-coordinate
         mainList_->Resize(Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight() - deltaHeight);
         mainList_->SetThrowDrag(true);
+        mainList_->SetViewId(UI_TEST_MAIN_LIST_ID);
         adapter_ = new TestCaseListAdapter(rootView_, mainList_, backBtn_, testCaseLabel_, testLabel_);
         UITestGroup::SetUpTestCase();
         mainList_->SetAdapter(adapter_);
@@ -97,4 +105,24 @@ UITestApp::~UITestApp()
         rootView_ = nullptr;
     }
 }
+
+#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
+void UIAutoTestApp::Start()
+{
+    EventInjector::GetInstance()->RegisterEventInjector(EventDataType::POINT_TYPE);
+    EventInjector::GetInstance()->RegisterEventInjector(EventDataType::KEY_TYPE);
+
+    //wait simulator enter master meanu
+    CompareTools::WaitSuspend();
+
+    UIAutoTestGroup::SetUpTestCase();
+    ListNode<UIAutoTest*>* node = UIAutoTestGroup::GetTestCase().Begin();
+    while (node != UIAutoTestGroup::GetTestCase().End()) {
+        node->data_->RunTestList();
+        node->data_->ResetMainMenu();
+        node = node->next_;
+    }
+    return;
+}
+#endif // OHOS_GRAPHIC_UI_AUTO_TEST
 } // namespace OHOS

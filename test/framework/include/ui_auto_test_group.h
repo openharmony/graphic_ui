@@ -13,22 +13,21 @@
  * limitations under the License.
  */
 
-#include "ui_test_app.h"
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
-#include <thread>
+#ifndef UI_AUTO_TEST_GROUP_H
+#define UI_AUTO_TEST_GROUP_H
 
-void thread()
-{
-    OHOS::UIAutoTestApp::GetInstance()->Start();
-    return;
-}
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST
+#include "list.h"
+#include "ui_auto_test.h"
 
-void RunApp()
-{
-    OHOS::UITestApp::GetInstance()->Start();
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
-    std::thread autoTestPthread(thread);
-    autoTestPthread.detach();
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST
-}
+namespace OHOS {
+class UIAutoTestGroup {
+public:
+    static void SetUpTestCase();
+    static List<UIAutoTest*>& GetTestCase();
+    static void TearDownTestCase();
+
+private:
+    static List<UIAutoTest*> testCaseList_;
+};
+} // namespace OHOS
+#endif // UI_AUTO_TEST_GROUP_H

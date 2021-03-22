@@ -179,6 +179,7 @@ UIView* TestCaseListAdapter::GetView(UIView* inView, int16_t index)
     listener = new BtnOnClickUiTestListener(rootView_, mainList_, backBtn_, &node->data_, testCaseLabel_, testLabel_);
     item->SetOnClickListener(listener);
     item->SetText(node->data_.sliceId);
+    item->SetViewId(node->data_.sliceId);
     item->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: means font size
     item->SetViewIndex(index);
     item->SetAlign(TEXT_ALIGNMENT_LEFT);

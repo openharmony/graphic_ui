@@ -1,0 +1,45 @@
+/*
+ * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef UI_AUTO_TEST_H
+#define UI_AUTO_TEST_H
+
+#include "components/ui_view.h"
+
+namespace OHOS {
+#define OHOS_GRAPHIC_UI_AUTO_TEST_SAVE
+class UIAutoTest {
+public:
+    UIAutoTest() {}
+    virtual ~UIAutoTest() {}
+
+    virtual void RunTestList() = 0;
+    virtual void Reset() = 0;
+
+    void ResetMainMenu();
+
+    void EnterSubMenu(const char* id);
+
+    void ClickViewById(const char* id);
+
+    void DragViewToHead(const char* id);
+
+private:
+    int16_t GetAbsoluteX(UIView* view) const;
+    int16_t GetAbsoluteY(UIView* view) const;
+    UIView* GetChildViewById(UIView* node, const char* id) const;
+};
+} //namespace OHOS
+#endif // UI_AUTO_TEST_H
