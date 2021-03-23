@@ -23,6 +23,7 @@
 #include "themes/theme_manager.h"
 
 namespace OHOS {
+#if SLIDER_KNOB
 UISlider::UISlider()
     : knobWidth_(0), knobWidthSetFlag_(false), knobStyleAllocFlag_(false), knobImage_(nullptr), listener_(nullptr)
 {
@@ -88,6 +89,265 @@ const Style& UISlider::GetKnobStyle() const
 int64_t UISlider::GetKnobStyle(uint8_t key) const
 {
     return knobStyle_->GetStyle(key);
+}
+
+int16_t UISlider::GetKnobWidth()
+{
+    if (!knobWidthSetFlag_) {
+        if ((direction_ == Direction::DIR_LEFT_TO_RIGHT) || (direction_ == Direction::DIR_RIGHT_TO_LEFT)) {
+            knobWidth_ = progressHeight_;
+        } else {
+            knobWidth_ = progressWidth_;
+        }
+    }
+    return knobWidth_;
+}
+
+void UISlider::SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage, const ImageInfo* knobImage)
+{
+    if (!InitImage()) {
+        return;
+    }
+    backgroundImage_->SetSrc(backgroundImage);
+    foregroundImage_->SetSrc(foregroundImage);
+    knobImage_->SetSrc(knobImage);
+}
+
+void UISlider::SetImage(const char* backgroundImage, const char* foregroundImage, const char* knobImage)
+{
+    if (!InitImage()) {
+        return;
+    }
+    backgroundImage_->SetSrc(backgroundImage);
+    foregroundImage_->SetSrc(foregroundImage);
+    knobImage_->SetSrc(knobImage);
+}
+
+void UISlider::DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect)
+{
+    int16_t halfKnobWidth = GetKnobWidth() >> 1;
+    int16_t offset;
+    Rect knobBar;
+    switch (direction_) {
+        case Direction::DIR_LEFT_TO_RIGHT: {
+            offset = (knobWidth_ - progressHeight_) >> 1;
+            knobBar.SetRect(foregroundRect.GetRight() - halfKnobWidth, foregroundRect.GetTop() - offset,
+                            foregroundRect.GetRight() + halfKnobWidth, foregroundRect.GetBottom() + offset);
+            break;
+        }
+        case Direction::DIR_RIGHT_TO_LEFT: {
+            offset = (knobWidth_ - progressHeight_) >> 1;
+            knobBar.SetRect(foregroundRect.GetLeft() - halfKnobWidth, foregroundRect.GetTop() - offset,
+                            foregroundRect.GetLeft() + halfKnobWidth, foregroundRect.GetBottom() + offset);
+            break;
+        }
+        case Direction::DIR_BOTTOM_TO_TOP: {
+            offset = (knobWidth_ - progressWidth_) >> 1;
+            knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetTop() - halfKnobWidth,
+                            foregroundRect.GetRight() + offset, foregroundRect.GetTop() + halfKnobWidth);
+            break;
+        }
+        case Direction::DIR_TOP_TO_BOTTOM: {
+            offset = (knobWidth_ - progressWidth_) >> 1;
+            knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetBottom() - halfKnobWidth,
+                            foregroundRect.GetRight() + offset, foregroundRect.GetBottom() + halfKnobWidth);
+            break;
+        }
+        default: {
+            GRAPHIC_LOGW("UISlider::DrawKnob Direction error!\n");
+        }
+    }
+    DrawValidRect(knobImage_, knobBar, invalidatedArea, *knobStyle_, 0);
+}
+
+bool UISlider::InitImage()
+{
+    if (!UIAbstractProgress::InitImage()) {
+        return false;
+    }
+    if (knobImage_ == nullptr) {
+        knobImage_ = new Image();
+        if (knobImage_ == nullptr) {
+            GRAPHIC_LOGE("new Image fail");
+            return false;
+        }
+    }
+    return true;
+}
+#else
+UISlider::UISlider()
+    : listener_(nullptr), turnUpImage_(nullptr), turnDownImage_(nullptr)
+{
+    touchable_ = true;
+    draggable_ = true;
+    dragParentInstead_ = false;
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
+}
+
+UISlider::~UISlider()
+{
+    if (turnUpImage_ != nullptr) {
+        delete turnUpImage_;
+        turnUpImage_ = nullptr;
+    }
+    if (turnDownImage_ != nullptr) {
+        delete turnDownImage_;
+        turnDownImage_ = nullptr;
+    }
+}
+
+void UISlider::SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage)
+{
+    if (!InitImage()) {
+        return;
+    }
+    backgroundImage_->SetSrc(backgroundImage);
+    foregroundImage_->SetSrc(foregroundImage);
+}
+
+void UISlider::SetImage(const char* backgroundImage, const char* foregroundImage)
+{
+    if (!InitImage()) {
+        return;
+    }
+    backgroundImage_->SetSrc(backgroundImage);
+    foregroundImage_->SetSrc(foregroundImage);
+}
+
+void UISlider::SetTurnImage(const ImageInfo* turnUpImage, const ImageInfo* turnDownImage)
+{
+    if (!InitImage()) {
+        return;
+    }
+    turnUpImage_->SetSrc(turnUpImage);
+    turnDownImage_->SetSrc(turnDownImage);
+}
+
+void UISlider::SetTurnImage(const char* turnUpImage, const char* turnDownImage)
+{
+    if (!InitImage()) {
+        return;
+    }
+    turnUpImage_->SetSrc(turnUpImage);
+    turnDownImage_->SetSrc(turnDownImage);
+}
+
+bool UISlider::InitImage()
+{
+    if (!UIAbstractProgress::InitImage()) {
+        return false;
+    }
+    if (turnUpImage_ == nullptr) {
+        turnUpImage_ = new Image();
+        if (turnUpImage_ == nullptr) {
+            GRAPHIC_LOGE("new Image fail");
+            return false;
+        }
+    }
+    if (turnDownImage_ == nullptr) {
+        turnDownImage_ = new Image();
+        if (turnDownImage_ == nullptr) {
+            GRAPHIC_LOGE("new Image fail");
+            return false;
+        }
+    }
+    return true;
+}
+
+void UISlider::DrawTurnImage(const Rect& invalidatedArea)
+{
+    
+}
+
+void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
+{
+    Point startPoint;
+    int16_t progressWidth;
+    int16_t progressHeight;
+    uint16_t radius;
+    GetBackgroundParam(startPoint, progressHeight, progressHeight, radius, *foregroundStyle_);
+
+    int16_t left;
+    int16_t right;
+    int16_t top;
+    int16_t bottom;
+    Rect rect;
+
+    int16_t length;
+
+    switch (direction_) {
+        case Direction::DIR_LEFT_TO_RIGHT: {
+            length = GetCurrentPos(progressWidth - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+
+            left = startPoint.x - radius - 1;
+            right = left + length;
+
+            rect = Rect(left, startPoint.y, right, startPoint.y + progressHeight - 1);
+            break;
+        }
+        case Direction::DIR_RIGHT_TO_LEFT: {
+            length = GetCurrentPos(progressWidth - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+
+            right = startPoint.x + progressWidth + radius + 1;
+            left = right - length;
+
+            rect = Rect(left, startPoint.y, right, startPoint.y + progressHeight - 1);
+            break;
+        }
+        case Direction::DIR_TOP_TO_BOTTOM: {
+            length = GetCurrentPos(progressHeight - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+
+            top = startPoint.y - radius - 1;
+            bottom = top + length;
+
+            rect = Rect(startPoint.x, top, startPoint.x + progressWidth - 1, bottom);
+            break;
+        }
+        case Direction::DIR_BOTTOM_TO_TOP: {
+
+            length = GetCurrentPos(progressHeight - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+
+            bottom = startPoint.y + progressHeight - 1;
+            top = bottom - length;
+
+            rect = Rect(startPoint.x, top, startPoint.x + progressWidth - 1, bottom);
+            break;
+        }
+        default: {
+            GRAPHIC_LOGE("UIBoxProgress: DrawForeground direction Err!\n");
+            return;
+        }
+    }
+
+    if (rect.Intersect(rect, invalidatedArea)) {
+        DrawValidRect(foregroundImage_, coords, invalidatedArea, *foregroundStyle_, radius);
+    }
+}
+#endif
+
+void UISlider::OnDraw(const Rect& invalidatedArea)
+{
+    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opaScale_);
+
+    Rect trunc(invalidatedArea);
+    if (trunc.Intersect(trunc, GetOrigRect())) {
+        DrawBackground(trunc);
+        Rect foregroundRect;
+        DrawForeground(trunc, foregroundRect);
+#if SLIDER_KNOB
+        DrawKnob(trunc, foregroundRect);
+#else
+        if (turnUpImage_ != nullptr || turnDownImage_ != nullptr) {
+            DrawTurnImage(trunc);
+        }
+#endif
+    }
 }
 
 int32_t UISlider::CalculateCurrentValue(int16_t length, int16_t totalLength)
@@ -204,101 +464,4 @@ bool UISlider::OnRotateEvent(const RotateEvent& event)
     return UIView::OnRotateEvent(event);
 }
 #endif
-
-int16_t UISlider::GetKnobWidth()
-{
-    if (!knobWidthSetFlag_) {
-        if ((direction_ == Direction::DIR_LEFT_TO_RIGHT) || (direction_ == Direction::DIR_RIGHT_TO_LEFT)) {
-            knobWidth_ = progressHeight_;
-        } else {
-            knobWidth_ = progressWidth_;
-        }
-    }
-    return knobWidth_;
-}
-
-void UISlider::SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage, const ImageInfo* knobImage)
-{
-    if (!InitImage()) {
-        return;
-    }
-    backgroundImage_->SetSrc(backgroundImage);
-    foregroundImage_->SetSrc(foregroundImage);
-    knobImage_->SetSrc(knobImage);
-}
-
-void UISlider::SetImage(const char* backgroundImage, const char* foregroundImage, const char* knobImage)
-{
-    if (!InitImage()) {
-        return;
-    }
-    backgroundImage_->SetSrc(backgroundImage);
-    foregroundImage_->SetSrc(foregroundImage);
-    knobImage_->SetSrc(knobImage);
-}
-
-void UISlider::DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect)
-{
-    int16_t halfKnobWidth = GetKnobWidth() >> 1;
-    int16_t offset;
-    Rect knobBar;
-    switch (direction_) {
-        case Direction::DIR_LEFT_TO_RIGHT: {
-            offset = (knobWidth_ - progressHeight_) >> 1;
-            knobBar.SetRect(foregroundRect.GetRight() - halfKnobWidth, foregroundRect.GetTop() - offset,
-                            foregroundRect.GetRight() + halfKnobWidth, foregroundRect.GetBottom() + offset);
-            break;
-        }
-        case Direction::DIR_RIGHT_TO_LEFT: {
-            offset = (knobWidth_ - progressHeight_) >> 1;
-            knobBar.SetRect(foregroundRect.GetLeft() - halfKnobWidth, foregroundRect.GetTop() - offset,
-                            foregroundRect.GetLeft() + halfKnobWidth, foregroundRect.GetBottom() + offset);
-            break;
-        }
-        case Direction::DIR_BOTTOM_TO_TOP: {
-            offset = (knobWidth_ - progressWidth_) >> 1;
-            knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetTop() - halfKnobWidth,
-                            foregroundRect.GetRight() + offset, foregroundRect.GetTop() + halfKnobWidth);
-            break;
-        }
-        case Direction::DIR_TOP_TO_BOTTOM: {
-            offset = (knobWidth_ - progressWidth_) >> 1;
-            knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetBottom() - halfKnobWidth,
-                            foregroundRect.GetRight() + offset, foregroundRect.GetBottom() + halfKnobWidth);
-            break;
-        }
-        default: {
-            GRAPHIC_LOGW("UISlider::DrawKnob Direction error!\n");
-        }
-    }
-    DrawValidRect(knobImage_, knobBar, invalidatedArea, *knobStyle_, 0);
-}
-
-void UISlider::OnDraw(const Rect& invalidatedArea)
-{
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opaScale_);
-
-    Rect trunc(invalidatedArea);
-    if (trunc.Intersect(trunc, GetOrigRect())) {
-        DrawBackground(trunc);
-        Rect foregroundRect;
-        DrawForeground(trunc, foregroundRect);
-        DrawKnob(trunc, foregroundRect);
-    }
-}
-
-bool UISlider::InitImage()
-{
-    if (!UIAbstractProgress::InitImage()) {
-        return false;
-    }
-    if (knobImage_ == nullptr) {
-        knobImage_ = new Image();
-        if (knobImage_ == nullptr) {
-            GRAPHIC_LOGE("new Image fail");
-            return false;
-        }
-    }
-    return true;
-}
 } // namespace OHOS

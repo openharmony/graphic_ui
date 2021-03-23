@@ -420,15 +420,15 @@ bool UITestSlider::OnClick(UIView& view, const ClickEvent& event)
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-        slider_->SetKnobWidth(50); // 50: knob width
+//        slider_->SetKnobWidth(50); // 50: knob width
         slider_->SetRange(g_max, g_min);
         slider_->SetValue(g_progress);
         slider_->SetStep(g_step);
         slider_->SetBackgroundStyle(StyleDefault::GetProgressBackgroundStyle());
         slider_->SetForegroundStyle(StyleDefault::GetProgressForegroundStyle());
-        slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
-        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                          static_cast<ImageInfo*>(nullptr));
+//        slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
+//        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
+//                          static_cast<ImageInfo*>(nullptr));
         slider_->EnableBackground(true);
     } else if (&view == incProgressBtn_) {
         g_progress++;
@@ -497,15 +497,15 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
     if (&view == imageBtn_) {
         slider_->SetValidHeight(DEFAULT_HEIGHT);
         slider_->SetValidWidth(5); // 5 valid width
-        slider_->SetKnobWidth(40); // 40: knob width
+//        slider_->SetKnobWidth(40); // 40: knob width
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
-        slider_->SetImage(SLIDER_BACKGROUND_IMAGE_PATH, SLIDER_INDICATOR_IMAGE_PATH, SLIDER_KNOB_IMAGE_PATH);
+//        slider_->SetImage(SLIDER_BACKGROUND_IMAGE_PATH, SLIDER_INDICATOR_IMAGE_PATH, SLIDER_KNOB_IMAGE_PATH);
     } else if (&view == noImageBtn_) {
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-        slider_->SetKnobWidth(g_knobWidth);
-        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                          static_cast<ImageInfo*>(nullptr));
+//        slider_->SetKnobWidth(g_knobWidth);
+//        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
+//                          static_cast<ImageInfo*>(nullptr));
     } else if (&view == setStyleBtn_) {
         Style style = StyleDefault::GetDefaultStyle();
         style.bgColor_ = Color::White();
@@ -513,21 +513,21 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
         style.bgColor_ = Color::Blue();
         slider_->SetForegroundStyle(style);
         style.bgColor_ = Color::Gray();
-        slider_->SetKnobStyle(style);
+//        slider_->SetKnobStyle(style);
     } else if (&view == getStyleBtn_) {
         slider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
         slider_->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::Yellow().full);
-        slider_->SetKnobStyle(STYLE_BACKGROUND_COLOR, Color::Green().full);
+//        slider_->SetKnobStyle(STYLE_BACKGROUND_COLOR, Color::Green().full);
     } else if (&view == incKnobWidthBtn_) {
         g_knobWidth++;
-        slider_->SetKnobWidth(g_knobWidth);
+//        slider_->SetKnobWidth(g_knobWidth);
     } else if (&view == decKnobWidthBtn_) {
         g_knobWidth--;
-        slider_->SetKnobWidth(g_knobWidth);
+//        slider_->SetKnobWidth(g_knobWidth);
     } else if (&view == colorBtn_) {
-        slider_->SetSliderColor(Color::Silver(), Color::Blue(), Color::White());
+//        slider_->SetSliderColor(Color::Silver(), Color::Blue(), Color::White());
     } else if (&view == radiusBtn_) {
-        slider_->SetSliderRadius(DEFAULT_RADIUS, DEFAULT_RADIUS, DEFAULT_RADIUS);
+//        slider_->SetSliderRadius(DEFAULT_RADIUS, DEFAULT_RADIUS, DEFAULT_RADIUS);
     } else if (&view == onChangeBtn_) {
         g_onChange = true;
     } else if (&view == onReleaseBtn_) {
