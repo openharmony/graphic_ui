@@ -24,12 +24,12 @@ public:
     UIAutoTestRender() {}
     ~UIAutoTestRender() {}
 
-    void Reset();
+    void Reset() const;
     void RunTestList();
 
-    void UIKit_Render_Test_Render_001();
+    void UIKitRenderTestRender001() const;
 
-    void UIKit_Render_Test_RenderMeasure_001();
+    void UIKitRenderTestRenderMeasure001() const;
 };
 } // namespace OHOS
 #endif // UI_AUTO_TEST_RENDER_H

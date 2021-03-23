@@ -17,9 +17,9 @@
 #include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
 #include "file.h"
+#include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
 #include "securec.h"
-#include "stdio.h"
 
 namespace OHOS {
 void CompareTools::WaitSuspend()
@@ -48,28 +48,26 @@ bool CompareTools::StrnCatPath(char* filePath, size_t pathMax, const char* fileN
 
 bool CompareTools::CompareFile(const char* src, size_t length, uint8_t flag)
 {
-    switch (flag)
-    {
-    case COMPARE_BINARY:
-        return CompareBinary(src, length);
-    case COMPARE_IMAGE:
-        break;
-    default:
-        break;
+    switch (flag) {
+        case COMPARE_BINARY:
+            return CompareBinary(src, length);
+        case COMPARE_IMAGE:
+            break;
+        default:
+            break;
     }
     return false;
 }
 
 bool CompareTools::SaveFile(const char* src, size_t length, uint8_t flag)
 {
-    switch (flag)
-    {
-    case COMPARE_BINARY:
-        return SaveFramBuffToBinary(src, length);
-    case COMPARE_IMAGE:
-        break;
-    default:
-        break;
+    switch (flag) {
+        case COMPARE_BINARY:
+            return SaveFramBuffToBinary(src, length);
+        case COMPARE_IMAGE:
+            break;
+        default:
+            break;
     }
     return false;
 }
@@ -92,7 +90,7 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
     }
     for (int32_t i = 0; i < (buffSize / sizeof(uint8_t)); i++) {
         if (readBuf[i] != frameBuf[i]) {
-            printf("[DIFF]:fileName=%s, read[%d]=%x, write[%d]=%x\n", filePath, i, readBuf[i], frameBuf[i]);
+            GRAPHIC_LOGE("[DIFF]:fileName=%s, read[%d]=%x, write[%d]=%x", filePath, i, readBuf[i], frameBuf[i]);
             return false;
         }
     }

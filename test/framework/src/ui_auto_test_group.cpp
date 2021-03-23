@@ -23,8 +23,6 @@ List<UIAutoTest*> UIAutoTestGroup::testCaseList_;
 void UIAutoTestGroup::SetUpTestCase()
 {
     testCaseList_.PushBack(new UIAutoTestRender());
-    //testCaseList_.PushBack(new UIAutoTestQrcode());
-    //testCaseList_.PushBack(new UIAutoTestSlider());
 }
 
 List<UIAutoTest*>& UIAutoTestGroup::GetTestCase()

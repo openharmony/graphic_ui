@@ -25,8 +25,6 @@
 
 #if defined QT_COMPILER
 #define UI_AUTO_TEST_RESOURCE_PATH  "..\\simulator\\config\\auto_test\\"
-#elif defined _WIN32
-#define UI_AUTO_TEST_RESOURCE_PATH  "..\\config\\auto_test\\"
 #else
 #define UI_AUTO_TEST_RESOURCE_PATH  (RESOURCE_DIR "auto_test/")
 #endif
@@ -44,7 +42,7 @@ public:
     };
 
     static void WaitSuspend();
-    static bool StrnCatPath(char* filePath, size_t pathMax,  char const* fileName, size_t count);
+    static bool StrnCatPath(char* filePath, size_t pathMax, const char* fileName, size_t count);
     static bool CompareFile(const char* filePath, size_t length, uint8_t flag);
     static bool SaveFile(const char* filePath, size_t length, uint8_t flag);
     static bool CheckFileExist(const char* filePath, size_t length);
@@ -53,5 +51,5 @@ private:
     static bool CompareBinary(const char* filePath, size_t length);
     static bool SaveFramBuffToBinary(const char* filePath, size_t length);
 };
-} //namespace OHOS
+} // namespace OHOS
 #endif // COMPARE_TOOLS_H

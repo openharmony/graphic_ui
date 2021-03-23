@@ -25,20 +25,20 @@ public:
     virtual ~UIAutoTest() {}
 
     virtual void RunTestList() = 0;
-    virtual void Reset() = 0;
+    virtual void Reset() const = 0;
 
-    void ResetMainMenu();
+    void ResetMainMenu() const;
 
-    void EnterSubMenu(const char* id);
+    void EnterSubMenu(const char* id) const;
 
-    void ClickViewById(const char* id);
+    void ClickViewById(const char* id) const;
 
-    void DragViewToHead(const char* id);
+    void DragViewToHead(const char* id) const;
 
 private:
     int16_t GetAbsoluteX(UIView* view) const;
     int16_t GetAbsoluteY(UIView* view) const;
     UIView* GetChildViewById(UIView* node, const char* id) const;
 };
-} //namespace OHOS
+} // namespace OHOS
 #endif // UI_AUTO_TEST_H

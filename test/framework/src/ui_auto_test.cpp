@@ -17,8 +17,8 @@
 #include "components/root_view.h"
 #include "components/ui_list.h"
 #include "components/ui_view_group.h"
-#include "dfx/event_injector.h"
 #include "compare_tools.h"
+#include "dfx/event_injector.h"
 #include "ui_test_app.h"
 #include "ui_test_group.h"
 
@@ -74,14 +74,14 @@ UIView* UIAutoTest::GetChildViewById(UIView* node, const char* id) const
     return nullptr;
 }
 
-void UIAutoTest::ResetMainMenu()
+void UIAutoTest::ResetMainMenu() const
 {
     while (RootView::GetInstance()->GetChildById(UI_TEST_MAIN_LIST_ID) == nullptr) {
         ClickViewById(UI_TEST_BACK_BUTTON_ID);
     }
 }
 
-void UIAutoTest::EnterSubMenu(const char* id)
+void UIAutoTest::EnterSubMenu(const char* id) const
 {
     if (id == nullptr) {
         return;
@@ -107,7 +107,7 @@ void UIAutoTest::EnterSubMenu(const char* id)
     ClickViewById(id);
 }
 
-void UIAutoTest::ClickViewById(const char* id)
+void UIAutoTest::ClickViewById(const char* id) const
 {
     if (id == nullptr) {
         return;
@@ -123,7 +123,7 @@ void UIAutoTest::ClickViewById(const char* id)
     CompareTools::WaitSuspend();
 }
 
-void UIAutoTest::DragViewToHead(const char* id)
+void UIAutoTest::DragViewToHead(const char* id) const
 {
     if (id == nullptr) {
         return;
@@ -137,9 +137,9 @@ void UIAutoTest::DragViewToHead(const char* id)
     startPoint.y = GetAbsoluteY(view);
 
     Point endPoint;
-    endPoint.x = 50;
-    endPoint.y = 80;
+    endPoint.x = 50; // 50 :end point x position;
+    endPoint.y = 80; // 80 :end point y position;
     EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 80); // 80: drag time
     CompareTools::WaitSuspend();
 }
-} //namespace OHOS
+} // namespace OHOS

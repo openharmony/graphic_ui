@@ -18,7 +18,7 @@
 #include "ui_test_render.h"
 
 namespace OHOS {
-void UIAutoTestRender::Reset()
+void UIAutoTestRender::Reset() const
 {
     ResetMainMenu();
     EnterSubMenu(UI_TEST_RENDER_ID);
@@ -27,11 +27,11 @@ void UIAutoTestRender::Reset()
 void UIAutoTestRender::RunTestList()
 {
     Reset();
-    UIKit_Render_Test_Render_001();
-    UIKit_Render_Test_RenderMeasure_001();
+    UIKitRenderTestRender001();
+    UIKitRenderTestRenderMeasure001();
 }
 
-void UIAutoTestRender::UIKit_Render_Test_Render_001()
+void UIAutoTestRender::UIKitRenderTestRender001() const
 {
     const char* fileName = "ui_test_render_001.bin";
     char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
@@ -44,11 +44,11 @@ void UIAutoTestRender::UIKit_Render_Test_Render_001()
     return;
 }
 
-void UIAutoTestRender::UIKit_Render_Test_RenderMeasure_001()
+void UIAutoTestRender::UIKitRenderTestRenderMeasure001() const
 {
     ClickViewById(UI_TEST_RENDER_UPDATA_BUTTON_ID_01);
     const char* fileName = "ui_test_render_measure_001.bin";
-    char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};;
+    char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
     CompareTools::StrnCatPath(filePath, DEFAULT_FILE_NAME_MAX_LENGTH, fileName, strlen(fileName));
     if (CompareTools::CheckFileExist(filePath, sizeof(filePath))) {
         CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
