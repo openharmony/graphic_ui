@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef UI_AUTO_TEST_H
-#define UI_AUTO_TEST_H
+#ifndef GRAPHIC_LITE_UI_AUTO_TEST_H
+#define GRAPHIC_LITE_UI_AUTO_TEST_H
 
 #include "components/ui_view.h"
 
@@ -28,17 +28,10 @@ public:
     virtual void Reset() const = 0;
 
     void ResetMainMenu() const;
-
     void EnterSubMenu(const char* id) const;
-
     void ClickViewById(const char* id) const;
-
     void DragViewToHead(const char* id) const;
-
-private:
-    int16_t GetAbsoluteX(UIView* view) const;
-    int16_t GetAbsoluteY(UIView* view) const;
-    UIView* GetChildViewById(UIView* node, const char* id) const;
+    void CompareByBinary(const char* fileName) const;
 };
 } // namespace OHOS
-#endif // UI_AUTO_TEST_H
+#endif // GRAPHIC_LITE_UI_AUTO_TEST_H

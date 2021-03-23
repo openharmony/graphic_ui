@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef UI_AUTO_TEST_RENDER_H
-#define UI_AUTO_TEST_RENDER_H
+#ifndef GRAPHIC_LITE_UI_AUTO_TEST_RENDER_H
+#define GRAPHIC_LITE_UI_AUTO_TEST_RENDER_H
 
 #include "ui_auto_test.h"
 
@@ -28,8 +28,7 @@ public:
     void RunTestList();
 
     void UIKitRenderTestRender001() const;
-
     void UIKitRenderTestRenderMeasure001() const;
 };
 } // namespace OHOS
-#endif // UI_AUTO_TEST_RENDER_H
+#endif // GRAPHIC_LITE_UI_AUTO_TEST_RENDER_H

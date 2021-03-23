@@ -15,15 +15,15 @@
 
 #include "ui_test_app.h"
 #include "common/screen.h"
-#include "compare_tools.h"
 #include "test_resource_config.h"
 #include "ui_test.h"
 #include "ui_test_group.h"
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
+#if ENABEL_UI_AUTO_TEST
+#include "compare_tools.h"
 #include "dfx/event_injector.h"
 #include "ui_auto_test_group.h"
 #include "ui_auto_test.h"
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST
+#endif // ENABEL_UI_AUTO_TEST
 
 namespace OHOS {
 void UITestApp::Start()
@@ -106,15 +106,12 @@ UITestApp::~UITestApp()
     }
 }
 
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
+#if ENABEL_UI_AUTO_TEST
 void UIAutoTestApp::Start()
 {
     EventInjector::GetInstance()->RegisterEventInjector(EventDataType::POINT_TYPE);
     EventInjector::GetInstance()->RegisterEventInjector(EventDataType::KEY_TYPE);
-
-    //wait simulator enter master meanu
     CompareTools::WaitSuspend();
-
     UIAutoTestGroup::SetUpTestCase();
     ListNode<UIAutoTest*>* node = UIAutoTestGroup::GetTestCase().Begin();
     while (node != UIAutoTestGroup::GetTestCase().End()) {
@@ -122,7 +119,6 @@ void UIAutoTestApp::Start()
         node->data_->ResetMainMenu();
         node = node->next_;
     }
-    return;
 }
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST
+#endif // ENABEL_UI_AUTO_TEST
 } // namespace OHOS

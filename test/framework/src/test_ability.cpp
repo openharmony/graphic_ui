@@ -14,21 +14,24 @@
  */
 
 #include "ui_test_app.h"
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
+#if ENABEL_UI_AUTO_TEST
+#ifdef _WIN32
 #include <thread>
+#endif // _WIN32
 
-void thread()
+void* AutoTestThread()
 {
     OHOS::UIAutoTestApp::GetInstance()->Start();
-    return;
 }
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST
+#endif // ENABEL_UI_AUTO_TEST
 
 void RunApp()
 {
     OHOS::UITestApp::GetInstance()->Start();
-#ifdef OHOS_GRAPHIC_UI_AUTO_TEST
-    std::thread autoTestPthread(thread);
+#if ENABEL_UI_AUTO_TEST
+#ifdef _WIN32
+    std::thread autoTestPthread(AutoTestThread);
     autoTestPthread.detach();
-#endif // OHOS_GRAPHIC_UI_AUTO_TEST
+#endif // _WIN32
+#endif // ENABEL_UI_AUTO_TEST
 }

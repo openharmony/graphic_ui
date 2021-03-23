@@ -14,66 +14,15 @@
  */
 
 #include "ui_auto_test.h"
+#include "compare_tools.h"
 #include "components/root_view.h"
 #include "components/ui_list.h"
 #include "components/ui_view_group.h"
-#include "compare_tools.h"
 #include "dfx/event_injector.h"
 #include "ui_test_app.h"
 #include "ui_test_group.h"
 
 namespace OHOS {
-int16_t UIAutoTest::GetAbsoluteX(UIView* view) const
-{
-    if (view == nullptr) {
-        return 0xffff;
-    }
-    int16_t x = 0;
-    UIView* pareter = view;
-    while (pareter != nullptr) {
-        x += pareter->GetX();
-        pareter = pareter->GetParent();
-    }
-    return x;
-}
-
-int16_t UIAutoTest::GetAbsoluteY(UIView*  view) const
-{
-    if (view == nullptr) {
-        return 0xffff;
-    }
-    int16_t y = 0;
-    UIView* pareter = view;
-    while (pareter != nullptr) {
-        y += pareter->GetY();
-        pareter = pareter->GetParent();
-    }
-    return y;
-}
-
-UIView* UIAutoTest::GetChildViewById(UIView* node, const char* id) const
-{
-    if (node == nullptr || id == nullptr) {
-        return nullptr;
-    }
-    if (!node->IsViewGroup()) {
-        return nullptr;
-    }
-    UIView* view = node->GetChildById(id);
-    if (view != nullptr) {
-        return view;
-    }
-    UIView* child = reinterpret_cast<UIViewGroup*>(node)->GetChildrenHead();
-    while (child != nullptr) {
-        view = GetChildViewById(child, id);
-        if (view != nullptr) {
-            return view;
-        }
-        child = child->GetNextSibling();
-    }
-    return nullptr;
-}
-
 void UIAutoTest::ResetMainMenu() const
 {
     while (RootView::GetInstance()->GetChildById(UI_TEST_MAIN_LIST_ID) == nullptr) {
@@ -86,15 +35,15 @@ void UIAutoTest::EnterSubMenu(const char* id) const
     if (id == nullptr) {
         return;
     }
-    UIView* view = GetChildViewById(RootView::GetInstance(), id);
+    UIView* view = RootView::GetInstance()->GetChildById(id);
     if (view == nullptr) {
-        UIView* view = GetChildViewById(RootView::GetInstance(), UI_TEST_MAIN_LIST_ID);
+        UIView* view = RootView::GetInstance()->GetChildById(UI_TEST_MAIN_LIST_ID);
         if (view == nullptr) {
             return;
         }
         ListNode<TestCaseInfo>* node = UITestGroup::GetTestCase().Begin();
         while (node != UITestGroup::GetTestCase().End()) {
-            if (node->data_.sliceId != nullptr && strcmp(id, node->data_.sliceId) == 0) {
+            if ((node->data_.sliceId != nullptr) && (strcmp(id, node->data_.sliceId) == 0)) {
                 UITestGroup::GetTestCase().PushFront(node->data_);
                 UITestGroup::GetTestCase().Remove(node);
                 break;
@@ -112,13 +61,13 @@ void UIAutoTest::ClickViewById(const char* id) const
     if (id == nullptr) {
         return;
     }
-    UIView* view = GetChildViewById(RootView::GetInstance(), id);
+    UIView* view = RootView::GetInstance()->GetChildById(id);
     if (view == nullptr) {
         return;
     }
     Point point;
-    point.x = GetAbsoluteX(view);
-    point.y = GetAbsoluteY(view);
+    point.x = view->GetOrigRect().GetX();
+    point.y = view->GetOrigRect().GetY();
     EventInjector::GetInstance()->SetClickEvent(point);
     CompareTools::WaitSuspend();
 }
@@ -128,18 +77,32 @@ void UIAutoTest::DragViewToHead(const char* id) const
     if (id == nullptr) {
         return;
     }
-        UIView* view = GetChildViewById(RootView::GetInstance(), id);
+    UIView* view = RootView::GetInstance()->GetChildById(id);
     if (view == nullptr) {
         return;
     }
     Point startPoint;
-    startPoint.x = GetAbsoluteX(view);
-    startPoint.y = GetAbsoluteY(view);
+    startPoint.x = view->GetOrigRect().GetX();
+    startPoint.y = view->GetOrigRect().GetY();
 
     Point endPoint;
     endPoint.x = 50; // 50 :end point x position;
     endPoint.y = 80; // 80 :end point y position;
     EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 80); // 80: drag time
     CompareTools::WaitSuspend();
+}
+
+void UIAutoTest::CompareByBinary(const char* fileName) const
+{
+    if (fileName == nullptr) {
+        return;
+    }
+    char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+    CompareTools::StrnCatPath(filePath, DEFAULT_FILE_NAME_MAX_LENGTH, fileName, strlen(fileName));
+    if (CompareTools::CheckFileExist(filePath, sizeof(filePath))) {
+        CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+    } else {
+        CompareTools::SaveFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+    }
 }
 } // namespace OHOS

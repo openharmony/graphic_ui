@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-#ifndef UI_AUTO_TEST_GROUP_H
-#define UI_AUTO_TEST_GROUP_H
+#ifndef GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
+#define GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
 
-#include "list.h"
+#include "gfx_utils/list.h"
 #include "ui_auto_test.h"
 
 namespace OHOS {
@@ -30,4 +30,4 @@ private:
     static List<UIAutoTest*> testCaseList_;
 };
 } // namespace OHOS
-#endif // UI_AUTO_TEST_GROUP_H
+#endif // GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H

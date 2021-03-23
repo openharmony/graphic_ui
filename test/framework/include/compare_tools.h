@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef COMPARE_TOOLS_H
-#define COMPARE_TOOLS_H
+#ifndef GRAPHIC_LITE_COMPARE_TOOLS_H
+#define GRAPHIC_LITE_COMPARE_TOOLS_H
 
 #include "graphic_config.h"
 #ifdef _WIN32
@@ -23,17 +23,17 @@
 #include <unistd.h>
 #endif // _WIN32
 
-#if defined QT_COMPILER
+#ifdef _WIN32
 #define UI_AUTO_TEST_RESOURCE_PATH  "..\\simulator\\config\\auto_test\\"
 #else
 #define UI_AUTO_TEST_RESOURCE_PATH  (RESOURCE_DIR "auto_test/")
 #endif
 
 namespace OHOS {
-    namespace {
-        constexpr uint16_t DEFAULT_WAIT_TIME_MS = 300;
-        constexpr size_t DEFAULT_FILE_NAME_MAX_LENGTH = 256;
-    }
+namespace {
+    constexpr uint16_t DEFAULT_WAIT_TIME_MS = 300;
+    constexpr size_t DEFAULT_FILE_NAME_MAX_LENGTH = 256;
+}
 class CompareTools {
 public:
     enum CompareMode : uint8_t {
@@ -49,7 +49,7 @@ public:
 
 private:
     static bool CompareBinary(const char* filePath, size_t length);
-    static bool SaveFramBuffToBinary(const char* filePath, size_t length);
+    static bool SaveFrameBuffToBinary(const char* filePath, size_t length);
 };
 } // namespace OHOS
-#endif // COMPARE_TOOLS_H
+#endif // GRAPHIC_LITE_COMPARE_TOOLS_H
