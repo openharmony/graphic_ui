@@ -28,7 +28,6 @@ SOURCES += \
     ../../../../frameworks/common/image.cpp \
     ../../../../frameworks/common/input_device_manager.cpp \
     ../../../../frameworks/common/screen.cpp \
-    ../../../../frameworks/common/screen_device_proxy.cpp \
     ../../../../frameworks/common/task.cpp \
     ../../../../frameworks/common/text.cpp \
     ../../../../frameworks/common/typed_text.cpp \
@@ -78,6 +77,7 @@ SOURCES += \
     ../../../../frameworks/dock/key_input_device.cpp \
     ../../../../frameworks/dock/pointer_input_device.cpp \
     ../../../../frameworks/dock/rotate_input_device.cpp \
+    ../../../../frameworks/dock/screen_device_proxy.cpp \
     ../../../../frameworks/dock/virtual_input_device.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
     ../../../../frameworks/draw/draw_curve.cpp \

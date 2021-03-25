@@ -79,7 +79,6 @@ public:
      * @version 1.0
      */
     bool ScreenshotToFile(const char* path);
-
 private:
     UIScreenshotListener* screenshotListener_;
 
