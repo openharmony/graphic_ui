@@ -52,6 +52,7 @@ public:
                        uint32_t srcStride,
                        uint32_t srcLineNumber,
                        ColorMode srcColorMode,
+                       LutColorMode srcLutColorMode,
                        uint32_t color,
                        OpacityType opa,
                        uint8_t* dst,
