@@ -50,6 +50,7 @@
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/heap_base.h"
+#include "gfx_utils/image_info.h"
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
 
@@ -1580,6 +1581,8 @@ public:
         return onFocusListener_;
     }
 #endif
+
+    bool GetBitmap(ImageInfo& bitmap);
 
 protected:
     bool touchable_ : 1;

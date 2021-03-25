@@ -17,7 +17,9 @@
 #include "components/root_view.h"
 #include "core/render_manager.h"
 #include "dock/focus_manager.h"
+#include "dock/screen_device_proxy.h"
 #include "draw/draw_rect.h"
+#include "draw/draw_utils.h"
 #include "gfx_utils/graphic_log.h"
 #include "themes/theme_manager.h"
 
@@ -804,4 +806,41 @@ uint8_t UIView::GetMixOpaScale()
     }
     return opaMix;
 }
+
+bool UIView::GetBitmap(ImageInfo& bitmap)
+{
+    if (!ScreenDeviceProxy::GetInstance()->EnableBitmapBuffer()) {
+        return false;
+    }
+    UIView* tempSibling = nextSibling_;
+    UIView* tempParent = parent_;
+    int16_t tempX = rect_.GetX();
+    int16_t tempY = rect_.GetY();
+    nextSibling_ = nullptr;
+    parent_ = nullptr;
+
+    int16_t screenWidth = ScreenDeviceProxy::GetInstance()->GetScreenWidth();
+    int16_t screenHeight = ScreenDeviceProxy::GetInstance()->GetScreenHeight();
+    Rect screenRect(0, 0, screenWidth, screenHeight);
+    rect_.SetPosition(0, 0);
+    Rect mask = GetRect();
+    mask.Intersect(mask, screenRect);
+    uint16_t bufferWidth = mask.GetWidth();
+    uint16_t bufferHeight = mask.GetHeight();
+    ScreenDeviceProxy::GetInstance()->SetViewBitmapBufferWidth(bufferWidth);
+    RootView::GetInstance()->DrawTop(this, mask);
+    bitmap.data = ScreenDeviceProxy::GetInstance()->GetBuffer();
+    bitmap.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
+    bitmap.header.width = bufferWidth;
+    bitmap.header.height = bufferHeight;
+    bitmap.header.reserved = 0;
+
+    ScreenDeviceProxy::GetInstance()->DisableBitmapBuffer();
+    nextSibling_ = tempSibling;
+    parent_ = tempParent;
+    rect_.SetPosition(tempX, tempY);
+    return true;
+}
+
 } // namespace OHOS

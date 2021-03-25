@@ -83,6 +83,9 @@ void ScreenDeviceProxy::SetScreenSize(uint16_t width, uint16_t height)
 
 uint8_t* ScreenDeviceProxy::GetBuffer()
 {
+    if (enableBitmapBuffer_) {
+        return viewBitmapBuffer_;
+    }
     flush_.Wait();
     if (useAnimatorBuff_) {
         if (animatorBufferAddr_ == nullptr) {
@@ -104,5 +107,28 @@ ColorMode ScreenDeviceProxy::GetBufferMode()
         return animatorBufferMode_;
     }
     return frameBufferMode_;
+}
+
+bool ScreenDeviceProxy::EnableBitmapBuffer()
+{
+    if (viewBitmapBuffer_ == nullptr) {
+        return false;
+    }
+    enableBitmapBuffer_ = true;
+    return true;
+}
+
+uint8_t* ScreenDeviceProxy::GetScreenBitmapBuffer()
+{
+    if (screenBitmapBuffer_ == nullptr) {
+        return nullptr;
+    }
+    uint8_t* buf = GetBuffer();
+    uint8_t byteSize = DrawUtils::GetByteSizeByColorMode(frameBufferMode_);
+    uint32_t bufSize = width_ * height_ * byteSize;
+    if (memcpy_s(screenBitmapBuffer_, bufSize, buf, bufSize) != EOK) {
+        return nullptr;
+    }
+    return screenBitmapBuffer_;
 }
 } // namespace OHOS

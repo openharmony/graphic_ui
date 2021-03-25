@@ -34,7 +34,7 @@ void RenderManager::Init()
     Task::Init();
 }
 
-void RenderManager::RenderTask()
+void RenderManager::Callback()
 {
 #if ENABLE_WINDOW
     ListNode<Window*>* winNode = winList_.Begin();
