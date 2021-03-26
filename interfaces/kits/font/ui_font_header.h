@@ -309,6 +309,7 @@ struct LangTexsTableHeader {
     uint32_t textUtf8ParamLen; // LANG_TEXTS_UTF8P_LEN
     uint32_t textUtf8Start;
     uint32_t textUtf8Len; // LANG_TEXTS_UTF8_LEN
+    uint32_t textUtf8MaxItemLen;
     uint32_t textCodepointsStart;
     uint32_t textCodepointsMaxItemLen;
     uint32_t textCodepointsTotalLen;
