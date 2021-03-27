@@ -139,7 +139,7 @@ RetCode FileImgDecoder::ReadToCache(ImgResDsc& dsc)
 
 RetCode FileImgDecoder::ReadLineTrueColor(ImgResDsc& dsc, const Point& start, int16_t len, uint8_t* buf)
 {
-    uint8_t pxSizeInBit = DrawUtils::GetPxSizeByImageInfo(dsc.imgInfo);
+    uint8_t pxSizeInBit = DrawUtils::GetPxSizeByColorMode(dsc.imgInfo.header.colorMode);
     off_t res;
 
     uint32_t pos = ((start.y * dsc.imgInfo.header.width + start.x) * pxSizeInBit) >> BYTE_TO_BIT_SHIFT;

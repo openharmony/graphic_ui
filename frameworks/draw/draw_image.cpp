@@ -27,10 +27,33 @@ void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
         return;
     }
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.imageOpa_);
-
-    /* 3 : when single pixel change bit to byte, the buffer should divide by 8, equal to shift right 3 bits. */
-    uint8_t pxByteSize = DrawUtils::GetPxSizeByImageInfo(*img) >> 3;
-    DrawUtils::GetInstance()->DrawImage(coords, mask, img->data, opa, pxByteSize);
+    uint8_t pxBitSize = DrawUtils::GetPxSizeByColorMode(img->header.colorMode);
+    LutColorMode lutColorMode = LUT_UNKNOW;
+    uint8_t size = 0;
+    switch (img->header.colorMode) {
+        case L1:
+            // One index represents 1 bit, 8 : convert to bytes, 1 : 2 color values
+            size = (img->dataSize - (img->header.width * img->header.height / 8)) >> 1;
+            break;
+        case L2:
+            // One index represents 2 bit, 4 : convert to bytes, 2 : 4 color values
+            size = (img->dataSize - (img->header.width * img->header.height / 4)) >> 2;
+            break;
+        case L4:
+            // One index represents 4 bit, 2 : convert to bytes, 4 : 16 color values
+            size = (img->dataSize - (img->header.width * img->header.height / 2)) >> 4;
+            break;
+        case L8:
+            // One index represents 8 bit, 8 : 256 color values
+            size = (img->dataSize - (img->header.width * img->header.height)) >> 8;
+            break;
+        default:
+            size = 0;
+            break;
+    }
+    lutColorMode = DrawUtils::GetLutColorModeBySize(size);
+    DrawUtils::GetInstance()->DrawImage(coords, mask, img->data, opa, pxBitSize,
+                                        static_cast<ColorMode>(img->header.colorMode), lutColorMode);
 }
 
 void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
@@ -46,10 +69,10 @@ void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
         return;
     }
 
-    /* 3 : when single pixel change bit to byte, the buffer should divide by 8, equal to shift right 3 bits. */
-    uint8_t pxByteSize = DrawUtils::GetPxSizeByImageInfo(entry.GetImageInfo()) >> 3;
+    uint8_t pxBitSize = DrawUtils::GetPxSizeByColorMode(entry.GetImageInfo().header.colorMode);
     if (entry.InCache()) {
-        DrawUtils::GetInstance()->DrawImage(coords, mask, entry.GetImgData(), opa, pxByteSize);
+        DrawUtils::GetInstance()->DrawImage(coords, mask, entry.GetImgData(), opa, pxBitSize,
+                                            static_cast<ColorMode>(entry.GetImageInfo().header.colorMode));
     } else {
         Rect valid = coords;
         if (!valid.Intersect(valid, mask)) {
@@ -77,7 +100,8 @@ void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
                 UIFree(buf);
                 return;
             }
-            DrawUtils::GetInstance()->DrawImage(line, mask, buf, opa, pxByteSize);
+            DrawUtils::GetInstance()->DrawImage(line, mask, buf, opa, pxBitSize,
+                                                static_cast<ColorMode>(entry.GetImageInfo().header.colorMode));
             line.SetTop(line.GetTop() + 1);
             line.SetBottom(line.GetBottom() + 1);
             start.y++;

@@ -206,6 +206,7 @@ void DrawUtils::DrawColorArea(const Rect& area, const Rect& mask, const ColorTyp
 uint8_t DrawUtils::GetPxSizeByColorMode(uint8_t colorMode)
 {
     switch (colorMode) {
+        case TSC:
         case ARGB8888:
             return 32; // 32: 32 bit
         case RGB888:
@@ -247,14 +248,18 @@ uint8_t DrawUtils::GetByteSizeByColorMode(uint8_t colorMode)
     }
 }
 
-uint8_t DrawUtils::GetPxSizeByImageInfo(ImageInfo imageInfo)
+LutColorMode DrawUtils::GetLutColorModeBySize(uint8_t size)
 {
-    if ((imageInfo.header.width == 0) || (imageInfo.header.height == 0)) {
-        return 0;
+    switch (size) {
+        case 2: // 2: 2 Byte
+            return LUT_RGB565;
+        case 3: // 3: 3 Byte
+            return LUT_RGB888;
+        case 4: // 4: 4 Byte
+            return LUT_ARGB8888;
+        default:
+            return LUT_UNKNOW;
     }
-    /* 3 : when change byte to single pixel, the buffer should multiply by 8, equal to shift left 3 bits. */
-    uint8_t pxSize = (imageInfo.dataSize / (imageInfo.header.width * imageInfo.header.height)) << 3;
-    return pxSize;
 }
 
 void DrawUtils::DrawPixel(int16_t x, int16_t y, const Rect& mask, const ColorType& color, OpacityType opa) const
@@ -348,7 +353,7 @@ void DrawUtils::DrawLetter(const LabelLetterInfo& letterInfo) const
         (posX + letterW <= letterInfo.mask.GetRight()) ? letterW : (letterInfo.mask.GetRight() - posX + 1);
 
     uint8_t letterWidthInByte = (letterW * fontWeight) >> SHIFT_3;
-    if ((letterW * fontWeight) & 0x7) {
+    if ((letterW * fontWeight) & 0x7) { // 0x7 : less than 1 byte is counted as 1 byte
         letterWidthInByte++;
     }
 
@@ -363,7 +368,7 @@ void DrawUtils::DrawLetter(const LabelLetterInfo& letterInfo) const
 #if ENABLE_HARDWARE_ACCELERATION && ENABLE_HARDWARE_ACCELERATION_FOR_TEXT
     Rect srcRect(colStart, rowStart, colEnd - 1, rowEnd - 1);
     if (ScreenDeviceProxy::GetInstance()->HardwareBlend(fontMap, srcRect, letterWidthInByte, letterH,
-        static_cast<ColorMode>(colorMode),
+        static_cast<ColorMode>(colorMode), LUT_UNKNOW,
         Color::ColorTo32(letterInfo.color), opa, reinterpret_cast<uint8_t*>(screenBuffer),
         screenBufferWidth * bufferPxSize, bufferMode, dstPosX, dstPosY)) {
         return;
@@ -414,7 +419,9 @@ void DrawUtils::DrawImage(const Rect& area,
                           const Rect& mask,
                           const uint8_t* image,
                           OpacityType opa,
-                          uint8_t pxByteSize) const
+                          uint8_t pxBitSize,
+                          ColorMode colorMode,
+                          LutColorMode LutColorMode) const
 {
     if (image == nullptr) {
         return;
@@ -435,32 +442,24 @@ void DrawUtils::DrawImage(const Rect& area,
     int16_t mapWidth = area.GetWidth();
     int16_t imageX = originMaskedArea.GetLeft() - area.GetLeft();
     int16_t imageY = originMaskedArea.GetTop() - area.GetTop();
-
-    ColorMode srcMode;
-    if (pxByteSize == static_cast<uint8_t>(PixelType::IMG_RGB888)) {
-        srcMode = RGB888;
-    } else if (pxByteSize == static_cast<uint8_t>(PixelType::IMG_RGB565)) {
-        srcMode = RGB565;
-    } else if (pxByteSize == static_cast<uint8_t>(PixelType::IMG_ARGB8888)) {
-        srcMode = ARGB8888;
-    } else {
-        GRAPHIC_LOGE("DrawUtils::DrawImage image format err\n");
-        return;
+    uint32_t imageWidthInByte = (static_cast<uint32_t>(mapWidth) * pxBitSize) >> SHIFT_3;
+    if ((mapWidth * pxBitSize) & 0x7) { // 0x7 : less than 1 byte is counted as 1 byte
+        imageWidthInByte++;
     }
 #if ENABLE_HARDWARE_ACCELERATION
     Rect srcRect(imageX, imageY, imageX + maskedArea.GetWidth() - 1, imageY + maskedArea.GetHeight() - 1);
-    if (ScreenDeviceProxy::GetInstance()->HardwareBlend(image, srcRect, mapWidth * pxByteSize, area.GetHeight(),
-        srcMode, 0, opa, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode, maskedArea.GetLeft(),
-        maskedArea.GetTop())) {
+    if (ScreenDeviceProxy::GetInstance()->HardwareBlend(image, srcRect, imageWidthInByte, area.GetHeight(),
+        colorMode, lutColorMode, 0, opa, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode,
+        maskedArea.GetLeft(), maskedArea.GetTop())) {
         return;
     }
 #endif
     screenBuffer += static_cast<uint32_t>(screenBufferWidth) * maskedArea.GetTop() * bufferPxSize;
     screenBuffer += static_cast<uint32_t>(maskedArea.GetLeft()) * bufferPxSize;
 
-    image += (static_cast<uint32_t>(mapWidth) * imageY + imageX) * pxByteSize;
+    image += (static_cast<uint32_t>(mapWidth) * imageY + imageX) * (pxBitSize >> SHIFT_3);
     /* RGB565 RGB888 color mode, image src don't have alpha */
-    BlendWithSoftWare(image, mapWidth * pxByteSize, srcMode, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode,
+    BlendWithSoftWare(image, imageWidthInByte, colorMode, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode,
                       maskedArea.GetWidth(), maskedArea.GetHeight(), opa);
 }
 

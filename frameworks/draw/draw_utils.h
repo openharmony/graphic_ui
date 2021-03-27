@@ -167,12 +167,6 @@ enum {
     IMG_SRC_UNKNOWN,
 };
 
-enum PixelType {
-    IMG_RGB565 = 2,
-    IMG_RGB888 = 3,
-    IMG_ARGB8888 = 4,
-};
-
 class DrawUtils : public HeapBase {
 public:
     static DrawUtils* GetInstance()
@@ -189,7 +183,8 @@ public:
 
     void DrawLetter(const LabelLetterInfo& letterInfo) const;
 
-    void DrawImage(const Rect& area, const Rect& mask, const uint8_t* image, OpacityType opa, uint8_t pxByteSize) const;
+    void DrawImage(const Rect& area, const Rect& mask, const uint8_t* image, OpacityType opa, uint8_t pxBitSize,
+                    ColorMode colorMode, LutColorMode lutColorMode = LUT_UNKNOW) const;
 
     static void
         GetXAxisErrForJunctionLine(bool ignoreJunctionPoint, bool isRightPart, int16_t& xMinErr, int16_t& xMaxErr);
@@ -221,7 +216,7 @@ public:
 
     static uint8_t GetByteSizeByColorMode(uint8_t colorMode);
 
-    static uint8_t GetPxSizeByImageInfo(ImageInfo imageInfo);
+    static LutColorMode GetLutColorModeBySize(uint8_t size);
 
     static OpacityType GetMixOpacity(OpacityType opa1, OpacityType opa2)
     {
