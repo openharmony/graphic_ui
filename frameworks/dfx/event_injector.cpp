@@ -18,7 +18,7 @@
 #include "common/input_device_manager.h"
 #include "dfx/key_event_injector.h"
 #include "dfx/point_event_injector.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 EventInjector::~EventInjector()

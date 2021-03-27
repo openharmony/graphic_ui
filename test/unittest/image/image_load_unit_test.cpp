@@ -15,8 +15,8 @@
 
 #include "imgdecode/image_load.h"
 
-#include "file.h"
-#include "mem_api.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/mem_api.h"
 #include "test_resource_config.h"
 
 #include <climits>

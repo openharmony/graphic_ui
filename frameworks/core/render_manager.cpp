@@ -17,7 +17,7 @@
 
 #include "components/root_view.h"
 #include "dock/screen_device_proxy.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 #include "securec.h"
 #if ENABLE_WINDOW

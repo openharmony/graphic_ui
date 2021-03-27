@@ -37,7 +37,7 @@
 
 #include "common/text.h"
 #include "components/ui_button.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 /**

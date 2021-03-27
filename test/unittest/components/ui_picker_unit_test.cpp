@@ -16,7 +16,7 @@
 #include "components/ui_picker.h"
 #include <climits>
 #include <gtest/gtest.h>
-#include "style.h"
+#include "gfx_utils/style.h"
 
 using namespace testing::ext;
 namespace OHOS {

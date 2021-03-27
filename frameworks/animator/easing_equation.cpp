@@ -14,7 +14,7 @@
  */
 
 #include "animator/easing_equation.h"
-#include "graphic_math.h"
+#include "gfx_utils/graphic_math.h"
 
 namespace OHOS {
 double EasingEquation::overshoot_ = 1.7; // The empirical value commonly used in easing equation

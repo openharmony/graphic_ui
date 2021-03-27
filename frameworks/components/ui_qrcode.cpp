@@ -15,7 +15,7 @@
 
 #include "components/ui_qrcode.h"
 #include "QrCode.hpp"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
 using qrcodegen::QrCode;

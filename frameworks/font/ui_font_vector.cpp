@@ -14,7 +14,7 @@
  */
 
 #include "font/ui_font_vector.h"
-#include "file.h"
+#include "gfx_utils/file.h"
 #include "graphic_config.h"
 #include "securec.h"
 #if ENABLE_MULTI_FONT

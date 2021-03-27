@@ -19,10 +19,10 @@
 #include "draw/draw_image.h"
 #include "draw/draw_label.h"
 #include "draw/draw_rect.h"
-#include "file.h"
-#include "image_info.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/image_info.h"
+#include "gfx_utils/mem_api.h"
 #include "imgdecode/cache_manager.h"
-#include "mem_api.h"
 #ifndef VERSION_LITE
 #include "gif_lib.h"
 #endif

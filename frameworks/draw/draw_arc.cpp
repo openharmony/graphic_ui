@@ -15,7 +15,7 @@
 
 #include "draw/draw_arc.h"
 #include "common/image.h"
-#include "graphic_math.h"
+#include "gfx_utils/graphic_math.h"
 
 namespace OHOS {
 #define IS_IN_DEGREERANE(d, s, e) ((s) <= (e)) ? (((d) >= (s)) && ((d) <= (e))) : (((d) >= (s)) || ((d) <= (e)))

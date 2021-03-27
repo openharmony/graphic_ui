@@ -35,7 +35,7 @@
 #ifndef GRAPHIC_LITE_UI_DIGITAL_CLOCK_H
 #define GRAPHIC_LITE_UI_DIGITAL_CLOCK_H
 
-#include "color.h"
+#include "gfx_utils/color.h"
 #include "components/ui_abstract_clock.h"
 #include "components/ui_label.h"
 

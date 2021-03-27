@@ -16,7 +16,7 @@
 #include "window/window_impl.h"
 #include "core/render_manager.h"
 #include "dock/screen_device_proxy.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 #include "iwindows_manager.h"
 
 namespace OHOS {

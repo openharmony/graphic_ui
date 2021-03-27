@@ -16,7 +16,7 @@
 #ifndef GRAPHIC_LITE_IMAGE_LOAD_H
 #define GRAPHIC_LITE_IMAGE_LOAD_H
 
-#include "image_info.h"
+#include "gfx_utils/image_info.h"
 
 namespace OHOS {
 enum CompressMode : uint8_t {

@@ -15,7 +15,7 @@
 
 #include "dfx/point_event_injector.h"
 #if ENABLE_DEBUG
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace {
 const uint16_t MAX_LIST_SIZE = 500;

@@ -22,7 +22,7 @@
 #include "components/ui_view_group.h"
 #include "dock/screen_device.h"
 #include "dock/screen_device_proxy.h"
-#include "style.h"
+#include "gfx_utils/style.h"
 #include "test_resource_config.h"
 #include "window/window.h"
 

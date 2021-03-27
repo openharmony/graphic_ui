@@ -16,13 +16,13 @@
 #ifndef GRAPHIC_LITE_SCREEN_DEVICE_PROXY_H
 #define GRAPHIC_LITE_SCREEN_DEVICE_PROXY_H
 
-#include "color.h"
+#include "gfx_utils/color.h"
 #include "dock/screen_device.h"
-#include "graphic_assert.h"
+#include "gfx_utils/graphic_assert.h"
 #include "graphic_semaphore.h"
-#include "image_info.h"
-#include "rect.h"
-#include "transform.h"
+#include "gfx_utils/image_info.h"
+#include "gfx_utils/rect.h"
+#include "gfx_utils/transform.h"
 #if ENABLE_WINDOW
 #include "surface.h"
 #endif

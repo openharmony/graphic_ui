@@ -19,9 +19,9 @@
 #include "components/ui_view.h"
 #include "components/root_view.h"
 #include "common/task_manager.h"
-#include "geometry2d.h"
-#include "list.h"
-#include "sys_info.h"
+#include "gfx_utils/geometry2d.h"
+#include "gfx_utils/list.h"
+#include "gfx_utils/sys_info.h"
 #if ENABLE_WINDOW
 #include "window/window.h"
 #endif

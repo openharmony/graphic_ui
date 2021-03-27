@@ -17,7 +17,7 @@
 #define GRAPHIC_LITE_INPUT_DEVICE_MANAGER_H
 
 #include "dock/input_device.h"
-#include "list.h"
+#include "gfx_utils/list.h"
 #include "common/task.h"
 
 namespace OHOS {

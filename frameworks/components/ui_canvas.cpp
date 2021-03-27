@@ -20,7 +20,7 @@
 #include "draw/draw_image.h"
 #include "draw/draw_line.h"
 #include "draw/draw_rect.h"
-#include "graphic_log.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 UICanvas::UICanvasPath::~UICanvasPath()
