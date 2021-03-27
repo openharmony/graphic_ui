@@ -214,7 +214,7 @@ bool UIList::OnRotateEvent(const RotateEvent& event)
 #endif
 
     if (!throwDrag_ || ((MATH_ABS(tmpRotateLen) < (midPointX / rotateThreshold_)) &&
-                        (MATH_ABS(tmpRotateLen) < (midPointY / rotateThreshold_)))) {
+        (MATH_ABS(tmpRotateLen) < (midPointY / rotateThreshold_)))) {
         ScrollBy(tmpRotateLen);
         if (event.GetRotate() == 0) {
             isReCalculateDragEnd_ = false;
@@ -430,7 +430,7 @@ bool UIList::MoveChildStepInner(int16_t distance,
     } else {
         if ((childrenTail_ == nullptr) ||
             ((childrenTail_->*pfnGetXOrY)() + (childrenTail_->GetRelativeRect().*pfnGetWidthOrHeight)() + distance <
-             (this->GetRelativeRect().*pfnGetWidthOrHeight)())) {
+            (this->GetRelativeRect().*pfnGetWidthOrHeight)())) {
             UIView* newView = recycle_.GetView(GetIndexInc(bottomIndex_));
             if (newView == nullptr) {
                 return false;
@@ -581,9 +581,9 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
         if (direction_ == VERTICAL) {
             height = view->GetRelativeRect().GetHeight();
             if ((GetChildrenHead()->GetY() - GetChildrenHead()->GetStyle(STYLE_MARGIN_TOP) + yOffset >
-                 selectPosition_) ||
+                selectPosition_) ||
                 (childrenTail_->GetY() + height + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) + yOffset <
-                 selectPosition_)) {
+                selectPosition_)) {
                 onSelectedIndex_ = NULL_SELECT_INDEX;
                 onSelectedView_ = nullptr;
                 if (scrollListener_ != nullptr) {
