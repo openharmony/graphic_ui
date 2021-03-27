@@ -139,6 +139,13 @@ UILabel::~UILabel()
     }
 }
 
+void UILabel::InitLabelText()
+{
+    if (labelText_ == nullptr) {
+        labelText_ = new Text();
+    }
+}
+
 int16_t UILabel::GetWidth()
 {
     InitLabelText();

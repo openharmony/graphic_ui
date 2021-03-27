@@ -409,12 +409,7 @@ protected:
     Text* labelText_;
     void RefreshLabel();
 
-    virtual void InitLabelText()
-    {
-        if (labelText_ == nullptr) {
-            labelText_ = new Text();
-        }
-    }
+    virtual void InitLabelText();
 
 private:
     friend class LabelAnimator;
