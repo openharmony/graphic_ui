@@ -282,18 +282,18 @@ bool UIList::DragXInner(int16_t distance)
         return MoveOffset(distance);
     }
     if (distance > 0) {
-        if (childrenHead_ && (childrenHead_->GetX() + distance >
-                              scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_LEFT))) {
+        if (childrenHead_ && ((childrenHead_->GetX() + distance) >
+            (scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_LEFT)))) {
             distance =
                 scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_LEFT) - childrenHead_->GetX();
         }
     } else {
         if (childrenTail_) {
             if (childrenTail_->GetRelativeRect().GetRight() <=
-                listWidth - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_RIGHT)) {
+                (listWidth - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_RIGHT))) {
                 distance = 0;
-            } else if (listWidth - (childrenTail_->GetX() + childrenTail_->GetRelativeRect().GetWidth() + distance) >
-                       scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT)) {
+            } else if ((listWidth - childrenTail_->GetX() - childrenTail_->GetRelativeRect().GetWidth() - distance) >
+                       (scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT))) {
                 distance = listWidth - scrollBlankSize_ - reboundSize - childrenTail_->GetX() -
                            childrenTail_->GetRelativeRect().GetWidth() - childrenTail_->GetStyle(STYLE_MARGIN_RIGHT);
             }
@@ -324,18 +324,19 @@ bool UIList::DragYInner(int16_t distance)
         return MoveOffset(distance);
     }
     if (distance > 0) {
-        if (childrenHead_ && (childrenHead_->GetY() + distance >
-                              scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP))) {
+        if (childrenHead_ &&
+            ((childrenHead_->GetY() + distance) >
+            (scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP)))) {
             distance =
                 scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP) - childrenHead_->GetY();
         }
     } else {
         if (childrenTail_) {
             if (childrenTail_->GetRelativeRect().GetBottom() <=
-                listHeigh - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM)) {
+                (listHeigh - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
                 distance = 0;
-            } else if (listHeigh - (childrenTail_->GetY() + childrenTail_->GetRelativeRect().GetHeight() + distance) >
-                       scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM)) {
+            } else if ((listHeigh - childrenTail_->GetY() - childrenTail_->GetRelativeRect().GetHeight() - distance) >
+                       (scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
                 distance = listHeigh - scrollBlankSize_ - reboundSize - childrenTail_->GetY() -
                            childrenTail_->GetRelativeRect().GetHeight() - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM);
             }
@@ -504,10 +505,10 @@ void UIList::PushBack(UIView* view)
         if (direction_ == VERTICAL) {
             view->SetPosition(view->GetStyle(STYLE_MARGIN_LEFT),
                               childrenTail_->GetY() + childrenTail_->GetRelativeRect().GetHeight() +
-                                  childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) + view->GetStyle(STYLE_MARGIN_TOP));
+                              childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) + view->GetStyle(STYLE_MARGIN_TOP));
         } else {
             view->SetPosition(childrenTail_->GetX() + childrenTail_->GetRelativeRect().GetWidth() +
-                                  childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) + view->GetStyle(STYLE_MARGIN_LEFT),
+                              childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) + view->GetStyle(STYLE_MARGIN_LEFT),
                               view->GetStyle(STYLE_MARGIN_TOP));
         }
         bottomIndex_ = GetIndexInc(bottomIndex_);
@@ -528,10 +529,10 @@ void UIList::PushFront(UIView* view)
         if (direction_ == VERTICAL) {
             view->SetPosition(view->GetStyle(STYLE_MARGIN_LEFT),
                               GetChildrenHead()->GetY() - GetChildrenHead()->GetStyle(STYLE_MARGIN_TOP) -
-                                  view->GetRelativeRect().GetHeight() - view->GetStyle(STYLE_MARGIN_BOTTOM));
+                              view->GetRelativeRect().GetHeight() - view->GetStyle(STYLE_MARGIN_BOTTOM));
         } else {
             view->SetPosition(GetChildrenHead()->GetX() - GetChildrenHead()->GetStyle(STYLE_MARGIN_LEFT) -
-                                  view->GetRelativeRect().GetWidth() - view->GetStyle(STYLE_MARGIN_RIGHT),
+                              view->GetRelativeRect().GetWidth() - view->GetStyle(STYLE_MARGIN_RIGHT),
                               view->GetStyle(STYLE_MARGIN_TOP));
         }
         topIndex_ = GetIndexDec(topIndex_);
