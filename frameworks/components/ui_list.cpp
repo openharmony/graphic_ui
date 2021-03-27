@@ -593,7 +593,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
         } else {
             width = view->GetRelativeRect().GetWidth();
             if ((GetChildrenHead()->GetX() - GetChildrenHead()->GetStyle(STYLE_MARGIN_LEFT) + xOffset >
-                 selectPosition_) ||
+                selectPosition_) ||
                 (childrenTail_->GetX() + width + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) < selectPosition_)) {
                 onSelectedIndex_ = NULL_SELECT_INDEX;
                 onSelectedView_ = nullptr;
