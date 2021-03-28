@@ -106,32 +106,6 @@ public:
      */
     int16_t GetKnobWidth();
 
-#if ENABLE_ROTATE_INPUT
-    /**
-     * @brief 获得旋转系数
-     * @return 旋转系数
-     * @since 5.0
-     * @version 3.0
-     */
-    int8_t GetRotateFactor()
-    {
-        return rotateFactor_;
-    }
-
-    /**
-     * @brief 设置旋转系数
-     * @param factor 旋转系数
-     * @since 5.0
-     * @version 3.0
-     */
-    void SetRotateFactor(int8_t factor)
-    {
-        rotateFactor_ = factor;
-    }
-
-    bool OnRotateEvent(const RotateEvent& event) override;
-#endif
-
     /**
      * @brief Sets the images as pixel maps for this slider, including the background, foreground, and knob images.
      *
@@ -225,6 +199,79 @@ public:
      */
     int64_t GetKnobStyle(uint8_t key) const;
 
+    /**
+     * @brief Sets the images as pixel maps for this slider, including the background, foreground, and knob images.
+     *
+     * @param backgroundImage Indicates the background image to set.
+     * @param foregroundImage Indicates the foreground image to set.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage);
+
+    /**
+     * @brief Sets the images for this slider, including the background, foreground, and knob images.
+     *
+     * @param backgroundImage Indicates the background image to set.
+     * @param foregroundImage Indicates the foreground image to set.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetImage(const char* backgroundImage, const char* foregroundImage);
+
+    /**
+     * @brief Sets the colors for this slider, including the background, foreground, and knob colors.
+     *
+     * @param backgroundColor Indicates the background color to set.
+     * @param foregroundColor Indicates the foreground color to set.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetSliderColor(const ColorType backgroundColor, const ColorType foregroundColor)
+    {
+        SetBackgroundStyle(STYLE_BACKGROUND_COLOR, backgroundColor.full);
+        SetForegroundStyle(STYLE_BACKGROUND_COLOR, foregroundColor.full);
+    }
+
+    /**
+     * @brief Sets the corner radiuses for this slider, including the background, foreground, and knob corner radiuses.
+     *
+     * @param backgroundRadius Indicates the background corner radius to set.
+     * @param foregroundRadius Indicates the foreground corner radius to set.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetSliderRadius(int16_t backgroundRadius, int16_t foregroundRadius)
+    {
+        SetBackgroundStyle(STYLE_BORDER_RADIUS, backgroundRadius);
+        SetForegroundStyle(STYLE_BORDER_RADIUS, foregroundRadius);
+    }
+
+#if ENABLE_ROTATE_INPUT
+    /**
+     * @brief 鑾峰緱鏃嬭浆绯绘暟
+     * @return 鏃嬭浆绯绘暟
+     * @since 5.0
+     * @version 3.0
+     */
+    int8_t GetRotateFactor()
+    {
+        return rotateFactor_;
+    }
+
+     /**
+     * @brief 璁剧疆鏃嬭浆绯绘暟
+     * @param factor 鏃嬭浆绯绘暟
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetRotateFactor(int8_t factor)
+    {
+        rotateFactor_ = factor;
+    }
+
+    bool OnRotateEvent(const RotateEvent& event) override;
+#endif
     bool OnClickEvent(const ClickEvent& event) override;
 
     bool OnDragEvent(const DragEvent& event) override;
@@ -294,17 +341,22 @@ protected:
     bool InitImage() override;
 
 private:
+#if ENABLE_SLIDER_KNOB
     void DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect);
-    int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
-    int32_t UpdateCurrentValue(const Point& knobPosition);
-#if ENABLE_ROTATE_INPUT
-    int8_t rotateFactor_ = 1;
-#endif
+#else
     int16_t knobWidth_;
     bool knobWidthSetFlag_;
     bool knobStyleAllocFlag_;
     Style* knobStyle_;
     Image* knobImage_;
+
+    void DrawForeground(const Rect& invalidatedArea, Rect& coords);
+#endif
+    int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
+    int32_t UpdateCurrentValue(const Point& knobPosition);
+#if ENABLE_ROTATE_INPUT
+    int8_t rotateFactor_ = 1;
+#endif
     UISliderEventListener* listener_;
 }; // class UISlider
 } // namespace OHOS
