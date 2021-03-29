@@ -245,6 +245,8 @@ public:
 
     virtual void ReMeasureTextSize(const Rect& textRect, const Style& style);
 
+    void ReMeasureTextWidthInEllipsisMode(const Rect& textRect, const Style& style, uint16_t ellipsisIndex);
+
     void OnDraw(const Rect& invalidatedArea,
                 const Rect& viewOrigRect,
                 const Rect& textRect,
