@@ -165,6 +165,18 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     }
 }
 
+void Text::ReMeasureTextWidthInEllipsisMode(const Rect& textRect, const Style& style, uint16_t ellipsisIndex)
+{
+    if (ellipsisIndex != TEXT_ELLIPSIS_END_INV) {
+        int16_t lineMaxWidth  = expandWidth_ ? textSize_.x : textRect.GetWidth();
+        uint32_t maxLineBytes = 0;
+        uint16_t lineCount = GetLine(lineMaxWidth, style.letterSpace_, ellipsisIndex, maxLineBytes);
+        if ((lineCount > 0) && (textSize_.x < textLine_[lineCount - 1].linePixelWidth)) {
+            textSize_.x = textLine_[lineCount - 1].linePixelWidth;
+        }
+    }
+}
+
 void Text::OnDraw(const Rect& invalidatedArea,
                   const Rect& viewOrigRect,
                   const Rect& textRect,
