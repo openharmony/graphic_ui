@@ -236,15 +236,17 @@ void UITestDumpDomTree::UIKit_TestDumpDom_003()
         slider->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, VIEW_DISTANCE_TO_TOP_SIDE, 50, 100);
         slider->SetValidHeight(250); // 250: valid height
         slider->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
-        slider->SetKnobWidth(50); // 50: knob width
         slider->SetRange(100, 0); // 100: max
         slider->SetValue(50);     // 50: value of progress bar
         slider->SetStep(0);
         slider->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::GetColorFromRGB(0, 182, 191).full); // 182, 191: color
         slider->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::GetColorFromRGB(255, 152, 0).full); // 255, 152: color
+#if ENABLE_SLIDER_KNOB
+        slider->SetKnobWidth(50); // 50: knob width
         slider->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
         slider->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
                          static_cast<ImageInfo*>(nullptr));
+#endif
         slider->EnableBackground(true);
         slider->SetViewId("dump_slider");
         group5->Add(slider);
