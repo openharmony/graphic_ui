@@ -133,6 +133,9 @@ void UITestSlider::SetUp()
         uiViewGroupFrame_->SetStyle(STYLE_BACKGROUND_OPA, 0);
 
         slider_ = new UISlider();
+#if !ENABLE_SLIDER_KNOB
+        slider_->SetSliderColor(Color::Silver(), Color::Blue());
+#endif
         slider_->SetPosition(10, 10, 50, 300); // 10:position x; 10: position y; 50: width; 300: height
         slider_->SetValidHeight(250);          // 250: valid height;
         slider_->SetValue(20);                 // 20:  progress bar current value
@@ -420,15 +423,19 @@ bool UITestSlider::OnClick(UIView& view, const ClickEvent& event)
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
+#if ENABLE_SLIDER_KNOB
         slider_->SetKnobWidth(50); // 50: knob width
+#endif
         slider_->SetRange(g_max, g_min);
         slider_->SetValue(g_progress);
         slider_->SetStep(g_step);
         slider_->SetBackgroundStyle(StyleDefault::GetProgressBackgroundStyle());
         slider_->SetForegroundStyle(StyleDefault::GetProgressForegroundStyle());
-        slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
-        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                          static_cast<ImageInfo*>(nullptr));
+#if ENABLE_SLIDER_KNOB
+       slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
+       slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
+                         static_cast<ImageInfo*>(nullptr));
+#endif
         slider_->EnableBackground(true);
     } else if (&view == incProgressBtn_) {
         g_progress++;
@@ -469,11 +476,17 @@ bool UITestSlider::ExpandClick1(UIView& view, const ClickEvent& event)
     } else if (&view == dirL2RBtn_) {
         g_width = DEFAULT_HEIGHT;
         g_height = DEFAULT_WIDTH;
+        slider_->SetValidHeight(g_height);
+        slider_->SetValidWidth(g_width);
+        slider_->LayoutCenterOfParent();
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_LEFT_TO_RIGHT);
     } else if (&view == dirR2LBtn_) {
         g_width = DEFAULT_HEIGHT;
         g_height = DEFAULT_WIDTH;
+        slider_->SetValidHeight(g_height);
+        slider_->SetValidWidth(g_width);
+        slider_->LayoutCenterOfParent();
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_RIGHT_TO_LEFT);
     } else if (&view == dirT2BBtn_) {
@@ -484,6 +497,9 @@ bool UITestSlider::ExpandClick1(UIView& view, const ClickEvent& event)
     } else if (&view == dirB2TBtn_) {
         g_width = DEFAULT_WIDTH;
         g_height = DEFAULT_HEIGHT;
+        slider_->SetValidHeight(g_height);
+        slider_->SetValidWidth(g_width);
+        slider_->LayoutCenterOfParent();
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
     } else {
@@ -497,15 +513,19 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
     if (&view == imageBtn_) {
         slider_->SetValidHeight(DEFAULT_HEIGHT);
         slider_->SetValidWidth(5); // 5 valid width
+#if ENABLE_SLIDER_KNOB
         slider_->SetKnobWidth(40); // 40: knob width
-        slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
         slider_->SetImage(SLIDER_BACKGROUND_IMAGE_PATH, SLIDER_INDICATOR_IMAGE_PATH, SLIDER_KNOB_IMAGE_PATH);
+#endif
+        slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
     } else if (&view == noImageBtn_) {
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
+#if ENABLE_SLIDER_KNOB
         slider_->SetKnobWidth(g_knobWidth);
         slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
                           static_cast<ImageInfo*>(nullptr));
+#endif
     } else if (&view == setStyleBtn_) {
         Style style = StyleDefault::GetDefaultStyle();
         style.bgColor_ = Color::White();
@@ -513,21 +533,37 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
         style.bgColor_ = Color::Blue();
         slider_->SetForegroundStyle(style);
         style.bgColor_ = Color::Gray();
+#if ENABLE_SLIDER_KNOB
         slider_->SetKnobStyle(style);
+#endif
     } else if (&view == getStyleBtn_) {
         slider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
         slider_->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::Yellow().full);
+#if ENABLE_SLIDER_KNOB
         slider_->SetKnobStyle(STYLE_BACKGROUND_COLOR, Color::Green().full);
+#endif
     } else if (&view == incKnobWidthBtn_) {
+#if ENABLE_SLIDER_KNOB
         g_knobWidth++;
         slider_->SetKnobWidth(g_knobWidth);
+#endif
     } else if (&view == decKnobWidthBtn_) {
+#if ENABLE_SLIDER_KNOB
         g_knobWidth--;
         slider_->SetKnobWidth(g_knobWidth);
+#endif
     } else if (&view == colorBtn_) {
+#if ENABLE_SLIDER_KNOB
         slider_->SetSliderColor(Color::Silver(), Color::Blue(), Color::White());
+#else
+        slider_->SetSliderColor(Color::Silver(), Color::Blue());
+#endif
     } else if (&view == radiusBtn_) {
+#if ENABLE_SLIDER_KNOB
         slider_->SetSliderRadius(DEFAULT_RADIUS, DEFAULT_RADIUS, DEFAULT_RADIUS);
+#else
+        slider_->SetSliderRadius(DEFAULT_RADIUS, DEFAULT_RADIUS);
+#endif
     } else if (&view == onChangeBtn_) {
         g_onChange = true;
     } else if (&view == onReleaseBtn_) {
