@@ -173,10 +173,14 @@ bool UISwipeView::OnDragEndEvent(const DragEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UISwipeView::OnRotateEvent(const RotateEvent& event)
 {
+    if (rotateFactor_ == 0) {
+        return UIView::OnRotateEvent(event);
+    }
     if (event.GetRotate() != 0) {
+        int8_t sign = rotateFactor_ < 0 ? -1 : 1;
         // 4 : need to fit for the device
-        if (MATH_ABS(event.GetRotate()) > blankSize_ / (4 * static_cast<uint16_t>(rotateFactor_))) {
-            SwitchToPage(curIndex_ - event.GetRotate());
+        if (MATH_ABS(event.GetRotate()) > blankSize_ / (4 * static_cast<uint16_t>(MATH_ABS(rotateFactor_)))) {
+            SwitchToPage(curIndex_ - sign * event.GetRotate());
         } else {
             int16_t tmp = event.GetRotate() * rotateFactor_;
             DragXInner(tmp);
