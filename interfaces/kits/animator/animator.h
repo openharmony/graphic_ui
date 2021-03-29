@@ -112,7 +112,7 @@ public:
      * @version 1.0
      */
     Animator()
-        : callback_(nullptr), view_(nullptr), state_(STOP), time_(0), repeat_(false), runTime_(0), lastRunTime_(0)
+        : callback_(nullptr), view_(nullptr), state_(STOP), period_(0), repeat_(false), runTime_(0), lastRunTime_(0)
     {
     }
 
@@ -130,7 +130,7 @@ public:
      * @version 1.0
      */
     Animator(AnimatorCallback* callback, UIView* view, uint32_t time, bool repeat)
-        : callback_(callback), view_(view), state_(STOP), time_(time), repeat_(repeat), runTime_(0), lastRunTime_(0)
+        : callback_(callback), view_(view), state_(STOP), period_(time), repeat_(repeat), runTime_(0), lastRunTime_(0)
     {
     }
 
@@ -215,7 +215,7 @@ public:
      */
     uint32_t GetTime() const
     {
-        return time_;
+        return period_;
     }
 
     /**
@@ -226,9 +226,9 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetTime(uint32_t time)
+    void SetTime(uint32_t period)
     {
-        time_ = time;
+        period_ = period;
     }
 
     /**
@@ -275,7 +275,7 @@ protected:
     AnimatorCallback* callback_;
     UIView* view_;
     uint8_t state_;
-    uint32_t time_;
+    uint32_t period_;
     bool repeat_;
     uint32_t runTime_;
     uint32_t lastRunTime_;

@@ -63,11 +63,14 @@ public:
      * @version 1.0
      */
     static int16_t GetBezierInterpolation(int16_t t, int16_t u0, int16_t u1, int16_t u2, int16_t u3);
+    static int16_t GetBezierY(int16_t x, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+
+    constexpr static int16_t INTERPOLATION_RANGE = 1024;
 
 private:
     constexpr static uint16_t BESSEL_COEFFICIENT = 3;
-    constexpr static uint16_t INTERPOLATION_RANGE = 1024;
     constexpr static uint16_t CUBIC_BEZIER_CALCULATE_OFFSET = 30;
+    static int16_t GetBezierDerivative(int16_t t, int16_t u0, int16_t u1, int16_t u2, int16_t u3);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_INTERPOLATION_H

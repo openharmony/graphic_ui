@@ -48,14 +48,14 @@ Window* RootView::GetBoundWindow() const
 }
 #endif
 
-inline bool RootView::IntersectScreenRect(Rect& rect)
+Rect RootView::GetScreenRect()
 {
 #if ENABLE_WINDOW
     Rect screenRect = GetRect();
 #else
     Rect screenRect(0, 0, Screen::GetInstance().GetWidth() - 1, Screen::GetInstance().GetHeight() - 1);
 #endif
-    return rect.Intersect(rect, screenRect);
+    return screenRect;
 }
 
 #if LOCAL_RENDER
@@ -338,8 +338,7 @@ void RootView::OptimizeInvalidMap()
         }
 
         curview = g_viewStack[--stackCount];
-        Rect rect(curview->GetRect());
-        if (!curview->IsVisible() || !IntersectScreenRect(rect)) {
+        if (!curview->IsVisible() || !rect.Intersect(curview->GetRect(), GetScreenRect())) {
             curview = nullptr;
             continue;
         }
@@ -386,8 +385,8 @@ void RootView::DrawInvalidMap(const Rect& buffRect)
 
 void RootView::AddInvalidateRect(Rect& rect, UIView* view)
 {
-    Rect commonRect(rect);
-    if (IntersectScreenRect(commonRect)) {
+    Rect commonRect;
+    if (commonRect.Intersect(rect, GetScreenRect())) {
 #if LOCAL_RENDER
         Vector<Rect>& invalidRects = invalidateMap_[view];
         if (invalidRects.IsEmpty()) {
@@ -505,34 +504,28 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
     Rect mask = rect;
     Rect origRect;
     Rect relativeRect;
+    bool enableAnimator = false;
     while (par != nullptr) {
         if (curView != nullptr) {
             if (curView->IsVisible()) {
-                curViewRect = curView->GetMaskedRect();
-                if (curViewRect.Intersect(curViewRect, mask) || enableAnimator_) {
+                if (curViewRect.Intersect(curView->GetMaskedRect(), mask) || enableAnimator) {
                     if ((curView->GetViewType() != UI_IMAGE_VIEW) && (curView->GetViewType() != UI_TEXTURE_MAPPER) &&
-                        !curView->IsTransInvalid() && !enableAnimator_) {
+                        !curView->IsTransInvalid() && !enableAnimator) {
                         origRect = curView->GetOrigRect();
                         relativeRect = curView->GetRelativeRect();
                         curView->GetTransformMap().SetInvalid(true);
                         curView->SetPosition(relativeRect.GetX() - origRect.GetX(),
                                              relativeRect.GetY() - origRect.GetY());
+                        curViewRect = curView->GetMaskedRect();
                         ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(true);
                         ScreenDeviceProxy::GetInstance()->SetAnimatorRect(origRect);
                         ScreenDeviceProxy::GetInstance()->SetAnimatorTransMap(curView->GetTransformMap());
-                        enableAnimator_ = true;
+                        enableAnimator = true;
                     }
-                    if (enableAnimator_) {
-                        Rect invalidatedArea;
-                        invalidatedArea.SetWidth(ScreenDeviceProxy::GetInstance()->GetScreenWidth());
-                        invalidatedArea.SetHeight(ScreenDeviceProxy::GetInstance()->GetScreenHeight());
-                        curView->OnDraw(invalidatedArea);
-                    } else {
-                        curView->OnDraw(curViewRect);
-                    }
+                    curView->OnDraw(curViewRect);
 
                     if ((curView->IsViewGroup()) && (stackCount < COMPONENT_NESTING_DEPTH)) {
-                        if (enableAnimator_ && (transViewGroup == nullptr)) {
+                        if (enableAnimator && (transViewGroup == nullptr)) {
                             transViewGroup = curView;
                         }
                         par = curView;
@@ -545,11 +538,11 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         continue;
                     }
                     curView->OnPostDraw(curViewRect);
-                    if (enableAnimator_ && (transViewGroup == nullptr)) {
+                    if (enableAnimator && (transViewGroup == nullptr)) {
                         ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
                         ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
                         curView->GetTransformMap().SetInvalid(false);
-                        enableAnimator_ = false;
+                        enableAnimator = false;
                         curView->SetPosition(relativeRect.GetX(), relativeRect.GetY());
                     }
                 }
@@ -560,14 +553,14 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
         if (--stackCount >= 0) {
             curViewRect = par->GetMaskedRect();
             mask = g_maskStack[stackCount];
-            if (curViewRect.Intersect(curViewRect, mask)) {
+            if (enableAnimator || curViewRect.Intersect(curViewRect, mask)) {
                 par->OnPostDraw(curViewRect);
             }
-            if (enableAnimator_ && transViewGroup == g_viewStack[stackCount]) {
+            if (enableAnimator && transViewGroup == g_viewStack[stackCount]) {
                 ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
                 ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
                 transViewGroup->GetTransformMap().SetInvalid(false);
-                enableAnimator_ = false;
+                enableAnimator = false;
                 transViewGroup->SetPosition(relativeRect.GetX(), relativeRect.GetY());
                 transViewGroup = nullptr;
             }

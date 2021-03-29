@@ -1462,7 +1462,7 @@ protected:
 #endif
     ViewExtraMsg* viewExtraMsg_;
 
-    uint8_t GetMixOpaScale();
+    uint8_t GetMixOpaScale() const;
     bool IsInvalid(float percent);
 
 private:
