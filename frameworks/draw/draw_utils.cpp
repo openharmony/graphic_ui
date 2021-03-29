@@ -899,13 +899,11 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
 
 static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                    uint8_t* screenBuffer,
-                                                   int16_t len)
+                                                   int16_t len,
+                                                   int32_t u,
+                                                   int32_t v)
 {
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
-    // parameters below are Q15 fixed-point number
-    int32_t u = in.init.verticalU;
-    int32_t v = in.init.verticalV;
-    // parameters above are Q15 fixed-point number
     for (int16_t x = 0; x < len; ++x) {
         int16_t intU = FO_TO_INTEGER(u);
         int16_t intV = FO_TO_INTEGER(v);
@@ -1069,13 +1067,17 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
             vOutA = NeonMulDiv255(vdup_n_u8(in.opaScale), vOutA);
             pipeLine.Invoke(screenBuffer, vOutR, vOutG, vOutB, vOutA);
         } else {
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8);
+            int32_t fixedU = FO_TRANS_FLOAT_TO_FIXED(arrayU[0]);
+            int32_t fixedV = FO_TRANS_FLOAT_TO_FIXED(arrayV[0]);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8, fixedU, fixedV);
         }
         screenBuffer += step;
         len -= NEON_STEP_8;
     }
     if (len > 0) {
-        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len);
+        int32_t fixedU = FO_TRANS_FLOAT_TO_FIXED(u);
+        int32_t fixedV = FO_TRANS_FLOAT_TO_FIXED(v);
+        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len, fixedU, fixedV);
     }
 }
 #endif
@@ -1119,8 +1121,10 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
         }
 #else
         {
+            int32_t u = in.init.verticalU;
+            int32_t v = in.init.verticalV;
             DEBUG_PERFORMANCE_TRACE("DrawTriangleTrueColorBilinear8888");
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, u, v);
         }
 #endif
         StepToNextLine(in.edge1, in.edge2);
