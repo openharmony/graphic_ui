@@ -42,6 +42,7 @@ public:
 
 private:
     void SetLastPos(UIView* view);
+    void CreateLabelButton(int16_t x, int16_t y, UIView::OnClickListener* listener, const char* text);
     UIScrollView* container_ = nullptr;
     UIList* list_ = nullptr;
     UIScrollView* scroll_ = nullptr;
