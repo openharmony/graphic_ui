@@ -35,6 +35,8 @@ static int16_t g_swipeH = 200;
 static int16_t g_swipeW = 400;
 static int16_t g_sliderW = 40;
 static int16_t g_sliderH = 300;
+static int16_t g_testButtonW = 80;
+static int16_t g_testButtonH = 40;
 static const char* g_pickerRange[] = { "A0", "B1", "C2", "D3", "E4", "F5", "G6", "H7", "I8", "J9", "K10", "L11" };
 
 #if ENABLE_MOTOR
@@ -52,6 +54,31 @@ void Print(MotorType motorType)
     }
 }
 #endif
+
+class TestSetRotateFactorListener : public UIView::OnClickListener {
+public:
+    TestSetRotateFactorListener(UIView* view, int8_t factor) : view_(view), factor_(factor) {}
+    ~TestSetRotateFactorListener() {}
+
+    bool OnClick(UIView& view, const ClickEvent& event) override
+    {
+        switch (view_->GetViewType()) {
+            case UI_SWIPE_VIEW:
+                static_cast<UISwipeView*>(view_)->SetRotateFactor(factor_);
+                break;
+            case UI_SCROLL_VIEW:
+                static_cast<UIScrollView*>(view_)->SetRotateFactor(factor_);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+private:
+    UIView* view_ = nullptr;
+    int8_t factor_ = 0;
+};
 
 void UITestRotateInput::SetUp()
 {
@@ -239,6 +266,18 @@ void UITestRotateInput::UIKit_Rotate_Event_Swipe_View_003()
     swipe_->SetOnTouchListener(this);
     swipe_->SetRotateFactor(30); // 30 : rotate factor
     container_->Add(swipe_);
+
+    TestSetRotateFactorListener* listener1 = new TestSetRotateFactorListener(swipe_, 0);
+    CreateLabelButton(g_swipeW + g_blank, label->GetY() + g_blank, listener1, "factor: 0");
+    TestSetRotateFactorListener* listener2 = new TestSetRotateFactorListener(swipe_, 15); // 15: rotate factor
+    CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener2, "factor: 15");
+    TestSetRotateFactorListener* listener3 = new TestSetRotateFactorListener(swipe_, -15); // -15: rotate factor
+    CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener3, "factor: -15");
+    TestSetRotateFactorListener* listener4 = new TestSetRotateFactorListener(swipe_, 30); // 30: rotate factor
+    int16_t x = lastX_ + g_testButtonW + g_blank;
+    CreateLabelButton(x, label->GetY() + g_blank, listener4, "factor: 30");
+    TestSetRotateFactorListener* listener5 = new TestSetRotateFactorListener(swipe_, -30); // 30: rotate factor
+    CreateLabelButton(x, lastY_ + g_blank, listener5, "factor: -30");
     SetLastPos(swipe_);
 }
 
@@ -356,6 +395,17 @@ void UITestRotateInput::SetLastPos(UIView* view)
     }
     lastX_ = view->GetX();
     lastY_ = view->GetY() + view->GetHeight();
+}
+
+void UITestRotateInput::CreateLabelButton(int16_t x, int16_t y, UIView::OnClickListener* listener, const char* text)
+{
+    UILabelButton* labelButton = new UILabelButton();
+    labelButton->SetPosition(x, y, g_testButtonW, g_testButtonH);
+    labelButton->SetOnClickListener(listener);
+    labelButton->SetText(text);
+    labelButton->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15);
+    container_->Add(labelButton);
+    SetLastPos(labelButton);
 }
 } // namespace OHOS
 #endif
