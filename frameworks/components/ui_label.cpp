@@ -231,9 +231,7 @@ uint16_t UILabel::GetTextWidth()
 {
     InitLabelText();
     if (labelText_->IsNeedRefresh()) {
-        Style style = GetStyleConst();
-        style.textColor_ = GetTextColor();
-        labelText_->ReMeasureTextSize(GetContentRect(), style);
+        ReMeasure();
     }
     return labelText_->GetTextSize().x;
 }
@@ -242,9 +240,7 @@ uint16_t UILabel::GetTextHeight()
 {
     InitLabelText();
     if (labelText_->IsNeedRefresh()) {
-        Style style = GetStyleConst();
-        style.textColor_ = GetTextColor();
-        labelText_->ReMeasureTextSize(GetContentRect(), style);
+        ReMeasure();
     }
     return labelText_->GetTextSize().y;
 }
@@ -297,6 +293,7 @@ void UILabel::ReMeasure()
             break;
         case LINE_BREAK_ELLIPSIS:
             ellipsisIndex_ = labelText_->GetEllipsisIndex(GetContentRect(), style);
+            labelText_->ReMeasureTextWidthInEllipsisMode(GetContentRect(), style, ellipsisIndex_);
             break;
         case LINE_BREAK_MARQUEE:
             RemeasureForMarquee(textSize.x);
