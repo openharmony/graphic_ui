@@ -30,6 +30,8 @@ UIScrollView::UIScrollView()
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = 1;
     rotateThreshold_ = 4; // 4: which means 25% of half view size
+    tmpRotateLen_ = 0;
+
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -106,21 +108,22 @@ bool UIScrollView::OnPressEvent(const PressEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UIScrollView::OnRotateEvent(const RotateEvent& event)
 {
-    int16_t tmpRotateLen = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
     int16_t midPointX = static_cast<int16_t>(GetWidth() / 2); // 2 : Get the middle point X coord of the view
     int16_t midPointY = static_cast<int16_t>(GetHeight() / 2); // 2 : Get the middle point Y coord of the view
     Point last, current;
-    if (!throwDrag_ || ((MATH_ABS(tmpRotateLen) < (midPointX / rotateThreshold_)) &&
-        (MATH_ABS(tmpRotateLen) < (midPointY / rotateThreshold_)))) {
-            yScrollable_ ? ScrollBy(0, tmpRotateLen) : ScrollBy(tmpRotateLen, 0);
-        if (event.GetRotate() == 0) {
-            DragThrowAnimator(Point {0, 0}, Point {0, 0});
-        }
-    } else {
+    if (throwDrag_ && event.GetRotate() == 0) {
         last = Point {midPointX, midPointY};
-        yScrollable_ ? (current = Point {midPointX, static_cast<int16_t>(midPointY + tmpRotateLen)})
-                     : (current = Point {static_cast<int16_t>(midPointX + tmpRotateLen), midPointY});
+        yScrollable_ ? (current = Point {midPointX, static_cast<int16_t>(midPointY + tmpRotateLen_)})
+                     : (current = Point {static_cast<int16_t>(midPointX + tmpRotateLen_), midPointY});
         DragThrowAnimator(current, last);
+        tmpRotateLen_ = 0;
+    } else {
+        tmpRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+        if (yScrollable_) {
+            DragYInner(tmpRotateLen_);
+        } else {
+            DragXInner(tmpRotateLen_);
+        }
     }
 #if ENABLE_MOTOR
     MotorFunc motorFunc = FocusManager::GetInstance()->GetMotorFunc();

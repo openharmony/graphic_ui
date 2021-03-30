@@ -292,6 +292,9 @@ private:
     bool yScrollable_;
     int16_t minScrollBarLen_;
     OnScrollListener* scrollListener_;
+#if ENABLE_ROTATE_INPUT
+    int16_t tmpRotateLen_;
+#endif
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_SCROLL_VIEW_H
