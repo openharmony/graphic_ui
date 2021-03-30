@@ -53,6 +53,19 @@ public:
     static constexpr const char* SEC_LIST_NAME = "second";
 #endif
     /**
+     * 枚举Picker类型
+     */
+    enum PickerType : uint8_t {
+        /* 时 */
+        PICKER_HOUR = 0,
+        /* 分 */
+        PICKER_MIN,
+        /* 秒 */
+        PICKER_SEC,
+        /* 最大值 */
+        PICKER_MAX,
+    };
+    /**
      * @brief A constructor used to create a <b>UITimePicker</b> instance.
      *
      * @since 1.0
@@ -224,6 +237,17 @@ public:
     void SetHeight(int16_t height) override;
 
     /**
+     * @brief 设置是否开启循环
+     *
+     * @param pickerType Picker类型
+     * @param state 状态
+     *
+     * @since 3.0
+     * @version 5.0
+     */
+    void SetLoopState(const uint8_t pickerType, bool state);
+
+    /**
      * @brief Defines the listener used by the time picker. This listener is triggered when an item is selected
      *        after sliding stops.
      *
@@ -315,6 +339,7 @@ private:
     char selectedMinute_[BUF_SIZE];
     char selectedSecond_[BUF_SIZE];
     bool secVisible_;
+    bool loopState_[PICKER_MAX];
     const char* setSelectedTime_;
     uint16_t pickerWidth_;
     uint16_t itemsHeight_;

@@ -28,6 +28,7 @@ UITimePicker::UITimePicker()
       selectedMinute_{0},
       selectedSecond_{0},
       secVisible_(false),
+      loopState_{false},
       setSelectedTime_(nullptr),
       pickerWidth_(0),
       itemsHeight_(0),
@@ -84,11 +85,20 @@ void UITimePicker::InitTimePicker()
         InitPicker(minutePicker_, TIME_START, MIN_END);
         xPos_ *= (SEC_VISIBLE_COUNT - 1);
         InitPicker(secondPicker_, TIME_START, SEC_END);
+        if (secondPicker_ != nullptr) {
+            secondPicker_->SetLoopState(loopState_[PICKER_SEC]);
+        }
     } else {
         pickerWidth_ = GetWidth() / SEC_INVISIBLE_COUNT;
         InitPicker(hourPicker_, TIME_START, HOUR_END);
         xPos_ = pickerWidth_;
         InitPicker(minutePicker_, TIME_START, MIN_END);
+    }
+    if (hourPicker_ != nullptr) {
+        hourPicker_->SetLoopState(loopState_[PICKER_HOUR]);
+    }
+    if (minutePicker_ != nullptr) {
+        minutePicker_->SetLoopState(loopState_[PICKER_MIN]);
     }
 
     if (setSelectedTime_ == nullptr) {
@@ -286,6 +296,24 @@ void UITimePicker::SetWidth(int16_t width)
 void UITimePicker::SetHeight(int16_t height)
 {
     UIView::SetHeight(height);
+    RefreshTimePicker();
+}
+
+void UITimePicker::SetLoopState(const uint8_t pickerType, bool state)
+{
+    switch (pickerType) {
+        case PICKER_HOUR:
+            loopState_[PICKER_HOUR] = state;
+            break;
+        case PICKER_MIN:
+            loopState_[PICKER_MIN] = state;
+            break;
+        case PICKER_SEC:
+            loopState_[PICKER_SEC] = state;
+            break;
+        default:
+            return;
+    }
     RefreshTimePicker();
 }
 }

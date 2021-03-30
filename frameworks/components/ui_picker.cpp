@@ -449,6 +449,7 @@ void UIPicker::SetHeight(int16_t height)
 void UIPicker::SetLoopState(bool state)
 {
     list_.SetLoopState(state);
+    Refresh();
 }
 
 void UIPicker::SetDirect(UITextLanguageDirect direct)
