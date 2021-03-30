@@ -53,6 +53,7 @@ static_library("framework") {
     "../uitest/test_ui_swipe_view/ui_test_ui_swipe_view.cpp",
     "../uitest/test_vector_font/ui_test_vector_font.cpp",
     "../uitest/test_video/ui_test_video.cpp",
+    "../uitest/test_view_group/ui_test_view_group.cpp",
     "../uitest/test_view_percent/ui_test_view_percent.cpp",
     "../uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp",
     "src/test_ability.cpp",

@@ -16,12 +16,18 @@
 #include "components/ui_view_group.h"
 
 #include <cstring>
+
 #include "components/root_view.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 UIViewGroup::UIViewGroup()
-    : childrenHead_(nullptr), childrenTail_(nullptr), childrenNum_(0),
-      isDragging_(false), disallowIntercept_(false), isAutoSize_(false)
+    : childrenHead_(nullptr),
+      childrenTail_(nullptr),
+      childrenNum_(0),
+      isDragging_(false),
+      disallowIntercept_(false),
+      isAutoSize_(false)
 {
     isViewGroup_ = true;
 #if ENABLE_FOCUS_MANAGER
@@ -34,21 +40,19 @@ UIViewGroup::~UIViewGroup() {}
 void UIViewGroup::Add(UIView* view)
 {
     if ((view == this) || (view == nullptr)) {
+        GRAPHIC_LOGE("view can not be nullptr and added to self");
+        ASSERT(0);
         return;
     }
+    if (view->GetParent() != nullptr) {
+        GRAPHIC_LOGE("can not add view multi times");
+        ASSERT(0);
+        return;
+    }
+
     if (childrenHead_ == nullptr) {
         childrenHead_ = view;
     } else {
-        UIView* head = childrenHead_;
-        while (head != nullptr) {
-            if ((view == head) ||
-                ((view->GetViewId() != nullptr) &&
-                (head->GetViewId() != nullptr) &&
-                !strcmp(view->GetViewId(), head->GetViewId()))) {
-                return;
-            }
-            head = head->GetNextSibling();
-        }
 
         if (childrenTail_ == nullptr) {
             return;
@@ -67,23 +71,23 @@ void UIViewGroup::Add(UIView* view)
 
 void UIViewGroup::Insert(UIView* prevView, UIView* insertView)
 {
-    if (insertView == nullptr) {
+    if ((insertView == nullptr) || (insertView == this)) {
+        GRAPHIC_LOGE("insertView can not be nullptr and insert to self");
+        ASSERT(0);
         return;
     }
+
+    if (insertView->GetParent() != nullptr) {
+        GRAPHIC_LOGE("can not insert view multi times");
+        ASSERT(0);
+        return;
+    }
+
     if (childrenHead_ == nullptr) {
         Add(insertView);
         return;
     }
-    UIView* head = childrenHead_;
-    while (head != nullptr) {
-        if ((insertView == head) ||
-            ((insertView->GetViewId() != nullptr) &&
-            (head->GetViewId() != nullptr) &&
-            !strcmp(insertView->GetViewId(), head->GetViewId()))) {
-            return;
-        }
-        head = head->GetNextSibling();
-    }
+
     if (prevView == nullptr) {
         insertView->SetNextSibling(childrenHead_);
         insertView->SetParent(this);

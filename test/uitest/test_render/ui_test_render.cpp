@@ -14,6 +14,7 @@
  */
 
 #include "ui_test_render.h"
+
 #include "common/screen.h"
 
 namespace OHOS {
@@ -118,7 +119,6 @@ void UITestRender::UIKit_Render_Test_RenderMeasure_001()
     // 2: half of screen width
     label->Resize(Screen::GetInstance().GetWidth() / 2, TITLE_LABEL_DEFAULT_HEIGHT);
     label->SetText("UIKit绘制Measure效果:");
-    group->Add(label);
 
     testLabel_ = new UILabel();
     group->Add(testLabel_);
