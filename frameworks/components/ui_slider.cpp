@@ -23,13 +23,13 @@
 #include "themes/theme_manager.h"
 
 namespace OHOS {
-#if ENABLE_SLIDER_KNOB
 UISlider::UISlider()
     : knobWidth_(0), knobWidthSetFlag_(false), knobStyleAllocFlag_(false), knobImage_(nullptr), listener_(nullptr)
 {
     touchable_ = true;
     draggable_ = true;
     dragParentInstead_ = false;
+    SetCapType(CapType::CAP_ROUND);
     Theme* theme = ThemeManager::GetInstance().GetCurrent();
     if (theme != nullptr) {
         knobStyle_ = &(theme->GetSliderKnobStyle());
@@ -54,7 +54,6 @@ UISlider::~UISlider()
         knobStyleAllocFlag_ = false;
     }
 }
-#endif
 
 void UISlider::SetKnobStyle(const Style& style)
 {
@@ -177,20 +176,6 @@ bool UISlider::InitImage()
     return true;
 }
 #else
-UISlider::UISlider()
-    : listener_(nullptr)
-{
-    touchable_ = true;
-    draggable_ = true;
-    dragParentInstead_ = false;
-    SetCapType(CapType::CAP_ROUND);
-#if ENABLE_FOCUS_MANAGER
-    focusable_ = true;
-#endif
-}
-
-UISlider::~UISlider() {}
-
 void UISlider::SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage)
 {
     if (!InitImage()) {
