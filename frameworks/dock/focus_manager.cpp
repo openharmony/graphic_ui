@@ -16,7 +16,7 @@
 #include "dock/focus_manager.h"
 #if ENABLE_FOCUS_MANAGER
 #include "components/root_view.h"
-#include "graphic_math.h"
+#include "gfx_utils/graphic_math.h"
 
 namespace OHOS {
 bool FocusManager::RequestFocus(UIView* view)
