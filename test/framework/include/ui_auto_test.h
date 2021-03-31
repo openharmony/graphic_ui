@@ -13,25 +13,25 @@
  * limitations under the License.
  */
 
-#include "ui_test_app.h"
-#if ENABEL_UI_AUTO_TEST
-#ifdef _WIN32
-#include <thread>
-#endif // _WIN32
+#ifndef GRAPHIC_LITE_UI_AUTO_TEST_H
+#define GRAPHIC_LITE_UI_AUTO_TEST_H
 
-void* AutoTestThread()
-{
-    OHOS::UIAutoTestApp::GetInstance()->Start();
-}
-#endif // ENABEL_UI_AUTO_TEST
+#include "components/ui_view.h"
 
-void RunApp()
-{
-    OHOS::UITestApp::GetInstance()->Start();
-#if ENABEL_UI_AUTO_TEST
-#ifdef _WIN32
-    std::thread autoTestPthread(AutoTestThread);
-    autoTestPthread.detach();
-#endif // _WIN32
-#endif // ENABEL_UI_AUTO_TEST
-}
+namespace OHOS {
+class UIAutoTest {
+public:
+    UIAutoTest() {}
+    virtual ~UIAutoTest() {}
+
+    virtual void RunTestList() = 0;
+    virtual void Reset() const = 0;
+
+    void ResetMainMenu() const;
+    void EnterSubMenu(const char* id) const;
+    void ClickViewById(const char* id) const;
+    void DragViewToHead(const char* id) const;
+    void CompareByBinary(const char* fileName) const;
+};
+} // namespace OHOS
+#endif // GRAPHIC_LITE_UI_AUTO_TEST_H

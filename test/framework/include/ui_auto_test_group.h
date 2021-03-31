@@ -13,25 +13,21 @@
  * limitations under the License.
  */
 
-#include "ui_test_app.h"
-#if ENABEL_UI_AUTO_TEST
-#ifdef _WIN32
-#include <thread>
-#endif // _WIN32
+#ifndef GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
+#define GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
 
-void* AutoTestThread()
-{
-    OHOS::UIAutoTestApp::GetInstance()->Start();
-}
-#endif // ENABEL_UI_AUTO_TEST
+#include "gfx_utils/list.h"
+#include "ui_auto_test.h"
 
-void RunApp()
-{
-    OHOS::UITestApp::GetInstance()->Start();
-#if ENABEL_UI_AUTO_TEST
-#ifdef _WIN32
-    std::thread autoTestPthread(AutoTestThread);
-    autoTestPthread.detach();
-#endif // _WIN32
-#endif // ENABEL_UI_AUTO_TEST
-}
+namespace OHOS {
+class UIAutoTestGroup {
+public:
+    static void SetUpTestCase();
+    static List<UIAutoTest*>& GetTestCase();
+    static void TearDownTestCase();
+
+private:
+    static List<UIAutoTest*> testCaseList_;
+};
+} // namespace OHOS
+#endif // GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H

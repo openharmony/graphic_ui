@@ -133,6 +133,7 @@ void UITestRender::UIKit_Render_Test_RenderMeasure_001()
     group->Add(labelButton_);
     labelButton_->Resize(BUTTON_WIDHT3, BUTTON_HEIGHT3);
     labelButton_->SetText("更新label");
+    labelButton_->SetViewId(UI_TEST_RENDER_UPDATA_BUTTON_ID_01);
     labelButton_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
     labelButton_->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::RELEASED);
     labelButton_->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::PRESSED);

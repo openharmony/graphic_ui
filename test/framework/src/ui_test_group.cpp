@@ -103,7 +103,7 @@ void UITestGroup::SetUpTestCase()
     testCaseList_.PushBack(TestCaseInfo{"Canvas", new UITestCanvas()});
     testCaseList_.PushBack(TestCaseInfo{"Draw_Rect", new UITestDrawRect()});
     testCaseList_.PushBack(TestCaseInfo{"Draw_Line", new UITestDrawLine()});
-    testCaseList_.PushBack(TestCaseInfo{"Render", new UITestRender()});
+    testCaseList_.PushBack(TestCaseInfo{UI_TEST_RENDER_ID, new UITestRender()});
     testCaseList_.PushBack(TestCaseInfo{"Anti_Aliasing", new UITestAntiAliasing()});
     testCaseList_.PushBack(TestCaseInfo{"UIList", new UITestUIList()});
     testCaseList_.PushBack(TestCaseInfo{"UISwipeView", new UITestUISwipeView()});

@@ -13,25 +13,30 @@
  * limitations under the License.
  */
 
-#include "ui_test_app.h"
-#if ENABEL_UI_AUTO_TEST
-#ifdef _WIN32
-#include <thread>
-#endif // _WIN32
+#include "ui_auto_test_group.h"
+#include "graphic_config.h"
+#include "test_render/ui_auto_test_render.h"
 
-void* AutoTestThread()
-{
-    OHOS::UIAutoTestApp::GetInstance()->Start();
-}
-#endif // ENABEL_UI_AUTO_TEST
+namespace OHOS {
+List<UIAutoTest*> UIAutoTestGroup::testCaseList_;
 
-void RunApp()
+void UIAutoTestGroup::SetUpTestCase()
 {
-    OHOS::UITestApp::GetInstance()->Start();
-#if ENABEL_UI_AUTO_TEST
-#ifdef _WIN32
-    std::thread autoTestPthread(AutoTestThread);
-    autoTestPthread.detach();
-#endif // _WIN32
-#endif // ENABEL_UI_AUTO_TEST
+    testCaseList_.PushBack(new UIAutoTestRender());
 }
+
+List<UIAutoTest*>& UIAutoTestGroup::GetTestCase()
+{
+    return testCaseList_;
+}
+
+void UIAutoTestGroup::TearDownTestCase()
+{
+    ListNode<UIAutoTest*>* node = testCaseList_.Begin();
+    while (node != testCaseList_.End()) {
+        delete node->data_;
+        node = node->next_;
+    }
+    testCaseList_.Clear();
+}
+} // namespace OHOS

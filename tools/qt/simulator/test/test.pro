@@ -65,6 +65,12 @@ SOURCES += \
     ../../../../test/uitest/test_view_percent/ui_test_view_percent.cpp \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp
 
+SOURCES += \
+    ../../../../test/framework/src/ui_auto_test.cpp \
+    ../../../../test/framework/src/ui_auto_test_group.cpp \
+    ../../../../test/framework/src/compare_tools.cpp \
+    ../../../../test/uitest/test_render/ui_auto_test_render.cpp \
+
 HEADERS += \
     ../../../../test/framework/include/test_case_list_adapter.h \
     ../../../../test/framework/include/ui_test_app.h \
@@ -110,6 +116,12 @@ HEADERS += \
     ../../../../test/uitest/test_vector_font/ui_test_vector_font.h \
     ../../../../test/uitest/test_view_percent/ui_test_view_percent.h \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.h
+
+HEADERS += \
+    ../../../../test/framework/include/ui_auto_test.h \
+    ../../../../test/framework/include/ui_auto_test_group.h \
+    ../../../../test/framework/include/compare_tools.h \
+    ../../../../test/uitest/test_render/ui_auto_test_render.h
 
 INCLUDEPATH += \
     ../../../../frameworks \
