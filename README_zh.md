@@ -70,7 +70,7 @@
 平台约束
 
 -   Windows平台仅支持QT和OHOS IDE。
--   其他平台支持情况参考vender/hisilicon/\[product\_name\]/config.json中的graphic标签（不存在graphic标签即该产品不存在图形子系统）。
+-   其他平台支持情况参考vendor/hisilicon/\[product\_name\]/config.json中的graphic标签（不存在graphic标签即该产品不存在图形子系统）。
 
 ## 编译构建<a name="section137768191623"></a>
 
