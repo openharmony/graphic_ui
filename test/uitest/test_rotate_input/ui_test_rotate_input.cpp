@@ -37,7 +37,7 @@ static int16_t g_sliderW = 40;
 static int16_t g_sliderH = 300;
 static int16_t g_testButtonW = 80;
 static int16_t g_testButtonH = 40;
-static const char* g_pickerRange[] = { "A0", "B1", "C2", "D3", "E4", "F5", "G6", "H7", "I8", "J9", "K10", "L11" };
+static const char* g_pickerRange[] = {"A0", "B1", "C2", "D3", "E4", "F5", "G6", "H7", "I8", "J9", "K10", "L11"};
 
 #if ENABLE_MOTOR
 void Print(MotorType motorType)
@@ -190,7 +190,7 @@ void UITestRotateInput::UIKit_Rotate_Event_List_001()
     list_->SetOnTouchListener(this);
     list_->SetThrowDrag(true);
     list_->SetRotateFactor(10); // 10 : rotate factor
-    list_->SetReboundSize(50); // 50 : rebound size
+    list_->SetReboundSize(50);  // 50 : rebound size
     container_->Add(list_);
     SetLastPos(list_);
 }
