@@ -19,34 +19,17 @@
 #include "securec.h"
 
 namespace OHOS {
-#if ENABLE_FRAME_BUFFER
 void ScreenDeviceProxy::Flush() {}
-#else
-void ScreenDeviceProxy::Flush()
-{
-    flush_.Flushing();
-
-    if (device_ != nullptr) {
-#if ENABLE_WINDOW
-        device_->Flush(bufferRect_.GetLeft(), bufferRect_.GetTop(), bufferRect_.GetRight(), bufferRect_.GetBottom(),
-                       gfxAlloc_.virAddr, ARGB8888);
-#else
-        device_->Flush(bufferRect_.GetLeft(), bufferRect_.GetTop(), bufferRect_.GetRight(), bufferRect_.GetBottom(),
-                       buffer_, ARGB8888);
-#endif
-    }
-}
-#endif
 
 void ScreenDeviceProxy::OnFlushReady()
 {
     flush_.Notify();
 }
 
-void ScreenDeviceProxy::OnRenderFinish()
+void ScreenDeviceProxy::OnRenderFinish(const Rect& mask)
 {
     if (device_ != nullptr) {
-        device_->RenderFinish();
+        device_->RenderFinish(mask);
     }
 }
 
@@ -96,22 +79,6 @@ void ScreenDeviceProxy::SetScreenSize(uint16_t width, uint16_t height)
     }
     width_ = width;
     height_ = height;
-#if !ENABLE_WINDOW && !ENABLE_FRAME_BUFFER
-    if (buffer_ != nullptr) {
-        UIFree(buffer_);
-    }
-    uint32_t bufSize = width * height * DrawUtils::GetByteSizeByColorMode(ARGB8888);
-    buffer_ = static_cast<uint8_t*>(UIMalloc(bufSize));
-    if (buffer_ == nullptr) {
-        GRAPHIC_LOGE("screen buffer malloc failed.");
-        return;
-    }
-    if (memset_s(buffer_, bufSize, 0, bufSize) != EOK) {
-        GRAPHIC_LOGE("screen buffer memset failed.");
-        UIFree(reinterpret_cast<void*>(buffer_));
-        buffer_ = nullptr;
-    }
-#endif
 }
 
 uint8_t* ScreenDeviceProxy::GetBuffer()
@@ -122,23 +89,13 @@ uint8_t* ScreenDeviceProxy::GetBuffer()
             GRAPHIC_LOGE("Invalid param animatorBufferAddr_.");
             return nullptr;
         }
-        int32_t offset = bufferRect_.GetTop() * animatorBufferWidth_ + bufferRect_.GetLeft();
-        offset *= DrawUtils::GetByteSizeByColorMode(animatorBufferMode_);
-        return animatorBufferAddr_ + offset;
+        return animatorBufferAddr_;
     }
-#if ENABLE_FRAME_BUFFER
     if (frameBufferAddr_ == nullptr) {
         GRAPHIC_LOGE("Invalid param frameBufferAddr_.");
         return nullptr;
     }
-    int32_t offset = bufferRect_.GetTop() * frameBufferWidth_ + bufferRect_.GetLeft();
-    offset *= DrawUtils::GetByteSizeByColorMode(frameBufferMode_);
-    return frameBufferAddr_ + offset;
-#elif ENABLE_WINDOW
-    return gfxAlloc_.virAddr;
-#else
-    return buffer_;
-#endif
+    return frameBufferAddr_;
 }
 
 ColorMode ScreenDeviceProxy::GetBufferMode()
@@ -146,10 +103,6 @@ ColorMode ScreenDeviceProxy::GetBufferMode()
     if (useAnimatorBuff_) {
         return animatorBufferMode_;
     }
-#if ENABLE_FRAME_BUFFER
     return frameBufferMode_;
-#else
-    return ARGB8888;
-#endif
 }
 } // namespace OHOS

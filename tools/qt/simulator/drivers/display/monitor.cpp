@@ -25,38 +25,11 @@
 #include "mouse_input.h"
 
 namespace OHOS {
-void Monitor::Flush(int16_t x1, int16_t y1, int16_t x2, int16_t y2, const uint8_t* buffer, ColorMode mode)
-{
-    if (buffer == nullptr) {
-        ScreenDeviceProxy::GetInstance()->OnFlushReady();
-        return;
-    }
-
-    if ((x1 < 0) || (y1 < 0) || (x2 > HORIZONTAL_RESOLUTION - 1) || (y2 > VERTICAL_RESOLUTION - 1)) {
-        ScreenDeviceProxy::GetInstance()->OnFlushReady();
-        return;
-    }
-
-    int32_t x, y;
-    if (mode == ARGB8888) {
-        const Color32* tmp = reinterpret_cast<const Color32*>(buffer);
-        for (y = y1; y <= y2; y++) {
-            for (x = x1; x <= x2; x++) {
-                tftFb_[y * HORIZONTAL_RESOLUTION + x] = tmp->full;
-                tmp++;
-            }
-        }
-    }
-    ScreenDeviceProxy::GetInstance()->OnFlushReady();
-}
-
 void Monitor::InitHal()
 {
     ScreenDeviceProxy::GetInstance()->SetScreenSize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
-#if ENABLE_FRAME_BUFFER
     ScreenDeviceProxy::GetInstance()->SetFramebuffer(reinterpret_cast<uint8_t*>(tftFb_), ARGB8888,
                                                      HORIZONTAL_RESOLUTION);
-#endif
     ScreenDeviceProxy::GetInstance()->SetAnimatorbuffer(reinterpret_cast<uint8_t*>(animaterBuffer_), ARGB8888,
                                                         HORIZONTAL_RESOLUTION);
     Monitor* display = Monitor::GetInstance();
@@ -73,7 +46,7 @@ void Monitor::InitHal()
 #endif
 }
 
-void Monitor::RenderFinish()
+void Monitor::RenderFinish(const Rect& mask)
 {
     UpdatePaint(tftFb_, HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
 }

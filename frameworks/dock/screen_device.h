@@ -198,7 +198,7 @@ public:
     {
     }
 
-    virtual void RenderFinish() {}
+    virtual void RenderFinish(const Rect& mask) {}
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_SCREEN_DEVICE_H

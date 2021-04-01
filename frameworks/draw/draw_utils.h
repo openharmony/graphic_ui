@@ -133,7 +133,6 @@ struct TriangleScanInfo {
     TriangleEdge& edge2;
     uint8_t* screenBuffer;
     uint8_t bufferPxSize;
-    Rect screenBufferRect;
     const ColorType& color;
     const OpacityType opaScale;
     TransformInitState& init;
