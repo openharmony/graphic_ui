@@ -18,11 +18,7 @@
 
 namespace OHOS {
 UISwipeView::UISwipeView(uint8_t direction)
-    : swipeListener_(nullptr),
-      curIndex_(0),
-      blankSize_(DEFAULT_BLANK_SIZE),
-      curView_(nullptr),
-      loop_(false)
+    : swipeListener_(nullptr), curIndex_(0), blankSize_(DEFAULT_BLANK_SIZE), curView_(nullptr), loop_(false)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = 1;
@@ -177,7 +173,7 @@ bool UISwipeView::OnRotateEvent(const RotateEvent& event)
         return UIView::OnRotateEvent(event);
     }
     if (event.GetRotate() != 0) {
-        int8_t sign = rotateFactor_ < 0 ? -1 : 1;
+        int8_t sign = (rotateFactor_ < 0) ? -1 : 1;
         // 4 : need to fit for the device
         if (MATH_ABS(event.GetRotate()) > blankSize_ / (4 * static_cast<uint16_t>(MATH_ABS(rotateFactor_)))) {
             SwitchToPage(curIndex_ - sign * event.GetRotate());
@@ -306,8 +302,9 @@ void UISwipeView::SortChild()
     loop_ = tmpLoop;
 }
 
-void UISwipeView::RefreshCurrentViewInner(int16_t distance, int16_t (UIView::*pfnGetXOrY)() const,
-    int16_t(UIView::*pfnGetWidthOrHeight)())
+void UISwipeView::RefreshCurrentViewInner(int16_t distance,
+                                          int16_t (UIView::*pfnGetXOrY)() const,
+                                          int16_t (UIView::*pfnGetWidthOrHeight)())
 {
     if (childrenHead_ == nullptr) {
         curIndex_ = 0;
@@ -356,8 +353,8 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance, int16_t (UIView::*pf
          * that is, the x or y coordinate plus 7/10 width or height.
          */
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) < swipeMid) &&
-            ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 7 / 10) -
-            accelerationOffset < swipeMid)) {
+            ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 7 / 10) - accelerationOffset <
+             swipeMid)) {
             curIndex_++;
         }
     } else if (distance > 0) {
@@ -366,8 +363,8 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance, int16_t (UIView::*pf
          * that is, the x or y coordinate plus 3/10 width or height.
          */
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) > swipeMid) &&
-            ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 3 / 10) +
-            accelerationOffset > swipeMid)) {
+            ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 3 / 10) + accelerationOffset >
+             swipeMid)) {
             curIndex_--;
         }
     } else {
