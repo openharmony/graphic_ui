@@ -70,7 +70,7 @@ The graphics UI directly calls the HAL API or uses the client provided by the Wi
 Platform Constraints
 
 -   The Windows platform supports only Qt and OHOS IDE.
--   For the support of other platforms, see the  **graphic**  tag in  **vender/hisilicon/\[product\_name\]/config.json**. If the  **graphic**  tag does not exist, it indicates that the product does not have the graphics subsystem.
+-   For the support of other platforms, see the  **graphic**  tag in  **vendor/hisilicon/\[product\_name\]/config.json**. If the  **graphic**  tag does not exist, it indicates that the product does not have the graphics subsystem.
 
 ## Compilation and Building<a name="section137768191623"></a>
 
