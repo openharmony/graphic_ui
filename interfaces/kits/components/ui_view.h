@@ -304,17 +304,18 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
-     * @brief 声明旋转事件监听类。你需要注册此监听类以响应旋转事件。
+     * @brief Defines a rotation event listener.
+     *        You need to register this listener with the view to listen for rotation events.
      * @since 5.0
      * @version 3.0
      */
     class OnRotateListener : public HeapBase {
     public:
         /**
-         * @brief 当组件收到旋转事件时调用
-         * @param view 响应旋转的组件
-         * @param event 旋转事件
-         * @return 如果事件被消费返回true， 否则返回false.
+         * @brief Called when a rotation event occurs on a view.
+         * @param view Indicates the view that responds to the rotation event.
+         * @param event Indicates the rotation event.
+         * @return Returns <b>true</b> if the rotation event is consumed; returns <b>false</b> otherwise.
          * @since 5.0
          * @version 3.0
          */
@@ -323,7 +324,7 @@ public:
             return true;
         }
         /**
-         * @brief 析构函数，删除OnRotateListener旋转事件监听类实例.
+         * @brief A destructor used to delete an <b>OnRotateListener</b> instance.
          * @since 5.0
          * @version 3.0
          */
@@ -331,16 +332,16 @@ public:
     };
 
     /**
-     * @brief 当旋转事件传入组件时调用以产生对应响应
-     * @param event 旋转事件
+     * @brief Called when a rotation event occurs on the view.
+     * @param event Indicates the rotation event.
      * @since 5.0
      * @version 3.0
      */
     virtual bool OnRotateEvent(const RotateEvent& event);
 
     /**
-     * @brief 设置当前view组件的旋转事件监听对象
-     * @param onRotateListener 输入当前view组件的旋转事件监听对象指针
+     * @brief Sets a rotation event listener for the view.
+     * @param onRotateListener Indicates the pointer to the rotation event listener to set.
      * @since 5.0
      * @version 3.0
      */
@@ -350,8 +351,8 @@ public:
     }
 
     /**
-     * @brief 获得当前view组件的旋转事件监听对象指针
-     * @return 返回当前view组件的旋转事件监听对象指针
+     * @brief Obtains the rotation event listener for the view.
+     * @return Returns the rotation event listener.
      * @since 5.0
      * @version 3.0
      */
@@ -1463,7 +1464,7 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
-     * @brief 使组件注册获取焦点
+     * @brief Requests the focus on the view.
      *
      * @since 5.0
      * @version 3.0
@@ -1471,7 +1472,7 @@ public:
     virtual void RequestFocus();
 
     /**
-     * @brief 使组件失去焦点
+     * @brief Clears the focus on the view.
      *
      * @since 5.0
      * @version 3.0
