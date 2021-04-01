@@ -222,9 +222,9 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
-     * @brief 获得组件旋转系数
+     * @brief Obtains the rotation factor.
      *
-     * @return 返回旋转系数
+     * @return Returns the rotation factor.
      * @since 5.0
      * @version 3.0
      */
@@ -234,9 +234,9 @@ public:
     }
 
     /**
-     * @brief 设置组件旋转系数
+     * @brief Sets the rotation factor.
      *
-     * @param factor 旋转系数，旋转输入事件的旋转参数与旋转系数的乘积为实际滑动像素值
+     * @param factor Indicates the rotation factor to set.
      * @since 5.0
      * @version 3.0
      */
