@@ -16,7 +16,7 @@
 #include "compare_tools.h"
 #include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
-#include "file.h"
+#include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
 #include "securec.h"
