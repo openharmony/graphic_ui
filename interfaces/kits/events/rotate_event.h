@@ -31,7 +31,7 @@
 /**
  * @file rotate_event.h
  *
- * @brief 声明旋转事件RotateEvent，由旋钮类硬件产生
+ * @brief Declares a <b>RotateEvent</b>, which usually occurs on a knob.
  *
  * @since 5.0
  * @version 3.0
@@ -41,7 +41,7 @@
 
 namespace OHOS {
 /**
- * @brief 定义旋转事件RotateEvent，由旋钮类硬件产生
+ * @brief Defines a <b>RotateEvent</b>, which usually occurs on a knob.
  *
  * @since 5.0
  * @version 3.0
@@ -51,19 +51,19 @@ public:
     RotateEvent() = delete;
 
     /**
-     * @brief 旋转事件<b>RotateEvent</b>实例的构造函数.
-     * @param rotate short型旋转数值
+     * @brief A constructor used to create a <b>RotateEvent</b> instance.
+     * @param rotate Indicates the short data representing the number reported by a <b>RotateEvent</b>.
      *
      * @since 5.0
      * @version 3.0
      */
-    RotateEvent(int16_t rotate) : rotate_(-rotate * ROTATE_SENSITIVITY) {} // 翻转旋转方向
+    RotateEvent(int16_t rotate) : rotate_(-rotate * ROTATE_SENSITIVITY) {} // Rotation direction
 
     ~RotateEvent() {};
 
     /**
-     * @brief 获取旋转值
-     * @return 旋转值
+     * @brief Obtains the number reported by a <b>RotateEvent</b>.
+     * @return Returns the number reported by a <b>RotateEvent</b>.
      *
      * @since 5.0
      * @version 3.0

@@ -249,8 +249,9 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
-     * @brief 获得旋转系数
-     * @return 旋转系数
+     * @brief Obtains the rotation factor.
+     *
+     * @return Returns the rotation factor.
      * @since 5.0
      * @version 3.0
      */
@@ -259,9 +260,10 @@ public:
         return rotateFactor_;
     }
 
-     /**
-     * @brief 设置旋转系数
-     * @param factor 旋转系数
+    /**
+     * @brief Sets the rotation factor.
+     *
+     * @param factor Indicates the rotation factor to set.
      * @since 5.0
      * @version 3.0
      */
