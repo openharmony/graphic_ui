@@ -14,6 +14,7 @@
  */
 
 #include "ui_test_group.h"
+
 #include "graphic_config.h"
 #include "test_animator/ui_test_animator.h"
 #include "test_anti_aliasing/ui_test_anti_aliasing.h"
@@ -60,6 +61,7 @@
 #include "test_ui_list_view/ui_test_list_layout.h"
 #include "test_ui_scroll_view/ui_test_ui_scroll_view.h"
 #include "test_ui_swipe_view/ui_test_ui_swipe_view.h"
+#include "test_view_group/ui_test_view_group.h"
 #include "test_view_percent/ui_test_view_percent.h"
 #include "test_view_scale_rotate/ui_test_view_scale_rotate.h"
 #if ENABLE_VECTOR_FONT
@@ -130,6 +132,7 @@ void UITestGroup::SetUpTestCase()
     testCaseList_.PushBack(TestCaseInfo{"Transform", new UITestTransform()});
     testCaseList_.PushBack(TestCaseInfo{"Opacity", new UITestOpacity()});
     testCaseList_.PushBack(TestCaseInfo{"UIQrcode", new UITestQrcode()});
+    testCaseList_.PushBack(TestCaseInfo{"UIViewGroup", new UITestViewGroup()});
 #ifndef VERSION_LITE
     testCaseList_.PushBack(TestCaseInfo{"Video", new UITestVideo()});
 #endif
