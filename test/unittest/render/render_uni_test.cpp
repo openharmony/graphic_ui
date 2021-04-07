@@ -98,6 +98,7 @@ HWTEST_F(RenderTest, Graphic_RenderTest_Test_Measuer_001, TestSize.Level0)
     g_measureCount = 0;
 
     RenderTest::CreateDefaultWindow(rootView, 0, 0);
+    sleep(DEFAULT_TASK_PERIOD);
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_measureCount, 2); // 2: measure view
     rootView->RemoveAll();
@@ -129,6 +130,7 @@ HWTEST_F(RenderTest, Graphic_RenderTest_Test_Measuer_02, TestSize.Level0)
     g_measureCount = 0;
 
     RenderTest::CreateDefaultWindow(rootView, 0, 0);
+    sleep(DEFAULT_TASK_PERIOD);
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_measureCount, 1);
 
