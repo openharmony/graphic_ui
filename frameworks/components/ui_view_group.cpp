@@ -50,7 +50,6 @@ void UIViewGroup::Add(UIView* view)
     if (childrenHead_ == nullptr) {
         childrenHead_ = view;
     } else {
-
         if (childrenTail_ == nullptr) {
             return;
         }
