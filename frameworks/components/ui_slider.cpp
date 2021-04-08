@@ -220,7 +220,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
     switch (direction_) {
         case Direction::DIR_LEFT_TO_RIGHT: {
             length = GetCurrentPos(progressWidth_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1, startPoint.y + progressHeight_ - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
+                           startPoint.y + progressHeight_ - 1);
 
             left = startPoint.x - radius - 1;
             right = left + length;
@@ -229,7 +230,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
         case Direction::DIR_RIGHT_TO_LEFT: {
             length = GetCurrentPos(progressWidth_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1, startPoint.y + progressHeight_ - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
+                           startPoint.y + progressHeight_ - 1);
 
             right = startPoint.x + progressWidth + radius + 1;
             left = right - length;
@@ -238,7 +240,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
         case Direction::DIR_TOP_TO_BOTTOM: {
             length = GetCurrentPos(progressHeight_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
+                           startPoint.y + progressHeight - 1);
 
             top = startPoint.y - radius + 1;
             bottom = top + length;
@@ -247,7 +250,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
         case Direction::DIR_BOTTOM_TO_TOP: {
             length = GetCurrentPos(progressHeight_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
+                           startPoint.y + progressHeight - 1);
 
             bottom = startPoint.y + progressHeight + radius + 1;
             top = bottom - length;

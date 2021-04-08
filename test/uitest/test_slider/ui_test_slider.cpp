@@ -432,9 +432,9 @@ bool UITestSlider::OnClick(UIView& view, const ClickEvent& event)
         slider_->SetBackgroundStyle(StyleDefault::GetProgressBackgroundStyle());
         slider_->SetForegroundStyle(StyleDefault::GetProgressForegroundStyle());
 #if ENABLE_SLIDER_KNOB
-       slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
-       slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                         static_cast<ImageInfo*>(nullptr));
+        slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
+        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
+                          static_cast<ImageInfo*>(nullptr));
 #endif
         slider_->EnableBackground(true);
     } else if (&view == incProgressBtn_) {
