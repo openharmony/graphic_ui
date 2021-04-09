@@ -14,6 +14,7 @@
  */
 
 #include "compare_tools.h"
+#include <cstring>
 #include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/file.h"
@@ -21,7 +22,11 @@
 #include "graphic_config.h"
 #include "securec.h"
 
+
 namespace OHOS {
+bool CompareTools::enableLog_ = false;
+char* CompareTools::logPath_ = nullptr;
+
 void CompareTools::WaitSuspend()
 {
 #ifdef _WIN32
@@ -84,25 +89,48 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
         return false;
     }
     uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
+    if (frameBuf == nullptr) {
+        return false;
+    }
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
     uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
     uint8_t* readBuf = reinterpret_cast<uint8_t*>(malloc(buffSize));
-    if (fread(readBuf, buffSize, sizeof(uint8_t), fd) < 0) {
-        fclose(fd);
-        free(readBuf);
+    if (readBuf == nullptr) {
         return false;
     }
+    if (fread(readBuf, sizeof(uint8_t), buffSize, fd) < 0) {
+        free(readBuf);
+        fclose(fd);
+        return false;
+    }
+    bool ret = true;
     for (int32_t i = 0; i < (buffSize / sizeof(uint8_t)); i++) {
         if (readBuf[i] != frameBuf[i]) {
-            GRAPHIC_LOGE("[DIFF]:fileName=%s, read[%d]=%x, write[%d]=%x", filePath, i, readBuf[i], frameBuf[i]);
-            fclose(fd);
-            free(readBuf);
-            return false;
+            ret = false;
+            break;
         }
     }
-    fclose(fd);
+    if (ret) {
+        GRAPHIC_LOGI("[SUCCESS]:fileName=%s", filePath);
+    } else {
+        GRAPHIC_LOGI("[FAILURE]:fileName=%s", filePath);
+    }
     free(readBuf);
-    return true;
+    fclose(fd);
+    if (enableLog_) {
+        char logBuf[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+        if (ret) {
+            if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[SUCCESS]:fileName=%s\n", filePath) < 0) {
+                return false;
+            }
+        } else {
+            if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[FAILURE]:fileName=%s\n", filePath) < 0) {
+                return false;
+            }
+        }
+        SaveLog(logBuf, strlen(logBuf));
+    }
+    return ret;
 }
 
 bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
@@ -115,13 +143,25 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
         return false;
     }
     uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
+    if (frameBuf == nullptr) {
+        GRAPHIC_LOGE("GetBuffer failed");
+        return false;
+    }
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
     uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
-    if (fwrite(frameBuf, buffSize, sizeof(uint8_t), fd) < 0) {
+    if (fwrite(frameBuf, sizeof(uint8_t), buffSize, fd) < 0) {
         fclose(fd);
         return false;
     }
     fclose(fd);
+    GRAPHIC_LOGI("[SAVEBIN]:fileName=%s", filePath);
+    if (enableLog_) {
+        char logBuf[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+        if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[SAVEBIN]:fileName=%s\n", filePath) < 0) {
+            return false;
+        }
+        SaveLog(logBuf, strlen(logBuf));
+    }
     return true;
 }
 
@@ -135,6 +175,49 @@ bool CompareTools::CheckFileExist(const char* filePath, size_t length)
         return false;
     }
     fclose(fd);
+    return true;
+}
+
+void CompareTools::SetLogPath(const char* filePath, size_t length)
+{
+    if (logPath_ == nullptr) {
+        logPath_ = new char[length];
+        if (logPath_ == nullptr) {
+            return;
+        }
+        if (memcpy_s(logPath_, length, filePath, length) != EOK) {
+            GRAPHIC_LOGE("memcpy filepath failed");
+            return;
+        }
+        enableLog_ = true;
+    }
+}
+
+void CompareTools::UnsetLogPath()
+{
+    if (logPath_ != nullptr) {
+        delete[] logPath_;
+        logPath_ = nullptr;
+        enableLog_ = false;
+    }
+}
+
+bool CompareTools::SaveLog(char* buff, size_t bufSize)
+{
+    if ((buff == nullptr) || (logPath_ == nullptr)) {
+        return false;
+    }
+    FILE* log = fopen(logPath_, "a");
+    if (log == nullptr) {
+        GRAPHIC_LOGE("open log failed");
+        return false;
+    }
+    if (fwrite(buff, 1, bufSize, log) < 0) {
+        fclose(log);
+        GRAPHIC_LOGE("wtite log failed");
+        return false;
+    }
+    fclose(log);
     return true;
 }
 } // namespace OHOS

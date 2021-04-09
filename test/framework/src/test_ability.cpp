@@ -14,16 +14,22 @@
  */
 
 #include "ui_test_app.h"
-#if ENABEL_UI_AUTO_TEST
 #ifdef _WIN32
 #include <thread>
+#else
+#include <pthread.h>
 #endif // _WIN32
 
-void* AutoTestThread()
+#ifdef _WIN32
+void AutoTestThread()
+#else
+void* AutoTestThread(void*)
+#endif // _WIN32
 {
     OHOS::UIAutoTestApp::GetInstance()->Start();
+    pthread_exit(0);
 }
-#endif // ENABEL_UI_AUTO_TEST
+
 
 void RunApp()
 {
@@ -32,6 +38,10 @@ void RunApp()
 #ifdef _WIN32
     std::thread autoTestPthread(AutoTestThread);
     autoTestPthread.detach();
+#else
+    pthread_t thread;
+    pthread_create(&thread, 0, AutoTestThread, nullptr);
+    pthread_detach(thread);
 #endif // _WIN32
 #endif // ENABEL_UI_AUTO_TEST
 }
