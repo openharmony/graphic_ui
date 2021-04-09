@@ -15,6 +15,7 @@
 
 #include "components/ui_scroll_view.h"
 #include "dock/focus_manager.h"
+#include "dock/vibrator_manager.h"
 #include "draw/draw_rect.h"
 
 namespace OHOS {
@@ -28,10 +29,8 @@ UIScrollView::UIScrollView()
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = 1;
-    rotateThreshold_ = 4; // 4: which means 25% of half view size
-    tmpRotateLen_ = 0;
-
+    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    lastRotateLen_ = 0;
 #endif
     direction_ = HORIZONTAL_AND_VERTICAL;
     xSlider_.SetVisible(false);
@@ -105,27 +104,45 @@ bool UIScrollView::OnPressEvent(const PressEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UIScrollView::OnRotateEvent(const RotateEvent& event)
 {
-    int16_t midPointX = static_cast<int16_t>(GetWidth() / 2); // 2 : Get the middle point X coord of the view
+    int16_t midPointX = static_cast<int16_t>(GetWidth() / 2);  // 2 : Get the middle point X coord of the view
     int16_t midPointY = static_cast<int16_t>(GetHeight() / 2); // 2 : Get the middle point Y coord of the view
     Point last, current;
     if (throwDrag_ && event.GetRotate() == 0) {
-        last = Point {midPointX, midPointY};
-        yScrollable_ ? (current = Point {midPointX, static_cast<int16_t>(midPointY + tmpRotateLen_)})
-                     : (current = Point {static_cast<int16_t>(midPointX + tmpRotateLen_), midPointY});
+        last = Point{midPointX, midPointY};
+        yScrollable_ ? (current = Point{midPointX, static_cast<int16_t>(midPointY + lastRotateLen_)}) :
+                       (current = Point{static_cast<int16_t>(midPointX + lastRotateLen_), midPointY});
         DragThrowAnimator(current, last);
-        tmpRotateLen_ = 0;
+        lastRotateLen_ = 0;
     } else {
-        tmpRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+        lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
         if (yScrollable_) {
-            DragYInner(tmpRotateLen_);
+            DragYInner(lastRotateLen_);
         } else {
-            DragXInner(tmpRotateLen_);
+            DragXInner(lastRotateLen_);
         }
     }
-#if ENABLE_MOTOR
-    MotorFunc motorFunc = FocusManager::GetInstance()->GetMotorFunc();
-    if (motorFunc != nullptr) {
-        motorFunc(MotorType::MOTOR_TYPE_ONE);
+#if ENABLE_VIBRATOR
+    Rect rect = GetAllChildRelativeRect();
+    int16_t top = rect.GetTop();
+    int16_t bottom = rect.GetBottom();
+    int16_t scrollHeight = GetHeight();
+    int16_t left = rect.GetLeft();
+    int16_t right = rect.GetRight();
+    int16_t scrollWidth = GetWidth();
+    bool needMotor = true;
+    if (yScrollable_) {
+        if ((top > 0 && top <= reboundSize_) ||
+            (bottom >= (scrollHeight - reboundSize_ - 1) && bottom < scrollHeight)) {
+            needMotor = false;
+        }
+    } else {
+        if ((left > 0 && left <= reboundSize_) || (right >= (scrollWidth - reboundSize_ - 1) && right < scrollWidth)) {
+            needMotor = false;
+        }
+    }
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (vibratorFunc != nullptr && needMotor) {
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
     }
 #endif
     return UIView::OnRotateEvent(event);

@@ -41,6 +41,7 @@
 #include "components/abstract_adapter.h"
 #include "components/ui_abstract_scroll.h"
 #include "dock/focus_manager.h"
+#include "dock/vibrator_manager.h"
 #include "gfx_utils/list.h"
 
 namespace OHOS {
@@ -429,9 +430,14 @@ private:
     bool MoveOffset(int16_t offset);
     bool IsNeedReCalculateDragEnd();
     bool ReCalculateDragEnd();
-#if ENABLE_MOTOR
-    void SetMotorType(MotorType motorType);
-    MotorType motorType_;
+#if ENABLE_ROTATE_INPUT
+    bool isRotating_;
+    int16_t lastRotateLen_;
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 5;
+#endif
+#if ENABLE_VIBRATOR
+    void SetMotorType(VibratorType vibratorType);
+    VibratorType vibratorType_;
 #endif
     bool isLoopList_;
     bool isReCalculateDragEnd_;

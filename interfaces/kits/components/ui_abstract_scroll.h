@@ -348,8 +348,8 @@ protected:
     ListAnimatorCallback animatorCallback_;
     Animator scrollAnimator_;
 #if ENABLE_ROTATE_INPUT
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
     int8_t rotateFactor_;
-    int8_t rotateThreshold_;
 #endif
 };
 } // namespace OHOS

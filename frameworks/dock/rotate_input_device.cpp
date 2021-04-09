@@ -18,25 +18,20 @@
 
 #if ENABLE_ROTATE_INPUT
 namespace OHOS {
-static int8_t g_rotateCtrl = INT8_MIN;
 void RotateInputDevice::DispatchEvent(const DeviceData& data)
 {
     UIView *view_ = FocusManager::GetInstance()->GetFocusedView();
     if (view_ == nullptr) {
         return;
-    } else if (g_rotateCtrl == INT8_MIN) {
-        g_rotateCtrl = INT8_MAX;
-        return;
-    } else if (data.rotate == 0 && g_rotateCtrl == NULL) {
+    } else if (data.rotate == 0 && rotateStart) {
         view_->OnRotateEvent(0);
-        g_rotateCtrl = INT8_MAX;
+        rotateStart = false;
         return;
-    } else if (data.rotate == 0) {
+    } else if (MATH_ABS(data.rotate) < ROTATE_INPUT_THRESHOLD) {
         return;
     } else {
-        g_rotateCtrl = data.rotate;
-        view_->OnRotateEvent(g_rotateCtrl);
-        g_rotateCtrl = NULL;
+        view_->OnRotateEvent(data.rotate);
+        rotateStart = true;
     }
 }
 } // namespace OHOS
