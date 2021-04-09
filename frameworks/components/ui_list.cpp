@@ -113,11 +113,12 @@ UIList::UIList()
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = 1;
-    rotateThreshold_ = 4; // 4: which means 25% of half view size
+    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    isRotating_ = false;
+    lastRotateLen_ = 0;
 #endif
-#if ENABLE_MOTOR
-    motorType_ = MotorType::MOTOR_TYPE_ONE;
+#if ENABLE_VIBRATOR
+    vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -142,11 +143,12 @@ UIList::UIList(uint8_t direction)
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = 1;
-    rotateThreshold_ = 4; // 4: which means 25% of half view size
+    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    isRotating_ = false;
+    lastRotateLen_ = 0;
 #endif
-#if ENABLE_MOTOR
-    motorType_ = MotorType::MOTOR_TYPE_ONE;
+#if ENABLE_VIBRATOR
+    vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -215,40 +217,24 @@ bool UIList::OnRotateEvent(const RotateEvent& event)
     int16_t midPointX = static_cast<int16_t>(GetWidth() / 2);  // 2 : Get the middle point X coord of the view
     int16_t midPointY = static_cast<int16_t>(GetHeight() / 2); // 2 : Get the middle point Y coord of the view
     Point last, current;
-#if ENABLE_MOTOR
-    MotorFunc motorFunc = FocusManager::GetInstance()->GetMotorFunc();
-#endif
 
-    if (!throwDrag_ || ((MATH_ABS(tmpRotateLen) < (midPointX / rotateThreshold_)) &&
-        (MATH_ABS(tmpRotateLen) < (midPointY / rotateThreshold_)))) {
-        ScrollBy(tmpRotateLen);
-        if (event.GetRotate() == 0) {
-            isReCalculateDragEnd_ = false;
-            DragThrowAnimator(Point{0, 0}, Point{0, 0});
-        }
-    } else {
-        tmpRotateLen += tmpRotateLen;
-        last = Point{midPointX, midPointY};
-        if (direction_ == VERTICAL) {
-            current = Point{midPointX, static_cast<int16_t>(midPointY + tmpRotateLen)};
-        } else {
-            current = Point{static_cast<int16_t>(midPointX + tmpRotateLen), midPointY};
-        }
+    isRotating_ = true;
+    if (throwDrag_ && event.GetRotate() == 0) {
+        last = Point {midPointX, midPointY};
+        (direction_ == VERTICAL) ? (current = Point {midPointX, static_cast<int16_t>(midPointY + lastRotateLen_)})
+                                 : (current = Point {static_cast<int16_t>(midPointX + lastRotateLen_), midPointY});
         isReCalculateDragEnd_ = false;
         DragThrowAnimator(current, last);
-#if ENABLE_MOTOR
-        if (motorFunc != nullptr && motorType_ == MotorType::MOTOR_TYPE_TWO) {
-            motorFunc(MotorType::MOTOR_TYPE_TWO);
+        lastRotateLen_ = 0;
+    } else {
+        lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+        if (direction_ == VERTICAL) {
+            DragYInner(lastRotateLen_);
+        } else {
+            DragXInner(lastRotateLen_);
         }
-#endif
     }
-
-#if ENABLE_MOTOR
-    if (motorFunc != nullptr && motorType_ == MotorType::MOTOR_TYPE_ONE) {
-        motorFunc(MotorType::MOTOR_TYPE_ONE);
-    }
-#endif
-
+    isRotating_ = false;
     return UIView::OnRotateEvent(event);
 }
 #endif
@@ -644,6 +630,13 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
         }
         view = view->GetNextSibling();
     }
+
+#if ENABLE_ROTATE_INPUT && ENABLE_VIBRATOR
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (isRotating_ && vibratorFunc != nullptr && isSelectViewFind) {
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
+    }
+#endif
 }
 
 void UIList::StopAnimator()
@@ -780,10 +773,10 @@ void UIList::CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDista
     }
 }
 
-#if ENABLE_MOTOR
-void UIList::SetMotorType(MotorType motorType)
+#if ENABLE_VIBRATOR
+void UIList::SetMotorType(VibratorType vibratorType)
 {
-    motorType_ = motorType;
+    vibratorType_ = vibratorType;
 }
 #endif
 } // namespace OHOS

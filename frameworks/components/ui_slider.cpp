@@ -16,6 +16,7 @@
 #include "components/ui_slider.h"
 #include "common/image.h"
 #include "dock/focus_manager.h"
+#include "dock/vibrator_manager.h"
 #include "draw/draw_image.h"
 #include "draw/draw_rect.h"
 #include "gfx_utils/graphic_log.h"
@@ -388,12 +389,16 @@ bool UISlider::OnRotateEvent(const RotateEvent& event)
     if (event.GetRotate() == 0) {
         return false;
     }
-    int32_t tmp = event.GetRotate() * rotateFactor_;
+    int32_t lastValue = curValue_;
+    int32_t tmp = static_cast<int32_t>(event.GetRotate()) * rotateFactor_;
     SetValue(curValue_ + tmp);
-#if ENABLE_MOTOR
-    MotorFunc motorFunc = FocusManager::GetInstance()->GetMotorFunc();
-    if (motorFunc != nullptr) {
-        motorFunc(MotorType::MOTOR_TYPE_TWO);
+    if (listener_ != nullptr) {
+        listener_->OnChange(curValue_);
+    }
+#if ENABLE_VIBRATOR
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (vibratorFunc != nullptr && lastValue != curValue_) {
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
     }
 #endif
     return UIView::OnRotateEvent(event);
