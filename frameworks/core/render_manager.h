@@ -41,7 +41,7 @@ public:
         return instance;
     }
 
-    virtual void Init() override;
+    void Init() override;
 
 #if ENABLE_WINDOW
     Window* GetWindowById(int32_t id)
@@ -57,10 +57,7 @@ public:
     }
 #endif
 
-    virtual void Callback() override
-    {
-        RenderTask();
-    }
+    void Callback() override;
 
     float GetFPS() const
     {
@@ -79,16 +76,12 @@ public:
     void RemoveFromDisplay(Window* window);
 #endif
 
-private:
-    friend class RootView;
+static void RenderRect(const Rect& rect, RootView* rootView);
 
+private:
     RenderManager();
 
     ~RenderManager();
-
-    void RenderTask();
-
-    static void RenderRect(const Rect& rect, RootView* rootView);
 
 #if ENABLE_FPS_SUPPORT
     void UpdateFPS();

@@ -61,6 +61,7 @@
 #include "test_ui_list_view/ui_test_list_layout.h"
 #include "test_ui_scroll_view/ui_test_ui_scroll_view.h"
 #include "test_ui_swipe_view/ui_test_ui_swipe_view.h"
+#include "test_view_bitmap/ui_test_view_bitmap.h"
 #include "test_view_group/ui_test_view_group.h"
 #include "test_view_percent/ui_test_view_percent.h"
 #include "test_view_scale_rotate/ui_test_view_scale_rotate.h"
@@ -133,6 +134,7 @@ void UITestGroup::SetUpTestCase()
     testCaseList_.PushBack(TestCaseInfo{"Opacity", new UITestOpacity()});
     testCaseList_.PushBack(TestCaseInfo{"UIQrcode", new UITestQrcode()});
     testCaseList_.PushBack(TestCaseInfo{"UIViewGroup", new UITestViewGroup()});
+    testCaseList_.PushBack(TestCaseInfo{"View Bitmap", new UITestViewBitmap()});
 #ifndef VERSION_LITE
     testCaseList_.PushBack(TestCaseInfo{"Video", new UITestVideo()});
 #endif

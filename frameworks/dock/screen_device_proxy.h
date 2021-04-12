@@ -155,6 +155,9 @@ public:
 
     uint16_t GetBufferWidth() const
     {
+        if (enableBitmapBuffer_) {
+            return bitmapBufferWidth_;
+        }
         if (useAnimatorBuff_) {
             return animatorBufferWidth_;
         }
@@ -182,6 +185,28 @@ public:
 
     ColorMode GetBufferMode();
 
+    void SetBitmapBuffer(uint8_t* addr0, uint8_t* addr1)
+    {
+        if ((addr0 == nullptr) || (addr1 == nullptr)) {
+            return;
+        }
+        viewBitmapBuffer_ = addr0;
+        screenBitmapBuffer_ = addr1;
+    }
+
+    void SetViewBitmapBufferWidth(uint16_t width)
+    {
+        bitmapBufferWidth_ = width;
+    }
+
+    bool EnableBitmapBuffer();
+
+    void DisableBitmapBuffer()
+    {
+        enableBitmapBuffer_ = false;
+    }
+
+    uint8_t* GetScreenBitmapBuffer();
 private:
     ScreenDeviceProxy() {}
     virtual ~ScreenDeviceProxy() {}
@@ -207,7 +232,12 @@ private:
     TransformMap transMap_;
     bool useAnimatorBuff_ = false;
     ImageInfo animatorImageInfo_ = {{0}};
-
+    // snapshot related
+    uint8_t* viewBitmapBuffer_ = nullptr;
+    uint8_t* screenBitmapBuffer_ = nullptr;
+    uint16_t bitmapBufferWidth_ = 0;
+    bool enableBitmapBuffer_ = false;
+    // snapshot related
 #if ENABLE_WINDOW
     AllocationInfo gfxAlloc_ = {0};
 #endif

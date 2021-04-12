@@ -14,7 +14,6 @@
  */
 
 #include "dfx/ui_screenshot.h"
-
 #if ENABLE_DEBUG
 #include "iwindows_manager.h"
 #include "common/screen.h"
