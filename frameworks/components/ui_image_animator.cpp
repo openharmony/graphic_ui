@@ -17,17 +17,23 @@
 
 namespace OHOS {
 UIImageAnimatorView::UIImageAnimatorView()
-    : imageSrc_(nullptr), imageNum_(0), tickOfUpdate_(1), timeOfUpdate_(DEFAULT_TASK_PERIOD),
-      timeOfPause_(0), tickOfPause_(0), repeatTimes_(1), imageAnimator_(&imageAnimatorCallback_, this, 0, true),
-      listener_(nullptr), reverse_(false), repeat_(true), sizeFixed_(false), fillMode_(true)
+    : imageSrc_(nullptr),
+      imageNum_(0),
+      tickOfUpdate_(1),
+      timeOfUpdate_(DEFAULT_TASK_PERIOD),
+      timeOfPause_(0),
+      tickOfPause_(0),
+      repeatTimes_(1),
+      imageAnimator_(&imageAnimatorCallback_, this, 0, true),
+      listener_(nullptr),
+      reverse_(false),
+      repeat_(true),
+      sizeFixed_(false),
+      fillMode_(true)
 {
-    AnimatorManager::GetInstance()->Add(&imageAnimator_);
 }
 
-UIImageAnimatorView::~UIImageAnimatorView()
-{
-    AnimatorManager::GetInstance()->Remove(&imageAnimator_);
-}
+UIImageAnimatorView::~UIImageAnimatorView() {}
 
 void UIImageAnimatorView::ImageAnimatorCallback::Callback(UIView* view)
 {
@@ -103,7 +109,8 @@ void UIImageAnimatorView::SetImageAnimatorSrc(const ImageAnimatorInfo imageAnima
 }
 
 void UIImageAnimatorView::SetImageAnimatorSrc(const ImageAnimatorInfo imageAnimatorInfoSrc[],
-                                              uint8_t imageNum, uint16_t timeOfUpdate)
+                                              uint8_t imageNum,
+                                              uint16_t timeOfUpdate)
 {
     imageSrc_ = const_cast<ImageAnimatorInfo*>(imageAnimatorInfoSrc);
     imageNum_ = imageNum;
@@ -147,7 +154,7 @@ uint16_t UIImageAnimatorView::GetTimeOfPause() const
 void UIImageAnimatorView::Start()
 {
     Reset(false);
-    imageAnimator_.SetState(Animator::START);
+    imageAnimator_.Start();
 }
 
 void UIImageAnimatorView::Reset(bool fillMode)
@@ -184,11 +191,21 @@ void UIImageAnimatorView::Stop()
         return;
     }
 
-    imageAnimator_.SetState(Animator::STOP);
+    imageAnimator_.Stop();
     Reset(fillMode_);
     if (listener_ != nullptr) {
         listener_->OnAnimatorStop(*this);
     }
+}
+
+void UIImageAnimatorView::Pause()
+{
+    imageAnimator_.Pause();
+}
+
+void UIImageAnimatorView::Resume()
+{
+    imageAnimator_.Resume();
 }
 
 uint8_t UIImageAnimatorView::GetTickByTime(uint16_t time) const
@@ -201,4 +218,4 @@ uint8_t UIImageAnimatorView::GetTickByTime(uint16_t time) const
     }
     return tick;
 }
-}
+} // namespace OHOS

@@ -32,13 +32,9 @@ public:
           preRunTime_(0),
           decimal_(0)
     {
-        AnimatorManager::GetInstance()->Add(this);
     }
 
-    virtual ~LabelAnimator()
-    {
-        AnimatorManager::GetInstance()->Remove(this);
-    }
+    virtual ~LabelAnimator() {}
 
     int16_t GetStartPos() const
     {

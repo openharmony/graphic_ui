@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_image_view.h"
+
 #include "common/image.h"
 #include "common/typed_text.h"
 #include "draw/draw_image.h"
@@ -406,7 +407,6 @@ void UIImageView::SetSrc(const ImageInfo* src)
 void UIImageView::AddAndStartGifAnimator()
 {
     if (gifImageAnimator_ != nullptr) {
-        AnimatorManager::GetInstance()->Add(gifImageAnimator_);
         gifImageAnimator_->Start();
     }
 }
@@ -415,7 +415,6 @@ void UIImageView::RemoveAndStopGifAnimator()
 {
     if (gifImageAnimator_ != nullptr) {
         gifImageAnimator_->Stop();
-        AnimatorManager::GetInstance()->Remove(gifImageAnimator_);
         delete gifImageAnimator_;
         gifImageAnimator_ = nullptr;
     }

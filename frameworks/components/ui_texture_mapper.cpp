@@ -46,13 +46,9 @@ UITextureMapper::UITextureMapper()
       delayTime_(0),
       easingFunc_(EasingEquation::LinearEaseNone)
 {
-    AnimatorManager::GetInstance()->Add(&animator_);
 }
 
-UITextureMapper::~UITextureMapper()
-{
-    AnimatorManager::GetInstance()->Remove(&animator_);
-}
+UITextureMapper::~UITextureMapper() {}
 
 void UITextureMapper::Start()
 {
@@ -92,4 +88,4 @@ void UITextureMapper::Callback()
         Rotate(rotateCur_, pivot_);
     }
 }
-}
+} // namespace OHOS

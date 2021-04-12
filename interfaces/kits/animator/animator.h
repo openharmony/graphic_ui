@@ -35,14 +35,9 @@
 #ifndef GRAPHIC_LITE_ANIMATOR_H
 #define GRAPHIC_LITE_ANIMATOR_H
 
-#include <cstdint>
 #include "components/ui_view.h"
-#include "gfx_utils/list.h"
-#include "common/task.h"
 
 namespace OHOS {
-class Animator;
-
 /**
  * @brief Represents the animator callback.
  *
@@ -73,7 +68,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnStop(UIView& view) {};
+    virtual void OnStop(UIView& view) {}
 
     /**
      * @brief A default destructor used to delete an <b>AnimatorCallback</b> instance.
@@ -117,7 +112,9 @@ public:
      * @version 1.0
      */
     Animator()
-        : callback_(nullptr), view_(nullptr), state_(STOP), time_(0), repeat_(false), runTime_(0), lastRunTime_(0) {}
+        : callback_(nullptr), view_(nullptr), state_(STOP), time_(0), repeat_(false), runTime_(0), lastRunTime_(0)
+    {
+    }
 
     /**
      * @brief A constructor used to create an <b>Animator</b> instance.
@@ -133,7 +130,9 @@ public:
      * @version 1.0
      */
     Animator(AnimatorCallback* callback, UIView* view, uint32_t time, bool repeat)
-        : callback_(callback), view_(view), state_(STOP), time_(time), repeat_(repeat), runTime_(0), lastRunTime_(0) {}
+        : callback_(callback), view_(view), state_(STOP), time_(time), repeat_(repeat), runTime_(0), lastRunTime_(0)
+    {
+    }
 
     /**
      * @brief A destructor used to delete the <b>Animator</b> instance.
@@ -141,7 +140,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual ~Animator() {}
+    virtual ~Animator();
 
     /**
      * @brief Starts this animator.
@@ -281,69 +280,5 @@ protected:
     uint32_t runTime_;
     uint32_t lastRunTime_;
 };
-
-/**
- * @brief Represents the animator manager.
- *
- * This is a singleton class used to manage <b>Animator</b> instances.
- *
- * @see Task
- * @since 1.0
- * @version 1.0
- */
-class AnimatorManager : public Task {
-public:
-    /**
-     * @brief Obtains the <b>AnimatorManager</b> instance.
-     *
-     * @return Returns the <b>AnimatorManager</b> instance.
-     * @since 1.0
-     * @version 1.0
-     */
-    static AnimatorManager* GetInstance()
-    {
-        static AnimatorManager animatorManager;
-        return &animatorManager;
-    }
-
-    void Init() override;
-
-    /**
-     * @brief Adds the <b>Animator</b> instance to the <b>AnimatorManager</b> linked list for management,
-     *        so that the {@link Run} function of the <b>Animator</b> class is called once for each frame.
-     *
-     * @param animator Indicates the pointer to the <b>Animator</b> instance to add.
-     * @see Remove
-     * @since 1.0
-     * @version 1.0
-     */
-    void Add(Animator* animator);
-
-    /**
-     * @brief Removes the <b>Animator</b> instance from the <b>AnimatorManager</b> linked list.
-     *
-     * @param animator Indicates the pointer to the <b>Animator</b> instance to remove.
-     * @see Add
-     * @since 1.0
-     * @version 1.0
-     */
-    void Remove(const Animator* animator);
-
-    void AnimatorTask();
-
-    void Callback() override
-    {
-        AnimatorTask();
-    }
-
-protected:
-    List<Animator*> list_;
-    AnimatorManager() {}
-    virtual ~AnimatorManager() {}
-    AnimatorManager(const AnimatorManager&) = delete;
-    AnimatorManager& operator=(const AnimatorManager&) = delete;
-    AnimatorManager(AnimatorManager&&) = delete;
-    AnimatorManager& operator=(AnimatorManager&&) = delete;
-};
-}
+} // namespace OHOS
 #endif

@@ -41,13 +41,11 @@ UIAbstractScroll::UIAbstractScroll()
     touchable_ = true;
     draggable_ = true;
     dragParentInstead_ = false;
-    AnimatorManager::GetInstance()->Add(&scrollAnimator_);
 }
 
 UIAbstractScroll::~UIAbstractScroll()
 {
     scrollAnimator_.Stop();
-    AnimatorManager::GetInstance()->Remove(&scrollAnimator_);
 }
 
 void UIAbstractScroll::MoveChildByOffset(int16_t offsetX, int16_t offsetY)

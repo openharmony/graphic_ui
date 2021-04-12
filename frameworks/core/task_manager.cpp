@@ -14,7 +14,8 @@
  */
 
 #include "common/task_manager.h"
-#include <cassert>
+
+#include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 
 namespace OHOS {
@@ -22,6 +23,15 @@ void TaskManager::Add(Task* task)
 {
     if (task == nullptr) {
         return;
+    }
+
+    ListNode<Task*>* pos = list_.Begin();
+    while (pos != list_.End()) {
+        if (pos->data_ == task) {
+            GRAPHIC_LOGI("do not add task multi times");
+            return;
+        }
+        pos = pos->next_;
     }
 
     list_.PushBack(task);
@@ -64,4 +74,4 @@ void TaskManager::TaskHandler()
 
     isHandlerRunning_ = false;
 }
-}
+} // namespace OHOS

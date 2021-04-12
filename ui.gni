@@ -18,6 +18,7 @@ graphic_ui_include_dirs = [
 
 graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/animator/animator.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/animator/animator_manager.cpp",
   "$GRAPHIC_UI_PATH/frameworks/animator/easing_equation.cpp",
   "$GRAPHIC_UI_PATH/frameworks/animator/interpolation.cpp",
   "$GRAPHIC_UI_PATH/frameworks/common/graphic_startup.cpp",

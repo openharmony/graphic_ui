@@ -32,7 +32,6 @@ UIVideo::~UIVideo()
         videoPlayer_->Release();
     }
     if (sliderAnimator_ != nullptr) {
-        AnimatorManager::GetInstance()->Remove(sliderAnimator_);
         delete sliderAnimator_;
         sliderAnimator_ = nullptr;
     }
@@ -369,7 +368,6 @@ void UIVideo::InitVideo()
             GRAPHIC_LOGE("new Animator fail");
             return;
         }
-        AnimatorManager::GetInstance()->Add(sliderAnimator_);
         sliderAnimatorCallback_->SetSliderAnimator(sliderAnimator_);
     }
 }

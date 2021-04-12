@@ -26,6 +26,7 @@ DESTDIR = ../libs
 
 SOURCES += \
     ../../../../frameworks/animator/animator.cpp \
+    ../../../../frameworks/animator/animator_manager.cpp \
     ../../../../frameworks/animator/easing_equation.cpp \
     ../../../../frameworks/animator/interpolation.cpp \
     ../../../../frameworks/common/graphic_startup.cpp \
