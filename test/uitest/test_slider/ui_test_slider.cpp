@@ -150,6 +150,7 @@ void UITestSlider::SetUp()
 
     if (scroll_ == nullptr) {
         scroll_ = new UIScrollView();
+        scroll_->SetIntercept(true);
         scroll_->SetPosition(336, 11);                                // 336: x-coordinate; 11: y-coordinate
         scroll_->Resize(624, Screen::GetInstance().GetHeight() - 70); // 624: width; 70: decrease height
         container_->Add(scroll_);
