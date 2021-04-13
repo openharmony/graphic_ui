@@ -19,26 +19,6 @@
 #include "components/ui_view.h"
 
 namespace OHOS {
-#if ENABLE_MOTOR
-/**
- * @brief 震动类型.
- *
- * @since 5.0
- * @version 3.0
- */
-enum class MotorType {
-    MOTOR_TYPE_ONE,
-    MOTOR_TYPE_TWO,
-};
-
-/**
- * @brief 震动函数.
- *
- * @param type 震动类型.
- */
-typedef void(*MotorFunc)(MotorType motorType);
-#endif
-
 class FocusManager {
 public:
     static FocusManager* GetInstance()
@@ -46,6 +26,7 @@ public:
         static FocusManager instance;
         return &instance;
     }
+
     void ClearFocus()
     {
         view_ = nullptr;
@@ -61,25 +42,10 @@ public:
         view_ = view;
     }
 
-#if ENABLE_MOTOR
-    void RegisterMotorFunc(MotorFunc motorFunc)
-    {
-        motorFunc_ = motorFunc;
-    }
-
-    MotorFunc GetMotorFunc()
-    {
-        return motorFunc_;
-    }
-#endif
-
 private:
     FocusManager() : view_(nullptr) {}
     ~FocusManager() {}
     UIView* view_;
-#if ENABLE_MOTOR
-    MotorFunc motorFunc_ = nullptr;
-#endif
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_FOCUS_MANAGER_H

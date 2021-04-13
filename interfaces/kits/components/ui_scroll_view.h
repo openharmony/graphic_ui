@@ -293,7 +293,8 @@ private:
     int16_t minScrollBarLen_;
     OnScrollListener* scrollListener_;
 #if ENABLE_ROTATE_INPUT
-    int16_t tmpRotateLen_;
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 3;
+    int16_t lastRotateLen_;
 #endif
 };
 } // namespace OHOS

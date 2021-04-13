@@ -15,13 +15,14 @@
 
 #include "components/ui_swipe_view.h"
 #include "dock/focus_manager.h"
+#include "dock/vibrator_manager.h"
 
 namespace OHOS {
 UISwipeView::UISwipeView(uint8_t direction)
     : swipeListener_(nullptr), curIndex_(0), blankSize_(DEFAULT_BLANK_SIZE), curView_(nullptr), loop_(false)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = 1;
+    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
 #endif
     direction_ = direction;
     AnimatorManager::GetInstance()->Add(&scrollAnimator_);
@@ -172,25 +173,20 @@ bool UISwipeView::OnRotateEvent(const RotateEvent& event)
     if (rotateFactor_ == 0) {
         return UIView::OnRotateEvent(event);
     }
+    uint16_t lastIndex_ = curIndex_;
     if (event.GetRotate() != 0) {
-        int8_t sign = (rotateFactor_ < 0) ? -1 : 1;
-        // 4 : need to fit for the device
-        if (MATH_ABS(event.GetRotate()) > blankSize_ / (4 * static_cast<uint16_t>(MATH_ABS(rotateFactor_)))) {
-            SwitchToPage(curIndex_ - sign * event.GetRotate());
-        } else {
-            int16_t tmp = event.GetRotate() * rotateFactor_;
-            DragXInner(tmp);
-            RefreshCurrentView(tmp);
-        }
+        int16_t rotateLen = event.GetRotate() * rotateFactor_;
+        (direction_ == HORIZONTAL) ? DragXInner(rotateLen) : DragYInner(rotateLen);
+        RefreshCurrentView(rotateLen);
     } else {
         SwitchToPage(curIndex_);
-#if ENABLE_MOTOR
-        MotorFunc motorFunc = FocusManager::GetInstance()->GetMotorFunc();
-        if (motorFunc != nullptr) {
-            motorFunc(MotorType::MOTOR_TYPE_ONE);
-        }
-#endif
     }
+#if ENABLE_VIBRATOR
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (vibratorFunc != nullptr && curIndex_ != lastIndex_) {
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
+    }
+#endif
     return UIView::OnRotateEvent(event);
 }
 #endif

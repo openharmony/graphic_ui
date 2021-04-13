@@ -31,8 +31,7 @@ UIAbstractScroll::UIAbstractScroll()
       scrollAnimator_(&animatorCallback_, this, 0, true)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = 1;
-    rotateThreshold_ = 1;
+    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
 #endif
     isViewGroup_ = true;
     touchable_ = true;

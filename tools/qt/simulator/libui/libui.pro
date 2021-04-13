@@ -152,6 +152,7 @@ HEADERS += \
     ../../../../interfaces/innerkits/common/task_manager.h \
     ../../../../interfaces/innerkits/dock/focus_manager.h \
     ../../../../interfaces/innerkits/dock/rotate_input_device.h \
+    ../../../../interfaces/innerkits/dock/vibrator_manager.h \
     ../../../../interfaces/kits/animator/animator.h \
     ../../../../interfaces/kits/animator/easing_equation.h \
     ../../../../interfaces/kits/animator/interpolation.h \

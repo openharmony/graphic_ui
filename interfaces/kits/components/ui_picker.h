@@ -399,6 +399,9 @@ protected:
     uint16_t setSelectedIndex_;
 
 private:
+#if ENABLE_ROTATE_INPUT
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
+#endif
     friend class PickerListScrollListener;
     bool RefreshValues(const char* value[], uint16_t count);
     bool RefreshValues(int16_t start, int16_t end);

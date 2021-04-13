@@ -30,7 +30,13 @@ public:
     virtual ~RotateInputDevice(){};
 
 protected:
+#ifdef _WIN32
+    static constexpr int16_t ROTATE_INPUT_THRESHOLD = 1;
+#else
+    static constexpr int16_t ROTATE_INPUT_THRESHOLD = 3;
+#endif
     void DispatchEvent(const DeviceData& data) override;
+    bool rotateStart = false;
 };
 } // namespace OHOS
 
