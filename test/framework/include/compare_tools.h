@@ -46,10 +46,19 @@ public:
     static bool CompareFile(const char* filePath, size_t length, uint8_t flag);
     static bool SaveFile(const char* filePath, size_t length, uint8_t flag);
     static bool CheckFileExist(const char* filePath, size_t length);
+    static void SetLogPath(const char* filePath, size_t length);
+    static void UnsetLogPath();
 
 private:
+    CompareTools() {}
+    virtual ~CompareTools() {}
+
+    static bool SaveLog(char* buff, size_t bufSize);
     static bool CompareBinary(const char* filePath, size_t length);
     static bool SaveFrameBuffToBinary(const char* filePath, size_t length);
+
+    static bool enableLog_;
+    static char* logPath_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_COMPARE_TOOLS_H

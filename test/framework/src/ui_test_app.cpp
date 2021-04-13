@@ -15,15 +15,16 @@
 
 #include "ui_test_app.h"
 #include "common/screen.h"
-#include "test_resource_config.h"
-#include "ui_test.h"
-#include "ui_test_group.h"
-#if ENABEL_UI_AUTO_TEST
 #include "compare_tools.h"
 #include "dfx/event_injector.h"
-#include "ui_auto_test_group.h"
+#include "test_resource_config.h"
 #include "ui_auto_test.h"
-#endif // ENABEL_UI_AUTO_TEST
+#include "ui_auto_test_group.h"
+#include "ui_test.h"
+#include "ui_test_group.h"
+#if ENABLE_WINDOW
+#include "window/window.h"
+#endif
 
 namespace OHOS {
 void UITestApp::Start()
@@ -106,12 +107,26 @@ UITestApp::~UITestApp()
     }
 }
 
-#if ENABEL_UI_AUTO_TEST
 void UIAutoTestApp::Start()
 {
     EventInjector::GetInstance()->RegisterEventInjector(EventDataType::POINT_TYPE);
     EventInjector::GetInstance()->RegisterEventInjector(EventDataType::KEY_TYPE);
+#ifdef _WIN32
+    char logPath[] = ".\\auto_test_log.txt";
+    CompareTools::SetLogPath(logPath, sizeof(logPath));
+#else
+    char logPath[] = "./auto_test_log.txt";
+    CompareTools::SetLogPath(logPath, sizeof(logPath));
+#endif
+
+#if ENABLE_WINDOW
+    Window* window = RootView::GetInstance()->GetBoundWindow();
+    if (window != nullptr) {
+        EventInjector::GetInstance()->SetWindowId(window->GetWindowId());
+    }
+#endif
     CompareTools::WaitSuspend();
+
     UIAutoTestGroup::SetUpTestCase();
     ListNode<UIAutoTest*>* node = UIAutoTestGroup::GetTestCase().Begin();
     while (node != UIAutoTestGroup::GetTestCase().End()) {
@@ -120,5 +135,16 @@ void UIAutoTestApp::Start()
         node = node->next_;
     }
 }
-#endif // ENABEL_UI_AUTO_TEST
+
+UIAutoTestApp::~UIAutoTestApp()
+{
+    if (EventInjector::GetInstance()->IsEventInjectorRegistered(EventDataType::POINT_TYPE)) {
+        EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::POINT_TYPE);
+    }
+    if (EventInjector::GetInstance()->IsEventInjectorRegistered(EventDataType::KEY_TYPE)) {
+        EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::KEY_TYPE);
+    }
+    CompareTools::UnsetLogPath();
+    UIAutoTestGroup::TearDownTestCase();
+}
 } // namespace OHOS

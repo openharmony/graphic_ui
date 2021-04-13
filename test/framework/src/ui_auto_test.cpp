@@ -86,9 +86,9 @@ void UIAutoTest::DragViewToHead(const char* id) const
     startPoint.y = view->GetOrigRect().GetY();
 
     Point endPoint;
-    endPoint.x = 50; // 50 :end point x position;
-    endPoint.y = 80; // 80 :end point y position;
-    EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 80); // 80: drag time
+    endPoint.x = 100; // 100 :end point x position;
+    endPoint.y = 100; // 100 :end point y position;
+    EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 300); // 300: drag time
     CompareTools::WaitSuspend();
 }
 

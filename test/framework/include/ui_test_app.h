@@ -22,7 +22,6 @@
 #include "components/ui_list.h"
 #include "test_case_list_adapter.h"
 
-#define ENABEL_UI_AUTO_TEST 0
 namespace OHOS {
 namespace {
     constexpr char* UI_TEST_MAIN_LIST_ID = "main_list";
@@ -55,7 +54,6 @@ private:
     UILabel* testLabel_ = nullptr;
 };
 
-#if ENABEL_UI_AUTO_TEST
 class UIAutoTestApp {
 public:
     static UIAutoTestApp* GetInstance()
@@ -66,13 +64,12 @@ public:
     void Start();
 private:
     UIAutoTestApp() {}
-    ~UIAutoTestApp() {}
+    virtual ~UIAutoTestApp();
 
     UIAutoTestApp(const UIAutoTestApp&) = delete;
     UIAutoTestApp& operator=(const UIAutoTestApp&) = delete;
     UIAutoTestApp(UIAutoTestApp&&) = delete;
     UIAutoTestApp& operator=(UIAutoTestApp&&) = delete;
 };
-#endif // ENABEL_UI_AUTO_TEST
 } // namespace OHOS
 #endif
