@@ -31,7 +31,6 @@ public:
         static Monitor instance;
         return &instance;
     }
-    void Flush(int16_t x1, int16_t y1, int16_t x2, int16_t y2, const uint8_t* buffer, ColorMode mode) override;
     void InitHal();
     void InitFontEngine();
     void InitImageDecodeAbility();
@@ -39,7 +38,7 @@ public:
     void GUILoopStart() const;
     void GUIRefresh();
     void GUILoopQuit() const;
-    void RenderFinish() override;
+    void RenderFinish(const Rect& mask) override;
 signals:
     void UpdatePaintSignal(uint32_t* tftFb, uint32_t imgWidth, uint32_t imgHeight);
 
@@ -54,6 +53,8 @@ private:
     uint8_t fontPsramBaseAddr_[MIN_FONT_PSRAM_LENGTH];
     uint32_t tftFb_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t animaterBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
+    uint32_t viewBitmapBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
+    uint32_t screenBitmapBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t defaultColor_;
 };
 } // namespace OHOS

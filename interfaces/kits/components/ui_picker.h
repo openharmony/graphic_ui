@@ -330,7 +330,7 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
-     * @brief 使组件注册获取焦点
+     * @brief Requests the focus on the view.
      *
      * @since 5.0
      * @version 3.0
@@ -341,7 +341,7 @@ public:
     }
 
     /**
-     * @brief 使组件失去焦点
+     * @brief Clears the focus on the view.
      *
      * @since 5.0
      * @version 3.0
@@ -352,9 +352,9 @@ public:
     }
 
     /**
-     * @brief 设置组件旋转系数
+     * @brief Sets the rotation factor.
      *
-     * @param factor 旋转系数，旋转输入事件的旋转参数与旋转系数的乘积为实际滑动像素值
+     * @param factor Indicates the rotation factor to set.
      * @since 5.0
      * @version 3.0
      */
@@ -364,9 +364,9 @@ public:
     }
 
     /**
-     * @brief 获得组件旋转系数
-     * @return 返回旋转系数
+     * @brief Obtains the rotation factor.
      *
+     * @return Returns the rotation factor.
      * @since 5.0
      * @version 3.0
      */
@@ -399,6 +399,9 @@ protected:
     uint16_t setSelectedIndex_;
 
 private:
+#if ENABLE_ROTATE_INPUT
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
+#endif
     friend class PickerListScrollListener;
     bool RefreshValues(const char* value[], uint16_t count);
     bool RefreshValues(int16_t start, int16_t end);

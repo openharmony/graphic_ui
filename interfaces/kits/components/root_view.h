@@ -262,6 +262,7 @@ public:
     Window* GetBoundWindow() const;
 #endif
 
+    void DrawTop(UIView* view, const Rect& rect);
 private:
     friend class RenderManager;
     friend class UIViewGroup;
@@ -280,7 +281,6 @@ private:
     void Measure();
     void MeasureView(UIView* view);
     void Render();
-    void DrawTop(UIView* view, const Rect& rect);
     UIView* GetTopUIView(const Rect& rect);
 #if LOCAL_RENDER
     void RemoveViewFromInvalidMap(UIView *view);

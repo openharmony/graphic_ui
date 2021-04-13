@@ -249,8 +249,9 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
-     * @brief 获得旋转系数
-     * @return 旋转系数
+     * @brief Obtains the rotation factor.
+     *
+     * @return Returns the rotation factor.
      * @since 5.0
      * @version 3.0
      */
@@ -259,9 +260,10 @@ public:
         return rotateFactor_;
     }
 
-     /**
-     * @brief 设置旋转系数
-     * @param factor 旋转系数
+    /**
+     * @brief Sets the rotation factor.
+     *
+     * @param factor Indicates the rotation factor to set.
      * @since 5.0
      * @version 3.0
      */
@@ -355,7 +357,8 @@ private:
     int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
     int32_t UpdateCurrentValue(const Point& knobPosition);
 #if ENABLE_ROTATE_INPUT
-    int8_t rotateFactor_ = 1;
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
+    int8_t rotateFactor_ = DEFAULT_ROTATE_FACTOR;
 #endif
     UISliderEventListener* listener_;
 }; // class UISlider

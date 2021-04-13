@@ -16,6 +16,7 @@
 #include "components/ui_slider.h"
 #include "common/image.h"
 #include "dock/focus_manager.h"
+#include "dock/vibrator_manager.h"
 #include "draw/draw_image.h"
 #include "draw/draw_rect.h"
 #include "gfx_utils/graphic_log.h"
@@ -220,7 +221,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
     switch (direction_) {
         case Direction::DIR_LEFT_TO_RIGHT: {
             length = GetCurrentPos(progressWidth_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1, startPoint.y + progressHeight_ - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
+                           startPoint.y + progressHeight_ - 1);
 
             left = startPoint.x - radius - 1;
             right = left + length;
@@ -229,7 +231,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
         case Direction::DIR_RIGHT_TO_LEFT: {
             length = GetCurrentPos(progressWidth_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1, startPoint.y + progressHeight_ - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
+                           startPoint.y + progressHeight_ - 1);
 
             right = startPoint.x + progressWidth + radius + 1;
             left = right - length;
@@ -238,7 +241,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
         case Direction::DIR_TOP_TO_BOTTOM: {
             length = GetCurrentPos(progressHeight_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
+                           startPoint.y + progressHeight - 1);
 
             top = startPoint.y - radius + 1;
             bottom = top + length;
@@ -247,7 +251,8 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
         case Direction::DIR_BOTTOM_TO_TOP: {
             length = GetCurrentPos(progressHeight_ - 1);
-            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1, startPoint.y + progressHeight - 1);
+            coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
+                           startPoint.y + progressHeight - 1);
 
             bottom = startPoint.y + progressHeight + radius + 1;
             top = bottom - length;
@@ -384,12 +389,16 @@ bool UISlider::OnRotateEvent(const RotateEvent& event)
     if (event.GetRotate() == 0) {
         return false;
     }
-    int32_t tmp = event.GetRotate() * rotateFactor_;
+    int32_t lastValue = curValue_;
+    int32_t tmp = static_cast<int32_t>(event.GetRotate()) * rotateFactor_;
     SetValue(curValue_ + tmp);
-#if ENABLE_MOTOR
-    MotorFunc motorFunc = FocusManager::GetInstance()->GetMotorFunc();
-    if (motorFunc != nullptr) {
-        motorFunc(MotorType::MOTOR_TYPE_TWO);
+    if (listener_ != nullptr) {
+        listener_->OnChange(curValue_);
+    }
+#if ENABLE_VIBRATOR
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (vibratorFunc != nullptr && lastValue != curValue_) {
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
     }
 #endif
     return UIView::OnRotateEvent(event);

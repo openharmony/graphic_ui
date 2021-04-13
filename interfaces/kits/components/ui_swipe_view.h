@@ -354,6 +354,9 @@ protected:
     UIView* curView_;
     AlignMode alignMode_ = ALIGN_CENTER;
     bool loop_;
+#if ENABLE_ROTATE_INPUT
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 2;
+#endif
 
 private:
     void RefreshCurrentView(int16_t distance);

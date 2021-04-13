@@ -243,9 +243,9 @@ void UIAnalogClock::CalculateRedrawArea(const Rect& current, Hand& hand, bool cl
     int16_t imgHeight = hand.imageInfo_.header.height;
 
     int16_t left = hand.position_.x + current.GetLeft();
-    int16_t right = left + imgWidth;
+    int16_t right = left + imgWidth - 1;
     int16_t top = hand.position_.y + current.GetTop();
-    int16_t bottom = top + imgHeight;
+    int16_t bottom = top + imgHeight - 1;
     Rect imgRect(left, top, right, bottom);
     TransformMap backwardMap(imgRect);
     Vector2<float> pivot;

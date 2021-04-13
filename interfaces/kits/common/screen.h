@@ -36,8 +36,10 @@
 #define GRAPHIC_LITE_SCREEN_H
 
 #include "gfx_utils/heap_base.h"
+#include "gfx_utils/image_info.h"
 
 namespace OHOS {
+
 /**
  * @brief Represents the screen info of the device.
  *
@@ -73,6 +75,8 @@ public:
      * @version 1.0
      */
     uint16_t GetHeight();
+
+    bool GetCurrentScreenBitmap(ImageInfo& info);
 
 private:
     Screen() {}

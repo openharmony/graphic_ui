@@ -48,8 +48,7 @@ namespace OHOS {
     }                                                                                \
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();        \
     uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);                       \
-    uint16_t screenBufferWidth = ScreenDeviceProxy::GetInstance()->GetBufferWidth(); \
-    Rect bufferRect = ScreenDeviceProxy::GetInstance()->GetBufferRect();
+    uint16_t screenBufferWidth = ScreenDeviceProxy::GetInstance()->GetBufferWidth();
 
 /* cover mode, src alpha is 255 */
 #define COLOR_FILL_COVER(d, dm, r2, g2, b2, sm)               \
@@ -185,10 +184,6 @@ void DrawUtils::DrawColorArea(const Rect& area, const Rect& mask, const ColorTyp
     if (!maskedArea.Intersect(area, mask)) {
         return;
     }
-#if !ENABLE_WINDOW
-    maskedArea.SetRect(maskedArea.GetLeft() - bufferRect.GetLeft(), maskedArea.GetTop() - bufferRect.GetTop(),
-                       maskedArea.GetRight() - bufferRect.GetLeft(), maskedArea.GetBottom() - bufferRect.GetTop());
-#endif
 #if ENABLE_HARDWARE_ACCELERATION
     if (ScreenDeviceProxy::GetInstance()->HardwareFill(maskedArea, Color::ColorTo32(color), opa, screenBuffer,
         screenBufferWidth * bufferPxSize, bufferMode)) {
@@ -269,11 +264,6 @@ void DrawUtils::DrawPixel(int16_t x, int16_t y, const Rect& mask, const ColorTyp
     }
 
     DRAW_UTILS_PREPROCESS(opa);
-
-#if !ENABLE_WINDOW
-    x -= bufferRect.GetLeft();
-    y -= bufferRect.GetTop();
-#endif
 
     Color32 fillColor;
     fillColor.full = Color::ColorTo32(color);
@@ -357,13 +347,8 @@ void DrawUtils::DrawLetter(const LabelLetterInfo& letterInfo) const
         letterWidthInByte++;
     }
 
-#if ENABLE_WINDOW
     int16_t dstPosX = posX + colStart;
     int16_t dstPosY = posY + rowStart;
-#else
-    int16_t dstPosX = posX + colStart - bufferRect.GetLeft();
-    int16_t dstPosY = posY + rowStart - bufferRect.GetTop();
-#endif
 
 #if ENABLE_HARDWARE_ACCELERATION && ENABLE_HARDWARE_ACCELERATION_FOR_TEXT
     Rect srcRect(colStart, rowStart, colEnd - 1, rowEnd - 1);
@@ -428,20 +413,12 @@ void DrawUtils::DrawImage(const Rect& area,
     }
     DRAW_UTILS_PREPROCESS(opa);
     Rect maskedArea;
-    Rect originMaskedArea;
-    if (!originMaskedArea.Intersect(area, mask)) {
+    if (!maskedArea.Intersect(area, mask)) {
         return;
     }
-#if ENABLE_WINDOW
-    maskedArea = originMaskedArea;
-#else
-    maskedArea.SetRect(
-        originMaskedArea.GetLeft() - bufferRect.GetLeft(), originMaskedArea.GetTop() - bufferRect.GetTop(),
-        originMaskedArea.GetRight() - bufferRect.GetLeft(), originMaskedArea.GetBottom() - bufferRect.GetTop());
-#endif
     int16_t mapWidth = area.GetWidth();
-    int16_t imageX = originMaskedArea.GetLeft() - area.GetLeft();
-    int16_t imageY = originMaskedArea.GetTop() - area.GetTop();
+    int16_t imageX = maskedArea.GetLeft() - area.GetLeft();
+    int16_t imageY = maskedArea.GetTop() - area.GetTop();
     uint32_t imageWidthInByte = (static_cast<uint32_t>(mapWidth) * pxBitSize) >> SHIFT_3;
     if ((mapWidth * pxBitSize) & 0x7) { // 0x7 : less than 1 byte is counted as 1 byte
         imageWidthInByte++;
@@ -680,14 +657,7 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
         int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
         in.init.verticalU += in.init.duHorizon * diffX;
         in.init.verticalV += in.init.dvHorizon * diffX;
-#if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
-#else
-        uint8_t* screenBuffer =
-            in.screenBuffer +
-            (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
-             in.bufferPxSize);
-#endif
         // parameters below are Q15 fixed-point number
         int32_t u = in.init.verticalU;
         int32_t v = in.init.verticalV;
@@ -741,14 +711,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
         int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
         int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
-#if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
-#else
-        uint8_t* screenBuffer =
-            in.screenBuffer +
-            (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
-             in.bufferPxSize);
-#endif
         // parameters below are Q15 fixed-point number
         int32_t u = in.init.verticalU;
         int32_t v = in.init.verticalV;
@@ -822,14 +785,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
         int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
         int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
-#if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
-#else
-        uint8_t* screenBuffer =
-            in.screenBuffer +
-            (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
-             in.bufferPxSize);
-#endif
         // parameters below are Q15 fixed-point number
         int32_t u = in.init.verticalU;
         int32_t v = in.init.verticalV;
@@ -1104,14 +1060,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
         int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
         in.init.verticalU += in.init.duHorizon * diffX;
         in.init.verticalV += in.init.dvHorizon * diffX;
-#if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
-#else
-        uint8_t* screenBuffer =
-            in.screenBuffer +
-            (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
-             in.bufferPxSize);
-#endif
 #ifdef ARM_NEON_OPT
         {
             float u = static_cast<float>(in.init.verticalU) / FIXED_NUM_1;
@@ -1152,14 +1101,7 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
         int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
         in.init.verticalU += in.init.duHorizon * diffX;
         in.init.verticalV += in.init.dvHorizon * diffX;
-#if ENABLE_WINDOW
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
-#else
-        uint8_t* screenBuffer =
-            in.screenBuffer +
-            (((y - in.screenBufferRect.GetTop()) * in.screenBufferWidth + (xMin - in.screenBufferRect.GetLeft())) *
-             in.bufferPxSize);
-#endif
         // parameters below are Q15 fixed-point number
         int32_t u = in.init.verticalU;
         int32_t v = in.init.verticalV;
@@ -1247,7 +1189,6 @@ void DrawUtils::DrawTriangleTransformPart(const TrianglePartInfo& part)
     if (screenBuffer == nullptr) {
         return;
     }
-    Rect bufferRect = ScreenDeviceProxy::GetInstance()->GetBufferRect();
     uint8_t pixelSize;
     DrawTriangleTransformFuc fuc;
     bool isTrueColor = (part.info.header.colorMode == ARGB8888) || (part.info.header.colorMode == RGB888) ||
@@ -1274,7 +1215,6 @@ void DrawUtils::DrawTriangleTransformPart(const TrianglePartInfo& part)
                            part.edge2,
                            screenBuffer,
                            bufferPxSize,
-                           bufferRect,
                            part.color,
                            part.opaScale,
                            init,
@@ -1491,14 +1431,6 @@ void DrawUtils::FillArea(const Rect& rect, const Rect& mask, bool isTransparent,
     int16_t top = maskedArea.GetTop();
     int16_t bottom = maskedArea.GetBottom();
 
-#if !ENABLE_WINDOW
-    Rect bufferRect = ScreenDeviceProxy::GetInstance()->GetBufferRect();
-    maskedArea.SetLeft(left - bufferRect.GetLeft());
-    maskedArea.SetRight(right - bufferRect.GetLeft());
-    maskedArea.SetTop(top - bufferRect.GetTop());
-    maskedArea.SetBottom(bottom - bufferRect.GetTop());
-#endif
-
     uint16_t screenBufferWidth = ScreenDeviceProxy::GetInstance()->GetBufferWidth();
     uint8_t* mem = ScreenDeviceProxy::GetInstance()->GetBuffer();
     ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
@@ -1547,15 +1479,11 @@ void DrawUtils::DrawAdjPixelInLine(int16_t x1,
     Color32 result;
     result.full = Color::ColorTo32(color);
     if ((x1 >= mask.GetLeft()) && (x1 <= mask.GetRight()) && (y1 >= mask.GetTop()) && (y1 <= mask.GetBottom())) {
-        x1 -= bufferRect.GetLeft();
-        y1 -= bufferRect.GetTop();
         screenBuffer += (y1 * screenBufferWidth + x1) * bufferPxSize;
         OpacityType fillOpa = (weight ^ OPA_OPAQUE) * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
     if ((x2 >= mask.GetLeft()) && (x2 <= mask.GetRight()) && (y2 >= mask.GetTop()) && (y2 <= mask.GetBottom())) {
-        x2 -= bufferRect.GetLeft();
-        y2 -= bufferRect.GetTop();
         screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
         screenBuffer += (y2 * screenBufferWidth + x2) * bufferPxSize;
         OpacityType fillOpa = weight * opa / OPA_OPAQUE;
@@ -1574,8 +1502,6 @@ void DrawUtils::DrawPixelInLine(int16_t x,
     Color32 result;
     result.full = Color::ColorTo32(color);
     if ((x >= mask.GetLeft()) && (x <= mask.GetRight()) && (y >= mask.GetTop()) && (y <= mask.GetBottom())) {
-        x -= bufferRect.GetLeft();
-        y -= bufferRect.GetTop();
         screenBuffer += (y * screenBufferWidth + x) * bufferPxSize;
         OpacityType fillOpa = weight * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
@@ -1598,15 +1524,12 @@ void DrawUtils::DrawVerPixelInLine(int16_t x,
     result.full = Color::ColorTo32(color);
     int16_t x0 = x + dir;
     int16_t x1 = x - dir;
-    y -= bufferRect.GetTop();
     if ((x0 >= mask.GetLeft()) && (x0 <= mask.GetRight())) {
-        x0 -= bufferRect.GetLeft();
         screenBuffer += (y * screenBufferWidth + x0) * bufferPxSize;
         OpacityType fillOpa = weight * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
     if ((x >= mask.GetLeft()) && (x <= mask.GetRight())) {
-        x -= bufferRect.GetLeft();
         screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
         screenBuffer += (y * screenBufferWidth + x) * bufferPxSize;
         if (opa == OPA_OPAQUE) {
@@ -1616,7 +1539,6 @@ void DrawUtils::DrawVerPixelInLine(int16_t x,
         }
     }
     if ((x1 >= mask.GetLeft()) && (x1 <= mask.GetRight())) {
-        x1 -= bufferRect.GetLeft();
         screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
         screenBuffer += (y * screenBufferWidth + x1) * bufferPxSize;
         OpacityType fillOpa = (weight ^ OPA_OPAQUE) * opa / OPA_OPAQUE;
@@ -1640,15 +1562,12 @@ void DrawUtils::DrawHorPixelInLine(int16_t x,
     result.full = Color::ColorTo32(color);
     int16_t y0 = y + dir;
     int16_t y1 = y - dir;
-    x -= bufferRect.GetLeft();
     if ((y0 >= mask.GetTop()) && (y0 <= mask.GetBottom())) {
-        y0 -= bufferRect.GetTop();
         screenBuffer += (y0 * screenBufferWidth + x) * bufferPxSize;
         OpacityType fillOpa = weight * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
     if ((y >= mask.GetTop()) && (y <= mask.GetBottom())) {
-        y -= bufferRect.GetTop();
         screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
         screenBuffer += (y * screenBufferWidth + x) * bufferPxSize;
         if (opa == OPA_OPAQUE) {
@@ -1658,7 +1577,6 @@ void DrawUtils::DrawHorPixelInLine(int16_t x,
         }
     }
     if ((y1 >= mask.GetTop()) && (y1 <= mask.GetBottom())) {
-        y1 -= bufferRect.GetTop();
         screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
         screenBuffer += (y1 * screenBufferWidth + x) * bufferPxSize;
         OpacityType fillOpa = (weight ^ OPA_OPAQUE) * opa / OPA_OPAQUE;

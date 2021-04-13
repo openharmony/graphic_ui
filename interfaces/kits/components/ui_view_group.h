@@ -252,7 +252,7 @@ protected:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnChildChanged() {};
+    virtual void OnChildChanged() {}
 
     /**
      * @brief Indicates the pointer to the first child view of this view group.

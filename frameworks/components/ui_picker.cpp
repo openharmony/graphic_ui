@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_picker.h"
+#include "dock/vibrator_manager.h"
 #include "draw/draw_line.h"
 #include "draw/draw_rect.h"
 #include "themes/theme_manager.h"
@@ -162,11 +163,10 @@ UIPicker::UIPicker()
 
     list_.SetThrowDrag(true);
 #if ENABLE_ROTATE_INPUT
-    list_.rotateFactor_ = 5; // 5: need to fit device to change
-    list_.rotateThreshold_ = 20; // 20: which means 20% of half view size
+    list_.rotateFactor_ = DEFAULT_ROTATE_FACTOR;
 #endif
-#if ENABLE_MOTOR
-    list_.SetMotorType(MotorType::MOTOR_TYPE_TWO);
+#if ENABLE_VIBRATOR
+    list_.SetMotorType(VibratorType::VIBRATOR_TYPE_TWO);
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;

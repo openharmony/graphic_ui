@@ -33,26 +33,6 @@ enum : uint8_t {
     FOCUS_DIRECTION_DOWN,
 };
 
-#if ENABLE_MOTOR
-/**
- * @brief 震动类型.
- *
- * @since 5.0
- * @version 3.0
- */
-enum class MotorType {
-    MOTOR_TYPE_ONE,
-    MOTOR_TYPE_TWO,
-};
-
-/**
- * @brief 震动函数.
- *
- * @param type 震动类型.
- */
-typedef void(*MotorFunc)(MotorType motorType);
-#endif
-
 class FocusManager {
 public:
     /**
@@ -109,18 +89,6 @@ public:
      */
     bool RequestFocusByDirection(uint8_t direction);
 
-#if ENABLE_MOTOR
-    void RegisterMotorFunc(MotorFunc motorFunc)
-    {
-        motorFunc_ = motorFunc;
-    }
-
-    MotorFunc GetMotorFunc()
-    {
-        return motorFunc_;
-    }
-#endif
-
 private:
     FocusManager() : focusView_(nullptr), lastFocusView_(nullptr) {}
     ~FocusManager() {}
@@ -139,9 +107,6 @@ private:
 
     UIView* focusView_;
     UIView* lastFocusView_;
-#if ENABLE_MOTOR
-    MotorFunc motorFunc_ = nullptr;
-#endif
 };
 } // namespace OHOS
 #endif
