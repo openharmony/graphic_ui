@@ -25,15 +25,11 @@ UISwipeView::UISwipeView(uint8_t direction)
     rotateFactor_ = DEFAULT_ROTATE_FACTOR;
 #endif
     direction_ = direction;
-    AnimatorManager::GetInstance()->Add(&scrollAnimator_);
     tickTime_ = ANIMATOR_TIME;
     swipeAccCoefficient_ = DRAG_ACC_FACTOR;
 }
 
-UISwipeView::~UISwipeView()
-{
-    AnimatorManager::GetInstance()->Remove(&scrollAnimator_);
-}
+UISwipeView::~UISwipeView() {}
 
 void UISwipeView::Add(UIView* view)
 {

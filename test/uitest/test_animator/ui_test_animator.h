@@ -33,12 +33,10 @@ public:
           easingFunc_(EasingEquation::LinearEaseNone),
           animator_(new Animator(this, uiView, 1000, true)) // 1000:duration of animator_, in milliseconds.
     {
-        AnimatorManager::GetInstance()->Add(animator_);
     }
 
     virtual ~ImageEaseAnimatorCallback()
     {
-        AnimatorManager::GetInstance()->Remove(animator_);
         delete animator_;
     }
 

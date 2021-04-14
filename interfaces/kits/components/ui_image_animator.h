@@ -376,10 +376,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void Pause()
-    {
-        imageAnimator_.SetState(Animator::PAUSE);
-    }
+    void Pause();
 
     /**
      * @brief Resumes this animator from the current image.
@@ -388,10 +385,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void Resume()
-    {
-        imageAnimator_.SetState(Animator::START);
-    }
+    void Resume();
 
     /**
      * @brief Represents a listener that contains a callback to be invoked when this animator stops.
@@ -436,11 +430,9 @@ public:
 protected:
     class ImageAnimatorCallback : public AnimatorCallback {
     public:
-        ImageAnimatorCallback()
-            : tickNum_(0), loop_(1), drawingImage_(0), repeat_(0),
-            imageSrc_(nullptr), imageNum_(0)
+        ImageAnimatorCallback() : tickNum_(0), loop_(1), drawingImage_(0), repeat_(0), imageSrc_(nullptr), imageNum_(0)
         {
-        };
+        }
 
         virtual ~ImageAnimatorCallback() {}
 
@@ -480,5 +472,5 @@ protected:
     bool sizeFixed_;
     bool fillMode_;
 };
-}
+} // namespace OHOS
 #endif // GRAPHIC_LITE_UI_IMAGE_ANIMATOR_H

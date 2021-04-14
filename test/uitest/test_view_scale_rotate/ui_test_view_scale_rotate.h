@@ -33,15 +33,10 @@
 namespace OHOS {
 class UITestViewScaleRotate : public UITest, public AnimatorCallback {
 public:
-    UITestViewScaleRotate()
-        : animator_(this, nullptr, 1000, true) // 1000: the animator duration time is 1000ms
+    UITestViewScaleRotate() : animator_(this, nullptr, 1000, true) // 1000: the animator duration time is 1000ms
     {
-        AnimatorManager::GetInstance()->Add(&animator_);
     }
-    virtual ~UITestViewScaleRotate()
-    {
-        AnimatorManager::GetInstance()->Remove(&animator_);
-    }
+    virtual ~UITestViewScaleRotate() {}
     void SetUp() override;
     void TearDown() override;
     UIView* GetTestView() override;

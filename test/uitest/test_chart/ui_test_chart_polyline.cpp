@@ -14,6 +14,7 @@
  */
 
 #include "ui_test_chart_polyline.h"
+
 #include "common/screen.h"
 
 namespace OHOS {
@@ -83,7 +84,6 @@ void UITestChartPolyline::InnerDeleteChildren(UIView* view) const
 void UITestChartPolyline::TearDown()
 {
     ECGAnimator_->Stop();
-    AnimatorManager::GetInstance()->Remove(ECGAnimator_);
     delete ECGAnimator_;
     ECGAnimator_ = nullptr;
     chart_->ClearDataSerial();
@@ -298,7 +298,6 @@ void UITestChartPolyline::UIKit_ChartPolyline_Test_AddPoints_004()
     ECGChart_->AddDataSerial(ECGDataSerial_);
     ImageAnimatorCallbackDemo* imageAnimCallback = new ImageAnimatorCallbackDemo(ECGDataSerial_);
     ECGAnimator_ = new OHOS::Animator(imageAnimCallback, ECGChart_, 0, true);
-    AnimatorManager::GetInstance()->Add(ECGAnimator_);
     ECGAnimator_->Start();
 
     addPointsBtn_ = new UILabelButton();

@@ -14,6 +14,7 @@
  */
 
 #include "ui_test_analog_clock.h"
+
 #include "common/screen.h"
 #include "components/ui_analog_clock.h"
 #include "components/ui_image_view.h"
@@ -38,7 +39,6 @@ void UITestAnalogClock::SetUp()
 void UITestAnalogClock::TearDown()
 {
     if (animator_ != nullptr) {
-        AnimatorManager::GetInstance()->Remove(animator_);
         delete animator_;
         delete callback_;
         animator_ = nullptr;
@@ -46,7 +46,6 @@ void UITestAnalogClock::TearDown()
     }
 
     if (animator2_ != nullptr) {
-        AnimatorManager::GetInstance()->Remove(animator2_);
         delete animator2_;
         delete callback2_;
         animator2_ = nullptr;
@@ -159,7 +158,6 @@ void UITestAnalogClock::UIKit_TestLineHandAnalogClock_001()
         CreateButtons001(group1, curFace, clock1);
         callback_ = new ClockAnimatorCallback(clock1);
         animator_ = new Animator(callback_, clock1, 0, true);
-        AnimatorManager::GetInstance()->Add(animator_);
         animator_->Start();
     }
 }
@@ -259,7 +257,6 @@ void UITestAnalogClock::UIKit_TestImageHandAnalogClock_002()
         CreateButtons002(group2, curFace, clock2);
         callback2_ = new ClockAnimatorCallback(clock2);
         animator2_ = new Animator(callback2_, clock2, 0, true);
-        AnimatorManager::GetInstance()->Add(animator2_);
         animator2_->Start();
     }
 }

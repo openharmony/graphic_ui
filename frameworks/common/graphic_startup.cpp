@@ -14,7 +14,8 @@
  */
 
 #include "common/graphic_startup.h"
-#include "animator/animator.h"
+
+#include "animator/animator_manager.h"
 #include "common/input_device_manager.h"
 #include "common/task_manager.h"
 #include "core/render_manager.h"

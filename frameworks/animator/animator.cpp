@@ -15,15 +15,21 @@
 
 #include "animator/animator.h"
 
-#include "common/task_manager.h"
+#include "animator/animator_manager.h"
 #include "hal_tick.h"
 
 namespace OHOS {
+Animator::~Animator()
+{
+    AnimatorManager::GetInstance()->Remove(this);
+}
+
 void Animator::Start()
 {
     SetState(START);
     runTime_ = 0;
     lastRunTime_ = 0;
+    AnimatorManager::GetInstance()->Add(this);
 }
 
 void Animator::Stop()
@@ -32,17 +38,20 @@ void Animator::Stop()
     if (callback_ != nullptr) {
         callback_->OnStop(*view_);
     }
+    AnimatorManager::GetInstance()->Remove(this);
 }
 
 void Animator::Pause()
 {
     SetState(PAUSE);
+    AnimatorManager::GetInstance()->Remove(this);
 }
 
 void Animator::Resume()
 {
     SetState(START);
     lastRunTime_ = HALTick::GetInstance().GetTime();
+    AnimatorManager::GetInstance()->Add(this);
 }
 
 void Animator::Run()
@@ -59,52 +68,4 @@ void Animator::Run()
         callback_->Callback(view_);
     }
 }
-
-void AnimatorManager::Init()
-{
-    Task::Init();
-}
-
-void AnimatorManager::Add(Animator* animator)
-{
-    if (animator == nullptr) {
-        return;
-    }
-
-    list_.PushBack(animator);
-}
-
-void AnimatorManager::Remove(const Animator* animator)
-{
-    if (animator == nullptr) {
-        return;
-    }
-    ListNode<Animator*>* pos = list_.Begin();
-    while (pos != list_.End()) {
-        if (pos->data_ == animator) {
-            list_.Remove(pos);
-            return;
-        }
-        pos = pos->next_;
-    }
-}
-
-void AnimatorManager::AnimatorTask()
-{
-    ListNode<Animator*>* pos = list_.Begin();
-    Animator* animator = nullptr;
-
-    while (pos != list_.End()) {
-        animator = pos->data_;
-        if (animator->GetState() == Animator::START) {
-            if (animator->IsRepeat() || (animator->GetRunTime() <= animator->GetTime())) {
-                animator->Run();
-            } else {
-                animator->Stop();
-            }
-        }
-
-        pos = pos->next_;
-    }
-}
-}
+} // namespace OHOS

@@ -13,20 +13,21 @@
  * limitations under the License.
  */
 
-#include "animator/animator.h"
+#include "animator/animator_manager.h"
 
 #include <climits>
 #include <gtest/gtest.h>
+
 #include "animator/easing_equation.h"
 #include "common/task_manager.h"
 
 using namespace testing::ext;
 namespace OHOS {
 namespace {
-    const int16_t START_POS = 0;
-    const int16_t END_POS = 100;
-    const uint16_t TIME = 300;
-}
+const int16_t START_POS = 0;
+const int16_t END_POS = 100;
+const uint16_t TIME = 300;
+} // namespace
 class TestAnimatorCallback : public AnimatorCallback {
 public:
     explicit TestAnimatorCallback(UIView* view) : view_(view), animator_(nullptr) {}
@@ -66,11 +67,11 @@ public:
     {
         return animator_;
     }
+
 protected:
     UIView* view_;
     Animator* animator_;
 };
-
 
 class AnimatorTest : public testing::Test {
 public:
