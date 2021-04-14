@@ -54,12 +54,19 @@ void Monitor::RenderFinish(const Rect& mask)
 }
 
 // assuming below are the memory pool
-static uint8_t g_fontPsramBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
+static uint8_t g_fontMemBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
+#if ENABLE_ICU
+static uint8_t g_icuMemBaseAddr[OHOS::SHAPING_WORD_DICT_LENGTH];
+#endif
 
 void Monitor::InitFontEngine()
 {
-    GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontPsramBaseAddr), MIN_FONT_PSRAM_LENGTH,
+    GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontMemBaseAddr), MIN_FONT_PSRAM_LENGTH,
                                    VECTOR_FONT_DIR, DEFAULT_VECTOR_FONT_FILENAME);
+#if ENABLE_ICU
+    GraphicStartUp::InitLineBreakEngine(reinterpret_cast<uintptr_t>(g_icuMemBaseAddr), SHAPING_WORD_DICT_LENGTH,
+                                        VECTOR_FONT_DIR, DEFAULT_LINE_BREAK_RULE_FILENAME);
+#endif
 }
 
 void Monitor::InitImageDecodeAbility()

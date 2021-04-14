@@ -11,7 +11,7 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS \
     "ENABLE_SHAPING=0" \
-    "ENABLE_ICU=0" \
+    "ENABLE_ICU=1" \
     "ENABLE_VECTOR_FONT=1" \
     "ENABLE_BITMAP_FONT=0"
 
