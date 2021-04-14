@@ -66,6 +66,12 @@ test_sources = [
   "src/ui_test_group.cpp",
 ]
 
+test_sources += [
+  "../uitest/test_render/ui_auto_test_render.cpp",
+  "src/compare_tools.cpp",
+  "src/ui_auto_test.cpp",
+  "src/ui_auto_test_group.cpp",
+]
 static_library("framework") {
   sources = test_sources
 
@@ -89,12 +95,7 @@ static_library("framework") {
 
 static_library("auto_framework") {
   sources = test_sources
-  sources += [
-    "../uitest/test_render/ui_auto_test_render.cpp",
-    "src/compare_tools.cpp",
-    "src/ui_auto_test.cpp",
-    "src/ui_auto_test_group.cpp",
-  ]
+
   include_dirs = [
     "include",
     "../uitest",
