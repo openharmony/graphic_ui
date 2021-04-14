@@ -213,7 +213,6 @@ bool UIList::OnPressEvent(const PressEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UIList::OnRotateEvent(const RotateEvent& event)
 {
-    int16_t tmpRotateLen = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
     int16_t midPointX = static_cast<int16_t>(GetWidth() / 2);  // 2 : Get the middle point X coord of the view
     int16_t midPointY = static_cast<int16_t>(GetHeight() / 2); // 2 : Get the middle point Y coord of the view
     Point last, current;
