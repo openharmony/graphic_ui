@@ -84,6 +84,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
     positionY_ += g_deltaCoordinateY2;
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
+    swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeH);
     swipe->SetBlankSize(100); // 100: is blank size
@@ -112,6 +113,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
     positionY_ += g_deltaCoordinateY2;
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
+    swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeH);
     swipe->SetLoopState(true);
@@ -147,6 +149,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_001()
     positionY_ += g_deltaCoordinateY2;
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::VERTICAL);
+    swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     swipe->SetPosition(positionX_, positionY_, g_swipeH, g_swipeW);
     container_->Add(swipe);
@@ -174,6 +177,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_002()
     positionY_ += g_deltaCoordinateY2;
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::VERTICAL);
+    swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     swipe->SetPosition(positionX_, positionY_, g_swipeH, g_swipeW);
     swipe->SetLoopState(true);
@@ -207,6 +211,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Remove_001()
     positionY_ += g_deltaCoordinateY2;
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
+    swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     swipe->SetPosition(positionX_, positionY_, g_swipeH, g_swipeW);
     swipe->SetLoopState(true);
@@ -267,6 +272,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode a
     label->SetPosition(positionX_, lastY_ + g_blank);
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
+    swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     // 100: offset
     swipe->SetPosition(positionX_, label->GetY() + g_blank + g_deltaCoordinateY, g_swipeW - 100, g_swipeH);

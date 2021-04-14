@@ -108,6 +108,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_001()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetXScrollBarVisible(false);
@@ -133,6 +134,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_002()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetXScrollBarVisible(true);
@@ -157,6 +159,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_003()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetXScrollBarVisible(true);
@@ -186,6 +189,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_004()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetXScrollBarVisible(true);
@@ -212,6 +216,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scrollable_Set_001()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetScrollBlankSize(20); // 20: means scroll blank size
@@ -240,6 +245,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scrollable_Set_002()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetHorizontalScrollState(true);
@@ -267,6 +273,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scroll_Blank_Set_001()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetScrollBlankSize(50); // (50): means scroll blank size
@@ -293,6 +300,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scroll_listener_001()
     positionY_ += DELTA_Y_COORDINATE_2;
 
     UIScrollView* scroll = new UIScrollView();
+    scroll->SetIntercept(true);
     scroll->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     container_->Add(scroll);

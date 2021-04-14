@@ -129,6 +129,7 @@ void UITestUIList::UIKit_List_Init_Test_Full_Screen_001()
     adapter1_->SetData(adapterData2_);
 
     UIList* list = new UIList(UIList::VERTICAL);
+    list->SetIntercept(true);
     list->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     list->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, VIEW_DISTANCE_TO_TOP_SIDE, g_listW,
                       g_listH - 200); // 200: mean list reduce height
@@ -154,6 +155,7 @@ void UITestUIList::UIKit_List_Init_Test_halh_Screen_001()
     adapter2_->SetData(adapterData1_);
 
     UIList* list = new UIList(UIList::VERTICAL);
+    list->SetIntercept(true);
     list->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     // 2: half of screen width
     list->SetPosition(Screen::GetInstance().GetWidth() / 2 + VIEW_DISTANCE_TO_LEFT_SIDE, VIEW_DISTANCE_TO_TOP_SIDE,
@@ -233,6 +235,7 @@ void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
     adapter4_->SetData(adapterData2_);
 
     UIList* list = new UIList(UIList::VERTICAL);
+    list->SetIntercept(true);
     list->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     list->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, g_listH - 95, g_listW, g_listH); // 95: decrease y-coordinate
     list->SetAdapter(adapter4_);

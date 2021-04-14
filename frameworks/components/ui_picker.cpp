@@ -173,7 +173,6 @@ UIPicker::UIPicker()
 #endif
     list_.SetLoopState(false);
     list_.EnableAutoAlign(true);
-    list_.SetIntercept(false);
     PickerListScrollListener* listener = new PickerListScrollListener(this, &list_);
     list_.SetScrollStateListener(listener);
     listListener_ = static_cast<void*>(listener);

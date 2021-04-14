@@ -32,7 +32,7 @@ UIView::UIView()
       isViewGroup_(false),
       needRedraw_(false),
       styleAllocFlag_(false),
-      isIntercept_(true),
+      isIntercept_(false),
 #if ENABLE_FOCUS_MANAGER
       focusable_(false),
 #endif
@@ -288,7 +288,7 @@ bool UIView::OnLongPressEvent(const LongPressEvent& event)
         bool isConsumed = onLongPressListener_->OnLongPress(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnDragStartEvent(const DragEvent& event)
@@ -298,7 +298,7 @@ bool UIView::OnDragStartEvent(const DragEvent& event)
         bool isConsumed = onDragListener_->OnDragStart(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnDragEvent(const DragEvent& event)
@@ -308,7 +308,7 @@ bool UIView::OnDragEvent(const DragEvent& event)
         bool isConsumed = onDragListener_->OnDrag(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnDragEndEvent(const DragEvent& event)
@@ -318,7 +318,7 @@ bool UIView::OnDragEndEvent(const DragEvent& event)
         bool isConsumed = onDragListener_->OnDragEnd(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnClickEvent(const ClickEvent& event)
@@ -328,7 +328,7 @@ bool UIView::OnClickEvent(const ClickEvent& event)
         bool isConsumed = onClickListener_->OnClick(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnPressEvent(const PressEvent& event)
@@ -338,7 +338,7 @@ bool UIView::OnPressEvent(const PressEvent& event)
         bool isConsumed = onTouchListener_->OnPress(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnReleaseEvent(const ReleaseEvent& event)
@@ -348,7 +348,7 @@ bool UIView::OnReleaseEvent(const ReleaseEvent& event)
         bool isConsumed = onTouchListener_->OnRelease(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 bool UIView::OnCancelEvent(const CancelEvent& event)
@@ -358,7 +358,7 @@ bool UIView::OnCancelEvent(const CancelEvent& event)
         bool isConsumed = onTouchListener_->OnCancel(*this, event);
         return isConsumed;
     }
-    return false;
+    return isIntercept_;
 }
 
 #if ENABLE_ROTATE_INPUT
@@ -367,7 +367,7 @@ bool UIView::OnRotateEvent(const RotateEvent& event)
     if (onRotateListener_ != nullptr) {
         return onRotateListener_->OnRotate(*this, event);
     }
-    return false;
+    return isIntercept_;
 }
 #endif
 

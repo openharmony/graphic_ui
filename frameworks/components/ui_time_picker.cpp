@@ -141,7 +141,6 @@ void UITimePicker::InitPicker(UIPicker*& picker, int16_t start, int16_t end)
     picker->SetTextColor(backgroundColor_, highlightColor_);
     picker->SetValues(start, end);
     picker->RegisterSelectedListener(&pickerListener_);
-    picker->SetIntercept(false);
     Add(picker);
 
 #if ENABLE_ROTATE_INPUT

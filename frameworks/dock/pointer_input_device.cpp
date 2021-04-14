@@ -101,7 +101,7 @@ void PointerInputDevice::DispatchPressEvent(UIViewGroup* rootView)
                 if (!touchableView_->OnPressEvent(evt)) {
                     while (parent != nullptr) {
                         PressEvent evtParent(curPos_);
-                        if (parent->UIView::OnPressEvent(evtParent)) {
+                        if (parent->OnPressEvent(evtParent)) {
                             break;
                         }
                         parent = parent->GetParent();
@@ -123,7 +123,7 @@ bool PointerInputDevice::ProcessReleaseEvent()
         if (!touchableView_->OnPressEvent(evtPress)) {
             while (parent != nullptr) {
                 PressEvent evtPressParent(curPos_);
-                if (parent->UIView::OnPressEvent(evtPressParent)) {
+                if (parent->OnPressEvent(evtPressParent)) {
                     break;
                 }
                 parent = parent->GetParent();
@@ -136,7 +136,7 @@ bool PointerInputDevice::ProcessReleaseEvent()
         if (!touchableView_->OnReleaseEvent(evtRelease)) {
             while (parent != nullptr) {
                 ReleaseEvent evtReleaseParent(curPos_);
-                if (parent->UIView::OnReleaseEvent(evtReleaseParent)) {
+                if (parent->OnReleaseEvent(evtReleaseParent)) {
                     break;
                 }
                 parent = parent->GetParent();
@@ -152,7 +152,7 @@ bool PointerInputDevice::ProcessReleaseEvent()
                     OnClickEventHappen(parent);
 #endif
                     ClickEvent evtParent(curPos_);
-                    if (parent->UIView::OnClickEvent(evtParent)) {
+                    if (parent->OnClickEvent(evtParent)) {
                         break;
                     }
                     parent = parent->GetParent();
@@ -214,7 +214,7 @@ void PointerInputDevice::DispatchDragStartEvent()
             if (!draggableView_->OnDragStartEvent(evt)) {
                 while (parent != nullptr) {
                     DragEvent evtParent(curPos_, lastPos_, dragLen_);
-                    if (parent->UIView::OnDragStartEvent(evtParent)) {
+                    if (parent->OnDragStartEvent(evtParent)) {
                         break;
                     }
                     parent = parent->GetParent();
@@ -237,7 +237,7 @@ void PointerInputDevice::DispatchDragEvent()
         if (!draggableView_->OnDragEvent(evt)) {
             while (parent != nullptr) {
                 DragEvent evtParent(curPos_, lastPos_, dragLen_);
-                if (parent->UIView::OnDragEvent(evtParent)) {
+                if (parent->OnDragEvent(evtParent)) {
                     break;
                 }
                 parent = parent->GetParent();
@@ -259,7 +259,7 @@ void PointerInputDevice::DispatchDragEndEvent()
         if (!draggableView_->OnDragEndEvent(evt)) {
             while (parent != nullptr) {
                 DragEvent evtParent(curPos_, lastPos_, dragLen_);
-                if (parent->UIView::OnDragEndEvent(evtParent)) {
+                if (parent->OnDragEndEvent(evtParent)) {
                     break;
                 }
                 parent = parent->GetParent();
@@ -290,7 +290,7 @@ void PointerInputDevice::DispatchLongPressEvent(uint32_t elapse)
         if (!isConsumed) {
             while (parent != nullptr) {
                 LongPressEvent evtParent(curPos_, pressTimeStamp_);
-                isConsumed = parent->UIView::OnLongPressEvent(evtParent);
+                isConsumed = parent->OnLongPressEvent(evtParent);
                 if (needClick_ && (parent->GetOnLongPressListener() != nullptr)) {
                     needClick_ = false;
                 }
@@ -313,7 +313,7 @@ void PointerInputDevice::DispatchCancelEvent()
     if (!touchableView_->OnCancelEvent(evt)) {
         while (parent != nullptr) {
             CancelEvent evtParent(lastPos_);
-            if (parent->UIView::OnCancelEvent(evtParent)) {
+            if (parent->OnCancelEvent(evtParent)) {
                 break;
             }
             parent = parent->GetParent();
