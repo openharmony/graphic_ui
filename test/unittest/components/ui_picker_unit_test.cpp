@@ -50,7 +50,7 @@ void UIPickerTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ6
  */
-HWTEST_F(UIPickerTest, UIPickerGetViewType_001, TestSize.Level0)
+HWTEST_F(UIPickerTest, UIPickerGetViewType_001, TestSize.Level1)
 {
     if (picker_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -65,7 +65,7 @@ HWTEST_F(UIPickerTest, UIPickerGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ6
  */
-HWTEST_F(UIPickerTest, UIPickerGetHighlightFontId_001, TestSize.Level0)
+HWTEST_F(UIPickerTest, UIPickerGetHighlightFontId_001, TestSize.Level1)
 {
     if (picker_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -81,7 +81,7 @@ HWTEST_F(UIPickerTest, UIPickerGetHighlightFontId_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ6
  */
-HWTEST_F(UIPickerTest, UIPickerSetFontId_001, TestSize.Level0)
+HWTEST_F(UIPickerTest, UIPickerSetFontId_001, TestSize.Level1)
 {
     if (picker_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -101,7 +101,7 @@ HWTEST_F(UIPickerTest, UIPickerSetFontId_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ6
  */
-HWTEST_F(UIPickerTest, UIPickerSetTextColor_001, TestSize.Level0)
+HWTEST_F(UIPickerTest, UIPickerSetTextColor_001, TestSize.Level1)
 {
     if (picker_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -123,7 +123,7 @@ HWTEST_F(UIPickerTest, UIPickerSetTextColor_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ6
  */
-HWTEST_F(UIPickerTest, UIPickerSetWidth_001, TestSize.Level0)
+HWTEST_F(UIPickerTest, UIPickerSetWidth_001, TestSize.Level1)
 {
     if (picker_ == nullptr) {
         EXPECT_EQ(1, 0);

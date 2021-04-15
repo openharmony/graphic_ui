@@ -57,7 +57,7 @@ void UISwipeViewTest::TearDown()
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UISwipeViewTest, UISwipeViewGetViewType_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, UISwipeViewGetViewType_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -72,7 +72,7 @@ HWTEST_F(UISwipeViewTest, UISwipeViewGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UISwipeViewTest, UISwipeViewSetDirection_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, UISwipeViewSetDirection_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -91,7 +91,7 @@ HWTEST_F(UISwipeViewTest, UISwipeViewSetDirection_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UISwipeViewTest, UISwipeViewAdd_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, UISwipeViewAdd_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -115,7 +115,7 @@ HWTEST_F(UISwipeViewTest, UISwipeViewAdd_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UISwipeViewTest, UISwipeViewInsert_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, UISwipeViewInsert_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -148,7 +148,7 @@ HWTEST_F(UISwipeViewTest, UISwipeViewInsert_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UISwipeViewTest, UISwipeViewRemove_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, UISwipeViewRemove_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -241,7 +241,7 @@ public:
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UISwipeViewTest, UISwipeViewSetOnSwipeListener_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, UISwipeViewSetOnSwipeListener_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -304,7 +304,7 @@ HWTEST_F(UISwipeViewTest, UISwipeViewGetViewByIndex_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVTV4
  */
-HWTEST_F(UISwipeViewTest, Graphic_UISwipeView_Test_SetAlignMode_001, TestSize.Level0)
+HWTEST_F(UISwipeViewTest, Graphic_UISwipeView_Test_SetAlignMode_001, TestSize.Level1)
 {
     if (swipeView_ == nullptr) {
         EXPECT_NE(0, 0);

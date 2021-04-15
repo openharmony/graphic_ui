@@ -94,7 +94,7 @@ HWTEST_F(UIDialogTest, UIDialogSetTitle_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5F
  */
-HWTEST_F(UIDialogTest, UIDialogSetTitle_002, TestSize.Level0)
+HWTEST_F(UIDialogTest, UIDialogSetTitle_002, TestSize.Level1)
 {
     dialog_->SetTitle(nullptr);
     EXPECT_EQ(dialog_->GetTitle(), nullptr);
@@ -126,7 +126,7 @@ HWTEST_F(UIDialogTest, UIDialogSetText_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5F
  */
-HWTEST_F(UIDialogTest, UIDialogSetText_002, TestSize.Level0)
+HWTEST_F(UIDialogTest, UIDialogSetText_002, TestSize.Level1)
 {
     dialog_->SetText(nullptr);
     EXPECT_EQ(dialog_->GetText(), nullptr);
@@ -160,7 +160,7 @@ HWTEST_F(UIDialogTest, UIDialogSetButton_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5F
  */
-HWTEST_F(UIDialogTest, UIDialogSetButtonColor_001, TestSize.Level0)
+HWTEST_F(UIDialogTest, UIDialogSetButtonColor_001, TestSize.Level1)
 {
     dialog_->SetButton(UIDialog::DialogButtonType::BUTTON_LEFT, "button", listener_);
     ColorType color = Color::Red();
@@ -174,7 +174,7 @@ HWTEST_F(UIDialogTest, UIDialogSetButtonColor_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5F
  */
-HWTEST_F(UIDialogTest, UIDialogSetOnCancelListener_001, TestSize.Level0)
+HWTEST_F(UIDialogTest, UIDialogSetOnCancelListener_001, TestSize.Level1)
 {
     dialog_->SetOnCancelListener(nullptr);
     EXPECT_EQ(dialog_->GetOnCancelListener(), nullptr);
@@ -188,7 +188,7 @@ HWTEST_F(UIDialogTest, UIDialogSetOnCancelListener_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5F
  */
-HWTEST_F(UIDialogTest, UIDialogEnableAutoCancel_001, TestSize.Level0)
+HWTEST_F(UIDialogTest, UIDialogEnableAutoCancel_001, TestSize.Level1)
 {
     dialog_->EnableAutoCancel(true);
     EXPECT_EQ(dialog_->GetEnableAutoCancel(), true);

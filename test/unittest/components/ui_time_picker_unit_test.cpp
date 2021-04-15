@@ -48,7 +48,7 @@ void UITimePickerTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ7
  */
-HWTEST_F(UITimePickerTest, UITimePickerGetViewType_001, TestSize.Level0)
+HWTEST_F(UITimePickerTest, UITimePickerGetViewType_001, TestSize.Level1)
 {
     if (timePicker_ == nullptr) {
         EXPECT_EQ(1, 0);

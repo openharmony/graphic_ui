@@ -49,7 +49,7 @@ void UISliderTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: NA
  */
-HWTEST_F(UISliderTest, UISliderGetViewType_001, TestSize.Level0)
+HWTEST_F(UISliderTest, UISliderGetViewType_001, TestSize.Level1)
 {
     if (slider_ == nullptr) {
         EXPECT_EQ(1, 0);

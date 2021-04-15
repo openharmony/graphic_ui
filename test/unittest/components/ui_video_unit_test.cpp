@@ -115,7 +115,7 @@ void UIVideoTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: SR000F3PEN
  */
-HWTEST_F(UIVideoTest, UIVideoSetSrc_001, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoSetSrc_001, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();
@@ -139,7 +139,7 @@ HWTEST_F(UIVideoTest, UIVideoSetSrc_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5Q
  */
-HWTEST_F(UIVideoTest, UIVideoSetSrc_002, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoSetSrc_002, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();
@@ -159,7 +159,7 @@ HWTEST_F(UIVideoTest, UIVideoSetSrc_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5Q
  */
-HWTEST_F(UIVideoTest, UIVideoPrepare_001, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoPrepare_001, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();
@@ -181,7 +181,7 @@ HWTEST_F(UIVideoTest, UIVideoPrepare_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5Q
  */
-HWTEST_F(UIVideoTest, UIVideoPrepare_002, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoPrepare_002, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();
@@ -208,7 +208,7 @@ HWTEST_F(UIVideoTest, UIVideoPrepare_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5Q
  */
-HWTEST_F(UIVideoTest, UIVideoPlay_001, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoPlay_001, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();
@@ -269,7 +269,7 @@ HWTEST_F(UIVideoTest, UIVideoPlay_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5Q
  */
-HWTEST_F(UIVideoTest, UIVideoIsPlaying_001, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoIsPlaying_001, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();
@@ -295,7 +295,7 @@ HWTEST_F(UIVideoTest, UIVideoIsPlaying_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5Q
  */
-HWTEST_F(UIVideoTest, UIVideoIsSingleLooping_001, TestSize.Level0)
+HWTEST_F(UIVideoTest, UIVideoIsSingleLooping_001, TestSize.Level1)
 {
     if (video_ == nullptr) {
         video_ = new UIVideo();

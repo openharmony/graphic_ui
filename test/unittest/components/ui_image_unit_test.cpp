@@ -55,7 +55,7 @@ void UIImageViewTest::TearDown(void)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UIImageViewTest, UIImageViewGetViewType_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewGetViewType_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -104,7 +104,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetPosition_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000F3PEO
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetSrc_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -121,7 +121,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetSrc_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F3R70
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetSrc_002, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc_002, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -138,7 +138,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetSrc_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F3R70
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetSrc_003, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc_003, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -179,7 +179,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetSrc_004, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetAutoEnable_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetAutoEnable_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -195,7 +195,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetAutoEnable_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetParent_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetParent_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -214,7 +214,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetParent_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetNextSibling_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetNextSibling_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -233,7 +233,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetNextSibling_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetVisible_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetVisible_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -251,7 +251,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetVisible_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetTouchable_001, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetTouchable_001, TestSize.Level1)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);

@@ -107,7 +107,7 @@ HWTEST_F(DragEventTest, DragEventGetStartPoint_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH4
  */
-HWTEST_F(DragEventTest, DragEventSetPreLastPoint_001, TestSize.Level0)
+HWTEST_F(DragEventTest, DragEventSetPreLastPoint_001, TestSize.Level1)
 {
     if (dragEvent_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -154,7 +154,7 @@ HWTEST_F(DragEventTest, DragEventGetDragDirection_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH4
  */
-HWTEST_F(DragEventTest, DragEventGetDeltaX_001, TestSize.Level0)
+HWTEST_F(DragEventTest, DragEventGetDeltaX_001, TestSize.Level1)
 {
     if (dragEvent_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -169,7 +169,7 @@ HWTEST_F(DragEventTest, DragEventGetDeltaX_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH4
  */
-HWTEST_F(DragEventTest, DragEventGetDeltaY_001, TestSize.Level0)
+HWTEST_F(DragEventTest, DragEventGetDeltaY_001, TestSize.Level1)
 {
     if (dragEvent_ == nullptr) {
         EXPECT_EQ(1, 0);

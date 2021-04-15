@@ -76,7 +76,7 @@ void InitPointStyle(UIChartDataSerial::PointStyle& pointStyle)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetMaxDataCount_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetMaxDataCount_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -91,7 +91,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetMaxDataCount_001, TestSize.L
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialAddPoints_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialAddPoints_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -160,7 +160,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialModifyPoint_001, TestSize.Level
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialClearData_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialClearData_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -181,7 +181,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialClearData_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetDataCount_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetDataCount_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -255,7 +255,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetPeakIndex_001, TestSize.Leve
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetValleyIndex_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetValleyIndex_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -273,7 +273,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetValleyIndex_001, TestSize.Le
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetLatestIndex_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialGetLatestIndex_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -312,7 +312,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetLastPointIndex_001, TestSize
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetLineColor_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetLineColor_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -329,7 +329,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetLineColor_001, TestSize.Leve
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetFillColor_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetFillColor_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -346,7 +346,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetFillColor_001, TestSize.Leve
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDataSerialHidePoint_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDataSerialHidePoint_001, TestSize.Level1)
 {
     if (chartDataSerial_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -434,7 +434,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDataSerialSetBottomPointStyle_001, TestSi
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartAddDataSerial_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartAddDataSerial_001, TestSize.Level1)
 {
     if (chart_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -454,7 +454,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartAddDataSerial_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartDeleteDataSerial_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartDeleteDataSerial_001, TestSize.Level1)
 {
     if (chart_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -476,7 +476,7 @@ HWTEST_F(UIChartDataSerialTest, UIChartDeleteDataSerial_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIChartDataSerialTest, UIChartClearDataSerial_001, TestSize.Level0)
+HWTEST_F(UIChartDataSerialTest, UIChartClearDataSerial_001, TestSize.Level1)
 {
     if (chart_ == nullptr) {
         EXPECT_EQ(1, 0);

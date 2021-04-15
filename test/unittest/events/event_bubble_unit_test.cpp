@@ -311,7 +311,7 @@ HWTEST_F(EventBubbleTest, Graphic_EventBubbleTest_Test_UIViewGroup_GetTargetView
  * @tc.type: FUNC
  * @tc.require: AR000F4E5C
  */
-HWTEST_F(EventBubbleTest, Graphic_EventBubbleTest_Test_UIView_GetTargetView_009, TestSize.Level0)
+HWTEST_F(EventBubbleTest, Graphic_EventBubbleTest_Test_UIView_GetTargetView_009, TestSize.Level1)
 {
     if ((clickView_ == nullptr) || (rootView_ == nullptr)) {
         return;

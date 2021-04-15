@@ -92,7 +92,7 @@ HWTEST_F(FocusManagerTest, GetFocusedView_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVI2R
  */
-HWTEST_F(FocusManagerTest, RequestFocus_001, TestSize.Level0)
+HWTEST_F(FocusManagerTest, RequestFocus_001, TestSize.Level1)
 {
     FocusManager::GetInstance()->RequestFocus(label1_);
     UIView* focusedView = FocusManager::GetInstance()->GetFocusedView();
@@ -108,7 +108,7 @@ HWTEST_F(FocusManagerTest, RequestFocus_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVI2R
  */
-HWTEST_F(FocusManagerTest, ClearFocus_001, TestSize.Level0)
+HWTEST_F(FocusManagerTest, ClearFocus_001, TestSize.Level1)
 {
     FocusManager::GetInstance()->RequestFocus(label1_);
     UIView* focusedView = FocusManager::GetInstance()->GetFocusedView();

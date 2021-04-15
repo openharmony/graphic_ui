@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ HWTEST_F(UIAxisTest, UIAxisGetViewType_001, TestSize.Level1)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIAxisTest, UIAxisSetLineColor_001, TestSize.Level0)
+HWTEST_F(UIAxisTest, UIAxisSetLineColor_001, TestSize.Level1)
 {
     if (axisY_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -108,7 +108,7 @@ HWTEST_F(UIAxisTest, UIXAxisSetDataRange_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIAxisTest, UIXAxisSetDataRange_002, TestSize.Level0)
+HWTEST_F(UIAxisTest, UIXAxisSetDataRange_002, TestSize.Level1)
 {
     if (axisX_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -123,7 +123,7 @@ HWTEST_F(UIAxisTest, UIXAxisSetDataRange_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIAxisTest, UIYAxisSetDataRange_001, TestSize.Level0)
+HWTEST_F(UIAxisTest, UIYAxisSetDataRange_001, TestSize.Level1)
 {
     if (axisY_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -138,7 +138,7 @@ HWTEST_F(UIAxisTest, UIYAxisSetDataRange_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UIAxisTest, UIYAxisSetDataRange_002, TestSize.Level0)
+HWTEST_F(UIAxisTest, UIYAxisSetDataRange_002, TestSize.Level1)
 {
     if (axisY_ == nullptr) {
         EXPECT_EQ(1, 0);

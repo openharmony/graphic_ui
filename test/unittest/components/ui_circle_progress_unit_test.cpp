@@ -54,7 +54,7 @@ void UICircleProgressTest::TearDownTestCase()
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UICircleProgressTest, UICircleProgressGetViewType_001, TestSize.Level0)
+HWTEST_F(UICircleProgressTest, UICircleProgressGetViewType_001, TestSize.Level1)
 {
     if (circleProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -69,7 +69,7 @@ HWTEST_F(UICircleProgressTest, UICircleProgressGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UICircleProgressTest, UICircleProgressSetRadius_001, TestSize.Level0)
+HWTEST_F(UICircleProgressTest, UICircleProgressSetRadius_001, TestSize.Level1)
 {
     if (circleProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -87,7 +87,7 @@ HWTEST_F(UICircleProgressTest, UICircleProgressSetRadius_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UICircleProgressTest, UICircleProgressSetCenterPosition_001, TestSize.Level0)
+HWTEST_F(UICircleProgressTest, UICircleProgressSetCenterPosition_001, TestSize.Level1)
 {
     if (circleProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -109,7 +109,7 @@ HWTEST_F(UICircleProgressTest, UICircleProgressSetCenterPosition_001, TestSize.L
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UICircleProgressTest, UICircleProgressSetLineColor_001, TestSize.Level0)
+HWTEST_F(UICircleProgressTest, UICircleProgressSetLineColor_001, TestSize.Level1)
 {
     if (circleProgress_ == nullptr) {
         EXPECT_NE(0, 0);

@@ -150,7 +150,7 @@ HWTEST_F(UIViewGroupTest, UIViewGroupRemoveAll_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewGroupTest, UIViewGroupGetViewType_001, TestSize.Level0)
+HWTEST_F(UIViewGroupTest, UIViewGroupGetViewType_001, TestSize.Level1)
 {
     if (viewGroup_ == nullptr) {
         EXPECT_EQ(1, 0);

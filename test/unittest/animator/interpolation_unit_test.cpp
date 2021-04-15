@@ -38,7 +38,7 @@ public:
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(InterpolationTest, InterpolationGetBezierInterpolation_001, TestSize.Level1)
+HWTEST_F(InterpolationTest, InterpolationGetBezierInterpolation_001, TestSize.Level0)
 {
     int16_t ret = Interpolation::GetBezierInterpolation(200, U1, U2, U3, U4); // 200:current change rate;
     EXPECT_EQ(ret, 379); // 379:current change rate;
