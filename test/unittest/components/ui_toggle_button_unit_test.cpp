@@ -50,7 +50,7 @@ void UIToggleButtonTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQA
  */
-HWTEST_F(UIToggleButtonTest, UIToggleButtonGetViewType_001, TestSize.Level0)
+HWTEST_F(UIToggleButtonTest, UIToggleButtonGetViewType_001, TestSize.Level1)
 {
     if (toggleBtn_ == nullptr) {
         EXPECT_NE(0, 0);

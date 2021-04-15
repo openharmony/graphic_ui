@@ -55,7 +55,7 @@ void KeyEventTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH4
  */
-HWTEST_F(KeyEventTest, KeyEventGetKeyId_001, TestSize.Level0)
+HWTEST_F(KeyEventTest, KeyEventGetKeyId_001, TestSize.Level1)
 {
     if (keyEvent_ == nullptr) {
         EXPECT_EQ(1, 0);

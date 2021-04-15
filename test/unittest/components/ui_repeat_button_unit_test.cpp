@@ -50,7 +50,7 @@ void UIRepeatButtonTest::TearDownTestCase()
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIRepeatButtonTest, UIRepeatButtonTestGetViewType_001, TestSize.Level0)
+HWTEST_F(UIRepeatButtonTest, UIRepeatButtonTestGetViewType_001, TestSize.Level1)
 {
     if (repeatBtn_ == nullptr) {
         EXPECT_NE(0, 0);

@@ -50,7 +50,7 @@ void UIRadioButtonTest::TearDownTestCase()
  * @tc.type: FUNC
  * @tc.require: AR000DSMQB
  */
-HWTEST_F(UIRadioButtonTest, UIRadioButtonGetViewType_001, TestSize.Level0)
+HWTEST_F(UIRadioButtonTest, UIRadioButtonGetViewType_001, TestSize.Level1)
 {
     if (radioBtn_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -65,7 +65,7 @@ HWTEST_F(UIRadioButtonTest, UIRadioButtonGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5I
  */
-HWTEST_F(UIRadioButtonTest, UIRadioButtonGetName_001, TestSize.Level0)
+HWTEST_F(UIRadioButtonTest, UIRadioButtonGetName_001, TestSize.Level1)
 {
     if (radioBtn_ == nullptr) {
         EXPECT_NE(0, 0);

@@ -64,7 +64,7 @@ void UIAbsatrctProgressTest::TearDown()
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressGetViewType_001, TestSize.Level0)
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressGetViewType_001, TestSize.Level1)
 {
     if (abstractProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -105,7 +105,7 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetValue_001, TestSize.Level0
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetValue_002, TestSize.Level0)
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetValue_002, TestSize.Level1)
 {
     if (abstractProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -126,7 +126,7 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetValue_002, TestSize.Level0
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetStep_001, TestSize.Level0)
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetStep_001, TestSize.Level1)
 {
     if (abstractProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -142,7 +142,7 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetStep_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetBackgroundStyle_001, TestSize.Level0)
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetBackgroundStyle_001, TestSize.Level1)
 {
     if (abstractProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -168,7 +168,7 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetBackgroundStyle_001, TestS
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetForegroundStyle_001, TestSize.Level0)
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetForegroundStyle_001, TestSize.Level1)
 {
     if (abstractProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -194,7 +194,7 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetForegroundStyle_001, TestS
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetCapType_001, TestSize.Level0)
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetCapType_001, TestSize.Level1)
 {
     if (abstractProgress_ == nullptr) {
         EXPECT_NE(0, 0);

@@ -54,7 +54,7 @@ void EventTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH4
  */
-HWTEST_F(EventTest, EventConstructor_001, TestSize.Level0)
+HWTEST_F(EventTest, EventConstructor_001, TestSize.Level1)
 {
     if (event_ == nullptr) {
         EXPECT_EQ(1, 0);

@@ -66,7 +66,7 @@ HWTEST_F(UICheckBoxTest, UICheckBoxGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ8
  */
-HWTEST_F(UICheckBoxTest, UICheckBoxOnClickEvent_001, TestSize.Level0)
+HWTEST_F(UICheckBoxTest, UICheckBoxOnClickEvent_001, TestSize.Level1)
 {
     if (checkBox_ == nullptr) {
         EXPECT_NE(0, 0);

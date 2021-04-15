@@ -49,7 +49,7 @@ void UIArcLabelTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelGetViewType_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelGetViewType_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -64,7 +64,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelGetWidth_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelGetWidth_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -81,7 +81,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelGetWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelGetHeight_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelGetHeight_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -98,7 +98,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelGetHeight_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelSetText_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelSetText_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -115,7 +115,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetText_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelSetAlign_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelSetAlign_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -132,7 +132,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetAlign_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextCenter_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextCenter_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -151,7 +151,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextCenter_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextRadius_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextRadius_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -186,7 +186,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextAngle_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextOrientation_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextOrientation_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -206,7 +206,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextOrientation_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPM
  */
-HWTEST_F(UIArcLabelTest, UIArcLabelGetDirect_001, TestSize.Level0)
+HWTEST_F(UIArcLabelTest, UIArcLabelGetDirect_001, TestSize.Level1)
 {
     if (arcLabel_ == nullptr) {
         EXPECT_EQ(1, 0);

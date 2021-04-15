@@ -40,7 +40,7 @@ public:
  * @tc.type: FUNC
  * @tc.require: SR000ERCQF
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_001, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_001, TestSize.Level1)
 {
     UIScrollView* scroll = new UIScrollView();
     scroll->SetRotateFactor(10); // 10 : rotate factor
@@ -54,7 +54,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_001, TestSi
  * @tc.type: FUNC
  * @tc.require: SR000ERCQF
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_002, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_002, TestSize.Level1)
 {
     UISwipeView* swipe = new UISwipeView();
     swipe->SetRotateFactor(10); // 10 : rotate factor
@@ -68,7 +68,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_002, TestSi
  * @tc.type: FUNC
  * @tc.require: SR000ERCQF
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_003, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_003, TestSize.Level1)
 {
     UIList* list = new UIList();
     list->SetRotateFactor(10); // 10 : rotate factor
@@ -82,7 +82,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_003, TestSi
  * @tc.type: FUNC
  * @tc.require: SR000ERCQF
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_004, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_004, TestSize.Level1)
 {
     UIList* list = new UIList();
     list->SetRotateFactor(20); // 10 : rotate factor
@@ -96,7 +96,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_004, TestSi
  * @tc.type: FUNC
  * @tc.require: AR000EVI2R
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_005, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_SetRotateFactor_005, TestSize.Level1)
 {
     UISlider* slider = new UISlider();
     slider->SetRotateFactor(10); // 10 : rotate factor
@@ -123,7 +123,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_001, TestSize.
  * @tc.type: FUNC
  * @tc.require: AR000FH554
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_002, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_002, TestSize.Level1)
 {
     UITimePicker* timePicker = new UITimePicker();
     timePicker->RequestFocus();
@@ -136,7 +136,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_002, TestSize.
  * @tc.type: FUNC
  * @tc.require: AR000FH554
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_003, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_003, TestSize.Level1)
 {
     UISwipeView* swipe = new UISwipeView();
     swipe->RequestFocus();
@@ -149,7 +149,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_003, TestSize.
  * @tc.type: FUNC
  * @tc.require: SR000ERCQG
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_004, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_004, TestSize.Level1)
 {
     UIList* list = new UIList();
     list->RequestFocus();
@@ -162,7 +162,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_004, TestSize.
  * @tc.type: FUNC
  * @tc.require: AR000EVI2S
  */
-HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_005, TestSize.Level0)
+HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_005, TestSize.Level1)
 {
     UISlider* slider = new UISlider();
     slider->RequestFocus();

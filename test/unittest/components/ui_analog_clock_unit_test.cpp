@@ -93,7 +93,7 @@ HWTEST_F(UIAnalogClockTest, UIAnalogClockSetPosition_001, TestSize.Level1)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQA
  */
-HWTEST_F(UIAnalogClockTest, UIAnalogClockSetTime24Hour_001, TestSize.Level0)
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetTime24Hour_001, TestSize.Level1)
 {
     if (clock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -129,7 +129,7 @@ HWTEST_F(UIAnalogClockTest, UIAnalogClockSetTime12Hour_001, TestSize.Level1)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQA
  */
-HWTEST_F(UIAnalogClockTest, UIAnalogClockSetTime12Hour_002, TestSize.Level0)
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetTime12Hour_002, TestSize.Level1)
 {
     if (clock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -147,7 +147,7 @@ HWTEST_F(UIAnalogClockTest, UIAnalogClockSetTime12Hour_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQA
  */
-HWTEST_F(UIAnalogClockTest, UIAnalogClockSetHandLine_001, TestSize.Level0)
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetHandLine_001, TestSize.Level1)
 {
     if (clock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -196,7 +196,7 @@ HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime24Hour_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQA
  */
-HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime12Hour_001, TestSize.Level0)
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime12Hour_001, TestSize.Level1)
 {
     if (clock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -216,7 +216,7 @@ HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime12Hour_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQA
  */
-HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime12Hour_002, TestSize.Level0)
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime12Hour_002, TestSize.Level1)
 {
     if (clock_ == nullptr) {
         EXPECT_EQ(1, 0);
