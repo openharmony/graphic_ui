@@ -54,7 +54,7 @@ void UIQrcodeTest::TearDownTestCase()
  * @tc.type: FUNC
  * @tc.require: AR000F4E5M
  */
-HWTEST_F(UIQrcodeTest, Graphic_UIQrcodeTest_Test_GetViewType_001, TestSize.Level0)
+HWTEST_F(UIQrcodeTest, Graphic_UIQrcodeTest_Test_GetViewType_001, TestSize.Level1)
 {
     if (qrcode_ == nullptr) {
         EXPECT_NE(0, 0);

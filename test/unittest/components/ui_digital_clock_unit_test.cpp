@@ -111,7 +111,7 @@ HWTEST_F(UIDigitalClockTest, UIDigitalClockSetDisplayMode_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ4
  */
-HWTEST_F(UIDigitalClockTest, UIDigitalClockSetOpacity_001, TestSize.Level0)
+HWTEST_F(UIDigitalClockTest, UIDigitalClockSetOpacity_001, TestSize.Level1)
 {
     if (digitalClock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -127,7 +127,7 @@ HWTEST_F(UIDigitalClockTest, UIDigitalClockSetOpacity_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ4
  */
-HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime24Hour_001, TestSize.Level0)
+HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime24Hour_001, TestSize.Level1)
 {
     if (digitalClock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -145,7 +145,7 @@ HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime24Hour_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ4
  */
-HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime12Hour_001, TestSize.Level0)
+HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime12Hour_001, TestSize.Level1)
 {
     if (digitalClock_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -163,7 +163,7 @@ HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime12Hour_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ4
  */
-HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime12Hour_002, TestSize.Level0)
+HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime12Hour_002, TestSize.Level1)
 {
     if (digitalClock_ == nullptr) {
         EXPECT_EQ(1, 0);

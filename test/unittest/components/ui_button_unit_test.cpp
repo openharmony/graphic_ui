@@ -101,7 +101,7 @@ HWTEST_F(UIButtonTest, UIButtonSetImageSrc_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetImagePosition_001, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetImagePosition_001, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -118,7 +118,7 @@ HWTEST_F(UIButtonTest, UIButtonSetImagePosition_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetStyle_001, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetStyle_001, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -136,7 +136,7 @@ HWTEST_F(UIButtonTest, UIButtonSetStyle_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetStyle_002, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetStyle_002, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -154,7 +154,7 @@ HWTEST_F(UIButtonTest, UIButtonSetStyle_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetStyle_003, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetStyle_003, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -172,7 +172,7 @@ HWTEST_F(UIButtonTest, UIButtonSetStyle_003, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonIsTouchable_001, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonIsTouchable_001, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -226,7 +226,7 @@ button_->SetPosition(posX, posY);
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetSize_002, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetSize_002, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -262,7 +262,7 @@ HWTEST_F(UIButtonTest, UIButtonSetSize_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetSize_003, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetSize_003, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -297,7 +297,7 @@ HWTEST_F(UIButtonTest, UIButtonSetSize_003, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetStyleForState_001, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetStyleForState_001, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -320,7 +320,7 @@ HWTEST_F(UIButtonTest, UIButtonSetStyleForState_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000DRSH1
  */
-HWTEST_F(UIButtonTest, UIButtonSetStateForStyle_001, TestSize.Level0)
+HWTEST_F(UIButtonTest, UIButtonSetStateForStyle_001, TestSize.Level1)
 {
     if (button_ == nullptr) {
         EXPECT_NE(0, 0);

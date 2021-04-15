@@ -131,7 +131,7 @@ HWTEST_F(UICanvasTest, UICanvasSetPaintStyle_001, TestSize.Level1)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UICanvasTest, UICanvasSetStrokeWidth_001, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasSetStrokeWidth_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -147,7 +147,7 @@ HWTEST_F(UICanvasTest, UICanvasSetStrokeWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UICanvasTest, UICanvasSetStrokeColor_001, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasSetStrokeColor_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -165,7 +165,7 @@ HWTEST_F(UICanvasTest, UICanvasSetStrokeColor_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UICanvasTest, UICanvasSetFillColor_001, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasSetFillColor_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -183,7 +183,7 @@ HWTEST_F(UICanvasTest, UICanvasSetFillColor_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UICanvasTest, UICanvasSetOpacity_001, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasSetOpacity_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -199,7 +199,7 @@ HWTEST_F(UICanvasTest, UICanvasSetOpacity_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UICanvasTest, UICanvasSetStartPosition_001, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasSetStartPosition_001, TestSize.Level1)
 {
     if (canvas_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -338,7 +338,7 @@ HWTEST_F(UICanvasTest, UICanvasLineTo_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVN8V
  */
-HWTEST_F(UICanvasTest, UICanvasLineTo_002, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasLineTo_002, TestSize.Level1)
 {
     if (canvas_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -395,7 +395,7 @@ HWTEST_F(UICanvasTest, UICanvasArcTo_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVN8V
  */
-HWTEST_F(UICanvasTest, UICanvasArcTo_002, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasArcTo_002, TestSize.Level1)
 {
     if (canvas_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -423,7 +423,7 @@ HWTEST_F(UICanvasTest, UICanvasArcTo_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVN8V
  */
-HWTEST_F(UICanvasTest, UICanvasArcTo_003, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasArcTo_003, TestSize.Level1)
 {
     if (canvas_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -474,7 +474,7 @@ HWTEST_F(UICanvasTest, UICanvasAddRect_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVN8V
  */
-HWTEST_F(UICanvasTest, UICanvasAddRect_002, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasAddRect_002, TestSize.Level1)
 {
     if (canvas_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -526,7 +526,7 @@ HWTEST_F(UICanvasTest, UICanvasClosePath_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000EVN8R
  */
-HWTEST_F(UICanvasTest, UICanvasClosePath_002, TestSize.Level0)
+HWTEST_F(UICanvasTest, UICanvasClosePath_002, TestSize.Level1)
 {
     if (canvas_ == nullptr) {
         EXPECT_EQ(1, 0);

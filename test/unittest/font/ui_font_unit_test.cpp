@@ -51,7 +51,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetInstance_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000F3PEK
  */
-HWTEST_F(UIFontTest, Graphic_Font_Test_GetInstance_002, TestSize.Level0)
+HWTEST_F(UIFontTest, Graphic_Font_Test_GetInstance_002, TestSize.Level1)
 {
     UIFont* font = UIFont::GetInstance();
     bool ret = UIFont::GetInstance()->IsVectorFont();
@@ -64,7 +64,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetInstance_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F3R7C
  */
-HWTEST_F(UIFontTest, Graphic_Font_Test_RegisterFontInfo_001, TestSize.Level0)
+HWTEST_F(UIFontTest, Graphic_Font_Test_RegisterFontInfo_001, TestSize.Level1)
 {
     uint8_t ret = UIFont::GetInstance()->RegisterFontInfo("error");
     EXPECT_EQ(ret, FONT_ERROR_RET);
@@ -88,7 +88,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_RegisterFontInfo_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F3R7C
  */
-HWTEST_F(UIFontTest, Graphic_Font_Test_UnregisterFontInfo_001, TestSize.Level0)
+HWTEST_F(UIFontTest, Graphic_Font_Test_UnregisterFontInfo_001, TestSize.Level1)
 {
     uint8_t ret = UIFont::GetInstance()->UnregisterFontInfo("error font name");
     EXPECT_EQ(ret, FONT_ERROR_RET);

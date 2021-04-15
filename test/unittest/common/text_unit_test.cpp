@@ -87,7 +87,7 @@ HWTEST_F(TextTest, TextSetDirect_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(TextTest, TextSetAlign_001, TestSize.Level0)
+HWTEST_F(TextTest, TextSetAlign_001, TestSize.Level1)
 {
     if (text_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -105,7 +105,7 @@ HWTEST_F(TextTest, TextSetAlign_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(TextTest, TextSetExpand_001, TestSize.Level0)
+HWTEST_F(TextTest, TextSetExpand_001, TestSize.Level1)
 {
     if (text_ == nullptr) {
         EXPECT_NE(0, 0);

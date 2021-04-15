@@ -67,7 +67,7 @@ void UIBoxProgressTest::TearDown()
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIBoxProgressTest, UIBoxProgressGetViewType_001, TestSize.Level0)
+HWTEST_F(UIBoxProgressTest, UIBoxProgressGetViewType_001, TestSize.Level1)
 {
     if (boxProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -108,7 +108,7 @@ HWTEST_F(UIBoxProgressTest, UIBoxProgressSetDirection_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValidWidth_001, TestSize.Level0)
+HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValidWidth_001, TestSize.Level1)
 {
     if (boxProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -127,7 +127,7 @@ HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValidWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValidHeight_001, TestSize.Level0)
+HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValidHeight_001, TestSize.Level1)
 {
     if (boxProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -146,7 +146,7 @@ HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValidHeight_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValue_001, TestSize.Level0)
+HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValue_001, TestSize.Level1)
 {
     if (boxProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -169,7 +169,7 @@ HWTEST_F(UIBoxProgressTest, UIBoxProgressSetValue_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIBoxProgressTest, UIBoxProgressSetWidth_001, TestSize.Level0)
+HWTEST_F(UIBoxProgressTest, UIBoxProgressSetWidth_001, TestSize.Level1)
 {
     if (boxProgress_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -187,7 +187,7 @@ HWTEST_F(UIBoxProgressTest, UIBoxProgressSetWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQG
  */
-HWTEST_F(UIBoxProgressTest, UIBoxProgressSetHeight_001, TestSize.Level0)
+HWTEST_F(UIBoxProgressTest, UIBoxProgressSetHeight_001, TestSize.Level1)
 {
     if (boxProgress_ == nullptr) {
         EXPECT_NE(0, 0);

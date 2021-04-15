@@ -55,7 +55,7 @@ void UILabelTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UILabelTest, UILabelGetViewType_001, TestSize.Level0)
+HWTEST_F(UILabelTest, UILabelGetViewType_001, TestSize.Level1)
 {
     if (label_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -70,7 +70,7 @@ HWTEST_F(UILabelTest, UILabelGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UILabelTest, UILabelResize_001, TestSize.Level0)
+HWTEST_F(UILabelTest, UILabelResize_001, TestSize.Level1)
 {
     if (label_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -87,7 +87,7 @@ HWTEST_F(UILabelTest, UILabelResize_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UILabelTest, UILabelSetText_001, TestSize.Level0)
+HWTEST_F(UILabelTest, UILabelSetText_001, TestSize.Level1)
 {
     if (label_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -126,7 +126,7 @@ HWTEST_F(UILabelTest, UILabelSetLineBreakMode_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UILabelTest, UILabelSetTextColor_001, TestSize.Level0)
+HWTEST_F(UILabelTest, UILabelSetTextColor_001, TestSize.Level1)
 {
     if (label_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -177,7 +177,7 @@ HWTEST_F(UILabelTest, UILabelSetAlign_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UILabelTest, UILabelSetDirect_001, TestSize.Level0)
+HWTEST_F(UILabelTest, UILabelSetDirect_001, TestSize.Level1)
 {
     if (label_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -211,7 +211,7 @@ HWTEST_F(UILabelTest, UILabelSetRollStartPos_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQ1
  */
-HWTEST_F(UILabelTest, UILabelSetFont_001, TestSize.Level0)
+HWTEST_F(UILabelTest, UILabelSetFont_001, TestSize.Level1)
 {
     if (label_ == nullptr) {
         EXPECT_EQ(1, 0);

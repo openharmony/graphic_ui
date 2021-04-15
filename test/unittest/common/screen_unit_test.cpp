@@ -32,7 +32,7 @@ public:
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ9
  */
-HWTEST_F(ScreenTest, ScreenGetWidth_001, TestSize.Level0)
+HWTEST_F(ScreenTest, ScreenGetWidth_001, TestSize.Level1)
 {
     EXPECT_EQ(Screen::GetInstance().GetWidth(), HORIZONTAL_RESOLUTION);
 }
@@ -43,7 +43,7 @@ HWTEST_F(ScreenTest, ScreenGetWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ9
  */
-HWTEST_F(ScreenTest, ScreenGetHeight_001, TestSize.Level0)
+HWTEST_F(ScreenTest, ScreenGetHeight_001, TestSize.Level1)
 {
     EXPECT_EQ(Screen::GetInstance().GetHeight(), VERTICAL_RESOLUTION);
 }

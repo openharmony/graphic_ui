@@ -129,7 +129,7 @@ public:
  * @tc.require: SR000ERCR6
  */
 #if ENABLE_HARDWARE_ACCELERATION
-HWTEST_F(HardwareAccelerationTest, HardwareFill_001, TestSize.Level0)
+HWTEST_F(HardwareAccelerationTest, HardwareFill_001, TestSize.Level1)
 {
     RootView* rootView = RootView::GetInstance();
     rootView->SetWidth(600);  // 600: width
@@ -185,7 +185,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareBlend_001, TestSize.Level0)
  * @tc.require: AR000EVI3I
  */
 #if ENABLE_HARDWARE_ACCELERATION && ENABLE_HARDWARE_ACCELERATION_FOR_TEXT
-HWTEST_F(HardwareAccelerationTest, HardwareBlend_002, TestSize.Level0)
+HWTEST_F(HardwareAccelerationTest, HardwareBlend_002, TestSize.Level1)
 {
     RootView* rootView = RootView::GetInstance();
     rootView->SetWidth(600);  // 600: width
@@ -255,7 +255,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareTransform_001, TestSize.Level0)
  * @tc.require: AR000EVI3I
  */
 #if ENABLE_HARDWARE_ACCELERATION
-HWTEST_F(HardwareAccelerationTest, HardwareTransform_002, TestSize.Level0)
+HWTEST_F(HardwareAccelerationTest, HardwareTransform_002, TestSize.Level1)
 {
     // set device to null
     ScreenDeviceProxy::GetInstance()->SetDevice(nullptr);

@@ -65,7 +65,7 @@ static ImageAnimatorInfo g_imageAnimatorInfo[IMAGE_SIZE] = {
  * @tc.type: FUNC
  * @tc.require: AR000DSMQL
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewGetViewType_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewGetViewType_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -80,7 +80,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewGetViewType_001, TestSize.L
  * @tc.type: FUNC
  * @tc.require: AR000DSMQL
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetTimeOfPause_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetTimeOfPause_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -98,7 +98,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetTimeOfPause_001, TestSiz
  * @tc.type: FUNC
  * @tc.require: AR000DSMQL
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetTimeOfUpdate_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetTimeOfUpdate_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -116,7 +116,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetTimeOfUpdate_001, TestSi
  * @tc.type: FUNC
  * @tc.require: AR000DSMQL
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -134,7 +134,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_001, Te
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_002, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_002, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -152,7 +152,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_002, Te
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetSizeFixed_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetSizeFixed_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -170,7 +170,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetSizeFixed_001, TestSize.
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetRepeat_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetRepeat_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -188,7 +188,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetRepeat_001, TestSize.Lev
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetReverse_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetReverse_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -206,7 +206,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetReverse_001, TestSize.Le
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetStartPosition_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetStartPosition_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -223,7 +223,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetStartPosition_001, TestS
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewStart_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewStart_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -239,7 +239,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewStart_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewStop_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewStop_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -255,7 +255,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewStop_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewPause_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewPause_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -271,7 +271,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewPause_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMPV
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewResume_001, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewResume_001, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -308,7 +308,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_001, TestSize.L
  * @tc.type: FUNC
  * @tc.require: AR000F4E5J
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_002, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_002, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -329,7 +329,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_002, TestSize.L
  * @tc.type: FUNC
  * @tc.require: AR000F4E5J
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_003, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_003, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
@@ -350,7 +350,7 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_003, TestSize.L
  * @tc.type: FUNC
  * @tc.require: AR000F4E5J
  */
-HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_004, TestSize.Level0)
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_004, TestSize.Level1)
 {
     if (imageAnimator_ == nullptr) {
         EXPECT_EQ(1, 0);
