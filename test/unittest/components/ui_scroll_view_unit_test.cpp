@@ -76,7 +76,7 @@ HWTEST_F(ScrollViewTest, UIScrollViewSetScrollState_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQE
  */
-HWTEST_F(ScrollViewTest, UIScrollViewGetViewType_001, TestSize.Level0)
+HWTEST_F(ScrollViewTest, UIScrollViewGetViewType_001, TestSize.Level1)
 {
     if (scrollView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -91,7 +91,7 @@ HWTEST_F(ScrollViewTest, UIScrollViewGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQE
  */
-HWTEST_F(ScrollViewTest, UIScrollViewSetHorizontalScrollState_001, TestSize.Level0)
+HWTEST_F(ScrollViewTest, UIScrollViewSetHorizontalScrollState_001, TestSize.Level1)
 {
     if (scrollView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -110,7 +110,7 @@ HWTEST_F(ScrollViewTest, UIScrollViewSetHorizontalScrollState_001, TestSize.Leve
  * @tc.type: FUNC
  * @tc.require: AR000DSMQE
  */
-HWTEST_F(ScrollViewTest, UIScrollViewSetVerticalScrollState_001, TestSize.Level0)
+HWTEST_F(ScrollViewTest, UIScrollViewSetVerticalScrollState_001, TestSize.Level1)
 {
     if (scrollView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -129,7 +129,7 @@ HWTEST_F(ScrollViewTest, UIScrollViewSetVerticalScrollState_001, TestSize.Level0
  * @tc.type: FUNC
  * @tc.require: AR000E2RJK
  */
-HWTEST_F(ScrollViewTest, UIScrollViewSetMaxScrollDistance_001, TestSize.Level0)
+HWTEST_F(ScrollViewTest, UIScrollViewSetMaxScrollDistance_001, TestSize.Level1)
 {
     if (scrollView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -146,7 +146,7 @@ HWTEST_F(ScrollViewTest, UIScrollViewSetMaxScrollDistance_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000E2RJJ
  */
-HWTEST_F(ScrollViewTest, UIScrollViewSetDragACCLevel_001, TestSize.Level0)
+HWTEST_F(ScrollViewTest, UIScrollViewSetDragACCLevel_001, TestSize.Level1)
 {
     if (scrollView_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -163,7 +163,7 @@ HWTEST_F(ScrollViewTest, UIScrollViewSetDragACCLevel_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5P
  */
-HWTEST_F(ScrollViewTest, UIScrollViewSetSwipeACCLevel_001, TestSize.Level0)
+HWTEST_F(ScrollViewTest, UIScrollViewSetSwipeACCLevel_001, TestSize.Level1)
 {
     if (scrollView_ == nullptr) {
         EXPECT_NE(0, 0);

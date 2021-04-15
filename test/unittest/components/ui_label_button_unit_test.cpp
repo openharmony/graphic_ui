@@ -87,7 +87,7 @@ HWTEST_F(UILabelButtonTest, UILabelButtonSetText_001, TestSize.Level1)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ5
  */
-HWTEST_F(UILabelButtonTest, UILabelButtonSetLablePosition_001, TestSize.Level0)
+HWTEST_F(UILabelButtonTest, UILabelButtonSetLablePosition_001, TestSize.Level1)
 {
     if (labelBtn_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -139,7 +139,7 @@ HWTEST_F(UILabelButtonTest, UILabelButtonSetDirect_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ5
  */
-HWTEST_F(UILabelButtonTest, UILabelButtonSetLabelStyle_001, TestSize.Level0)
+HWTEST_F(UILabelButtonTest, UILabelButtonSetLabelStyle_001, TestSize.Level1)
 {
     if (labelBtn_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -174,7 +174,7 @@ HWTEST_F(UILabelButtonTest, UILabelButtonSetLabelStyle_002, TestSize.Level1)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ5
  */
-HWTEST_F(UILabelButtonTest, UILabelButtonSetTextColor_001, TestSize.Level0)
+HWTEST_F(UILabelButtonTest, UILabelButtonSetTextColor_001, TestSize.Level1)
 {
     if (labelBtn_ == nullptr) {
         EXPECT_NE(0, 0);

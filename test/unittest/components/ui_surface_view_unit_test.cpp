@@ -89,7 +89,7 @@ HWTEST_F(UISurfaceViewTest, UISurfaceViewSetPosition_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQJ
  */
-HWTEST_F(UISurfaceViewTest, UISurfaceViewResize_001, TestSize.Level0)
+HWTEST_F(UISurfaceViewTest, UISurfaceViewResize_001, TestSize.Level1)
 {
     if (surface_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -106,7 +106,7 @@ HWTEST_F(UISurfaceViewTest, UISurfaceViewResize_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQJ
  */
-HWTEST_F(UISurfaceViewTest, UISurfaceViewSetX_001, TestSize.Level0)
+HWTEST_F(UISurfaceViewTest, UISurfaceViewSetX_001, TestSize.Level1)
 {
     if (surface_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -122,7 +122,7 @@ HWTEST_F(UISurfaceViewTest, UISurfaceViewSetX_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQJ
  */
-HWTEST_F(UISurfaceViewTest, UISurfaceViewSetY_001, TestSize.Level0)
+HWTEST_F(UISurfaceViewTest, UISurfaceViewSetY_001, TestSize.Level1)
 {
     if (surface_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -138,7 +138,7 @@ HWTEST_F(UISurfaceViewTest, UISurfaceViewSetY_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQJ
  */
-HWTEST_F(UISurfaceViewTest, UISurfaceViewSetWidth_001, TestSize.Level0)
+HWTEST_F(UISurfaceViewTest, UISurfaceViewSetWidth_001, TestSize.Level1)
 {
     if (surface_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -154,7 +154,7 @@ HWTEST_F(UISurfaceViewTest, UISurfaceViewSetWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQJ
  */
-HWTEST_F(UISurfaceViewTest, UISurfaceViewSetHeight_001, TestSize.Level0)
+HWTEST_F(UISurfaceViewTest, UISurfaceViewSetHeight_001, TestSize.Level1)
 {
     if (surface_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -170,7 +170,7 @@ HWTEST_F(UISurfaceViewTest, UISurfaceViewSetHeight_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQJ
  */
-HWTEST_F(UISurfaceViewTest, UISurfaceViewSetVisible_001, TestSize.Level0)
+HWTEST_F(UISurfaceViewTest, UISurfaceViewSetVisible_001, TestSize.Level1)
 {
     if (surface_ == nullptr) {
         EXPECT_NE(0, 0);

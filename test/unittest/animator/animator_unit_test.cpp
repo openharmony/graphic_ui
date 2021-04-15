@@ -103,7 +103,7 @@ void AnimatorTest::TearDownTestCase(void)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(AnimatorTest, AnimatorGetState_001, TestSize.Level0)
+HWTEST_F(AnimatorTest, AnimatorGetState_001, TestSize.Level1)
 {
     if (animator_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -125,7 +125,7 @@ HWTEST_F(AnimatorTest, AnimatorGetState_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(AnimatorTest, AnimatorSetState_001, TestSize.Level0)
+HWTEST_F(AnimatorTest, AnimatorSetState_001, TestSize.Level1)
 {
     if (animator_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -145,7 +145,7 @@ HWTEST_F(AnimatorTest, AnimatorSetState_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(AnimatorTest, AnimatorSetTime_001, TestSize.Level0)
+HWTEST_F(AnimatorTest, AnimatorSetTime_001, TestSize.Level1)
 {
     if (animator_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -161,7 +161,7 @@ HWTEST_F(AnimatorTest, AnimatorSetTime_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(AnimatorTest, AnimatorSetRunTime_001, TestSize.Level0)
+HWTEST_F(AnimatorTest, AnimatorSetRunTime_001, TestSize.Level1)
 {
     if (animator_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -177,7 +177,7 @@ HWTEST_F(AnimatorTest, AnimatorSetRunTime_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(AnimatorTest, AnimatorIsRepeat_001, TestSize.Level0)
+HWTEST_F(AnimatorTest, AnimatorIsRepeat_001, TestSize.Level1)
 {
     if (animator_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -192,7 +192,7 @@ HWTEST_F(AnimatorTest, AnimatorIsRepeat_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(AnimatorTest, AnimatorManagerAddAndRemove_001, TestSize.Level1)
+HWTEST_F(AnimatorTest, AnimatorManagerAddAndRemove_001, TestSize.Level0)
 {
     UIView* view = new UIView();
     view->SetX(START_POS);

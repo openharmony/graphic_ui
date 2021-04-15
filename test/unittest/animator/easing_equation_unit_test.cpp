@@ -38,7 +38,7 @@ public:
  * @tc.type: FUNC
  * @tc.require: AR000DSMQM
  */
-HWTEST_F(EasingEquationTest, EasingEquationBackEaseIn_001, TestSize.Level1)
+HWTEST_F(EasingEquationTest, EasingEquationBackEaseIn_001, TestSize.Level0)
 {
     const double overShoot = 2;
     EasingEquation::SetBackOvershoot(overShoot);

@@ -74,7 +74,7 @@ void UIViewTest::TearDown()
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetOnDragListener_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetOnDragListener_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -92,7 +92,7 @@ HWTEST_F(UIViewTest, UIViewSetOnDragListener_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetOnClickListener_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetOnClickListener_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -110,7 +110,7 @@ HWTEST_F(UIViewTest, UIViewSetOnClickListener_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetOnLongPressListener_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetOnLongPressListener_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -128,7 +128,7 @@ HWTEST_F(UIViewTest, UIViewSetOnLongPressListener_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetOnTouchListener_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetOnTouchListener_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -146,7 +146,7 @@ HWTEST_F(UIViewTest, UIViewSetOnTouchListener_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetParent_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetParent_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -169,7 +169,7 @@ HWTEST_F(UIViewTest, UIViewSetParent_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetNextSibling_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetNextSibling_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -192,7 +192,7 @@ HWTEST_F(UIViewTest, UIViewSetNextSibling_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetVisible_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetVisible_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -208,7 +208,7 @@ HWTEST_F(UIViewTest, UIViewSetVisible_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetTouchable_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetTouchable_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -224,7 +224,7 @@ HWTEST_F(UIViewTest, UIViewSetTouchable_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetDraggable_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetDraggable_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -240,7 +240,7 @@ HWTEST_F(UIViewTest, UIViewSetDraggable_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetDragParentInstead_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetDragParentInstead_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -256,7 +256,7 @@ HWTEST_F(UIViewTest, UIViewSetDragParentInstead_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewResizeVisibleArea_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewResizeVisibleArea_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -274,7 +274,7 @@ HWTEST_F(UIViewTest, UIViewResizeVisibleArea_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetWidth_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetWidth_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -292,7 +292,7 @@ HWTEST_F(UIViewTest, UIViewSetWidth_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetHeight_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetHeight_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -310,7 +310,7 @@ HWTEST_F(UIViewTest, UIViewSetHeight_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewResize_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewResize_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -330,7 +330,7 @@ HWTEST_F(UIViewTest, UIViewResize_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetX_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetX_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -348,7 +348,7 @@ HWTEST_F(UIViewTest, UIViewSetX_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetY_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetY_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -366,7 +366,7 @@ HWTEST_F(UIViewTest, UIViewSetY_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetPosition_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetPosition_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -386,7 +386,7 @@ HWTEST_F(UIViewTest, UIViewSetPosition_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetPosition_002, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetPosition_002, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -729,7 +729,7 @@ HWTEST_F(UIViewTest, UIViewSetPositionPercent_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetViewId_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetViewId_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -747,7 +747,7 @@ HWTEST_F(UIViewTest, UIViewSetViewId_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetViewIndex_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetViewIndex_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -765,7 +765,7 @@ HWTEST_F(UIViewTest, UIViewSetViewIndex_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewGetViewType_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewGetViewType_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -780,7 +780,7 @@ HWTEST_F(UIViewTest, UIViewGetViewType_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5D
  */
-HWTEST_F(UIViewTest, UIViewSetOpaScale_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetOpaScale_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -798,7 +798,7 @@ HWTEST_F(UIViewTest, UIViewSetOpaScale_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000F3PEB
  */
-HWTEST_F(UIViewTest, UIViewSetOpaScale_002, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetOpaScale_002, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -818,7 +818,7 @@ HWTEST_F(UIViewTest, UIViewSetOpaScale_002, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EEMQF
  */
-HWTEST_F(UIViewTest, UIViewSetStyle_001, TestSize.Level0)
+HWTEST_F(UIViewTest, UIViewSetStyle_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -965,7 +965,7 @@ HWTEST_F(UIViewTest, UIViewLayoutToSibling_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: SR000F3PEC
  */
-HWTEST_F(UIViewTest, Graphic_UIView_Test_Rotate_001, TestSize.Level0)
+HWTEST_F(UIViewTest, Graphic_UIView_Test_Rotate_001, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -983,7 +983,7 @@ HWTEST_F(UIViewTest, Graphic_UIView_Test_Rotate_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000F4E5E
  */
-HWTEST_F(UIViewTest, Graphic_UIView_Test_Rotate_002, TestSize.Level0)
+HWTEST_F(UIViewTest, Graphic_UIView_Test_Rotate_002, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
@@ -1023,7 +1023,7 @@ HWTEST_F(UIViewTest, Graphic_UIView_Test_Scale_001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000EVI2T
  */
-HWTEST_F(UIViewTest, Graphic_UIView_Test_Scale_002, TestSize.Level0)
+HWTEST_F(UIViewTest, Graphic_UIView_Test_Scale_002, TestSize.Level1)
 {
     if (view_ == nullptr) {
         EXPECT_NE(0, 0);
