@@ -109,26 +109,29 @@ ColorMode ScreenDeviceProxy::GetBufferMode()
     return frameBufferMode_;
 }
 
-bool ScreenDeviceProxy::EnableBitmapBuffer()
+void ScreenDeviceProxy::EnableBitmapBuffer(uint8_t* viewBitmapBuffer)
 {
-    if (viewBitmapBuffer_ == nullptr) {
-        return false;
+    if (viewBitmapBuffer == nullptr) {
+        return;
     }
+    viewBitmapBuffer_ = viewBitmapBuffer;
     enableBitmapBuffer_ = true;
-    return true;
 }
 
-uint8_t* ScreenDeviceProxy::GetScreenBitmapBuffer()
+bool ScreenDeviceProxy::GetScreenBitmapBuffer(uint8_t* dest, uint32_t size)
 {
-    if (screenBitmapBuffer_ == nullptr) {
-        return nullptr;
+    if ((dest == nullptr) || (size == 0)) {
+        return false;
     }
-    uint8_t* buf = GetBuffer();
     uint8_t byteSize = DrawUtils::GetByteSizeByColorMode(frameBufferMode_);
     uint32_t bufSize = width_ * height_ * byteSize;
-    if (memcpy_s(screenBitmapBuffer_, bufSize, buf, bufSize) != EOK) {
-        return nullptr;
+    if (size < bufSize) {
+        return false;
     }
-    return screenBitmapBuffer_;
+    uint8_t* buf = GetBuffer();
+    if (memcpy_s(dest, size, buf, bufSize) != EOK) {
+        return false;
+    }
+    return true;
 }
 } // namespace OHOS

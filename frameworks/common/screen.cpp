@@ -17,6 +17,7 @@
 #include "core/render_manager.h"
 #include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
+#include "gfx_utils/mem_api.h"
 
 namespace OHOS {
 uint16_t Screen::GetWidth()
@@ -33,16 +34,18 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
 {
     uint16_t screenWidth = ScreenDeviceProxy::GetInstance()->GetScreenWidth();
     uint16_t screenHeight = ScreenDeviceProxy::GetInstance()->GetScreenHeight();
-    info.data = ScreenDeviceProxy::GetInstance()->GetScreenBitmapBuffer();
-    if (info.data == nullptr) {
-        return false;
-    }
     info.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     info.dataSize = screenWidth * screenHeight * DrawUtils::GetByteSizeByColorMode(info.header.colorMode);
+    uint8_t* screenBitmapBuffer = reinterpret_cast<uint8_t*>(ImageCacheMalloc(info));
     info.header.width = screenWidth;
     info.header.height = screenHeight;
     info.header.reserved = 0;
     info.header.compressMode = 0;
+
+    if (!ScreenDeviceProxy::GetInstance()->GetScreenBitmapBuffer(screenBitmapBuffer, info.dataSize)) {
+        return false;
+    }
+    info.data = screenBitmapBuffer;
     return true;
 }
 } // namespace OHOS

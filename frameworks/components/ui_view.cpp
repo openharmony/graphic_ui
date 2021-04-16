@@ -21,6 +21,7 @@
 #include "draw/draw_rect.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/graphic_log.h"
+#include "gfx_utils/mem_api.h"
 #include "themes/theme_manager.h"
 
 namespace OHOS {
@@ -809,9 +810,6 @@ uint8_t UIView::GetMixOpaScale()
 
 bool UIView::GetBitmap(ImageInfo& bitmap)
 {
-    if (!ScreenDeviceProxy::GetInstance()->EnableBitmapBuffer()) {
-        return false;
-    }
     UIView* tempSibling = nextSibling_;
     UIView* tempParent = parent_;
     int16_t tempX = rect_.GetX();
@@ -827,15 +825,23 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     mask.Intersect(mask, screenRect);
     uint16_t bufferWidth = mask.GetWidth();
     uint16_t bufferHeight = mask.GetHeight();
-    ScreenDeviceProxy::GetInstance()->SetViewBitmapBufferWidth(bufferWidth);
-    RootView::GetInstance()->DrawTop(this, mask);
-    bitmap.data = ScreenDeviceProxy::GetInstance()->GetBuffer();
     bitmap.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
     bitmap.header.width = bufferWidth;
     bitmap.header.height = bufferHeight;
     bitmap.header.reserved = 0;
 
+    uint8_t* viewBitmapBuffer = reinterpret_cast<uint8_t*>(ImageCacheMalloc(bitmap));
+    if (viewBitmapBuffer == nullptr) {
+        nextSibling_ = tempSibling;
+        parent_ = tempParent;
+        rect_.SetPosition(tempX, tempY);
+        return false;
+    }
+    ScreenDeviceProxy::GetInstance()->EnableBitmapBuffer(viewBitmapBuffer);
+    ScreenDeviceProxy::GetInstance()->SetViewBitmapBufferWidth(bufferWidth);
+    RootView::GetInstance()->DrawTop(this, mask);
+    bitmap.data = viewBitmapBuffer;
     ScreenDeviceProxy::GetInstance()->DisableBitmapBuffer();
     nextSibling_ = tempSibling;
     parent_ = tempParent;

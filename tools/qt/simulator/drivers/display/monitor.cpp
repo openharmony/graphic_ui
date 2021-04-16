@@ -32,8 +32,6 @@ void Monitor::InitHal()
                                                      HORIZONTAL_RESOLUTION);
     ScreenDeviceProxy::GetInstance()->SetAnimatorbuffer(reinterpret_cast<uint8_t*>(animaterBuffer_), ARGB8888,
                                                         HORIZONTAL_RESOLUTION);
-    ScreenDeviceProxy::GetInstance()->SetBitmapBuffer(reinterpret_cast<uint8_t*>(viewBitmapBuffer_),
-                                                      reinterpret_cast<uint8_t*>(screenBitmapBuffer_));
     Monitor* display = Monitor::GetInstance();
     ScreenDeviceProxy::GetInstance()->SetDevice(display);
 
