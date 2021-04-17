@@ -32,6 +32,14 @@ void UITestScreenshot::SetUp()
 
 void UITestScreenshot::TearDown()
 {
+    if (clickLeftListener_ != nullptr) {
+        delete clickLeftListener_;
+        clickLeftListener_ = nullptr;
+    }
+    if (clickRightListener_ != nullptr) {
+        delete clickRightListener_;
+        clickRightListener_ = nullptr;
+    }
     DeleteChildren(container_);
     container_ = nullptr;
 }
@@ -90,8 +98,11 @@ void UITestScreenshot::UIKit_SCREENSHOT_TEST_001()
     labelButton->SetWidth(labelButtonWidth);
     labelButton->SetHeight(labelButtonHeight);
     labelButton->SetFont(DEFAULT_VECTOR_FONT_FILENAME, BUTTON_LABEL_SIZE);
-    UIView::OnClickListener* clickLeftListener = new TestScreenshotOnClickListener((UIView*)labelButton);
-    labelButton->SetOnClickListener(clickLeftListener);
+    if (clickLeftListener_ == nullptr) {
+        clickLeftListener_ = static_cast<UIView::OnClickListener*>(
+            new TestScreenshotOnClickListener((UIView*)labelButton));
+    }
+    labelButton->SetOnClickListener(clickLeftListener_);
     UILabel* label2 = GetTitleLabel("显示截屏图片 ");
     container_->Add(label2);
     label2->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, 255,  // 255: y-coordinate
@@ -114,8 +125,11 @@ void UITestScreenshot::UIKit_SCREENSHOT_TEST_001()
     labelButton2->SetPosition(300, 50); // 300: position x; 50: position y
     labelButton2->SetWidth(labelButtonWidth);
     labelButton2->SetHeight(labelButtonHeight);
-    UIView::OnClickListener* clickRightListener = new TestSetScreenshotOnClickListener(static_cast<UIView*>(imageView));
-    labelButton2->SetOnClickListener(clickRightListener);
+    if (clickRightListener_ == nullptr) {
+        clickRightListener_ = static_cast<UIView::OnClickListener*>(
+            new TestSetScreenshotOnClickListener(static_cast<UIView*>(imageView)));
+    }
+    labelButton2->SetOnClickListener(clickRightListener_);
 }
 } // namespace OHOS
 #endif

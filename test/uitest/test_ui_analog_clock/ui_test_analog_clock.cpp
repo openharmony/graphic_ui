@@ -51,7 +51,46 @@ void UITestAnalogClock::TearDown()
         animator2_ = nullptr;
         callback2_ = nullptr;
     }
-
+    if (changeModeListener_ != nullptr) {
+        delete changeModeListener_;
+        changeModeListener_ = nullptr;
+    }
+    if (clickMoveLeftListener_ != nullptr) {
+        delete clickMoveLeftListener_;
+        clickMoveLeftListener_ = nullptr;
+    }
+    if (clickMoveRightListener_ != nullptr) {
+        delete clickMoveRightListener_;
+        clickMoveRightListener_ = nullptr;
+    }
+    if (clickMoveTopListener_ != nullptr) {
+        delete clickMoveTopListener_;
+        clickMoveTopListener_ = nullptr;
+    }
+    if (clickMoveBottomListener_ != nullptr) {
+        delete clickMoveBottomListener_;
+        clickMoveBottomListener_ = nullptr;
+    }
+    if (changeModeListener1_ != nullptr) {
+        delete changeModeListener1_;
+        changeModeListener1_ = nullptr;
+    }
+    if (clickMoveLeftListener1_ != nullptr) {
+        delete clickMoveLeftListener1_;
+        clickMoveLeftListener1_ = nullptr;
+    }
+    if (clickMoveRightListener1_ != nullptr) {
+        delete clickMoveRightListener1_;
+        clickMoveRightListener1_ = nullptr;
+    }
+    if (clickMoveTopListener1_ != nullptr) {
+        delete clickMoveTopListener1_;
+        clickMoveTopListener1_ = nullptr;
+    }
+    if (clickMoveBottomListener1_ != nullptr) {
+        delete clickMoveBottomListener1_;
+        clickMoveBottomListener1_ = nullptr;
+    }
     DeleteChildren(container_);
     container_ = nullptr;
 }
@@ -171,44 +210,59 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     group->Add(button1);
     // 58: increase x-position; 48: y-position
     button1->SetPosition(curFace->GetWidth() + 58, 48, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* changeModeListener =
-        new TestBtnOnClickChangeModeListener(static_cast<UIView*>(button1), clock);
-    button1->SetOnClickListener(changeModeListener);
+    if (changeModeListener_ == nullptr) {
+        changeModeListener_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickChangeModeListener(static_cast<UIView*>(button1), clock));
+    }
+    button1->SetOnClickListener(changeModeListener_);
 
     UILabelButton* button2 = SetUpButton("左移");
     group->Add(button2);
     // 58: increase x-position; 58: increase y-position
     button2->SetPosition(curFace->GetWidth() + 58, BUTTON_HEIGHT + 58, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveLeftListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button2), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_LEFT, 10); // 10: grid
-    button2->SetOnClickListener(clickMoveLeftListener);
+    if (clickMoveLeftListener_ == nullptr) {
+        clickMoveLeftListener_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button2), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_LEFT, 10)); // 10: grid
+    }
+    button2->SetOnClickListener(clickMoveLeftListener_);
 
     UILabelButton* button3 = SetUpButton("右移");
     group->Add(button3);
     // 58: increase x-position; 148: y-position
     button3->SetPosition(curFace->GetWidth() + 58, 148, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveRightListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button3), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_RIGHT,
-        10); // 10: grid
-    button3->SetOnClickListener(clickMoveRightListener);
+    if (clickMoveRightListener_ == nullptr) {
+        clickMoveRightListener_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button3), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_RIGHT, 10)); // 10: grid
+    }
+    button3->SetOnClickListener(clickMoveRightListener_);
 
     UILabelButton* button4 = SetUpButton("上移");
     group->Add(button4);
     // 58: increase x-position; 198: y-position
     button4->SetPosition(curFace->GetWidth() + 58, 198, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveTopListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button4), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_TOP,
-        10); // 10: move value
-    button4->SetOnClickListener(clickMoveTopListener);
+    if (clickMoveTopListener_ == nullptr) {
+        clickMoveTopListener_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button4), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_TOP, 10)); // 10: move value
+    }
+    button4->SetOnClickListener(clickMoveTopListener_);
 
     UILabelButton* button5 = SetUpButton("下移");
     group->Add(button5);
     // 58: increase x-position; 248: y-position
     button5->SetPosition(curFace->GetWidth() + 58, 248, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveBottomListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button5), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_BOTTOM,
-        10); // 10: move value
-    button5->SetOnClickListener(clickMoveBottomListener);
+    if (clickMoveBottomListener_ == nullptr) {
+        clickMoveBottomListener_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button5), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_BOTTOM, 10)); // 10: move value
+    }
+    button5->SetOnClickListener(clickMoveBottomListener_);
 }
 
 void UITestAnalogClock::UIKit_TestImageHandAnalogClock_002()
@@ -270,43 +324,58 @@ void UITestAnalogClock::CreateButtons002(UIViewGroup* group, UIImageView* curFac
     group->Add(button1);
     // 58: increase x-coordinate; 48: y-coordinate
     button1->SetPosition(curFace->GetWidth() + 58, 48, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* changeModeListener =
-        new TestBtnOnClickChangeModeListener(static_cast<UIView*>(button1), clock);
-    button1->SetOnClickListener(changeModeListener);
+    if (changeModeListener1_ == nullptr) {
+        changeModeListener1_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickChangeModeListener(static_cast<UIView*>(button1), clock));
+    }
+    button1->SetOnClickListener(changeModeListener1_);
 
     UILabelButton* button2 = SetUpButton("左移");
     group->Add(button2);
     // 58: increase x-coordinate; 98: y-coordinate
     button2->SetPosition(curFace->GetWidth() + 58, 98, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveLeftListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button2), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_LEFT, 10); // 10: grid
-    button2->SetOnClickListener(clickMoveLeftListener);
+    if (clickMoveLeftListener1_ == nullptr) {
+        clickMoveLeftListener1_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button2), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_LEFT, 10)); // 10: grid
+    }
+    button2->SetOnClickListener(clickMoveLeftListener1_);
 
     UILabelButton* button3 = SetUpButton("右移");
     group->Add(button3);
     // 58: increase x-coordinate; 148: y-coordinate
     button3->SetPosition(curFace->GetWidth() + 58, 148, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveRightListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button3), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_RIGHT,
-        10); // 10: move value
-    button3->SetOnClickListener(clickMoveRightListener);
+    if (clickMoveRightListener1_ == nullptr) {
+        clickMoveRightListener1_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button3), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_RIGHT, 10)); // 10: move value
+    }
+    button3->SetOnClickListener(clickMoveRightListener1_);
 
     UILabelButton* button4 = SetUpButton("上移");
     group->Add(button4);
     // 58: increase x-coordinate; 198: y-coordinate
     button4->SetPosition(curFace->GetWidth() + 58, 198, BUTTON_WIDTH, BUTTON_HEIGHT);
-    UIView::OnClickListener* clickMoveTopListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button4), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_TOP,
-        10); // 10: move value
-    button4->SetOnClickListener(clickMoveTopListener);
+    if (clickMoveTopListener1_ == nullptr) {
+        clickMoveTopListener1_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button4), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_TOP, 10)); // 10: move value
+    }
+    button4->SetOnClickListener(clickMoveTopListener1_);
     UILabelButton* button5 = SetUpButton("下移");
     group->Add(button5);
     // 58: increase x-coordinate; 248: y-coordinate
     button5->SetPosition(curFace->GetWidth() + 58, 248, BUTTON_WIDTH, BUTTON_HEIGHT);
     /* Move bottom */
-    UIView::OnClickListener* clickMoveBottomListener = new TestBtnOnClickMovePositionListener(
-        static_cast<UIView*>(button5), clock, TestBtnOnClickMovePositionListener::MoveType::MOVE_BOTTOM,
-        10); // 10: move value
-    button5->SetOnClickListener(clickMoveBottomListener);
+    if (clickMoveBottomListener1_ == nullptr) {
+        clickMoveBottomListener1_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickMovePositionListener(
+            static_cast<UIView*>(button5), clock,
+            TestBtnOnClickMovePositionListener::MoveType::MOVE_BOTTOM, 10)); // 10: move value
+    }
+    button5->SetOnClickListener(clickMoveBottomListener1_);
 }
 } // namespace OHOS

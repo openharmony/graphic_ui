@@ -134,6 +134,26 @@ void UITestRotateInput::SetUp()
 
 void UITestRotateInput::TearDown()
 {
+    if (listener1_ != nullptr) {
+        delete listener1_;
+        listener1_ = nullptr;
+    }
+    if (listener2_ != nullptr) {
+        delete listener2_;
+        listener2_ = nullptr;
+    }
+    if (listener3_ != nullptr) {
+        delete listener3_;
+        listener3_ = nullptr;
+    }
+    if (listener4_ != nullptr) {
+        delete listener4_;
+        listener4_ = nullptr;
+    }
+    if (listener5_ != nullptr) {
+        delete listener5_;
+        listener5_ = nullptr;
+    }
     container_->ClearFocus();
     container_->Remove(timePicker_);
     container_->Remove(picker_);
@@ -292,6 +312,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Slider_004()
     container_->Add(slider_);
     SetLastPos(slider_);
 }
+
 void UITestRotateInput::UIKit_Rotate_Event_Time_Picker_005()
 {
     if (container_ == nullptr) {
@@ -405,17 +426,31 @@ void UITestRotateInput::CreateLabelButton(int16_t x, int16_t y, UIView::OnClickL
 
 void UITestRotateInput::SetTestLabelButton(UILabel* label, UIView* view)
 {
-    TestSetRotateFactorListener* listener1 = new TestSetRotateFactorListener(view, 0);
-    CreateLabelButton(g_swipeW + g_blank, label->GetY() + g_blank, listener1, "factor: 0");
-    TestSetRotateFactorListener* listener2 = new TestSetRotateFactorListener(view, 15); // 15: rotate factor
-    CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener2, "factor: 15");
-    TestSetRotateFactorListener* listener3 = new TestSetRotateFactorListener(view, -15); // -15: rotate factor
-    CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener3, "factor: -15");
-    TestSetRotateFactorListener* listener4 = new TestSetRotateFactorListener(view, 30); // 30: rotate factor
+    if (listener1_ == nullptr) {
+        listener1_ = static_cast<UIView::OnClickListener*>(new TestSetRotateFactorListener(view, 0));
+    }
+    CreateLabelButton(g_swipeW + g_blank, label->GetY() + g_blank, listener1_, "factor: 0");
+    if (listener2_ == nullptr) {
+        listener2_ = static_cast<UIView::OnClickListener*>(
+            new TestSetRotateFactorListener(view, 15));
+    }
+    CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener2_, "factor: 15");
+    if (listener3_ == nullptr) {
+        listener3_ = static_cast<UIView::OnClickListener*>(
+            new TestSetRotateFactorListener(view, -15)); // -15: rotate factor
+    }
+    CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener3_, "factor: -15");
+    if (listener4_ == nullptr) {
+        listener4_ = static_cast<UIView::OnClickListener*>(
+            new TestSetRotateFactorListener(view, 30)); // 30: rotate factor
+    }
     int16_t x = lastX_ + g_testButtonW + g_blank;
-    CreateLabelButton(x, label->GetY() + g_blank, listener4, "factor: 30");
-    TestSetRotateFactorListener* listener5 = new TestSetRotateFactorListener(view, -30); // -30: rotate factor
-    CreateLabelButton(x, lastY_ + g_blank, listener5, "factor: -30");
+    CreateLabelButton(x, label->GetY() + g_blank, listener4_, "factor: 30");
+    if (listener5_ == nullptr) {
+        listener5_ = static_cast<UIView::OnClickListener*>(
+            new TestSetRotateFactorListener(view, -30)); // -30: rotate factor
+    }
+    CreateLabelButton(x, lastY_ + g_blank, listener5_, "factor: -30");
 }
 } // namespace OHOS
 #endif
