@@ -53,8 +53,6 @@ private:
     uint8_t fontPsramBaseAddr_[MIN_FONT_PSRAM_LENGTH];
     uint32_t tftFb_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t animaterBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
-    uint32_t viewBitmapBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
-    uint32_t screenBitmapBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t defaultColor_;
 };
 } // namespace OHOS
