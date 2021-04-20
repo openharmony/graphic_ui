@@ -66,11 +66,7 @@ void AnimatorManager::AnimatorTask()
         animator = pos->data_;
         pos = pos->next_;
         if (animator->GetState() == Animator::START) {
-            if (animator->IsRepeat() || (animator->GetRunTime() <= animator->GetTime())) {
-                animator->Run();
-            } else {
-                animator->Stop();
-            }
+            animator->Run();
         }
     }
 }

@@ -28,7 +28,7 @@ void Animator::Start()
 {
     SetState(START);
     runTime_ = 0;
-    lastRunTime_ = 0;
+    lastRunTime_ = HALTick::GetInstance().GetTime();
     AnimatorManager::GetInstance()->Add(this);
 }
 
@@ -56,14 +56,15 @@ void Animator::Resume()
 
 void Animator::Run()
 {
-    if (lastRunTime_ == 0) {
-        lastRunTime_ = HALTick::GetInstance().GetTime();
+    uint32_t elapse = HALTick::GetInstance().GetElapseTime(lastRunTime_);
+    lastRunTime_ = HALTick::GetInstance().GetTime();
+    runTime_ = (UINT32_MAX - elapse > runTime_) ? (runTime_ + elapse) : period_;
+
+    if (!repeat_ && (runTime_ >= period_)) {
+        Stop();
+        return;
     }
 
-    uint32_t elepse = HALTick::GetInstance().GetElapseTime(lastRunTime_);
-
-    runTime_ = (UINT32_MAX - elepse > runTime_) ? (runTime_ + elepse) : time_;
-    lastRunTime_ = HALTick::GetInstance().GetTime();
     if (callback_ != nullptr) {
         callback_->Callback(view_);
     }

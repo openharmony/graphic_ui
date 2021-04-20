@@ -186,10 +186,15 @@ void UIView::Scale(const Vector2<float>& scale, const Vector2<float>& pivot)
             return;
         }
     }
+    bool firstTrans = transMap_->IsInvalid();
     Rect joinRect = transMap_->GetBoxRect();
     transMap_->SetTransMapRect(GetOrigRect());
     transMap_->Scale(scale, pivot);
-    joinRect.Join(joinRect, transMap_->GetBoxRect());
+    if (firstTrans) {
+        joinRect = transMap_->GetBoxRect();
+    } else {
+        joinRect.Join(joinRect, transMap_->GetBoxRect());
+    }
     joinRect.Join(joinRect, GetOrigRect());
     InvalidateRect(joinRect);
 }
@@ -227,6 +232,7 @@ void UIView::ResetTransParameter()
     if (transMap_ != nullptr) {
         delete transMap_;
         transMap_ = nullptr;
+        Invalidate();
     }
 }
 
@@ -794,7 +800,7 @@ void UIView::LayoutBottomToSibling(const char* id, int16_t offset)
     }
 }
 
-uint8_t UIView::GetMixOpaScale()
+uint8_t UIView::GetMixOpaScale() const
 {
     uint8_t opaMix = opaScale_;
     UIView* parent = parent_;

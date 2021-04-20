@@ -35,6 +35,7 @@
 #ifndef GRAPHIC_LITE_UI_BUTTON_H
 #define GRAPHIC_LITE_UI_BUTTON_H
 
+#include "animator/animator.h"
 #include "common/image.h"
 #include "components/ui_view.h"
 
@@ -101,6 +102,15 @@ public:
      */
     bool OnPreDraw(Rect& invalidatedArea) const override;
 
+#if DEFAULT_ANIMATION
+    /**
+     * @fn virtual bool UIButton::OnPostDraw(Rect& invalidatedArea) override
+     *
+     * @brief Do something after draw.
+     * @param [in] invalidate area.
+     */
+    void OnPostDraw(const Rect& invalidatedArea) override;
+#endif
     /**
      * @fn  virtual void UIButton::OnDraw(const Rect& invalidatedArea) override;
      *
@@ -253,7 +263,7 @@ public:
     {
         Style* style = buttonStyles_[state_];
         return GetRelativeRect().GetWidth() - (style->paddingLeft_ + style->paddingRight_) -
-            (style->borderWidth_ * 2); /* 2: left and right border */
+               (style->borderWidth_ * 2); /* 2: left and right border */
     }
 
     /**
@@ -267,7 +277,7 @@ public:
     {
         Style* style = buttonStyles_[state_];
         return GetRelativeRect().GetHeight() - (style->paddingTop_ + style->paddingBottom_) -
-            (style->borderWidth_ * 2); /* 2: top and bottom border */
+               (style->borderWidth_ * 2); /* 2: top and bottom border */
     }
 
     /**
@@ -282,7 +292,7 @@ public:
         contentWidth_ = width;
         Style* style = buttonStyles_[state_];
         UIView::SetWidth(width + (style->paddingLeft_ + style->paddingRight_) +
-            (style->borderWidth_ * 2)); /* 2: left and right border */
+                         (style->borderWidth_ * 2)); /* 2: left and right border */
     }
 
     /**
@@ -297,7 +307,7 @@ public:
         contentHeight_ = height;
         Style* style = buttonStyles_[state_];
         UIView::SetHeight(height + (style->paddingTop_ + style->paddingBottom_) +
-            (style->borderWidth_ * 2)); /* 2: top and bottom border */
+                          (style->borderWidth_ * 2)); /* 2: top and bottom border */
     }
 
     /**
@@ -410,6 +420,30 @@ private:
     void SetupThemeStyles();
 
     void DrawImg(const Rect& invalidatedArea, OpacityType opaScale);
+
+#if DEFAULT_ANIMATION
+    friend class ButtonAnimator;
+    class ButtonAnimator final : public AnimatorCallback {
+    public:
+        ButtonAnimator() = delete;
+        ButtonAnimator(const ButtonAnimator&) = delete;
+        ButtonAnimator& operator=(const ButtonAnimator&) = delete;
+        ButtonAnimator(ButtonAnimator&&) = delete;
+        ButtonAnimator& operator=(ButtonAnimator&&) = delete;
+        ButtonAnimator(UIButton& button) : animator_(this, nullptr, 0, false), button_(button) {}
+        ~ButtonAnimator() {}
+
+        void Start();
+        void DrawMask(const Rect& invalidatedArea);
+        void Callback(UIView* view) override;
+        void OnStop(UIView& view) override;
+
+    private:
+        Animator animator_;
+        UIButton& button_;
+        int16_t progress_ = 0;
+    } animator_;
+#endif
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_BUTTON_H

@@ -275,7 +275,7 @@ private:
 
     ~RootView() {}
 
-    inline bool IntersectScreenRect(Rect& rect);
+    inline Rect GetScreenRect();
     void AddInvalidateRectWithLock(Rect& rect, UIView *view);
     void AddInvalidateRect(Rect& rect, UIView* view);
     void Measure();
@@ -295,7 +295,6 @@ private:
 #endif
     OnKeyActListener* onKeyActListener_ {nullptr};
     OnVirtualDeviceEventListener* onVirtualEventListener_ {nullptr};
-    bool enableAnimator_ {false};
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_t lock_;
 #endif

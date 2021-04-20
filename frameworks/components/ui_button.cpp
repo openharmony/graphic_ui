@@ -14,6 +14,8 @@
  */
 
 #include "components/ui_button.h"
+
+#include "animator/interpolation.h"
 #include "common/image.h"
 #include "draw/draw_image.h"
 #include "draw/draw_rect.h"
@@ -24,7 +26,11 @@
 
 namespace OHOS {
 UIButton::UIButton()
-    : defaultImgSrc_(nullptr),
+    :
+#if DEFAULT_ANIMATION
+      animator_(*this),
+#endif
+      defaultImgSrc_(nullptr),
       triggeredImgSrc_(nullptr),
       currentImgSrc_(ButtonImageSrc::BTN_IMAGE_DEFAULT),
       imgX_(0),
@@ -168,6 +174,9 @@ bool UIButton::OnPressEvent(const PressEvent& event)
     SetState(PRESSED);
     Resize(contentWidth_, contentHeight_);
     Invalidate();
+#if DEFAULT_ANIMATION
+    animator_.Start();
+#endif
     return UIView::OnPressEvent(event);
 }
 
@@ -177,6 +186,9 @@ bool UIButton::OnReleaseEvent(const ReleaseEvent& event)
     SetState(RELEASED);
     Resize(contentWidth_, contentHeight_);
     Invalidate();
+#if DEFAULT_ANIMATION
+    animator_.Start();
+#endif
     return UIView::OnReleaseEvent(event);
 }
 
@@ -186,6 +198,9 @@ bool UIButton::OnCancelEvent(const CancelEvent& event)
     SetState(RELEASED);
     Resize(contentWidth_, contentHeight_);
     Invalidate();
+#if DEFAULT_ANIMATION
+    animator_.Start();
+#endif
     return UIView::OnCancelEvent(event);
 }
 
@@ -262,6 +277,7 @@ bool UIButton::OnPreDraw(Rect& invalidatedArea) const
     if (r == COORD_MAX) {
         return true;
     }
+
     if (r != 0) {
         r = ((r & 0x1) == 0) ? (r >> 1) : ((r + 1) >> 1);
         rect.SetLeft(rect.GetX() + r);
@@ -275,4 +291,77 @@ bool UIButton::OnPreDraw(Rect& invalidatedArea) const
     invalidatedArea.Intersect(invalidatedArea, rect);
     return false;
 }
+
+#if DEFAULT_ANIMATION
+void UIButton::OnPostDraw(const Rect& invalidatedArea)
+{
+    if (state_ == ButtonState::PRESSED) {
+        animator_.DrawMask(invalidatedArea);
+    }
+}
+
+namespace {
+constexpr int16_t INTERVAL_MAX = Interpolation::INTERPOLATION_RANGE;
+constexpr float SHRINK_SCALE = 0.8f;
+constexpr uint32_t SHRINK_DURATION = 150;
+constexpr uint32_t RECOVER_DURATION = 200;
+constexpr int64_t MASK_OPA = 25;
+constexpr int16_t BEZIER_CONTROL = INTERVAL_MAX / 5;
+} // namespace
+
+void UIButton::ButtonAnimator::Start()
+{
+    if (button_.state_ == UIButton::ButtonState::PRESSED) {
+        animator_.SetTime(SHRINK_DURATION);
+    } else {
+        animator_.SetTime(RECOVER_DURATION);
+    }
+    animator_.Start();
+
+    if (progress_ != 0) {
+        /* reverse the animator direction */
+        progress_ = INTERVAL_MAX - progress_;
+        animator_.SetRunTime(animator_.GetTime() * progress_ / INTERVAL_MAX);
+    }
+}
+
+void UIButton::ButtonAnimator::DrawMask(const Rect& invalidatedArea)
+{
+    Style maskStyle;
+    maskStyle.SetStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
+    maskStyle.SetStyle(STYLE_BACKGROUND_OPA, MASK_OPA);
+    maskStyle.SetStyle(STYLE_BORDER_RADIUS, button_.GetStyle(STYLE_BORDER_RADIUS));
+    OpacityType opa = button_.GetMixOpaScale();
+    DrawRect::Draw(button_.GetRect(), invalidatedArea, maskStyle, opa);
+}
+
+static inline void ScaleButton(UIButton& button, float scale)
+{
+    Vector2<float> scaleValue_ = {scale, scale};
+    Vector2<float> centrePoint(button.GetWidth() / 2.0f, button.GetHeight() / 2.0f);
+    button.Scale(scaleValue_, centrePoint);
+}
+
+void UIButton::ButtonAnimator::Callback(UIView* view)
+{
+    progress_ = static_cast<int16_t>(INTERVAL_MAX * animator_.GetRunTime() / animator_.GetTime());
+
+    int16_t offset = Interpolation::GetBezierY(progress_, BEZIER_CONTROL, 0, BEZIER_CONTROL, INTERVAL_MAX);
+    float scale = (1 - SHRINK_SCALE) * offset / INTERVAL_MAX;
+
+    scale = (button_.state_ == UIButton::ButtonState::PRESSED) ? (1 - scale) : (scale + SHRINK_SCALE);
+    ScaleButton(button_, scale);
+}
+
+void UIButton::ButtonAnimator::OnStop(UIView& view)
+{
+    progress_ = 0;
+    if (button_.state_ == UIButton::ButtonState::PRESSED) {
+        ScaleButton(button_, SHRINK_SCALE);
+    } else {
+        button_.ResetTransParameter();
+    }
+}
+#endif
+
 } // namespace OHOS
