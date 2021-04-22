@@ -108,7 +108,6 @@ void UISlider::SetImage(const ImageInfo* backgroundImage, const ImageInfo* foreg
     }
     backgroundImage_->SetSrc(backgroundImage);
     foregroundImage_->SetSrc(foregroundImage);
-    knobImage_->SetSrc(knobImage);
 }
 
 void UISlider::SetImage(const char* backgroundImage, const char* foregroundImage, const char* knobImage)
@@ -118,7 +117,6 @@ void UISlider::SetImage(const char* backgroundImage, const char* foregroundImage
     }
     backgroundImage_->SetSrc(backgroundImage);
     foregroundImage_->SetSrc(foregroundImage);
-    knobImage_->SetSrc(knobImage);
 }
 
 #if ENABLE_SLIDER_KNOB
