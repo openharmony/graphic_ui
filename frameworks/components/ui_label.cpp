@@ -257,6 +257,22 @@ void UILabel::SetHeight(int16_t height)
     }
 }
 
+void UILabel::SetX(int16_t x)
+{
+    if (GetX() != x) {
+        UIView::SetX(x);
+        RefreshLabel();
+    }
+}
+
+void UILabel::SetY(int16_t y)
+{
+    if (GetY() != y) {
+        UIView::SetY(y);
+        RefreshLabel();
+    }
+}
+
 void UILabel::RefreshLabel()
 {
     Invalidate();
