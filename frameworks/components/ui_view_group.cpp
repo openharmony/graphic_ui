@@ -38,12 +38,10 @@ void UIViewGroup::Add(UIView* view)
 {
     if ((view == this) || (view == nullptr)) {
         GRAPHIC_LOGE("view can not be nullptr and added to self");
-        ASSERT(0);
         return;
     }
     if (view->GetParent() != nullptr) {
         GRAPHIC_LOGE("can not add view multi times");
-        ASSERT(0);
         return;
     }
 
@@ -69,13 +67,11 @@ void UIViewGroup::Insert(UIView* prevView, UIView* insertView)
 {
     if ((insertView == nullptr) || (insertView == this)) {
         GRAPHIC_LOGE("insertView can not be nullptr and insert to self");
-        ASSERT(0);
         return;
     }
 
     if (insertView->GetParent() != nullptr) {
         GRAPHIC_LOGE("can not insert view multi times");
-        ASSERT(0);
         return;
     }
 
