@@ -16,6 +16,8 @@
 #ifndef UI_TEST_BUTTON_H
 #define UI_TEST_BUTTON_H
 
+#include "components/ui_button.h"
+#include "components/ui_checkbox.h"
 #include "components/ui_scroll_view.h"
 #include "ui_test.h"
 
@@ -51,21 +53,40 @@ public:
     /**
      * @brief Test Togglebutton Function
      */
-    void UIKit_Toggle_Button_Test_001() const;
+    void UIKit_Toggle_Button_Test_001();
 
     /**
      * @brief Test Togglebutton's SetImage Function
      */
-    void UIKit_Toggle_Button_Test_002() const;
+    void UIKit_Toggle_Button_Test_002();
 
     /**
      * @brief Test button Function
      */
-    void UIKit_Button_Test_001() const;
+    void UIKit_Button_Test_001();
 
 private:
+    void UIKit_Button_Test_002(UIScrollView* container, UIButton* button);
     static constexpr int16_t CHANGE_SIZE = 10;
     UIScrollView* container_ = nullptr;
+
+    UICheckBox::OnChangeListener* toggleChangeListener_ = nullptr;
+    UICheckBox::OnChangeListener* toggleChangeListener1_ = nullptr;
+
+    UIView::OnClickListener* clickEnableVisiableListener_ = nullptr;
+    UIView::OnClickListener* clickDisableVisiableListener_ = nullptr;
+    UIView::OnClickListener* clickEnableTouchableListener_ = nullptr;
+    UIView::OnClickListener* clickDisableTouchableListener_ = nullptr;
+    UIView::OnClickListener* clickColorToWhiteListener_ = nullptr;
+    UIView::OnClickListener* clickColorToRedListener_ = nullptr;
+    UIView::OnClickListener* clickRevetColorListener_ = nullptr;
+    UIView::OnClickListener* clickRevetToOriginListener_ = nullptr;
+    UIView::OnClickListener* clickBigListener_ = nullptr;
+    UIView::OnClickListener* clickLeftListener_ = nullptr;
+    UIView::OnClickListener* clickRightListener_ = nullptr;
+    UIView::OnClickListener* clickUpListener_ = nullptr;
+    UIView::OnClickListener* clickDownListener_ = nullptr;
+    UIView::OnClickListener* clickSmallListener_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_BUTTON_H

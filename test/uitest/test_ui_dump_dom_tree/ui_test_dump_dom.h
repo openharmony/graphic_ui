@@ -44,6 +44,18 @@ public:
 
 private:
     UIScrollView* container_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener1_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener2_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener3_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener4_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener5_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener6_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener7_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener8_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener9_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener10_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener11_ = nullptr;
+    UIView::OnClickListener* clickDumpDomListener12_ = nullptr;
 };
 }
 #endif // ENABLE_DEBUG

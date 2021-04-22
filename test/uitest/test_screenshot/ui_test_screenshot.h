@@ -40,7 +40,8 @@ public:
 
 private:
     UIScrollView* container_ = nullptr;
-
+    UIView::OnClickListener* clickLeftListener_ = nullptr;
+    UIView::OnClickListener* clickRightListener_ = nullptr;
     UILabelButton* SetUpButton(const char* title)
     {
         UILabelButton* btn = new UILabelButton();

@@ -173,6 +173,54 @@ void UITestFocusManager::SetUp()
 
 void UITestFocusManager::TearDown()
 {
+    if (testOnFocusListener_ != nullptr) {
+        delete testOnFocusListener_;
+        testOnFocusListener_ = nullptr;
+    }
+    if (requestFocusByDirectionLeftListener_ != nullptr) {
+        delete requestFocusByDirectionLeftListener_;
+        requestFocusByDirectionLeftListener_ = nullptr;
+    }
+    if (requestFocusByDirectionRightListener_ != nullptr) {
+        delete requestFocusByDirectionRightListener_;
+        requestFocusByDirectionRightListener_ = nullptr;
+    }
+    if (requestFocusByDirectionUpListener_ != nullptr) {
+        delete requestFocusByDirectionUpListener_;
+        requestFocusByDirectionUpListener_ = nullptr;
+    }
+    if (requestFocusByDirectionLeftListener_ != nullptr) {
+        delete requestFocusByDirectionLeftListener_;
+        requestFocusByDirectionLeftListener_ = nullptr;
+    }
+    if (requestFocusByDirectionDownListener_ != nullptr) {
+        delete requestFocusByDirectionDownListener_;
+        requestFocusByDirectionDownListener_ = nullptr;
+    }
+    if (setFocusableViewListener_ != nullptr) {
+        delete setFocusableViewListener_;
+        setFocusableViewListener_ = nullptr;
+    }
+    if (setFocusableViewListener1_ != nullptr) {
+        delete setFocusableViewListener1_;
+        setFocusableViewListener1_ = nullptr;
+    }
+    if (setGroupInterceptListener_ != nullptr) {
+        delete setGroupInterceptListener_;
+        setGroupInterceptListener_ = nullptr;
+    }
+    if (setGroupInterceptListener1_ != nullptr) {
+        delete setGroupInterceptListener1_;
+        setGroupInterceptListener1_ = nullptr;
+    }
+    if (resetFocusListener_ != nullptr) {
+        delete resetFocusListener_;
+        resetFocusListener_ = nullptr;
+    }
+    if (clearFocusListener_ != nullptr) {
+        delete clearFocusListener_;
+        clearFocusListener_ = nullptr;
+    }
     FocusManager::GetInstance()->ClearFocus();
     DeleteChildren(container_);
     container_ = nullptr;
@@ -198,8 +246,10 @@ UIView* UITestFocusManager::CreateTestUILabel(UIViewGroup* parent, int16_t x, in
     label->SetStyle(STYLE_BACKGROUND_COLOR, Color::GetColorFromRGB(0, 125, 255).full);
     label->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
     label->SetAlign(TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_CENTER);
-    TestOnFocusListener* testOnFocusListener = new TestOnFocusListener();
-    label->SetOnFocusListener(testOnFocusListener);
+    if (testOnFocusListener_ == nullptr) {
+        testOnFocusListener_ = static_cast<UIView::OnFocusListener*>(new TestOnFocusListener());
+    }
+    label->SetOnFocusListener(testOnFocusListener_);
     return label;
 }
 
@@ -213,8 +263,10 @@ UIViewGroup* UITestFocusManager::CreateTestUIViewGroup(UIViewGroup* parent, bool
     viewGroup->SetStyle(STYLE_BORDER_OPA, HALF_OPA_OPAQUE);
     viewGroup->SetStyle(STYLE_BORDER_WIDTH, 1);
     viewGroup->SetStyle(STYLE_BORDER_RADIUS, VIEW_STYLE_BORDER_RADIUS);
-    TestOnFocusListener* testOnFocusListener = new TestOnFocusListener();
-    viewGroup->SetOnFocusListener(testOnFocusListener);
+    if (testOnFocusListener_ == nullptr) {
+        testOnFocusListener_ = static_cast<UIView::OnFocusListener*>(new TestOnFocusListener());
+    }
+    viewGroup->SetOnFocusListener(testOnFocusListener_);
     return viewGroup;
 }
 
@@ -262,26 +314,66 @@ void UITestFocusManager::UIKit_Focus_Manager_Test_001()
     container_->Add(btnViewGroup);
 
     UILabelButton* leftBtn = new UILabelButton();
+
+    if (requestFocusByDirectionLeftListener_ == nullptr) {
+        requestFocusByDirectionLeftListener_ = static_cast<UIView::OnClickListener*>(
+            new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_LEFT));
+    }
+    if (requestFocusByDirectionRightListener_ == nullptr) {
+        requestFocusByDirectionRightListener_ = static_cast<UIView::OnClickListener*>(
+            new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_RIGHT));
+    }
+    if (requestFocusByDirectionUpListener_ == nullptr) {
+        requestFocusByDirectionUpListener_ = static_cast<UIView::OnClickListener*>(
+            new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_UP));
+    }
+    if (requestFocusByDirectionDownListener_ == nullptr) {
+        requestFocusByDirectionDownListener_ = static_cast<UIView::OnClickListener*>(
+            new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_DOWN));
+    }
+    if (setFocusableViewListener_ == nullptr) {
+        setFocusableViewListener_ = static_cast<UIView::OnClickListener*>(
+            new SetFocusableOnClickListener(view2, true));
+    }
+    if (setFocusableViewListener1_ == nullptr) {
+        setFocusableViewListener1_ = static_cast<UIView::OnClickListener*>(
+            new SetFocusableOnClickListener(view2, false));
+    }
+    if (setGroupInterceptListener_ == nullptr) {
+        setGroupInterceptListener_ = static_cast<UIView::OnClickListener*>(
+            new SetGroupInterceptOnClickListener(viewGroup5, true));
+    }
+    if (setGroupInterceptListener1_ == nullptr) {
+        setGroupInterceptListener1_ = static_cast<UIView::OnClickListener*>(
+            new SetGroupInterceptOnClickListener(viewGroup5, false));
+    }
+    if (resetFocusListener_ == nullptr) {
+        resetFocusListener_ = static_cast<UIView::OnClickListener*>(
+            new ResetFocusOnClickListener(viewGroup1->GetChildById("1")));
+    }
+    if (clearFocusListener_ == nullptr) {
+        clearFocusListener_ = static_cast<UIView::OnClickListener*>(new ClearFocusOnClickListener());
+    }
     /* 10: x, 10: y */
-    SetUpButton("向左 ", 10, 10, btnViewGroup, new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_LEFT));
+    SetUpButton("向左 ", 10, 10, btnViewGroup, requestFocusByDirectionLeftListener_);
     /* 150: x, 10: y */
-    SetUpButton("向右 ", 150, 10, btnViewGroup, new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_RIGHT));
+    SetUpButton("向右 ", 150, 10, btnViewGroup, requestFocusByDirectionRightListener_);
     /* 10: x, 60: y */
-    SetUpButton("向上 ", 10, 60, btnViewGroup, new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_UP));
+    SetUpButton("向上 ", 10, 60, btnViewGroup, requestFocusByDirectionUpListener_);
     /* 150: x, 60: y */
-    SetUpButton("向下 ", 150, 60, btnViewGroup, new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_DOWN));
+    SetUpButton("向下 ", 150, 60, btnViewGroup, requestFocusByDirectionDownListener_);
     /* 10: x, 110: y */
-    SetUpButton("2可获焦 ", 10, 110, btnViewGroup, new SetFocusableOnClickListener(view2, true));
+    SetUpButton("2可获焦 ", 10, 110, btnViewGroup, setFocusableViewListener_);
     /* 150: x, 110: y */
-    SetUpButton("2不可获焦 ", 150, 110, btnViewGroup, new SetFocusableOnClickListener(view2, false));
+    SetUpButton("2不可获焦 ", 150, 110, btnViewGroup, setFocusableViewListener1_);
     /* 10: x, 160: y */
-    SetUpButton("设置4容器拦截 ", 10, 160, btnViewGroup, new SetGroupInterceptOnClickListener(viewGroup5, true));
+    SetUpButton("设置4容器拦截 ", 10, 160, btnViewGroup, setGroupInterceptListener_);
     /* 150: x, 160: y */
-    SetUpButton("取消4容器拦截 ", 150, 160, btnViewGroup, new SetGroupInterceptOnClickListener(viewGroup5, false));
+    SetUpButton("取消4容器拦截 ", 150, 160, btnViewGroup, setGroupInterceptListener1_);
     /* 10: x, 210: y */
-    SetUpButton("重置焦点 ", 10, 210, btnViewGroup, new ResetFocusOnClickListener(viewGroup1->GetChildById("1")));
+    SetUpButton("重置焦点 ", 10, 210, btnViewGroup, resetFocusListener_);
     /* 150: x, 210: y */
-    SetUpButton("清除焦点 ", 150, 210, btnViewGroup, new ClearFocusOnClickListener());
+    SetUpButton("清除焦点 ", 150, 210, btnViewGroup, clearFocusListener_);
 
     FocusManager::GetInstance()->RequestFocus(viewGroup1->GetChildById("1"));
 }
