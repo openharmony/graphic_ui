@@ -22,6 +22,7 @@
 #include "draw/draw_utils.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
+#include "securec.h"
 #include "themes/theme_manager.h"
 
 namespace OHOS {
@@ -829,8 +830,8 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();
     mask.Intersect(mask, screenRect);
-    uint16_t bufferWidth = mask.GetWidth();
-    uint16_t bufferHeight = mask.GetHeight();
+    uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
+    uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
     bitmap.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
     bitmap.header.width = bufferWidth;
@@ -842,6 +843,10 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
         nextSibling_ = tempSibling;
         parent_ = tempParent;
         rect_.SetPosition(tempX, tempY);
+        return false;
+    }
+    if (memset_s(viewBitmapBuffer, bitmap.dataSize, 0, bitmap.dataSize) != EOK) {
+        ImageCacheFree(bitmap);
         return false;
     }
     ScreenDeviceProxy::GetInstance()->EnableBitmapBuffer(viewBitmapBuffer);
