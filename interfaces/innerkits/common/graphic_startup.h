@@ -25,7 +25,10 @@ class GraphicStartUp : public HeapBase {
 public:
     static void Init();
 
-    static void InitFontEngine(uintptr_t psramAddr, uint32_t psramLen, const char* dPath, const char* ttfName);
+    static void InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath, const char* ttfName);
+
+    static void InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* path,
+                                    const char* fileName);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_GRAPHIC_STARTUP_H

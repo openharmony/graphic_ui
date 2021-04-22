@@ -17,6 +17,7 @@
 #include "common/typed_text.h"
 #include "draw/draw_label.h"
 #include "font/ui_font.h"
+#include "font/ui_font_adaptor.h"
 #include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
@@ -308,13 +309,14 @@ uint32_t Text::GetTextStrLen()
 
 uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace)
 {
-    uint16_t nextLineBytes = TypedText::GetNextLine(&text_[begin], letterSpace, width);
+    int16_t lineWidth = width;
+    uint16_t nextLineBytes = UIFontAdaptor::GetNextLineAndWidth(&text_[begin], letterSpace, lineWidth, false,
+                                                                textLen - begin);
     if (nextLineBytes + begin > textLen) {
         nextLineBytes = textLen - begin;
     }
     textLine_[lineNum].lineBytes = nextLineBytes;
-    textLine_[lineNum].linePixelWidth =
-        static_cast<uint16_t>(TypedText::GetTextWidth(&text_[begin], nextLineBytes, letterSpace));
+    textLine_[lineNum].linePixelWidth = lineWidth;
     return nextLineBytes;
 }
 
@@ -345,36 +347,25 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     }
     uint32_t lineStart = 0;
     uint32_t nextLineStart = 0;
-
-    uint16_t lineHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
     int16_t y = 0;
     uint32_t textLen = static_cast<uint32_t>(strlen(text_));
+    int16_t width = 0;
     while ((lineStart < textLen) && (text_[lineStart] != '\0')) {
-        nextLineStart += TypedText::GetNextLine(&text_[lineStart], style.letterSpace_, textRect.GetWidth());
-        if (pos.y <= y + lineHeight) {
+        width = textRect.GetWidth();
+        nextLineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width);
+        if (nextLineStart == 0) {
             break;
         }
-        y += lineHeight + style.lineSpace_;
+        if (pos.y <= y + letterHeight) {
+            break;
+        }
+        y += letterHeight + style.lineSpace_;
         lineStart = nextLineStart;
     }
     /* Calculate the x coordinate */
-    int16_t x = 0;
-    uint32_t i = lineStart;
-    uint32_t pre = i;
-    while (i < nextLineStart - 1) {
-        uint32_t letter = TypedText::GetUTF8Next(text_, i, i);
-        x += UIFont::GetInstance()->GetWidth(letter, 0);
-        if (pos.x < x) {
-            i = pre;
-            break;
-        }
-        x += style.letterSpace_;
-        pre = i;
-    }
-    if (i >= (GetTextStrLen() - TEXT_ELLIPSIS_DOT_NUM)) {
-        return TEXT_ELLIPSIS_END_INV;
-    } else {
-        return static_cast<uint16_t>(i);
-    }
+    width = pos.x;
+    lineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width, true);
+    return (lineStart < textLen) ? lineStart : TEXT_ELLIPSIS_END_INV;
 }
 } // namespace OHOS

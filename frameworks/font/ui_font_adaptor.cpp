@@ -23,10 +23,11 @@
 #include "font/ui_text_shaping.h"
 #endif
 namespace OHOS {
-uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt, int16_t letterSpace, int16_t& maxWidth, bool allBreak)
+uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt, int16_t letterSpace, int16_t& maxWidth, bool allBreak,
+                                            uint16_t len)
 {
 #if ENABLE_ICU
-    return UILineBreakEngine::GetInstance().GetNextLineAndWidth(txt, letterSpace, allBreak, maxWidth);
+    return UILineBreakEngine::GetInstance().GetNextLineAndWidth(txt, letterSpace, allBreak, maxWidth, len);
 #else
     uint32_t index = TypedText::GetNextLine(txt, letterSpace, maxWidth);
     maxWidth = TypedText::GetTextWidth(txt, index, letterSpace);
