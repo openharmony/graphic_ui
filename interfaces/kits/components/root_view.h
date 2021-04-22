@@ -273,7 +273,7 @@ private:
 
     RootView();
 
-    ~RootView() {}
+    ~RootView();
 
     inline Rect GetScreenRect();
     void AddInvalidateRectWithLock(Rect& rect, UIView *view);
@@ -282,6 +282,13 @@ private:
     void MeasureView(UIView* view);
     void Render();
     UIView* GetTopUIView(const Rect& rect);
+    void InitDrawContext();
+    void DestroyDrawContext();
+    void UpdateBufferInfo(BufferInfo* bufferInfo);
+    void InitMapBufferInfo(BufferInfo* bufferInfo);
+    void DestroyMapBufferInfo();
+    void BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea);
+    void ClearMapBuffer();
 #if LOCAL_RENDER
     void RemoveViewFromInvalidMap(UIView *view);
     void DrawInvalidMap(const Rect &buffRect);
@@ -302,6 +309,7 @@ private:
 #if ENABLE_WINDOW
     WindowImpl* boundWindow_ {nullptr};
 #endif
+    DrawContext dc_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_ROOT_VIEW_H

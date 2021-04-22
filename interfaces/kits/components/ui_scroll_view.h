@@ -146,7 +146,7 @@ public:
     bool OnRotateEvent(const RotateEvent& event) override;
 #endif
 
-    void OnPostDraw(const Rect& invalidatedArea) override;
+    void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     bool OnDragEvent(const DragEvent& event) override;
 

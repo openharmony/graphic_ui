@@ -15,21 +15,21 @@
 
 #include "common/screen.h"
 #include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/mem_api.h"
 
 namespace OHOS {
 uint16_t Screen::GetWidth()
 {
-    return ScreenDeviceProxy::GetInstance()->GetScreenWidth();
+    return BaseGfxEngine::GetInstance()->GetScreenWidth();
 }
 
 uint16_t Screen::GetHeight()
 {
-    return ScreenDeviceProxy::GetInstance()->GetScreenHeight();
+    return BaseGfxEngine::GetInstance()->GetScreenHeight();
 }
-
+#if 0
 bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
 {
     uint16_t screenWidth = ScreenDeviceProxy::GetInstance()->GetScreenWidth();
@@ -48,4 +48,5 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
     info.data = screenBitmapBuffer;
     return true;
 }
+#endif
 } // namespace OHOS

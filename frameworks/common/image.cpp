@@ -224,12 +224,12 @@ bool Image::SetSrc(const ImageInfo* src)
     return true;
 }
 
-void Image::DrawImage(const Rect& coords, const Rect& mask, const Style& style, uint8_t opaScale) const
+void Image::DrawImage(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask, const Style& style, uint8_t opaScale) const
 {
     if (srcType_ == IMG_SRC_VARIABLE) {
-        DrawImage::DrawCommon(coords, mask, imageInfo_, style, opaScale);
+        DrawImage::DrawCommon(gfxDstBuffer, coords, mask, imageInfo_, style, opaScale);
     } else if (srcType_ == IMG_SRC_FILE) {
-        DrawImage::DrawCommon(coords, mask, path_, style, opaScale);
+        DrawImage::DrawCommon(gfxDstBuffer, coords, mask, path_, style, opaScale);
     } else {
         GRAPHIC_LOGE("Image::DrawImage:: failed with error srctype!\n");
     }

@@ -80,7 +80,7 @@ public:
         return UI_TOGGLE_BUTTON;
     }
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Sets the state for this toggle button.

@@ -71,6 +71,7 @@ SOURCES += \
     ../../../../frameworks/components/ui_view.cpp \
     ../../../../frameworks/components/ui_view_group.cpp \
     ../../../../frameworks/dock/focus_manager.cpp \
+    ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
     ../../../../frameworks/core/render_manager.cpp \
     ../../../../frameworks/core/task_manager.cpp \
     ../../../../frameworks/default_resource/check_box_res.cpp \
@@ -154,6 +155,7 @@ HEADERS += \
     ../../../../interfaces/innerkits/common/task_manager.h \
     ../../../../interfaces/innerkits/dock/focus_manager.h \
     ../../../../interfaces/innerkits/dock/rotate_input_device.h \
+    ../../../../interfaces/innerkits/engines/gfx/gfx_engine_manager.h \
     ../../../../interfaces/innerkits/dock/vibrator_manager.h \
     ../../../../interfaces/kits/animator/animator.h \
     ../../../../interfaces/kits/animator/easing_equation.h \

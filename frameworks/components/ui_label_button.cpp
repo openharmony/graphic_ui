@@ -24,9 +24,9 @@ UILabelButton::UILabelButton() : labelButtonText_(nullptr), offset_({ 0, 0 })
     labelStyle_ = StyleDefault::GetDefaultStyle();
 }
 
-void UILabelButton::OnDraw(const Rect& invalidatedArea)
+void UILabelButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    UIButton::OnDraw(invalidatedArea);
+    UIButton::OnDraw(gfxDstBuffer, invalidatedArea);
 
     Rect textRect = GetContentRect();
     textRect.SetLeft(textRect.GetLeft() + offset_.x);
@@ -35,7 +35,7 @@ void UILabelButton::OnDraw(const Rect& invalidatedArea)
     labelButtonText_->ReMeasureTextSize(textRect, labelStyle_);
     OpacityType opa = GetMixOpaScale();
     uint16_t ellipsisIndex = labelButtonText_->GetEllipsisIndex(textRect, labelStyle_);
-    labelButtonText_->OnDraw(invalidatedArea, GetOrigRect(), textRect, 0, labelStyle_, ellipsisIndex, opa);
+    labelButtonText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(), textRect, 0, labelStyle_, ellipsisIndex, opa);
 }
 
 UILabelButton::~UILabelButton()

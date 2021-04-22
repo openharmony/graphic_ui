@@ -16,12 +16,11 @@
 #include "components/ui_analog_clock.h"
 #include "components/ui_image_view.h"
 #include "draw/draw_image.h"
-#include "draw/draw_line.h"
-#include "draw/draw_rect.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/style.h"
 #include "imgdecode/cache_manager.h"
 #include "themes/theme.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIAnalogClock::UIAnalogClock()
@@ -206,18 +205,18 @@ void UIAnalogClock::UpdateClock(bool clockInit)
     }
 }
 
-void UIAnalogClock::OnDraw(const Rect& invalidatedArea)
+void UIAnalogClock::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    DrawRect::Draw(GetRect(), invalidatedArea, *style_, opaScale_);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opaScale_);
 }
 
-void UIAnalogClock::OnPostDraw(const Rect& invalidatedArea)
+void UIAnalogClock::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     Rect current = GetOrigRect();
-    DrawHand(current, invalidatedArea, hourHand_);
-    DrawHand(current, invalidatedArea, minuteHand_);
+    DrawHand(gfxDstBuffer, current, invalidatedArea, hourHand_);
+    DrawHand(gfxDstBuffer, current, invalidatedArea, minuteHand_);
     if (GetWorkMode() == WorkMode::NORMAL) {
-        DrawHand(current, invalidatedArea, secondHand_);
+        DrawHand(gfxDstBuffer, current, invalidatedArea, secondHand_);
     }
 }
 
@@ -265,27 +264,27 @@ void UIAnalogClock::CalculateRedrawArea(const Rect& current, Hand& hand, bool cl
     }
 }
 
-void UIAnalogClock::DrawHand(const Rect& current, const Rect& invalidatedArea, Hand& hand)
+void UIAnalogClock::DrawHand(BufferInfo& gfxDstBuffer, const Rect& current, const Rect& invalidatedArea, Hand& hand)
 {
     if (hand.drawtype_ == DrawType::DRAW_IMAGE) {
-        DrawHandImage(current, invalidatedArea, hand);
+        DrawHandImage(gfxDstBuffer, current, invalidatedArea, hand);
     } else {
-        DrawHandLine(invalidatedArea, hand);
+        DrawHandLine(gfxDstBuffer, invalidatedArea, hand);
     }
 }
 
-void UIAnalogClock::DrawHandImage(const Rect& current, const Rect& invalidatedArea, Hand& hand)
+void UIAnalogClock::DrawHandImage(BufferInfo& gfxDstBuffer, const Rect& current, const Rect& invalidatedArea, Hand& hand)
 {
     uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(hand.imageInfo_.header.colorMode);
     TransformDataInfo imageTranDataInfo = {
         hand.imageInfo_.header, hand.imageInfo_.data, pxSize,
         BlurLevel::LEVEL0, TransformAlgorithm::BILINEAR
     };
-    DrawUtils::GetInstance()->DrawTransform(invalidatedArea, { 0, 0 },
+    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, { 0, 0 },
         Color::Black(), opaScale_, hand.trans_, imageTranDataInfo);
 }
 
-void UIAnalogClock::DrawHandLine(const Rect& invalidatedArea, Hand& hand)
+void UIAnalogClock::DrawHandLine(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Hand& hand)
 {
     float sinma = Sin(hand.nextAngle_);
     float cosma = Sin(hand.nextAngle_ + THREE_QUARTER_IN_DEGREE);
@@ -316,7 +315,7 @@ void UIAnalogClock::DrawHandLine(const Rect& invalidatedArea, Hand& hand)
     end.x = xlength + curCenter.x;
     end.y = ylength + curCenter.y;
 
-    DrawLine::Draw(start, end, invalidatedArea, hand.width_, hand.color_, hand.opacity_);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, hand.width_, hand.color_, hand.opacity_);
 }
 
 void UIAnalogClock::SetWorkMode(WorkMode newMode)

@@ -17,11 +17,13 @@
 
 #include "common/screen.h"
 #include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
+//#include "dock/screen_device_proxy.h"
 #include "gfx_utils/graphic_log.h"
+#include "draw/draw_utils.h"
 #if ENABLE_WINDOW
 #include "window/window_impl.h"
 #endif
+#include "securec.h"
 namespace OHOS {
 namespace {
 #if LOCAL_RENDER
@@ -39,8 +41,16 @@ RootView::RootView()
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_init(&lock_, nullptr);
 #endif
+    InitDrawContext();
 }
 
+RootView::~RootView()
+{
+    DestroyDrawContext();
+#if defined __linux__ || defined __LITEOS__ || defined __APPLE__
+    pthread_mutex_destroy(&lock_);
+#endif
+}
 #if ENABLE_WINDOW
 Window* RootView::GetBoundWindow() const
 {
@@ -459,16 +469,13 @@ void RootView::Render()
     pthread_mutex_lock(&lock_);
 #endif
 
-    Rect mask;
 #if LOCAL_RENDER
     if (!invalidateMap_.empty()) {
-        mask = GetRect();
-        RenderManager::RenderRect(mask, this);
+        RenderManager::RenderRect(GetRect(), this);
         invalidateMap_.clear();
 #else
     if (renderFlag_) {
-        mask = invalidRect_;
-        RenderManager::RenderRect(mask, this);
+        RenderManager::RenderRect(invalidRect_, this);
         invalidRect_ = {0, 0, 0, 0};
         renderFlag_ = false;
 #endif
@@ -479,12 +486,43 @@ void RootView::Render()
             boundWindow_->Update();
         }
 #endif
-        ScreenDeviceProxy::GetInstance()->OnRenderFinish(mask);
+        BaseGfxEngine::GetInstance()->Flush();
     }
 
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_unlock(&lock_);
 #endif
+}
+
+void RootView::BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea)
+{
+    Rect invalidRect = curViewRect;
+    transMap.SetTransMapRect(curViewRect);
+    invalidRect.Join(invalidRect, transMap.GetBoxRect());
+
+    if (invalidRect.Intersect(invalidRect, invalidatedArea)) {
+        uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode);
+        ImageInfo imageInfo;
+        imageInfo.header.colorMode = dc_.mapBufferInfo->mode;
+        imageInfo.dataSize = dc_.mapBufferInfo->width * dc_.mapBufferInfo->height * (pxSize >> 3);
+        imageInfo.header.width = dc_.mapBufferInfo->width;
+        imageInfo.header.height = dc_.mapBufferInfo->height;
+        imageInfo.header.reserved = 0;
+        imageInfo.data = reinterpret_cast<uint8_t*>(dc_.mapBufferInfo->virAddr);
+        TransformDataInfo imageTranDataInfo = {imageInfo.header, imageInfo.data, pxSize, LEVEL0,
+                                               BILINEAR};
+        dc_.gfxEngine->DrawTransform(*dc_.bufferInfo, invalidRect, {0, 0}, Color::Black(),
+                                     OPA_OPAQUE, transMap, imageTranDataInfo);
+    }
+}
+
+void RootView::ClearMapBuffer()
+{
+    uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode);
+    uint32_t dataSize = dc_.mapBufferInfo->width * dc_.mapBufferInfo->height * (pxSize >> 3);
+    if (memset_s(dc_.mapBufferInfo->virAddr, dataSize, 0, dataSize) != EOK) {
+        GRAPHIC_LOGE("animator buffer memset failed.");
+    }
 }
 
 void RootView::DrawTop(UIView* view, const Rect& rect)
@@ -505,9 +543,16 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
     Rect origRect;
     Rect relativeRect;
     bool enableAnimator = false;
+    TransformMap curTransMap;
+#if ENABLE_WINDOW
+    WindowImpl* boundWin = static_cast<WindowImpl*>(GetBoundWindow());
+    BufferInfo* gfxDstBuffer = boundWin->GetBufferInfo();
+    UpdateBufferInfo(gfxDstBuffer);
+#endif
     while (par != nullptr) {
         if (curView != nullptr) {
             if (curView->IsVisible()) {
+                //curViewRect = curView->GetMaskedRect();
                 if (curViewRect.Intersect(curView->GetMaskedRect(), mask) || enableAnimator) {
                     if ((curView->GetViewType() != UI_IMAGE_VIEW) && (curView->GetViewType() != UI_TEXTURE_MAPPER) &&
                         !curView->IsTransInvalid() && !enableAnimator) {
@@ -516,13 +561,23 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         curView->GetTransformMap().SetInvalid(true);
                         curView->SetPosition(relativeRect.GetX() - origRect.GetX(),
                                              relativeRect.GetY() - origRect.GetY());
+                        //ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(true);
+                        // ScreenDeviceProxy::GetInstance()->SetAnimatorRect(OrigRect);
+                        // ScreenDeviceProxy::GetInstance()->SetAnimatorTransMap(curView->GetTransformMap());
                         curViewRect = curView->GetMaskedRect();
-                        ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(true);
-                        ScreenDeviceProxy::GetInstance()->SetAnimatorRect(origRect);
-                        ScreenDeviceProxy::GetInstance()->SetAnimatorTransMap(curView->GetTransformMap());
+                        ClearMapBuffer();
+                        curTransMap = curView->GetTransformMap();
                         enableAnimator = true;
                     }
-                    curView->OnDraw(curViewRect);
+
+                    if (enableAnimator) {
+                        // Rect invalidatedArea;
+                        // invalidatedArea.SetWidth(dc_.bufferInfo->width);
+                        // invalidatedArea.SetHeight(dc_.bufferInfo->height);
+                        curView->OnDraw(*dc_.mapBufferInfo, curViewRect);
+                    } else {
+                        curView->OnDraw(*dc_.bufferInfo, curViewRect);
+                    }
 
                     if ((curView->IsViewGroup()) && (stackCount < COMPONENT_NESTING_DEPTH)) {
                         if (enableAnimator && (transViewGroup == nullptr)) {
@@ -537,10 +592,11 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         mask.Intersect(mask, curViewRect);
                         continue;
                     }
-                    curView->OnPostDraw(curViewRect);
+                    curView->OnPostDraw(*dc_.mapBufferInfo, curViewRect);
                     if (enableAnimator && (transViewGroup == nullptr)) {
-                        ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
-                        ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
+                        //ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
+                        //ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
+                        BlitMapBuffer(origRect, curTransMap, mask);
                         curView->GetTransformMap().SetInvalid(false);
                         enableAnimator = false;
                         curView->SetPosition(relativeRect.GetX(), relativeRect.GetY());
@@ -554,11 +610,12 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
             curViewRect = par->GetMaskedRect();
             mask = g_maskStack[stackCount];
             if (enableAnimator || curViewRect.Intersect(curViewRect, mask)) {
-                par->OnPostDraw(curViewRect);
+                par->OnPostDraw(*dc_.bufferInfo, curViewRect);
             }
             if (enableAnimator && transViewGroup == g_viewStack[stackCount]) {
-                ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
-                ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
+                //ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
+                //ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
+                BlitMapBuffer(origRect, curTransMap, mask);
                 transViewGroup->GetTransformMap().SetInvalid(false);
                 enableAnimator = false;
                 transViewGroup->SetPosition(relativeRect.GetX(), relativeRect.GetY());
@@ -631,5 +688,73 @@ bool RootView::FindSubView(const UIView& parentView, const UIView* subView)
         }
     }
     return false;
+}
+
+void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
+{
+    uint32_t bufferSize = bufferInfo->width * bufferInfo->height *
+        (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3);
+
+    dc_.mapBufferInfo = new BufferInfo();
+    (void)memcpy_s(dc_.mapBufferInfo, sizeof(BufferInfo), bufferInfo, sizeof(BufferInfo));
+    dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr =
+        dc_.gfxEngine->AllocBuffer(bufferSize, BUFFER_MAP_SURFACE);
+
+    dc_.snapShotBufferInfo = new BufferInfo();
+    (void)memcpy_s(dc_.snapShotBufferInfo, sizeof(BufferInfo), bufferInfo, sizeof(BufferInfo));
+    dc_.snapShotBufferInfo->virAddr = dc_.snapShotBufferInfo->phyAddr =
+        dc_.gfxEngine->AllocBuffer(bufferSize, BUFFER_SNAPSHOT_SURFACE);
+}
+
+void RootView::DestroyMapBufferInfo()
+{
+    if (dc_.gfxEngine == nullptr) {
+        return;
+    }
+
+    if (dc_.mapBufferInfo != nullptr) {
+        dc_.gfxEngine->FreeBuffer(static_cast<uint8_t *>(dc_.mapBufferInfo->virAddr));
+        dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr = nullptr;
+        delete dc_.mapBufferInfo;
+        dc_.mapBufferInfo = nullptr;
+    }
+
+    if (dc_.snapShotBufferInfo != nullptr) {
+        dc_.gfxEngine->FreeBuffer(static_cast<uint8_t *>(dc_.snapShotBufferInfo->virAddr));
+        dc_.snapShotBufferInfo->virAddr = dc_.snapShotBufferInfo->phyAddr = nullptr;
+        delete dc_.snapShotBufferInfo;
+        dc_.snapShotBufferInfo = nullptr;
+    }
+}
+
+void RootView::InitDrawContext()
+{
+    dc_.gfxEngine = BaseGfxEngine::GetInstance();
+    dc_.bufferInfo = dc_.gfxEngine->GetBufferInfo();
+
+    if (dc_.bufferInfo != nullptr) {
+        InitMapBufferInfo(dc_.bufferInfo);
+    }
+}
+
+void RootView::DestroyDrawContext()
+{
+    DestroyMapBufferInfo();
+}
+
+void RootView::UpdateBufferInfo(BufferInfo* bufferInfo)
+{
+    if (dc_.bufferInfo == nullptr) {
+        dc_.bufferInfo = bufferInfo;
+        InitMapBufferInfo(bufferInfo);
+    } else {
+        if (dc_.bufferInfo->width != bufferInfo->width ||
+            dc_.bufferInfo->height != bufferInfo->height ||
+            dc_.bufferInfo->mode != bufferInfo->mode) {
+            DestroyMapBufferInfo();
+            InitMapBufferInfo(bufferInfo);
+        }
+        dc_.bufferInfo = bufferInfo;
+    }
 }
 } // namespace OHOS

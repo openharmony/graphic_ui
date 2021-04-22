@@ -285,7 +285,7 @@ public:
         return false;
     }
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Represents the listener for a slider change.
@@ -344,7 +344,7 @@ protected:
 
 private:
 #if ENABLE_SLIDER_KNOB
-    void DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect);
+    void DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, const Rect& foregroundRect);
 #else
     int16_t knobWidth_;
     bool knobWidthSetFlag_;
@@ -352,7 +352,7 @@ private:
     Style* knobStyle_;
     Image* knobImage_;
 
-    void DrawForeground(const Rect& invalidatedArea, Rect& coords);
+    void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Rect& coords);
 #endif
     int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
     int32_t UpdateCurrentValue(const Point& knobPosition);

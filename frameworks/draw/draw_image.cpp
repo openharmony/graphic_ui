@@ -20,7 +20,7 @@
 #include "imgdecode/cache_manager.h"
 
 namespace OHOS {
-void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
+void DrawImage::DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask,
     const ImageInfo* img, const Style& style, uint8_t opaScale)
 {
     if (img == nullptr) {
@@ -52,11 +52,11 @@ void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
             break;
     }
     lutColorMode = DrawUtils::GetLutColorModeBySize(size);
-    DrawUtils::GetInstance()->DrawImage(coords, mask, img->data, opa, pxBitSize,
+    DrawUtils::GetInstance()->DrawImage(gfxDstBuffer, coords, mask, img->data, opa, pxBitSize,
                                         static_cast<ColorMode>(img->header.colorMode), lutColorMode);
 }
 
-void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
+void DrawImage::DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask,
     const char* path, const Style& style, uint8_t opaScale)
 {
     if (path == nullptr) {
@@ -71,7 +71,7 @@ void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
 
     uint8_t pxBitSize = DrawUtils::GetPxSizeByColorMode(entry.GetImageInfo().header.colorMode);
     if (entry.InCache()) {
-        DrawUtils::GetInstance()->DrawImage(coords, mask, entry.GetImgData(), opa, pxBitSize,
+        DrawUtils::GetInstance()->DrawImage(gfxDstBuffer, coords, mask, entry.GetImgData(), opa, pxBitSize,
                                             static_cast<ColorMode>(entry.GetImageInfo().header.colorMode));
     } else {
         Rect valid = coords;
@@ -100,7 +100,7 @@ void DrawImage::DrawCommon(const Rect& coords, const Rect& mask,
                 UIFree(buf);
                 return;
             }
-            DrawUtils::GetInstance()->DrawImage(line, mask, buf, opa, pxBitSize,
+            DrawUtils::GetInstance()->DrawImage(gfxDstBuffer, line, mask, buf, opa, pxBitSize,
                                                 static_cast<ColorMode>(entry.GetImageInfo().header.colorMode));
             line.SetTop(line.GetTop() + 1);
             line.SetBottom(line.GetBottom() + 1);

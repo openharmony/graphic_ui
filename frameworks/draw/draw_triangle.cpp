@@ -17,7 +17,7 @@
 #include "draw/draw_utils.h"
 
 namespace OHOS {
-void DrawTriangle::Draw(const Point* points, uint8_t count, const Rect& mask, const ColorType& color, OpacityType opa)
+void DrawTriangle::Draw(BufferInfo& gfxDstBuffer, const Point* points, uint8_t count, const Rect& mask, const ColorType& color, OpacityType opa)
 {
     if ((points == nullptr) || (count != VERTEX_NUM)) {
         return;
@@ -55,7 +55,7 @@ void DrawTriangle::Draw(const Point* points, uint8_t count, const Rect& mask, co
         area.SetRight(MATH_MAX(edge1.curPoint.x, edge2.curPoint.x));
         area.SetTop(MATH_MIN(edge1.curPoint.y, edge2.curPoint.y));
         area.SetBottom(MATH_MAX(edge1.curPoint.y, edge2.curPoint.y));
-        DrawUtils::GetInstance()->DrawColorArea(area, mask, color, opa);
+        DrawUtils::GetInstance()->DrawColorArea(gfxDstBuffer, area, mask, color, opa);
 
         while (edge1.curPoint.y == lastY) {
             // use Bresenham algorithm to get next point on edge1

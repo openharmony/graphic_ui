@@ -219,15 +219,15 @@ public:
         return progressHeight_;
     }
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
 protected:
     void GetBackgroundParam(Point& startPoint, int16_t& width, int16_t& height, uint16_t& radius, const Style& style);
-    void DrawBackground(const Rect& invalidatedArea);
-    void DrawForeground(const Rect& invalidatedArea, Rect& coords);
-    void DrawRoundCap(const Image* image, const Point& imgPos, const Rect& rect, const Rect& invalidatedArea,
+    void DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
+    void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Rect& coords);
+    void DrawRoundCap(BufferInfo& gfxDstBuffer, const Image* image, const Point& imgPos, const Rect& rect, const Rect& invalidatedArea,
         uint16_t radius, const Style& style);
-    void DrawValidRect(const Image* image, const Rect& rect, const Rect& invalidatedArea, const Style& style,
+    void DrawValidRect(BufferInfo& gfxDstBuffer, const Image* image, const Rect& rect, const Rect& invalidatedArea, const Style& style,
         uint16_t radius);
 
     uint16_t progressWidth_;

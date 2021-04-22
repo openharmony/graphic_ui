@@ -19,9 +19,10 @@
 #include <QtCore/qobject.h>
 #include "dock/screen_device.h"
 #include "font/ui_font_header.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
-class Monitor : public QObject, public ScreenDevice {
+class Monitor : public QObject, public BaseGfxEngine {
     Q_OBJECT
 public:
     Monitor() : defaultColor_ (0x44) {}
@@ -29,8 +30,13 @@ public:
     static Monitor* GetInstance()
     {
         static Monitor instance;
+        if (!bRegister_) {
+            BaseGfxEngine::InitGfxEngine(&instance);
+            bRegister_ = true;
+        }
         return &instance;
     }
+
     void InitHal();
     void InitFontEngine();
     void InitImageDecodeAbility();
@@ -38,7 +44,8 @@ public:
     void GUILoopStart() const;
     void GUIRefresh();
     void GUILoopQuit() const;
-    void RenderFinish(const Rect& mask) override;
+    void Flush() override;
+    BufferInfo* GetBufferInfo() override;
 signals:
     void UpdatePaintSignal(uint32_t* tftFb, uint32_t imgWidth, uint32_t imgHeight);
 
@@ -54,6 +61,7 @@ private:
     uint32_t tftFb_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t animaterBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t defaultColor_;
+    static bool bRegister_;
 };
 } // namespace OHOS
 

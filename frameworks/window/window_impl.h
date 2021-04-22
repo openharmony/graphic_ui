@@ -20,6 +20,7 @@
 #include "components/root_view.h"
 #include "window/window.h"
 #include "dock/screen_device.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 class WindowImpl : public Window {
@@ -49,6 +50,7 @@ public:
     void AddToDisplay();
     void RemoveFromDisplay();
 
+    BufferInfo* GetBufferInfo();
 private:
     void UpdateHalDisplayBuffer();
 

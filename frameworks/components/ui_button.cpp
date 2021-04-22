@@ -18,11 +18,11 @@
 #include "animator/interpolation.h"
 #include "common/image.h"
 #include "draw/draw_image.h"
-#include "draw/draw_rect.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/style.h"
 #include "imgdecode/cache_manager.h"
 #include "themes/theme_manager.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIButton::UIButton()
@@ -66,7 +66,7 @@ UIButton::~UIButton()
     }
 }
 
-void UIButton::DrawImg(const Rect& invalidatedArea, OpacityType opaScale)
+void UIButton::DrawImg(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, OpacityType opaScale)
 {
     const Image* image = GetCurImageSrc();
     if (image == nullptr) {
@@ -84,15 +84,15 @@ void UIButton::DrawImg(const Rect& invalidatedArea, OpacityType opaScale)
 
     Rect trunc(invalidatedArea);
     if (trunc.Intersect(trunc, viewRect)) {
-        image->DrawImage(coords, trunc, *buttonStyles_[state_], opaScale);
+        image->DrawImage(gfxDstBuffer, coords, trunc, *buttonStyles_[state_], opaScale);
     }
 }
 
-void UIButton::OnDraw(const Rect& invalidatedArea)
+void UIButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     OpacityType opa = GetMixOpaScale();
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *buttonStyles_[state_], opa);
-    DrawImg(invalidatedArea, opa);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *buttonStyles_[state_], opa);
+    DrawImg(gfxDstBuffer, invalidatedArea, opa);
 }
 
 void UIButton::SetupThemeStyles()
@@ -293,10 +293,10 @@ bool UIButton::OnPreDraw(Rect& invalidatedArea) const
 }
 
 #if DEFAULT_ANIMATION
-void UIButton::OnPostDraw(const Rect& invalidatedArea)
+void UIButton::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     if (state_ == ButtonState::PRESSED) {
-        animator_.DrawMask(invalidatedArea);
+        animator_.DrawMask(gfxDstBuffer, invalidatedArea);
     }
 }
 
@@ -325,14 +325,14 @@ void UIButton::ButtonAnimator::Start()
     }
 }
 
-void UIButton::ButtonAnimator::DrawMask(const Rect& invalidatedArea)
+void UIButton::ButtonAnimator::DrawMask(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     Style maskStyle;
     maskStyle.SetStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
     maskStyle.SetStyle(STYLE_BACKGROUND_OPA, MASK_OPA);
     maskStyle.SetStyle(STYLE_BORDER_RADIUS, button_.GetStyle(STYLE_BORDER_RADIUS));
     OpacityType opa = button_.GetMixOpaScale();
-    DrawRect::Draw(button_.GetRect(), invalidatedArea, maskStyle, opa);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, button_.GetRect(), invalidatedArea, maskStyle, opa);
 }
 
 static inline void ScaleButton(UIButton& button, float scale)

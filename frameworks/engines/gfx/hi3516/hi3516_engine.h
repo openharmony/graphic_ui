@@ -13,21 +13,19 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_DRAW_CURVE_H
-#define GRAPHIC_LITE_DRAW_CURVE_H
+#ifndef GRAPHIC_LITE_HI3516_ENGINE_H
+#define GRAPHIC_LITE_HI3516_ENGINE_H
 
-#include "gfx_utils/color.h"
-#include "gfx_utils/geometry2d.h"
 #include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
-class DrawCurve : public HeapBase {
+class Hi3516GfxEngine : public BaseGfxEngine {
 public:
-    static void DrawCubicBezier(BufferInfo& gfxDstBuffer, const Point& start, const Point& control1,
-                                const Point& control2, const Point& end, const Rect& mask,
-                                int16_t width, const ColorType& color, OpacityType opacity);
-private:
-    static constexpr uint16_t INTERPOLATION_RANGE = 1024;
+    void Fill(BufferInfo& dst,
+              const Rect& fillArea,
+              const ColorType color,
+              const OpacityType opacity) override;
 };
-} // namespace OHOS
-#endif // GRAPHIC_LITE_DRAW_CURVE_H
+}
+
+#endif

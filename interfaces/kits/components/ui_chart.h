@@ -506,7 +506,7 @@ public:
         enableBottomPoint_ = enable;
     }
 
-    void DrawPoint(const Rect& mask);
+    void DrawPoint(BufferInfo& gfxDstBuffer, const Rect& mask);
 
     void Refresh();
 
@@ -542,7 +542,7 @@ private:
     void RefreshInvalidateRect(uint16_t startIndex, uint16_t endIndex);
     void RefreshInvalidateRect(uint16_t pointIndex, const PointStyle& style);
     bool UpdatePeakAndValley(uint16_t startPos, uint16_t endPos);
-    void DoDrawPoint(const Point& point, const PointStyle& style, const Rect& mask);
+    void DoDrawPoint(BufferInfo& gfxDstBuffer, const Point& point, const PointStyle& style, const Rect& mask);
 };
 
 /**
@@ -610,7 +610,7 @@ public:
         return false;
     }
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Adds a data set.
@@ -705,7 +705,7 @@ protected:
     bool enableReverse_;
     bool needRefresh_;
     uint8_t* mixData_;
-    virtual void DrawDataSerials(const Rect& invalidatedArea) = 0;
+    virtual void DrawDataSerials(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) = 0;
 };
 
 /**
@@ -744,7 +744,7 @@ public:
     void RefreshChart() override;
 
 protected:
-    void DrawDataSerials(const Rect& invalidatedArea) override;
+    void DrawDataSerials(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
 private:
     static constexpr float DEFAULT_MARK_PERCENTAGE = 0.1f;
@@ -820,7 +820,7 @@ public:
     }
 
 protected:
-    void DrawDataSerials(const Rect& invalidatedArea) override;
+    void DrawDataSerials(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
 private:
     struct ChartLine {
@@ -842,17 +842,20 @@ private:
     uint8_t maxOpa_;
     uint16_t gradientBottom_;
 
-    void GradientColor(const Rect& invalidatedArea, UIChartDataSerial* data);
-    void DrawGradientColor(const Rect& invalidatedArea,
+    void GradientColor(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, UIChartDataSerial* data);
+    void DrawGradientColor(BufferInfo& gfxDstBuffer,
+                           const Rect& invalidatedArea,
                            UIChartDataSerial* data,
                            const ChartLine& linePoints,
                            const ChartLine& limitPoints,
                            int16_t startY);
-    void DrawSmoothPolyLine(uint16_t startIndex,
+    void DrawSmoothPolyLine(BufferInfo& gfxDstBuffer,
+                            uint16_t startIndex,
                             uint16_t endIndex,
                             const Rect& invalidatedArea,
                             UIChartDataSerial* data);
-    void DrawPolyLine(uint16_t startIndex, uint16_t endIndex, const Rect& invalidatedArea, UIChartDataSerial* data);
+    void DrawPolyLine(BufferInfo& gfxDstBuffer, uint16_t startIndex, uint16_t endIndex,
+                      const Rect& invalidatedArea, UIChartDataSerial* data);
     bool GetLineCrossPoint(const Point& p1, const Point& p2, const Point& p3, const Point& p4, Point& cross);
     void FindCrossPoints(const ChartLine& line, const ChartLine& polyLine, CrossPointSet& cross);
     void ReMeasure() override;

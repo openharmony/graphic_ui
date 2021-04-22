@@ -104,12 +104,12 @@ public:
 
 #if DEFAULT_ANIMATION
     /**
-     * @fn virtual bool UIButton::OnPostDraw(Rect& invalidatedArea) override
+     * @fn virtual bool UIButton::OnPostDraw(BufferInfo& gfxDstBuffer, Rect& invalidatedArea) override
      *
      * @brief Do something after draw.
      * @param [in] invalidate area.
      */
-    void OnPostDraw(const Rect& invalidatedArea) override;
+    void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 #endif
     /**
      * @fn  virtual void UIButton::OnDraw(const Rect& invalidatedArea) override;
@@ -118,7 +118,7 @@ public:
      *
      * @param   [in] invalidatedArea The rectangle to draw, with coordinates relative to this drawable..
      */
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @fn  virtual void UIButton::OnPressEvent(const PressEvent& event) override;
@@ -419,7 +419,7 @@ private:
     /** Sets up the theme styles */
     void SetupThemeStyles();
 
-    void DrawImg(const Rect& invalidatedArea, OpacityType opaScale);
+    void DrawImg(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, OpacityType opaScale);
 
 #if DEFAULT_ANIMATION
     friend class ButtonAnimator;
@@ -434,7 +434,7 @@ private:
         ~ButtonAnimator() {}
 
         void Start();
-        void DrawMask(const Rect& invalidatedArea);
+        void DrawMask(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
         void Callback(UIView* view) override;
         void OnStop(UIView& view) override;
 

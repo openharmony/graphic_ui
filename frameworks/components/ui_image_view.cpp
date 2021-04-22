@@ -14,12 +14,11 @@
  */
 
 #include "components/ui_image_view.h"
-
 #include "common/image.h"
 #include "common/typed_text.h"
 #include "draw/draw_image.h"
 #include "draw/draw_label.h"
-#include "draw/draw_rect.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/image_info.h"
 #include "gfx_utils/mem_api.h"
@@ -261,10 +260,10 @@ bool UIImageView::OnPreDraw(Rect& invalidatedArea) const
     return false;
 }
 
-void UIImageView::OnDraw(const Rect& invalidatedArea)
+void UIImageView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     OpacityType opa = GetMixOpaScale();
-    DrawRect::Draw(GetRect(), invalidatedArea, *style_, opa);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opa);
     if ((imageHeight_ == 0) || (imageWidth_ == 0)) {
         return;
     }
@@ -283,7 +282,7 @@ void UIImageView::OnDraw(const Rect& invalidatedArea)
                     cordsTmp.SetLeft(viewRect.GetX());
                     cordsTmp.SetRight(viewRect.GetX() + imageWidth_ - 1);
                     while (cordsTmp.GetLeft() <= viewRect.GetRight()) {
-                        image_.DrawImage(cordsTmp, trunc, *style_, opa);
+                        image_.DrawImage(gfxDstBuffer, cordsTmp, trunc, *style_, opa);
                         cordsTmp.SetLeft(cordsTmp.GetLeft() + imageWidth_);
                         cordsTmp.SetRight(cordsTmp.GetRight() + imageWidth_);
                     }
@@ -310,8 +309,8 @@ void UIImageView::OnDraw(const Rect& invalidatedArea)
                 Rect origRect = GetOrigRect();
                 transMap_->SetTransMapRect(origRect);
                 OpacityType opaScale = DrawUtils::GetMixOpacity(opa, style_->imageOpa_);
-                DrawUtils::GetInstance()->DrawTransform(invalidatedArea, {0, 0}, Color::Black(), opaScale, *transMap_,
-                                                        imageTranDataInfo);
+                BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, {0, 0}, Color::Black(), opaScale, *transMap_,
+                                                       imageTranDataInfo);
             }
         }
     }

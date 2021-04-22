@@ -43,8 +43,8 @@ void ScreenDeviceProxy::DrawAnimatorBuffer(const Rect& invalidatedArea)
         uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(animatorImageInfo_.header.colorMode);
         TransformDataInfo imageTranDataInfo = {animatorImageInfo_.header, animatorImageInfo_.data, pxSize, LEVEL0,
                                                BILINEAR};
-        DrawUtils::GetInstance()->DrawTransform(invalidRect, {0, 0}, Color::Black(), OPA_OPAQUE, transMap_,
-                                                imageTranDataInfo);
+        //DrawUtils::GetInstance()->DrawTransform(invalidRect, {0, 0}, Color::Black(), OPA_OPAQUE, transMap_,
+        //                                        imageTranDataInfo);
     }
 }
 

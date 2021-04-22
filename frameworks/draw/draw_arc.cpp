@@ -20,7 +20,8 @@
 namespace OHOS {
 #define IS_IN_DEGREERANE(d, s, e) ((s) <= (e)) ? (((d) >= (s)) && ((d) <= (e))) : (((d) >= (s)) || ((d) <= (e)))
 
-void DrawArc::DrawImg(const Point& imgPos,
+void DrawArc::DrawImg(BufferInfo& gfxDstBuffer,
+                      const Point& imgPos,
                       Rect& area,
                       const Rect& invalidatedArea,
                       const Style& style,
@@ -38,11 +39,12 @@ void DrawArc::DrawImg(const Point& imgPos,
     cordsTmp.SetHeight(header.height);
     cordsTmp.SetWidth(header.width);
     if (area.Intersect(area, invalidatedArea)) {
-        image->DrawImage(cordsTmp, area, style, opaScale);
+        image->DrawImage(gfxDstBuffer, cordsTmp, area, style, opaScale);
     }
 }
 
-void DrawArc::DrawVerLine(const Point& begin,
+void DrawArc::DrawVerLine(BufferInfo& gfxDstBuffer,
+                          const Point& begin,
                           const Point& imgPos,
                           const Rect& mask,
                           int16_t len,
@@ -52,13 +54,14 @@ void DrawArc::DrawVerLine(const Point& begin,
 {
     Rect rect(begin.x, begin.y, begin.x, begin.y + len);
     if ((image != nullptr) && (image->GetSrcType() != IMG_SRC_UNKNOWN)) {
-        DrawImg(imgPos, rect, mask, style, opaScale, image);
+        DrawImg(gfxDstBuffer, imgPos, rect, mask, style, opaScale, image);
     } else {
-        DrawUtils::GetInstance()->DrawColorArea(rect, mask, style.lineColor_, opaScale);
+        DrawUtils::GetInstance()->DrawColorArea(gfxDstBuffer, rect, mask, style.lineColor_, opaScale);
     }
 }
 
-void DrawArc::DrawHorLine(const Point& begin,
+void DrawArc::DrawHorLine(BufferInfo& gfxDstBuffer,
+                          const Point& begin,
                           const Point& imgPos,
                           const Rect& mask,
                           int16_t len,
@@ -68,13 +71,13 @@ void DrawArc::DrawHorLine(const Point& begin,
 {
     if ((image != nullptr) && (image->GetSrcType() != IMG_SRC_UNKNOWN)) {
         Rect rect(begin.x, begin.y, begin.x + len, begin.y);
-        DrawImg(imgPos, rect, mask, style, opaScale, image);
+        DrawImg(gfxDstBuffer, imgPos, rect, mask, style, opaScale, image);
     } else {
         if (len == 0) {
-            DrawUtils::GetInstance()->DrawPixel(begin.x, begin.y, mask, style.lineColor_, opaScale);
+            DrawUtils::GetInstance()->DrawPixel(gfxDstBuffer, begin.x, begin.y, mask, style.lineColor_, opaScale);
         } else {
             Rect rect(begin.x, begin.y, begin.x + len, begin.y);
-            DrawUtils::GetInstance()->DrawColorArea(rect, mask, style.lineColor_, opaScale);
+            DrawUtils::GetInstance()->DrawColorArea(gfxDstBuffer, rect, mask, style.lineColor_, opaScale);
         }
     }
 }
@@ -117,9 +120,9 @@ uint16_t DrawArc::CalculateTanDegree(uint16_t x, uint16_t y)
     return degree;
 }
 
-void DrawArc::DrawCircleNoEndpoint(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa, bool anti)
+void DrawArc::DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa, bool anti)
 {
-    DrawAxisLine(arcInfo, mask, style, opa);
+    DrawAxisLine(gfxDstBuffer, arcInfo, mask, style, opa);
 
     int16_t yStart = mask.GetTop() - arcInfo.center.y;
     int16_t yEnd = mask.GetBottom() - arcInfo.center.y;
@@ -171,52 +174,53 @@ void DrawArc::DrawCircleNoEndpoint(ArcInfo& arcInfo, const Rect& mask, const Sty
         }
 #if ENABLE_ANTIALIAS
         if (anti) {
-            DrawLineAnti(arcInfo, mask, style, opa);
+            DrawLineAnti(gfxDstBuffer, arcInfo, mask, style, opa);
         }
 #endif
-        DrawLineWithDegree(arcInfo, -lineEnd_, -lineStart_, y_, mask, style, opa, ARC_QUADRANT_ONE);
+        DrawLineWithDegree(gfxDstBuffer, arcInfo, -lineEnd_, -lineStart_, y_, mask, style, opa, ARC_QUADRANT_ONE);
 
-        DrawLineWithDegree(arcInfo, -lineEnd_, -lineStart_, -y_, mask, style, opa, ARC_QUADRANT_TWO);
+        DrawLineWithDegree(gfxDstBuffer, arcInfo, -lineEnd_, -lineStart_, -y_, mask, style, opa, ARC_QUADRANT_TWO);
 
-        DrawLineWithDegree(arcInfo, lineStart_, lineEnd_, -y_, mask, style, opa, ARC_QUADRANT_THREE);
+        DrawLineWithDegree(gfxDstBuffer, arcInfo, lineStart_, lineEnd_, -y_, mask, style, opa, ARC_QUADRANT_THREE);
 
-        DrawLineWithDegree(arcInfo, lineStart_, lineEnd_, y_, mask, style, opa, ARC_QUADRANT_FOUR);
+        DrawLineWithDegree(gfxDstBuffer, arcInfo, lineStart_, lineEnd_, y_, mask, style, opa, ARC_QUADRANT_FOUR);
     }
 }
 
-void DrawArc::DrawAxisLine(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa)
+void DrawArc::DrawAxisLine(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa)
 {
     int16_t lineWidth = 0;
     int16_t outRadius = outRadius_ - 1;
     int16_t inRadius = inRadius_;
     if (inRadius <= 0) {
         inRadius = 1;
-        DrawHorLine(arcInfo.center, arcInfo.imgPos, mask, 0, style, opa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, arcInfo.center, arcInfo.imgPos, mask, 0, style, opa, arcInfo.imgSrc);
     }
     lineWidth = outRadius - inRadius;
 
     if (isCircle_ || (IS_IN_DEGREERANE(THREE_QUARTER_IN_DEGREE, arcInfo.startAngle, arcInfo.endAngle))) {
-        DrawHorLine(Point{static_cast<int16_t>(arcInfo.center.x - outRadius), arcInfo.center.y}, arcInfo.imgPos, mask,
-                    lineWidth, style, opa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{static_cast<int16_t>(arcInfo.center.x - outRadius), arcInfo.center.y},
+                    arcInfo.imgPos, mask, lineWidth, style, opa, arcInfo.imgSrc);
     }
 
     if (isCircle_ || (IS_IN_DEGREERANE(QUARTER_IN_DEGREE, arcInfo.startAngle, arcInfo.endAngle))) {
-        DrawHorLine(Point{static_cast<int16_t>(arcInfo.center.x + inRadius), arcInfo.center.y}, arcInfo.imgPos, mask,
-                    lineWidth, style, opa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{static_cast<int16_t>(arcInfo.center.x + inRadius), arcInfo.center.y},
+                    arcInfo.imgPos, mask, lineWidth, style, opa, arcInfo.imgSrc);
     }
 
     if (isCircle_ || (IS_IN_DEGREERANE(0, arcInfo.startAngle, arcInfo.endAngle))) {
-        DrawVerLine(Point{arcInfo.center.x, static_cast<int16_t>(arcInfo.center.y - outRadius)}, arcInfo.imgPos, mask,
-                    lineWidth, style, opa, arcInfo.imgSrc);
+        DrawVerLine(gfxDstBuffer, Point{arcInfo.center.x, static_cast<int16_t>(arcInfo.center.y - outRadius)},
+                    arcInfo.imgPos, mask, lineWidth, style, opa, arcInfo.imgSrc);
     }
 
     if (isCircle_ || (IS_IN_DEGREERANE(SEMICIRCLE_IN_DEGREE, arcInfo.startAngle, arcInfo.endAngle))) {
-        DrawVerLine(Point{arcInfo.center.x, static_cast<int16_t>(arcInfo.center.y + inRadius)}, arcInfo.imgPos, mask,
-                    lineWidth, style, opa, arcInfo.imgSrc);
+        DrawVerLine(gfxDstBuffer, Point{arcInfo.center.x, static_cast<int16_t>(arcInfo.center.y + inRadius)},
+                    arcInfo.imgPos, mask, lineWidth, style, opa, arcInfo.imgSrc);
     }
 }
 
-void DrawArc::DrawLineWithDegree(ArcInfo& arcInfo,
+void DrawArc::DrawLineWithDegree(BufferInfo& gfxDstBuffer,
+                                 ArcInfo& arcInfo,
                                  int16_t start,
                                  int16_t end,
                                  int16_t y,
@@ -226,7 +230,7 @@ void DrawArc::DrawLineWithDegree(ArcInfo& arcInfo,
                                  uint8_t quadrant)
 {
     if (isCircle_) {
-        DrawHorLine(Point{static_cast<int16_t>(arcInfo.center.x + start), static_cast<int16_t>(arcInfo.center.y + y)},
+        DrawHorLine(gfxDstBuffer, Point{static_cast<int16_t>(arcInfo.center.x + start), static_cast<int16_t>(arcInfo.center.y + y)},
                     arcInfo.imgPos, mask, end - start, style, opaScale, arcInfo.imgSrc);
         return;
     }
@@ -244,23 +248,24 @@ void DrawArc::DrawLineWithDegree(ArcInfo& arcInfo,
         case OUT_DEGREE_RANG:
             return;
         case IN_DEGREE_RANG:
-            DrawHorLine(
+            DrawHorLine(gfxDstBuffer,
                 Point{static_cast<int16_t>(arcInfo.center.x + start), static_cast<int16_t>(arcInfo.center.y + y)},
                 arcInfo.imgPos, mask, end - start, style, opaScale, arcInfo.imgSrc);
             return;
         case INTERSECT:
-            DrawLineWithDegreeInner(arcInfo, start, end, y, mask, style, opaScale, quadrant);
+            DrawLineWithDegreeInner(gfxDstBuffer, arcInfo, start, end, y, mask, style, opaScale, quadrant);
             return;
         case DOUBLE_INTERSECT:
-            drawEnd = DrawLineWithDegreeInner(arcInfo, start, end, y, mask, style, opaScale, quadrant);
-            DrawLineWithDegreeInner(arcInfo, drawEnd + 1, end, y, mask, style, opaScale, quadrant);
+            drawEnd = DrawLineWithDegreeInner(gfxDstBuffer, arcInfo, start, end, y, mask, style, opaScale, quadrant);
+            DrawLineWithDegreeInner(gfxDstBuffer, arcInfo, drawEnd + 1, end, y, mask, style, opaScale, quadrant);
             return;
         default:
             return;
     }
 }
 
-int16_t DrawArc::DrawLineWithDegreeInner(ArcInfo& arcInfo,
+int16_t DrawArc::DrawLineWithDegreeInner(BufferInfo& gfxDstBuffer,
+                                         ArcInfo& arcInfo,
                                          int16_t start,
                                          int16_t end,
                                          int16_t y,
@@ -289,7 +294,7 @@ int16_t DrawArc::DrawLineWithDegreeInner(ArcInfo& arcInfo,
         drawEnd = end;
     }
     if ((drawStart != COORD_MIN) && (drawEnd != COORD_MIN)) {
-        DrawHorLine(
+        DrawHorLine(gfxDstBuffer,
             Point{static_cast<int16_t>(arcInfo.center.x + drawStart), static_cast<int16_t>(arcInfo.center.y + y)},
             arcInfo.imgPos, mask, drawEnd - drawStart, style, opaScale, arcInfo.imgSrc);
     }
@@ -297,7 +302,8 @@ int16_t DrawArc::DrawLineWithDegreeInner(ArcInfo& arcInfo,
 }
 
 #if ENABLE_ANTIALIAS
-void DrawArc::DrawLineAnti(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa)
+void DrawArc::DrawLineAnti(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
+                           const Style& style, uint8_t opa)
 {
     outAntiStart_ = lineStart_;
     outAntiEnd_ = lineStart_;
@@ -327,7 +333,7 @@ void DrawArc::DrawLineAnti(ArcInfo& arcInfo, const Rect& mask, const Style& styl
             (((static_cast<uint64_t>(outRadius_) << 1) - 1 - (currentSqr - antiOutRadiusSqr_)) * OPA_OPAQUE) /
             ((outRadius_ << 1) - 1);
         antiOpa = (opa == OPA_OPAQUE) ? antiOpa : (static_cast<uint16_t>(antiOpa) * opa) >> SHIFT_8;
-        DrawPointAnti(arcInfo, xAnti, mask, style, antiOpa);
+        DrawPointAnti(gfxDstBuffer, arcInfo, xAnti, mask, style, antiOpa);
     }
 
     for (int16_t xAnti = inAntiStart_; xAnti <= inAntiEnd_; xAnti++) {
@@ -337,11 +343,12 @@ void DrawArc::DrawLineAnti(ArcInfo& arcInfo, const Rect& mask, const Style& styl
         }
         uint8_t antiOpa = (static_cast<uint64_t>(currentSqr - antiInRadiusSqr_) * OPA_OPAQUE) / ((inRadius_ << 1) - 1);
         antiOpa = (opa == OPA_OPAQUE) ? antiOpa : (static_cast<uint16_t>(antiOpa) * opa) >> SHIFT_8;
-        DrawPointAnti(arcInfo, xAnti, mask, style, antiOpa);
+        DrawPointAnti(gfxDstBuffer, arcInfo, xAnti, mask, style, antiOpa);
     }
 }
 
-void DrawArc::DrawPointAnti(ArcInfo& arcInfo, int16_t x, const Rect& mask, const Style& style, uint8_t antiOpa)
+void DrawArc::DrawPointAnti(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, int16_t x, const Rect& mask,
+                            const Style& style, uint8_t antiOpa)
 {
     int16_t startX;
     int16_t starty;
@@ -349,22 +356,22 @@ void DrawArc::DrawPointAnti(ArcInfo& arcInfo, int16_t x, const Rect& mask, const
     if (isCircle_ || (IS_IN_DEGREERANE(CIRCLE_IN_DEGREE - degreeBase, arcInfo.startAngle, arcInfo.endAngle))) {
         startX = arcInfo.center.x + x;
         starty = arcInfo.center.y + y_;
-        DrawHorLine(Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
     }
     if (isCircle_ || (IS_IN_DEGREERANE(SEMICIRCLE_IN_DEGREE + degreeBase, arcInfo.startAngle, arcInfo.endAngle))) {
         startX = arcInfo.center.x + x;
         starty = arcInfo.center.y - y_;
-        DrawHorLine(Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
     }
     if (isCircle_ || (IS_IN_DEGREERANE(degreeBase, arcInfo.startAngle, arcInfo.endAngle))) {
         startX = arcInfo.center.x - x;
         starty = arcInfo.center.y + y_;
-        DrawHorLine(Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
     }
     if (isCircle_ || (IS_IN_DEGREERANE(SEMICIRCLE_IN_DEGREE - degreeBase, arcInfo.startAngle, arcInfo.endAngle))) {
         startX = arcInfo.center.x - x;
         starty = arcInfo.center.y - y_;
-        DrawHorLine(Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{startX, starty}, arcInfo.imgPos, mask, 0, style, antiOpa, arcInfo.imgSrc);
     }
 }
 #endif
@@ -385,7 +392,8 @@ uint16_t DrawArc::GetDegreeInQuadrant(uint16_t degree, uint8_t quadrant)
     }
 }
 
-void DrawArc::Draw(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opaScale, uint8_t cap)
+void DrawArc::Draw(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
+                   const Style& style, uint8_t opaScale, uint8_t cap)
 {
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.lineOpa_);
     if ((opa == OPA_TRANSPARENT) || (style.lineWidth_ < 1) || (arcInfo.startAngle == arcInfo.endAngle)) {
@@ -395,9 +403,9 @@ void DrawArc::Draw(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8
     SetArcInfo(arcInfo, style);
 
     if ((arcInfo.imgSrc != nullptr) && (arcInfo.imgSrc->GetSrcType() != IMG_SRC_UNKNOWN)) {
-        DrawCircleNoEndpoint(arcInfo, mask, style, opa, false);
+        DrawCircleNoEndpoint(gfxDstBuffer, arcInfo, mask, style, opa, false);
     } else {
-        DrawCircleNoEndpoint(arcInfo, mask, style, opa, true);
+        DrawCircleNoEndpoint(gfxDstBuffer, arcInfo, mask, style, opa, true);
     }
 
     if (!isCircle_ && (cap == CapType::CAP_ROUND)) {
@@ -425,7 +433,7 @@ void DrawArc::Draw(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8
         endArcInfo.center.x += startCapX;
         endArcInfo.center.y -= startCapY;
         SetArcInfo(endArcInfo, style);
-        DrawCircleNoEndpoint(endArcInfo, mask, style, opa, true);
+        DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
 
         temp = (outRadius - endArcInfo.radius + 1) * Sin(arcInfo.endAngle);
         int16_t endCapX = static_cast<int16_t>((temp > 0) ? (temp + 0.5f) : (temp - 0.5f));
@@ -437,7 +445,7 @@ void DrawArc::Draw(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8
         endArcInfo.center.x += endCapX;
         endArcInfo.center.y -= endCapY;
         SetArcInfo(endArcInfo, style);
-        DrawCircleNoEndpoint(endArcInfo, mask, style, opa, true);
+        DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
     }
 }
 

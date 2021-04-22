@@ -16,9 +16,9 @@
 #include "components/ui_arc_label.h"
 #include "common/typed_text.h"
 #include "draw/draw_label.h"
-#include "draw/draw_rect.h"
 #include "font/ui_font.h"
 #include "themes/theme_manager.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIArcLabel::UIArcLabel()
@@ -115,7 +115,7 @@ void UIArcLabel::SetFont(const char* name, uint8_t size)
     }
 }
 
-void UIArcLabel::OnDraw(const Rect& invalidatedArea)
+void UIArcLabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     InitArcLabelText();
     const char* text = arcLabelText_->GetText();
@@ -124,22 +124,22 @@ void UIArcLabel::OnDraw(const Rect& invalidatedArea)
     }
     Rect trunc = invalidatedArea;
     OpacityType opa = GetMixOpaScale();
-    DrawRect::Draw(GetRect(), trunc, *style_, opa);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), trunc, *style_, opa);
 
     Rect coords = GetContentRect();
     if (trunc.Intersect(trunc, coords)) {
-        DrawArcText(trunc, opa);
+        DrawArcText(gfxDstBuffer, trunc, opa);
     }
 }
 
-void UIArcLabel::DrawArcText(const Rect& mask, OpacityType opaScale)
+void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, OpacityType opaScale)
 {
     Point center;
     center.x = arcTextInfo_.arcCenter.x + GetRect().GetX();
     center.y = arcTextInfo_.arcCenter.y + GetRect().GetY();
     InitArcLabelText();
     UIFont::GetInstance()->SetCurrentFontId(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
-    DrawLabel::DrawArcText(mask, arcLabelText_->GetText(), center, arcLabelText_->GetFontId(),
+    DrawLabel::DrawArcText(gfxDstBuffer, mask, arcLabelText_->GetText(), center, arcLabelText_->GetFontId(),
         arcTextInfo_, orientation_, *style_, opaScale);
 }
 

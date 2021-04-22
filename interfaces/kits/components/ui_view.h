@@ -54,6 +54,8 @@
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
 
+#include "engines/gfx/gfx_engine_manager.h"
+
 namespace OHOS {
 /* Enumerates view types. */
 enum UIViewType : uint8_t {
@@ -381,7 +383,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnDraw(const Rect& invalidatedArea);
+    virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
 
     /**
      * @brief Called after a view is drawn.
@@ -389,7 +391,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnPostDraw(const Rect& invalidatedArea) {}
+    virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) {}
 
     /**
      * @brief Remeasures the view size.

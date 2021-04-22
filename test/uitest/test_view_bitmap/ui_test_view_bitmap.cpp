@@ -27,7 +27,7 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
         ImageInfo info;
-        view.GetBitmap(info);
+        //view.GetBitmap(info);
         img_->SetSrc(&info);
         container_->Add(img_);
         img_->Invalidate();
@@ -45,7 +45,7 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
         ImageInfo info;
-        Screen::GetInstance().GetCurrentScreenBitmap(info);
+        //Screen::GetInstance().GetCurrentScreenBitmap(info);
         img_->SetSrc(&info);
         container_->Add(img_);
         container_->Invalidate();

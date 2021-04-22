@@ -17,9 +17,7 @@
 #include "components/root_view.h"
 #include "core/render_manager.h"
 #include "dock/focus_manager.h"
-#include "dock/screen_device_proxy.h"
-#include "draw/draw_rect.h"
-#include "draw/draw_utils.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
 #include "themes/theme_manager.h"
@@ -99,10 +97,10 @@ bool UIView::OnPreDraw(Rect& invalidatedArea) const
     return false;
 }
 
-void UIView::OnDraw(const Rect& invalidatedArea)
+void UIView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     uint8_t opa = GetMixOpaScale();
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opa);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *style_, opa);
 }
 
 void UIView::SetupThemeStyles()
@@ -813,7 +811,7 @@ uint8_t UIView::GetMixOpaScale() const
     }
     return opaMix;
 }
-
+#if 0
 bool UIView::GetBitmap(ImageInfo& bitmap)
 {
     UIView* tempSibling = nextSibling_;
@@ -854,5 +852,5 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     rect_.SetPosition(tempX, tempY);
     return true;
 }
-
+#endif
 } // namespace OHOS

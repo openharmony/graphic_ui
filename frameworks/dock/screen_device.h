@@ -23,6 +23,7 @@
 #if ENABLE_WINDOW
 #include "gfx_utils/pixel_format_utils.h"
 #endif
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 #if ENABLE_WINDOW
@@ -35,10 +36,6 @@ struct AllocationInfo {
     ImagePixelFormat pixelFormat;
 };
 #endif
-
-struct TransformOption {
-    TransformAlgorithm algorithm;
-};
 
 /** @brief A semaphore for display buffer flushing. */
 class FlushSem : public HeapBase {

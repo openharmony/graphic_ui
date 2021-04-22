@@ -25,9 +25,9 @@ UIRepeatButton::UIRepeatButton() : ticksInterval_(200), event_({ 0, 0 }),
 
 UIRepeatButton::~UIRepeatButton() {}
 
-void UIRepeatButton::OnDraw(const Rect& invalidatedArea)
+void UIRepeatButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    UIButton::OnDraw(invalidatedArea);
+    UIButton::OnDraw(gfxDstBuffer, invalidatedArea);
 }
 
 bool UIRepeatButton::OnReleaseEvent(const ReleaseEvent& event)
