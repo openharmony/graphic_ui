@@ -583,7 +583,7 @@ UIView* RootView::GetTopUIView(const Rect& rect)
     while (stackCount >= 0) {
         while (currentView != nullptr) {
             if (currentView->GetOrigRect().IsContains(rect) && currentView->IsVisible()) {
-                if (currentView->GetStyleConst().bgOpa_ == OPA_OPAQUE && currentView->OnPreDraw(copyRect) &&
+                if (currentView->GetStyle(STYLE_BACKGROUND_OPA) == OPA_OPAQUE && currentView->OnPreDraw(copyRect) &&
                     currentView->GetOpaScale() == OPA_OPAQUE) {
                     topView = currentView;
                 }
