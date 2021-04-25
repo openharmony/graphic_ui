@@ -87,6 +87,7 @@ SOURCES += \
     ../../../../frameworks/dock/vibrator_manager.cpp \
     ../../../../frameworks/dock/virtual_input_device.cpp \
     ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
+    ../../../../frameworks/draw/clip_utils.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
     ../../../../frameworks/draw/draw_curve.cpp \
     ../../../../frameworks/draw/draw_image.cpp \
@@ -138,6 +139,7 @@ HEADERS += \
     ../../../../frameworks/dock/input_device.h \
     ../../../../frameworks/dock/pointer_input_device.h \
     ../../../../frameworks/dock/virtual_input_device.h \
+    ../../../../frameworks/draw/clip_utils.h \
     ../../../../frameworks/draw/draw_arc.h \
     ../../../../frameworks/draw/draw_curve.h \
     ../../../../frameworks/draw/draw_image.h \

@@ -24,6 +24,7 @@
 #include "test_canvas/ui_test_canvas.h"
 #include "test_chart/ui_test_chart_pillar.h"
 #include "test_chart/ui_test_chart_polyline.h"
+#include "test_clip/ui_test_clip.h"
 #ifdef ENABLE_WINDOW
 #include "test_dialog/ui_test_dialog.h"
 #endif
@@ -83,6 +84,7 @@ void UITestGroup::AddTestCase(TestCaseInfo testCaseInfo)
 
 void UITestGroup::SetUpTestCase()
 {
+    testCaseList_.PushBack(TestCaseInfo{"Clip", new UITestClip()});
 #if ENABLE_ROTATE_INPUT
     testCaseList_.PushBack(TestCaseInfo{"Rotate_Input", new UITestRotateInput()});
 #endif
