@@ -501,7 +501,7 @@ void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
         }
         uint8_t* memStart = dest;
         int32_t memSize = static_cast<int32_t>(width) * destByteSize;
-        dest += destWidth * destByteSize;
+        dest += halBufferDeltaByteLen;
         dstMaxSize -= halBufferDeltaByteLen;
         for (int16_t row = 1; row < height; ++row) {
 #ifdef ARM_NEON_OPT
@@ -518,7 +518,7 @@ void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
                 }
             }
 #endif
-            dest += destWidth * destByteSize;
+            dest += halBufferDeltaByteLen;
             dstMaxSize -= halBufferDeltaByteLen;
         }
     } else {
