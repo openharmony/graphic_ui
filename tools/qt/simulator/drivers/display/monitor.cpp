@@ -29,10 +29,6 @@ bool Monitor::bRegister_ = false;
 
 void Monitor::InitHal()
 {
-//     ScreenDeviceProxy::GetInstance()->SetAnimatorbuffer(reinterpret_cast<uint8_t*>(animaterBuffer_), ARGB8888,
-//                                                         HORIZONTAL_RESOLUTION);
-
-
 #if USE_MOUSE
     MouseInput* mouse = MouseInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(mouse);

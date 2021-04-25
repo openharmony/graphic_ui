@@ -18,6 +18,7 @@
 #include "engines/gfx/gfx_engine_manager.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/mem_api.h"
+#include "securec.h"
 
 namespace OHOS {
 uint16_t Screen::GetWidth()
@@ -29,12 +30,13 @@ uint16_t Screen::GetHeight()
 {
     return BaseGfxEngine::GetInstance()->GetScreenHeight();
 }
-#if 0
+
 bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
 {
-    uint16_t screenWidth = ScreenDeviceProxy::GetInstance()->GetScreenWidth();
-    uint16_t screenHeight = ScreenDeviceProxy::GetInstance()->GetScreenHeight();
-    info.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    uint16_t screenWidth = BaseGfxEngine::GetInstance()->GetScreenWidth();
+    uint16_t screenHeight = BaseGfxEngine::GetInstance()->GetScreenHeight();
+    info.header.colorMode = bufferInfo->mode;;
     info.dataSize = screenWidth * screenHeight * DrawUtils::GetByteSizeByColorMode(info.header.colorMode);
     uint8_t* screenBitmapBuffer = reinterpret_cast<uint8_t*>(ImageCacheMalloc(info));
     info.header.width = screenWidth;
@@ -42,11 +44,11 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
     info.header.reserved = 0;
     info.header.compressMode = 0;
 
-    if (!ScreenDeviceProxy::GetInstance()->GetScreenBitmapBuffer(screenBitmapBuffer, info.dataSize)) {
+    if (memcpy_s(screenBitmapBuffer, info.dataSize, bufferInfo->virAddr, info.dataSize) != EOK) {
         return false;
     }
+
     info.data = screenBitmapBuffer;
     return true;
 }
-#endif
 } // namespace OHOS

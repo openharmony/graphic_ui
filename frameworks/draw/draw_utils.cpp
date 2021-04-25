@@ -29,10 +29,6 @@
 #include "graphic_neon_utils.h"
 #endif
 
-// #if ENABLE_GFX_ENGINES
-// #include "hals/gfx_engines.h"
-// #endif
-
 #if ENABLE_ARM_MATH
 #include "arm_math.h"
 #endif
@@ -187,12 +183,6 @@ void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer, const Rect& area, const 
     if (!maskedArea.Intersect(area, mask)) {
         return;
     }
-
-// #if ENABLE_GFX_ENGINES
-//     if (FillAreaWithHardware(maskedArea, color, opa)) {
-//         return;
-//     }
-// #endif
 
     BaseGfxEngine::GetInstance()->Fill(gfxDstBuffer, maskedArea, color, opa);
 }
@@ -450,25 +440,6 @@ void DrawUtils::DrawImage(BufferInfo& gfxDstBuffer,
     blendOption.opacity = opa;
     BaseGfxEngine::GetInstance()->Blit(gfxDstBuffer, dstPos, src, maskedArea, blendOption);
 }
-
-// #if ENABLE_GFX_ENGINES
-// bool DrawUtils::FillAreaWithHardware(const Rect& fillArea, const ColorType& color, const OpacityType& opa) const
-// {
-//     if ((opa != OPA_OPAQUE) && (fillArea.GetSize() >= HARDWARE_ACC_SIZE_LIMIT)) {
-//         AllocationInfo gfxAlloc = ScreenDeviceProxy::GetInstance()->GetAllocationInfo();
-//         LiteSurfaceData data;
-//         data.phyAddr = gfxAlloc.phyAddr;
-//         data.width = gfxAlloc.width;
-//         data.height = gfxAlloc.height;
-//         data.stride = gfxAlloc.stride;
-//         data.pixelFormat = gfxAlloc.pixelFormat;
-//         if (GfxEngines::GetInstance()->GfxFillArea(data, fillArea, color, opa)) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-// #endif
 
 void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
                                      const Rect& fillArea,
@@ -1331,7 +1302,7 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     if (!trans.Intersect(trans, mask)) {
         return;
     }
-#if ENABLE_HARDWARE_ACCELERATION
+#if ENABLE_HARDWARE_ACCELERATION    // to do for backends
     DRAW_UTILS_PREPROCESS(gfxDstBuffer, opaScale);
     TransformOption option;
     option.algorithm = dataInfo.algorithm;

@@ -20,7 +20,6 @@
 #include "common/task_manager.h"
 #include "common/input_device_manager.h"
 #include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
 #include <climits>
@@ -169,17 +168,10 @@ TestEventBubbleView* EventBubbleTest::longPressView_ = nullptr;
 TestEventBubbleView* EventBubbleTest::keyView_ = nullptr;
 TestEventBubbleView* EventBubbleTest::unTouchView_ = nullptr;
 
-static void InitHal()
-{
-    ScreenDevice* display = new ScreenDevice();
-    ScreenDeviceProxy::GetInstance()->SetDevice(display);
-    ScreenDeviceProxy::GetInstance()->SetScreenSize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
-}
 
 void EventBubbleTest::SetUpTestCase(void)
 {
     GraphicStartUp::Init();
-    InitHal();
     TestApp();
 }
 

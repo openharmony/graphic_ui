@@ -28,10 +28,12 @@
 #include "components/ui_slider.h"
 #include "components/ui_swipe_view.h"
 #include "layout/list_layout.h"
+#include "gfx_utils/sys_info.h"
 #include "ui_test.h"
+#include "stdio.h"
 
 namespace OHOS {
-class UITestViewScaleRotate : public UITest, public AnimatorCallback {
+class UITestViewScaleRotate : public UITest, public AnimatorCallback, public SysInfo::OnFPSChangedListener {
 public:
     UITestViewScaleRotate() : animator_(this, nullptr, 1000, true) // 1000: the animator duration time is 1000ms
     {
@@ -49,6 +51,12 @@ public:
     void UIKit_View_Scale_Rotate_Test_UICircleProgress_005();
     void UIKit_View_Scale_Rotate_Test_UIDigitalClock_006();
     void UIKit_View_Scale_Rotate_Test_Group_007();
+
+    virtual void OnFPSChanged(float newFPS) override
+    {
+        //printf("view scale rotate: %f\n", newFPS);
+        GRAPHIC_LOGE("view scale rotate: %f\n", newFPS);
+    }
 
 private:
     const int GROUP_WIDHT = 454;

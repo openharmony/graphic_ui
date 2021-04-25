@@ -21,17 +21,9 @@
 #include "gfx_utils/style.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/transform.h"
-//#include "common/image.h"    // to do delete
 
 namespace OHOS {
 class BaseGfxEngine;
-// #define GFX_ENGINE_REGISTER(shortname)                                               \
-// __attribute__((constructor)) void Register##shortname##GfxEngine();                  \
-//                                                                                      \
-// void Register##shortname##GfxEngine()                                                \
-// {                                                                                    \
-//     BaseGfxEngine::InitGfxEngine(new OHOS::##shortname##GfxEngine());       \
-// }
 
 struct BufferInfo {
     Rect rect;

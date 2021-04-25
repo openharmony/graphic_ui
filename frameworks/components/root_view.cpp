@@ -17,7 +17,6 @@
 
 #include "common/screen.h"
 #include "core/render_manager.h"
-//#include "dock/screen_device_proxy.h"
 #include "gfx_utils/graphic_log.h"
 #include "draw/draw_utils.h"
 #if ENABLE_WINDOW
@@ -544,11 +543,7 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
     Rect relativeRect;
     bool enableAnimator = false;
     TransformMap curTransMap;
-#if ENABLE_WINDOW
-    WindowImpl* boundWin = static_cast<WindowImpl*>(GetBoundWindow());
-    BufferInfo* gfxDstBuffer = boundWin->GetBufferInfo();
-    UpdateBufferInfo(gfxDstBuffer);
-#endif
+
     while (par != nullptr) {
         if (curView != nullptr) {
             if (curView->IsVisible()) {
@@ -560,9 +555,7 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         curView->GetTransformMap().SetInvalid(true);
                         curView->SetPosition(relativeRect.GetX() - origRect.GetX(),
                                              relativeRect.GetY() - origRect.GetY());
-                        //ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(true);
-                        // ScreenDeviceProxy::GetInstance()->SetAnimatorRect(OrigRect);
-                        // ScreenDeviceProxy::GetInstance()->SetAnimatorTransMap(curView->GetTransformMap());
+
                         ClearMapBuffer();
                         curTransMap = curView->GetTransformMap();
                         enableAnimator = true;
@@ -599,8 +592,6 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                     }
 
                     if (enableAnimator && (transViewGroup == nullptr)) {
-                        //ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
-                        //ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
                         BlitMapBuffer(origRect, curTransMap, mask);
                         curView->GetTransformMap().SetInvalid(false);
                         enableAnimator = false;
@@ -621,8 +612,6 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
             }
 
             if (enableAnimator && transViewGroup == g_viewStack[stackCount]) {
-                //ScreenDeviceProxy::GetInstance()->EnableAnimatorBuffer(false);
-                //ScreenDeviceProxy::GetInstance()->DrawAnimatorBuffer(mask);
                 BlitMapBuffer(origRect, curTransMap, mask);
                 transViewGroup->GetTransformMap().SetInvalid(false);
                 enableAnimator = false;
@@ -764,5 +753,31 @@ void RootView::UpdateBufferInfo(BufferInfo* bufferInfo)
         }
         dc_.bufferInfo = bufferInfo;
     }
+}
+
+void RootView::SaveDrawContext()
+{
+    bakDc_.bufferInfo = dc_.bufferInfo;
+    dc_.bufferInfo = nullptr;
+
+    bakDc_.mapBufferInfo = dc_.mapBufferInfo;
+    dc_.mapBufferInfo = nullptr;
+
+    bakDc_.snapShotBufferInfo = dc_.snapShotBufferInfo;
+    dc_.snapShotBufferInfo = nullptr;
+}
+
+void RootView::RestoreDrawContext()
+{
+    DestroyDrawContext();
+
+    dc_.bufferInfo = bakDc_.bufferInfo;
+    bakDc_.bufferInfo = nullptr;
+
+    dc_.mapBufferInfo = bakDc_.mapBufferInfo;
+    bakDc_.mapBufferInfo = nullptr;
+
+    dc_.snapShotBufferInfo = bakDc_.snapShotBufferInfo;
+    bakDc_.snapShotBufferInfo = nullptr;
 }
 } // namespace OHOS

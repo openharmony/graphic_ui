@@ -17,6 +17,7 @@
 #include "components/root_view.h"
 #include "core/render_manager.h"
 #include "dock/focus_manager.h"
+#include "draw/draw_utils.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
@@ -811,7 +812,7 @@ uint8_t UIView::GetMixOpaScale() const
     }
     return opaMix;
 }
-#if 0
+
 bool UIView::GetBitmap(ImageInfo& bitmap)
 {
     UIView* tempSibling = nextSibling_;
@@ -821,15 +822,16 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     nextSibling_ = nullptr;
     parent_ = nullptr;
 
-    int16_t screenWidth = ScreenDeviceProxy::GetInstance()->GetScreenWidth();
-    int16_t screenHeight = ScreenDeviceProxy::GetInstance()->GetScreenHeight();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    int16_t screenWidth = bufferInfo->rect.GetWidth();
+    int16_t screenHeight = bufferInfo->rect.GetHeight();
     Rect screenRect(0, 0, screenWidth, screenHeight);
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();
     mask.Intersect(mask, screenRect);
     uint16_t bufferWidth = mask.GetWidth();
     uint16_t bufferHeight = mask.GetHeight();
-    bitmap.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    bitmap.header.colorMode = bufferInfo->mode;
     bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
     bitmap.header.width = bufferWidth;
     bitmap.header.height = bufferHeight;
@@ -842,15 +844,22 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
         rect_.SetPosition(tempX, tempY);
         return false;
     }
-    ScreenDeviceProxy::GetInstance()->EnableBitmapBuffer(viewBitmapBuffer);
-    ScreenDeviceProxy::GetInstance()->SetViewBitmapBufferWidth(bufferWidth);
+
+    BufferInfo newBufferInfo;
+    newBufferInfo.virAddr = newBufferInfo.phyAddr = static_cast<void*>(viewBitmapBuffer);
+    newBufferInfo.rect = mask;
+    newBufferInfo.width = bufferWidth;
+    newBufferInfo.height = bufferHeight;
+    newBufferInfo.mode = bufferInfo->mode;
+
+    RootView::GetInstance()->SaveDrawContext();
+    RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
     RootView::GetInstance()->DrawTop(this, mask);
     bitmap.data = viewBitmapBuffer;
-    ScreenDeviceProxy::GetInstance()->DisableBitmapBuffer();
+    RootView::GetInstance()->RestoreDrawContext();
     nextSibling_ = tempSibling;
     parent_ = tempParent;
     rect_.SetPosition(tempX, tempY);
     return true;
 }
-#endif
 } // namespace OHOS

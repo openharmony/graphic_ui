@@ -22,7 +22,6 @@
 #include "common/task_manager.h"
 #include "common/input_device_manager.h"
 #include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
 #include <climits>
@@ -114,17 +113,9 @@ TestEventInjectorView* EventInjectorTest::longPressView_ = nullptr;
 TestEventInjectorView* EventInjectorTest::keyView_ = nullptr;
 Window* EventInjectorTest::window_ = nullptr;
 
-static void InitHal()
-{
-    ScreenDevice* display = new ScreenDevice();
-    ScreenDeviceProxy::GetInstance()->SetDevice(display);
-    ScreenDeviceProxy::GetInstance()->SetScreenSize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
-}
-
 void EventInjectorTest::SetUpTestCase(void)
 {
     GraphicStartUp::Init();
-    InitHal();
     TestApp();
     if (pthread_create(&mainTaskThread_, nullptr, MainTask, nullptr) != 0) {
         return;

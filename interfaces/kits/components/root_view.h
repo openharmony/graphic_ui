@@ -263,6 +263,10 @@ public:
 #endif
 
     void DrawTop(UIView* view, const Rect& rect);
+
+    void UpdateBufferInfo(BufferInfo* bufferInfo);
+    void SaveDrawContext();
+    void RestoreDrawContext();
 private:
     friend class RenderManager;
     friend class UIViewGroup;
@@ -284,7 +288,6 @@ private:
     UIView* GetTopUIView(const Rect& rect);
     void InitDrawContext();
     void DestroyDrawContext();
-    void UpdateBufferInfo(BufferInfo* bufferInfo);
     void InitMapBufferInfo(BufferInfo* bufferInfo);
     void DestroyMapBufferInfo();
     void BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea);
@@ -310,6 +313,7 @@ private:
     WindowImpl* boundWindow_ {nullptr};
 #endif
     DrawContext dc_;
+    DrawContext bakDc_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_ROOT_VIEW_H

@@ -15,7 +15,6 @@
 
 #include "window/window_impl.h"
 #include "core/render_manager.h"
-//#include "dock/screen_device_proxy.h"
 #include "gfx_utils/graphic_log.h"
 #include "iwindows_manager.h"
 
@@ -216,14 +215,10 @@ void WindowImpl::UpdateHalDisplayBuffer()
             return;
         }
         surface->Lock((void**)&gfxAlloc_.virAddr, (void**)&gfxAlloc_.phyAddr, &gfxAlloc_.stride);
+
+        BufferInfo* bufferInfo = GetBufferInfo();
+        rootView_->UpdateBufferInfo(bufferInfo);
     }
-    // AllocationInfo& gfxAlloc = ScreenDeviceProxy::GetInstance()->GetAllocationInfo();
-    // gfxAlloc.phyAddr = gfxAlloc_.phyAddr;
-    // gfxAlloc.virAddr = gfxAlloc_.virAddr;
-    // gfxAlloc.stride = gfxAlloc_.stride;
-    // gfxAlloc.width = config_.rect.GetWidth();
-    // gfxAlloc.height = config_.rect.GetHeight();
-    // gfxAlloc.pixelFormat = IMAGE_PIXEL_FORMAT_ARGB8888;
 }
 
 BufferInfo* WindowImpl::GetBufferInfo()

@@ -17,7 +17,6 @@
 #define GRAPHIC_LITE_DRAW_UTILS_H
 
 #include "gfx_utils/color.h"
-//#include "dock/screen_device_proxy.h"
 #include "common/text.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_types.h"
@@ -273,10 +272,6 @@ public:
                               const ColorType& color,
                               const OpacityType& opa) const;
 private:
-// #if ENABLE_GFX_ENGINES
-//     bool FillAreaWithHardware(const Rect& fillArea, const ColorType& color, const OpacityType& opa) const;
-// #endif
-
     using DrawTriangleTransformFuc = void (*)(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
     static void DrawTriangleTrueColorNearest(const TriangleScanInfo& triangle, const ColorMode bufferMode);

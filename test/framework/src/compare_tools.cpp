@@ -15,7 +15,6 @@
 
 #include "compare_tools.h"
 #include <cstring>
-#include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
@@ -88,11 +87,13 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
     if (fd == nullptr) {
         return false;
     }
-    uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
+
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
     if (frameBuf == nullptr) {
         return false;
     }
-    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
+    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(bufferInfo->mode);
     uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
     uint8_t* readBuf = reinterpret_cast<uint8_t*>(malloc(buffSize));
     if (readBuf == nullptr) {
@@ -142,12 +143,14 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
     if (fd == nullptr) {
         return false;
     }
-    uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
+
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
     if (frameBuf == nullptr) {
         GRAPHIC_LOGE("GetBuffer failed");
         return false;
     }
-    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
+    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(bufferInfo->mode);
     uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
     if (fwrite(frameBuf, sizeof(uint8_t), buffSize, fd) < 0) {
         fclose(fd);
