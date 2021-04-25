@@ -344,23 +344,19 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
 
     int16_t accelerationOffset = GetMaxDeltaY() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
     if (distance < 0) {
-        /*
-         * 7, 10 : Check whether the current view is dragged by more than 1/5,
-         * that is, the x or y coordinate plus 7/10 width or height.
-         */
+        // 7, 10 : Check whether the current view is dragged by more than 1/5, that is,
+        // the x or y coordinate plus 7/10 width or height.
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) < swipeMid) &&
             ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 7 / 10) - accelerationOffset <
-             swipeMid)) {
+            swipeMid)) {
             curIndex_++;
         }
     } else if (distance > 0) {
-        /*
-         * 3, 10 : Check whether the current view is dragged by more than 1/5,
-         * that is, the x or y coordinate plus 3/10 width or height.
-         */
+        // 3, 10 : Check whether the current view is dragged by more than 1/5,
+        // that is, the x or y coordinate plus 3/10 width or height.
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) > swipeMid) &&
             ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 3 / 10) + accelerationOffset >
-             swipeMid)) {
+            swipeMid)) {
             curIndex_--;
         }
     } else {
