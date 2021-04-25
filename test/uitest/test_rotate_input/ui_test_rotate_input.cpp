@@ -23,6 +23,7 @@
 
 #if ENABLE_ROTATE_INPUT
 namespace OHOS {
+namespace {
 static int16_t g_blank = 20;
 static int16_t g_listW = 200;
 static int16_t g_listH = 400;
@@ -39,6 +40,7 @@ static int16_t g_sliderH = 300;
 static int16_t g_testButtonW = 80;
 static int16_t g_testButtonH = 40;
 static const char* g_pickerRange[] = {"A0", "B1", "C2", "D3", "E4", "F5", "G6", "H7", "I8", "J9", "K10", "L11"};
+}
 
 #if ENABLE_VIBRATOR
 void Print(VibratorType vibratorType)
