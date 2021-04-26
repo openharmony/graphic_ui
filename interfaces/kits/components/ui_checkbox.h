@@ -35,6 +35,8 @@
 #ifndef GRAPHIC_LITE_UI_CHECKBOX_H
 #define GRAPHIC_LITE_UI_CHECKBOX_H
 
+#include "animator/animator.h"
+#include "animator/interpolation.h"
 #include "common/image.h"
 #include "components/ui_view.h"
 
@@ -47,7 +49,11 @@ namespace OHOS {
  * @since 1.0
  * @version 1.0
  */
+#if DEFAULT_ANIMATION
+class UICheckBox : public UIView, public AnimatorCallback {
+#else
 class UICheckBox : public UIView {
+#endif
 public:
     /**
      * @brief Enumerates the states of a check box.
@@ -219,16 +225,30 @@ protected:
     virtual void ReverseState();
     virtual void CalculateSize();
     void SelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
-
+    void UnSelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
+#if DEFAULT_ANIMATION
+    virtual void ResetCallback();
+    void Callback(UIView* view) override;
+    void OnStop(UIView& view) override;
+#endif
     static constexpr int16_t DEFAULT_HOT_WIDTH = 46;
     static constexpr int16_t DEFAULT_HOT_HEIGHT = 46;
     static constexpr int16_t DEFAULT_BORDER_WIDTH = 22;
+    static constexpr uint8_t DEFAULT_BG_RED = 31;
+    static constexpr uint8_t DEFAULT_BG_GREEN = 113;
+    static constexpr uint8_t DEFAULT_BG_BLUE = 255;
+
     UICheckBoxState state_;
     OnChangeListener* onStateChangeListener_;
     int16_t width_;
     int16_t height_;
     int16_t borderWidth_;
     Image image_[MAX_STATUS_NUM];
+    uint8_t backgroundOpacity_;
+#if DEFAULT_ANIMATION
+    Animator checkBoxAnimator_;
+    uint32_t runTime_;
+#endif
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_CHECKBOX_H
