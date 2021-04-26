@@ -84,22 +84,23 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    FILE* fd = fopen(filePath, "rb");
-    if (fd == nullptr) {
-        return false;
-    }
     uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
     if (frameBuf == nullptr) {
         return false;
     }
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
     uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
-    uint8_t* readBuf = reinterpret_cast<uint8_t*>(malloc(buffSize));
+    uint8_t* readBuf = new uint8_t[buffSize];
     if (readBuf == nullptr) {
         return false;
     }
+    FILE* fd = fopen(filePath, "rb");
+    if (fd == nullptr) {
+        delete[] readBuf;
+        return false;
+    }
     if (fread(readBuf, sizeof(uint8_t), buffSize, fd) < 0) {
-        free(readBuf);
+        delete[] readBuf;
         fclose(fd);
         return false;
     }
@@ -115,7 +116,7 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
     } else {
         GRAPHIC_LOGI("[FAILURE]:fileName=%s", filePath);
     }
-    free(readBuf);
+    delete[] readBuf;
     fclose(fd);
     if (enableLog_) {
         char logBuf[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
@@ -138,10 +139,6 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    FILE* fd = fopen(filePath, "wb+");
-    if (fd == nullptr) {
-        return false;
-    }
     uint8_t* frameBuf = ScreenDeviceProxy::GetInstance()->GetBuffer();
     if (frameBuf == nullptr) {
         GRAPHIC_LOGE("GetBuffer failed");
@@ -149,6 +146,10 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
     }
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
     uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
+    FILE* fd = fopen(filePath, "wb+");
+    if (fd == nullptr) {
+        return false;
+    }
     if (fwrite(frameBuf, sizeof(uint8_t), buffSize, fd) < 0) {
         fclose(fd);
         return false;
@@ -202,7 +203,7 @@ void CompareTools::UnsetLogPath()
     }
 }
 
-bool CompareTools::SaveLog(char* buff, size_t bufSize)
+bool CompareTools::SaveLog(const char* buff, size_t bufSize)
 {
     if ((buff == nullptr) || (logPath_ == nullptr)) {
         return false;
@@ -214,7 +215,7 @@ bool CompareTools::SaveLog(char* buff, size_t bufSize)
     }
     if (fwrite(buff, 1, bufSize, log) < 0) {
         fclose(log);
-        GRAPHIC_LOGE("wtite log failed");
+        GRAPHIC_LOGE("write log failed");
         return false;
     }
     fclose(log);

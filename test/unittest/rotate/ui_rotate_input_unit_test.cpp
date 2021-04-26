@@ -115,6 +115,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_001, TestSize.
     UIScrollView* scroll = new UIScrollView();
     scroll->RequestFocus();
     EXPECT_EQ(scroll, FocusManager::GetInstance()->GetFocusedView());
+    scroll->ClearFocus();
     delete scroll;
 }
 /**
@@ -128,6 +129,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_002, TestSize.
     UITimePicker* timePicker = new UITimePicker();
     timePicker->RequestFocus();
     EXPECT_EQ(timePicker, FocusManager::GetInstance()->GetFocusedView());
+    timePicker->ClearFocus();
     delete timePicker;
 }
 /**
@@ -141,6 +143,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_003, TestSize.
     UISwipeView* swipe = new UISwipeView();
     swipe->RequestFocus();
     EXPECT_EQ(swipe, FocusManager::GetInstance()->GetFocusedView());
+    swipe->ClearFocus();
     delete swipe;
 }
 /**
@@ -154,6 +157,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_004, TestSize.
     UIList* list = new UIList();
     list->RequestFocus();
     EXPECT_EQ(list, FocusManager::GetInstance()->GetFocusedView());
+    list->ClearFocus();
     delete list;
 }
 /**
@@ -167,6 +171,7 @@ HWTEST_F(UIRotateInputTest, Graphic_RotateInput_Test_RequestFocus_005, TestSize.
     UISlider* slider = new UISlider();
     slider->RequestFocus();
     EXPECT_EQ(slider, FocusManager::GetInstance()->GetFocusedView());
+    slider->ClearFocus();
     delete slider;
 }
 }
