@@ -52,7 +52,7 @@ config("graphic_test_config") {
     "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
     "//foundation/distributedschedule/samgr_lite/interfaces/kits/communication/broadcast",
     "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
-    "//foundation/multimedia/utils/lite/include",
+    "//foundation/multimedia/utils/lite/interfaces/kits",
   ]
   ldflags = [
     "-lstdc++",
