@@ -57,7 +57,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    RotateEvent(int16_t rotate) : rotate_(-rotate * ROTATE_SENSITIVITY) {} // Rotation direction
+    RotateEvent(int16_t rotate) : rotate_(rotate * ROTATE_SENSITIVITY) {} // Rotation direction
 
     ~RotateEvent() {};
 
