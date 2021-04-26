@@ -60,7 +60,7 @@ public:
 
     virtual void OnStop(UIView& view) override
     {
-        EXPECT_EQ(view_->GetX(), END_POS);
+        view_->SetX(END_POS);
     }
 
     Animator* GetAnimator() const
@@ -203,7 +203,6 @@ HWTEST_F(AnimatorTest, AnimatorManagerAddAndRemove_001, TestSize.Level0)
     }
     Animator* animator = callback->GetAnimator();
     AnimatorManager::GetInstance()->Init();
-    AnimatorManager::GetInstance()->Add(animator);
     animator->Start();
     EXPECT_EQ(animator->GetState(), Animator::START);
     TaskManager::GetInstance()->SetTaskRun(true);
@@ -213,8 +212,8 @@ HWTEST_F(AnimatorTest, AnimatorManagerAddAndRemove_001, TestSize.Level0)
             break;
         }
     }
+    EXPECT_EQ(view->GetX(), END_POS);
 
-    AnimatorManager::GetInstance()->Remove(animator);
     view->SetX(START_POS);
     animator->Start();
     EXPECT_EQ(animator->GetState(), Animator::START);

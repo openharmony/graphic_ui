@@ -440,8 +440,9 @@ private:
 
     private:
         Animator animator_;
+        bool isReverseAnimation_ = false;
+        float scale_ = 1.0f;
         UIButton& button_;
-        int16_t progress_ = 0;
     } animator_;
 #endif
 };
