@@ -53,7 +53,7 @@ private:
     CompareTools() {}
     virtual ~CompareTools() {}
 
-    static bool SaveLog(char* buff, size_t bufSize);
+    static bool SaveLog(const char* buff, size_t bufSize);
     static bool CompareBinary(const char* filePath, size_t length);
     static bool SaveFrameBuffToBinary(const char* filePath, size_t length);
 

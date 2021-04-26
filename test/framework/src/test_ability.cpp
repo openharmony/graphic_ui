@@ -27,7 +27,6 @@ void* AutoTestThread(void*)
 #endif // _WIN32
 {
     OHOS::UIAutoTestApp::GetInstance()->Start();
-    pthread_exit(0);
 }
 
 
