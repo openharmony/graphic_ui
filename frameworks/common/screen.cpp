@@ -43,6 +43,7 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
     info.header.compressMode = 0;
 
     if (!ScreenDeviceProxy::GetInstance()->GetScreenBitmapBuffer(screenBitmapBuffer, info.dataSize)) {
+        ImageCacheFree(info);
         return false;
     }
     info.data = screenBitmapBuffer;
