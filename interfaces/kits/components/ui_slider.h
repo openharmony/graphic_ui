@@ -357,7 +357,7 @@ private:
     int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
     int32_t UpdateCurrentValue(const Point& knobPosition);
 #if ENABLE_ROTATE_INPUT
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
+    static constexpr int8_t DEFAULT_ROTATE_FACTOR = -1;
     int8_t rotateFactor_ = DEFAULT_ROTATE_FACTOR;
 #endif
     UISliderEventListener* listener_;
