@@ -102,6 +102,8 @@ void UITestUIList::TearDown()
     setSelectOffBtn_ = nullptr;
     setAutoAlignBtn_ = nullptr;
     setAutoAlignOffBtn_ = nullptr;
+    setAutoAlignACCIncBtn_ = nullptr;
+    setAutoAlignACCDncBtn_ = nullptr;
     lastX_ = 0;
     lastY_ = 0;
 }
@@ -200,6 +202,13 @@ void UITestUIList::SetControlButton()
         setAutoAlignOffBtn_ = new UILabelButton();
     }
 
+    if (setAutoAlignACCIncBtn_ == nullptr) {
+        setAutoAlignACCIncBtn_ = new UILabelButton();
+    }
+    if (setAutoAlignACCDncBtn_ == nullptr) {
+        setAutoAlignACCDncBtn_ = new UILabelButton();
+    }
+
     positionX_ += 5; // 5: increase y-coordinate
     SetUpButton(setBlankBtn_, "开启blank");
     SetUpButton(setBlankOffBtn_, "关闭blank");
@@ -214,6 +223,8 @@ void UITestUIList::SetControlButton()
     SetUpButton(setSelectOffBtn_, "关闭select");
     SetUpButton(setAutoAlignBtn_, "开启自动对齐 ");
     SetUpButton(setAutoAlignOffBtn_, "关闭自动对齐 ");
+    SetUpButton(setAutoAlignACCIncBtn_, "增加自动对齐时间 ");
+    SetUpButton(setAutoAlignACCDncBtn_, "减少自动对齐时间 ");
 }
 
 void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
@@ -305,6 +316,12 @@ bool UITestUIList::OnClick(UIView& view, const ClickEvent& event)
         currentList_->EnableAutoAlign(true);
     } else if (&view == setAutoAlignOffBtn_) {
         currentList_->EnableAutoAlign(false);
+    } else if (&view == setAutoAlignACCIncBtn_) {
+        autoAlignTime_ += ALINE_TIME_CHANGE_VALUE;
+        currentList_->SetAutoAlignTime(autoAlignTime_);
+    } else if (&view == setAutoAlignACCDncBtn_) {
+        autoAlignTime_ -= ALINE_TIME_CHANGE_VALUE;
+        currentList_->SetAutoAlignTime(autoAlignTime_);
     }
     return true;
 }
