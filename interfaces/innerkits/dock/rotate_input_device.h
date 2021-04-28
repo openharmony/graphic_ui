@@ -29,14 +29,20 @@ public:
     /** @brief Destructor */
     virtual ~RotateInputDevice(){};
 
+    void SetRotateInputThreshold(int16_t threshold)
+    {
+        threshold_ = threshold;
+    }
+
 protected:
 #ifdef _WIN32
     static constexpr int16_t ROTATE_INPUT_THRESHOLD = 1;
 #else
-    static constexpr int16_t ROTATE_INPUT_THRESHOLD = 3;
+    static constexpr int16_t ROTATE_INPUT_THRESHOLD = 10;
 #endif
     void DispatchEvent(const DeviceData& data) override;
     bool rotateStart = false;
+    int16_t threshold_ = ROTATE_INPUT_THRESHOLD;
 };
 } // namespace OHOS
 

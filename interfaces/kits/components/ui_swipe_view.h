@@ -355,7 +355,7 @@ protected:
     AlignMode alignMode_ = ALIGN_CENTER;
     bool loop_;
 #if ENABLE_ROTATE_INPUT
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 2;
+    static constexpr float DEFAULT_ROTATE_FACTOR = 2.0;
 #endif
 
 private:

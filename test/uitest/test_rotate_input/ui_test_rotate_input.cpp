@@ -60,7 +60,7 @@ void Print(VibratorType vibratorType)
 
 class TestSetRotateFactorListener : public UIView::OnClickListener {
 public:
-    TestSetRotateFactorListener(UIView* view, int8_t factor) : view_(view), factor_(factor) {}
+    TestSetRotateFactorListener(UIView* view, float factor) : view_(view), factor_(factor) {}
     ~TestSetRotateFactorListener() {}
 
     bool OnClick(UIView& view, const ClickEvent& event) override
@@ -80,7 +80,7 @@ public:
 
 private:
     UIView* view_ = nullptr;
-    int8_t factor_ = 0;
+    float factor_ = 0;
 };
 
 void UITestRotateInput::SetUp()
