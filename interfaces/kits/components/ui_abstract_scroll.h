@@ -228,7 +228,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    int8_t GetRotateFactor() const
+    float GetRotateFactor() const
     {
         return rotateFactor_;
     }
@@ -240,7 +240,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetRotateFactor(int8_t factor)
+    void SetRotateFactor(float factor)
     {
         rotateFactor_ = factor;
     }
@@ -348,8 +348,8 @@ protected:
     ListAnimatorCallback animatorCallback_;
     Animator scrollAnimator_;
 #if ENABLE_ROTATE_INPUT
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
-    int8_t rotateFactor_;
+    static constexpr float DEFAULT_ROTATE_FACTOR = 1.0;
+    float rotateFactor_;
 #endif
 };
 } // namespace OHOS

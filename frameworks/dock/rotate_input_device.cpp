@@ -27,7 +27,7 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
         view_->OnRotateEvent(0);
         rotateStart = false;
         return;
-    } else if (MATH_ABS(data.rotate) < ROTATE_INPUT_THRESHOLD) {
+    } else if (MATH_ABS(data.rotate) < threshold_) {
         return;
     } else {
         view_->OnRotateEvent(data.rotate);
