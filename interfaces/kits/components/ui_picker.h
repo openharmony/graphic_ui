@@ -358,7 +358,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetRotateFactor(int8_t factor)
+    void SetRotateFactor(float factor)
     {
         list_.SetRotateFactor(factor);
     }
@@ -370,7 +370,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    int8_t GetRotateFactor()
+    float GetRotateFactor()
     {
         return list_.GetRotateFactor();
     }
@@ -400,7 +400,7 @@ protected:
 
 private:
 #if ENABLE_ROTATE_INPUT
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 1;
+    static constexpr float DEFAULT_ROTATE_FACTOR = 1.0;
 #endif
     friend class PickerListScrollListener;
     bool RefreshValues(const char* value[], uint16_t count);

@@ -458,7 +458,7 @@ private:
 #if ENABLE_ROTATE_INPUT
     bool isRotating_;
     int16_t lastRotateLen_;
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 5;
+    static constexpr float DEFAULT_ROTATE_FACTOR = 5.0;
 #endif
 #if ENABLE_VIBRATOR
     void SetMotorType(VibratorType vibratorType);
