@@ -41,6 +41,7 @@ public:
     void UIKit_List_Scroll_Test_Blank_Set_001();
 
 private:
+    static constexpr int16_t ALINE_TIME_CHANGE_VALUE = 100;
     void SetLastPos(UIView* view);
     void SetUpButton(UILabelButton* btn, const char* title);
     void SetControlButton();
@@ -55,6 +56,8 @@ private:
     UILabelButton* setSelectOffBtn_ = nullptr;
     UILabelButton* setAutoAlignBtn_ = nullptr;
     UILabelButton* setAutoAlignOffBtn_ = nullptr;
+    UILabelButton* setAutoAlignACCIncBtn_ = nullptr;
+    UILabelButton* setAutoAlignACCDncBtn_ = nullptr;
     UILabel* scrollStateLabel_ = nullptr;
     UILabel* scrollSelectLabel_ = nullptr;
     UIScrollView* container_ = nullptr;
@@ -69,6 +72,7 @@ private:
     UILabel* lastSelectLabel_ = nullptr;
     int16_t lastX_ = 0;
     int16_t lastY_ = 0;
+    uint16_t autoAlignTime_ = 100; // 100: default list auto aling ACC
 };
 } // namespace OHOS
 #endif // UI_TEST_UI_LIST_H
