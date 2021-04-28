@@ -99,41 +99,14 @@ void UIList::Recycle::FillActiveView()
     }
 }
 
-UIList::UIList()
-    : onSelectedView_(nullptr),
-      isLoopList_(false),
-      isReCalculateDragEnd_(true),
-      autoAlign_(false),
-      startIndex_(0),
-      topIndex_(0),
-      bottomIndex_(0),
-      selectPosition_(0),
-      onSelectedIndex_(0),
-      recycle_(this),
-      scrollListener_(nullptr)
-{
-#if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
-    isRotating_ = false;
-    lastRotateLen_ = 0;
-#endif
-#if ENABLE_VIBRATOR
-    vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
-#endif
-#if ENABLE_FOCUS_MANAGER
-    focusable_ = true;
-#endif
-    direction_ = VERTICAL;
-    touchable_ = true;
-    draggable_ = true;
-    dragParentInstead_ = false;
-}
+UIList::UIList() : UIList(VERTICAL) {}
 
 UIList::UIList(uint8_t direction)
     : onSelectedView_(nullptr),
       isLoopList_(false),
       isReCalculateDragEnd_(true),
       autoAlign_(false),
+      alignTime_(DEFAULT_ALINE_TIMES),
       startIndex_(0),
       topIndex_(0),
       bottomIndex_(0),
@@ -386,9 +359,10 @@ bool UIList::ReCalculateDragEnd()
         // 2: half
         offsetX = selectPosition_ - (onSelectedView_->GetX() + (onSelectedView_->GetRelativeRect().GetWidth() / 2));
     }
+    animatorCallback_.RsetCallback();
     animatorCallback_.SetDragStartValue(0, 0);
     animatorCallback_.SetDragEndValue(offsetX, offsetY);
-    animatorCallback_.SetDragTimes(RECALCULATE_DRAG_TIMES * DRAG_ACC_FACTOR / GetDragACCLevel());
+    animatorCallback_.SetDragTimes(GetAutoAlignTime() / DEFAULT_TASK_PERIOD);
     scrollAnimator_.Start();
     isReCalculateDragEnd_ = true;
     return true;
