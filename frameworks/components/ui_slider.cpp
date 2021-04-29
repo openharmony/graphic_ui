@@ -30,16 +30,16 @@ UISlider::UISlider()
     touchable_ = true;
     draggable_ = true;
     dragParentInstead_ = false;
-    SetCapType(CapType::CAP_ROUND);
-    Theme* theme = ThemeManager::GetInstance().GetCurrent();
-    if (theme != nullptr) {
-        knobStyle_ = &(theme->GetSliderKnobStyle());
-    } else {
-        knobStyle_ = &(StyleDefault::GetSliderKnobStyle());
-    }
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
 #endif
+
+    SetBackgroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
+    SetBackgroundStyle(STYLE_BACKGROUND_OPA, BACKGROUND_OPA);
+    SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Black().full);
+    SetForegroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
+    SetForegroundStyle(STYLE_BACKGROUND_COLOR,
+        Color::GetColorFromRGB(FOREGROUND_COLOR_R, FOREGROUND_COLOR_G, FOREGROUND_COLOR_B).full);
 }
 
 UISlider::~UISlider()
@@ -220,7 +220,7 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
 
     switch (direction_) {
         case Direction::DIR_LEFT_TO_RIGHT: {
-            length = GetCurrentPos(progressWidth_ - 1);
+            length = GetCurrentPos(progressWidth_ + 1);
             coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
                            startPoint.y + progressHeight_ - 1);
 
@@ -230,7 +230,7 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
             break;
         }
         case Direction::DIR_RIGHT_TO_LEFT: {
-            length = GetCurrentPos(progressWidth_ - 1);
+            length = GetCurrentPos(progressWidth_ + 1);
             coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
                            startPoint.y + progressHeight_ - 1);
 
@@ -240,17 +240,17 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
             break;
         }
         case Direction::DIR_TOP_TO_BOTTOM: {
-            length = GetCurrentPos(progressHeight_ - 1);
+            length = GetCurrentPos(progressHeight_ + 1);
             coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
                            startPoint.y + progressHeight - 1);
 
-            top = startPoint.y - radius + 1;
+            top = startPoint.y - radius - 1;
             bottom = top + length;
             rect = Rect(startPoint.x, top, startPoint.x + progressWidth_ - 1, bottom);
             break;
         }
         case Direction::DIR_BOTTOM_TO_TOP: {
-            length = GetCurrentPos(progressHeight_ - 1);
+            length = GetCurrentPos(progressHeight_ + 1);
             coords.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
                            startPoint.y + progressHeight - 1);
 
