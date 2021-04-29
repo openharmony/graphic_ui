@@ -14,31 +14,29 @@
  */
 
 #if ENABLE_DEBUG
+#include <climits>
+#include <gtest/gtest.h>
+#include <unistd.h>
+
 #include "common/graphic_startup.h"
-#include "common/screen.h"
-#include "components/root_view.h"
-#include "common/task_manager.h"
 #include "common/input_device_manager.h"
-#include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
+#include "common/screen.h"
+#include "common/task_manager.h"
+#include "components/root_view.h"
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
-#include <climits>
-#include "gfx_utils/file.h"
+#include "core/render_manager.h"
+#include "dock/screen_device_proxy.h"
 #include "font/ui_font.h"
-#include <gtest/gtest.h>
-#include "graphic_config.h"
+#include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
+#include "graphic_config.h"
 #include "imgdecode/cache_manager.h"
 #include "layout/grid_layout.h"
-#include <unistd.h>
 
 using namespace testing::ext;
 
-enum TestEventFlag {
-    FLAG0,
-    FLAG1
-};
+enum TestEventFlag { FLAG0, FLAG1 };
 
 namespace {
 uint8_t REGISTER_POINT_FLAG = FLAG0;
@@ -48,7 +46,7 @@ uint8_t LONG_PRESS_FLAG = FLAG0;
 uint8_t PRESS_FLAG = FLAG0;
 uint8_t DRAG_FLAG = FLAG0;
 uint8_t KEY_FLAG = FLAG0;
-}
+} // namespace
 
 namespace OHOS {
 class TestEventBubbleView : public UIView, public RootView::OnKeyActListener {
@@ -88,7 +86,7 @@ public:
     static void SetUpTestCase(void);
     static void TearDownTestCase(void);
     static void TestApp();
-    static void SetUpTestview(TestEventBubbleView *testView, bool touchable, bool draggable);
+    static void SetUpTestview(TestEventBubbleView* testView, bool touchable, bool draggable);
     static void DeleteChildren(UIView* view);
 
     static RootView* rootView_;
@@ -128,12 +126,9 @@ private:
     bool isConsume_;
 };
 
-
 class TestOnTouchListener : public UIView::OnTouchListener {
 public:
-    explicit TestOnTouchListener(bool isConsume) : isConsume_(isConsume)
-    {
-    }
+    explicit TestOnTouchListener(bool isConsume) : isConsume_(isConsume) {}
     virtual ~TestOnTouchListener() {}
     virtual bool OnPress(UIView& view, const PressEvent& event)
     {
@@ -147,9 +142,7 @@ private:
 
 class TestOnDragListener : public UIView::OnDragListener {
 public:
-    explicit TestOnDragListener(bool isConsume) : isConsume_(isConsume)
-    {
-    }
+    explicit TestOnDragListener(bool isConsume) : isConsume_(isConsume) {}
     virtual ~TestOnDragListener() {}
     virtual bool OnDrag(DragEvent& event)
     {
@@ -215,7 +208,7 @@ void EventBubbleTest::TestApp()
     rootView_->Invalidate();
 }
 
-void EventBubbleTest::SetUpTestview(TestEventBubbleView *testView, bool touchable, bool draggable)
+void EventBubbleTest::SetUpTestview(TestEventBubbleView* testView, bool touchable, bool draggable)
 {
     layout_->Add(testView);
     testView->Resize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION / 7); /* 7:ratio */
@@ -245,6 +238,7 @@ void EventBubbleTest::TearDownTestCase(void)
 {
     DeleteChildren(layout_);
     layout_ = nullptr;
+    RootView::GetInstance()->ClearOnKeyActListener();
 }
 
 /**
@@ -260,7 +254,7 @@ HWTEST_F(EventBubbleTest, Graphic_EventBubbleTest_Test_GetExtraMsg_SetExtraMsg_0
     EXPECT_EQ(view->GetExtraMsg(), nullptr);
 
     /* test for SetExtraMsg */
-    UIView::ViewExtraMsg *extraMsg = new UIView::ViewExtraMsg();
+    UIView::ViewExtraMsg* extraMsg = new UIView::ViewExtraMsg();
     extraMsg->elementPtr = malloc(sizeof(char));
     view->SetExtraMsg(extraMsg);
     EXPECT_EQ(view->GetExtraMsg()->elementPtr, extraMsg->elementPtr);

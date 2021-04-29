@@ -16,33 +16,31 @@
 #include "dfx/event_injector.h"
 
 #if ENABLE_DEBUG
-#include "common/graphic_startup.h"
-#include "common/screen.h"
-#include "components/root_view.h"
-#include "common/task_manager.h"
-#include "common/input_device_manager.h"
-#include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
-#include "components/ui_label_button.h"
-#include "components/ui_scroll_view.h"
 #include <climits>
-#include "gfx_utils/file.h"
-#include "font/ui_font.h"
 #include <gtest/gtest.h>
-#include "graphic_config.h"
-#include "gfx_utils/graphic_log.h"
-#include "imgdecode/cache_manager.h"
-#include "layout/grid_layout.h"
 #include <pthread.h>
 #include <unistd.h>
+
+#include "common/graphic_startup.h"
+#include "common/input_device_manager.h"
+#include "common/screen.h"
+#include "common/task_manager.h"
+#include "components/root_view.h"
+#include "components/ui_label_button.h"
+#include "components/ui_scroll_view.h"
+#include "core/render_manager.h"
+#include "dock/screen_device_proxy.h"
+#include "font/ui_font.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
+#include "graphic_config.h"
+#include "imgdecode/cache_manager.h"
+#include "layout/grid_layout.h"
 #include "window/window.h"
 
 using namespace testing::ext;
 
-enum TestEventInjectorFlag {
-    FLAG0,
-    FLAG1
-};
+enum TestEventInjectorFlag { FLAG0, FLAG1 };
 
 namespace {
 uint8_t REGISTER_POINT_FLAG = FLAG0;
@@ -54,7 +52,7 @@ uint8_t LONG_PRESS_FLAG = FLAG0;
 uint8_t DRAG_FLAG = FLAG0;
 uint8_t KEY_FLAG = FLAG0;
 uint8_t MAX_LOOP = 200;
-}
+} // namespace
 
 namespace OHOS {
 class TestEventInjectorView : public UIView, public RootView::OnKeyActListener {
@@ -95,7 +93,7 @@ public:
 
     static pthread_t mainTaskThread_;
     static bool isRepeat_;
-    static  RootView* rootView_;
+    static RootView* rootView_;
     static GridLayout* layout_;
     static TestEventInjectorView* clickView_;
     static TestEventInjectorView* dragView_;
@@ -220,6 +218,7 @@ void EventInjectorTest::TearDownTestCase(void)
 
     EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::POINT_TYPE);
     EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::KEY_TYPE);
+    RootView::GetInstance()->ClearOnKeyActListener();
 }
 
 /**
@@ -255,7 +254,7 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_SetClickEvent_001, Te
     uint8_t loop = 0;
     while ((loop < MAX_LOOP) && !CLICK_FLAG) {
         loop++;
-        usleep(10000);  /* 10000:10ms */
+        usleep(10000); /* 10000:10ms */
     }
     EXPECT_EQ(CLICK_FLAG, FLAG1);
 }
@@ -284,7 +283,7 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_SetDragEvent_001, Tes
     uint8_t loop = 0;
     while ((loop < MAX_LOOP) && !DRAG_FLAG) {
         loop++;
-        usleep(10000);  /* 10000:10ms */
+        usleep(10000); /* 10000:10ms */
     }
     EXPECT_EQ(DRAG_FLAG, FLAG1);
 }
@@ -345,17 +344,17 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_SetLongPressEvent_001
         ADD_FAILURE();
         return;
     }
-    sleep(2);  /* 2:2s */
+    sleep(2); /* 2:2s */
     LONG_PRESS_FLAG = FLAG0;
     /* 2:ratio, 2:ratio */
     Point longPressPoint = {static_cast<int16_t>(longPressView_->GetRect().GetX() + longPressView_->GetWidth() / 2),
-                        static_cast<int16_t>(longPressView_->GetRect().GetY() + longPressView_->GetHeight() / 2)};
+                            static_cast<int16_t>(longPressView_->GetRect().GetY() + longPressView_->GetHeight() / 2)};
     bool ret = EventInjector::GetInstance()->SetLongPressEvent(longPressPoint);
     EXPECT_EQ(ret, true);
     uint8_t loop = 0;
     while ((loop < MAX_LOOP) && !LONG_PRESS_FLAG) {
         loop++;
-        usleep(10000);  /* 10000:10ms */
+        usleep(10000); /* 10000:10ms */
     }
     EXPECT_EQ(LONG_PRESS_FLAG, FLAG1);
 }
@@ -374,7 +373,7 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_SetLongPressEvent_002
     }
     /* 2:ratio, 2:ratio */
     Point longPressPoint = {static_cast<int16_t>(longPressView_->GetRect().GetX() + longPressView_->GetWidth() / 2),
-                        static_cast<int16_t>(longPressView_->GetRect().GetY() + longPressView_->GetHeight() / 2)};
+                            static_cast<int16_t>(longPressView_->GetRect().GetY() + longPressView_->GetHeight() / 2)};
     /* 20:loop */
     for (uint8_t i = 0; i < 20; i++) {
         EventInjector::GetInstance()->SetLongPressEvent(longPressPoint);
@@ -397,7 +396,7 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_SetKeyEvent_001, Test
     uint8_t loop = 0;
     while ((loop < MAX_LOOP) && !KEY_FLAG) {
         loop++;
-        usleep(10000);  /* 10000:10ms */
+        usleep(10000); /* 10000:10ms */
     }
     EXPECT_EQ(KEY_FLAG, FLAG1);
 }
@@ -439,5 +438,5 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_UnregisterEventInject
     EXPECT_EQ(UNREGISTER_POINT_FLAG, FLAG1);
     EXPECT_EQ(UNREGISTER_KEY_FLAG, FLAG1);
 }
-}
+} // namespace OHOS
 #endif // ENABLE_DEBUG
