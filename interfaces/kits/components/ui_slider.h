@@ -343,6 +343,10 @@ protected:
     bool InitImage() override;
 
 private:
+    static constexpr int8_t BACKGROUND_OPA = 38;
+    static constexpr uint8_t FOREGROUND_COLOR_R = 0x1f;
+    static constexpr uint8_t FOREGROUND_COLOR_G = 0x71;
+    static constexpr uint8_t FOREGROUND_COLOR_B = 0xff;
 #if ENABLE_SLIDER_KNOB
     void DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect);
 #else
