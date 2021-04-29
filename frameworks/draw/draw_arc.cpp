@@ -463,6 +463,7 @@ int16_t DrawArc::GetDegreeRangeIntersectState(uint16_t degreeStart, uint16_t deg
         }
     }
 }
+
 void DrawArc::SetArcInfo(ArcInfo& arcInfo, const Style& style)
 {
     outRadius_ = arcInfo.radius;
@@ -478,6 +479,7 @@ void DrawArc::SetArcInfo(ArcInfo& arcInfo, const Style& style)
     } else {
         isCircle_ = false;
     }
+
 #if ENABLE_ANTIALIAS
     antiOutRadiusSqr_ = (outRadius_ - 1) * (outRadius_ - 1);
     if (inRadius_ == 0) {
