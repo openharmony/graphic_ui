@@ -468,8 +468,8 @@ Rect UIView::GetOrigRect() const
     int16_t y = rect_.GetY();
     UIView* par = parent_;
     while (par != nullptr) {
-        x += par->GetX() + par->style_->paddingLeft_ + par->style_->borderWidth_;
-        y += par->GetY() + par->style_->paddingTop_ + par->style_->borderWidth_;
+        x += par->GetRelativeRect().GetX() + par->GetStyle(STYLE_PADDING_LEFT) + par->GetStyle(STYLE_BORDER_WIDTH);
+        y += par->GetRelativeRect().GetY() + par->GetStyle(STYLE_PADDING_TOP) + par->GetStyle(STYLE_BORDER_WIDTH);
         par = par->parent_;
     }
     return Rect(x, y, x + rect_.GetWidth() - 1, y + rect_.GetHeight() - 1);

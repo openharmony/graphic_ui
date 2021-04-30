@@ -40,7 +40,7 @@ void UIChart::SetHeight(int16_t height)
         needRefresh_ = true;
     }
 
-    UIViewGroup::SetHeight(height);
+    UIView::SetHeight(height);
     xAxis_.SetHeight(height);
     xAxis_.UpdateAxis();
     yAxis_.SetHeight(height);
@@ -49,7 +49,7 @@ void UIChart::SetHeight(int16_t height)
 
 void UIChart::SetWidth(int16_t width)
 {
-    UIViewGroup::SetWidth(width);
+    UIView::SetWidth(width);
     xAxis_.SetWidth(width);
     yAxis_.SetWidth(width);
     xAxis_.UpdateAxis();
@@ -59,10 +59,7 @@ void UIChart::SetWidth(int16_t width)
 void UIChart::OnDraw(const Rect& invalidatedArea)
 {
     UIViewGroup::OnDraw(invalidatedArea);
-    Rect rect = GetContentRect();
-    if (rect.Intersect(rect, invalidatedArea)) {
-        DrawDataSerials(rect);
-    }
+    DrawDataSerials(invalidatedArea);
 }
 
 bool UIChart::AddDataSerial(UIChartDataSerial* dataSerial)

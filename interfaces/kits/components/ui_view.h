@@ -879,7 +879,12 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetX(int16_t x) { rect_.SetX(x); }
+    virtual void SetX(int16_t x)
+    {
+        if (GetX() != x) {
+            rect_.SetX(x + GetStyle(STYLE_MARGIN_LEFT));
+        }
+    }
 
     /**
      * @brief Sets a percentage that represents the proportion of the view's x-coordinate
@@ -896,7 +901,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetX() const { return rect_.GetX(); }
+    int16_t GetX() const
+    {
+        return rect_.GetX() - GetStyle(STYLE_MARGIN_LEFT);
+    }
 
     /**
      * @brief Sets the y-coordinate for the view.
@@ -904,7 +912,12 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetY(int16_t y) { rect_.SetY(y); }
+    virtual void SetY(int16_t y)
+    {
+        if (GetY() != y) {
+            rect_.SetY(y + GetStyle(STYLE_MARGIN_TOP));
+        }
+    }
 
     /**
      * @brief Sets a percentage that represents the proportion of the view's y-coordinate
@@ -921,7 +934,32 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetY() const { return rect_.GetY(); }
+    int16_t GetY() const
+    {
+        return rect_.GetY() - GetStyle(STYLE_MARGIN_TOP);
+    }
+
+    /**
+     * @brief 获取组件设置margin属性后margin的宽度，包括组件宽度加marginLeft 加 marginRight.
+     * @return margin的宽度
+     * @since 3.0
+     * @version 3.0
+     */
+    int16_t GetWidthWithMargin()
+    {
+        return GetRelativeRect().GetWidth() + GetStyle(STYLE_MARGIN_LEFT) + GetStyle(STYLE_MARGIN_RIGHT);
+    }
+
+    /**
+     * @brief 获取组件设置margin属性后margin的高度度，包括组件宽度加marginTop 加 marginBottom.
+     * @return margin的高度
+     * @since 3.0
+     * @version 3.0
+     */
+    int16_t GetHeightWithMargin()
+    {
+        return GetRelativeRect().GetHeight() + GetStyle(STYLE_MARGIN_TOP) + GetStyle(STYLE_MARGIN_BOTTOM);
+    }
 
     /**
      * @brief Sets the position for the view.
@@ -930,7 +968,11 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetPosition(int16_t x, int16_t y) { rect_.SetPosition(x, y); }
+    virtual void SetPosition(int16_t x, int16_t y)
+    {
+        SetX(x);
+        SetY(y);
+    }
 
     /**
      * @brief Sets the position percentages for the view.

@@ -290,9 +290,7 @@ public:
     void SetWidth(int16_t width) override
     {
         contentWidth_ = width;
-        Style* style = buttonStyles_[state_];
-        UIView::SetWidth(width + (style->paddingLeft_ + style->paddingRight_) +
-                         (style->borderWidth_ * 2)); /* 2: left and right border */
+        UIView::SetWidth(width); /* 2: left and right border */
     }
 
     /**
@@ -305,9 +303,7 @@ public:
     void SetHeight(int16_t height) override
     {
         contentHeight_ = height;
-        Style* style = buttonStyles_[state_];
-        UIView::SetHeight(height + (style->paddingTop_ + style->paddingBottom_) +
-                          (style->borderWidth_ * 2)); /* 2: top and bottom border */
+        UIView::SetHeight(height); /* 2: top and bottom border */
     }
 
     /**

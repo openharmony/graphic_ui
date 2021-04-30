@@ -446,9 +446,8 @@ private:
     void PushFront(UIView* view);
     void SetHead(UIView* view);
     bool MoveChildStep(int16_t distance);
-    bool MoveChildStepInner(int16_t distance,
-                            int16_t (UIView::*pfnGetXOrY)() const,
-                            int16_t (Rect::*pfnGetWidthOrHeight)() const);
+    bool
+        MoveChildStepInner(int16_t distance, int16_t (UIView::*getXOrY)() const, int16_t (UIView::*getWidthOrHeight)());
     uint16_t GetIndexInc(uint16_t index);
     uint16_t GetIndexDec(uint16_t index);
 

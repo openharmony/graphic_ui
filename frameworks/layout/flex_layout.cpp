@@ -296,9 +296,10 @@ void FlexLayout::LayoutHorizontal()
 
             GetCrossAxisPosY(posY, count, rowsMaxHeight, child);
             if (direction_ == LAYOUT_HOR_R) {
-                child->SetPosition(GetWidth() - (posX - left) - child->GetRelativeRect().GetWidth() - right, posY);
+                child->SetPosition(GetWidth() - posX - child->GetRelativeRect().GetWidth() - right,
+                                   posY - child->GetStyle(STYLE_MARGIN_TOP));
             } else {
-                child->SetPosition(posX, posY);
+                child->SetPosition(posX - left, posY - child->GetStyle(STYLE_MARGIN_TOP));
             }
             posX += child->GetRelativeRect().GetWidth() + right + interval;
             child->LayoutChildren();
@@ -483,9 +484,10 @@ void FlexLayout::LayoutVertical()
 
             GetCrossAxisPosX(posX, count, columnsMaxWidth, child);
             if (direction_ == LAYOUT_VER_R) {
-                child->SetPosition(posX, GetHeight() - (posY - top) - child->GetRelativeRect().GetHeight() - bottom);
+                child->SetPosition(posX - child->GetStyle(STYLE_MARGIN_LEFT),
+                                   GetHeight() - posY - child->GetRelativeRect().GetHeight() - bottom);
             } else {
-                child->SetPosition(posX, posY);
+                child->SetPosition(posX - child->GetStyle(STYLE_MARGIN_LEFT), posY - top);
             }
             posY += child->GetRelativeRect().GetHeight() + bottom + interval;
             child->LayoutChildren();
