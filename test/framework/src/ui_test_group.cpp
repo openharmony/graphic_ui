@@ -19,6 +19,7 @@
 #include "test_animator/ui_test_animator.h"
 #include "test_anti_aliasing/ui_test_anti_aliasing.h"
 #include "test_arc_label/ui_test_arc_label.h"
+#include "test_border_margin_padding/ui_test_border_margin_padding.h"
 #include "test_button/ui_test_button.h"
 #include "test_canvas/ui_test_canvas.h"
 #include "test_chart/ui_test_chart_pillar.h"
@@ -141,6 +142,7 @@ void UITestGroup::SetUpTestCase()
 #if ENABLE_FOCUS_MANAGER
     testCaseList_.PushBack(TestCaseInfo{"FocusManager", new UITestFocusManager()});
 #endif
+    testCaseList_.PushBack(TestCaseInfo{"Border_Margin_Padding", new UITestBorderMarginPadding()});
 }
 
 List<TestCaseInfo>& UITestGroup::GetTestCase()

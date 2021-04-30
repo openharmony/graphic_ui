@@ -230,12 +230,12 @@ void UISwipeView::SwitchToPage(int16_t dst, bool needAnimator)
         if (alignMode_ == ALIGN_LEFT) {
             xOffset = -dstView->GetX();
         } else if (alignMode_ == ALIGN_RIGHT) {
-            xOffset = GetWidth() - (dstView->GetX() + dstView->GetWidth());
+            xOffset = GetWidth() - (dstView->GetX() + dstView->GetWidthWithMargin());
         } else {
-            xOffset = (GetWidth() >> 1) - (dstView->GetX() + (dstView->GetWidth() >> 1));
+            xOffset = (GetWidth() >> 1) - (dstView->GetX() + (dstView->GetWidthWithMargin() >> 1));
         }
     } else {
-        yOffset = (GetHeight() >> 1) - (dstView->GetY() + (dstView->GetHeight() >> 1));
+        yOffset = (GetHeight() >> 1) - (dstView->GetY() + (dstView->GetHeightWithMargin() >> 1));
     }
 
     if ((xOffset != 0) || (yOffset != 0)) {
@@ -279,9 +279,9 @@ void UISwipeView::SortChild()
 
     while (next != nullptr) {
         if (direction_ == HORIZONTAL) {
-            next->SetX(pre->GetX() + pre->GetWidth());
+            next->SetX(pre->GetRelativeRect().GetRight() + pre->GetStyle(STYLE_MARGIN_RIGHT));
         } else {
-            next->SetY(pre->GetY() + pre->GetHeight());
+            next->SetY(pre->GetRelativeRect().GetBottom() + pre->GetStyle(STYLE_MARGIN_BOTTOM));
         }
         pre = next;
         next->SetViewIndex(index);
@@ -375,9 +375,9 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
 void UISwipeView::RefreshCurrentView(int16_t distance)
 {
     if (direction_ == HORIZONTAL) {
-        RefreshCurrentViewInner(distance, &UIView::GetX, &UIView::GetWidth);
+        RefreshCurrentViewInner(distance, &UIView::GetX, &UIView::GetWidthWithMargin);
     } else {
-        RefreshCurrentViewInner(distance, &UIView::GetY, &UIView::GetHeight);
+        RefreshCurrentViewInner(distance, &UIView::GetY, &UIView::GetHeightWithMargin);
     }
 }
 

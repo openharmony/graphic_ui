@@ -25,8 +25,11 @@ UIBoxProgress::UIBoxProgress()
     SetDirection(Direction::DIR_LEFT_TO_RIGHT);
 }
 
-void UIBoxProgress::DrawValidRect(const Image* image, const Rect& rect, const Rect& invalidatedArea,
-    const Style& style, uint16_t radius)
+void UIBoxProgress::DrawValidRect(const Image* image,
+                                  const Rect& rect,
+                                  const Rect& invalidatedArea,
+                                  const Style& style,
+                                  uint16_t radius)
 {
     Rect cordsTmp;
     if ((image != nullptr) && (image->GetSrcType() != IMG_SRC_UNKNOWN)) {
@@ -65,8 +68,12 @@ void UIBoxProgress::DrawValidRect(const Image* image, const Rect& rect, const Re
     }
 }
 
-void UIBoxProgress::DrawRoundCap(const Image* image, const Point& imgPos, const Rect& rect,
-    const Rect& invalidatedArea, uint16_t radius, const Style& style)
+void UIBoxProgress::DrawRoundCap(const Image* image,
+                                 const Point& imgPos,
+                                 const Rect& rect,
+                                 const Rect& invalidatedArea,
+                                 uint16_t radius,
+                                 const Style& style)
 {
     Point leftTop;
     Point leftBottom;
@@ -134,8 +141,11 @@ void UIBoxProgress::DrawRoundCap(const Image* image, const Point& imgPos, const 
     DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
 }
 
-void UIBoxProgress::GetBackgroundParam(Point& startPoint, int16_t& width, int16_t& height, uint16_t& radius,
-    const Style& style)
+void UIBoxProgress::GetBackgroundParam(Point& startPoint,
+                                       int16_t& width,
+                                       int16_t& height,
+                                       uint16_t& radius,
+                                       const Style& style)
 {
     Rect rect = GetOrigRect();
     // 2: Half of the gap
@@ -223,17 +233,14 @@ void UIBoxProgress::DrawForeground(const Rect& invalidatedArea, Rect& coords)
 
 void UIBoxProgress::OnDraw(const Rect& invalidatedArea)
 {
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opaScale_);
-    Rect trunc(invalidatedArea);
-    if (trunc.Intersect(trunc, GetOrigRect())) {
-        if (enableBackground_) {
-            DrawBackground(trunc);
-        }
+    UIView::OnDraw(invalidatedArea);
+    if (enableBackground_) {
+        DrawBackground(invalidatedArea);
+    }
 
-        if ((lastValue_ - rangeMin_ != 0) || (foregroundStyle_->lineCap_ == CapType::CAP_ROUND)) {
-            Rect coords;
-            DrawForeground(trunc, coords);
-        }
+    if ((lastValue_ - rangeMin_ != 0) || (foregroundStyle_->lineCap_ == CapType::CAP_ROUND)) {
+        Rect coords;
+        DrawForeground(invalidatedArea, coords);
     }
 }
 } // namespace OHOS

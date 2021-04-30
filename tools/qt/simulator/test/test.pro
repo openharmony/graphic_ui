@@ -30,6 +30,7 @@ SOURCES += \
     ../../../../test/uitest/test_animator/ui_test_animator.cpp \
     ../../../../test/uitest/test_anti_aliasing/ui_test_anti_aliasing.cpp \
     ../../../../test/uitest/test_arc_label/ui_test_arc_label.cpp \
+    ../../../../test/uitest/test_border_margin_padding/ui_test_border_margin_padding.cpp \
     ../../../../test/uitest/test_button/ui_test_button.cpp \
     ../../../../test/uitest/test_canvas/ui_test_canvas.cpp \
     ../../../../test/uitest/test_chart/ui_test_chart_pillar.cpp \

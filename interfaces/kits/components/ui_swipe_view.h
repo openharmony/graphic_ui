@@ -360,8 +360,10 @@ protected:
 
 private:
     void RefreshCurrentView(int16_t distance);
-    void RefreshCurrentViewInner(int16_t distance, int16_t (UIView::*pfnGetXOrY)() const,
-        int16_t(UIView::*pfnGetWidthOrHeight)());
+    void RefreshCurrentViewInner(int16_t distance,
+                                 int16_t (UIView::*pfnGetXOrY)() const,
+                                 int16_t (UIView::*pfnGetWidthOrHeight)());
+
     bool isNeedLoop();
     void MoveFirstChildToLast();
     void MoveLastChildToFirst();

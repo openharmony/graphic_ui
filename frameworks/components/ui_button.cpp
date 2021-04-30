@@ -108,6 +108,7 @@ void UIButton::SetupThemeStyles()
         buttonStyles_[PRESSED] = &(theme->GetButtonStyle().pressed);
         buttonStyles_[INACTIVE] = &(theme->GetButtonStyle().inactive);
     }
+    style_ = buttonStyles_[RELEASED];
 }
 
 int64_t UIButton::GetStyle(uint8_t key) const
@@ -143,6 +144,7 @@ void UIButton::SetStyleForState(uint8_t key, int64_t value, ButtonState state)
             }
             buttonStyleAllocFlag_ = true;
         }
+        style_ = buttonStyles_[RELEASED];
         int16_t width = GetWidth();
         int16_t height = GetHeight();
         buttonStyles_[state]->SetStyle(key, value);

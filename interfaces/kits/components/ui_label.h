@@ -421,6 +421,8 @@ public:
      */
     void SetY(int16_t y) override;
 
+    void ReMeasure() override;
+
 protected:
     Text* labelText_;
     void RefreshLabel();
@@ -430,7 +432,6 @@ protected:
 private:
     friend class LabelAnimator;
 
-    void ReMeasure() override;
     void RemeasureForMarquee(int16_t textWidth);
 
     bool needRefresh_ : 1;
