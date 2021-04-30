@@ -25,8 +25,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QWidget>
+
 #include "common/graphic_startup.h"
 #include "gui_thread.h"
+#include "key_input.h"
 #include "monitor.h"
 #include "mouse_input.h"
 #include "mousewheel_input.h"
@@ -54,6 +56,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
     Ui::MainWidget* ui_;

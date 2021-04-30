@@ -13,11 +13,33 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_CONFIG_H
-#define GRAPHIC_LITE_CONFIG_H
+#ifndef GRAPHIC_LITE_KEY_INPUT_H
+#define GRAPHIC_LITE_KEY_INPUT_H
 
-#define USE_MOUSE 1
-#define USE_MOUSEWHEEL 1
-#define USE_KEY 1
+#include <QKeyEvent>
 
-#endif // GRAPHIC_LITE_CONFIG_H
+#include "config.h"
+#include "dock/key_input_device.h"
+
+namespace OHOS {
+#if USE_KEY
+class KeyInput : public KeyInputDevice {
+public:
+    KeyInput() {}
+    virtual ~KeyInput() {}
+    static KeyInput* GetInstance()
+    {
+        static KeyInput keyInput;
+        return &keyInput;
+    }
+    bool Read(DeviceData& data) override;
+    void KeyHandler(QKeyEvent* event);
+
+private:
+    bool leftButtonDown_;
+    int16_t lastX_;
+    int16_t lastY_;
+};
+#endif // USE_KEY
+} // namespace OHOS
+#endif // GRAPHIC_LITE_KEY_INPUT_H

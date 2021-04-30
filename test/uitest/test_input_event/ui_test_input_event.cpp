@@ -14,6 +14,7 @@
  */
 
 #include "ui_test_input_event.h"
+
 #include "common/screen.h"
 #include "components/root_view.h"
 
@@ -245,6 +246,7 @@ void UITestInputEvent::TearDown()
 {
     DeleteChildrenAndListener(container_);
     container_ = nullptr;
+    RootView::GetInstance()->ClearOnKeyActListener();
     if (keyListener_ != nullptr) {
         delete keyListener_;
         keyListener_ = nullptr;

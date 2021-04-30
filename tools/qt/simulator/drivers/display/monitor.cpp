@@ -14,6 +14,7 @@
  */
 
 #include "monitor.h"
+
 #include "common/graphic_startup.h"
 #include "common/image_decode_ability.h"
 #include "common/input_device_manager.h"
@@ -21,8 +22,9 @@
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #include "font/ui_font_vector.h"
-#include "mousewheel_input.h"
+#include "key_input.h"
 #include "mouse_input.h"
+#include "mousewheel_input.h"
 
 namespace OHOS {
 void Monitor::InitHal()
@@ -43,6 +45,11 @@ void Monitor::InitHal()
 #if USE_MOUSEWHEEL && ENABLE_ROTATE_INPUT
     MousewheelInput* mousewheel = MousewheelInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(mousewheel);
+#endif
+
+#if USE_KEY
+    KeyInput* key = KeyInput::GetInstance();
+    InputDeviceManager::GetInstance()->Add(key);
 #endif
 }
 

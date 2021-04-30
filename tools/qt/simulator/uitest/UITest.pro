@@ -42,6 +42,7 @@ SOURCES += \
     ../drivers/display/gui_thread.cpp \
     ../drivers/display/monitor.cpp \
     ../drivers/display/task_thread.cpp \
+    ../drivers/indev/key_input.cpp \
     ../drivers/indev/mouse_input.cpp \
     ../drivers/indev/mousewheel_input.cpp \
     main.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     ../drivers/display/gui_thread.h \
     ../drivers/display/task_thread.h \
     ../drivers/display/monitor.h \
+    ../drivers/indev/key_input.h \
     ../drivers/indev/mouse_input.h \
     ../drivers/indev/mousewheel_input.h \
     main_widget.h

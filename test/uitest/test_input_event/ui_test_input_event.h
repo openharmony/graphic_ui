@@ -20,6 +20,7 @@
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
+#include "dock/input_device.h"
 #include "ui_test.h"
 
 namespace OHOS {
@@ -29,10 +30,21 @@ public:
     virtual ~TestKeyInputListener() {}
     bool OnKeyAct(UIView& view, const KeyEvent& event) override
     {
-        if (label_ != nullptr) {
-            label_->SetText("key pressed!");
-            label_->Invalidate();
+        if (label_ == nullptr) {
+            return true;
         }
+        switch (event.GetState()) {
+            case InputDevice::STATE_PRESS:
+                label_->SetText("key pressed!");
+                break;
+            case InputDevice::STATE_RELEASE:
+                label_->SetText("key released!");
+                break;
+            default:
+                label_->SetText("");
+                break;
+        }
+        label_->Invalidate();
         return true;
     }
 
@@ -43,7 +55,9 @@ private:
 class TestOnClickListener : public UIView::OnClickListener {
 public:
     explicit TestOnClickListener(UILabel* label, char* sentence, bool isConsume)
-        : label_(label), sentence_(sentence), isConsume_(isConsume) {}
+        : label_(label), sentence_(sentence), isConsume_(isConsume)
+    {
+    }
     virtual ~TestOnClickListener() {}
     virtual bool OnClick(UIView& view, const ClickEvent& event)
     {
@@ -63,7 +77,9 @@ private:
 class TestOnLongPressListener : public UIView::OnLongPressListener {
 public:
     explicit TestOnLongPressListener(UILabel* label, char* sentence, bool isConsume)
-        : label_(label), sentence_(sentence), isConsume_(isConsume) {}
+        : label_(label), sentence_(sentence), isConsume_(isConsume)
+    {
+    }
     virtual ~TestOnLongPressListener() {}
     virtual bool OnLongPress(UIView& view, const LongPressEvent& event)
     {
@@ -83,7 +99,9 @@ private:
 class TestOnTouchListener : public UIView::OnTouchListener {
 public:
     explicit TestOnTouchListener(UILabel* label, char* strPress, char* strRelease, char* strCancel, bool isConsume)
-        : label_(label), strPress_(strPress), strRelease_(strRelease), strCancel_(strCancel), isConsume_(isConsume) {}
+        : label_(label), strPress_(strPress), strRelease_(strRelease), strCancel_(strCancel), isConsume_(isConsume)
+    {
+    }
     virtual ~TestOnTouchListener() {}
     virtual bool OnPress(UIView& view, const PressEvent& event)
     {
@@ -161,7 +179,6 @@ private:
     char* strDragEnd_;
     bool isConsume_;
 };
-
 
 class UITestInputEvent : public UITest {
 public:
@@ -245,8 +262,11 @@ private:
     TestKeyInputListener* keyListener_ = nullptr;
     void InnerTest(const char* title, bool touchable, bool draggable, bool dragParent);
     void InnerBubbleTest(const char* title, bool touchable, bool draggable, bool hasListener, bool isBubble);
-    void InnerBubbleDragTest(const char* title, bool childDraggable, bool parentDraggable, bool hasListener,
-        bool isBubble);
+    void InnerBubbleDragTest(const char* title,
+                             bool childDraggable,
+                             bool parentDraggable,
+                             bool hasListener,
+                             bool isBubble);
 };
 } // namespace OHOS
 #endif // UI_TEST_INPUT_EVENT_H

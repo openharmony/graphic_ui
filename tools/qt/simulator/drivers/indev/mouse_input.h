@@ -17,6 +17,7 @@
 #define GRAPHIC_LITE_MOUSE_INPUT_H
 
 #include <QMouseEvent>
+
 #include "config.h"
 #include "dock/pointer_input_device.h"
 
@@ -24,8 +25,8 @@ namespace OHOS {
 #if USE_MOUSE
 class MouseInput : public PointerInputDevice {
 public:
-    MouseInput() : leftButtonDown_(false), lastX_(0), lastY_(0) {};
-    virtual ~MouseInput() {};
+    MouseInput() : leftButtonDown_(false), lastX_(0), lastY_(0) {}
+    virtual ~MouseInput() {}
     static MouseInput* GetInstance()
     {
         static MouseInput mouseInput;

@@ -27,32 +27,35 @@
 
 namespace OHOS {
 namespace {
-    const int16_t ITEM_H = 50;
-    const int16_t TEXT_H = 29;
-    const int16_t TEXT_W = 250;
-    const int16_t TEST_VIEW_H = 50;
-    const int16_t TEST_VIEW_W = 50;
-    const int16_t GAP = 5;
-    const int16_t TEST_VIEW_GAP = 80;
-    const int16_t TEST_BUTTON_W = 100;
-    const int16_t TEST_BUTTON_H = 30;
-    const int16_t LAYOUT_HEIGHT = 150;
-    const int16_t LAYOUT_WIDTH = 480;
-    const int16_t BLANK = 20;
-    const int16_t SCROLL_WIDTH = 300;
-    const int16_t SCROLL_HEIGHT = 300;
-    const int16_t SCROLL_BUTTON_W = 800;
-    const int16_t SCROLL_BUTTON_H = 400;
-    const int16_t DRAG_TIME_OFFSET = 20;
-    const int16_t RATIO_X = 3;
-    const int16_t RATIO_Y = 10;
-    const int16_t POINT_OFFSET = 4;
-}
+const int16_t ITEM_H = 50;
+const int16_t TEXT_H = 29;
+const int16_t TEXT_W = 250;
+const int16_t TEST_VIEW_H = 50;
+const int16_t TEST_VIEW_W = 50;
+const int16_t GAP = 5;
+const int16_t TEST_VIEW_GAP = 80;
+const int16_t TEST_BUTTON_W = 100;
+const int16_t TEST_BUTTON_H = 30;
+const int16_t LAYOUT_HEIGHT = 150;
+const int16_t LAYOUT_WIDTH = 480;
+const int16_t BLANK = 20;
+const int16_t SCROLL_WIDTH = 300;
+const int16_t SCROLL_HEIGHT = 300;
+const int16_t SCROLL_BUTTON_W = 800;
+const int16_t SCROLL_BUTTON_H = 400;
+const int16_t DRAG_TIME_OFFSET = 20;
+const int16_t RATIO_X = 3;
+const int16_t RATIO_Y = 10;
+const int16_t POINT_OFFSET = 4;
+} // namespace
 
 class TestEventInjectorView : public UIView, public RootView::OnKeyActListener {
 public:
     TestEventInjectorView() : label_(nullptr) {}
-    virtual ~TestEventInjectorView() {}
+    virtual ~TestEventInjectorView()
+    {
+        RootView::GetInstance()->ClearOnKeyActListener();
+    }
 
     void InitListener()
     {
@@ -137,7 +140,6 @@ private:
     UILabel* label_;
     const char* sentence_ = "click";
 };
-
 
 void UITestEventInjector::SetUp()
 {
@@ -307,7 +309,7 @@ void UITestEventInjector::InnerTest(const char* title,
 
         container_->Add(btn);
         btn->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE + 3 * TEST_VIEW_GAP, positionY_ + GAP, // 3 : ratio
-            BUTTON_WIDHT2, BUTTON_HEIGHT2);
+                         BUTTON_WIDHT2, BUTTON_HEIGHT2);
         btn->SetText(btnTitle);
         btn->SetFont(DEFAULT_VECTOR_FONT_FILENAME, BUTTON_LABEL_SIZE);
         btn->SetOnClickListener(this);
@@ -351,8 +353,7 @@ void UITestEventInjector::SetUpScrollView()
 
     if (layout_ == nullptr) {
         layout_ = new GridLayout();
-        layout_->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE + SCROLL_WIDTH + GAP, positionY_,
-            LAYOUT_WIDTH, LAYOUT_HEIGHT);
+        layout_->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE + SCROLL_WIDTH + GAP, positionY_, LAYOUT_WIDTH, LAYOUT_HEIGHT);
         container_->Add(layout_);
         layout_->SetLayoutDirection(LAYOUT_VER);
         layout_->SetRows(3); // 3 : rows
@@ -367,7 +368,7 @@ void UITestEventInjector::SetLastPos(UIView* view)
     }
     lastX_ = view->GetX();
     lastY_ = view->GetY() + view->GetHeight();
-    positionY_ = lastY_ + 8 * GAP;    /* 8:ratio */
+    positionY_ = lastY_ + 8 * GAP; /* 8:ratio */
 }
 
 void UITestEventInjector::SetUpButton(UILabelButton* btn, const char* title)
@@ -402,17 +403,17 @@ bool UITestEventInjector::OnClick(UIView& view, const ClickEvent& event)
     Point scrollPoint;
     if (&view == clickBtn_) {
         point = {static_cast<int16_t>(clickTestView_->GetRect().GetX() + TEST_VIEW_W / POINT_OFFSET),
-            clickBtn_->GetRect().GetBottom()};
+                 clickBtn_->GetRect().GetBottom()};
         EventInjector::GetInstance()->SetClickEvent(point);
     } else if (&view == dragBtn_) {
         point = {static_cast<int16_t>(dragTestView_->GetRect().GetX() + TEST_VIEW_W / POINT_OFFSET),
-            dragBtn_->GetRect().GetBottom()};
+                 dragBtn_->GetRect().GetBottom()};
         Point endPoint = {static_cast<int16_t>(point.x + (RATIO_X * TEST_VIEW_W) / POINT_OFFSET), point.y};
         // 80:ms
         EventInjector::GetInstance()->SetDragEvent(point, endPoint, 80);
     } else if (&view == longPressBtn_) {
         point = {static_cast<int16_t>(longPressTestView_->GetRect().GetX() + TEST_VIEW_W / POINT_OFFSET),
-            longPressBtn_->GetRect().GetBottom()};
+                 longPressBtn_->GetRect().GetBottom()};
         EventInjector::GetInstance()->SetLongPressEvent(point);
     } else if (&view == keyBtn_) {
         // 26:key id
@@ -421,44 +422,44 @@ bool UITestEventInjector::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == upToDownBtn_) {
         scrollPoint = {scrollTestView_->GetRect().GetX(), scrollTestView_->GetRect().GetY()};
         Point startPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
+                            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
         Point endPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                          static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, dragTime_);
     } else if (&view == downToUpBtn_) {
         scrollPoint = {scrollTestView_->GetRect().GetX(), scrollTestView_->GetRect().GetY()};
         Point startPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         Point endPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
+                          static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
         EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, dragTime_);
     } else if (&view == leftToRightBtn_) {
         scrollPoint = {scrollTestView_->GetRect().GetX(), scrollTestView_->GetRect().GetY()};
         Point startPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_Y),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         Point endPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                          static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, dragTime_);
     } else if (&view == rightToLeftBtn_) {
         scrollPoint = {scrollTestView_->GetRect().GetX(), scrollTestView_->GetRect().GetY()};
         Point startPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         Point endPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_Y),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                          static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, dragTime_);
     } else if (&view == uLeftTolRightBtn_) {
         scrollPoint = {scrollTestView_->GetRect().GetX(), scrollTestView_->GetRect().GetY()};
         Point startPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_Y),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
+                            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
         Point endPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                          static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, dragTime_);
     } else if (&view == lRightTouLeftBtn_) {
         scrollPoint = {scrollTestView_->GetRect().GetX(), scrollTestView_->GetRect().GetY()};
         Point startPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_X),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
+                            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_X)};
         Point endPoint = {static_cast<int16_t>(scrollPoint.x + SCROLL_WIDTH / RATIO_Y),
-            static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
+                          static_cast<int16_t>(scrollPoint.y + SCROLL_HEIGHT / RATIO_Y)};
         EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, dragTime_);
     } else if (&view == increaseDragTimeBtn_) {
         dragTime_ += DRAG_TIME_OFFSET;
