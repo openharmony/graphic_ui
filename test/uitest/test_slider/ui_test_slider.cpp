@@ -479,30 +479,33 @@ bool UITestSlider::ExpandClick1(UIView& view, const ClickEvent& event)
         g_height = DEFAULT_WIDTH;
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-        slider_->LayoutCenterOfParent();
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_LEFT_TO_RIGHT);
+        slider_->LayoutCenterOfParent();
     } else if (&view == dirR2LBtn_) {
         g_width = DEFAULT_HEIGHT;
         g_height = DEFAULT_WIDTH;
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-        slider_->LayoutCenterOfParent();
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_RIGHT_TO_LEFT);
+        slider_->LayoutCenterOfParent();
     } else if (&view == dirT2BBtn_) {
         g_width = DEFAULT_WIDTH;
         g_height = DEFAULT_HEIGHT;
+        slider_->SetValidHeight(g_height);
+        slider_->SetValidWidth(g_width);
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_TOP_TO_BOTTOM);
+        slider_->LayoutCenterOfParent();
     } else if (&view == dirB2TBtn_) {
         g_width = DEFAULT_WIDTH;
         g_height = DEFAULT_HEIGHT;
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-        slider_->LayoutCenterOfParent();
         slider_->Resize(g_width, g_height);
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
+        slider_->LayoutCenterOfParent();
     } else {
         ExpandClick2(view, event);
     }
@@ -529,9 +532,9 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
 #endif
     } else if (&view == setStyleBtn_) {
         Style style = StyleDefault::GetDefaultStyle();
-        style.bgColor_ = Color::White();
+        style.bgColor_ = Color::Green();
         slider_->SetBackgroundStyle(style);
-        style.bgColor_ = Color::Blue();
+        style.bgColor_ = Color::Red();
         slider_->SetForegroundStyle(style);
         style.bgColor_ = Color::Gray();
 #if ENABLE_SLIDER_KNOB
