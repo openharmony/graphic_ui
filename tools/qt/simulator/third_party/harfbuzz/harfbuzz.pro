@@ -21,8 +21,6 @@ DESTDIR = ../../libs
 SOURCES += \
     ../../../../../../../../third_party/harfbuzz/src/hb-aat-layout.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-aat-map.cc \
-    ../../../../../../../../third_party/harfbuzz/src/hb-aat-layout.cc \
-    ../../../../../../../../third_party/harfbuzz/src/hb-aat-map.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-blob.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-buffer-serialize.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-buffer.cc \
