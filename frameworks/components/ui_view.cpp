@@ -509,10 +509,6 @@ Rect UIView::GetVisibleRect() const
 
 void UIView::SetTransformMap(const TransformMap& transMap)
 {
-    if (transMap.IsInvalid()) {
-        return;
-    }
-
     if ((transMap_ != nullptr) && (*transMap_ == transMap)) {
         return;
     }
