@@ -432,7 +432,7 @@ void UITestRotateInput::SetTestLabelButton(UILabel* label, UIView* view)
     CreateLabelButton(g_swipeW + g_blank, label->GetY() + g_blank, listener1_, "factor: 0");
     if (listener2_ == nullptr) {
         listener2_ = static_cast<UIView::OnClickListener*>(
-            new TestSetRotateFactorListener(view, 15));
+            new TestSetRotateFactorListener(view, 15)); // 15: rotate factor
     }
     CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener2_, "factor: 15");
     if (listener3_ == nullptr) {

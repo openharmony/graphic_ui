@@ -74,7 +74,7 @@ void UITestBUTTON::TearDown()
     }
     if (clickLeftListener_ != nullptr) {
         delete clickLeftListener_;
-        clickBigListener_ = nullptr;
+        clickLeftListener_ = nullptr;
     }
     if (clickRightListener_ != nullptr) {
         delete clickRightListener_;
