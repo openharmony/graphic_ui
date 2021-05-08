@@ -32,7 +32,7 @@ public:
     ~UITestRender() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
     /**

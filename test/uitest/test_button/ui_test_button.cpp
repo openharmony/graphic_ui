@@ -104,7 +104,7 @@ void UITestBUTTON::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestBUTTON::GetTestView()
+const UIView* UITestBUTTON::GetTestView()
 {
     UIKit_Check_Box_Test_001();
     UIKit_Radio_Button_Test_001();

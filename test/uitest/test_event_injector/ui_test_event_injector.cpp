@@ -175,7 +175,7 @@ void UITestEventInjector::TearDown()
     }
 }
 
-UIView* UITestEventInjector::GetTestView()
+const UIView* UITestEventInjector::GetTestView()
 {
     UIKit_Event_Injector_Click_Event_001();
     UIKit_Event_Injector_Drag_Event_002();

@@ -65,7 +65,7 @@ void UITestDigitalClock::InnerTestTitle(const char* title)
     positionY_ += TITLE_HEIGHT + GAP;
 }
 
-UIView* UITestDigitalClock::GetTestView()
+const UIView* UITestDigitalClock::GetTestView()
 {
     UIKit_UIDigitalClock_Test_Display_001();
     UIKit_UIDigitalClock_Test_Display_002();

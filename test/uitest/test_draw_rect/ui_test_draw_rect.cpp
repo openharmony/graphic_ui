@@ -35,7 +35,7 @@ void UITestDrawRect::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestDrawRect::GetTestView()
+const UIView* UITestDrawRect::GetTestView()
 {
     UIKit_DrawRect_Test_RectNoBorder_001();
     UIKit_DrawRect_Test_RectNoBorder_002();

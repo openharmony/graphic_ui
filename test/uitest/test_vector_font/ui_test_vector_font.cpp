@@ -70,7 +70,7 @@ void UITestVectorFont::InnerTestTitle(const char* title)
     positionY_ += TITLE_HEIGHT + GAP;
 }
 
-UIView* UITestVectorFont::GetTestView()
+const UIView* UITestVectorFont::GetTestView()
 {
     Font_FontEngine_Vector_Test_CH_Lang_001();
     Font_FontEngine_Vector_Test_CH_Lang_002();

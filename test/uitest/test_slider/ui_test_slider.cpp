@@ -169,7 +169,7 @@ void UITestSlider::TearDown()
     uiViewGroupFrame_ = nullptr;
 }
 
-UIView* UITestSlider::GetTestView()
+const UIView* UITestSlider::GetTestView()
 {
     UIKit_Slider_Test_UISlider_001();
     UIKit_Slider_Test_SetRange_002();

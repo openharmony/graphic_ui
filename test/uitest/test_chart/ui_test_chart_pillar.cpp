@@ -85,7 +85,7 @@ void UITestChartPillar::TearDown()
     positionY_ = 0;
 }
 
-UIView* UITestChartPillar::GetTestView()
+const UIView* UITestChartPillar::GetTestView()
 {
     UIKit_ChartPillar_Test_AddDataSerial_001();
     UIKit_ChartPillar_Test_EnableReverse_002();

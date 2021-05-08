@@ -67,7 +67,7 @@ public:
      * @since 3.0
      * @version 5.0
      */
-   uint16_t GetNextBreakPos(UILineBreakProxy& record);
+    uint16_t GetNextBreakPos(UILineBreakProxy& record);
 
     /**
      * @brief 设置规则文件信息
@@ -79,29 +79,29 @@ public:
      * @since 3.0
      * @version 5.0
      */
-   int32_t SetRuleBinInfo(int32_t fp, int32_t offset, uint32_t size)
-   {
-       fp_ = fp;
-       offset_ = offset;
-       int32_t fRet = lseek(fp_, offset, SEEK_SET);
-       if (fRet != offset) {
-           return fRet;
-       }
-       size_ = size;
-       return 0;
-   }
+    int32_t SetRuleBinInfo(int32_t fp, int32_t offset, uint32_t size)
+    {
+        fp_ = fp;
+        offset_ = offset;
+        int32_t fRet = lseek(fp_, offset, SEEK_SET);
+        if (fRet != offset) {
+            return fRet;
+        }
+        size_ = size;
+        return 0;
+    }
 
-   /**
+    /**
      * @brief 设置规则文件加载位置
      *
      * @param addr 规则文件加载位置
      * @since 3.0
      * @version 5.0
      */
-   void SetRuleFileLoadAddr(char* addr)
-   {
-       addr_ = addr;
-   }
+    void SetRuleFileLoadAddr(char* addr)
+    {
+        addr_ = addr;
+    }
 
     /**
      * @brief 获取规则文件加载位置
@@ -128,12 +128,15 @@ public:
     }
 
     // 0xFFFF: unlimit the length until the end null.
-    uint32_t GetNextLineAndWidth(const char* text, int16_t space, bool allBreak, int16_t& maxWidth,
-                                 uint16_t len = 0xFFFF);
+    uint32_t
+        GetNextLineAndWidth(const char* text, int16_t space, bool allBreak, int16_t& maxWidth, uint16_t len = 0xFFFF);
     bool IsBreakPos(uint32_t unicode, int32_t& state);
+
 private:
-    UILineBreakEngine() : initSuccess_(false), addr_(nullptr), size_(0), fp_(0), offset_(0),
-                          lineBreakTrie_(nullptr), stateTbl_(nullptr) {}
+    UILineBreakEngine()
+        : initSuccess_(false), addr_(nullptr), size_(0), fp_(0), offset_(0), lineBreakTrie_(nullptr), stateTbl_(nullptr)
+    {
+    }
     ~UILineBreakEngine() {}
 
     void LoadRule();

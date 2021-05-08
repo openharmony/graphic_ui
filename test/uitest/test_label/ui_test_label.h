@@ -28,7 +28,7 @@ public:
     ~UITestLabel() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void CreateLabels(UIViewGroup* uiViewGroup);
 
     /**

@@ -28,7 +28,7 @@ public:
     ~UITestDrawRect() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     void UIKit_DrawRect_Test_RectNoBorder_001();
     void UIKit_DrawRect_Test_RectNoBorder_002();

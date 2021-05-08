@@ -29,7 +29,7 @@ public:
     ~UITestVideo() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     bool OnClick(UIView &view, const ClickEvent& event) override;
     bool OnClick1(UIView &view, const ClickEvent& event);
     bool OnClick2(UIView &view, const ClickEvent& event);

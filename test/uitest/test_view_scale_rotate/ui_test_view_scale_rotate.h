@@ -39,7 +39,7 @@ public:
     virtual ~UITestViewScaleRotate() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void Callback(UIView* view) override;
 
     void UIKit_View_Scale_Rotate_Test_Label_001();

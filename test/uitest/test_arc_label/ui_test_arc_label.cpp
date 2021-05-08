@@ -53,7 +53,7 @@ void UITestArcLabel::InnerTestTitle(const char* title, int16_t x, int16_t y) con
     container_->Add(titleLabel);
 }
 
-UIView* UITestArcLabel::GetTestView()
+const UIView* UITestArcLabel::GetTestView()
 {
     UIKit_UIArcLabel_Test_Display_001();
     UIKit_UIArcLabel_Test_Display_002();

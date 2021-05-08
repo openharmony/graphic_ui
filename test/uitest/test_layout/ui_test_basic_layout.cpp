@@ -95,7 +95,7 @@ void UITestBasicLayout::TearDown()
     positionY_ = 5;  // 5 position y
 }
 
-UIView* UITestBasicLayout::GetTestView()
+const UIView* UITestBasicLayout::GetTestView()
 {
     UIKit_Layout_Test_Basic_Layout_001();
     return container_;

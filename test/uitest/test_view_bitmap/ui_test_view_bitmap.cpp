@@ -99,7 +99,7 @@ void UITestViewBitmap::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestViewBitmap::GetTestView()
+const UIView* UITestViewBitmap::GetTestView()
 {
     UIKit_Bitmap_Test_GetViewBitmap_001();
     UIKit_Bitmap_Test_GetScreenBitmap_001();

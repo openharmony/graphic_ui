@@ -28,7 +28,7 @@ public:
     ~UITestCircleProgress() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     void SetUpButton(UILabelButton* btn, const char* title, int16_t x, int16_t y);
     void SetUpLabel(const char* title, int16_t x, int16_t y) const;
