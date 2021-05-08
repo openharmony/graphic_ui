@@ -28,47 +28,56 @@ public:
     void SetUp() override;
     void TearDown() override;
     UIView* GetTestView() override;
+    /**
+     * @brief Test single line Chinese display
+     */
+    void UIKitFontTestDispaly001();
 
     /**
-     * @brief Test psram
+     * @brief Test multiline Chinese display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestPsram_001();
+    void UIKitFontTestDispaly002();
 
     /**
-     * @brief Test Font path
+     * @brief Test single line English display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestFontPath_001();
+    void UIKitFontTestDispaly003();
 
     /**
-     * @brief Test Set Font Id
+     * @brief Test multiline English display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestSetFontId_001();
+    void UIKitFontTestDispaly004();
 
     /**
-     * @brief Test Set Font
+     * @brief Test single line Chinese and English display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestSetFont_001();
+    void UIKitFontTestDispaly005();
 
     /**
-     * @brief Test Get Font Height
+     * @brief Test multiline Chinese and English display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestGetFontHeight_001();
+    void UIKitFontTestDispaly006();
 
     /**
-     * @brief Test get font version
+     * @brief Test single line text color display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestGetFontVersion_001();
+    void UIKitFontTestDispaly007();
 
     /**
-     * @brief Test get font Id
+     * @brief Test multiline line text color display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestGetFontId_001();
+    void UIKitFontTestDispaly008();
+#if ENABLE_MULTI_FONT
+    /**
+     * @brief Test multilingual display
+     */
+    void UIKitFontMultiLanguage001();
 
     /**
-     * @brief Test get font header
+     * @brief Test multilingual display
      */
-    void Font_FontEngine_FontConvert_Test_FontTestGetFontHeader_001();
-
+    void UIKitFontMultiLanguage002();
+#endif // ENABLE_MULTI_FONT
 private:
     UIScrollView* container_ = nullptr;
     void InnerTestTitle(const char* title);

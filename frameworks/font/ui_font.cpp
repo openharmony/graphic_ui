@@ -18,7 +18,9 @@
 #include "font/ui_font_cache.h"
 #if ENABLE_VECTOR_FONT
 #include "font/ui_font_vector.h"
-#endif // ENABLE_VECTOR_FONT
+#else
+#include "font/ui_font_bitmap.h"
+#endif
 #include "graphic_config.h"
 #if ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
@@ -35,6 +37,11 @@ UIFont* UIFont::GetInstance()
 #if ENABLE_VECTOR_FONT
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontVector();
+        instance.instance_ = instance.defaultInstance_;
+    }
+#else
+    if (instance.instance_ == nullptr) {
+        instance.defaultInstance_ = new UIFontBitmap();
         instance.instance_ = instance.defaultInstance_;
     }
 #endif

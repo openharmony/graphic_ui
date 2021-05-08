@@ -15,18 +15,25 @@
 
 #include "ui_test_font.h"
 #include "common/screen.h"
-#include "components/ui_checkbox.h"
+#if ENABLE_VECTOR_FONT
+#else
+#include "common/ui_text_language.h"
+#endif
 #include "components/ui_label.h"
 #include "font/ui_font.h"
+#if ENABLE_MULTI_FONT
+#include "font/ui_multi_font_manager.h"
+#endif
 
 namespace OHOS {
 namespace {
-const int16_t GAP = 15;
+const int16_t GAP = 5;
 const int16_t TITLE_HEIGHT = 20;
 const uint16_t LABEL_WIDTH = 400;
 const uint16_t LABEL_HEIGHT = 50;
-const uint16_t BUF_SIZE = 200;
-static uint8_t g_newFontPsramBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
+const uint16_t FONT_SIZE = 30;
+const char* SOURCE_HAN_SANS_SC_REGULAR = "SourceHanSansSC-Regular.otf";
+const char* ROBOTO_CONDENSED_REGULAR = "RobotoCondensed-Regulat.ttf";
 } // namespace
 
 void UITestFont::SetUp()
@@ -52,7 +59,11 @@ void UITestFont::InnerTestTitle(const char* title)
     UILabel* titleLabel = new UILabel();
     titleLabel->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, positionY_, Screen::GetInstance().GetWidth(),
                             TITLE_LABEL_DEFAULT_HEIGHT);
-    titleLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
+#if ENABLE_VECTOR_FONT
+    titleLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, DEFAULT_VECTOR_FONT_SIZE);
+#else
+    titleLabel->SetFontId(F_SOURCEHANSANSSC_REGULAR_18_4);
+#endif
     titleLabel->SetText(title);
     container_->Add(titleLabel);
     positionY_ += TITLE_HEIGHT + GAP;
@@ -60,149 +71,243 @@ void UITestFont::InnerTestTitle(const char* title)
 
 UIView* UITestFont::GetTestView()
 {
-    Font_FontEngine_FontConvert_Test_FontTestSetFontId_001();
-    Font_FontEngine_FontConvert_Test_FontTestSetFont_001();
-    Font_FontEngine_FontConvert_Test_FontTestGetFontHeight_001();
-    Font_FontEngine_FontConvert_Test_FontTestGetFontVersion_001();
-    Font_FontEngine_FontConvert_Test_FontTestGetFontId_001();
-    Font_FontEngine_FontConvert_Test_FontTestGetFontHeight_001();
-    Font_FontEngine_FontConvert_Test_FontTestPsram_001();
-    Font_FontEngine_FontConvert_Test_FontTestFontPath_001();
+    UIKitFontTestDispaly001();
+    UIKitFontTestDispaly002();
+    UIKitFontTestDispaly003();
+    UIKitFontTestDispaly004();
+    UIKitFontTestDispaly005();
+    UIKitFontTestDispaly006();
+    UIKitFontTestDispaly007();
+    UIKitFontTestDispaly008();
+#if ENABLE_MULTI_FONT
+    UIKitFontMultiLanguage001();
+    UIKitFontMultiLanguage002();
+#endif
     return container_;
 }
-
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestPsram_001()
+void UITestFont::UIKitFontTestDispaly001()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Psram");
-        UIFont::GetInstance()->SetPsramMemory(reinterpret_cast<uintptr_t>(g_newFontPsramBaseAddr),
-                                              OHOS::MIN_FONT_PSRAM_LENGTH);
-        UILabel* label = new UILabel();
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        label->SetLineBreakMode(UILabel::LINE_BREAK_WRAP);
-        label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 18); // 18 : size
-        char buf[BUF_SIZE] = {0};
-        label->SetText(reinterpret_cast<char*>(buf));
-        container_->Add(label);
-        positionY_ += LABEL_HEIGHT + GAP;
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display single line Chinese");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("轻量图形子系统");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestFontPath_001()
+void UITestFont::UIKitFontTestDispaly002()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Font Path");
-        std::string dpath;
-        std::string spath;
-        size_t len = dpath.size();
-        size_t pos = dpath.find_last_of('\\');
-        dpath.replace((pos + 1), (len - pos), "..\\..\\config\\font.bin");
-        spath.replace((pos + 1), (len - pos), "..\\..\\config\\glyphs.bin");
-        UILabel* label = new UILabel();
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        char buf[BUF_SIZE] = {0};
-        label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 18); // 18 : size
-        label->SetText(reinterpret_cast<char*>(buf));
-        container_->Add(label);
-        positionY_ += LABEL_HEIGHT + GAP;
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display multiline Chinese");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText(" 你好\n轻量图形子系统");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP;  // 2 : double
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestSetFontId_001()
+
+void UITestFont::UIKitFontTestDispaly003()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Set Font Id");
-        UILabel* label = new UILabel();
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        UIFont::GetInstance()->SetCurrentFontId(0);
-        label->SetFontId(0);
-        label->SetText("Hello!\nOHOS UIKIT!");
-        label->SetLineBreakMode(UILabel::LINE_BREAK_WRAP);
-        container_->Add(label);
-        positionY_ += LABEL_HEIGHT + GAP;
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display single line English");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("uikit test");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestSetFont_001()
+
+void UITestFont::UIKitFontTestDispaly004()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Set Font");
-        UILabel* label = new UILabel();
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        uint8_t fontId = UIFont::GetInstance()->GetFontId("RobotoCondensed-Regular");
-        UIFont::GetInstance()->SetCurrentFontId(fontId, 18); // 18: means font size
-        label->SetFont("RobotoCondensed-Regular", 18);       // 18: means font size
-        label->SetText("Hello!\nOHOS UIKIT!");
-        label->SetLineBreakMode(UILabel::LINE_BREAK_WRAP);
-        container_->Add(label);
-        positionY_ += LABEL_HEIGHT + GAP;
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display multiline English");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText(" Hello\n uikit");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestGetFontHeight_001()
+
+void UITestFont::UIKitFontTestDispaly005()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Get Font Height");
-        UILabel* label = new UILabel();
-        label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 18); // 18 : size
-        char buf[BUF_SIZE] = {0};
-        label->SetText(reinterpret_cast<char*>(buf));
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        positionY_ += LABEL_HEIGHT + GAP;
-        container_->Add(label);
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display single line Chinese and English");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("你好，轻量级图形 uikit");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestGetFontVersion_001()
+void UITestFont::UIKitFontTestDispaly006()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Get Font Version");
-        UILabel* label = new UILabel();
-        label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-        char buf[BUF_SIZE] = {0};
-        label->SetText(reinterpret_cast<char*>(buf));
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        positionY_ += LABEL_HEIGHT + GAP;
-        container_->Add(label);
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display multiline Chinese and English");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("你好\n轻量级图形 uikit");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestGetFontId_001()
+
+void UITestFont::UIKitFontTestDispaly007()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Get Font Id");
-        UILabel* label = new UILabel();
-        label->SetFont("HYQiHei-65S", 18);                   // 18: means font size
-        UIFont::GetInstance()->GetFontId("HYQiHei-65S", 18); // 18: means font size
-        char buf[BUF_SIZE] = {0};
-        label->SetText(reinterpret_cast<char*>(buf));
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        positionY_ += LABEL_HEIGHT + GAP;
-        container_->Add(label);
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display single line text color");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetStyle(STYLE_TEXT_COLOR, Color::Red().full);
+    label->SetText("你好，轻量级图形");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::Font_FontEngine_FontConvert_Test_FontTestGetFontHeader_001()
+void UITestFont::UIKitFontTestDispaly008()
 {
-    if (container_ != nullptr) {
-        InnerTestTitle("Test Get Font Header");
-        UILabel* label = new UILabel();
-        label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-        FontHeader fontHeader;
-        UIFont::GetInstance()->GetCurrentFontHeader(fontHeader);
-        char buf[BUF_SIZE] = {0};
-        label->SetText(reinterpret_cast<char*>(buf));
-        label->SetPosition(positionX_, positionY_);
-        label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-        positionY_ += LABEL_HEIGHT + GAP;
-        container_->Add(label);
+    if (container_ == nullptr) {
+        return;
     }
+    InnerTestTitle(" Display multiline text color");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetStyle(STYLE_TEXT_COLOR, Color::Yellow().full);
+    label->SetText("你好\n 轻量级图形 uikit");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
+
+#if ENABLE_MULTI_FONT
+void UITestFont::UIKitFontMultiLanguage001()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
+    uint8_t findPath[] = {UIFont::GetInstance()->GetFontId(SOURCE_HAN_SANS_SC_REGULAR)};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(UIFont::GetInstance()->GetFontId(ROBOTO_CONDENSED_REGULAR),
+                                                         findPath, sizeof(findPath));
+#else
+    uint8_t findPath[] = {F_SOURCEHANSANSSC_REGULAR_30_4};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(F_ROBOTOCONDENSED_REGULAR_30_4, findPath, sizeof(findPath));
+#endif
+    InnerTestTitle(" Display multilingual display");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    label->SetFont(ROBOTO_CONDENSED_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
+#endif
+    label->SetText("Hello, 鸿蒙轻量级GUI");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT + GAP;
+}
+
+void UITestFont::UIKitFontMultiLanguage002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
+    uint8_t findPath[] = {UIFont::GetInstance()->GetFontId(SOURCE_HAN_SANS_SC_REGULAR)};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(UIFont::GetInstance()->GetFontId(ROBOTO_CONDENSED_REGULAR),
+                                                         findPath, sizeof(findPath));
+#else
+    uint8_t findPath[] = {F_SOURCEHANSANSSC_REGULAR_30_4};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(F_ROBOTOCONDENSED_REGULAR_30_4, findPath, sizeof(findPath));
+#endif
+    InnerTestTitle(" Display multilingual display");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    label->SetFont(ROBOTO_CONDENSED_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
+#endif
+    label->SetText("Hello\n 鸿蒙轻量级GUI");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+#endif // ENABLE_MULTI_FONT
 } // namespace OHOS

@@ -21,7 +21,12 @@
 #include "dock/screen_device_proxy.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
+#if ENABLE_VECTOR_FONT
 #include "font/ui_font_vector.h"
+#else
+#include "common/ui_text_language.h"
+#include "font/ui_font_bitmap.h"
+#endif
 #include "key_input.h"
 #include "mouse_input.h"
 #include "mousewheel_input.h"
@@ -66,8 +71,19 @@ static uint8_t g_icuMemBaseAddr[OHOS::SHAPING_WORD_DICT_LENGTH];
 
 void Monitor::InitFontEngine()
 {
+#if ENABLE_VECTOR_FONT
     GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontMemBaseAddr), MIN_FONT_PSRAM_LENGTH,
                                    VECTOR_FONT_DIR, DEFAULT_VECTOR_FONT_FILENAME);
+#else
+    BitmapFontInit();
+    std::string dPath(_pgmptr);
+    size_t len = dPath.size();
+    size_t pos = dPath.find_last_of('\\');
+    dPath.replace((pos + 1), (len - pos), "..\\..\\simulator\\font\\font.bin");
+    GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontMemBaseAddr), MIN_FONT_PSRAM_LENGTH,
+                                   dPath.c_str(), nullptr);
+#endif
+
 #if ENABLE_ICU
     GraphicStartUp::InitLineBreakEngine(reinterpret_cast<uintptr_t>(g_icuMemBaseAddr), SHAPING_WORD_DICT_LENGTH,
                                         VECTOR_FONT_DIR, DEFAULT_LINE_BREAK_RULE_FILENAME);

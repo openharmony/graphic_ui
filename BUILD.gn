@@ -32,6 +32,7 @@ config("graphic_define_config") {
 
   defines = [
     "ENABLE_VECTOR_FONT=1",
+    "ENABLE_BITMAP_FONT=0",
     "ENABLE_SHAPING=0",
     "ENABLE_ICU=1",
     "ENABLE_MULTI_FONT=0",
@@ -67,7 +68,6 @@ shared_library("ui") {
     "frameworks/common/task.cpp",
     "frameworks/common/text.cpp",
     "frameworks/common/typed_text.cpp",
-    "frameworks/common/ui_font_header.cpp",
     "frameworks/components/root_view.cpp",
     "frameworks/components/text_adapter.cpp",
     "frameworks/components/ui_abstract_clock.cpp",
@@ -133,6 +133,8 @@ shared_library("ui") {
     "frameworks/font/ui_font.cpp",
     "frameworks/font/ui_font_adaptor.cpp",
     "frameworks/font/ui_font_allocator.cpp",
+    "frameworks/font/ui_font_bitmap.cpp",
+    "frameworks/font/ui_font_builder.cpp",
     "frameworks/font/ui_font_cache.cpp",
     "frameworks/font/ui_font_vector.cpp",
     "frameworks/font/ui_line_break.cpp",

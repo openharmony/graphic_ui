@@ -42,26 +42,29 @@
 #include "securec.h"
 
 namespace OHOS {
-void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath, const char* ttfName)
+void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath,
+                                    const char* ttfName)
 {
-#if ENABLE_VECTOR_FONT
-    UIFont* fontEngine = UIFont::GetInstance();
-    if (fontEngine == nullptr) {
+    UIFont* uiFont = UIFont::GetInstance();
+    if (uiFont == nullptr) {
         GRAPHIC_LOGE("Get UIFont error");
         return;
     }
-    fontEngine->SetPsramMemory(cacheMemAddr, cacheMemLen);
-    int8_t ret = fontEngine->SetFontPath(const_cast<char*>(dPath), nullptr);
+    uiFont->SetPsramMemory(cacheMemAddr, cacheMemLen);
+    int8_t ret = uiFont->SetFontPath(const_cast<char*>(dPath), nullptr);
     if (ret == INVALID_RET_VALUE) {
         GRAPHIC_LOGW("SetFontPath failed");
     }
-    if (ttfName != nullptr) {
-        uint8_t ret2 = fontEngine->RegisterFontInfo(ttfName);
-        if (ret2 == INVALID_UCHAR_ID) {
-            GRAPHIC_LOGW("SetTtfName failed");
+    if (uiFont->IsVectorFont()) {
+        if (ttfName != nullptr) {
+            uint8_t ret2 = uiFont->RegisterFontInfo(ttfName);
+            if (ret2 == INVALID_UCHAR_ID) {
+                GRAPHIC_LOGW("SetTtfName failed");
+            }
         }
+    } else {
+        (void)uiFont->SetCurrentLangId(0); // set language
     }
-#endif
 }
 
 void GraphicStartUp::InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* path,

@@ -61,6 +61,7 @@ test_sources = [
   "../uitest/test_view_percent/ui_test_view_percent.cpp",
   "../uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp",
   "../uitest/test_border_margin_padding/ui_test_border_margin_padding.cpp",
+  "common/ui_text_language.cpp",
   "src/test_ability.cpp",
   "src/test_case_list_adapter.cpp",
   "src/ui_test_app.cpp",
@@ -77,7 +78,9 @@ static_library("framework") {
   sources = test_sources
 
   include_dirs = [
+    "common",
     "include",
+    "../framework",
     "../uitest",
     "../../tools",
     "../../interfaces",
@@ -98,7 +101,9 @@ static_library("auto_framework") {
   sources = test_sources
 
   include_dirs = [
+    "common",
     "include",
+    "../framework",
     "../uitest",
     "../../tools",
     "../../interfaces",
