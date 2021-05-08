@@ -855,5 +855,4 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     rect_.SetPosition(tempX, tempY);
     return true;
 }
-
 } // namespace OHOS

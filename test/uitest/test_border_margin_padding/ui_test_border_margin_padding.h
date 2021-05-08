@@ -42,7 +42,7 @@ public:
     virtual ~UITestBorderMarginPadding() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void ReloadTest();
 
     void UIKit_UITestBorderMarginPadding_Test_001();

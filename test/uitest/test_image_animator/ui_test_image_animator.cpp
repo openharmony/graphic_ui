@@ -210,7 +210,7 @@ void UITestImageAnimator::TearDown()
     imageInfo3_ = nullptr;
 }
 
-UIView* UITestImageAnimator::GetTestView()
+const UIView* UITestImageAnimator::GetTestView()
 {
     UIKit_ImageAnimator_Test_Start_001();
     UIKit_ImageAnimator_Test_Stop_002();

@@ -44,7 +44,7 @@ void UITestScreenshot::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestScreenshot::GetTestView()
+const UIView* UITestScreenshot::GetTestView()
 {
     UIKit_SCREENSHOT_TEST_001();
     return container_;

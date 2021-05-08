@@ -253,7 +253,7 @@ void UITestInputEvent::TearDown()
     }
 }
 
-UIView* UITestInputEvent::GetTestView()
+const UIView* UITestInputEvent::GetTestView()
 {
     UIKit_Pointer_Input_Test_Dispatch_Simple_Event_001();
     UIKit_Pointer_Input_Test_Dispatch_Simple_Event_002();

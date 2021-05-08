@@ -58,7 +58,7 @@ void UITestFont::InnerTestTitle(const char* title)
     positionY_ += TITLE_HEIGHT + GAP;
 }
 
-UIView* UITestFont::GetTestView()
+const UIView* UITestFont::GetTestView()
 {
     Font_FontEngine_FontConvert_Test_FontTestSetFontId_001();
     Font_FontEngine_FontConvert_Test_FontTestSetFont_001();

@@ -69,7 +69,7 @@ void UITestTransform::TearDown()
     imageView_ = nullptr;
 }
 
-UIView* UITestTransform::GetTestView()
+const UIView* UITestTransform::GetTestView()
 {
     UIKit_Transform_Test_Rotate_001();
     UIKit_Transform_Test_Scale_002();

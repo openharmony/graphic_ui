@@ -95,7 +95,7 @@ void UITestAnalogClock::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestAnalogClock::GetTestView()
+const UIView* UITestAnalogClock::GetTestView()
 {
     UIKit_TestLineHandAnalogClock_001();
     UIKit_TestImageHandAnalogClock_002();

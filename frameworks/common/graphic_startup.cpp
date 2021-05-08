@@ -42,7 +42,10 @@
 #include "securec.h"
 
 namespace OHOS {
-void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath, const char* ttfName)
+void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr,
+                                    uint32_t cacheMemLen,
+                                    const char* dPath,
+                                    const char* ttfName)
 {
 #if ENABLE_VECTOR_FONT
     UIFont* fontEngine = UIFont::GetInstance();

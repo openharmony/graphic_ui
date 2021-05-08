@@ -33,7 +33,7 @@ public:
     void SetUp() override;
     void TearDown() override;
     bool OnClick(UIView& view, const ClickEvent& event) override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void OnPickerStoped(UIPicker& picker) override;
     void OnTimePickerStoped(UITimePicker& picker) override;
     void CreatButtons();

@@ -37,7 +37,7 @@ public:
     ~UITestImage() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void UIKit_UIImage_Test_SetImage_001();
     void UIKit_UIImage_Test_SetImage_002();
     void UIKit_UIImage_Test_SetImage_004();

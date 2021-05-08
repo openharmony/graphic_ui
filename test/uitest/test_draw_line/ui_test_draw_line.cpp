@@ -39,7 +39,7 @@ void UITestDrawLine::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestDrawLine::GetTestView()
+const UIView* UITestDrawLine::GetTestView()
 {
     UIKit_Draw_Line_Test_Line_001();
     UIKit_Draw_Line_Test_Line_002();

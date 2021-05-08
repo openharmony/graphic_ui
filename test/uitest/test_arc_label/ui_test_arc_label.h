@@ -28,7 +28,7 @@ public:
     ~UITestArcLabel() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     /**
      * @brief Test display arc text from 0 to 270 INSIDE

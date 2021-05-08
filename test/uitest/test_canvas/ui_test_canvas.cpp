@@ -36,7 +36,7 @@ void UITestCanvas::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestCanvas::GetTestView()
+const UIView* UITestCanvas::GetTestView()
 {
     UIKitCanvasTestDrawLine001();
     UIKitCanvasTestDrawLine002();

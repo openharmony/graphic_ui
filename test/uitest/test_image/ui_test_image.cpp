@@ -54,7 +54,7 @@ void UITestImage::TearDown()
 #endif
 }
 
-UIView* UITestImage::GetTestView()
+const UIView* UITestImage::GetTestView()
 {
     UIKit_UIImage_Test_SetImage_001();
     UIKit_UIImage_Test_SetImage_002();

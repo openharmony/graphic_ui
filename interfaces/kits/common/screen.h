@@ -39,7 +39,6 @@
 #include "gfx_utils/image_info.h"
 
 namespace OHOS {
-
 /**
  * @brief Represents the screen info of the device.
  *

@@ -83,7 +83,7 @@ void UITestCircleProgress::TearDown()
     scroll_ = nullptr;
 }
 
-UIView* UITestCircleProgress::GetTestView()
+const UIView* UITestCircleProgress::GetTestView()
 {
     UIKit_CircleProgress_Test_UICircleProgress_001();
     UIKit_CircleProgress_Test_SetValue_002();

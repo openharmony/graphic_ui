@@ -63,7 +63,7 @@ void UITestViewPercent::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestViewPercent::GetTestView()
+const UIView* UITestViewPercent::GetTestView()
 {
     InitView();
     return container_;

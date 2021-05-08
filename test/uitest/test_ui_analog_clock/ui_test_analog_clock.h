@@ -46,7 +46,7 @@ public:
     ~UITestAnalogClock() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void CreateButtons001(UIViewGroup* group, UIImageView* curFace, UIAnalogClock* clock);
     void CreateButtons002(UIViewGroup* group, UIImageView* curFace, UIAnalogClock* clock);
 
