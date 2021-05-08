@@ -43,7 +43,7 @@ static void* MemRealloc(const void* context, void* mem, size_t size)
 
 uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)
 {
-    UChar* str = reinterpret_cast<UChar*>(record.GetStr());
+    const UChar* str = reinterpret_cast<const UChar*>(record.GetStr());
     if ((str == nullptr) || !initSuccess_ || (lineBreakTrie_ == nullptr)) {
         return 0;
     }

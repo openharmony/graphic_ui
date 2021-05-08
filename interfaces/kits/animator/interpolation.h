@@ -64,7 +64,39 @@ public:
      */
     static int16_t GetBezierInterpolation(int16_t t, int16_t u0, int16_t u1, int16_t u2, int16_t u3);
 
+    /**
+     * @brief Obtains the value calculated by the cubic Bezier equation.
+     *
+     * The standard cubic Bezier equation is <b>B(t) = P0*(1-t)^3 + 3*P1*t*(1-t)^2 + 3*P2*t^2*(1-t) + P3*t^3</b>.
+     *
+     * @param t  Indicates the current change rate of the cubic Bezier curve, within [0, 1].
+     * @param u0 Indicates the coordinates for the start point of the cubic Bezier curve, within [0, 1].
+     * @param u1 Indicates the coordinates for the first control point of the cubic Bezier curve, within [0, 1].
+     * @param u2 Indicates the coordinates for the second control point of the cubic Bezier curve, within [0, 1].
+     * @param u3 Indicates the coordinates for the end point of the cubic Bezier curve, within [0, 1].
+     *
+     * @return Returns the coordinates for the current change rate.
+     * @since 1.0
+     * @version 1.0
+     */
     static float GetBezierInterpolation(float t, float u0, float u1, float u2, float u3);
+
+    /**
+     * @brief Obtains the value calculated by the cubic Bezier equation in standard two-dimensional coordinate system.
+     *
+     * The cubic Bezier equation is <b>B(t) = P0*(1-t)^3 + 3*P1*t*(1-t)^2 + 3*P2*t^2*(1-t) + P3*t^3</b>.
+     * <b>P0=(0,0), P3=(1,1)</b>
+     *
+     * @param x  Indicates the abscissa of P, within [0, 1].
+     * @param x1 Indicates the abscissa of the first control point of the cubic Bezier curve, within [0, 1].
+     * @param y1 Indicates the ordinate of the first control point of the cubic Bezier curve, within [0, 1].
+     * @param x2 Indicates the abscissa of the second control point of the cubic Bezier curve, within [0, 1].
+     * @param y2 Indicates the ordinate of the second control point of the cubic Bezier curve, within [0, 1].
+     *
+     * @return Returns the ordinate of the P.
+     * @since 1.0
+     * @version 1.0
+     */
     static float GetBezierY(float x, float x1, float y1, float x2, float y2);
 
 private:

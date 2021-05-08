@@ -33,6 +33,7 @@ public:
         img_->Invalidate();
         return false;
     }
+
 private:
     UIViewGroup* container_;
     UIImageView* img_;
@@ -45,12 +46,15 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
         ImageInfo info;
-        Screen::GetInstance().GetCurrentScreenBitmap(info);
+        if (Screen::GetInstance().GetCurrentScreenBitmap(info)) {
+            return false;
+        }
         img_->SetSrc(&info);
         container_->Add(img_);
         container_->Invalidate();
         return false;
     }
+
 private:
     UIViewGroup* container_;
     UIImageView* img_;

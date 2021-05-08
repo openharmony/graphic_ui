@@ -209,7 +209,7 @@ public:
      * @since 3.0
      * @version 5.0
      */
-    uint16_t* GetStr() const
+    const uint16_t* GetStr() const
     {
         if (prePos_ < len_) {
             return &(str_[prePos_]);

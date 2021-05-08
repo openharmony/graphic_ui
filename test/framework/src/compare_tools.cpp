@@ -14,14 +14,15 @@
  */
 
 #include "compare_tools.h"
+
 #include <cstring>
+
 #include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
 #include "securec.h"
-
 
 namespace OHOS {
 bool CompareTools::enableLog_ = false;
@@ -45,7 +46,7 @@ bool CompareTools::StrnCatPath(char* filePath, size_t pathMax, const char* fileN
     if (strncat_s(dest, DEFAULT_FILE_NAME_MAX_LENGTH, fileName, count) != EOK) {
         return false;
     }
-    if (memcpy_s(static_cast<void *>(filePath), pathMax, dest, DEFAULT_FILE_NAME_MAX_LENGTH) != EOK) {
+    if (memcpy_s(static_cast<void*>(filePath), pathMax, dest, DEFAULT_FILE_NAME_MAX_LENGTH) != EOK) {
         return false;
     }
     return true;
@@ -186,6 +187,7 @@ void CompareTools::SetLogPath(const char* filePath, size_t length)
         if (logPath_ == nullptr) {
             return;
         }
+
         if (memcpy_s(logPath_, length, filePath, length) != EOK) {
             GRAPHIC_LOGE("memcpy filepath failed");
             return;
