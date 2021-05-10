@@ -60,6 +60,7 @@ test_sources = [
   "../uitest/test_view_group/ui_test_view_group.cpp",
   "../uitest/test_view_percent/ui_test_view_percent.cpp",
   "../uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp",
+  "../uitest/test_border_margin_padding/ui_test_border_margin_padding.cpp",
   "src/test_ability.cpp",
   "src/test_case_list_adapter.cpp",
   "src/ui_test_app.cpp",
@@ -81,7 +82,7 @@ static_library("framework") {
     "../../tools",
     "../../interfaces",
     "../../frameworks",
-    "//foundation/multimedia/utils/lite/include",
+    "//foundation/multimedia/utils/lite/interfaces/kits",
     "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
   ]
 
@@ -102,7 +103,7 @@ static_library("auto_framework") {
     "../../tools",
     "../../interfaces",
     "../../frameworks",
-    "//foundation/multimedia/utils/lite/include",
+    "//foundation/multimedia/utils/lite/interfaces/kits",
     "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
   ]
 

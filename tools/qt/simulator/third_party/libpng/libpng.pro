@@ -1,8 +1,6 @@
 CONFIG -= qt
 
 TEMPLATE = lib
-CONFIG += staticlib
-
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -38,3 +36,5 @@ SOURCES += \
 INCLUDEPATH += \
     ../../../../../../../../third_party/libpng \
     ../../../../../../../../third_party/zlib
+
+LIBS += $${DESTDIR}/zlib.dll

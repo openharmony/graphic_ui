@@ -32,7 +32,7 @@ void UITestRender::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestRender::GetTestView()
+const UIView* UITestRender::GetTestView()
 {
     UIKit_Render_Test_Render_001();
     UIKit_Render_Test_RenderMeasure_001();

@@ -55,6 +55,11 @@ private:
     int16_t lastX_ = 0;
     int16_t lastY_ = 0;
     UIPicker* picker_ = nullptr;
+    UIView::OnClickListener* listener1_ = nullptr;
+    UIView::OnClickListener* listener2_ = nullptr;
+    UIView::OnClickListener* listener3_ = nullptr;
+    UIView::OnClickListener* listener4_ = nullptr;
+    UIView::OnClickListener* listener5_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_ROTATE_INPUT_H

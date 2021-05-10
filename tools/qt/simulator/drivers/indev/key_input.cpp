@@ -13,45 +13,43 @@
  * limitations under the License.
  */
 
-#include "mouse_input.h"
+#include "key_input.h"
+
 #include <QtCore/qcoreevent.h>
 #include <QtCore/qvariant.h>
 
+#include "events/key_event.h"
+
 namespace OHOS {
-#if USE_MOUSE
-bool MouseInput::Read(DeviceData& data)
+#if USE_KEY
+namespace {
+static uint16_t g_lastKeyId = 0;
+static uint16_t g_lastKeyState = INVALID_KEY_STATE;
+} // namespace
+
+bool KeyInput::Read(DeviceData& data)
 {
-    data.point.x = lastX_;
-    data.point.y = lastY_;
-    data.state = leftButtonDown_ ? STATE_PRESS : STATE_RELEASE;
+    data.keyId = g_lastKeyId;
+    data.state = g_lastKeyState;
+    g_lastKeyState = INVALID_KEY_STATE;
     return false;
 }
 
-void MouseInput::MouseHandler(QMouseEvent* event)
+void KeyInput::KeyHandler(QKeyEvent* event)
 {
     if (event == nullptr) {
         return;
     }
     switch (event->type()) {
-        case QMouseEvent::Type::MouseButtonRelease:
-            if (event->button() == Qt::LeftButton) {
-                leftButtonDown_ = false;
-            }
+        case QKeyEvent::Type::KeyPress:
+            g_lastKeyState = InputDevice::STATE_PRESS;
             break;
-        case QMouseEvent::Type::MouseButtonPress:
-            if (event->button() == Qt::LeftButton) {
-                leftButtonDown_ = true;
-                lastX_ = event->x();
-                lastY_ = event->y();
-            }
-            break;
-        case QMouseEvent::Type::MouseMove:
-            lastX_ = event->x();
-            lastY_ = event->y();
+        case QKeyEvent::Type::KeyRelease:
+            g_lastKeyState = InputDevice::STATE_RELEASE;
             break;
         default:
             break;
     }
 }
-#endif // USE_MOUSE
+#endif // USE_KEY
 } // namespace OHOS

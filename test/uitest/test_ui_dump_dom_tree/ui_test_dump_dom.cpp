@@ -46,6 +46,54 @@ void UITestDumpDomTree::SetUp()
 
 void UITestDumpDomTree::TearDown()
 {
+    if (clickDumpDomListener1_ != nullptr) {
+        delete clickDumpDomListener1_;
+        clickDumpDomListener1_ = nullptr;
+    }
+    if (clickDumpDomListener2_ != nullptr) {
+        delete clickDumpDomListener2_;
+        clickDumpDomListener2_ = nullptr;
+    }
+    if (clickDumpDomListener3_ != nullptr) {
+        delete clickDumpDomListener3_;
+        clickDumpDomListener3_ = nullptr;
+    }
+    if (clickDumpDomListener4_ != nullptr) {
+        delete clickDumpDomListener4_;
+        clickDumpDomListener4_ = nullptr;
+    }
+    if (clickDumpDomListener5_ != nullptr) {
+        delete clickDumpDomListener5_;
+        clickDumpDomListener5_ = nullptr;
+    }
+    if (clickDumpDomListener6_ != nullptr) {
+        delete clickDumpDomListener6_;
+        clickDumpDomListener6_ = nullptr;
+    }
+    if (clickDumpDomListener7_ != nullptr) {
+        delete clickDumpDomListener7_;
+        clickDumpDomListener7_ = nullptr;
+    }
+    if (clickDumpDomListener8_ != nullptr) {
+        delete clickDumpDomListener8_;
+        clickDumpDomListener8_ = nullptr;
+    }
+    if (clickDumpDomListener9_ != nullptr) {
+        delete clickDumpDomListener9_;
+        clickDumpDomListener9_ = nullptr;
+    }
+    if (clickDumpDomListener10_ != nullptr) {
+        delete clickDumpDomListener10_;
+        clickDumpDomListener10_ = nullptr;
+    }
+    if (clickDumpDomListener11_ != nullptr) {
+        delete clickDumpDomListener11_;
+        clickDumpDomListener11_ = nullptr;
+    }
+    if (clickDumpDomListener12_ != nullptr) {
+        delete clickDumpDomListener12_;
+        clickDumpDomListener12_ = nullptr;
+    }
     positionY_ = 0;
     DeleteChildren(container_);
     container_ = nullptr;
@@ -151,35 +199,46 @@ void UITestDumpDomTree::CreateButtons(GridLayout* layout)
     UILabelButton* dumpButton1 = GetLabelButton("dump");
     layout->Add(dumpButton1);
     /* dump node here */
-    UIView::OnClickListener* clickDumpDomListener1 =
-        new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton1), "dump_checkbox");
-    dumpButton1->SetOnClickListener(clickDumpDomListener1);
+    if (clickDumpDomListener1_ == nullptr) {
+        clickDumpDomListener1_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton1), "dump_checkbox"));
+    }
+    dumpButton1->SetOnClickListener(clickDumpDomListener1_);
 
     UILabelButton* dumpButton2 = GetLabelButton("dump");
     layout->Add(dumpButton2);
     /* dump node here */
-    UIView::OnClickListener* clickDumpDomListener2 =
-        new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton2), "dump_radiobutton");
-    dumpButton2->SetOnClickListener(clickDumpDomListener2);
+    if (clickDumpDomListener2_ == nullptr) {
+        clickDumpDomListener2_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton2), "dump_radiobutton"));
+    }
+    dumpButton2->SetOnClickListener(clickDumpDomListener2_);
 
     UILabelButton* dumpButton3 = GetLabelButton("dump");
     layout->Add(dumpButton3);
     /* dump node here */
-    UIView::OnClickListener* clickDumpDomListener3 =
-        new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton3), "dump_togglebutton");
-    dumpButton3->SetOnClickListener(clickDumpDomListener3);
+    if (clickDumpDomListener3_ == nullptr) {
+        clickDumpDomListener3_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton3), "dump_togglebutton"));
+    }
+    dumpButton3->SetOnClickListener(clickDumpDomListener3_);
 
     UILabelButton* dumpButton4 = GetLabelButton("dump_all ");
     layout->Add(dumpButton4);
-    UIView::OnClickListener* clickDumpDomTreeListener1 =
-        new TestBtnOnClickDumpDomTreeListener(static_cast<UIView*>(dumpButton4), nullptr);
-    dumpButton4->SetOnClickListener(clickDumpDomTreeListener1);
+
+    if (clickDumpDomListener4_ == nullptr) {
+        clickDumpDomListener4_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickDumpDomTreeListener(static_cast<UIView*>(dumpButton4), nullptr));
+    }
+    dumpButton4->SetOnClickListener(clickDumpDomListener4_);
 
     UILabelButton* dumpButton5 = GetLabelButton("dump_group");
     layout->Add(dumpButton5);
-    UIView::OnClickListener* clickDumpDomTreeListener2 =
-        new TestBtnOnClickDumpDomTreeListener(static_cast<UIView*>(dumpButton5), "dump_group");
-    dumpButton5->SetOnClickListener(clickDumpDomTreeListener2);
+    if (clickDumpDomListener5_ == nullptr) {
+        clickDumpDomListener5_ = static_cast<UIView::OnClickListener*>(
+            new TestBtnOnClickDumpDomTreeListener(static_cast<UIView*>(dumpButton5), "dump_group"));
+    }
+    dumpButton5->SetOnClickListener(clickDumpDomListener5_);
 }
 
 void UITestDumpDomTree::UIKit_TestDumpDom_002()
@@ -210,9 +269,11 @@ void UITestDumpDomTree::UIKit_TestDumpDom_002()
         group2->Add(dumpButton1);
         dumpButton1->SetText("dump");
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener1 =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton1), "dump_image");
-        dumpButton1->SetOnClickListener(clickDumpDomListener1);
+        if (clickDumpDomListener6_ == nullptr) {
+            clickDumpDomListener6_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton1), "dump_image"));
+        }
+        dumpButton1->SetOnClickListener(clickDumpDomListener6_);
     }
 }
 
@@ -254,9 +315,11 @@ void UITestDumpDomTree::UIKit_TestDumpDom_003()
         UILabelButton* dumpButton = GetLabelButton("dump");
         dumpButton->SetPosition(120, 73); // 120: x-coordinate, 73: y-coordinate
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton), "dump_slider");
-        dumpButton->SetOnClickListener(clickDumpDomListener);
+        if (clickDumpDomListener7_ == nullptr) {
+            clickDumpDomListener7_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton), "dump_slider"));
+        }
+        dumpButton->SetOnClickListener(clickDumpDomListener7_);
         group5->Add(dumpButton);
     }
 }
@@ -296,9 +359,11 @@ void UITestDumpDomTree::UIKit_TestDumpDom_004()
         UILabelButton* dumpButton = GetLabelButton("dump");
         dumpButton->SetPosition(160, 48); // 160: x-coordinate, 48: y-coordinate
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton), "dump_boxprogress");
-        dumpButton->SetOnClickListener(clickDumpDomListener);
+        if (clickDumpDomListener8_ == nullptr) {
+            clickDumpDomListener8_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton), "dump_boxprogress"));
+        }
+        dumpButton->SetOnClickListener(clickDumpDomListener8_);
         group4->Add(dumpButton);
     }
 }
@@ -341,25 +406,31 @@ void UITestDumpDomTree::UIKit_TestDumpDom_005()
         UILabelButton* dumpButton1 = GetLabelButton("dump");
         dumpButton1->SetPosition(230, 48); // 230: x-coordinate, 48: y-coordinate
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener1 =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton1), "dump_label");
-        dumpButton1->SetOnClickListener(clickDumpDomListener1);
+        if (clickDumpDomListener9_ == nullptr) {
+            clickDumpDomListener9_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton1), "dump_label"));
+        }
+        dumpButton1->SetOnClickListener(clickDumpDomListener9_);
         group3->Add(dumpButton1);
 
         UILabelButton* dumpButton2 = GetLabelButton("dump");
         dumpButton2->SetPosition(230, 108); // 230: x-coordinate, 108: y-coordinate
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener2 =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton2), "dump_label_button");
-        dumpButton2->SetOnClickListener(clickDumpDomListener2);
+        if (clickDumpDomListener10_ == nullptr) {
+            clickDumpDomListener10_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton2), "dump_label_button"));
+        }
+        dumpButton2->SetOnClickListener(clickDumpDomListener10_);
         group3->Add(dumpButton2);
 
         UILabelButton* dumpButton3 = GetLabelButton("dump");
         dumpButton3->SetPosition(230, 310); // 230: x position, 310: y position
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener3 =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton3), "dump_arc_label");
-        dumpButton3->SetOnClickListener(clickDumpDomListener3);
+        if (clickDumpDomListener11_ == nullptr) {
+            clickDumpDomListener11_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton3), "dump_arc_label"));
+        }
+        dumpButton3->SetOnClickListener(clickDumpDomListener11_);
         group3->Add(dumpButton3);
     }
 }
@@ -403,9 +474,11 @@ void UITestDumpDomTree::UIKit_TestDumpDom_006()
         UILabelButton* dumpButton = GetLabelButton("dump");
         dumpButton->SetPosition(170, 73); // 170: x-coordinate, 73: y-coordinate
         /* dump node here */
-        UIView::OnClickListener* clickDumpDomListener =
-            new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton), "dump_circle_progress");
-        dumpButton->SetOnClickListener(clickDumpDomListener);
+        if (clickDumpDomListener12_ == nullptr) {
+            clickDumpDomListener12_ = static_cast<UIView::OnClickListener*>(
+                new TestBtnOnClickDumpDomListener(static_cast<UIView*>(dumpButton), "dump_circle_progress"));
+        }
+        dumpButton->SetOnClickListener(clickDumpDomListener12_);
         group6->Add(dumpButton);
     }
 }

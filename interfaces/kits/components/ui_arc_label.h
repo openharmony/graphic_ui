@@ -114,6 +114,17 @@ public:
     }
 
     /**
+     * @brief Sets the view style.
+     * @param style Indicates the view style.
+     * @since 1.0
+     * @version 1.0
+     */
+    virtual void SetStyle(Style& style) override
+    {
+        UIView::SetStyle(style);
+    }
+
+    /**
      * @brief Sets a style.
      *
      * @param key Indicates the key of the style to set.

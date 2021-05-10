@@ -29,7 +29,7 @@ public:
     ~UITestChartPolyline() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     void SetUpButton(UILabelButton* btn, const char* title);
 

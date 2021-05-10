@@ -13,22 +13,33 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_GRAPHIC_STARTUP_H
-#define GRAPHIC_LITE_GRAPHIC_STARTUP_H
-#include "gfx_utils/heap_base.h"
+#ifndef GRAPHIC_LITE_KEY_INPUT_H
+#define GRAPHIC_LITE_KEY_INPUT_H
+
+#include <QKeyEvent>
+
+#include "config.h"
+#include "dock/key_input_device.h"
 
 namespace OHOS {
-class BaseFont;
-
-/** @brief Entry of graphic, mainly used to start graphic. */
-class GraphicStartUp : public HeapBase {
+#if USE_KEY
+class KeyInput : public KeyInputDevice {
 public:
-    static void Init();
+    KeyInput() {}
+    virtual ~KeyInput() {}
+    static KeyInput* GetInstance()
+    {
+        static KeyInput keyInput;
+        return &keyInput;
+    }
+    bool Read(DeviceData& data) override;
+    void KeyHandler(QKeyEvent* event);
 
-    static void InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath, const char* ttfName);
-
-    static void InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* path,
-                                    const char* fileName);
+private:
+    bool leftButtonDown_;
+    int16_t lastX_;
+    int16_t lastY_;
 };
+#endif // USE_KEY
 } // namespace OHOS
-#endif // GRAPHIC_LITE_GRAPHIC_STARTUP_H
+#endif // GRAPHIC_LITE_KEY_INPUT_H

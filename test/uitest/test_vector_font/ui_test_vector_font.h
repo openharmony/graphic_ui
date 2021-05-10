@@ -30,8 +30,9 @@ public:
     ~UITestVectorFont() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void Font_FontEngine_Vector_Test_CH_Lang_001();
+    void Font_FontEngine_Vector_Test_CH_Lang_002();
     void Font_FontEngine_Vector_Test_JA_Lang_001();
     void Font_FontEngine_Vector_Test_JA_Lang_002();
     void Font_FontEngine_Vector_Test_KR_Lang_001();

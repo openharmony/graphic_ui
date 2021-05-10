@@ -77,7 +77,7 @@ void UITestAdvancedLayout::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestAdvancedLayout::GetTestView()
+const UIView* UITestAdvancedLayout::GetTestView()
 {
     UIKit_Layout_Test_FlexLayout_001();
     UIKit_Layout_Test_GridLayout_001();

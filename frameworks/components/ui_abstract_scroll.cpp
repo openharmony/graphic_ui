@@ -105,6 +105,7 @@ void UIAbstractScroll::StartAnimator(int16_t dragDistanceX, int16_t dragDistance
     if (dragTimes < MIN_DRAG_TIMES) {
         dragTimes = MIN_DRAG_TIMES;
     }
+    animatorCallback_.RsetCallback();
     animatorCallback_.SetDragStartValue(0, 0);
     animatorCallback_.SetDragEndValue(dragDistanceX, dragDistanceY);
     animatorCallback_.SetDragTimes(dragTimes * DRAG_ACC_FACTOR / GetDragACCLevel());
@@ -146,7 +147,6 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
     if (view == nullptr) {
         return;
     }
-    curtTime_++;
 
     UIAbstractScroll* scrollView = static_cast<UIAbstractScroll*>(view);
     scrollView->isDragging_ = true;
@@ -174,6 +174,8 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
         }
         if (needStopX && needStopY) {
             scrollView->StopAnimator();
+        } else {
+            curtTime_++;
         }
     } else {
         scrollView->StopAnimator();

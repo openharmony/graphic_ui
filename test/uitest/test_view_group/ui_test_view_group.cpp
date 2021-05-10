@@ -32,7 +32,7 @@ void UITestViewGroup::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestViewGroup::GetTestView()
+const UIView* UITestViewGroup::GetTestView()
 {
     UIKit_ViewGroup_Test_AddRemove_001();
     UIKit_ViewGroup_Test_Add_Error_001();

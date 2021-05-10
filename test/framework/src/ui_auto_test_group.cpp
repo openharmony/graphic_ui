@@ -35,6 +35,7 @@ void UIAutoTestGroup::TearDownTestCase()
     ListNode<UIAutoTest*>* node = testCaseList_.Begin();
     while (node != testCaseList_.End()) {
         delete node->data_;
+        node->data_ = nullptr;
         node = node->next_;
     }
     testCaseList_.Clear();

@@ -23,8 +23,14 @@ namespace OHOS {
 class PickerListScrollListener : public ListScrollListener {
 public:
     PickerListScrollListener(UIPicker* picker, UIList* list)
-        : listView_(list), pickerView_(picker), selectView_(nullptr), lastSelectView_(nullptr),
-          selectIndex_(0), isInitted_(false){}
+        : listView_(list),
+          pickerView_(picker),
+          selectView_(nullptr),
+          lastSelectView_(nullptr),
+          selectIndex_(0),
+          isInitted_(false)
+    {
+    }
 
     virtual ~PickerListScrollListener() {}
 
@@ -46,8 +52,7 @@ public:
             if (pickerView_->highlightFontName_ == nullptr) {
                 static_cast<UILabel*>(view)->SetFontId(pickerView_->highlightFontId_);
             } else {
-                static_cast<UILabel*>(view)
-                    ->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
+                static_cast<UILabel*>(view)->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
             }
             lastSelectView_ = view;
             selectIndex_ = index;
@@ -76,8 +81,7 @@ public:
         if (pickerView_->highlightFontName_ == nullptr) {
             static_cast<UILabel*>(view)->SetFontId(pickerView_->highlightFontId_);
         } else {
-            static_cast<UILabel*>(view)
-                ->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
+            static_cast<UILabel*>(view)->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
         }
 
         listView_->Invalidate();
@@ -184,7 +188,7 @@ UIPicker::~UIPicker()
     ClearValues();
     Remove(&list_);
     if (listListener_ != nullptr) {
-        delete static_cast<PickerListScrollListener *>(listListener_);
+        delete static_cast<PickerListScrollListener*>(listListener_);
         listListener_ = nullptr;
     }
 
@@ -293,12 +297,9 @@ void UIPicker::RefreshList()
     textAdapter_->SetDirect(direct_);
     list_.SetHeight(height);
     list_.SetWidth(itemsWidth_);
-    list_.SetPosition(GetWidth() / 2 - list_.GetWidth() / 2, 0); // 2: half
+    list_.LayoutCenterOfParent();
     list_.SetScrollBlankSize((height - itemsHeight_) / 2); // 2: half
-    list_.SetSelectPosition(height / 2); // 2: half
-    list_.SetStyle(*style_);
-    list_.SetStyle(STYLE_BORDER_WIDTH, 0);
-    list_.SetStyle(STYLE_BACKGROUND_OPA, 0);
+    list_.SetSelectPosition(height / 2);                   // 2: half
     if (!isSetAdaptered_) {
         list_.SetAdapter(textAdapter_);
         isSetAdaptered_ = true;
@@ -342,7 +343,7 @@ bool UIPicker::RefreshSelected(uint16_t index)
         listListener->SetInitStatus(false);
         // 2: half
         int16_t yOffset = (list_.GetHeight() - itemsHeight_) / 2 -
-            itemsHeight_ * (index - list_.GetChildrenHead()->GetViewIndex());
+                          itemsHeight_ * (index - list_.GetChildrenHead()->GetViewIndex());
         list_.SetScrollStateListener(nullptr);
         list_.ScrollBy(yOffset - list_.GetChildrenHead()->GetY());
         list_.SetScrollStateListener(listListener);
@@ -466,4 +467,4 @@ void UIPicker::SetTextFormatter(TextFormatter* formatter)
     textAdapter_->SetTextFormatter(formatter);
     Refresh();
 }
-}
+} // namespace OHOS

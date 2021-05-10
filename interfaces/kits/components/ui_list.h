@@ -362,6 +362,30 @@ public:
         autoAlign_ = state;
     }
 
+    /**
+     * @brief 设置自动对齐动画时长，单位为毫秒，默认为100毫秒。该功能依赖EnableAutoAlign()方法，自动对齐设置为true情况下才生效。
+     *
+     * @param value 自动对齐动画时长,0表示无动画。
+     * @since 3.0
+     * @version 3.0
+     */
+    void SetAutoAlignTime(uint16_t time)
+    {
+        alignTime_ = time;
+    }
+
+    /**
+     * @brief 获取自动对齐动画时长。
+     *
+     * @return 自动对齐动画时长。
+     * @since 3.0
+     * @version 3.0
+     */
+    uint16_t GetAutoAlignTime() const
+    {
+        return alignTime_;
+    }
+
     void RemoveAll() override;
 
     static constexpr int8_t NULL_SELECT_INDEX = -1;
@@ -371,6 +395,7 @@ public:
 protected:
     static constexpr int16_t RECALCULATE_DRAG_DISTANCE = 10;
     static constexpr int16_t RECALCULATE_DRAG_TIMES = 10;
+    static constexpr int16_t DEFAULT_ALINE_TIMES = 100;
     void StopAnimator() override;
     bool DragXInner(int16_t distance) override;
     bool DragYInner(int16_t distance) override;
@@ -421,9 +446,8 @@ private:
     void PushFront(UIView* view);
     void SetHead(UIView* view);
     bool MoveChildStep(int16_t distance);
-    bool MoveChildStepInner(int16_t distance,
-                            int16_t (UIView::*pfnGetXOrY)() const,
-                            int16_t (Rect::*pfnGetWidthOrHeight)() const);
+    bool
+        MoveChildStepInner(int16_t distance, int16_t (UIView::*getXOrY)() const, int16_t (UIView::*getWidthOrHeight)());
     uint16_t GetIndexInc(uint16_t index);
     uint16_t GetIndexDec(uint16_t index);
 
@@ -433,7 +457,7 @@ private:
 #if ENABLE_ROTATE_INPUT
     bool isRotating_;
     int16_t lastRotateLen_;
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 5;
+    static constexpr float DEFAULT_ROTATE_FACTOR = 5.0;
 #endif
 #if ENABLE_VIBRATOR
     void SetMotorType(VibratorType vibratorType);
@@ -442,6 +466,7 @@ private:
     bool isLoopList_;
     bool isReCalculateDragEnd_;
     bool autoAlign_;
+    uint16_t alignTime_;
     uint16_t startIndex_;
     uint16_t topIndex_;
     uint16_t bottomIndex_;

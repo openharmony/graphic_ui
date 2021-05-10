@@ -25,7 +25,7 @@
 namespace {
 const int16_t GAP = 5;
 const int16_t TITLE_HEIGHT = 29;
-const uint16_t LABEL_WIDTH = 400;
+const uint16_t LABEL_WIDTH = 200;
 const uint16_t LABEL_HEIGHT = 50;
 const uint16_t BUF_SIZE = 200;
 const uint16_t LANGUAGE_FILE_ID_MAX = 9;
@@ -70,9 +70,10 @@ void UITestVectorFont::InnerTestTitle(const char* title)
     positionY_ += TITLE_HEIGHT + GAP;
 }
 
-UIView* UITestVectorFont::GetTestView()
+const UIView* UITestVectorFont::GetTestView()
 {
     Font_FontEngine_Vector_Test_CH_Lang_001();
+    Font_FontEngine_Vector_Test_CH_Lang_002();
     Font_FontEngine_Vector_Test_JA_Lang_001();
     Font_FontEngine_Vector_Test_JA_Lang_002();
     Font_FontEngine_Vector_Test_KR_Lang_001();
@@ -102,6 +103,21 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_CH_Lang_001()
         label->SetText("测试中文");
         container_->Add(label);
         positionY_ += LABEL_HEIGHT + GAP;
+    }
+}
+
+void UITestVectorFont::Font_FontEngine_Vector_Test_CH_Lang_002()
+{
+    if (container_ != nullptr) {
+        InnerTestTitle("Multiline text");
+        UILabel* label = new UILabel();
+        UIFont::GetInstance()->RegisterFontInfo(HYQIHEI_65S);
+        label->SetPosition(positionX_, positionY_);
+        label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2：double
+        label->SetFont(HYQIHEI_65S, 24); // 24 : size
+        label->SetText("测试中英文混合：text和text text和text text和text");
+        container_->Add(label);
+        positionY_ += LABEL_HEIGHT * 2 + GAP; // 2：double
     }
 }
 

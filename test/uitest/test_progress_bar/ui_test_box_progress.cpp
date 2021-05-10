@@ -84,7 +84,7 @@ void UITestBoxProgress::TearDown()
     uiViewGroupFrame_ = nullptr;
 }
 
-UIView* UITestBoxProgress::GetTestView()
+const UIView* UITestBoxProgress::GetTestView()
 {
     UIKit_BoxProgress_Test_UIBoxProgress_001();
     UIKit_BoxProgress_Test_SetRange_002();

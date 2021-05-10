@@ -293,7 +293,7 @@ private:
     int16_t minScrollBarLen_;
     OnScrollListener* scrollListener_;
 #if ENABLE_ROTATE_INPUT
-    static constexpr int8_t DEFAULT_ROTATE_FACTOR = 3;
+    static constexpr float DEFAULT_ROTATE_FACTOR = 3.0;
     int16_t lastRotateLen_;
 #endif
 };

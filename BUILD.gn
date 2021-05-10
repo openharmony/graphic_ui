@@ -33,7 +33,7 @@ config("graphic_define_config") {
   defines = [
     "ENABLE_VECTOR_FONT=1",
     "ENABLE_SHAPING=0",
-    "ENABLE_ICU=0",
+    "ENABLE_ICU=1",
     "ENABLE_MULTI_FONT=0",
   ]
 
@@ -46,8 +46,11 @@ config("graphic_define_config") {
 
 if (enable_graphic_font) {
   copy("utils_config") {
-    sources = [ "tools/qt/simulator/font/SourceHanSansSC-Regular.otf" ]
-    outputs = [ "$root_out_dir/data/SourceHanSansSC-Regular.otf" ]
+    sources = [
+      "tools/qt/simulator/font/SourceHanSansSC-Regular.otf",
+      "tools/qt/simulator/font/line_cj.brk",
+    ]
+    outputs = [ "$root_out_dir/data/{{source_file_part}}" ]
   }
 }
 
@@ -158,6 +161,7 @@ shared_library("ui") {
     "//third_party/bounds_checking_function:libsec_shared",
     "//third_party/freetype:freetype",
     "//third_party/giflib:libgif",
+    "//third_party/icu/icu4c/source/common:icu_font",
     "//third_party/libjpeg:libjpeg",
     "//third_party/libpng:libpng",
     "//third_party/qrcodegen:qrcodegen",

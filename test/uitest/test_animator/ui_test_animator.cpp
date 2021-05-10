@@ -77,7 +77,7 @@ void UITestAnimator::TearDown()
     uiViewGroupFrame_ = nullptr;
 }
 
-UIView* UITestAnimator::GetTestView()
+const UIView* UITestAnimator::GetTestView()
 {
     UIKit_Animator_Test_BackEasing_001();
     UIKit_Animator_Test_CircEasing_002();

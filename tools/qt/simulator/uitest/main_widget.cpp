@@ -89,4 +89,17 @@ void MainWidget::wheelEvent(QWheelEvent* event)
     MousewheelInput::GetInstance()->MousewheelHandler(event);
 #endif
 }
+
+void MainWidget::keyPressEvent(QKeyEvent* event)
+{
+#if USE_KEY != 0
+    KeyInput::GetInstance()->KeyHandler(event);
+#endif
+}
+void MainWidget::keyReleaseEvent(QKeyEvent* event)
+{
+#if USE_KEY != 0
+    KeyInput::GetInstance()->KeyHandler(event);
+#endif
+}
 } // namespace OHOS

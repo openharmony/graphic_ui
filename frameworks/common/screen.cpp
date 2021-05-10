@@ -38,13 +38,14 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
     uint16_t screenHeight = BaseGfxEngine::GetInstance()->GetScreenHeight();
     info.header.colorMode = bufferInfo->mode;;
     info.dataSize = screenWidth * screenHeight * DrawUtils::GetByteSizeByColorMode(info.header.colorMode);
-    uint8_t* screenBitmapBuffer = reinterpret_cast<uint8_t*>(ImageCacheMalloc(info));
+    info.data = reinterpret_cast<uint8_t*>(ImageCacheMalloc(info));
     info.header.width = screenWidth;
     info.header.height = screenHeight;
     info.header.reserved = 0;
     info.header.compressMode = 0;
 
     if (memcpy_s(screenBitmapBuffer, info.dataSize, bufferInfo->virAddr, info.dataSize) != EOK) {
+        ImageCacheFree(info);
         return false;
     }
 

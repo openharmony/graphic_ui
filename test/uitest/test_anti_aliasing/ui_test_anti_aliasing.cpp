@@ -36,7 +36,7 @@ void UITestAntiAliasing::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestAntiAliasing::GetTestView()
+const UIView* UITestAntiAliasing::GetTestView()
 {
     UIKit_Anti_Aliasing_Test_Rect_001();
     UIKit_Anti_Aliasing_Test_Circle_001();

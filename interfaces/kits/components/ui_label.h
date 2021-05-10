@@ -405,6 +405,24 @@ public:
      */
     void SetHeight(int16_t height) override;
 
+    /**
+     * @brief Sets the x-coordinate for the view.
+     * @param x Indicates the x-coordinate to set.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetX(int16_t x) override;
+
+    /**
+     * @brief Sets the y-coordinate for the view.
+     * @param y Indicates the y-coordinate to set.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetY(int16_t y) override;
+
+    void ReMeasure() override;
+
 protected:
     Text* labelText_;
     void RefreshLabel();
@@ -414,7 +432,6 @@ protected:
 private:
     friend class LabelAnimator;
 
-    void ReMeasure() override;
     void RemeasureForMarquee(int16_t textWidth);
 
     bool needRefresh_ : 1;

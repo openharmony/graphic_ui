@@ -25,8 +25,12 @@ UIBoxProgress::UIBoxProgress()
     SetDirection(Direction::DIR_LEFT_TO_RIGHT);
 }
 
-void UIBoxProgress::DrawValidRect(BufferInfo& gfxDstBuffer, const Image* image, const Rect& rect, const Rect& invalidatedArea,
-    const Style& style, uint16_t radius)
+void UIBoxProgress::DrawValidRect(BufferInfo& gfxDstBuffer,
+                                  const Image* image,
+                                  const Rect& rect,
+                                  const Rect& invalidatedArea,
+                                  const Style& style,
+                                  uint16_t radius)
 {
     Rect cordsTmp;
     if ((image != nullptr) && (image->GetSrcType() != IMG_SRC_UNKNOWN)) {
@@ -65,8 +69,13 @@ void UIBoxProgress::DrawValidRect(BufferInfo& gfxDstBuffer, const Image* image, 
     }
 }
 
-void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer, const Image* image, const Point& imgPos,
-    const Rect& rect, const Rect& invalidatedArea, uint16_t radius, const Style& style)
+void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
+                                 const Image* image,
+                                 const Point& imgPos,
+                                 const Rect& rect,
+                                 const Rect& invalidatedArea,
+                                 uint16_t radius,
+                                 const Style& style)
 {
     Point leftTop;
     Point leftBottom;
@@ -107,35 +116,78 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer, const Image* image, c
     Style capStyle = style;
     capStyle.lineWidth_ = radius;
     capStyle.lineColor_ = style.bgColor_;
-    capStyle.lineOpa_ = style.bgOpa_;
+    if ((image != nullptr) && (image->GetSrcType() != IMG_SRC_UNKNOWN)) {
+        capStyle.lineOpa_ = style.imageOpa_;
+    } else {
+        capStyle.lineOpa_ = style.bgOpa_;
+    }
+
     ArcInfo arcInfo = {{0}};
     arcInfo.radius = radius;
     arcInfo.imgPos = imgPos;
     arcInfo.imgSrc = image;
 
-    arcInfo.center = leftTop;
-    arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
-    arcInfo.endAngle = 0;
-    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+    if (rect.GetWidth() % 2 == 0) { // 2: determine the odd or even number of the width
+        arcInfo.center = leftTop;
+        arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
+        arcInfo.endAngle = 0;
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
 
-    arcInfo.center = leftBottom;
-    arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
-    arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
-    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        arcInfo.center = leftBottom;
+        arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
+        arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
 
-    arcInfo.center = rightTop;
-    arcInfo.startAngle = 0;
-    arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
-    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        arcInfo.center = rightTop;
+        arcInfo.startAngle = 0;
+        arcInfo.endAngle = QUARTER_IN_DEGREE;
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
 
-    arcInfo.center = rightBottom;
-    arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
-    arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
-    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        arcInfo.center = rightBottom;
+        arcInfo.startAngle = QUARTER_IN_DEGREE;
+        arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+    } else {
+        switch (direction_) {
+            case Direction::DIR_LEFT_TO_RIGHT:
+            case Direction::DIR_RIGHT_TO_LEFT: {
+                arcInfo.center = leftTop;
+                arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
+                arcInfo.endAngle = 0;
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+
+                arcInfo.center = leftBottom;
+                arcInfo.startAngle = 0;
+                arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                break;
+            }
+
+            case Direction::DIR_TOP_TO_BOTTOM:
+            case Direction::DIR_BOTTOM_TO_TOP: {
+                arcInfo.center = leftTop;
+                arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
+                arcInfo.endAngle = QUARTER_IN_DEGREE;
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+
+                arcInfo.center = leftBottom;
+                arcInfo.startAngle = QUARTER_IN_DEGREE;
+                arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                break;
+            }
+            default:
+                GRAPHIC_LOGE("UIBoxProgress: DrawRoundCap direction Err!\n");
+                break;
+        }
+    }
 }
 
-void UIBoxProgress::GetBackgroundParam(Point& startPoint, int16_t& width, int16_t& height, uint16_t& radius,
-    const Style& style)
+void UIBoxProgress::GetBackgroundParam(Point& startPoint,
+                                       int16_t& width,
+                                       int16_t& height,
+                                       uint16_t& radius,
+                                       const Style& style)
 {
     Rect rect = GetOrigRect();
     // 2: Half of the gap
@@ -223,17 +275,14 @@ void UIBoxProgress::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalid
 
 void UIBoxProgress::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *style_, opaScale_);
-    Rect trunc(invalidatedArea);
-    if (trunc.Intersect(trunc, GetOrigRect())) {
-        if (enableBackground_) {
-            DrawBackground(gfxDstBuffer, trunc);
-        }
+    UIView::OnDraw(gfxDstBuffer, invalidatedArea);
+    if (enableBackground_) {
+        DrawBackground(gfxDstBuffer, invalidatedArea);
+    }
 
-        if ((lastValue_ - rangeMin_ != 0) || (foregroundStyle_->lineCap_ == CapType::CAP_ROUND)) {
-            Rect coords;
-            DrawForeground(gfxDstBuffer, trunc, coords);
-        }
+    if ((lastValue_ - rangeMin_ != 0) || (foregroundStyle_->lineCap_ == CapType::CAP_ROUND)) {
+        Rect coords;
+        DrawForeground(gfxDstBuffer, invalidatedArea, coords);
     }
 }
 } // namespace OHOS

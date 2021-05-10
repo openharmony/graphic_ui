@@ -396,16 +396,17 @@ void DrawArc::Draw(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
                    const Style& style, uint8_t opaScale, uint8_t cap)
 {
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.lineOpa_);
-    if ((opa == OPA_TRANSPARENT) || (style.lineWidth_ < 1) || (arcInfo.startAngle == arcInfo.endAngle)) {
+    if ((opa == OPA_TRANSPARENT) || (style.lineWidth_ < 1)) {
         return;
     }
 
     SetArcInfo(arcInfo, style);
-
-    if ((arcInfo.imgSrc != nullptr) && (arcInfo.imgSrc->GetSrcType() != IMG_SRC_UNKNOWN)) {
-        DrawCircleNoEndpoint(gfxDstBuffer, arcInfo, mask, style, opa, false);
-    } else {
-        DrawCircleNoEndpoint(gfxDstBuffer, arcInfo, mask, style, opa, true);
+    if (arcInfo.startAngle != arcInfo.endAngle) {
+        if ((arcInfo.imgSrc != nullptr) && (arcInfo.imgSrc->GetSrcType() != IMG_SRC_UNKNOWN)) {
+            DrawCircleNoEndpoint(gfxDstBuffer, arcInfo, mask, style, opa, false);
+        } else {
+            DrawCircleNoEndpoint(gfxDstBuffer, arcInfo, mask, style, opa, true);
+        }
     }
 
     if (!isCircle_ && (cap == CapType::CAP_ROUND)) {
@@ -471,6 +472,7 @@ int16_t DrawArc::GetDegreeRangeIntersectState(uint16_t degreeStart, uint16_t deg
         }
     }
 }
+
 void DrawArc::SetArcInfo(ArcInfo& arcInfo, const Style& style)
 {
     outRadius_ = arcInfo.radius;
@@ -486,6 +488,7 @@ void DrawArc::SetArcInfo(ArcInfo& arcInfo, const Style& style)
     } else {
         isCircle_ = false;
     }
+
 #if ENABLE_ANTIALIAS
     antiOutRadiusSqr_ = (outRadius_ - 1) * (outRadius_ - 1);
     if (inRadius_ == 0) {

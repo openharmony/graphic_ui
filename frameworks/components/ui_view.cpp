@@ -21,6 +21,7 @@
 #include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
+#include "securec.h"
 #include "themes/theme_manager.h"
 
 namespace OHOS {
@@ -466,8 +467,8 @@ Rect UIView::GetOrigRect() const
     int16_t y = rect_.GetY();
     UIView* par = parent_;
     while (par != nullptr) {
-        x += par->GetX() + par->style_->paddingLeft_ + par->style_->borderWidth_;
-        y += par->GetY() + par->style_->paddingTop_ + par->style_->borderWidth_;
+        x += par->GetRelativeRect().GetX() + par->GetStyle(STYLE_PADDING_LEFT) + par->GetStyle(STYLE_BORDER_WIDTH);
+        y += par->GetRelativeRect().GetY() + par->GetStyle(STYLE_PADDING_TOP) + par->GetStyle(STYLE_BORDER_WIDTH);
         par = par->parent_;
     }
     return Rect(x, y, x + rect_.GetWidth() - 1, y + rect_.GetHeight() - 1);
@@ -507,10 +508,6 @@ Rect UIView::GetVisibleRect() const
 
 void UIView::SetTransformMap(const TransformMap& transMap)
 {
-    if (transMap.IsInvalid()) {
-        return;
-    }
-
     if ((transMap_ != nullptr) && (*transMap_ == transMap)) {
         return;
     }
@@ -829,8 +826,8 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();
     mask.Intersect(mask, screenRect);
-    uint16_t bufferWidth = mask.GetWidth();
-    uint16_t bufferHeight = mask.GetHeight();
+    uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
+    uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
     bitmap.header.colorMode = bufferInfo->mode;
     bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
     bitmap.header.width = bufferWidth;
@@ -846,7 +843,8 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     }
 
     BufferInfo newBufferInfo;
-    newBufferInfo.virAddr = newBufferInfo.phyAddr = static_cast<void*>(viewBitmapBuffer);
+    newBufferInfo.virAddr = static_cast<void*>(viewBitmapBuffer);
+    newBufferInfo.phyAddr = newBufferInfo.virAddr;
     newBufferInfo.rect = mask;
     newBufferInfo.width = bufferWidth;
     newBufferInfo.height = bufferHeight;

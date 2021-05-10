@@ -87,7 +87,7 @@ void UITestTextureMapper::TearDown()
     listener_ = nullptr;
 }
 
-UIView* UITestTextureMapper::GetTestView()
+const UIView* UITestTextureMapper::GetTestView()
 {
     UIKit_TextureMapper_Test_SetRotateEnd_001();
     UIKit_TextureMapper_Test_SetRotateStart_002();

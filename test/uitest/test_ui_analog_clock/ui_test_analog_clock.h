@@ -46,7 +46,7 @@ public:
     ~UITestAnalogClock() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void CreateButtons001(UIViewGroup* group, UIImageView* curFace, UIAnalogClock* clock);
     void CreateButtons002(UIViewGroup* group, UIImageView* curFace, UIAnalogClock* clock);
 
@@ -59,7 +59,16 @@ private:
     Animator* animator_ = nullptr;
     ClockAnimatorCallback* callback2_ = nullptr;
     Animator* animator2_ = nullptr;
-
+    UIView::OnClickListener* changeModeListener_ = nullptr;
+    UIView::OnClickListener* clickMoveLeftListener_ = nullptr;
+    UIView::OnClickListener* clickMoveRightListener_ = nullptr;
+    UIView::OnClickListener* clickMoveTopListener_ = nullptr;
+    UIView::OnClickListener* clickMoveBottomListener_ = nullptr;
+    UIView::OnClickListener* changeModeListener1_ = nullptr;
+    UIView::OnClickListener* clickMoveLeftListener1_ = nullptr;
+    UIView::OnClickListener* clickMoveRightListener1_ = nullptr;
+    UIView::OnClickListener* clickMoveTopListener1_ = nullptr;
+    UIView::OnClickListener* clickMoveBottomListener1_ = nullptr;
     UILabelButton* SetUpButton(const char* title)
     {
         UILabelButton* btn = new UILabelButton();

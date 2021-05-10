@@ -113,9 +113,6 @@ private:
     static constexpr int16_t DEFAULT_CORNER_RADIUS = 11;
     static constexpr int16_t DEAFULT_RADIUS_DIFF = 2;
     static constexpr uint8_t DEFAULT_UNSELECTED_OPA = 97;
-    static constexpr uint8_t DEFAULT_BG_RED = 31;
-    static constexpr uint8_t DEFAULT_BG_GREEN = 113;
-    static constexpr uint8_t DEFAULT_BG_BLUE = 255;
 
     uint16_t corner_;
     uint16_t radius_;

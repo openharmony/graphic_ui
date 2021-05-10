@@ -18,5 +18,6 @@
 
 #define USE_MOUSE 1
 #define USE_MOUSEWHEEL 1
+#define USE_KEY 1
 
 #endif // GRAPHIC_LITE_CONFIG_H

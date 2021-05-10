@@ -31,7 +31,7 @@ public:
     ~UITestScreenshot() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     /**
      * @brief Test screenshot Function
@@ -40,7 +40,8 @@ public:
 
 private:
     UIScrollView* container_ = nullptr;
-
+    UIView::OnClickListener* clickLeftListener_ = nullptr;
+    UIView::OnClickListener* clickRightListener_ = nullptr;
     UILabelButton* SetUpButton(const char* title)
     {
         UILabelButton* btn = new UILabelButton();

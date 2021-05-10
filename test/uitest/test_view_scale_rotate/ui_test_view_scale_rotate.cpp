@@ -45,7 +45,7 @@ void UITestViewScaleRotate::TearDown()
     list_ = nullptr;
 }
 
-UIView* UITestViewScaleRotate::GetTestView()
+const UIView* UITestViewScaleRotate::GetTestView()
 {
     UIKit_View_Scale_Rotate_Test_Label_001();
     UIKit_View_Scale_Rotate_Test_LabelButton_002();

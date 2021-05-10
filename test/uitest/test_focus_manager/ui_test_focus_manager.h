@@ -30,7 +30,7 @@ public:
     ~UITestFocusManager() {}
     void SetUp() override;
     void TearDown() override;
-    const UIView* GetTestView();
+    const UIView* GetTestView() override;
 
     void UIKit_Focus_Manager_Test_001();
 
@@ -41,6 +41,17 @@ private:
     UILabelButton* SetUpButton(const char* title, int16_t x, int16_t y, UIViewGroup* viewGroup,
         UIView::OnClickListener* listener);
     UIScrollView* container_ = nullptr;
+    UIView::OnFocusListener* testOnFocusListener_ = nullptr;
+    UIView::OnClickListener* requestFocusByDirectionLeftListener_ = nullptr;
+    UIView::OnClickListener* requestFocusByDirectionRightListener_ = nullptr;
+    UIView::OnClickListener* requestFocusByDirectionUpListener_ = nullptr;
+    UIView::OnClickListener* requestFocusByDirectionDownListener_ = nullptr;
+    UIView::OnClickListener* setFocusableViewListener_ = nullptr;
+    UIView::OnClickListener* setFocusableViewListener1_ = nullptr;
+    UIView::OnClickListener* setGroupInterceptListener_ = nullptr;
+    UIView::OnClickListener* setGroupInterceptListener1_ = nullptr;
+    UIView::OnClickListener* resetFocusListener_ = nullptr;
+    UIView::OnClickListener* clearFocusListener_ = nullptr;
 };
 } // namespace OHOS
 #endif

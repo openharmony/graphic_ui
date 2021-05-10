@@ -20,8 +20,8 @@
 
 namespace OHOS {
 #if defined QT_COMPILER
-#define IMAGE_DIR "..\\simulator\\config\\images\\"
-#define FACE_DIR "..\\simulator\\config\\faces\\default\\"
+#define IMAGE_DIR "..\\..\\simulator\\config\\images\\"
+#define FACE_DIR "..\\..\\simulator\\config\\faces\\default\\"
 #elif defined _WIN32
 #define IMAGE_DIR "..\\config\\images\\"
 #define FACE_DIR "..\\config\\faces\\default\\"

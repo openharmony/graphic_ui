@@ -129,6 +129,9 @@ bool ScreenDeviceProxy::GetScreenBitmapBuffer(uint8_t* dest, uint32_t size)
         return false;
     }
     uint8_t* buf = GetBuffer();
+    if (buf == nullptr) {
+        return false;
+    }
     if (memcpy_s(dest, size, buf, bufSize) != EOK) {
         return false;
     }

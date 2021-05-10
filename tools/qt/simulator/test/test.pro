@@ -9,7 +9,9 @@ CONFIG += c++11
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS \
+    "ENABLE_ICU=1" \
+    "ENABLE_VECTOR_FONT=1"
 
 DEFINES += QT_COMPILER
 
@@ -28,6 +30,7 @@ SOURCES += \
     ../../../../test/uitest/test_animator/ui_test_animator.cpp \
     ../../../../test/uitest/test_anti_aliasing/ui_test_anti_aliasing.cpp \
     ../../../../test/uitest/test_arc_label/ui_test_arc_label.cpp \
+    ../../../../test/uitest/test_border_margin_padding/ui_test_border_margin_padding.cpp \
     ../../../../test/uitest/test_button/ui_test_button.cpp \
     ../../../../test/uitest/test_canvas/ui_test_canvas.cpp \
     ../../../../test/uitest/test_chart/ui_test_chart_pillar.cpp \

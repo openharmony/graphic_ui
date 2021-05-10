@@ -124,12 +124,8 @@ void UIArcLabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     }
     Rect trunc = invalidatedArea;
     OpacityType opa = GetMixOpaScale();
-    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), trunc, *style_, opa);
-
-    Rect coords = GetContentRect();
-    if (trunc.Intersect(trunc, coords)) {
-        DrawArcText(gfxDstBuffer, trunc, opa);
-    }
+    UIView::OnDraw(gfxDstBuffer, invalidatedArea);
+    DrawArcText(gfxDstBuffer, trunc, opa);
 }
 
 void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, OpacityType opaScale)
@@ -161,18 +157,15 @@ void UIArcLabel::ReMeasure()
     UIFont::GetInstance()->SetCurrentFontId(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
 
     MeasureArcTextInfo();
-    Rect textRect = TypedText::GetArcTextRect(arcLabelText_->GetText(),
-                                              arcCenter_,
-                                              style_->letterSpace_,
-                                              orientation_,
+    Rect textRect = TypedText::GetArcTextRect(arcLabelText_->GetText(), arcCenter_, style_->letterSpace_, orientation_,
                                               arcTextInfo_);
     int16_t arcTextWidth = textRect.GetWidth();
     int16_t arcTextHeight = textRect.GetHeight();
 
     SetPosition(textRect.GetX(), textRect.GetY());
     Resize(arcTextWidth, arcTextHeight);
-    arcTextInfo_.arcCenter.x = arcCenter_.x - GetX();
-    arcTextInfo_.arcCenter.y = arcCenter_.y - GetY();
+    arcTextInfo_.arcCenter.x = arcCenter_.x - GetX() + style_->borderWidth_ + style_->paddingLeft_;
+    arcTextInfo_.arcCenter.y = arcCenter_.y - GetY() + style_->borderWidth_ + style_->paddingTop_;
     textSize_.x = arcTextWidth;
     textSize_.y = arcTextHeight;
     Invalidate();

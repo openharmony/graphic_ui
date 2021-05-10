@@ -108,6 +108,7 @@ void UIButton::SetupThemeStyles()
         buttonStyles_[PRESSED] = &(theme->GetButtonStyle().pressed);
         buttonStyles_[INACTIVE] = &(theme->GetButtonStyle().inactive);
     }
+    style_ = buttonStyles_[RELEASED];
 }
 
 int64_t UIButton::GetStyle(uint8_t key) const
@@ -143,6 +144,7 @@ void UIButton::SetStyleForState(uint8_t key, int64_t value, ButtonState state)
             }
             buttonStyleAllocFlag_ = true;
         }
+        style_ = buttonStyles_[RELEASED];
         int16_t width = GetWidth();
         int16_t height = GetHeight();
         buttonStyles_[state]->SetStyle(key, value);
@@ -301,28 +303,34 @@ void UIButton::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 }
 
 namespace {
-constexpr int16_t INTERVAL_MAX = Interpolation::INTERPOLATION_RANGE;
+constexpr float FULL_SCALE = 1.0f;
 constexpr float SHRINK_SCALE = 0.8f;
 constexpr uint32_t SHRINK_DURATION = 150;
 constexpr uint32_t RECOVER_DURATION = 200;
 constexpr int64_t MASK_OPA = 25;
-constexpr int16_t BEZIER_CONTROL = INTERVAL_MAX / 5;
+constexpr float BEZIER_CONTROL = 0.2f;
 } // namespace
 
 void UIButton::ButtonAnimator::Start()
 {
-    if (button_.state_ == UIButton::ButtonState::PRESSED) {
+    bool isReverse = (button_.state_ == UIButton::ButtonState::PRESSED);
+    float targetScale = isReverse ? SHRINK_SCALE : FULL_SCALE;
+    if ((animator_.GetState() == Animator::STOP) && FloatEqual(targetScale, scale_)) {
+        return;
+    }
+
+    if (isReverse) {
         animator_.SetTime(SHRINK_DURATION);
     } else {
         animator_.SetTime(RECOVER_DURATION);
     }
     animator_.Start();
-
-    if (progress_ != 0) {
-        /* reverse the animator direction */
-        progress_ = INTERVAL_MAX - progress_;
-        animator_.SetRunTime(animator_.GetTime() * progress_ / INTERVAL_MAX);
-    }
+    /* reverse the animator direction */
+    float x = isReverseAnimation_ ? (FULL_SCALE - scale_) : (scale_ - SHRINK_SCALE);
+    float y = x / (FULL_SCALE - SHRINK_SCALE);
+    x = Interpolation::GetBezierY(FULL_SCALE - y, 0, BEZIER_CONTROL, FULL_SCALE, BEZIER_CONTROL);
+    animator_.SetRunTime(static_cast<uint32_t>(animator_.GetTime() * x));
+    isReverseAnimation_ = isReverse;
 }
 
 void UIButton::ButtonAnimator::DrawMask(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
@@ -344,24 +352,23 @@ static inline void ScaleButton(UIButton& button, float scale)
 
 void UIButton::ButtonAnimator::Callback(UIView* view)
 {
-    progress_ = static_cast<int16_t>(INTERVAL_MAX * animator_.GetRunTime() / animator_.GetTime());
+    float x = static_cast<float>(animator_.GetRunTime()) / animator_.GetTime();
+    float offset = Interpolation::GetBezierY(x, BEZIER_CONTROL, 0, BEZIER_CONTROL, FULL_SCALE);
+    float scale = (FULL_SCALE - SHRINK_SCALE) * offset;
 
-    int16_t offset = Interpolation::GetBezierY(progress_, BEZIER_CONTROL, 0, BEZIER_CONTROL, INTERVAL_MAX);
-    float scale = (1 - SHRINK_SCALE) * offset / INTERVAL_MAX;
-
-    scale = (button_.state_ == UIButton::ButtonState::PRESSED) ? (1 - scale) : (scale + SHRINK_SCALE);
-    ScaleButton(button_, scale);
+    scale_ = isReverseAnimation_ ? (FULL_SCALE - scale) : (scale + SHRINK_SCALE);
+    ScaleButton(button_, scale_);
 }
 
 void UIButton::ButtonAnimator::OnStop(UIView& view)
 {
-    progress_ = 0;
-    if (button_.state_ == UIButton::ButtonState::PRESSED) {
+    if (isReverseAnimation_) {
+        scale_ = SHRINK_SCALE;
         ScaleButton(button_, SHRINK_SCALE);
     } else {
+        scale_ = FULL_SCALE;
         button_.ResetTransParameter();
     }
 }
 #endif
-
 } // namespace OHOS

@@ -27,7 +27,7 @@ public:
     ~UITestDigitalClock() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     void UIKit_UIDigitalClock_Test_Display_001();
     void UIKit_UIDigitalClock_Test_Display_002();

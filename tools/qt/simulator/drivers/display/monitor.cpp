@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,17 @@
  */
 
 #include "monitor.h"
+
 #include "common/graphic_startup.h"
 #include "common/image_decode_ability.h"
 #include "common/input_device_manager.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #include "font/ui_font_vector.h"
-#include "mousewheel_input.h"
+#include "key_input.h"
 #include "mouse_input.h"
 #include "draw/draw_utils.h"
+#include "mousewheel_input.h"
 
 namespace OHOS {
 bool Monitor::bRegister_ = false;
@@ -37,6 +39,11 @@ void Monitor::InitHal()
 #if USE_MOUSEWHEEL && ENABLE_ROTATE_INPUT
     MousewheelInput* mousewheel = MousewheelInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(mousewheel);
+#endif
+
+#if USE_KEY
+    KeyInput* key = KeyInput::GetInstance();
+    InputDeviceManager::GetInstance()->Add(key);
 #endif
 }
 
@@ -62,12 +69,19 @@ void Monitor::Flush()
 }
 
 // assuming below are the memory pool
-static uint8_t g_fontPsramBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
+static uint8_t g_fontMemBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
+#if ENABLE_ICU
+static uint8_t g_icuMemBaseAddr[OHOS::SHAPING_WORD_DICT_LENGTH];
+#endif
 
 void Monitor::InitFontEngine()
 {
-    GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontPsramBaseAddr), MIN_FONT_PSRAM_LENGTH,
+    GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontMemBaseAddr), MIN_FONT_PSRAM_LENGTH,
                                    VECTOR_FONT_DIR, DEFAULT_VECTOR_FONT_FILENAME);
+#if ENABLE_ICU
+    GraphicStartUp::InitLineBreakEngine(reinterpret_cast<uintptr_t>(g_icuMemBaseAddr), SHAPING_WORD_DICT_LENGTH,
+                                        VECTOR_FONT_DIR, DEFAULT_LINE_BREAK_RULE_FILENAME);
+#endif
 }
 
 void Monitor::InitImageDecodeAbility()
