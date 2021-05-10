@@ -46,7 +46,7 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
         ImageInfo info;
-        if (Screen::GetInstance().GetCurrentScreenBitmap(info)) {
+        if (!Screen::GetInstance().GetCurrentScreenBitmap(info)) {
             return false;
         }
         img_->SetSrc(&info);
