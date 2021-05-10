@@ -60,7 +60,7 @@ uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)
             category &= ~0x4000;
         }
         state = row->fNextState[category];
-        row = reinterpret_cast<const RBBIStateTableRow*>( rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
+        row = reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
         int16_t completedRule = row->fAccepting;
         if ((completedRule > 0) || (state == LINE_BREAK_STATE_STOP)) {
             return index;
