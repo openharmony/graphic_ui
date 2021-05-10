@@ -42,7 +42,9 @@
 #include "securec.h"
 
 namespace OHOS {
-void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath,
+void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr,
+                                    uint32_t cacheMemLen,
+                                    const char* dPath,
                                     const char* ttfName)
 {
     UIFont* uiFont = UIFont::GetInstance();

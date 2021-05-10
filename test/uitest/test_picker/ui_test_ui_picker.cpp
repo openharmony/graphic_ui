@@ -69,7 +69,7 @@ void UITestUIPicker::TearDown()
     lastY_ = 0;
 }
 
-UIView* UITestUIPicker::GetTestView()
+const UIView* UITestUIPicker::GetTestView()
 {
     UIKit_Picker_Test_Base_001();
     UIKit_Picker_Test_Base_002();

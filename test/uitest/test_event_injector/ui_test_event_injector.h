@@ -35,7 +35,7 @@ public:
     ~UITestEventInjector() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
     void UIKit_Event_Injector_Click_Event_001();

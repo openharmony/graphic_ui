@@ -30,7 +30,7 @@ public:
     ~UITestAdvancedLayout() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     /**
      * @brief Test flex layout function.

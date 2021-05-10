@@ -104,7 +104,7 @@ void UITestChartPolyline::TearDown()
     g_hidePointsFlag = false;
 }
 
-UIView* UITestChartPolyline::GetTestView()
+const UIView* UITestChartPolyline::GetTestView()
 {
     UIKit_ChartPolyline_Test_AddDataSerial_001();
     UIKit_ChartPolyline_Test_EnableReverse_002();

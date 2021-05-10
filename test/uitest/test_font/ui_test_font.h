@@ -27,7 +27,8 @@ public:
     ~UITestFont() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
+
     /**
      * @brief Test single line Chinese display
      */

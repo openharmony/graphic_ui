@@ -187,7 +187,7 @@ void UITestBorderMarginPadding::ReloadTest()
     container_.Invalidate();
 }
 
-UIView* UITestBorderMarginPadding::GetTestView()
+const UIView* UITestBorderMarginPadding::GetTestView()
 {
     UIKit_UITestBorderMarginPadding_Test_001();
     UIKit_UITestBorderMarginPadding_Test_002();

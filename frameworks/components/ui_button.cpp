@@ -371,5 +371,4 @@ void UIButton::ButtonAnimator::OnStop(UIView& view)
     }
 }
 #endif
-
 } // namespace OHOS

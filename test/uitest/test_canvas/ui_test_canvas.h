@@ -29,7 +29,7 @@ public:
     ~UITestCanvas() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     void UIKitCanvasTestDrawLine001();
     void UIKitCanvasTestDrawLine002();

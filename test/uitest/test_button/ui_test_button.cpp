@@ -74,7 +74,7 @@ void UITestBUTTON::TearDown()
     }
     if (clickLeftListener_ != nullptr) {
         delete clickLeftListener_;
-        clickBigListener_ = nullptr;
+        clickLeftListener_ = nullptr;
     }
     if (clickRightListener_ != nullptr) {
         delete clickRightListener_;
@@ -104,7 +104,7 @@ void UITestBUTTON::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestBUTTON::GetTestView()
+const UIView* UITestBUTTON::GetTestView()
 {
     UIKit_Check_Box_Test_001();
     UIKit_Radio_Button_Test_001();

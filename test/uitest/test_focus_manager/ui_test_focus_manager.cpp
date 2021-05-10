@@ -313,8 +313,6 @@ void UITestFocusManager::UIKit_Focus_Manager_Test_001()
     btnViewGroup->SetPosition(650, VIEW_DISTANCE_TO_TOP_SIDE, 300, 400);
     container_->Add(btnViewGroup);
 
-    UILabelButton* leftBtn = new UILabelButton();
-
     if (requestFocusByDirectionLeftListener_ == nullptr) {
         requestFocusByDirectionLeftListener_ = static_cast<UIView::OnClickListener*>(
             new RequestFocusByDirectionOnClickListener(FOCUS_DIRECTION_LEFT));

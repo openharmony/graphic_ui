@@ -151,7 +151,7 @@ void UITestVideo::InitTestButtons()
     SetupTestButton(resetButton_, "reset");
 }
 
-UIView* UITestVideo::GetTestView()
+const UIView* UITestVideo::GetTestView()
 {
     if (video_ == nullptr) {
         UIKit_UIVideo_Test_SetVideo_001();

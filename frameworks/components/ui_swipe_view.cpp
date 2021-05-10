@@ -346,7 +346,7 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
          */
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) < swipeMid) &&
             ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 7 / 10) - accelerationOffset <
-             swipeMid)) {
+            swipeMid)) {
             curIndex_++;
         }
     } else if (distance > 0) {
@@ -356,7 +356,7 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
          */
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) > swipeMid) &&
             ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 3 / 10) + accelerationOffset >
-             swipeMid)) {
+            swipeMid)) {
             curIndex_--;
         }
     } else {

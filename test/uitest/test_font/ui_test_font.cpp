@@ -69,7 +69,7 @@ void UITestFont::InnerTestTitle(const char* title)
     positionY_ += TITLE_HEIGHT + GAP;
 }
 
-UIView* UITestFont::GetTestView()
+const UIView* UITestFont::GetTestView()
 {
     UIKitFontTestDispaly001();
     UIKitFontTestDispaly002();

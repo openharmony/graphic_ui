@@ -178,7 +178,7 @@ void UITestDialog::InnerTestTitle(const char* title)
     positionY_ += TITLE_HEIGHT + GAP;
 }
 
-UIView* UITestDialog::GetTestView()
+const UIView* UITestDialog::GetTestView()
 {
     UIKitDialogTest001();
     UIKitDialogTest002();

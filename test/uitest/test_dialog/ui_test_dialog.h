@@ -32,7 +32,7 @@ public:
     void SetUp() override;
     void TearDown() override;
     void InnerTestTitle(const char* title);
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     bool OnClick(UIView &view, const ClickEvent& event) override;
     bool ClickExpand(UIView &view, const ClickEvent& event);

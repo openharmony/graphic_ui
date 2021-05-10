@@ -67,7 +67,7 @@ void UITestLabel::TearDown()
     labelSizeBtn2_ = nullptr;
 }
 
-UIView* UITestLabel::GetTestView()
+const UIView* UITestLabel::GetTestView()
 {
     UIKit_UILabel_Test_Display_001();
     UIKit_UILabel_Test_Display_002();

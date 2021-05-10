@@ -27,7 +27,7 @@ public:
     ~UITestViewBitmap() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
     void UIKit_Bitmap_Test_GetViewBitmap_001();
     void UIKit_Bitmap_Test_GetScreenBitmap_001();
 private:

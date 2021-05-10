@@ -186,7 +186,7 @@ public:
     ~UITestInputEvent() {}
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     /**
      * @brief Test if dispatch press\release\longpress\cancel event act normal when target is touchable
