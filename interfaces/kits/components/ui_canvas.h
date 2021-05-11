@@ -656,26 +656,65 @@ protected:
         delete pathParam;
     }
 
-    static void DoDrawLine(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawCurve(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawRect(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoFillRect(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawCircle(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawArc(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawImage(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawLabel(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
-    static void DoDrawPath(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect, const Rect& invalidatedArea,
-        const Style& style);
+    static void DoDrawLine(BufferInfo& gfxDstBuffer,
+                           void* param,
+                           const Paint& paint,
+                           const Rect& rect,
+                           const Rect& invalidatedArea,
+                           const Style& style);
+    static void DoDrawCurve(BufferInfo& gfxDstBuffer,
+                            void* param,
+                            const Paint& paint,
+                            const Rect& rect,
+                            const Rect& invalidatedArea,
+                            const Style& style);
+    static void DoDrawRect(BufferInfo& gfxDstBuffer,
+                           void* param,
+                           const Paint& paint,
+                           const Rect& rect,
+                           const Rect& invalidatedArea,
+                           const Style& style);
+    static void DoFillRect(BufferInfo& gfxDstBuffer,
+                           void* param,
+                           const Paint& paint,
+                           const Rect& rect,
+                           const Rect& invalidatedArea,
+                           const Style& style);
+    static void DoDrawCircle(BufferInfo& gfxDstBuffer,
+                             void* param,
+                             const Paint& paint,
+                             const Rect& rect,
+                             const Rect& invalidatedArea,
+                             const Style& style);
+    static void DoDrawArc(BufferInfo& gfxDstBuffer,
+                          void* param,
+                          const Paint& paint,
+                          const Rect& rect,
+                          const Rect& invalidatedArea,
+                          const Style& style);
+    static void DoDrawImage(BufferInfo& gfxDstBuffer,
+                            void* param,
+                            const Paint& paint,
+                            const Rect& rect,
+                            const Rect& invalidatedArea,
+                            const Style& style);
+    static void DoDrawLabel(BufferInfo& gfxDstBuffer,
+                            void* param,
+                            const Paint& paint,
+                            const Rect& rect,
+                            const Rect& invalidatedArea,
+                            const Style& style);
+    static void DoDrawPath(BufferInfo& gfxDstBuffer,
+                           void* param,
+                           const Paint& paint,
+                           const Rect& rect,
+                           const Rect& invalidatedArea,
+                           const Style& style);
     static void GetAbsolutePosition(const Point& prePoint, const Rect& rect, const Style& style, Point& point);
-    static void DoDrawLineJoin(BufferInfo& gfxDstBuffer, const Point& center, const Rect& invalidatedArea, const Paint& paint);
+    static void DoDrawLineJoin(BufferInfo& gfxDstBuffer,
+                               const Point& center,
+                               const Rect& invalidatedArea,
+                               const Paint& paint);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_CANVAS_H

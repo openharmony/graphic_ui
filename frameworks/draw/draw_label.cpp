@@ -165,6 +165,7 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     transMap.Rotate(rotateAngle, Vector2<float>(-node.left, node.top - head.ascender));
     TransformDataInfo letterTranDataInfo = {ImageHeader{colorMode, 0, 0, 0, node.cols, node.rows}, fontMap, fontWeight,
                                             BlurLevel::LEVEL0};
-    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point{0, 0}, color, opaScale, transMap, letterTranDataInfo);
+    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point{0, 0}, color, opaScale, transMap,
+                                                letterTranDataInfo);
 }
 } // namespace OHOS

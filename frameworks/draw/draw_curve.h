@@ -18,7 +18,7 @@
 
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
-#include "engines/gfx/gfx_engine_manager.h"
+#include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
 class DrawCurve : public HeapBase {

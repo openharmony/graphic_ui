@@ -16,11 +16,11 @@
 #include "components/ui_analog_clock.h"
 #include "components/ui_image_view.h"
 #include "draw/draw_image.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/style.h"
 #include "imgdecode/cache_manager.h"
 #include "themes/theme.h"
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIAnalogClock::UIAnalogClock()
@@ -273,7 +273,10 @@ void UIAnalogClock::DrawHand(BufferInfo& gfxDstBuffer, const Rect& current, cons
     }
 }
 
-void UIAnalogClock::DrawHandImage(BufferInfo& gfxDstBuffer, const Rect& current, const Rect& invalidatedArea, Hand& hand)
+void UIAnalogClock::DrawHandImage(BufferInfo& gfxDstBuffer,
+                                  const Rect& current,
+                                  const Rect& invalidatedArea,
+                                  Hand& hand)
 {
     uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(hand.imageInfo_.header.colorMode);
     TransformDataInfo imageTranDataInfo = {
@@ -315,7 +318,8 @@ void UIAnalogClock::DrawHandLine(BufferInfo& gfxDstBuffer, const Rect& invalidat
     end.x = xlength + curCenter.x;
     end.y = ylength + curCenter.y;
 
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, hand.width_, hand.color_, hand.opacity_);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                           hand.width_, hand.color_, hand.opacity_);
 }
 
 void UIAnalogClock::SetWorkMode(WorkMode newMode)

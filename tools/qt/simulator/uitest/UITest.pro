@@ -88,8 +88,8 @@ SOURCES += \
     ../../../../frameworks/dock/key_input_device.cpp \
     ../../../../frameworks/dock/pointer_input_device.cpp \
     ../../../../frameworks/dock/rotate_input_device.cpp \
-    ../../../../frameworks/dock/screen_device_proxy.cpp \
     ../../../../frameworks/dock/virtual_input_device.cpp \
+    ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
     ../../../../frameworks/draw/draw_curve.cpp \
     ../../../../frameworks/draw/draw_image.cpp \
@@ -202,8 +202,6 @@ HEADERS += \
     ../../../../frameworks/dfx/point_event_injector.h \
     ../../../../frameworks/dock/input_device.h \
     ../../../../frameworks/dock/pointer_input_device.h \
-    ../../../../frameworks/dock/screen_device.h \
-    ../../../../frameworks/dock/screen_device_proxy.h \
     ../../../../frameworks/dock/virtual_input_device.h \
     ../../../../frameworks/draw/draw_arc.h \
     ../../../../frameworks/draw/draw_curve.h \
@@ -225,6 +223,7 @@ HEADERS += \
     ../../../../interfaces/innerkits/dock/focus_manager.h \
     ../../../../interfaces/innerkits/dock/rotate_input_device.h \
     ../../../../interfaces/innerkits/dock/vibrator_manager.h \
+    ../../../../interfaces/innerkits/engines/gfx/gfx_engine_manager.h \
     ../../../../interfaces/kits/animator/animator.h \
     ../../../../interfaces/kits/animator/easing_equation.h \
     ../../../../interfaces/kits/animator/interpolation.h \

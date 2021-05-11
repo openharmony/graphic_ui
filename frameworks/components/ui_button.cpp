@@ -14,15 +14,14 @@
  */
 
 #include "components/ui_button.h"
-
 #include "animator/interpolation.h"
 #include "common/image.h"
 #include "draw/draw_image.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/style.h"
 #include "imgdecode/cache_manager.h"
 #include "themes/theme_manager.h"
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIButton::UIButton()

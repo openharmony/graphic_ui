@@ -15,8 +15,8 @@
 
 #include "engines/gfx/hi3516/hi3516_engine.h"
 #include "draw/draw_utils.h"
-#include "lite_wm_type.h"
 #include "hals/gfx_engines.h"
+#include "lite_wm_type.h"
 
 namespace OHOS {
 const int16_t HARDWARE_ACC_SIZE_LIMIT = 50 * 50;
@@ -27,9 +27,9 @@ __attribute__((constructor)) void RegisterHi3516GfxEngine()
 }
 
 void Hi3516GfxEngine::Fill(BufferInfo& dst,
-              const Rect& fillArea,
-              const ColorType color,
-              const OpacityType opacity)
+                           const Rect& fillArea,
+                           const ColorType color,
+                           const OpacityType opacity)
 {
 #if ENABLE_GFX_ENGINES
     if ((opacity != OPA_OPAQUE) && (fillArea.GetSize() >= HARDWARE_ACC_SIZE_LIMIT)) {

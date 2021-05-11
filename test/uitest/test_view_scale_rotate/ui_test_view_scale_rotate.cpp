@@ -34,7 +34,6 @@ void UITestViewScaleRotate::SetUp()
         list_->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, 0, width, height + 1);
         container_->Add(list_);
     }
-    RenderManager::GetInstance().RegisterFPSChangedListener(this);
 }
 
 void UITestViewScaleRotate::TearDown()

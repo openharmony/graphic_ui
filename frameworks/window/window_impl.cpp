@@ -18,7 +18,6 @@
 #include "gfx_utils/graphic_log.h"
 #include "iwindows_manager.h"
 
-
 namespace OHOS {
 WindowImpl::WindowImpl() : rootView_(nullptr), iWindow_(nullptr), isShow_(false), gfxAlloc_({}) {}
 

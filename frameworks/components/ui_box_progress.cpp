@@ -15,8 +15,8 @@
 
 #include "components/ui_box_progress.h"
 #include "draw/draw_utils.h"
-#include "gfx_utils/graphic_log.h"
 #include "engines/gfx/gfx_engine_manager.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 UIBoxProgress::UIBoxProgress()
@@ -131,22 +131,26 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
         arcInfo.center = leftTop;
         arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
         arcInfo.endAngle = 0;
-        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
 
         arcInfo.center = leftBottom;
         arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
         arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
-        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
 
         arcInfo.center = rightTop;
         arcInfo.startAngle = 0;
         arcInfo.endAngle = QUARTER_IN_DEGREE;
-        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
 
         arcInfo.center = rightBottom;
         arcInfo.startAngle = QUARTER_IN_DEGREE;
         arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
-        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
     } else {
         switch (direction_) {
             case Direction::DIR_LEFT_TO_RIGHT:
@@ -154,12 +158,14 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
                 arcInfo.center = leftTop;
                 arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
                 arcInfo.endAngle = 0;
-                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
 
                 arcInfo.center = leftBottom;
                 arcInfo.startAngle = 0;
                 arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
-                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
                 break;
             }
 
@@ -168,12 +174,14 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
                 arcInfo.center = leftTop;
                 arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
                 arcInfo.endAngle = QUARTER_IN_DEGREE;
-                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
 
                 arcInfo.center = leftBottom;
                 arcInfo.startAngle = QUARTER_IN_DEGREE;
                 arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
-                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
                 break;
             }
             default:

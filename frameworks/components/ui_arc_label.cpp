@@ -16,9 +16,9 @@
 #include "components/ui_arc_label.h"
 #include "common/typed_text.h"
 #include "draw/draw_label.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
 #include "themes/theme_manager.h"
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIArcLabel::UIArcLabel()

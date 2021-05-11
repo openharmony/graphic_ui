@@ -309,8 +309,8 @@ void UIImageView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
                 Rect origRect = GetOrigRect();
                 transMap_->SetTransMapRect(origRect);
                 OpacityType opaScale = DrawUtils::GetMixOpacity(opa, style_->imageOpa_);
-                BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, {0, 0}, Color::Black(), opaScale, *transMap_,
-                                                       imageTranDataInfo);
+                BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, {0, 0}, Color::Black(),
+                                                            opaScale, *transMap_, imageTranDataInfo);
             }
         }
     }

@@ -133,8 +133,6 @@ HEADERS += \
     ../../../../frameworks/dfx/point_event_injector.h \
     ../../../../frameworks/dock/input_device.h \
     ../../../../frameworks/dock/pointer_input_device.h \
-    ../../../../frameworks/dock/screen_device.h \
-    ../../../../frameworks/dock/screen_device_proxy.h \
     ../../../../frameworks/dock/virtual_input_device.h \
     ../../../../frameworks/draw/draw_arc.h \
     ../../../../frameworks/draw/draw_curve.h \

@@ -16,10 +16,9 @@
 #ifndef GRAPHIC_LITE_MONITOR_H
 #define GRAPHIC_LITE_MONITOR_H
 
-#include <QtCore/qobject.h>
-#include "dock/screen_device.h"
-#include "font/ui_font_header.h"
 #include "engines/gfx/gfx_engine_manager.h"
+#include "font/ui_font_header.h"
+#include <QtCore/qobject.h>
 
 namespace OHOS {
 class Monitor : public QObject, public BaseGfxEngine {
@@ -30,9 +29,9 @@ public:
     static Monitor* GetInstance()
     {
         static Monitor instance;
-        if (!bRegister_) {
+        if (!isRegister_) {
             BaseGfxEngine::InitGfxEngine(&instance);
-            bRegister_ = true;
+            isRegister_ = true;
         }
         return &instance;
     }
@@ -61,7 +60,7 @@ private:
     uint32_t tftFb_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t animaterBuffer_[HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION];
     uint32_t defaultColor_;
-    static bool bRegister_;
+    static bool isRegister_;
 };
 } // namespace OHOS
 

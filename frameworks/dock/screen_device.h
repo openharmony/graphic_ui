@@ -23,7 +23,6 @@
 #if ENABLE_WINDOW
 #include "gfx_utils/pixel_format_utils.h"
 #endif
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 #if ENABLE_WINDOW
@@ -34,6 +33,13 @@ struct AllocationInfo {
     uint16_t height;
     uint32_t stride;
     ImagePixelFormat pixelFormat;
+};
+#endif
+
+#ifndef TRANSFORMOPTION
+#define TRANSFORMOPTION
+struct TransformOption {
+    TransformAlgorithm algorithm;
 };
 #endif
 

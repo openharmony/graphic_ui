@@ -15,14 +15,18 @@
 
 #include "engines/gfx/gfx_engine_manager.h"
 #include "draw/draw_arc.h"
-#include "draw/draw_line.h"
 #include "draw/draw_curve.h"
+#include "draw/draw_line.h"
 #include "draw/draw_rect.h"
 
 namespace OHOS {
 BaseGfxEngine* BaseGfxEngine::baseEngine_ = nullptr;
-void BaseGfxEngine::DrawArc(BufferInfo& dst, ArcInfo& arcInfo, const Rect& mask,
-    const Style& style, OpacityType opacity, uint8_t cap)
+void BaseGfxEngine::DrawArc(BufferInfo& dst,
+                            ArcInfo& arcInfo,
+                            const Rect& mask,
+                            const Style& style,
+                            OpacityType opacity,
+                            uint8_t cap)
 {
     DrawArc::GetInstance()->Draw(dst, arcInfo, mask, style, opacity, cap);
 }
@@ -38,14 +42,24 @@ void BaseGfxEngine::DrawLine(BufferInfo& dst,
     DrawLine::Draw(dst, start, end, mask, width, color, opacity);
 }
 
-void BaseGfxEngine::DrawCubicBezier(BufferInfo& dst, const Point& start, const Point& control1,
-    const Point& control2, const Point& end, const Rect& mask, int16_t width, ColorType color, OpacityType opacity)
+void BaseGfxEngine::DrawCubicBezier(BufferInfo& dst,
+                                    const Point& start,
+                                    const Point& control1,
+                                    const Point& control2,
+                                    const Point& end,
+                                    const Rect& mask,
+                                    int16_t width,
+                                    ColorType color,
+                                    OpacityType opacity)
 {
     DrawCurve::DrawCubicBezier(dst, start, control1, control2, end, mask, width, color, opacity);
 }
 
-void BaseGfxEngine::DrawRect(BufferInfo& dst, const Rect& rect, const Rect& dirtyRect,
-    const Style& style, OpacityType opacity)
+void BaseGfxEngine::DrawRect(BufferInfo& dst,
+                             const Rect& rect,
+                             const Rect& dirtyRect,
+                             const Style& style,
+                             OpacityType opacity)
 {
     DrawRect::Draw(dst, rect, dirtyRect, style, opacity);
 }
@@ -62,20 +76,20 @@ void BaseGfxEngine::DrawTransform(BufferInfo& dst,
         opacity, transMap, dataInfo);
 }
 
-void BaseGfxEngine::Blit(BufferInfo& dst, const Point& dstPos, const BufferInfo& src,
-        const Rect& subRect, const BlendOption& blendOption)
+void BaseGfxEngine::Blit(BufferInfo& dst,
+                         const Point& dstPos,
+                         const BufferInfo& src,
+                         const Rect& subRect,
+                         const BlendOption& blendOption)
 {
     DrawUtils::GetInstance()->BlendWithSoftWare(static_cast<uint8_t*>(src.virAddr), src.rect, src.stride,
         src.rect.GetHeight(), src.mode, src.color, blendOption.opacity, static_cast<uint8_t*>(dst.virAddr),
         dst.stride, dst.mode, subRect.GetX(), subRect.GetY());
 }
 
-void BaseGfxEngine::Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color,
-    const OpacityType opacity)
+void BaseGfxEngine::Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color, const OpacityType opacity)
 {
     uint8_t bufferPxSize = DrawUtils::GetByteSizeByColorMode(dst.mode);
-    //DrawUtils::GetInstance()->FillAreaWithSoftWare(fillArea, static_cast<uint8_t*>(dst.virAddr),
-    //    dst.mode, bufferPxSize, dst.rect.GetWidth(), color, opacity);
     DrawUtils::GetInstance()->FillAreaWithSoftWare(dst, fillArea, color, opacity);
 }
 

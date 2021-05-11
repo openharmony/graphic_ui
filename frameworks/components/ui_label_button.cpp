@@ -35,7 +35,8 @@ void UILabelButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
     labelButtonText_->ReMeasureTextSize(textRect, labelStyle_);
     OpacityType opa = GetMixOpaScale();
     uint16_t ellipsisIndex = labelButtonText_->GetEllipsisIndex(textRect, labelStyle_);
-    labelButtonText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(), textRect, 0, labelStyle_, ellipsisIndex, opa);
+    labelButtonText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(), textRect, 0,
+                             labelStyle_, ellipsisIndex, opa);
 }
 
 UILabelButton::~UILabelButton()

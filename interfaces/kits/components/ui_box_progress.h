@@ -225,10 +225,19 @@ protected:
     void GetBackgroundParam(Point& startPoint, int16_t& width, int16_t& height, uint16_t& radius, const Style& style);
     void DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
     void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Rect& coords);
-    void DrawRoundCap(BufferInfo& gfxDstBuffer, const Image* image, const Point& imgPos, const Rect& rect, const Rect& invalidatedArea,
-        uint16_t radius, const Style& style);
-    void DrawValidRect(BufferInfo& gfxDstBuffer, const Image* image, const Rect& rect, const Rect& invalidatedArea, const Style& style,
-        uint16_t radius);
+    void DrawRoundCap(BufferInfo& gfxDstBuffer,
+                      const Image* image,
+                      const Point& imgPos,
+                      const Rect& rect,
+                      const Rect& invalidatedArea,
+                      uint16_t radius,
+                      const Style& style);
+    void DrawValidRect(BufferInfo& gfxDstBuffer,
+                       const Image* image,
+                       const Rect& rect,
+                       const Rect& invalidatedArea,
+                       const Style& style,
+                       uint16_t radius);
 
     uint16_t progressWidth_;
     uint16_t progressHeight_;

@@ -17,7 +17,12 @@
 #include "draw/draw_utils.h"
 
 namespace OHOS {
-void DrawTriangle::Draw(BufferInfo& gfxDstBuffer, const Point* points, uint8_t count, const Rect& mask, const ColorType& color, OpacityType opa)
+void DrawTriangle::Draw(BufferInfo& gfxDstBuffer,
+                        const Point* points,
+                        uint8_t count,
+                        const Rect& mask,
+                        const ColorType& color,
+                        OpacityType opa)
 {
     if ((points == nullptr) || (count != VERTEX_NUM)) {
         return;

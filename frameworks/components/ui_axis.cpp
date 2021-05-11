@@ -93,7 +93,8 @@ void UIXAxis::TranslateToPixel(int16_t& value)
 
 void UIAxis::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start_, end_, invalidatedArea, style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start_, end_, invalidatedArea, style_->lineWidth_,
+                                           style_->lineColor_, style_->lineOpa_);
     DrawAxisMark(gfxDstBuffer, invalidatedArea);
 }
 
@@ -108,7 +109,8 @@ void UIXAxis::DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
         end.y = enableReverse_ ? (start.y + AXIS_DEFAULT_MARK_LENGTH) : (start.y - AXIS_DEFAULT_MARK_LENGTH);
         end.x = start.x;
 
-        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
+        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                               style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
         index++;
     }
 }
@@ -190,7 +192,8 @@ void UIYAxis::DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
         end.x = start.x + AXIS_DEFAULT_MARK_LENGTH;
         end.y = start.y;
 
-        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
+        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                               style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
         index++;
     }
 }

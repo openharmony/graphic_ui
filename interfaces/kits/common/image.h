@@ -36,10 +36,10 @@
 #define GRAPHIC_LITE_IMAGE_H
 
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/heap_base.h"
 #include "gfx_utils/image_info.h"
 #include "gfx_utils/style.h"
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 /**
@@ -133,7 +133,11 @@ public:
      */
     bool SetSrc(const ImageInfo* src);
 
-    void DrawImage(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask, const Style& style, uint8_t opaScale) const;
+    void DrawImage(BufferInfo& gfxDstBuffer,
+                   const Rect& coords,
+                   const Rect& mask,
+                   const Style& style,
+                   uint8_t opaScale) const;
 
 protected:
     const ImageInfo* imageInfo_;

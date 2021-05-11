@@ -16,8 +16,8 @@
 #include "components/ui_checkbox.h"
 #include "default_resource/check_box_res.h"
 #include "draw/draw_image.h"
-#include "imgdecode/cache_manager.h"
 #include "engines/gfx/gfx_engine_manager.h"
+#include "imgdecode/cache_manager.h"
 
 namespace OHOS {
 namespace {
@@ -118,7 +118,11 @@ void UICheckBox::CalculateSize()
     borderWidth_ =  DEFAULT_BORDER_WIDTH * minValue / DEFAULT_HOT_WIDTH;
 }
 
-void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer, Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth)
+void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                              Rect rect,
+                                              Rect trunc,
+                                              int16_t borderRadius,
+                                              int16_t rectLineWidth)
 {
     if (backgroundOpacity_ == 0) {
         return;
@@ -152,9 +156,11 @@ void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer, Rect rec
     styleSelect.lineOpa_ = backgroundOpacity_;
     uint8_t opa = DrawUtils::GetMixOpacity(opaScale_, backgroundOpacity_);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, mid, trunc, rectLineWidth * 2, Color::White(), opa); // 2 : double
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, mid, trunc, rectLineWidth * 2, Color::White(),
+                                           opa); // 2 : double
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoMid, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, mid, end, trunc, rectLineWidth * 2, Color::White(), opa); // 2 : double
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, mid, end, trunc, rectLineWidth * 2, Color::White(),
+                                           opa); // 2 : double
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
 }
 

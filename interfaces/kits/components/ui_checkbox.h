@@ -224,8 +224,16 @@ public:
 protected:
     virtual void ReverseState();
     virtual void CalculateSize();
-    void SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer, Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
-    void UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer, Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
+    void SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                      Rect rect,
+                                      Rect trunc,
+                                      int16_t borderRadius,
+                                      int16_t rectLineWidth);
+    void UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                        Rect rect,
+                                        Rect trunc,
+                                        int16_t borderRadius,
+                                        int16_t rectLineWidth);
 #if DEFAULT_ANIMATION
     virtual void ResetCallback();
     void Callback(UIView* view) override;

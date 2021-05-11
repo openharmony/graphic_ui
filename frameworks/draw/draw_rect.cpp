@@ -15,10 +15,10 @@
 
 #include "draw/draw_rect.h"
 #include "draw/draw_utils.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/graphic_math.h"
 #include "gfx_utils/style.h"
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 void DrawRect::Draw(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,

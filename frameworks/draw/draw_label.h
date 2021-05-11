@@ -31,8 +31,14 @@ public:
                             const Point& arcCenter, uint8_t fontId, const UIArcLabel::ArcTextInfo arcTextInfo,
                             UIArcLabel::TextOrientation orientation, const Style& style, uint8_t opaScale);
 
-    static void DrawLetterWithRotate(BufferInfo& gfxDstBuffer, const Rect& mask, uint8_t fontId, uint32_t letter, const Point& pos,
-        int16_t rotateAngle, const ColorType& color, OpacityType opaScale);
+    static void DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
+                                     const Rect& mask,
+                                     uint8_t fontId,
+                                     uint32_t letter,
+                                     const Point& pos,
+                                     int16_t rotateAngle,
+                                     const ColorType& color,
+                                     OpacityType opaScale);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_DRAW_LABEL_H

@@ -224,7 +224,11 @@ bool Image::SetSrc(const ImageInfo* src)
     return true;
 }
 
-void Image::DrawImage(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask, const Style& style, uint8_t opaScale) const
+void Image::DrawImage(BufferInfo& gfxDstBuffer,
+                      const Rect& coords,
+                      const Rect& mask,
+                      const Style& style,
+                      uint8_t opaScale) const
 {
     if (srcType_ == IMG_SRC_VARIABLE) {
         DrawImage::DrawCommon(gfxDstBuffer, coords, mask, imageInfo_, style, opaScale);

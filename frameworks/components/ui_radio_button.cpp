@@ -92,12 +92,14 @@ void UIRadioButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
                 styleSelect.lineWidth_ = arcInfoBig.radius;
                 styleSelect.lineColor_ = Color::GetColorFromRGB(0x1F, 0x71, 0xFF);
                 if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, styleSelect,
+                                                          OPA_OPAQUE, CapType::CAP_NONE);
                 }
                 styleSelect.lineWidth_ = arcInfoSmall.radius;
                 styleSelect.lineColor_ = Color::White();
                 if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoSmall, trunc, styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoSmall, trunc, styleSelect,
+                                                          OPA_OPAQUE, CapType::CAP_NONE);
                 }
                 break;
             }
@@ -107,7 +109,8 @@ void UIRadioButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
                 styleUnSelect.lineWidth_ = lineWidth_;
                 if (isIntersect) {
                     // 0xa8 : opacity of drawing unselected button arc edge.
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, styleUnSelect, 0xa8, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, styleUnSelect,
+                                                          0xa8, CapType::CAP_NONE);
                 }
                 break;
             }

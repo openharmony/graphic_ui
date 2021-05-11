@@ -453,7 +453,8 @@ void UIChartPillar::DrawDataSerials(BufferInfo& gfxDstBuffer, const Rect& invali
             }
             current.x += x;
             xStart.x = current.x;
-            BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, current, xStart, invalidatedArea, barWidth, data->GetFillColor(), style_->lineOpa_);
+            BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, current, xStart, invalidatedArea, barWidth,
+                                                   data->GetFillColor(), style_->lineOpa_);
         }
         dataSerialIndex++;
     }
@@ -832,7 +833,8 @@ void UIChartPolyline::GradientColor(BufferInfo& gfxDstBuffer, const Rect& invali
             }
             Point start = {limitPoints.start.x, y};
             Point end = {limitPoints.end.x, y};
-            BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, 1, data->GetFillColor(), mixData_[mixScale]);
+            BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, 1,
+                                                   data->GetFillColor(), mixData_[mixScale]);
         }
         y--;
     }

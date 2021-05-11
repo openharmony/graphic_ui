@@ -376,6 +376,7 @@ void UILabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     Style style = GetStyleConst();
     style.textColor_ = GetTextColor();
     OpacityType opa = GetMixOpaScale();
-    labelText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(), GetContentRect(), offsetX_, style, ellipsisIndex_, opa);
+    labelText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(),
+                       GetContentRect(), offsetX_, style, ellipsisIndex_, opa);
 }
 } // namespace OHOS

@@ -19,10 +19,10 @@
 #include "gfx_utils/color.h"
 #include "common/text.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_types.h"
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 #define SWAP_INT16(x, y)    \

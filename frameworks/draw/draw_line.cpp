@@ -281,7 +281,8 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
                     sy--;
                 }
                 sx += dir;
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy, mask, color, opacity, (acc1 >> SHIFT_8) ^ OPA_OPAQUE);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy, mask, color, opacity,
+                                                          (acc1 >> SHIFT_8) ^ OPA_OPAQUE);
             }
             if (temp1 < MAX_LINE_WIDTH) {
                 endPoints1[temp1++] = sx + dir;
@@ -304,7 +305,8 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
         while (--dy) {
             if (sy <= y1Int) {
                 INCREASE_ACC(acc0, accTemp0, adj0, sx, dir);
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx + dir, sy, mask, color, opacity, acc0 >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx + dir, sy, mask,
+                                                          color, opacity, acc0 >> SHIFT_8);
                 if (temp0 < MAX_LINE_WIDTH) {
                     edge0 = endPoints0[temp0++];
                 }
@@ -312,15 +314,16 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
             } else if (sy < y2Int) {
                 INCREASE_ACC(acc0, accTemp0, adj0, sx, dir);
                 INCREASE_ACC(acc2, accTemp2, adj0, sxTemp, dir);
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx + dir, sy, mask, color, opacity, acc0 >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx + dir, sy, mask,
+                                                          color, opacity, acc0 >> SHIFT_8);
                 DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sxTemp, sy, mask, color, opacity,
-                    (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
+                                                          (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
                 edge0 = sxTemp + dir;
                 edge1 = sx;
             } else if (sy < y3Int) {
                 INCREASE_ACC(acc2, accTemp2, adj0, sxTemp, dir);
                 DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sxTemp, sy, mask, color, opacity,
-                    (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
+                                                          (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
                 edge0 = sxTemp + dir;
                 if (temp1 > 0) {
                     edge1 = endPoints1[--temp1];
@@ -354,7 +357,7 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
                 }
                 sy -= dir;
                 DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy, mask, color, opacity,
-                    (acc1 >> SHIFT_8) ^ OPA_OPAQUE);
+                                                          (acc1 >> SHIFT_8) ^ OPA_OPAQUE);
             }
             if (x0Int - sx < MAX_LINE_WIDTH) {
                 endPoints0[x0Int - sx] = sy - dir;
@@ -375,7 +378,8 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
                     sx++;
                 }
                 sy += dir;
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy, mask, color, opacity, (acc1 >> SHIFT_8) ^ OPA_OPAQUE);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy, mask, color, opacity,
+                                                          (acc1 >> SHIFT_8) ^ OPA_OPAQUE);
             }
             DrawUtils::GetInstance()->DrawPixel(gfxDstBuffer, x3Int, y3Int, mask, color, opacity);
             if (temp1 < MAX_LINE_WIDTH) {
@@ -399,7 +403,8 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
         while (--dx) {
             if (sx >= x1Int) {
                 INCREASE_ACC(acc0, accTemp0, adj0, sy, dir);
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy + dir, mask, color, opacity, acc0 >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy + dir, mask,
+                                                          color, opacity, acc0 >> SHIFT_8);
                 if (temp0 < MAX_LINE_WIDTH) {
                     edge0 = endPoints0[temp0++];
                 }
@@ -407,15 +412,16 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
             } else if (sx > x2Int) {
                 INCREASE_ACC(acc0, accTemp0, adj0, sy, dir);
                 INCREASE_ACC(acc2, accTemp2, adj0, syTemp, dir);
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy + dir, mask, color, opacity, acc0 >> SHIFT_8);
-                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, syTemp, mask, color, opacity,
-                    (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, sy + dir, mask,
+                                                          color, opacity, acc0 >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, syTemp, mask, color,
+                                                          opacity, (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
                 edge0 = syTemp + dir;
                 edge1 = sy;
             } else if (sx > x3Int) {
                 INCREASE_ACC(acc2, accTemp2, adj0, syTemp, dir);
                 DrawUtils::GetInstance()->DrawPixelInLine(gfxDstBuffer, sx, syTemp, mask, color, opacity,
-                    (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
+                                                          (acc2 >> SHIFT_8) ^ OPA_OPAQUE);
                 edge0 = syTemp + dir;
                 if (temp1 > 0) {
                     edge1 = endPoints1[--temp1];
@@ -451,10 +457,11 @@ void DrawLine::DrawThinWuLine(BufferInfo& gfxDstBuffer, const Point& start, cons
             INCREASE_ACC(acc, accTemp, adj, sx, dir);
             sy++;
             if (width == 1) {
-                DrawUtils::GetInstance()->DrawAdjPixelInLine(gfxDstBuffer, sx, sy, sx + dir, sy, mask, color, opacity,
-                    acc >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawAdjPixelInLine(gfxDstBuffer, sx, sy, sx + dir, sy, mask,
+                                                             color, opacity, acc >> SHIFT_8);
             } else {
-                DrawUtils::GetInstance()->DrawVerPixelInLine(gfxDstBuffer, sx, sy, dir, mask, color, opacity, acc >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawVerPixelInLine(gfxDstBuffer, sx, sy, dir, mask,
+                                                             color, opacity, acc >> SHIFT_8);
             }
         }
     } else {
@@ -463,10 +470,11 @@ void DrawLine::DrawThinWuLine(BufferInfo& gfxDstBuffer, const Point& start, cons
             INCREASE_ACC(acc, accTemp, adj, sy, dir);
             sx--;
             if (width == 1) {
-                DrawUtils::GetInstance()->DrawAdjPixelInLine(gfxDstBuffer, sx, sy, sx, sy + dir, mask, color, opacity,
-                    acc >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawAdjPixelInLine(gfxDstBuffer, sx, sy, sx, sy + dir, mask,
+                                                             color, opacity, acc >> SHIFT_8);
             } else {
-                DrawUtils::GetInstance()->DrawHorPixelInLine(gfxDstBuffer, sx, sy, dir, mask, color, opacity, acc >> SHIFT_8);
+                DrawUtils::GetInstance()->DrawHorPixelInLine(gfxDstBuffer, sx, sy, dir, mask,
+                                                             color, opacity, acc >> SHIFT_8);
             }
         }
     }

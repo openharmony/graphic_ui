@@ -142,7 +142,12 @@ private:
                                     uint8_t quadrant);
 #if ENABLE_ANTIALIAS
     void DrawLineAnti(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa);
-    void DrawPointAnti(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, int16_t x, const Rect& mask, const Style& style, uint8_t antiOpa);
+    void DrawPointAnti(BufferInfo& gfxDstBuffer,
+                       ArcInfo& arcInfo,
+                       int16_t x,
+                       const Rect& mask,
+                       const Style& style,
+                       uint8_t antiOpa);
 #endif
     uint16_t GetDegreeInQuadrant(uint16_t degree, uint8_t quadrant);
     void SetArcInfo(ArcInfo& arcInfo, const Style& style);

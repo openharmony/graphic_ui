@@ -15,13 +15,13 @@
 
 #include "draw/draw_utils.h"
 #include "draw/draw_triangle.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #include "gfx_utils/color.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/graphic_math.h"
 #include "graphic_performance.h"
-#include "engines/gfx/gfx_engine_manager.h"
 #include "securec.h"
 
 #ifdef ARM_NEON_OPT
@@ -45,8 +45,7 @@ namespace OHOS {
     }                                                                                \
     ColorMode bufferMode = gfxBufferInfo.mode;                                      \
     uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);                       \
-    uint16_t screenBufferWidth = /*gfxBufferInfo->rect.GetWidth()*/gfxBufferInfo.width;                     \
-    Rect bufferRect = gfxBufferInfo.rect;
+    uint16_t screenBufferWidth = gfxBufferInfo.width;
 
 /* cover mode, src alpha is 255 */
 #define COLOR_FILL_COVER(d, dm, r2, g2, b2, sm)               \
@@ -176,7 +175,11 @@ void DrawUtils::DrawColorAreaBySides(BufferInfo& gfxDstBuffer,
     DrawUtils::GetInstance()->DrawColorArea(gfxDstBuffer, area, mask, color, opa);
 }
 
-void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer, const Rect& area, const Rect& mask, const ColorType& color, OpacityType opa) const
+void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer,
+                              const Rect& area,
+                              const Rect& mask,
+                              const ColorType& color,
+                              OpacityType opa) const
 {
     DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Rect maskedArea;
@@ -246,7 +249,12 @@ LutColorMode DrawUtils::GetLutColorModeBySize(uint8_t size)
     }
 }
 
-void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer, int16_t x, int16_t y, const Rect& mask, const ColorType& color, OpacityType opa) const
+void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
+                          int16_t x,
+                          int16_t y,
+                          const Rect& mask,
+                          const ColorType& color,
+                          OpacityType opa) const
 {
     if ((x < mask.GetLeft()) || (x > mask.GetRight()) || (y < mask.GetTop()) || (y > mask.GetBottom())) {
         return;
@@ -447,7 +455,7 @@ void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
                                      const OpacityType& opa) const
 {
     ColorMode mode = gfxDstBuffer.mode;
-    uint8_t destByteSize = DrawUtils::GetByteSizeByColorMode(mode);
+    uint8_t destByteSize = GetByteSizeByColorMode(mode);
     int16_t destWidth = gfxDstBuffer.width;
     int32_t halBufferDeltaByteLen = static_cast<int32_t>(destWidth) * destByteSize;
     int16_t width = fillArea.GetWidth();
@@ -1405,7 +1413,11 @@ void DrawUtils::DrawWithBuffer(BufferInfo& gfxDstBuffer, const Rect& rect,
     FillArea(gfxDstBuffer, rect, mask, false, colorBuf);
 }
 
-void DrawUtils::FillArea(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& mask, bool isTransparent, const ColorType* colorBuf)
+void DrawUtils::FillArea(BufferInfo& gfxDstBuffer,
+                         const Rect& rect,
+                         const Rect& mask,
+                         bool isTransparent,
+                         const ColorType* colorBuf)
 {
     Rect maskedArea;
     if (!maskedArea.Intersect(rect, mask)) {

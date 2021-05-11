@@ -120,7 +120,12 @@ uint16_t DrawArc::CalculateTanDegree(uint16_t x, uint16_t y)
     return degree;
 }
 
-void DrawArc::DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa, bool anti)
+void DrawArc::DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer,
+                                   ArcInfo& arcInfo,
+                                   const Rect& mask,
+                                   const Style& style,
+                                   uint8_t opa,
+                                   bool anti)
 {
     DrawAxisLine(gfxDstBuffer, arcInfo, mask, style, opa);
 
@@ -230,8 +235,9 @@ void DrawArc::DrawLineWithDegree(BufferInfo& gfxDstBuffer,
                                  uint8_t quadrant)
 {
     if (isCircle_) {
-        DrawHorLine(gfxDstBuffer, Point{static_cast<int16_t>(arcInfo.center.x + start), static_cast<int16_t>(arcInfo.center.y + y)},
-                    arcInfo.imgPos, mask, end - start, style, opaScale, arcInfo.imgSrc);
+        DrawHorLine(gfxDstBuffer, Point{static_cast<int16_t>(arcInfo.center.x + start),
+                    static_cast<int16_t>(arcInfo.center.y + y)}, arcInfo.imgPos,
+                    mask, end - start, style, opaScale, arcInfo.imgSrc);
         return;
     }
     uint16_t degreeStart = GetDegreeInQuadrant(CalculateTanDegree(MATH_ABS(start), MATH_ABS(y)), quadrant);

@@ -16,26 +16,16 @@
 #ifndef GRAPHIC_LITE_GFX_ENGINE_MANAGER_H
 #define GRAPHIC_LITE_GFX_ENGINE_MANAGER_H
 
-#include "gfx_utils/heap_base.h"
-#include "gfx_utils/graphic_math.h"
-#include "gfx_utils/style.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
+#include "gfx_utils/graphic_math.h"
+#include "gfx_utils/graphic_types.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
 
 namespace OHOS {
 class BaseGfxEngine;
-
-struct BufferInfo {
-    Rect rect;
-    int32_t stride;
-    void *phyAddr;
-    void *virAddr;
-    uint16_t width;
-    uint16_t height;
-    ColorMode mode;
-    uint32_t color;
-};
-
 enum BlendMode {
     BLEND_MODE,          /* no blending */
     BLEND_SRC,           /* S */
@@ -52,9 +42,12 @@ enum BlendMode {
     BLEND_SUBTRACT,      /* D * (1 - S) */
 };
 
+#ifndef TRANSFORMOPTION
+#define TRANSFORMOPTION
 struct TransformOption {
     TransformAlgorithm algorithm;
 };
+#endif
 
 struct BlendOption {
     TransformMap transMap;
@@ -79,13 +72,6 @@ struct TransformDataInfo {
     uint8_t pxSize;
     BlurLevel blurLevel;
     TransformAlgorithm algorithm;
-};
-
-struct DrawContext {
-    BaseGfxEngine* gfxEngine;
-    BufferInfo* bufferInfo;
-    BufferInfo* mapBufferInfo;
-    BufferInfo* snapShotBufferInfo;
 };
 
 enum BufferInfoUsage {

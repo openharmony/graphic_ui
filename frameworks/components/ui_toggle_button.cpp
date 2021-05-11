@@ -15,8 +15,8 @@
 
 #include "components/ui_toggle_button.h"
 #include "common/image.h"
-#include "imgdecode/cache_manager.h"
 #include "engines/gfx/gfx_engine_manager.h"
+#include "imgdecode/cache_manager.h"
 
 namespace OHOS {
 UIToggleButton::UIToggleButton() : corner_(DEFAULT_CORNER_RADIUS), radius_(DEFAULT_CORNER_RADIUS - DEAFULT_RADIUS_DIFF),
@@ -86,7 +86,8 @@ void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
                 styleSelect.lineWidth_ = radius_;
                 styleSelect.lineColor_ = Color::White();
                 if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc, styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc,
+                                                        styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
                 }
                 break;
             }
@@ -105,7 +106,8 @@ void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
                 styleUnSelect.lineColor_ = Color::White();
                 styleUnSelect.lineWidth_ = radius_;
                 if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc, styleUnSelect, OPA_OPAQUE, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc,
+                                                          styleUnSelect, OPA_OPAQUE, CapType::CAP_NONE);
                 }
                 break;
             }

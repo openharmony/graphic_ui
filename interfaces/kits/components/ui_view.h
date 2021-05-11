@@ -48,13 +48,12 @@
 #endif
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/heap_base.h"
 #include "gfx_utils/image_info.h"
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
-
-#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 /* Enumerates view types. */

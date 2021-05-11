@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,17 @@
 #include "common/graphic_startup.h"
 #include "common/image_decode_ability.h"
 #include "common/input_device_manager.h"
+#include "draw/draw_utils.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #include "font/ui_font_vector.h"
 #include "key_input.h"
 #include "mouse_input.h"
-#include "draw/draw_utils.h"
 #include "mousewheel_input.h"
+#include "windows.h"
 
 namespace OHOS {
-bool Monitor::bRegister_ = false;
+bool Monitor::isRegister_ = false;
 
 void Monitor::InitHal()
 {
@@ -56,7 +57,7 @@ BufferInfo* Monitor::GetBufferInfo()
         bufferInfo->mode = ARGB8888;
         bufferInfo->color = 0x44;
         bufferInfo->phyAddr = bufferInfo->virAddr = tftFb_;
-        bufferInfo->stride = HORIZONTAL_RESOLUTION * DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3;
+        bufferInfo->stride = HORIZONTAL_RESOLUTION * (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3); // 3: Shift right 3 bits
         bufferInfo->width = HORIZONTAL_RESOLUTION;
         bufferInfo->height = VERTICAL_RESOLUTION;
     }
