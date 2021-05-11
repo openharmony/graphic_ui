@@ -30,11 +30,7 @@ public:
      * @brief Get instance of InputDeviceManager.
      * @returns Instance of InputDeviceManager
      */
-    static InputDeviceManager* GetInstance()
-    {
-        static InputDeviceManager instance;
-        return &instance;
-    }
+    static InputDeviceManager* GetInstance();
 
     void Init() override;
 

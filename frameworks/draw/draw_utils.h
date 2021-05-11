@@ -168,11 +168,7 @@ enum {
 
 class DrawUtils : public HeapBase {
 public:
-    static DrawUtils* GetInstance()
-    {
-        static DrawUtils instance;
-        return &instance;
-    }
+    static DrawUtils* GetInstance();
 
     void DrawColorArea(const Rect& area, const Rect& mask, const ColorType& color, OpacityType opa) const;
 

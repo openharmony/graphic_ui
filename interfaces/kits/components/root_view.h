@@ -74,11 +74,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    static RootView* GetInstance()
-    {
-        static RootView instance;
-        return &instance;
-    }
+    static RootView* GetInstance();
 
 #if ENABLE_WINDOW
     /**

@@ -13,20 +13,13 @@
  * limitations under the License.
  */
 
-#include "themes/theme_manager.h"
-
+#include "dfx/performance_task.h"
+#if ENABLE_DEBUG && ENABLE_DEBUG_PERFORMANCE_TRACE
 namespace OHOS {
-ThemeManager& ThemeManager::GetInstance()
+PerformanceTask* PerformanceTask::GetInstance()
 {
-    static ThemeManager instance;
-    return instance;
+    static PerformanceTask instance;
+    return &instance;
 }
-
-void ThemeManager::SetCurrent(Theme* theme)
-{
-    if (theme_ != nullptr) {
-        delete theme_;
-    }
-    theme_ = theme;
 }
-} // namespace OHOS
+#endif

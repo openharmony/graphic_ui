@@ -22,7 +22,6 @@
 
 using namespace U_ICU_NAMESPACE;
 namespace OHOS {
-UILineBreakEngine* UILineBreakEngine::instance_ = nullptr;
 static void* MemAlloc(const void* context, size_t size)
 {
     return UIMalloc(size);
@@ -39,6 +38,12 @@ static void MemFree(const void* context, void* mem)
 static void* MemRealloc(const void* context, void* mem, size_t size)
 {
     return UIRealloc(mem, size);
+}
+
+UILineBreakEngine& UILineBreakEngine::GetInstance()
+{
+    static UILineBreakEngine instance;
+    return instance;
 }
 
 uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)

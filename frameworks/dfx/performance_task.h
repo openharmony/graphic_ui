@@ -24,11 +24,7 @@
 namespace OHOS {
 class PerformanceTask : public Task {
 public:
-    static PerformanceTask* GetInstance()
-    {
-        static PerformanceTask instance;
-        return &instance;
-    }
+    static PerformanceTask* GetInstance();
 
     void Init() override
     {

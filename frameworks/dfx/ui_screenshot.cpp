@@ -135,6 +135,12 @@ UIScreenshot::~UIScreenshot()
     }
 }
 
+UIScreenshot* UIScreenshot::GetInstance()
+{
+    static UIScreenshot instance;
+    return &instance;
+}
+
 bool UIScreenshot::ScreenshotToFile(const char* path)
 {
     if (screenshotListener_ == nullptr) {

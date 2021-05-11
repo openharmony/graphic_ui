@@ -35,11 +35,7 @@ static constexpr uint16_t MILLISECONDS_PER_SECOND = 1000;
 
 class RenderManager : public Task {
 public:
-    static RenderManager& GetInstance()
-    {
-        static RenderManager instance;
-        return instance;
-    }
+    static RenderManager& GetInstance();
 
     void Init() override;
 

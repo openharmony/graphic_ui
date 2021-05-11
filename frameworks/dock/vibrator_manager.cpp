@@ -13,20 +13,14 @@
  * limitations under the License.
  */
 
-#include "themes/theme_manager.h"
+#include "dock/vibrator_manager.h"
 
+#if ENABLE_VIBRATOR
 namespace OHOS {
-ThemeManager& ThemeManager::GetInstance()
+VibratorManager* VibratorManager::GetInstance()
 {
-    static ThemeManager instance;
-    return instance;
-}
-
-void ThemeManager::SetCurrent(Theme* theme)
-{
-    if (theme_ != nullptr) {
-        delete theme_;
-    }
-    theme_ = theme;
+    static VibratorManager instance;
+    return &instance;
 }
 } // namespace OHOS
+#endif

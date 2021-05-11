@@ -51,11 +51,7 @@ public:
      *
      * @return Returns the singleton instance of the <b>ThemeManager</b> class.
      */
-    static ThemeManager& GetInstance()
-    {
-        static ThemeManager instance;
-        return instance;
-    }
+    static ThemeManager& GetInstance();
 
     /**
      * @brief Sets the current screen theme for this application.

@@ -27,6 +27,12 @@
 #endif
 
 namespace OHOS {
+UITestApp* UITestApp::GetInstance()
+{
+    static UITestApp instance;
+    return &instance;
+}
+
 void UITestApp::Start()
 {
     if (rootView_ == nullptr) {
@@ -105,6 +111,12 @@ UITestApp::~UITestApp()
     if (rootView_ != nullptr) {
         rootView_ = nullptr;
     }
+}
+
+UIAutoTestApp* UIAutoTestApp::GetInstance()
+{
+    static UIAutoTestApp instance;
+    return &instance;
 }
 
 void UIAutoTestApp::Start()

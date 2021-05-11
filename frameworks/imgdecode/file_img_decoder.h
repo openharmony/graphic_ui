@@ -33,11 +33,7 @@ enum class RetCode {
 
 class FileImgDecoder : public HeapBase {
 public:
-    static FileImgDecoder& GetInstance()
-    {
-        static FileImgDecoder instance;
-        return instance;
-    }
+    static FileImgDecoder& GetInstance();
 
     struct ImgResDsc {
         FileImgDecoder* decoder;

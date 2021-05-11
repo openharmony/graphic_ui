@@ -27,11 +27,7 @@ class KeyInput : public KeyInputDevice {
 public:
     KeyInput() {}
     virtual ~KeyInput() {}
-    static KeyInput* GetInstance()
-    {
-        static KeyInput keyInput;
-        return &keyInput;
-    }
+    static KeyInput* GetInstance();
     bool Read(DeviceData& data) override;
     void KeyHandler(QKeyEvent* event);
 

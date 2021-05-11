@@ -19,6 +19,12 @@
 #include "hal_tick.h"
 
 namespace OHOS {
+AnimatorManager* AnimatorManager::GetInstance()
+{
+    static AnimatorManager animatorManager;
+    return &animatorManager;
+}
+
 void AnimatorManager::Init()
 {
     Task::Init();

@@ -26,11 +26,7 @@ class Monitor : public QObject, public ScreenDevice {
 public:
     Monitor() : defaultColor_ (0x44) {}
     virtual ~Monitor() {}
-    static Monitor* GetInstance()
-    {
-        static Monitor instance;
-        return &instance;
-    }
+    static Monitor* GetInstance();
     void InitHal();
     void InitFontEngine();
     void InitImageDecodeAbility();

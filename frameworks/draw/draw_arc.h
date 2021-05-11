@@ -35,11 +35,7 @@ struct ArcInfo {
 
 class DrawArc : public HeapBase {
 public:
-    static DrawArc* GetInstance()
-    {
-        static DrawArc drawArc;
-        return &drawArc;
-    }
+    static DrawArc* GetInstance();
 
     void GetDrawRange(int16_t& start, int16_t& end);
 

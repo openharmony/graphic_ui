@@ -119,6 +119,12 @@ void UIMultiFontManager::UpdateScript(UITextLanguageFontParam& fonts)
     }
 }
 
+UIMultiFontManager* UIMultiFontManager::GetInstance()
+{
+    static UIMultiFontManager instance;
+    return &instance;
+}
+
 void UIMultiFontManager::ClearSearchFontList()
 {
     uint8_t totalFontId = GetTotalFontId();

@@ -19,6 +19,12 @@
 #include "securec.h"
 
 namespace OHOS {
+ScreenDeviceProxy* ScreenDeviceProxy::GetInstance()
+{
+    static ScreenDeviceProxy instance;
+    return &instance;
+}
+
 void ScreenDeviceProxy::Flush() {}
 
 void ScreenDeviceProxy::OnFlushReady()

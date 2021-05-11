@@ -26,11 +26,7 @@ class MousewheelInput : public RotateInputDevice {
 public:
     MousewheelInput() {}
     virtual ~MousewheelInput() {}
-    static MousewheelInput* GetInstance()
-    {
-        static MousewheelInput mousewheelInput;
-        return &mousewheelInput;
-    }
+    static MousewheelInput* GetInstance();
     bool Read(DeviceData& data) override;
     void MousewheelHandler(QWheelEvent* event);
 };

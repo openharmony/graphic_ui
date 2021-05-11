@@ -19,6 +19,11 @@
 
 namespace OHOS {
 #define IS_IN_DEGREERANE(d, s, e) ((s) <= (e)) ? (((d) >= (s)) && ((d) <= (e))) : (((d) >= (s)) || ((d) <= (e)))
+DrawArc* DrawArc::GetInstance()
+{
+    static DrawArc drawArc;
+    return &drawArc;
+}
 
 void DrawArc::DrawImg(const Point& imgPos,
                       Rect& area,

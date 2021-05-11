@@ -41,6 +41,12 @@ RootView::RootView()
 #endif
 }
 
+RootView* RootView::GetInstance()
+{
+    static RootView instance;
+    return &instance;
+}
+
 #if ENABLE_WINDOW
 Window* RootView::GetBoundWindow() const
 {

@@ -64,11 +64,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    static UIScreenshot* GetInstance()
-    {
-        static UIScreenshot instance;
-        return &instance;
-    }
+    static UIScreenshot* GetInstance();
 
     /**
      * @brief Takes a screenshot and saves it to a file.

@@ -48,11 +48,7 @@ public:
      * @brief Get the Instance object
      * @return UITextShaping* the static instance
      */
-    static UITextShaping* GetInstance()
-    {
-        static UITextShaping instance;
-        return &instance;
-    }
+    static UITextShaping* GetInstance();
 
     static bool IsSameTTFId(uint8_t fontId, uint32_t unicode);
 }; // class UITextShaping

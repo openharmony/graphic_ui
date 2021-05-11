@@ -20,6 +20,12 @@
 #include "gfx_utils/mem_api.h"
 
 namespace OHOS {
+Screen& Screen::GetInstance()
+{
+    static Screen instance;
+    return instance;
+}
+
 uint16_t Screen::GetWidth()
 {
     return ScreenDeviceProxy::GetInstance()->GetScreenWidth();

@@ -27,6 +27,12 @@ static uint16_t g_lastKeyId = 0;
 static uint16_t g_lastKeyState = INVALID_KEY_STATE;
 } // namespace
 
+KeyInput* KeyInput::GetInstance()
+{
+    static KeyInput keyInput;
+    return &keyInput;
+}
+
 bool KeyInput::Read(DeviceData& data)
 {
     data.keyId = g_lastKeyId;

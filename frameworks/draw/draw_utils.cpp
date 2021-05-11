@@ -168,6 +168,12 @@ TriangleEdge::TriangleEdge(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 
 TriangleEdge::~TriangleEdge() {}
 
+DrawUtils* DrawUtils::GetInstance()
+{
+    static DrawUtils instance;
+    return &instance;
+}
+
 void DrawUtils::DrawColorAreaBySides(const Rect& mask,
                                      const ColorType& color,
                                      OpacityType opa,

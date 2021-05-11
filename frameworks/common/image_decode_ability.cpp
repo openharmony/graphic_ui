@@ -13,20 +13,12 @@
  * limitations under the License.
  */
 
-#include "themes/theme_manager.h"
+#include "common/image_decode_ability.h"
 
 namespace OHOS {
-ThemeManager& ThemeManager::GetInstance()
+ImageDecodeAbility& ImageDecodeAbility::GetInstance()
 {
-    static ThemeManager instance;
+    static ImageDecodeAbility instance;
     return instance;
 }
-
-void ThemeManager::SetCurrent(Theme* theme)
-{
-    if (theme_ != nullptr) {
-        delete theme_;
-    }
-    theme_ = theme;
-}
-} // namespace OHOS
+}  // namespace OHOS

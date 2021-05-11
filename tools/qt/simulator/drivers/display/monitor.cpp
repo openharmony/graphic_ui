@@ -27,6 +27,12 @@
 #include "mousewheel_input.h"
 
 namespace OHOS {
+Monitor* Monitor::GetInstance()
+{
+    static Monitor instance;
+    return &instance;
+}
+
 void Monitor::InitHal()
 {
     ScreenDeviceProxy::GetInstance()->SetScreenSize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);

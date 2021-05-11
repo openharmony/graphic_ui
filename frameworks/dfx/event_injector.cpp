@@ -35,6 +35,12 @@ EventInjector::~EventInjector()
     }
 }
 
+EventInjector* EventInjector::GetInstance()
+{
+    static EventInjector instance;
+    return &instance;
+}
+
 bool EventInjector::RegisterEventInjector(EventDataType type)
 {
     switch (type) {
