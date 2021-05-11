@@ -16,7 +16,6 @@
 #include "core/render_manager.h"
 
 #include "components/root_view.h"
-#include "dock/screen_device_proxy.h"
 #include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 #include "securec.h"

@@ -18,7 +18,7 @@
 #include "common/graphic_startup.h"
 #include "common/image_decode_ability.h"
 #include "common/input_device_manager.h"
-#include "dock/screen_device_proxy.h"
+#include "draw/draw_utils.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #if ENABLE_VECTOR_FONT
@@ -30,18 +30,13 @@
 #include "key_input.h"
 #include "mouse_input.h"
 #include "mousewheel_input.h"
+#include "windows.h"
 
 namespace OHOS {
+bool Monitor::isRegister_ = false;
+
 void Monitor::InitHal()
 {
-    ScreenDeviceProxy::GetInstance()->SetScreenSize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
-    ScreenDeviceProxy::GetInstance()->SetFramebuffer(reinterpret_cast<uint8_t*>(tftFb_), ARGB8888,
-                                                     HORIZONTAL_RESOLUTION);
-    ScreenDeviceProxy::GetInstance()->SetAnimatorbuffer(reinterpret_cast<uint8_t*>(animaterBuffer_), ARGB8888,
-                                                        HORIZONTAL_RESOLUTION);
-    Monitor* display = Monitor::GetInstance();
-    ScreenDeviceProxy::GetInstance()->SetDevice(display);
-
 #if USE_MOUSE
     MouseInput* mouse = MouseInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(mouse);
@@ -58,7 +53,23 @@ void Monitor::InitHal()
 #endif
 }
 
-void Monitor::RenderFinish(const Rect& mask)
+BufferInfo* Monitor::GetBufferInfo()
+{
+    static BufferInfo* bufferInfo = nullptr;
+    if (bufferInfo == nullptr) {
+        bufferInfo = new BufferInfo;
+        bufferInfo->rect = {0, 0, HORIZONTAL_RESOLUTION - 1, VERTICAL_RESOLUTION - 1};
+        bufferInfo->mode = ARGB8888;
+        bufferInfo->color = 0x44;
+        bufferInfo->phyAddr = bufferInfo->virAddr = tftFb_;
+        bufferInfo->stride = HORIZONTAL_RESOLUTION * (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3); // 3: Shift right 3 bits
+        bufferInfo->width = HORIZONTAL_RESOLUTION;
+        bufferInfo->height = VERTICAL_RESOLUTION;
+    }
+    return bufferInfo;
+}
+
+void Monitor::Flush()
 {
     UpdatePaint(tftFb_, HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
 }

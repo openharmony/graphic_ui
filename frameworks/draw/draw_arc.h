@@ -24,15 +24,6 @@
 #include "gfx_utils/style.h"
 
 namespace OHOS {
-struct ArcInfo {
-    Point center;
-    Point imgPos;
-    uint16_t radius;
-    int16_t startAngle;
-    int16_t endAngle;
-    const Image* imgSrc;
-};
-
 class DrawArc : public HeapBase {
 public:
     static DrawArc* GetInstance()
@@ -43,7 +34,8 @@ public:
 
     void GetDrawRange(int16_t& start, int16_t& end);
 
-    void Draw(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opaScale, uint8_t cap);
+    void Draw(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
+              const Style& style, uint8_t opaScale, uint8_t cap);
 
 private:
     static constexpr uint8_t DRAW_ARC_QUADRANT_NUM = 4;
@@ -90,8 +82,11 @@ private:
           antiInRadiusSqr_(0)
     {
     }
+
     ~DrawArc() {}
-    void DrawVerLine(const Point& begin,
+
+    void DrawVerLine(BufferInfo& gfxDstBuffer,
+                     const Point& begin,
                      const Point& imgPos,
                      const Rect& mask,
                      int16_t len,
@@ -99,7 +94,8 @@ private:
                      uint8_t opaScale,
                      const Image* imgSrc);
 
-    void DrawHorLine(const Point& begin,
+    void DrawHorLine(BufferInfo& gfxDstBuffer,
+                     const Point& begin,
                      const Point& imgPos,
                      const Rect& mask,
                      int16_t len,
@@ -107,7 +103,8 @@ private:
                      uint8_t opaScale,
                      const Image* imgSrc);
 
-    void DrawImg(const Point& imgPos,
+    void DrawImg(BufferInfo& gfxDstBuffer,
+                 const Point& imgPos,
                  Rect& area,
                  const Rect& invalidatedArea,
                  const Style& style,
@@ -115,11 +112,17 @@ private:
                  const Image* imgSrc);
 
     int16_t GetDegreeRangeIntersectState(uint16_t degreeStart, uint16_t degreeEnd, uint16_t start, uint16_t end);
+
     uint16_t CalculateTanDegree(uint16_t x, uint16_t y);
+
     int16_t GetDrawAngle(int16_t angle);
-    void DrawCircleNoEndpoint(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa, bool anti);
-    void DrawAxisLine(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa);
-    void DrawLineWithDegree(ArcInfo& arcInfo,
+
+    void DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa, bool anti);
+
+    void DrawAxisLine(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa);
+
+    void DrawLineWithDegree(BufferInfo& gfxDstBuffer,
+                            ArcInfo& arcInfo,
                             int16_t start,
                             int16_t end,
                             int16_t y,
@@ -127,7 +130,9 @@ private:
                             const Style& style,
                             uint8_t opaScale,
                             uint8_t quadrant);
-    int16_t DrawLineWithDegreeInner(ArcInfo& arcInfo,
+
+    int16_t DrawLineWithDegreeInner(BufferInfo& gfxDstBuffer,
+                                    ArcInfo& arcInfo,
                                     int16_t start,
                                     int16_t end,
                                     int16_t y,
@@ -136,8 +141,13 @@ private:
                                     uint8_t opaScale,
                                     uint8_t quadrant);
 #if ENABLE_ANTIALIAS
-    void DrawLineAnti(ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa);
-    void DrawPointAnti(ArcInfo& arcInfo, int16_t x, const Rect& mask, const Style& style, uint8_t antiOpa);
+    void DrawLineAnti(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa);
+    void DrawPointAnti(BufferInfo& gfxDstBuffer,
+                       ArcInfo& arcInfo,
+                       int16_t x,
+                       const Rect& mask,
+                       const Style& style,
+                       uint8_t antiOpa);
 #endif
     uint16_t GetDegreeInQuadrant(uint16_t degree, uint8_t quadrant);
     void SetArcInfo(ArcInfo& arcInfo, const Style& style);

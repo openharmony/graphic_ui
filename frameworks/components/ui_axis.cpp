@@ -15,7 +15,7 @@
 
 #include "components/ui_axis.h"
 #include "common/screen.h"
-#include "draw/draw_line.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UIAxis::UIAxis()
@@ -91,13 +91,14 @@ void UIXAxis::TranslateToPixel(int16_t& value)
     value = start_.x + static_cast<int16_t>((value - minRange_) * minXStep);
 }
 
-void UIAxis::OnDraw(const Rect& invalidatedArea)
+void UIAxis::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    DrawLine::Draw(start_, end_, invalidatedArea, style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
-    DrawAxisMark(invalidatedArea);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start_, end_, invalidatedArea, style_->lineWidth_,
+                                           style_->lineColor_, style_->lineOpa_);
+    DrawAxisMark(gfxDstBuffer, invalidatedArea);
 }
 
-void UIXAxis::DrawAxisMark(const Rect& invalidatedArea)
+void UIXAxis::DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     Point start;
     Point end;
@@ -108,7 +109,8 @@ void UIXAxis::DrawAxisMark(const Rect& invalidatedArea)
         end.y = enableReverse_ ? (start.y + AXIS_DEFAULT_MARK_LENGTH) : (start.y - AXIS_DEFAULT_MARK_LENGTH);
         end.x = start.x;
 
-        DrawLine::Draw(start, end, invalidatedArea, style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
+        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                               style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
         index++;
     }
 }
@@ -178,7 +180,7 @@ bool UIYAxis::UpdateAxis()
     return true;
 }
 
-void UIYAxis::DrawAxisMark(const Rect& invalidatedArea)
+void UIYAxis::DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     uint16_t index = 1;
     while (index <= markDataCount_) {
@@ -190,7 +192,8 @@ void UIYAxis::DrawAxisMark(const Rect& invalidatedArea)
         end.x = start.x + AXIS_DEFAULT_MARK_LENGTH;
         end.y = start.y;
 
-        DrawLine::Draw(start, end, invalidatedArea, style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
+        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                               style_->lineWidth_, style_->lineColor_, style_->lineOpa_);
         index++;
     }
 }

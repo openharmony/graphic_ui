@@ -17,12 +17,13 @@
 #include <cstdio>
 #include "common/typed_text.h"
 #include "draw/draw_utils.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
-void DrawLabel::DrawTextOneLine(const LabelLineInfo& labelLine)
+void DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine)
 {
     UIFont* fontEngine = UIFont::GetInstance();
     if (labelLine.direct == TEXT_DIRECT_RTL) {
@@ -48,7 +49,7 @@ void DrawLabel::DrawTextOneLine(const LabelLineInfo& labelLine)
                                    labelLine.fontId,
                                    0,
                                    labelLine.fontSize};
-        DrawUtils::GetInstance()->DrawLetter(letterInfo);
+        DrawUtils::GetInstance()->DrawLetter(gfxDstBuffer, letterInfo);
         letterWidth = fontEngine->GetWidth(letter, 0);
         if (labelLine.direct == TEXT_DIRECT_RTL) {
             labelLine.pos.x -= (letterWidth + labelLine.style.letterSpace_);
@@ -58,7 +59,8 @@ void DrawLabel::DrawTextOneLine(const LabelLineInfo& labelLine)
     }
 }
 
-void DrawLabel::DrawArcText(const Rect& mask,
+void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
+                            const Rect& mask,
                             const char* text,
                             const Point& arcCenter,
                             uint8_t fontId,
@@ -113,12 +115,13 @@ void DrawLabel::DrawArcText(const Rect& mask,
         TypedText::GetArcLetterPos(arcCenter, arcTextInfo.radius, angle, posX, posY);
         angle += incrementAngle;
 
-        DrawLetterWithRotate(mask, fontId, letter, Point{MATH_ROUND(posX), MATH_ROUND(posY)},
+        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, letter, Point{MATH_ROUND(posX), MATH_ROUND(posY)},
                              static_cast<int16_t>(rotateAngle), style.textColor_, opaScale);
     }
 }
 
-void DrawLabel::DrawLetterWithRotate(const Rect& mask,
+void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
+                                     const Rect& mask,
                                      uint8_t fontId,
                                      uint32_t letter,
                                      const Point& pos,
@@ -162,6 +165,7 @@ void DrawLabel::DrawLetterWithRotate(const Rect& mask,
     transMap.Rotate(rotateAngle, Vector2<float>(-node.left, node.top - head.ascender));
     TransformDataInfo letterTranDataInfo = {ImageHeader{colorMode, 0, 0, 0, node.cols, node.rows}, fontMap, fontWeight,
                                             BlurLevel::LEVEL0};
-    DrawUtils::GetInstance()->DrawTransform(mask, Point{0, 0}, color, opaScale, transMap, letterTranDataInfo);
+    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point{0, 0}, color, opaScale, transMap,
+                                                letterTranDataInfo);
 }
 } // namespace OHOS

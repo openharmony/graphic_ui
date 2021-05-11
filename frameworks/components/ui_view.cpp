@@ -17,9 +17,8 @@
 #include "components/root_view.h"
 #include "core/render_manager.h"
 #include "dock/focus_manager.h"
-#include "dock/screen_device_proxy.h"
-#include "draw/draw_rect.h"
 #include "draw/draw_utils.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
 #include "securec.h"
@@ -100,10 +99,10 @@ bool UIView::OnPreDraw(Rect& invalidatedArea) const
     return false;
 }
 
-void UIView::OnDraw(const Rect& invalidatedArea)
+void UIView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     uint8_t opa = GetMixOpaScale();
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opa);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *style_, opa);
 }
 
 void UIView::SetupThemeStyles()
@@ -820,15 +819,19 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     nextSibling_ = nullptr;
     parent_ = nullptr;
 
-    int16_t screenWidth = ScreenDeviceProxy::GetInstance()->GetScreenWidth();
-    int16_t screenHeight = ScreenDeviceProxy::GetInstance()->GetScreenHeight();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    if (bufferInfo == nullptr) {
+        return false;
+    }
+    int16_t screenWidth = bufferInfo->width;
+    int16_t screenHeight = bufferInfo->height;
     Rect screenRect(0, 0, screenWidth, screenHeight);
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();
     mask.Intersect(mask, screenRect);
     uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
     uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
-    bitmap.header.colorMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
+    bitmap.header.colorMode = bufferInfo->mode;
     bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
     bitmap.header.width = bufferWidth;
     bitmap.header.height = bufferHeight;
@@ -841,15 +844,20 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
         rect_.SetPosition(tempX, tempY);
         return false;
     }
-    if (memset_s(viewBitmapBuffer, bitmap.dataSize, 0, bitmap.dataSize) != EOK) {
-        ImageCacheFree(bitmap);
-        return false;
-    }
-    ScreenDeviceProxy::GetInstance()->EnableBitmapBuffer(viewBitmapBuffer);
-    ScreenDeviceProxy::GetInstance()->SetViewBitmapBufferWidth(bufferWidth);
+
+    BufferInfo newBufferInfo;
+    newBufferInfo.virAddr = static_cast<void*>(viewBitmapBuffer);
+    newBufferInfo.phyAddr = newBufferInfo.virAddr;
+    newBufferInfo.rect = mask;
+    newBufferInfo.width = bufferWidth;
+    newBufferInfo.height = bufferHeight;
+    newBufferInfo.mode = bufferInfo->mode;
+
+    RootView::GetInstance()->SaveDrawContext();
+    RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
     RootView::GetInstance()->DrawTop(this, mask);
     bitmap.data = viewBitmapBuffer;
-    ScreenDeviceProxy::GetInstance()->DisableBitmapBuffer();
+    RootView::GetInstance()->RestoreDrawContext();
     nextSibling_ = tempSibling;
     parent_ = tempParent;
     rect_.SetPosition(tempX, tempY);

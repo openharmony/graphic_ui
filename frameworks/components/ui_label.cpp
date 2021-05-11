@@ -369,13 +369,14 @@ void UILabel::SetRollSpeed(uint16_t speed)
     }
 }
 
-void UILabel::OnDraw(const Rect& invalidatedArea)
+void UILabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     InitLabelText();
-    UIView::OnDraw(invalidatedArea);
+    UIView::OnDraw(gfxDstBuffer, invalidatedArea);
     Style style = GetStyleConst();
     style.textColor_ = GetTextColor();
     OpacityType opa = GetMixOpaScale();
-    labelText_->OnDraw(invalidatedArea, GetOrigRect(), GetContentRect(), offsetX_, style, ellipsisIndex_, opa);
+    labelText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(),
+                       GetContentRect(), offsetX_, style, ellipsisIndex_, opa);
 }
 } // namespace OHOS

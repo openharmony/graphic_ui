@@ -180,8 +180,8 @@ void Text::ReMeasureTextWidthInEllipsisMode(const Rect& textRect, const Style& s
         }
     }
 }
-
-void Text::OnDraw(const Rect& invalidatedArea,
+void Text::OnDraw(BufferInfo& gfxDstBuffer,
+                  const Rect& invalidatedArea,
                   const Rect& viewOrigRect,
                   const Rect& textRect,
                   int16_t offsetX,
@@ -196,11 +196,12 @@ void Text::OnDraw(const Rect& invalidatedArea,
     Rect mask = invalidatedArea;
 
     if (mask.Intersect(mask, textRect)) {
-        Draw(mask, textRect, style, offsetX, ellipsisIndex, opaScale);
+        Draw(gfxDstBuffer, mask, textRect, style, offsetX, ellipsisIndex, opaScale);
     }
 }
 
-void Text::Draw(const Rect& mask,
+void Text::Draw(BufferInfo& gfxDstBuffer,
+                const Rect& mask,
                 const Rect& coords,
                 const Style& style,
                 int16_t offsetX,
@@ -239,13 +240,13 @@ void Text::Draw(const Rect& mask,
                                     0,
                                     static_cast<UITextLanguageDirect>(direct_),
                                     nullptr};
-            DrawLabel::DrawTextOneLine(labelLine);
+            DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
             if ((i == (lineCount - 1)) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
                 labelLine.offset.x = 0;
                 labelLine.text = TEXT_ELLIPSIS;
                 labelLine.lineLength = TEXT_ELLIPSIS_DOT_NUM;
                 labelLine.length = TEXT_ELLIPSIS_DOT_NUM;
-                DrawLabel::DrawTextOneLine(labelLine);
+                DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
             }
         }
         lineBegin += textLine_[i].lineBytes;

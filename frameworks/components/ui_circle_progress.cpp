@@ -16,7 +16,7 @@
 #include "components/ui_circle_progress.h"
 #include "draw/draw_arc.h"
 #include "draw/draw_line.h"
-#include "draw/draw_rect.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 UICircleProgress::UICircleProgress()
@@ -82,7 +82,7 @@ void UICircleProgress::GetRedrawAngle(int16_t& start, int16_t& end) const
     DrawArc::GetInstance()->GetDrawRange(start, end);
 }
 
-void UICircleProgress::DrawCommonCircle(const Rect& invalidatedArea)
+void UICircleProgress::DrawCommonCircle(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     ArcInfo arcinfo = {{0}};
     arcinfo.radius = radius_;
@@ -103,8 +103,8 @@ void UICircleProgress::DrawCommonCircle(const Rect& invalidatedArea)
         arcinfo.startAngle = start;
         arcinfo.endAngle = end;
         arcinfo.imgSrc = backgroundImage_;
-        DrawArc::GetInstance()->Draw(arcinfo, invalidatedArea, *backgroundStyle_, opaScale_,
-                                     backgroundStyle_->lineCap_);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcinfo, invalidatedArea, *backgroundStyle_, opaScale_,
+                                              backgroundStyle_->lineCap_);
     }
 
     if ((startAngle != endAngle) || (foregroundStyle_->lineCap_ == CapType::CAP_ROUND)) {
@@ -113,22 +113,22 @@ void UICircleProgress::DrawCommonCircle(const Rect& invalidatedArea)
         arcinfo.startAngle = startAngle;
         arcinfo.endAngle = endAngle;
         arcinfo.imgSrc = foregroundImage_;
-        DrawArc::GetInstance()->Draw(arcinfo, invalidatedArea, *foregroundStyle_, opaScale_,
-                                     foregroundStyle_->lineCap_);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcinfo, invalidatedArea, *foregroundStyle_, opaScale_,
+                                              foregroundStyle_->lineCap_);
     }
 }
 
-void UICircleProgress::OnDraw(const Rect& invalidatedArea)
+void UICircleProgress::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     if (GetRangeSize() == 0) {
         return;
     }
 
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opaScale_);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *style_, opaScale_);
 
     Rect trunc(invalidatedArea);
     if (trunc.Intersect(trunc, GetOrigRect())) {
-        DrawCommonCircle(trunc);
+        DrawCommonCircle(gfxDstBuffer, trunc);
     }
 }
 } // namespace OHOS

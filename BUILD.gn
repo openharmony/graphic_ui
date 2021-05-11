@@ -150,6 +150,8 @@ shared_library("ui") {
     "frameworks/themes/theme_manager.cpp",
     "frameworks/window/window.cpp",
     "frameworks/window/window_impl.cpp",
+    "frameworks/engines/gfx/gfx_engine_manager.cpp",
+    "frameworks/engines/gfx/hi3516/hi3516_engine.cpp",
   ]
   include_dirs = [ "//foundation/graphic/ui/frameworks" ]
   deps = [

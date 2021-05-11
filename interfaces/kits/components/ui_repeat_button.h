@@ -145,7 +145,7 @@ private:
     static UIRepeatButton* repeatButton_;
     uint32_t timerRepeatID_;
 
-    virtual void OnDraw(const Rect& invalidatedArea) override;
+    virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
     inline void SetEvent(const ClickEvent& event);
 };
 } // namespace OHOS

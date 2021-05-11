@@ -16,7 +16,11 @@
 #ifndef GRAPHIC_LITE_DRAW_RECT_H
 #define GRAPHIC_LITE_DRAW_RECT_H
 
-#include "components/ui_view.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/rect.h"
+#include "gfx_utils/style.h"
+#include "gfx_utils/color.h"
+#include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
 /** @brief Class for drawing rectangle. */
@@ -25,37 +29,48 @@ public:
     DrawRect() {};
     ~DrawRect() {};
 
-    static void Draw(const Rect& rect, const Rect& dirtyRect, const Style& style, OpacityType opaScale);
+    static void Draw(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                     const Style& style, OpacityType opaScale);
 
 private:
-    static void DrawRectRadiusWithoutBorder(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                            OpacityType opaScale);
-    static void DrawRectBorderWithoutRadius(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                            OpacityType opaScale);
-    static void DrawRectRadiusEqualBorder(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                          OpacityType opaScale);
-    static void DrawRectRadiusSmallThanBorder(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                              OpacityType opaScale);
-    static void DrawRectRadiusBiggerThanBorder(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                               OpacityType opaScale);
+    static void DrawRectRadiusWithoutBorder(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                            const Style& style, OpacityType opaScale);
 
-    static void DrawRectRadiusWithoutBorderCon1(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                OpacityType opaScale);
-    static void DrawRectRadiusWithoutBorderCon2(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                OpacityType opaScale);
-    static void DrawRectRadiusWithoutBorderCon3(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                OpacityType opaScale);
-    static void DrawRectRadiusWithoutBorderCon4(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                OpacityType opaScale);
+    static void DrawRectBorderWithoutRadius(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                            const Style& style, OpacityType opaScale);
 
-    static void DrawRectRadiusBiggerThanBorderCon1(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                   OpacityType opaScale);
-    static void DrawRectRadiusBiggerThanBorderCon2(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                   OpacityType opaScale);
-    static void DrawRectRadiusBiggerThanBorderCon3(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                   OpacityType opaScale);
-    static void DrawRectRadiusBiggerThanBorderCon4(const Rect& rect, const Rect& dirtyRect, const Style& style,
-                                                   OpacityType opaScale);
+    static void DrawRectRadiusEqualBorder(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                          const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusSmallThanBorder(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                              const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusBiggerThanBorder(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                               const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusWithoutBorderCon1(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusWithoutBorderCon2(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusWithoutBorderCon3(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusWithoutBorderCon4(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusBiggerThanBorderCon1(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                   const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusBiggerThanBorderCon2(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                   const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusBiggerThanBorderCon3(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                   const Style& style, OpacityType opaScale);
+
+    static void DrawRectRadiusBiggerThanBorderCon4(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
+                                                   const Style& style, OpacityType opaScale);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_DRAW_RECT_H

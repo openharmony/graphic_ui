@@ -157,7 +157,7 @@ public:
     }
 
     /**
-     * @fn  virtual void UICheckBox::OnDraw(const Rect& invalidatedArea) override;
+     * @fn  virtual void UICheckBox::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
      *
      * @brief   Executes the draw action
      *          Ondraw invokes the rendering function provided by the underlying layer to draw pictures
@@ -165,7 +165,7 @@ public:
      *
      * @param [in] invalidatedArea The invalidated area.
      */
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @fn  virtual void UICheckBox::OnClickEvent(const ClickEvent& event) override;
@@ -224,8 +224,16 @@ public:
 protected:
     virtual void ReverseState();
     virtual void CalculateSize();
-    void SelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
-    void UnSelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth);
+    void SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                      Rect rect,
+                                      Rect trunc,
+                                      int16_t borderRadius,
+                                      int16_t rectLineWidth);
+    void UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                        Rect rect,
+                                        Rect trunc,
+                                        int16_t borderRadius,
+                                        int16_t rectLineWidth);
 #if DEFAULT_ANIMATION
     virtual void ResetCallback();
     void Callback(UIView* view) override;

@@ -15,6 +15,8 @@
 
 #include "ui_test_view_bitmap.h"
 
+#include <cstring>
+
 #include "common/screen.h"
 #include "components/ui_label_button.h"
 #include "test_resource_config.h"
@@ -22,14 +24,32 @@
 namespace OHOS {
 class ViewBitmapListener : public UIView::OnClickListener {
 public:
-    ViewBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img) {}
-    virtual ~ViewBitmapListener() {}
+    ViewBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img)
+    {
+        memset(&info_, 0, sizeof(ImageInfo));
+        if ((img != nullptr) && (container != nullptr)) {
+            container->Add(img);
+            img->SetVisible(false);
+        }
+    }
+    virtual ~ViewBitmapListener()
+    {
+        if (info_.data != nullptr) {
+            ImageCacheFree(info_);
+        }
+    }
+
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
-        ImageInfo info;
-        view.GetBitmap(info);
-        img_->SetSrc(&info);
-        container_->Add(img_);
+        if (img_ == nullptr) {
+            return false;
+        }
+        if (info_.data != nullptr) {
+            ImageCacheFree(info_);
+        }
+        view.GetBitmap(info_);
+        img_->SetVisible(true);
+        img_->SetSrc(&info_);
         img_->Invalidate();
         return false;
     }
@@ -37,27 +57,46 @@ public:
 private:
     UIViewGroup* container_;
     UIImageView* img_;
+    ImageInfo info_;
 };
 
 class ScreenBitmapListener : public UIView::OnClickListener {
 public:
-    ScreenBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img) {}
-    virtual ~ScreenBitmapListener() {}
+    ScreenBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img)
+    {
+        memset(&info_, 0, sizeof(ImageInfo));
+        if ((img != nullptr) && (container != nullptr)) {
+            container->Add(img);
+            img->SetVisible(false);
+        }
+    }
+    virtual ~ScreenBitmapListener()
+    {
+        if (info_.data != nullptr) {
+            ImageCacheFree(info_);
+        }
+    }
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
-        ImageInfo info;
-        if (Screen::GetInstance().GetCurrentScreenBitmap(info)) {
+        if (img_ == nullptr) {
             return false;
         }
-        img_->SetSrc(&info);
-        container_->Add(img_);
-        container_->Invalidate();
+        if (info_.data != nullptr) {
+            ImageCacheFree(info_);
+        }
+        if (!Screen::GetInstance().GetCurrentScreenBitmap(info_)) {
+            return false;
+        }
+        img_->SetVisible(true);
+        img_->SetSrc(&info_);
+        img_->Invalidate();
         return false;
     }
 
 private:
     UIViewGroup* container_;
     UIImageView* img_;
+    ImageInfo info_;
 };
 
 void UITestViewBitmap::SetUp()
@@ -97,6 +136,9 @@ void UITestViewBitmap::TearDown()
     }
     DeleteChildren(container_);
     container_ = nullptr;
+
+    viewBitmap_ = nullptr;
+    screenBitmap_ = nullptr;
 }
 
 const UIView* UITestViewBitmap::GetTestView()
