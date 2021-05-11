@@ -16,6 +16,7 @@
 #include "ui_test_view_scale_rotate.h"
 #include "common/screen.h"
 #include "components/ui_label.h"
+#include "core/render_manager.h"
 #include "test_resource_config.h"
 
 namespace OHOS {
@@ -147,7 +148,6 @@ void UITestViewScaleRotate::UIKit_View_Scale_Rotate_Test_UIBoxProgress_004()
     UIViewGroup* group = new UIViewGroup();
     group->SetPosition(0, 0, GROUP_WIDHT, GROUP_HEIGHT);
     list_->Add(group);
-    boxProgress_ = new UIBoxProgress();
 
     boxProgress_ = new UIBoxProgress();
     boxProgress_->EnableBackground(true);

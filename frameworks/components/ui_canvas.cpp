@@ -16,10 +16,8 @@
 #include "components/ui_canvas.h"
 #include "common/image.h"
 #include "draw/draw_arc.h"
-#include "draw/draw_curve.h"
 #include "draw/draw_image.h"
-#include "draw/draw_line.h"
-#include "draw/draw_rect.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
@@ -450,10 +448,10 @@ void UICanvas::DrawPath(const Paint& paint)
     Invalidate();
 }
 
-void UICanvas::OnDraw(const Rect& invalidatedArea)
+void UICanvas::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     Rect rect = GetOrigRect();
-    DrawRect::Draw(rect, invalidatedArea, *style_, opaScale_);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, invalidatedArea, *style_, opaScale_);
 
     void* param = nullptr;
     ListNode<DrawCmd>* curDraw = drawCmdList_.Begin();
@@ -462,7 +460,7 @@ void UICanvas::OnDraw(const Rect& invalidatedArea)
     if (trunc.Intersect(trunc, coords)) {
         for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
             param = curDraw->data_.param;
-            curDraw->data_.DrawGraphics(param, curDraw->data_.paint, rect, trunc, *style_);
+            curDraw->data_.DrawGraphics(gfxDstBuffer, param, curDraw->data_.paint, rect, trunc, *style_);
         }
     }
 }
@@ -473,7 +471,8 @@ void UICanvas::GetAbsolutePosition(const Point& prePoint, const Rect& rect, cons
     point.y = prePoint.y + rect.GetTop() + style.paddingTop_ + style.borderWidth_;
 }
 
-void UICanvas::DoDrawLine(void* param,
+void UICanvas::DoDrawLine(BufferInfo& gfxDstBuffer,
+                          void* param,
                           const Paint& paint,
                           const Rect& rect,
                           const Rect& invalidatedArea,
@@ -488,10 +487,12 @@ void UICanvas::DoDrawLine(void* param,
     GetAbsolutePosition(lineParam->start, rect, style, start);
     GetAbsolutePosition(lineParam->end, rect, style, end);
 
-    DrawLine::Draw(start, end, invalidatedArea, paint.GetStrokeWidth(), paint.GetStrokeColor(), paint.GetOpacity());
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, paint.GetStrokeWidth(),
+                                           paint.GetStrokeColor(), paint.GetOpacity());
 }
 
-void UICanvas::DoDrawCurve(void* param,
+void UICanvas::DoDrawCurve(BufferInfo& gfxDstBuffer,
+                           void* param,
                            const Paint& paint,
                            const Rect& rect,
                            const Rect& invalidatedArea,
@@ -510,11 +511,12 @@ void UICanvas::DoDrawCurve(void* param,
     GetAbsolutePosition(curveParam->control1, rect, style, control1);
     GetAbsolutePosition(curveParam->control2, rect, style, control2);
 
-    DrawCurve::DrawCubicBezier(start, control1, control2, end, invalidatedArea, paint.GetStrokeWidth(),
-                               paint.GetStrokeColor(), paint.GetOpacity());
+    BaseGfxEngine::GetInstance()->DrawCubicBezier(gfxDstBuffer, start, control1, control2, end, invalidatedArea,
+                                                  paint.GetStrokeWidth(), paint.GetStrokeColor(), paint.GetOpacity());
 }
 
-void UICanvas::DoDrawRect(void* param,
+void UICanvas::DoDrawRect(BufferInfo& gfxDstBuffer,
+                          void* param,
                           const Paint& paint,
                           const Rect& rect,
                           const Rect& invalidatedArea,
@@ -540,32 +542,33 @@ void UICanvas::DoDrawRect(void* param,
         coords.SetPosition(x, y);
         coords.SetHeight(rectParam->height + lineWidth);
         coords.SetWidth(rectParam->width + lineWidth);
-        DrawRect::Draw(coords, invalidatedArea, drawStyle, OPA_OPAQUE);
+        BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, coords, invalidatedArea, drawStyle, OPA_OPAQUE);
         return;
     }
 
     coords.SetPosition(x, y);
     coords.SetHeight(lineWidth);
     coords.SetWidth(rectParam->width);
-    DrawRect::Draw(coords, invalidatedArea, drawStyle, OPA_OPAQUE);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, coords, invalidatedArea, drawStyle, OPA_OPAQUE);
 
     coords.SetPosition(x + rectParam->width, y);
     coords.SetHeight(rectParam->height);
     coords.SetWidth(lineWidth);
-    DrawRect::Draw(coords, invalidatedArea, drawStyle, OPA_OPAQUE);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, coords, invalidatedArea, drawStyle, OPA_OPAQUE);
 
     coords.SetPosition(x, y + lineWidth);
     coords.SetHeight(rectParam->height);
     coords.SetWidth(lineWidth);
-    DrawRect::Draw(coords, invalidatedArea, drawStyle, OPA_OPAQUE);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, coords, invalidatedArea, drawStyle, OPA_OPAQUE);
 
     coords.SetPosition(x + lineWidth, y + rectParam->height);
     coords.SetHeight(lineWidth);
     coords.SetWidth(rectParam->width);
-    DrawRect::Draw(coords, invalidatedArea, drawStyle, OPA_OPAQUE);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, coords, invalidatedArea, drawStyle, OPA_OPAQUE);
 }
 
-void UICanvas::DoFillRect(void* param,
+void UICanvas::DoFillRect(BufferInfo& gfxDstBuffer,
+                          void* param,
                           const Paint& paint,
                           const Rect& rect,
                           const Rect& invalidatedArea,
@@ -592,10 +595,11 @@ void UICanvas::DoFillRect(void* param,
     drawStyle.bgColor_ = paint.GetFillColor();
     drawStyle.bgOpa_ = paint.GetOpacity();
     drawStyle.borderRadius_ = 0;
-    DrawRect::Draw(coords, invalidatedArea, drawStyle, OPA_OPAQUE);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, coords, invalidatedArea, drawStyle, OPA_OPAQUE);
 }
 
-void UICanvas::DoDrawCircle(void* param,
+void UICanvas::DoDrawCircle(BufferInfo& gfxDstBuffer,
+                            void* param,
                             const Paint& paint,
                             const Rect& rect,
                             const Rect& invalidatedArea,
@@ -620,18 +624,21 @@ void UICanvas::DoDrawCircle(void* param,
         arcInfo.radius = circleParam->radius - halfLineWidth;
         drawStyle.lineWidth_ = arcInfo.radius;
         drawStyle.lineColor_ = paint.GetFillColor();
-        DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
+                                              CapType::CAP_NONE);
     }
 
     if (enableStroke) {
         arcInfo.radius = circleParam->radius + halfLineWidth - 1;
         drawStyle.lineWidth_ = static_cast<int16_t>(paint.GetStrokeWidth());
         drawStyle.lineColor_ = paint.GetStrokeColor();
-        DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
+                                              CapType::CAP_NONE);
     }
 }
 
-void UICanvas::DoDrawArc(void* param,
+void UICanvas::DoDrawArc(BufferInfo& gfxDstBuffer,
+                         void* param,
                          const Paint& paint,
                          const Rect& rect,
                          const Rect& invalidatedArea,
@@ -653,10 +660,12 @@ void UICanvas::DoDrawArc(void* param,
     arcInfo.radius = arcParam->radius + ((paint.GetStrokeWidth() + 1) >> 1);
 
     GetAbsolutePosition(arcParam->center, rect, style, arcInfo.center);
-    DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE, CapType::CAP_NONE);
+    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
+                                          CapType::CAP_NONE);
 }
 
-void UICanvas::DoDrawImage(void* param,
+void UICanvas::DoDrawImage(BufferInfo& gfxDstBuffer,
+                           void* param,
                            const Paint& paint,
                            const Rect& rect,
                            const Rect& invalidatedArea,
@@ -678,10 +687,12 @@ void UICanvas::DoDrawImage(void* param,
     cordsTmp.SetPosition(start.x, start.y);
     cordsTmp.SetHeight(imageParam->height);
     cordsTmp.SetWidth(imageParam->width);
-    DrawImage::DrawCommon(cordsTmp, invalidatedArea, imageParam->image->GetPath(), style, paint.GetOpacity());
+    DrawImage::DrawCommon(gfxDstBuffer,cordsTmp, invalidatedArea,
+                          imageParam->image->GetPath(), style, paint.GetOpacity());
 }
 
-void UICanvas::DoDrawLabel(void* param,
+void UICanvas::DoDrawLabel(BufferInfo& gfxDstBuffer,
+                           void* param,
                            const Paint& paint,
                            const Rect& rect,
                            const Rect& invalidatedArea,
@@ -695,11 +706,14 @@ void UICanvas::DoDrawLabel(void* param,
     Point start;
     GetAbsolutePosition({startPos.x, startPos.y}, rect, style, start);
     label->SetPosition(start.x, start.y);
-    label->OnDraw(invalidatedArea);
+    label->OnDraw(gfxDstBuffer, invalidatedArea);
     label->SetPosition(startPos.x, startPos.y);
 }
 
-void UICanvas::DoDrawLineJoin(const Point& center, const Rect& invalidatedArea, const Paint& paint)
+void UICanvas::DoDrawLineJoin(BufferInfo& gfxDstBuffer,
+                              const Point& center,
+                              const Rect& invalidatedArea,
+                              const Paint& paint)
 {
     ArcInfo arcinfo = {{0}};
     arcinfo.center = center;
@@ -712,10 +726,12 @@ void UICanvas::DoDrawLineJoin(const Point& center, const Rect& invalidatedArea, 
     style.lineColor_ = paint.GetStrokeColor();
     style.lineWidth_ = static_cast<int16_t>(paint.GetStrokeWidth());
     style.lineOpa_ = OPA_OPAQUE;
-    DrawArc::GetInstance()->Draw(arcinfo, invalidatedArea, style, OPA_OPAQUE, CapType::CAP_NONE);
+    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcinfo, invalidatedArea, style, OPA_OPAQUE,
+                                          CapType::CAP_NONE);
 }
 
-void UICanvas::DoDrawPath(void* param,
+void UICanvas::DoDrawPath(BufferInfo& gfxDstBuffer,
+                          void* param,
                           const Paint& paint,
                           const Rect& rect,
                           const Rect& invalidatedArea,
@@ -750,9 +766,10 @@ void UICanvas::DoDrawPath(void* param,
 
                 GetAbsolutePosition(start, rect, style, start);
                 GetAbsolutePosition(end, rect, style, end);
-                DrawLine::Draw(start, end, invalidatedArea, paint.GetStrokeWidth(), paint.GetStrokeColor(), OPA_OPAQUE);
+                BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                                       paint.GetStrokeWidth(), paint.GetStrokeColor(), OPA_OPAQUE);
                 if ((pathEnd.x == start.x) && (pathEnd.y == start.y)) {
-                    DoDrawLineJoin(start, invalidatedArea, paint);
+                    DoDrawLineJoin(gfxDstBuffer, start, invalidatedArea, paint);
                 }
                 pathEnd = end;
                 break;
@@ -769,9 +786,10 @@ void UICanvas::DoDrawPath(void* param,
                 arcInfo.radius = arcIter->data_.radius + ((paint.GetStrokeWidth() + 1) >> 1);
 
                 GetAbsolutePosition(arcIter->data_.center, rect, style, arcInfo.center);
-                DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
+                                                      CapType::CAP_NONE);
                 if (pointIter != path->points_.Begin()) {
-                    DoDrawLineJoin(pathEnd, invalidatedArea, paint);
+                    DoDrawLineJoin(gfxDstBuffer, pathEnd, invalidatedArea, paint);
                 }
 
                 GetAbsolutePosition(pointIter->data_, rect, style, pathEnd);
@@ -785,16 +803,16 @@ void UICanvas::DoDrawPath(void* param,
                 GetAbsolutePosition(start, rect, style, start);
                 GetAbsolutePosition(end, rect, style, end);
                 if ((start.x != end.x) || (start.y != end.y)) {
-                    DrawLine::Draw(start, end, invalidatedArea, paint.GetStrokeWidth(), paint.GetStrokeColor(),
-                        OPA_OPAQUE);
+                    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                                           paint.GetStrokeWidth(), paint.GetStrokeColor(), OPA_OPAQUE);
                     if ((pathEnd.x == start.x) && (pathEnd.y == start.y)) {
-                        DoDrawLineJoin(start, invalidatedArea, paint);
+                        DoDrawLineJoin(gfxDstBuffer, start, invalidatedArea, paint);
                     }
                     pathEnd = end;
                 }
 
                 if ((pathEnd.x == end.x) && (pathEnd.y == end.y)) {
-                    DoDrawLineJoin(end, invalidatedArea, paint);
+                    DoDrawLineJoin(gfxDstBuffer, end, invalidatedArea, paint);
                 }
                 pointIter = pointIter->next_;
                 break;

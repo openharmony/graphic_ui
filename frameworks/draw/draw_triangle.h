@@ -18,11 +18,13 @@
 
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
 class DrawTriangle : public HeapBase {
 public:
-    static void Draw(const Point* points, uint8_t count, const Rect& mask, const ColorType& color, OpacityType opa);
+    static void Draw(BufferInfo& gfxDstBuffer, const Point* points, uint8_t count,
+                     const Rect& mask, const ColorType& color, OpacityType opa);
 
     struct Edge {
         Point curPoint;

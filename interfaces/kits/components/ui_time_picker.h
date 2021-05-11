@@ -270,7 +270,7 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        ~SelectedListener() {}
+        virtual ~SelectedListener() {}
 
         /**
          * @brief Called when an item is selected after sliding stops. This function is implemented by applications.

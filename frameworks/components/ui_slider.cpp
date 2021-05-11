@@ -18,7 +18,7 @@
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
 #include "draw/draw_image.h"
-#include "draw/draw_rect.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 #include "imgdecode/cache_manager.h"
 #include "themes/theme_manager.h"
@@ -125,7 +125,7 @@ void UISlider::SetImage(const char* backgroundImage, const char* foregroundImage
 }
 
 #if ENABLE_SLIDER_KNOB
-void UISlider::DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect)
+void UISlider::DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, const Rect& foregroundRect)
 {
     int16_t halfKnobWidth = GetKnobWidth() >> 1;
     int16_t offset;
@@ -159,7 +159,7 @@ void UISlider::DrawKnob(const Rect& invalidatedArea, const Rect& foregroundRect)
             GRAPHIC_LOGW("UISlider::DrawKnob Direction error!\n");
         }
     }
-    DrawValidRect(knobImage_, knobBar, invalidatedArea, *knobStyle_, 0);
+    DrawValidRect(gfxDstBuffer, knobImage_, knobBar, invalidatedArea, *knobStyle_, 0);
 }
 
 bool UISlider::InitImage()
@@ -203,7 +203,7 @@ bool UISlider::InitImage()
     return true;
 }
 
-void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
+void UISlider::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Rect& coords)
 {
     Point startPoint;
     int16_t progressWidth;
@@ -266,22 +266,22 @@ void UISlider::DrawForeground(const Rect& invalidatedArea, Rect& coords)
     }
 
     if (rect.Intersect(rect, invalidatedArea)) {
-        DrawValidRect(foregroundImage_, coords, rect, *foregroundStyle_, radius);
+        DrawValidRect(gfxDstBuffer, foregroundImage_, coords, rect, *foregroundStyle_, radius);
     }
 }
 #endif
 
-void UISlider::OnDraw(const Rect& invalidatedArea)
+void UISlider::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    DrawRect::Draw(GetOrigRect(), invalidatedArea, *style_, opaScale_);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *style_, opaScale_);
 
     Rect trunc(invalidatedArea);
     if (trunc.Intersect(trunc, GetOrigRect())) {
-        DrawBackground(trunc);
+        DrawBackground(gfxDstBuffer, trunc);
         Rect foregroundRect;
-        DrawForeground(trunc, foregroundRect);
+        DrawForeground(gfxDstBuffer, trunc, foregroundRect);
 #if ENABLE_SLIDER_KNOB
-        DrawKnob(trunc, foregroundRect);
+        DrawKnob(gfxDstBuffer, trunc, foregroundRect);
 #endif
     }
 }

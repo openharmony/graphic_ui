@@ -39,6 +39,7 @@
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_types.h"
 #include "gfx_utils/style.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
 /**
@@ -247,7 +248,8 @@ public:
 
     void ReMeasureTextWidthInEllipsisMode(const Rect& textRect, const Style& style, uint16_t ellipsisIndex);
 
-    void OnDraw(const Rect& invalidatedArea,
+    void OnDraw(BufferInfo& gfxDstBuffer,
+                const Rect& invalidatedArea,
                 const Rect& viewOrigRect,
                 const Rect& textRect,
                 int16_t offsetX,
@@ -341,7 +343,8 @@ protected:
 
     virtual uint16_t GetLetterIndexByPosition(const Rect& textRect, const Style& style, const Point& pos);
 
-    virtual void Draw(const Rect& mask,
+    virtual void Draw(BufferInfo& gfxDstBuffer,
+                      const Rect& mask,
                       const Rect& coords,
                       const Style& style,
                       int16_t offsetX,

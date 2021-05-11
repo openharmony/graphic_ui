@@ -162,17 +162,10 @@ TestEventBubbleView* EventBubbleTest::longPressView_ = nullptr;
 TestEventBubbleView* EventBubbleTest::keyView_ = nullptr;
 TestEventBubbleView* EventBubbleTest::unTouchView_ = nullptr;
 
-static void InitHal()
-{
-    ScreenDevice* display = new ScreenDevice();
-    ScreenDeviceProxy::GetInstance()->SetDevice(display);
-    ScreenDeviceProxy::GetInstance()->SetScreenSize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
-}
 
 void EventBubbleTest::SetUpTestCase(void)
 {
     GraphicStartUp::Init();
-    InitHal();
     TestApp();
 }
 

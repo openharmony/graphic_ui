@@ -14,8 +14,8 @@
  */
 
 #include "components/ui_box_progress.h"
-#include "draw/draw_arc.h"
-#include "draw/draw_rect.h"
+#include "draw/draw_utils.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
@@ -25,7 +25,8 @@ UIBoxProgress::UIBoxProgress()
     SetDirection(Direction::DIR_LEFT_TO_RIGHT);
 }
 
-void UIBoxProgress::DrawValidRect(const Image* image,
+void UIBoxProgress::DrawValidRect(BufferInfo& gfxDstBuffer,
+                                  const Image* image,
                                   const Rect& rect,
                                   const Rect& invalidatedArea,
                                   const Style& style,
@@ -57,18 +58,19 @@ void UIBoxProgress::DrawValidRect(const Image* image,
         cordsTmp.SetHeight(header.height);
         cordsTmp.SetWidth(header.width);
         if (area.Intersect(area, invalidatedArea)) {
-            image->DrawImage(cordsTmp, area, style, opaScale_);
+            image->DrawImage(gfxDstBuffer, cordsTmp, area, style, opaScale_);
         }
     } else {
-        DrawRect::Draw(rect, invalidatedArea, style, opaScale_);
+        BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, invalidatedArea, style, opaScale_);
     }
 
     if (style.lineCap_ == CapType::CAP_ROUND) {
-        DrawRoundCap(image, {cordsTmp.GetX(), cordsTmp.GetY()}, rect, invalidatedArea, radius, style);
+        DrawRoundCap(gfxDstBuffer, image, {cordsTmp.GetX(), cordsTmp.GetY()}, rect, invalidatedArea, radius, style);
     }
 }
 
-void UIBoxProgress::DrawRoundCap(const Image* image,
+void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
+                                 const Image* image,
                                  const Point& imgPos,
                                  const Rect& rect,
                                  const Rect& invalidatedArea,
@@ -129,22 +131,26 @@ void UIBoxProgress::DrawRoundCap(const Image* image,
         arcInfo.center = leftTop;
         arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
         arcInfo.endAngle = 0;
-        DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
 
         arcInfo.center = leftBottom;
         arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
         arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
-        DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
 
         arcInfo.center = rightTop;
         arcInfo.startAngle = 0;
         arcInfo.endAngle = QUARTER_IN_DEGREE;
-        DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
 
         arcInfo.center = rightBottom;
         arcInfo.startAngle = QUARTER_IN_DEGREE;
         arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
-        DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                              CapType::CAP_NONE);
     } else {
         switch (direction_) {
             case Direction::DIR_LEFT_TO_RIGHT:
@@ -152,12 +158,14 @@ void UIBoxProgress::DrawRoundCap(const Image* image,
                 arcInfo.center = leftTop;
                 arcInfo.startAngle = SEMICIRCLE_IN_DEGREE;
                 arcInfo.endAngle = 0;
-                DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
 
                 arcInfo.center = leftBottom;
                 arcInfo.startAngle = 0;
                 arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
-                DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
                 break;
             }
 
@@ -166,12 +174,14 @@ void UIBoxProgress::DrawRoundCap(const Image* image,
                 arcInfo.center = leftTop;
                 arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
                 arcInfo.endAngle = QUARTER_IN_DEGREE;
-                DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
 
                 arcInfo.center = leftBottom;
                 arcInfo.startAngle = QUARTER_IN_DEGREE;
                 arcInfo.endAngle = THREE_QUARTER_IN_DEGREE;
-                DrawArc::GetInstance()->Draw(arcInfo, invalidatedArea, capStyle, opaScale_, CapType::CAP_NONE);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
+                                                      CapType::CAP_NONE);
                 break;
             }
             default:
@@ -217,7 +227,7 @@ void UIBoxProgress::GetBackgroundParam(Point& startPoint,
     }
 }
 
-void UIBoxProgress::DrawBackground(const Rect& invalidatedArea)
+void UIBoxProgress::DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     Point startPoint;
     int16_t progressWidth;
@@ -227,10 +237,10 @@ void UIBoxProgress::DrawBackground(const Rect& invalidatedArea)
 
     Rect coords(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1, startPoint.y + progressHeight - 1);
 
-    DrawValidRect(backgroundImage_, coords, invalidatedArea, *backgroundStyle_, radius);
+    DrawValidRect(gfxDstBuffer, backgroundImage_, coords, invalidatedArea, *backgroundStyle_, radius);
 }
 
-void UIBoxProgress::DrawForeground(const Rect& invalidatedArea, Rect& coords)
+void UIBoxProgress::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Rect& coords)
 {
     Point startPoint;
     int16_t progressWidth;
@@ -268,19 +278,19 @@ void UIBoxProgress::DrawForeground(const Rect& invalidatedArea, Rect& coords)
         }
     }
 
-    DrawValidRect(foregroundImage_, coords, invalidatedArea, *foregroundStyle_, radius);
+    DrawValidRect(gfxDstBuffer, foregroundImage_, coords, invalidatedArea, *foregroundStyle_, radius);
 }
 
-void UIBoxProgress::OnDraw(const Rect& invalidatedArea)
+void UIBoxProgress::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    UIView::OnDraw(invalidatedArea);
+    UIView::OnDraw(gfxDstBuffer, invalidatedArea);
     if (enableBackground_) {
-        DrawBackground(invalidatedArea);
+        DrawBackground(gfxDstBuffer, invalidatedArea);
     }
 
     if ((lastValue_ - rangeMin_ != 0) || (foregroundStyle_->lineCap_ == CapType::CAP_ROUND)) {
         Rect coords;
-        DrawForeground(invalidatedArea, coords);
+        DrawForeground(gfxDstBuffer, invalidatedArea, coords);
     }
 }
 } // namespace OHOS

@@ -136,6 +136,9 @@ void UITestViewBitmap::TearDown()
     }
     DeleteChildren(container_);
     container_ = nullptr;
+
+    viewBitmap_ = nullptr;
+    screenBitmap_ = nullptr;
 }
 
 const UIView* UITestViewBitmap::GetTestView()

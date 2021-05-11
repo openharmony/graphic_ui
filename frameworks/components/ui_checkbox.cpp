@@ -15,10 +15,8 @@
 
 #include "components/ui_checkbox.h"
 #include "default_resource/check_box_res.h"
-#include "draw/draw_arc.h"
 #include "draw/draw_image.h"
-#include "draw/draw_line.h"
-#include "draw/draw_rect.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "imgdecode/cache_manager.h"
 
 namespace OHOS {
@@ -120,7 +118,11 @@ void UICheckBox::CalculateSize()
     borderWidth_ =  DEFAULT_BORDER_WIDTH * minValue / DEFAULT_HOT_WIDTH;
 }
 
-void UICheckBox::SelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth)
+void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                              Rect rect,
+                                              Rect trunc,
+                                              int16_t borderRadius,
+                                              int16_t rectLineWidth)
 {
     if (backgroundOpacity_ == 0) {
         return;
@@ -129,7 +131,7 @@ void UICheckBox::SelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t bor
     styleSelect.borderRadius_ = borderRadius;
     styleSelect.bgColor_ = Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE);
     styleSelect.bgOpa_ = backgroundOpacity_;
-    DrawRect::Draw(rect, trunc, styleSelect, opaScale_);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, trunc, styleSelect, opaScale_);
     int16_t dx = borderWidth_ * DEFAULT_COEFFICIENT_START_DX;
     int16_t dy = borderWidth_ * DEFAULT_COEFFICIENT_START_DY;
     Point start = { static_cast<int16_t>(rect.GetX() + dx), static_cast<int16_t>(rect.GetY() + dy) };
@@ -153,14 +155,16 @@ void UICheckBox::SelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t bor
     styleSelect.lineColor_ = Color::White();
     styleSelect.lineOpa_ = backgroundOpacity_;
     uint8_t opa = DrawUtils::GetMixOpacity(opaScale_, backgroundOpacity_);
-    DrawArc::GetInstance()->Draw(arcInfoLeft, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
-    DrawLine::Draw(start, mid, trunc, rectLineWidth * 2, Color::White(), opa); // 2 : double
-    DrawArc::GetInstance()->Draw(arcInfoMid, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
-    DrawLine::Draw(mid, end, trunc, rectLineWidth * 2, Color::White(), opa); // 2 : double
-    DrawArc::GetInstance()->Draw(arcInfoRight, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
+    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, mid, trunc, rectLineWidth * 2, Color::White(),
+                                           opa); // 2 : double
+    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoMid, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, mid, end, trunc, rectLineWidth * 2, Color::White(),
+                                           opa); // 2 : double
+    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
 }
 
-void UICheckBox::UnSelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth)
+void UICheckBox::UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer, Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth)
 {
     Rect contentRect  = GetContentRect();
     Style styleUnSelect  = StyleDefault::GetBackgroundTransparentStyle();
@@ -168,7 +172,7 @@ void UICheckBox::UnSelectedStateSoftwareDrawing(Rect rect, Rect trunc, int16_t b
     styleUnSelect.borderRadius_ = borderRadius;
     styleUnSelect.borderColor_ = Color::White();
     styleUnSelect.borderOpa_ = DEFAULT_UNSELECT_BG_OPA;
-    DrawRect::Draw(rect, trunc, styleUnSelect, opaScale_);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, trunc, styleUnSelect, opaScale_);
 }
 
 #if DEFAULT_ANIMATION
@@ -196,7 +200,7 @@ void UICheckBox::OnStop(UIView& view)
 }
 #endif
 
-void UICheckBox::OnDraw(const Rect& invalidatedArea)
+void UICheckBox::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     Rect trunc = invalidatedArea;
     if ((image_[SELECTED].GetSrcType() != IMG_SRC_UNKNOWN) && (image_[UNSELECTED].GetSrcType() != IMG_SRC_UNKNOWN)) {
@@ -207,13 +211,13 @@ void UICheckBox::OnDraw(const Rect& invalidatedArea)
         Rect coords = GetContentRect();
         coords.SetWidth(imgWidth);
         coords.SetHeight(imgHeight);
-        DrawRect::Draw(GetRect(), invalidatedArea, *style_, opaScale_);
+        BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opaScale_);
         int16_t offsetLeft = (GetWidth() - imgWidth) / 2; // 2 : half
         int16_t offsetTop = (GetHeight() - imgHeight) / 2; // 2 : half
         coords.SetX(coords.GetX() + offsetLeft);
         coords.SetY(coords.GetY() + offsetTop);
         if (trunc.Intersect(trunc, coords)) {
-            image_[state_].DrawImage(coords, trunc, *style_, opaScale_);
+            image_[state_].DrawImage(gfxDstBuffer, coords, trunc, *style_, opaScale_);
         }
     } else {
         Rect contentRect = GetContentRect();
@@ -224,18 +228,18 @@ void UICheckBox::OnDraw(const Rect& invalidatedArea)
         CalculateSize();
         int16_t rectLineWidth = borderWidth_ / DEFAULT_BORDER_WIDTH;
         int16_t borderRadius  = rectLineWidth * DEFAULT_RATIO_BORDER_RADIUS_LINE_WIDTH;
-        DrawRect::Draw(GetRect(), invalidatedArea, *style_, opaScale_);
+        BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opaScale_);
         int16_t x = contentRect.GetX() + (width_ - borderWidth_) / 2; // 2: half
         int16_t y = contentRect.GetY() + (height_ - borderWidth_) / 2; // 2: half
         Rect rect(x, y, x + borderWidth_,  y + borderWidth_);
 #if DEFAULT_ANIMATION
-        UnSelectedStateSoftwareDrawing(rect, trunc, borderRadius, rectLineWidth);
-        SelectedStateSoftwareDrawing(rect, trunc, borderRadius, rectLineWidth);
+        UnSelectedStateSoftwareDrawing(gfxDstBuffer, rect, trunc, borderRadius, rectLineWidth);
+        SelectedStateSoftwareDrawing(gfxDstBuffer, rect, trunc, borderRadius, rectLineWidth);
 #else
         if (state_ == SELECTED) {
-            SelectedStateSoftwareDrawing(rect, trunc, borderRadius, rectLineWidth);
+            SelectedStateSoftwareDrawing(gfxDstBuffer, rect, trunc, borderRadius, rectLineWidth);
         } else {
-            UnSelectedStateSoftwareDrawing(rect, trunc, borderRadius, rectLineWidth);
+            UnSelectedStateSoftwareDrawing(gfxDstBuffer, rect, trunc, borderRadius, rectLineWidth);
         }
 #endif
     }

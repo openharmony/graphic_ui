@@ -160,10 +160,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
 private:
-    void Draw(const Rect& invalidatedArea);
+    void Draw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
 
     Surface* surface_;
     const std::string REGION_POSITION_X = "region_position_x";

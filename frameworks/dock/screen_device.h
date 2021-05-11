@@ -36,9 +36,12 @@ struct AllocationInfo {
 };
 #endif
 
+#ifndef TRANSFORMOPTION
+#define TRANSFORMOPTION
 struct TransformOption {
     TransformAlgorithm algorithm;
 };
+#endif
 
 /** @brief A semaphore for display buffer flushing. */
 class FlushSem : public HeapBase {
