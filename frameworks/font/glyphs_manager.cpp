@@ -14,6 +14,7 @@
  */
 
 #include "font/glyphs_manager.h"
+#include "font/ui_font_builder.h"
 #include "gfx_utils/file.h"
 #include "securec.h"
 
@@ -43,7 +44,7 @@ GlyphsManager::GlyphsManager()
       isFileSet_(false),
       isFontIdSet_(false)
 {
-    fontId_ = GetBitmapFontIdMax();
+    fontId_ = UIFontBuilder::GetInstance()->GetBitmapFontIdMax();
 }
 GlyphsManager::~GlyphsManager() {}
 
@@ -179,7 +180,7 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
     if (strncmp(binHeader_.fontMagic, FONT_MAGIC_NUMBER, FONT_MAGIC_NUM_LEN) != 0) {
         return INVALID_RET_VALUE;
     }
-    if (binHeader_.fontNum > GetBitmapFontIdMax()) {
+    if (binHeader_.fontNum > UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
         return INVALID_RET_VALUE;
     }
 
@@ -211,7 +212,7 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
         isFileSet_ = true;
     }
 
-    fontId_ = GetBitmapFontIdMax();
+    fontId_ = UIFontBuilder::GetInstance()->GetBitmapFontIdMax();
     return ret;
 }
 
@@ -221,7 +222,7 @@ int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
     if (!isFileSet_) {
         return INVALID_RET_VALUE;
     }
-    if (fontId > GetBitmapFontIdMax()) {
+    if (fontId > UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
         return INVALID_RET_VALUE;
     }
     if (fontId_ == fontId) {
@@ -247,7 +248,7 @@ int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
     if (!found) {
         isFontIdSet_ = false;
         curFontHeader_ = nullptr;
-        fontId_ = GetBitmapFontIdMax();
+        fontId_ = UIFontBuilder::GetInstance()->GetBitmapFontIdMax();
         return INVALID_RET_VALUE;
     }
 

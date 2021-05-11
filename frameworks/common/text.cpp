@@ -18,6 +18,7 @@
 #include "draw/draw_label.h"
 #include "font/ui_font.h"
 #include "font/ui_font_adaptor.h"
+#include "font/ui_font_builder.h"
 #include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
@@ -82,7 +83,8 @@ void Text::SetFont(const char* name, uint8_t size)
     }
     if (UIFont::GetInstance()->IsVectorFont()) {
         uint8_t fontId = UIFont::GetInstance()->GetFontId(name);
-        if ((fontId != GetTotalFontId()) && ((fontId_ != fontId) || (fontSize_ != size))) {
+        if ((fontId != UIFontBuilder::GetInstance()->GetTotalFontId()) &&
+            ((fontId_ != fontId) || (fontSize_ != size))) {
             fontId_ = fontId;
             fontSize_ = size;
             needRefresh_ = true;
@@ -127,17 +129,18 @@ void Text::SetFont(const char* name, uint8_t size, char*& destName, uint8_t& des
 
 void Text::SetFontId(uint8_t fontId)
 {
-    if ((fontId >= GetTotalFontId()) || (fontId_ == fontId)) {
+    if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontId_ == fontId)) {
         GRAPHIC_LOGE("Text::SetFontId invalid fontId(%d)", fontId);
         return;
     }
-    UITextLanguageFontParam* fontParam = GetTextLangFontsTable(fontId);
+    UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
     if (fontParam == nullptr) {
         return;
     }
     if (UIFont::GetInstance()->IsVectorFont()) {
         uint8_t fontId = UIFont::GetInstance()->GetFontId(fontParam->ttfName);
-        if ((fontId != GetTotalFontId()) && ((fontId_ != fontId) || (fontSize_ != fontParam->size))) {
+        if ((fontId != UIFontBuilder::GetInstance()->GetTotalFontId()) && ((fontId_ != fontId) ||
+            (fontSize_ != fontParam->size))) {
             fontId_ = fontId;
             fontSize_ = fontParam->size;
             needRefresh_ = true;

@@ -30,7 +30,7 @@ UIMultiFontManager::UIMultiFontManager()
       bengaliTtfId_(0), topIndex_(0)
 {
     const UITextLanguageFontParam* fontParam = nullptr;
-    uint8_t totalFontId = GetTotalFontId();
+    uint8_t totalFontId = UIFontBuilder::GetInstance()->GetTotalFontId();
     for (uint8_t i = 0; i < totalFontId; i++) {
         fontParam = UIFont::GetInstance()->GetFontInfo(i);
         if (fontParam == nullptr) {
@@ -121,7 +121,7 @@ void UIMultiFontManager::UpdateScript(UITextLanguageFontParam& fonts)
 
 void UIMultiFontManager::ClearSearchFontList()
 {
-    uint8_t totalFontId = GetTotalFontId();
+    uint8_t totalFontId = UIFontBuilder::GetInstance()->GetTotalFontId();
     for (uint8_t index = 0; index < totalFontId; index++) {
         fontIdIndex_[index] = MAX_LIST_NUM;
     }
@@ -136,7 +136,7 @@ void UIMultiFontManager::ClearSearchFontList()
 
 int8_t UIMultiFontManager::SetSearchFontList(uint8_t fontListId, uint8_t *fontIds, uint8_t size)
 {
-    if ((fontListId >= GetTotalFontId()) || (fontIds == nullptr) || (size == 0) ||
+    if ((fontListId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontIds == nullptr) || (size == 0) ||
         (fontIdIndex_ == nullptr) || (topIndex_ >= MAX_LIST_NUM)) {
         return INVALID_RET_VALUE;
     }
@@ -146,7 +146,7 @@ int8_t UIMultiFontManager::SetSearchFontList(uint8_t fontListId, uint8_t *fontId
 
 int8_t UIMultiFontManager::GetSearchFontList(uint8_t fontListId, uint8_t **fontIds)
 {
-    if ((fontListId >= GetTotalFontId()) || (fontIds == nullptr) ||
+    if ((fontListId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontIds == nullptr) ||
         (fontIdIndex_ == nullptr) || (fontIdIndex_[fontListId] >= MAX_LIST_NUM)) {
         return INVALID_RET_VALUE;
     }

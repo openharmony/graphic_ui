@@ -99,7 +99,7 @@ void UITestLabel::UIKit_UILabel_Test_Display_001()
         uiViewGroupFrame->SetStyle(STYLE_BACKGROUND_OPA, 0);
         uiLabel = new UILabel();
         uiLabel->SetText("鸿蒙轻量级图形子系统");
-        uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: font size
+        uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 26); // 26: font size
         uiLabel->SetPosition(0, 141, 280, 336);             // 141: y-coordinate; 280: width; 336: height
         uiViewGroupFrame->Add(uiLabel);
         positionX_ += 336; // 336: x-coordinate
@@ -123,7 +123,7 @@ void UITestLabel::CreateLabels(UIViewGroup* uiViewGroup)
     label1->SetText("字号");
     label1->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
     labelFontSizeBtn1_ = SetUpButton("18 ", 24, 48, uiViewGroup); // 24: x-coordinate; 48: y-coordinate
-    labelFontSizeBtn2_ = SetUpButton("24", 116, 48, uiViewGroup); // 116: x-coordinate; 48: y-coordinate
+    labelFontSizeBtn2_ = SetUpButton("26", 116, 48, uiViewGroup); // 116: x-coordinate; 48: y-coordinate
     labelFontSizeBtn3_ = SetUpButton("30", 208, 48, uiViewGroup); // 208: x-coordinate; 48: y-coordinate
 
     UILabel* label2 = new UILabel();
@@ -210,11 +210,11 @@ void UITestLabel::UIKit_UILabel_Test_Display_003()
 bool UITestLabel::OnClick(UIView& view, const ClickEvent& event)
 {
     uiLabel->Resize(288, 100);                          // 288: width; 100: height
-    uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: font size
+    uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 26); // 26: font size
     if (&view == labelFontSizeBtn1_) {
         uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 18); // 18: font size
     } else if (&view == labelFontSizeBtn2_) {
-        uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: font size
+        uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 26); // 26: font size
     } else if (&view == labelFontSizeBtn3_) {
         uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 30); // 30: font size
     } else if (&view == labelHorAlignBtn1_) {

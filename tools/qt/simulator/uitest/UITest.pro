@@ -42,7 +42,6 @@ SOURCES += \
     ../../../../frameworks/common/task.cpp \
     ../../../../frameworks/common/text.cpp \
     ../../../../frameworks/common/typed_text.cpp \
-    ../../../../frameworks/common/ui_font_header.cpp \
     ../../../../frameworks/components/root_view.cpp \
     ../../../../frameworks/components/text_adapter.cpp \
     ../../../../frameworks/components/ui_abstract_clock.cpp \
@@ -104,6 +103,8 @@ SOURCES += \
     ../../../../frameworks/font/ui_font.cpp \
     ../../../../frameworks/font/ui_font_adaptor.cpp \
     ../../../../frameworks/font/ui_font_allocator.cpp \
+    ../../../../frameworks/font/ui_font_bitmap.cpp \
+    ../../../../frameworks/font/ui_font_builder.cpp \
     ../../../../frameworks/font/ui_font_cache.cpp \
     ../../../../frameworks/font/ui_font_vector.cpp \
     ../../../../frameworks/font/ui_line_break.cpp \
@@ -130,6 +131,7 @@ SOURCES += \
     ../../../../../../../third_party/cJSON/cJSON.c
 
 SOURCES += \
+    ../../../../test/framework/common/ui_text_language.cpp \
     ../../../../test/framework/src/test_case_list_adapter.cpp \
     ../../../../test/framework/src/ui_test_group.cpp \
     ../../../../test/framework/src/test_ability.cpp \
@@ -223,6 +225,7 @@ HEADERS += \
     ../../../../interfaces/innerkits/dock/focus_manager.h \
     ../../../../interfaces/innerkits/dock/rotate_input_device.h \
     ../../../../interfaces/innerkits/dock/vibrator_manager.h \
+    ../../../../interfaces/innerkits/font/ui_font_builder.h \
     ../../../../interfaces/innerkits/engines/gfx/gfx_engine_manager.h \
     ../../../../interfaces/kits/animator/animator.h \
     ../../../../interfaces/kits/animator/easing_equation.h \
@@ -319,6 +322,7 @@ HEADERS += \
     ../../../../../../../tools/developer_tools_lite/graphic_tool/iar_project/config/gpu_2d/graphic_config.h
 
 HEADERS += \
+    ../../../../test/framework/common/ui_text_language.h \
     ../../../../test/framework/include/test_case_list_adapter.h \
     ../../../../test/framework/include/ui_test_app.h \
     ../../../../test/framework/include/test_resource_config.h \
@@ -389,6 +393,7 @@ INCLUDEPATH += \
     ../drivers/indev \
     ../drivers \
     ../../../../frameworks \
+    ../../../../test/framework \
     ../../../../test/framework/include \
     ../../../../test/uitest \
     ../../../../../utils/frameworks/windows \
