@@ -211,7 +211,7 @@ uint32_t UIFontBitmap::GetRamUsedLen(uint32_t textManagerRamUsed, uint32_t langF
     return dynamicFontRamUsed_ + textManagerRamUsed + bitmapRamUsed_ + langFontRamUsed;
 }
 
-int8_t UIFontBitmap::GetDynamicFotBitmap(uint32_t unicode, uint8_t* bitmap)
+int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap)
 {
     return dynamicFont_.GetBitmap(unicode, bitmap);
 }
