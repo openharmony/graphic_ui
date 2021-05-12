@@ -15,7 +15,6 @@
 
 #include "window/window_impl.h"
 #include "core/render_manager.h"
-#include "dock/screen_device_proxy.h"
 #include "gfx_utils/graphic_log.h"
 #include "iwindows_manager.h"
 
@@ -215,14 +214,28 @@ void WindowImpl::UpdateHalDisplayBuffer()
             return;
         }
         surface->Lock((void**)&gfxAlloc_.virAddr, (void**)&gfxAlloc_.phyAddr, &gfxAlloc_.stride);
+
+        BufferInfo* bufferInfo = GetBufferInfo();
+        rootView_->UpdateBufferInfo(bufferInfo);
     }
-    AllocationInfo& gfxAlloc = ScreenDeviceProxy::GetInstance()->GetAllocationInfo();
-    gfxAlloc.phyAddr = gfxAlloc_.phyAddr;
-    gfxAlloc.virAddr = gfxAlloc_.virAddr;
-    gfxAlloc.stride = gfxAlloc_.stride;
-    gfxAlloc.width = config_.rect.GetWidth();
-    gfxAlloc.height = config_.rect.GetHeight();
-    gfxAlloc.pixelFormat = IMAGE_PIXEL_FORMAT_ARGB8888;
-    ScreenDeviceProxy::GetInstance()->SetFramebuffer(gfxAlloc.virAddr, ARGB8888, gfxAlloc.stride / sizeof(uint32_t));
+}
+
+BufferInfo* WindowImpl::GetBufferInfo()
+{
+    static BufferInfo bufferInfo;
+    bufferInfo.virAddr = gfxAlloc_.virAddr;
+    bufferInfo.phyAddr = gfxAlloc_.phyAddr;
+    bufferInfo.width = config_.rect.GetWidth();
+    bufferInfo.height = config_.rect.GetHeight();
+    bufferInfo.mode = ARGB8888;
+    bufferInfo.stride = gfxAlloc_.stride;
+
+    bufferInfo.rect = {
+        0,
+        0,
+        static_cast<int16_t>(bufferInfo.width - 1),
+        static_cast<int16_t>(bufferInfo.height - 1)
+    };
+    return &bufferInfo;
 }
 } // namespace OHOS

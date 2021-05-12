@@ -259,6 +259,31 @@ public:
 #endif
 
     void DrawTop(UIView* view, const Rect& rect);
+
+    /**
+     * @brief 根据FBBuffer信息更新内存信息.
+     *
+     * @param bufferInfo FBBuffer信息
+     * @since 1.0
+     * @version 1.0
+     */
+    void UpdateBufferInfo(BufferInfo* fbBufferInfo);
+
+    /**
+     * @brief 保存绘制上下文.
+     *
+     * @since 1.0
+     * @version 1.0
+     */
+    void SaveDrawContext();
+
+    /**
+     * @brief 恢复绘制上下文.
+     *
+     * @since 1.0
+     * @version 1.0
+     */
+    void RestoreDrawContext();
 private:
     friend class RenderManager;
     friend class UIViewGroup;
@@ -269,7 +294,7 @@ private:
 
     RootView();
 
-    ~RootView() {}
+    ~RootView();
 
     inline Rect GetScreenRect();
     void AddInvalidateRectWithLock(Rect& rect, UIView *view);
@@ -278,6 +303,12 @@ private:
     void MeasureView(UIView* view);
     void Render();
     UIView* GetTopUIView(const Rect& rect);
+    void InitDrawContext();
+    void DestroyDrawContext();
+    void InitMapBufferInfo(BufferInfo* bufferInfo);
+    void DestroyMapBufferInfo();
+    void BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea);
+    void ClearMapBuffer();
 #if LOCAL_RENDER
     void RemoveViewFromInvalidMap(UIView *view);
     void DrawInvalidMap(const Rect &buffRect);
@@ -298,6 +329,19 @@ private:
 #if ENABLE_WINDOW
     WindowImpl* boundWindow_ {nullptr};
 #endif
+    /**
+     * @brief 绘制上下文结构信息.
+     * @param bufferInfo FB Buffer信息.
+     * @param mapBufferInfo 动效变换Buffer信息.
+     * @since 5.0
+     * @version 3.0
+     */
+    struct DrawContext {
+        BufferInfo* bufferInfo;
+        BufferInfo* mapBufferInfo;
+    };
+    DrawContext dc_;
+    DrawContext bakDc_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_ROOT_VIEW_H

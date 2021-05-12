@@ -17,9 +17,9 @@
 #define GRAPHIC_LITE_DRAW_UTILS_H
 
 #include "gfx_utils/color.h"
-#include "dock/screen_device_proxy.h"
 #include "common/text.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_types.h"
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
@@ -109,13 +109,6 @@ struct TriangleEdge {
     int32_t dv = 0;
     // parameters above are Q15 fixed-point number
 };
-struct TransformDataInfo {
-    ImageHeader header;
-    const uint8_t* data;
-    uint8_t pxSize;
-    BlurLevel blurLevel;
-    TransformAlgorithm algorithm;
-};
 
 struct TriangleTransformDataInfo {
     const TransformDataInfo& info;
@@ -170,16 +163,20 @@ class DrawUtils : public HeapBase {
 public:
     static DrawUtils* GetInstance();
 
-    void DrawColorArea(const Rect& area, const Rect& mask, const ColorType& color, OpacityType opa) const;
+    void DrawColorArea(BufferInfo& gfxDstBuffer, const Rect& area, const Rect& mask,
+                       const ColorType& color, OpacityType opa) const;
 
-    void DrawColorAreaBySides(const Rect& mask, const ColorType& color, OpacityType opa, const EdgeSides& sides) const;
+    void DrawColorAreaBySides(BufferInfo& gfxDstBuffer, const Rect& mask, const ColorType& color,
+                              OpacityType opa, const EdgeSides& sides) const;
 
-    void DrawPixel(int16_t x, int16_t y, const Rect& mask, const ColorType& color, OpacityType opa) const;
+    void DrawPixel(BufferInfo& gfxDstBuffer, int16_t x, int16_t y, const Rect& mask,
+                   const ColorType& color, OpacityType opa) const;
 
-    void DrawLetter(const LabelLetterInfo& letterInfo) const;
+    void DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const;
 
-    void DrawImage(const Rect& area, const Rect& mask, const uint8_t* image, OpacityType opa, uint8_t pxBitSize,
-                    ColorMode colorMode, LutColorMode lutColorMode = LUT_UNKNOW) const;
+    void DrawImage(BufferInfo& gfxDstBuffer, const Rect& area, const Rect& mask,
+                   const uint8_t* image, OpacityType opa, uint8_t pxBitSize,
+                   ColorMode colorMode, LutColorMode lutColorMode = LUT_UNKNOW) const;
 
     static void
         GetXAxisErrForJunctionLine(bool ignoreJunctionPoint, bool isRightPart, int16_t& xMinErr, int16_t& xMaxErr);
@@ -189,23 +186,25 @@ public:
                                       const Rect& trans,
                                       TransformInitState& init);
 
-    static void DrawTriangleTransform(const Rect& mask,
+    static void DrawTriangleTransform(BufferInfo& gfxDstBuffer,
+                                      const Rect& mask,
                                       const Point& position,
                                       const ColorType& color,
                                       OpacityType opaScale,
                                       const TransformMap& transMap,
                                       const TriangleTransformDataInfo& dataInfo);
 
-    void DrawTransform(const Rect& mask,
+    void DrawTransform(BufferInfo& gfxDstBuffer,
+                       const Rect& mask,
                        const Point& position,
                        const ColorType& color,
                        OpacityType opaScale,
                        const TransformMap& transMap,
                        const TransformDataInfo& dataInfo) const;
 
-    void DrawTranspantArea(const Rect& rect, const Rect& mask);
+    void DrawTranspantArea(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& mask);
 
-    void DrawWithBuffer(const Rect& rect, const Rect& mask, const ColorType* colorBuf);
+    void DrawWithBuffer(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& mask, const ColorType* colorBuf);
 
     static uint8_t GetPxSizeByColorMode(uint8_t colorMode);
 
@@ -220,7 +219,8 @@ public:
         return opaMix;
     }
 
-    void DrawAdjPixelInLine(int16_t x1,
+    void DrawAdjPixelInLine(BufferInfo& gfxDstBuffer,
+                            int16_t x1,
                             int16_t y1,
                             int16_t x2,
                             int16_t y2,
@@ -229,10 +229,11 @@ public:
                             OpacityType opa,
                             uint16_t w) const;
 
-    void DrawPixelInLine(int16_t x, int16_t y, const Rect& mask, const ColorType& color, OpacityType opa, uint16_t w)
-        const;
+    void DrawPixelInLine(BufferInfo& gfxDstBuffer, int16_t x, int16_t y, const Rect& mask,
+                         const ColorType& color, OpacityType opa, uint16_t w) const;
 
-    void DrawVerPixelInLine(int16_t x,
+    void DrawVerPixelInLine(BufferInfo& gfxDstBuffer,
+                            int16_t x,
                             int16_t y,
                             int8_t dir,
                             const Rect& mask,
@@ -240,7 +241,8 @@ public:
                             OpacityType opa,
                             uint16_t weight) const;
 
-    void DrawHorPixelInLine(int16_t x,
+    void DrawHorPixelInLine(BufferInfo& gfxDstBuffer,
+                            int16_t x,
                             int16_t y,
                             int8_t dir,
                             const Rect& mask,
@@ -248,47 +250,44 @@ public:
                             OpacityType opa,
                             uint16_t weight) const;
 
-private:
-#if ENABLE_GFX_ENGINES
-    bool FillAreaWithHardware(const Rect& fillArea, const ColorType& color, const OpacityType& opa) const;
-#endif
-    void FillAreaWithSoftWare(const Rect& fillArea,
-                              uint8_t* mem,
-                              ColorMode mode,
-                              uint8_t destByteSize,
-                              int16_t bufWidth,
-                              const ColorType& color,
-                              const OpacityType& opa) const;
-
-    void BlendWithSoftWare(const uint8_t* src,
+    void BlendWithSoftWare(const uint8_t* src1,
+                           const Rect& srcRect,
                            uint32_t srcStride,
+                           uint32_t srcLineNumber,
                            ColorMode srcMode,
-                           uint8_t* dest,
+                           uint32_t color,
+                           OpacityType opa,
+                           uint8_t* dst,
                            uint32_t destStride,
                            ColorMode destMode,
-                           uint32_t width,
-                           uint32_t height,
-                           OpacityType opa) const;
+                           uint32_t x,
+                           uint32_t y) const;
 
-    using DrawTriangleTransformFuc = void (*)(const TriangleScanInfo& triangle);
+    void FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
+                              const Rect& fillArea,
+                              const ColorType& color,
+                              const OpacityType& opa) const;
+private:
+    using DrawTriangleTransformFuc = void (*)(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
-    static void DrawTriangleTrueColorNearest(const TriangleScanInfo& triangle);
+    static void DrawTriangleTrueColorNearest(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
-    static void DrawTriangleAlphaBilinear(const TriangleScanInfo& triangle);
+    static void DrawTriangleAlphaBilinear(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
-    static void DrawTriangleTrueColorBilinear565(const TriangleScanInfo& triangle);
+    static void DrawTriangleTrueColorBilinear565(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
-    static void DrawTriangleTrueColorBilinear888(const TriangleScanInfo& triangle);
+    static void DrawTriangleTrueColorBilinear888(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
-    static void DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& triangle);
+    static void DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
     inline static void StepToNextLine(TriangleEdge& edg1, TriangleEdge& edg2);
 
-    static void DrawTriangleTransformPart(const TrianglePartInfo& part);
+    static void DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const TrianglePartInfo& part);
 
     static OpacityType GetPxAlphaForAlphaImg(const TransformDataInfo& dataInfo, const Point& point);
 
-    void FillArea(const Rect& rect, const Rect& mask, bool isTransparent, const ColorType* colorBuf);
+    void FillArea(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& mask,
+                  bool isTransparent, const ColorType* colorBuf);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_DRAW_UTILS_H

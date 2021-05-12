@@ -82,7 +82,7 @@ public:
         return false;
     }
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Sets the coordinates of the center point for this circular progress bar.
@@ -247,7 +247,7 @@ private:
     void GetStartEndAngle(int16_t& start, int16_t& end) const;
     void GetAngleRange(int16_t& start, int16_t& end) const;
     void GetRedrawAngle(int16_t& start, int16_t& end) const;
-    void DrawCommonCircle(const Rect& invalidatedArea);
+    void DrawCommonCircle(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
 
     Point center_;
     Point backgroundImagePos_;

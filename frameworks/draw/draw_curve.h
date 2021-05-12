@@ -18,12 +18,14 @@
 
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
 class DrawCurve : public HeapBase {
 public:
-    static void DrawCubicBezier(const Point& start, const Point& control1, const Point& control2, const Point& end,
-        const Rect& mask, int16_t width, const ColorType& color, OpacityType opacity);
+    static void DrawCubicBezier(BufferInfo& gfxDstBuffer, const Point& start, const Point& control1,
+                                const Point& control2, const Point& end, const Rect& mask,
+                                int16_t width, const ColorType& color, OpacityType opacity);
 private:
     static constexpr uint16_t INTERPOLATION_RANGE = 1024;
 };

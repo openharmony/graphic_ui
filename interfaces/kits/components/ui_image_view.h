@@ -126,7 +126,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Sets the image path.

@@ -15,6 +15,7 @@
 
 #include "draw/draw_utils.h"
 #include "draw/draw_triangle.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
 #include "gfx_utils/color.h"
@@ -28,27 +29,23 @@
 #include "graphic_neon_utils.h"
 #endif
 
-#if ENABLE_GFX_ENGINES
-#include "hals/gfx_engines.h"
-#endif
-
 #if ENABLE_ARM_MATH
 #include "arm_math.h"
 #endif
 
 namespace OHOS {
 // Preprocess operation for draw
-#define DRAW_UTILS_PREPROCESS(opa)                                                   \
+#define DRAW_UTILS_PREPROCESS(gfxBufferInfo, opa)                                                   \
     if ((opa) == OPA_TRANSPARENT) {                                                  \
         return;                                                                      \
     }                                                                                \
-    uint8_t* screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();           \
+    uint8_t* screenBuffer = static_cast<uint8_t*>(gfxBufferInfo.virAddr);           \
     if (screenBuffer == nullptr) {                                                   \
         return;                                                                      \
     }                                                                                \
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();        \
+    ColorMode bufferMode = gfxBufferInfo.mode;                                      \
     uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);                       \
-    uint16_t screenBufferWidth = ScreenDeviceProxy::GetInstance()->GetBufferWidth();
+    uint16_t screenBufferWidth = gfxBufferInfo.width;
 
 /* cover mode, src alpha is 255 */
 #define COLOR_FILL_COVER(d, dm, r2, g2, b2, sm)               \
@@ -174,34 +171,29 @@ DrawUtils* DrawUtils::GetInstance()
     return &instance;
 }
 
-void DrawUtils::DrawColorAreaBySides(const Rect& mask,
+void DrawUtils::DrawColorAreaBySides(BufferInfo& gfxDstBuffer,
+                                     const Rect& mask,
                                      const ColorType& color,
                                      OpacityType opa,
                                      const EdgeSides& sides) const
 {
     Rect area(sides.left, sides.top, sides.right, sides.bottom);
-    DrawUtils::GetInstance()->DrawColorArea(area, mask, color, opa);
+    DrawUtils::GetInstance()->DrawColorArea(gfxDstBuffer, area, mask, color, opa);
 }
 
-void DrawUtils::DrawColorArea(const Rect& area, const Rect& mask, const ColorType& color, OpacityType opa) const
+void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer,
+                              const Rect& area,
+                              const Rect& mask,
+                              const ColorType& color,
+                              OpacityType opa) const
 {
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Rect maskedArea;
     if (!maskedArea.Intersect(area, mask)) {
         return;
     }
-#if ENABLE_HARDWARE_ACCELERATION
-    if (ScreenDeviceProxy::GetInstance()->HardwareFill(maskedArea, Color::ColorTo32(color), opa, screenBuffer,
-        screenBufferWidth * bufferPxSize, bufferMode)) {
-        return;
-    }
-#endif
-#if ENABLE_GFX_ENGINES
-    if (FillAreaWithHardware(maskedArea, color, opa)) {
-        return;
-    }
-#endif
-    FillAreaWithSoftWare(maskedArea, screenBuffer, bufferMode, bufferPxSize, screenBufferWidth, color, opa);
+
+    BaseGfxEngine::GetInstance()->Fill(gfxDstBuffer, maskedArea, color, opa);
 }
 
 uint8_t DrawUtils::GetPxSizeByColorMode(uint8_t colorMode)
@@ -263,13 +255,18 @@ LutColorMode DrawUtils::GetLutColorModeBySize(uint8_t size)
     }
 }
 
-void DrawUtils::DrawPixel(int16_t x, int16_t y, const Rect& mask, const ColorType& color, OpacityType opa) const
+void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
+                          int16_t x,
+                          int16_t y,
+                          const Rect& mask,
+                          const ColorType& color,
+                          OpacityType opa) const
 {
     if ((x < mask.GetLeft()) || (x > mask.GetRight()) || (y < mask.GetTop()) || (y > mask.GetBottom())) {
         return;
     }
 
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
 
     Color32 fillColor;
     fillColor.full = Color::ColorTo32(color);
@@ -278,13 +275,13 @@ void DrawUtils::DrawPixel(int16_t x, int16_t y, const Rect& mask, const ColorTyp
     COLOR_FILL_BLEND(screenBuffer, bufferMode, &fillColor, ARGB8888, opa);
 }
 
-void DrawUtils::DrawLetter(const LabelLetterInfo& letterInfo) const
+void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const
 {
     OpacityType opa = letterInfo.opa;
     Color32 fillColor;
     fillColor.full = Color::ColorTo32(letterInfo.color);
 
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     UIFont* fontEngine = UIFont::GetInstance();
     FontHeader head;
     GlyphNode node;
@@ -358,12 +355,20 @@ void DrawUtils::DrawLetter(const LabelLetterInfo& letterInfo) const
 
 #if ENABLE_HARDWARE_ACCELERATION && ENABLE_HARDWARE_ACCELERATION_FOR_TEXT
     Rect srcRect(colStart, rowStart, colEnd - 1, rowEnd - 1);
-    if (ScreenDeviceProxy::GetInstance()->HardwareBlend(fontMap, srcRect, letterWidthInByte, letterH,
-        static_cast<ColorMode>(colorMode), LUT_UNKNOW,
-        Color::ColorTo32(letterInfo.color), opa, reinterpret_cast<uint8_t*>(screenBuffer),
-        screenBufferWidth * bufferPxSize, bufferMode, dstPosX, dstPosY)) {
-        return;
-    }
+    BufferInfo src;
+    src.rect = srcRect;
+    src.virAddr = static_cast<void*>(const_cast<uint8_t*>(fontMap));
+    src.stride = letterWidthInByte;
+    src.mode = static_cast<ColorMode>(colorMode);
+    src.color = Color::ColorTo32(letterInfo.color);
+
+    Point dstPos = {dstPosX, dstPosY};
+    BlendOption blendOption;
+    blendOption.opacity = opa;
+
+    Rect subRect(dstPosX, dstPosY, letterW, letterH);
+    BaseGfxEngine::GetInstance()->Blit(*gfxDstBuffer, dstPos, src, subRect, blendOption);
+    return;
 #endif
 
     screenBuffer += ((dstPosY * screenBufferWidth) + dstPosX) * bufferPxSize;
@@ -406,7 +411,8 @@ void DrawUtils::DrawLetter(const LabelLetterInfo& letterInfo) const
     }
 }
 
-void DrawUtils::DrawImage(const Rect& area,
+void DrawUtils::DrawImage(BufferInfo& gfxDstBuffer,
+                          const Rect& area,
                           const Rect& mask,
                           const uint8_t* image,
                           OpacityType opa,
@@ -417,7 +423,7 @@ void DrawUtils::DrawImage(const Rect& area,
     if (image == nullptr) {
         return;
     }
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Rect maskedArea;
     if (!maskedArea.Intersect(area, mask)) {
         return;
@@ -429,56 +435,42 @@ void DrawUtils::DrawImage(const Rect& area,
     if ((mapWidth * pxBitSize) & 0x7) { // 0x7 : less than 1 byte is counted as 1 byte
         imageWidthInByte++;
     }
-#if ENABLE_HARDWARE_ACCELERATION
-    Rect srcRect(imageX, imageY, imageX + maskedArea.GetWidth() - 1, imageY + maskedArea.GetHeight() - 1);
-    if (ScreenDeviceProxy::GetInstance()->HardwareBlend(image, srcRect, imageWidthInByte, area.GetHeight(),
-        colorMode, lutColorMode, 0, opa, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode,
-        maskedArea.GetLeft(), maskedArea.GetTop())) {
-        return;
-    }
-#endif
-    screenBuffer += static_cast<uint32_t>(screenBufferWidth) * maskedArea.GetTop() * bufferPxSize;
-    screenBuffer += static_cast<uint32_t>(maskedArea.GetLeft()) * bufferPxSize;
 
-    image += (static_cast<uint32_t>(mapWidth) * imageY + imageX) * (pxBitSize >> SHIFT_3);
-    /* RGB565 RGB888 color mode, image src don't have alpha */
-    BlendWithSoftWare(image, imageWidthInByte, colorMode, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode,
-                      maskedArea.GetWidth(), maskedArea.GetHeight(), opa);
+    BufferInfo src;
+    src.rect = {
+        imageX,
+        imageY,
+        static_cast<int16_t>(imageX + maskedArea.GetWidth() - 1),
+        static_cast<int16_t>(imageY + maskedArea.GetHeight() - 1)
+    };
+
+    src.virAddr = static_cast<void*>(const_cast<uint8_t*>(image));
+    src.stride = imageWidthInByte;
+    src.mode = colorMode;
+    src.color = 0;
+
+    Point dstPos = {maskedArea.GetLeft(), maskedArea.GetTop()};
+    BlendOption blendOption;
+    blendOption.opacity = opa;
+    BaseGfxEngine::GetInstance()->Blit(gfxDstBuffer, dstPos, src, maskedArea, blendOption);
 }
 
-#if ENABLE_GFX_ENGINES
-bool DrawUtils::FillAreaWithHardware(const Rect& fillArea, const ColorType& color, const OpacityType& opa) const
-{
-    if ((opa != OPA_OPAQUE) && (fillArea.GetSize() >= HARDWARE_ACC_SIZE_LIMIT)) {
-        AllocationInfo gfxAlloc = ScreenDeviceProxy::GetInstance()->GetAllocationInfo();
-        LiteSurfaceData data;
-        data.phyAddr = gfxAlloc.phyAddr;
-        data.width = gfxAlloc.width;
-        data.height = gfxAlloc.height;
-        data.stride = gfxAlloc.stride;
-        data.pixelFormat = gfxAlloc.pixelFormat;
-        if (GfxEngines::GetInstance()->GfxFillArea(data, fillArea, color, opa)) {
-            return true;
-        }
-    }
-    return false;
-}
-#endif
-
-void DrawUtils::FillAreaWithSoftWare(const Rect& fillArea,
-                                     uint8_t* dest,
-                                     ColorMode mode,
-                                     uint8_t destByteSize,
-                                     int16_t destWidth,
+void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
+                                     const Rect& fillArea,
                                      const ColorType& color,
                                      const OpacityType& opa) const
 {
+    ColorMode mode = gfxDstBuffer.mode;
+    uint8_t destByteSize = GetByteSizeByColorMode(mode);
+    int16_t destWidth = gfxDstBuffer.width;
     int32_t halBufferDeltaByteLen = static_cast<int32_t>(destWidth) * destByteSize;
     int16_t width = fillArea.GetWidth();
     int16_t height = fillArea.GetHeight();
+    uint8_t* dest = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
     int32_t offset = static_cast<int32_t>(fillArea.GetTop()) * destWidth + fillArea.GetLeft();
     dest += offset * destByteSize;
-    int32_t dstMaxSize = (ScreenDeviceProxy::GetInstance()->GetScreenArea() - offset) * destByteSize;
+
+    int32_t dstMaxSize = (gfxDstBuffer.width * gfxDstBuffer.height - offset) * destByteSize;
     Color32 fillColor;
     fillColor.full = Color::ColorTo32(color);
     uint8_t* dstTmp = nullptr;
@@ -494,7 +486,7 @@ void DrawUtils::FillAreaWithSoftWare(const Rect& fillArea,
         }
         uint8_t* memStart = dest;
         int32_t memSize = static_cast<int32_t>(width) * destByteSize;
-        dest += destWidth * destByteSize;
+        dest += halBufferDeltaByteLen;
         dstMaxSize -= halBufferDeltaByteLen;
         for (int16_t row = 1; row < height; ++row) {
 #ifdef ARM_NEON_OPT
@@ -511,7 +503,7 @@ void DrawUtils::FillAreaWithSoftWare(const Rect& fillArea,
                 }
             }
 #endif
-            dest += destWidth * destByteSize;
+            dest += halBufferDeltaByteLen;
             dstMaxSize -= halBufferDeltaByteLen;
         }
     } else {
@@ -551,18 +543,29 @@ void DrawUtils::FillAreaWithSoftWare(const Rect& fillArea,
     }
 }
 
-void DrawUtils::BlendWithSoftWare(const uint8_t* src,
+void DrawUtils::BlendWithSoftWare(const uint8_t* src1,
+                                  const Rect& srcRect,
                                   uint32_t srcStride,
+                                  uint32_t srcLineNumber,
                                   ColorMode srcMode,
-                                  uint8_t* dest,
+                                  uint32_t color,
+                                  OpacityType opa,
+                                  uint8_t* dst,
                                   uint32_t destStride,
                                   ColorMode destMode,
-                                  uint32_t width,
-                                  uint32_t height,
-                                  OpacityType opa) const
+                                  uint32_t x,
+                                  uint32_t y) const
 {
     uint8_t destByteSize = GetByteSizeByColorMode(destMode);
     uint8_t srcByteSize = GetByteSizeByColorMode(srcMode);
+
+    uint8_t* dest = dst + destStride * y;
+    dest += destByteSize * x;
+
+    uint8_t pxByteSize = GetPxSizeByColorMode(srcMode) >> 3;
+    uint8_t* src = const_cast<uint8_t*>(src1) + srcStride * srcRect.GetY() + pxByteSize * srcRect.GetX();
+    uint32_t width = srcRect.GetWidth();
+    uint32_t height = srcRect.GetHeight();
 #ifdef ARM_NEON_OPT
     {
         DEBUG_PERFORMANCE_TRACE("BlendWithSoftWare_neon");
@@ -650,9 +653,8 @@ inline void DrawUtils::StepToNextLine(TriangleEdge& edge1, TriangleEdge& edge2)
     edge2.curX += FO_DIV(edge2.du, edge2.dv);
 }
 
-void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
+void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     int16_t maskLeft = in.mask.GetLeft();
     int16_t maskRight = in.mask.GetRight();
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
@@ -711,9 +713,8 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in)
     }
 }
 
-void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
+void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
         int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
         int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
@@ -785,9 +786,8 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in)
     }
 }
 
-void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
+void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
         int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
         int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
@@ -862,10 +862,10 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in)
 static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                    uint8_t* screenBuffer,
                                                    int16_t len,
+												   const ColorMode bufferMode,
                                                    int32_t u,
                                                    int32_t v)
 {
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     for (int16_t x = 0; x < len; ++x) {
         int16_t intU = FO_TO_INTEGER(u);
         int16_t intV = FO_TO_INTEGER(v);
@@ -932,7 +932,8 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
                                                        int16_t len,
                                                        float u,
                                                        float v,
-                                                       NeonBlendPipeLine& pipeLine)
+                                                       NeonBlendPipeLine& pipeLine,
+                                                       const ColorMode bufferMode)
 {
     ColorType arrayp1[NEON_STEP_8] = {};
     ColorType arrayp2[NEON_STEP_8] = {};
@@ -1031,7 +1032,7 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
         } else {
             int32_t fixedU = FO_TRANS_FLOAT_TO_FIXED(arrayU[0]);
             int32_t fixedV = FO_TRANS_FLOAT_TO_FIXED(arrayV[0]);
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8, fixedU, fixedV);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8, bufferMode, fixedU, fixedV);
         }
         screenBuffer += step;
         len -= NEON_STEP_8;
@@ -1039,16 +1040,13 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
     if (len > 0) {
         int32_t fixedU = FO_TRANS_FLOAT_TO_FIXED(u);
         int32_t fixedV = FO_TRANS_FLOAT_TO_FIXED(v);
-        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len, fixedU, fixedV);
+        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len, bufferMode, fixedU, fixedV);
     }
 }
 #endif
 
-void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
+void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
-#ifdef ARM_NEON_OPT
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
-#endif
     int16_t maskLeft = in.mask.GetLeft();
     int16_t maskRight = in.mask.GetRight();
     int16_t xMinErr = 0;
@@ -1072,14 +1070,14 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
             float u = static_cast<float>(in.init.verticalU) / FIXED_NUM_1;
             float v = static_cast<float>(in.init.verticalV) / FIXED_NUM_1;
             DEBUG_PERFORMANCE_TRACE("DrawTriangleTrueColorBilinear8888_neon");
-            DrawTriangleTrueColorBilinear8888InnerNeon(in, screenBuffer, xMax - xMin + 1, u, v, pipeLine);
+            DrawTriangleTrueColorBilinear8888InnerNeon(in, screenBuffer, xMax - xMin + 1, u, v, pipeLine, bufferMode);
         }
 #else
         {
             int32_t u = in.init.verticalU;
             int32_t v = in.init.verticalV;
             DEBUG_PERFORMANCE_TRACE("DrawTriangleTrueColorBilinear8888");
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, u, v);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, bufferMode, u, v);
         }
 #endif
         StepToNextLine(in.edge1, in.edge2);
@@ -1091,9 +1089,8 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in)
     }
 }
 
-void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
+void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
     int16_t maskLeft = in.mask.GetLeft();
     int16_t maskRight = in.mask.GetRight();
     int16_t xMinErr = 0;
@@ -1171,7 +1168,7 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in)
     }
 }
 
-void DrawUtils::DrawTriangleTransformPart(const TrianglePartInfo& part)
+void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const TrianglePartInfo& part)
 {
     // parameters below are Q15 fixed-point number
     int32_t yMin = FO_TRANS_INTEGER_TO_FIXED(part.yMin);
@@ -1188,13 +1185,7 @@ void DrawUtils::DrawTriangleTransformPart(const TrianglePartInfo& part)
     TransformInitState init;
     GetTransformInitState(part.transMap, part.position, line, init);
 
-    uint16_t screenBufferWidth = ScreenDeviceProxy::GetInstance()->GetBufferWidth();
-    uint8_t* screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
-    uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);
-    if (screenBuffer == nullptr) {
-        return;
-    }
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, OPA_OPAQUE);
     uint8_t pixelSize;
     DrawTriangleTransformFuc fuc;
     bool isTrueColor = (part.info.header.colorMode == ARGB8888) || (part.info.header.colorMode == RGB888) ||
@@ -1224,17 +1215,18 @@ void DrawUtils::DrawTriangleTransformPart(const TrianglePartInfo& part)
                            part.color,
                            part.opaScale,
                            init,
-                           screenBufferWidth,
+                           gfxDstBuffer.width,
                            pixelSize,
                            srcLineWidth,
                            part.info,
                            part.mask,
                            part.isRightPart,
                            part.ignoreJunctionPoint};
-    fuc(input);
+    fuc(input, gfxDstBuffer.mode);
 }
 
-void DrawUtils::DrawTriangleTransform(const Rect& mask,
+void DrawUtils::DrawTriangleTransform(BufferInfo& gfxDstBuffer,
+                                      const Rect& mask,
                                       const Point& position,
                                       const ColorType& color,
                                       OpacityType opaScale,
@@ -1278,7 +1270,7 @@ void DrawUtils::DrawTriangleTransform(const Rect& mask,
     part.yMax = MATH_MIN(mask.GetBottom(), triangleInfo.p2.y);
     part.edge1 = edge1;
     part.edge2 = edge2;
-    DrawTriangleTransformPart(part);
+    DrawTriangleTransformPart(gfxDstBuffer, part);
 BottomHalf:
     if (triangleInfo.p2.y == triangleInfo.p3.y) {
         return;
@@ -1304,10 +1296,11 @@ BottomHalf:
     part.yMax = MATH_MIN(mask.GetBottom(), triangleInfo.p3.y);
     part.edge1 = edge1;
     part.edge2 = edge2;
-    DrawTriangleTransformPart(part);
+    DrawTriangleTransformPart(gfxDstBuffer, part);
 }
 
-void DrawUtils::DrawTransform(const Rect& mask,
+void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
+                              const Rect& mask,
                               const Point& position,
                               const ColorType& color,
                               OpacityType opaScale,
@@ -1323,8 +1316,8 @@ void DrawUtils::DrawTransform(const Rect& mask,
     if (!trans.Intersect(trans, mask)) {
         return;
     }
-#if ENABLE_HARDWARE_ACCELERATION
-    DRAW_UTILS_PREPROCESS(opaScale);
+#if ENABLE_HARDWARE_ACCELERATION    // to do for backends
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opaScale);
     TransformOption option;
     option.algorithm = dataInfo.algorithm;
     if (ScreenDeviceProxy::GetInstance()->HardwareTransform(dataInfo.data,
@@ -1355,7 +1348,7 @@ void DrawUtils::DrawTransform(const Rect& mask,
     triangleInfo.p2 = p2;
     triangleInfo.p3 = p3;
     if ((triangleInfo.p1.y <= mask.GetBottom()) && (triangleInfo.p3.y >= mask.GetTop())) {
-        DrawTriangleTransform(mask, position, color, opaScale, transMap, triangleInfo);
+        DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, transMap, triangleInfo);
     }
 
     triangleInfo.ignoreJunctionPoint = true;
@@ -1372,7 +1365,7 @@ void DrawUtils::DrawTransform(const Rect& mask,
     triangleInfo.p2 = p3;
     triangleInfo.p3 = p4;
     if ((triangleInfo.p1.y <= mask.GetBottom()) && (triangleInfo.p3.y >= mask.GetTop())) {
-        DrawTriangleTransform(mask, position, color, opaScale, transMap, triangleInfo);
+        DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, transMap, triangleInfo);
     }
 }
 
@@ -1415,17 +1408,22 @@ OpacityType DrawUtils::GetPxAlphaForAlphaImg(const TransformDataInfo& dataInfo, 
 #endif // ENABLE_SPEC_FONT
 }
 
-void DrawUtils::DrawTranspantArea(const Rect& rect, const Rect& mask)
+void DrawUtils::DrawTranspantArea(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& mask)
 {
-    FillArea(rect, mask, true, nullptr);
+    FillArea(gfxDstBuffer, rect, mask, true, nullptr);
 }
 
-void DrawUtils::DrawWithBuffer(const Rect& rect, const Rect& mask, const ColorType* colorBuf)
+void DrawUtils::DrawWithBuffer(BufferInfo& gfxDstBuffer, const Rect& rect,
+                               const Rect& mask, const ColorType* colorBuf)
 {
-    FillArea(rect, mask, false, colorBuf);
+    FillArea(gfxDstBuffer, rect, mask, false, colorBuf);
 }
 
-void DrawUtils::FillArea(const Rect& rect, const Rect& mask, bool isTransparent, const ColorType* colorBuf)
+void DrawUtils::FillArea(BufferInfo& gfxDstBuffer,
+                         const Rect& rect,
+                         const Rect& mask,
+                         bool isTransparent,
+                         const ColorType* colorBuf)
 {
     Rect maskedArea;
     if (!maskedArea.Intersect(rect, mask)) {
@@ -1437,11 +1435,8 @@ void DrawUtils::FillArea(const Rect& rect, const Rect& mask, bool isTransparent,
     int16_t top = maskedArea.GetTop();
     int16_t bottom = maskedArea.GetBottom();
 
-    uint16_t screenBufferWidth = ScreenDeviceProxy::GetInstance()->GetBufferWidth();
-    uint8_t* mem = ScreenDeviceProxy::GetInstance()->GetBuffer();
-    ColorMode bufferMode = ScreenDeviceProxy::GetInstance()->GetBufferMode();
-    uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);
-
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, OPA_OPAQUE);
+    uint8_t* mem = screenBuffer;
     mem += top * screenBufferWidth * bufferPxSize;
     if (isTransparent) {
         uint16_t sz = (right - left + 1) * bufferPxSize;
@@ -1472,7 +1467,8 @@ void DrawUtils::FillArea(const Rect& rect, const Rect& mask, bool isTransparent,
     }
 }
 
-void DrawUtils::DrawAdjPixelInLine(int16_t x1,
+void DrawUtils::DrawAdjPixelInLine(BufferInfo& gfxDstBuffer,
+                                   int16_t x1,
                                    int16_t y1,
                                    int16_t x2,
                                    int16_t y2,
@@ -1481,7 +1477,7 @@ void DrawUtils::DrawAdjPixelInLine(int16_t x1,
                                    OpacityType opa,
                                    uint16_t weight) const
 {
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Color32 result;
     result.full = Color::ColorTo32(color);
     if ((x1 >= mask.GetLeft()) && (x1 <= mask.GetRight()) && (y1 >= mask.GetTop()) && (y1 <= mask.GetBottom())) {
@@ -1490,21 +1486,22 @@ void DrawUtils::DrawAdjPixelInLine(int16_t x1,
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
     if ((x2 >= mask.GetLeft()) && (x2 <= mask.GetRight()) && (y2 >= mask.GetTop()) && (y2 <= mask.GetBottom())) {
-        screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
+        screenBuffer = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
         screenBuffer += (y2 * screenBufferWidth + x2) * bufferPxSize;
         OpacityType fillOpa = weight * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
 }
 
-void DrawUtils::DrawPixelInLine(int16_t x,
+void DrawUtils::DrawPixelInLine(BufferInfo& gfxDstBuffer,
+                                int16_t x,
                                 int16_t y,
                                 const Rect& mask,
                                 const ColorType& color,
                                 OpacityType opa,
                                 uint16_t weight) const
 {
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Color32 result;
     result.full = Color::ColorTo32(color);
     if ((x >= mask.GetLeft()) && (x <= mask.GetRight()) && (y >= mask.GetTop()) && (y <= mask.GetBottom())) {
@@ -1514,7 +1511,8 @@ void DrawUtils::DrawPixelInLine(int16_t x,
     }
 }
 
-void DrawUtils::DrawVerPixelInLine(int16_t x,
+void DrawUtils::DrawVerPixelInLine(BufferInfo& gfxDstBuffer,
+                                   int16_t x,
                                    int16_t y,
                                    int8_t dir,
                                    const Rect& mask,
@@ -1522,7 +1520,7 @@ void DrawUtils::DrawVerPixelInLine(int16_t x,
                                    OpacityType opa,
                                    uint16_t weight) const
 {
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     if ((y < mask.GetTop()) || (y > mask.GetBottom())) {
         return;
     }
@@ -1536,7 +1534,7 @@ void DrawUtils::DrawVerPixelInLine(int16_t x,
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
     if ((x >= mask.GetLeft()) && (x <= mask.GetRight())) {
-        screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
+        screenBuffer = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
         screenBuffer += (y * screenBufferWidth + x) * bufferPxSize;
         if (opa == OPA_OPAQUE) {
             COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
@@ -1545,14 +1543,15 @@ void DrawUtils::DrawVerPixelInLine(int16_t x,
         }
     }
     if ((x1 >= mask.GetLeft()) && (x1 <= mask.GetRight())) {
-        screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
+        screenBuffer = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
         screenBuffer += (y * screenBufferWidth + x1) * bufferPxSize;
         OpacityType fillOpa = (weight ^ OPA_OPAQUE) * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
 }
 
-void DrawUtils::DrawHorPixelInLine(int16_t x,
+void DrawUtils::DrawHorPixelInLine(BufferInfo& gfxDstBuffer,
+                                   int16_t x,
                                    int16_t y,
                                    int8_t dir,
                                    const Rect& mask,
@@ -1560,7 +1559,7 @@ void DrawUtils::DrawHorPixelInLine(int16_t x,
                                    OpacityType opa,
                                    uint16_t weight) const
 {
-    DRAW_UTILS_PREPROCESS(opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     if ((x < mask.GetLeft()) || (x > mask.GetRight())) {
         return;
     }
@@ -1574,7 +1573,7 @@ void DrawUtils::DrawHorPixelInLine(int16_t x,
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);
     }
     if ((y >= mask.GetTop()) && (y <= mask.GetBottom())) {
-        screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
+        screenBuffer = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
         screenBuffer += (y * screenBufferWidth + x) * bufferPxSize;
         if (opa == OPA_OPAQUE) {
             COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
@@ -1583,7 +1582,7 @@ void DrawUtils::DrawHorPixelInLine(int16_t x,
         }
     }
     if ((y1 >= mask.GetTop()) && (y1 <= mask.GetBottom())) {
-        screenBuffer = ScreenDeviceProxy::GetInstance()->GetBuffer();
+        screenBuffer = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
         screenBuffer += (y1 * screenBufferWidth + x) * bufferPxSize;
         OpacityType fillOpa = (weight ^ OPA_OPAQUE) * opa / OPA_OPAQUE;
         COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, fillOpa);

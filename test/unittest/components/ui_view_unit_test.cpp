@@ -27,6 +27,13 @@ namespace {
     const int16_t DEFAULE_HEIGHT = 100;
     const int16_t BUTTON_WIDTH = 20;
     const int16_t BUTTON_HEIGHT = 20;
+    const int16_t MARGIN_LEFT = 50;
+    const int16_t MARGIN_TOP = 30;
+    const int16_t PADDING_LEFT = 10;
+    const int16_t PADDING_TOP = 20;
+    const int16_t PADDING_RIGHT = 30;
+    const int16_t PADDING_BOTTOM = 40;
+    const int16_t BORDER_WIDTH = 10;
     const float POS_X_PERCENT = 0.1;
     const float POS_Y_PERCENT = 0.2;
     const float DEFAULT_WIDTH_PERCENT = 0.3;
@@ -1036,5 +1043,84 @@ HWTEST_F(UIViewTest, Graphic_UIView_Test_Scale_002, TestSize.Level1)
     EXPECT_EQ(0, polygon[0].y_);
     EXPECT_EQ((DEFAULE_WIDTH - 1) >> 1, polygon[2].x_); // 2: polygon num
     EXPECT_EQ((DEFAULE_WIDTH - 1) >> 1, polygon[2].x_); // 2: polygon num
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_Margin_001
+ * @tc.desc: Test whether the Rect is normal in the margin scenario.
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFP
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_Margin_001, TestSize.Level0)
+{
+    if (view_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    view_->SetStyle(STYLE_MARGIN_LEFT, MARGIN_LEFT);
+    view_->SetStyle(STYLE_MARGIN_TOP, MARGIN_TOP);
+    view_->SetPosition(0, 0, DEFAULE_WIDTH, DEFAULE_HEIGHT);
+    EXPECT_EQ(DEFAULE_WIDTH, view_->GetWidth());
+    EXPECT_EQ(DEFAULE_HEIGHT, view_->GetHeight());
+    EXPECT_EQ(0, view_->GetX());
+    EXPECT_EQ(0, view_->GetY());
+    Rect rect = view_->GetRelativeRect();
+    EXPECT_EQ(MARGIN_LEFT, rect.GetX());
+    EXPECT_EQ(MARGIN_TOP, rect.GetY());
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_Padding_001
+ * @tc.desc: Test whether the Rect is normal in the setting padding scene.
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFP
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_Padding_001, TestSize.Level0)
+{
+    if (view_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    view_->SetStyle(STYLE_PADDING_LEFT, PADDING_LEFT);
+    view_->SetStyle(STYLE_PADDING_TOP, PADDING_TOP);
+    view_->SetStyle(STYLE_PADDING_RIGHT, PADDING_RIGHT);
+    view_->SetStyle(STYLE_PADDING_BOTTOM, PADDING_BOTTOM);
+    view_->SetPosition(0, 0, DEFAULE_WIDTH, DEFAULE_HEIGHT);
+    Rect rect = view_->GetContentRect();
+    EXPECT_EQ(PADDING_LEFT, rect.GetX());
+    EXPECT_EQ(PADDING_TOP, rect.GetY());
+    EXPECT_EQ(PADDING_LEFT + DEFAULE_WIDTH - 1, rect.GetRight());
+    EXPECT_EQ(PADDING_TOP + DEFAULE_HEIGHT - 1, rect.GetBottom());
+    rect = view_->GetRelativeRect();
+    EXPECT_EQ(0, rect.GetX());
+    EXPECT_EQ(0, rect.GetY());
+    EXPECT_EQ(PADDING_LEFT + PADDING_RIGHT + DEFAULE_WIDTH - 1, rect.GetRight());
+    EXPECT_EQ(PADDING_TOP + PADDING_BOTTOM + DEFAULE_HEIGHT - 1, rect.GetBottom());
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_Border_001
+ * @tc.desc: Test whether the Rect is normal in the setting of the border scene.
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFP
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_Border_001, TestSize.Level0)
+{
+    if (view_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    view_->SetStyle(STYLE_BORDER_WIDTH, BORDER_WIDTH);
+    view_->SetPosition(0, 0, DEFAULE_WIDTH, DEFAULE_HEIGHT);
+    Rect rect = view_->GetContentRect();
+    EXPECT_EQ(BORDER_WIDTH, rect.GetX());
+    EXPECT_EQ(BORDER_WIDTH, rect.GetY());
+    EXPECT_EQ(BORDER_WIDTH + DEFAULE_WIDTH - 1, rect.GetRight());
+    EXPECT_EQ(BORDER_WIDTH + DEFAULE_HEIGHT - 1, rect.GetBottom());
+    rect = view_->GetRelativeRect();
+    EXPECT_EQ(0, rect.GetX());
+    EXPECT_EQ(0, rect.GetY());
+    EXPECT_EQ(BORDER_WIDTH + BORDER_WIDTH + DEFAULE_WIDTH - 1, rect.GetRight());
+    EXPECT_EQ(BORDER_WIDTH + BORDER_WIDTH + DEFAULE_HEIGHT - 1, rect.GetBottom());
 }
 } // namespace OHOS

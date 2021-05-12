@@ -131,7 +131,7 @@ public:
      */
     void SetLineColor(const ColorType& color);
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     bool OnPreDraw(Rect& invalidatedArea) const override
     {
@@ -169,7 +169,7 @@ protected:
     static constexpr uint8_t AXIS_DEFAULT_MARK_INTERVAL = 5;
     static constexpr uint8_t AXIS_DEFAULT_MARK_LENGTH = 1;
 
-    virtual void DrawAxisMark(const Rect& invalidatedArea) = 0;
+    virtual void DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) = 0;
 };
 
 /**
@@ -240,7 +240,7 @@ public:
     void UpdateAxisPoints() override;
 
 private:
-    void DrawAxisMark(const Rect& invalidatedArea) override;
+    void DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 };
 
 /**
@@ -308,7 +308,7 @@ public:
     void UpdateAxisPoints() override;
 
 private:
-    void DrawAxisMark(const Rect& invalidatedArea) override;
+    void DrawAxisMark(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_AXIS_H

@@ -11,7 +11,8 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS \
     "ENABLE_ICU=1" \
-    "ENABLE_VECTOR_FONT=1"
+    "ENABLE_VECTOR_FONT=1" \
+    "ENABLE_BITMAP_FONT=0"
 
 DEFINES += QT_COMPILER
 
@@ -23,6 +24,7 @@ DEFINES += QT_COMPILER
 DESTDIR = ../libs
 
 SOURCES += \
+    ../../../../test/framework/common/ui_text_language.cpp \
     ../../../../test/framework/src/test_case_list_adapter.cpp \
     ../../../../test/framework/src/ui_test_group.cpp \
     ../../../../test/framework/src/test_ability.cpp \
@@ -77,6 +79,7 @@ SOURCES += \
     ../../../../test/uitest/test_render/ui_auto_test_render.cpp \
 
 HEADERS += \
+    ../../../../test/framework/common/ui_text_language.h \
     ../../../../test/framework/include/test_case_list_adapter.h \
     ../../../../test/framework/include/ui_test_app.h \
     ../../../../test/framework/include/test_resource_config.h \
@@ -138,6 +141,7 @@ INCLUDEPATH += \
     ../../../../../ui/interfaces/frameworks \
     ../../../../../ui/interfaces/innerkits \
     ../../../../../ui/interfaces/kits \
+    ../../../../test/framework \
     ../../../../test/framework/include \
     ../../../../test/uitest \
     ../../../../../../../third_party/bounds_checking_function/include \

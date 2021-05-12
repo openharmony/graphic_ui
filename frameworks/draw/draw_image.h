@@ -30,10 +30,10 @@ public:
     DrawImage() {}
     ~DrawImage() {}
 
-    static void DrawCommon(const Rect& coords, const Rect& mask,
+    static void DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask,
         const ImageInfo* img, const Style& style, uint8_t opaScale);
 
-    static void DrawCommon(const Rect& coords, const Rect& mask,
+    static void DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask,
         const char* path, const Style& style, uint8_t opaScale);
 };
 } // namespace OHOS

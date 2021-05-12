@@ -28,7 +28,9 @@
 #include "components/ui_slider.h"
 #include "components/ui_swipe_view.h"
 #include "layout/list_layout.h"
+#include "gfx_utils/sys_info.h"
 #include "ui_test.h"
+#include <stdio.h>
 
 namespace OHOS {
 class UITestViewScaleRotate : public UITest, public AnimatorCallback {
@@ -49,7 +51,6 @@ public:
     void UIKit_View_Scale_Rotate_Test_UICircleProgress_005();
     void UIKit_View_Scale_Rotate_Test_UIDigitalClock_006();
     void UIKit_View_Scale_Rotate_Test_Group_007();
-
 private:
     const int GROUP_WIDHT = 454;
     const int GROUP_HEIGHT = 300;

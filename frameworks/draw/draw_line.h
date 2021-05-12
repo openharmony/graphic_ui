@@ -18,21 +18,25 @@
 
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
 class DrawLine : public HeapBase {
 public:
-    static void Draw(const Point& start, const Point& end, const Rect& mask,
+    static void Draw(BufferInfo& gfxDstBuffer, const Point& start, const Point& end, const Rect& mask,
         int16_t width, const ColorType& color, OpacityType opacity);
 
 private:
-    static void DrawVerticalLine(const Point& start, const Point& end, const Rect& mask,
-        int16_t width, const ColorType& color, OpacityType opacity);
-    static void DrawHorizontalLine(const Point& start, const Point& end, const Rect& mask,
-        int16_t width, const ColorType& color, OpacityType opacity);
-    static void DrawWuLine(const Point& start, const Point& end, const Rect& mask,
-        int16_t width, const ColorType& color, OpacityType opacity);
-    static void DrawThinWuLine(const Point& start, const Point& end, const Rect& mask,
+    static void DrawVerticalLine(BufferInfo& gfxDstBuffer, const Point& start, const Point& end,
+        const Rect& mask, int16_t width, const ColorType& color, OpacityType opacity);
+
+    static void DrawHorizontalLine(BufferInfo& gfxDstBuffer, const Point& start, const Point& end,
+        const Rect& mask, int16_t width, const ColorType& color, OpacityType opacity);
+
+    static void DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Point& end,
+        const Rect& mask, int16_t width, const ColorType& color, OpacityType opacity);
+
+    static void DrawThinWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Point& end, const Rect& mask,
         int16_t width, const ColorType& color, OpacityType opacity);
 };
 } // namespace OHOS

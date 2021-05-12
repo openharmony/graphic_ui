@@ -306,7 +306,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Performs the operations needed after the drawing.
@@ -315,7 +315,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnPostDraw(const Rect& invalidatedArea) override;
+    virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Sets the position for this analog clock.
@@ -363,9 +363,9 @@ private:
     Hand minuteHand_;
     Hand secondHand_;
 
-    void DrawHand(const Rect& current, const Rect& invalidatedArea, Hand& hand);
-    void DrawHandImage(const Rect& current, const Rect& invalidatedArea, Hand& hand);
-    void DrawHandLine(const Rect& invalidatedArea, Hand& hand);
+    void DrawHand(BufferInfo& gfxDstBuffer, const Rect& current, const Rect& invalidatedArea, Hand& hand);
+    void DrawHandImage(BufferInfo& gfxDstBuffer, const Rect& current, const Rect& invalidatedArea, Hand& hand);
+    void DrawHandLine(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Hand& hand);
     uint16_t ConvertHandValueToAngle(uint8_t handValue, uint8_t range, uint8_t secondHandValue, uint8_t ratio) const;
     uint16_t ConvertHandValueToAngle(uint8_t handValue, uint8_t range) const;
     void CalculateRedrawArea(const Rect& current, Hand& hand, bool clockInit);

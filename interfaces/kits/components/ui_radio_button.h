@@ -95,7 +95,7 @@ public:
         return false;
     }
 
-    void OnDraw(const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @fn  virtual void UIRadioButton::OnClickEvent(const ClickEvent& event) override;

@@ -135,23 +135,23 @@ bool UISurfaceView::OnPreDraw(Rect& invalidatedArea) const
     return false;
 }
 
-void UISurfaceView::OnDraw(const Rect& invalidatedArea)
+void UISurfaceView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    Draw(invalidatedArea);
+    Draw(gfxDstBuffer, invalidatedArea);
 }
 
-void UISurfaceView::Draw(const Rect& invalidatedArea)
+void UISurfaceView::Draw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     SurfaceBuffer* acquireBuffer = (surface_ != nullptr) ? surface_->AcquireBuffer() : nullptr;
     if (acquireBuffer != nullptr) {
         GRAPHIC_LOGE("UISurfaceView::Draw acquireBufferVirAddr=%p \n", acquireBuffer->GetVirAddr());
         // fill with buffer
-        DrawUtils::GetInstance()->DrawWithBuffer(GetRect(), invalidatedArea,
+        DrawUtils::GetInstance()->DrawWithBuffer(gfxDstBuffer, GetRect(), invalidatedArea,
                                                  reinterpret_cast<const ColorType*>(acquireBuffer->GetVirAddr()));
         surface_->ReleaseBuffer(acquireBuffer);
     } else {
         // fill with transpant color
-        DrawUtils::GetInstance()->DrawTranspantArea(GetRect(), invalidatedArea);
+        DrawUtils::GetInstance()->DrawTranspantArea(gfxDstBuffer, GetRect(), invalidatedArea);
     }
 }
 } // namespace OHOS

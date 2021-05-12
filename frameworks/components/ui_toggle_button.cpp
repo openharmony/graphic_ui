@@ -15,8 +15,7 @@
 
 #include "components/ui_toggle_button.h"
 #include "common/image.h"
-#include "draw/draw_arc.h"
-#include "draw/draw_rect.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "imgdecode/cache_manager.h"
 
 namespace OHOS {
@@ -54,13 +53,13 @@ void UIToggleButton::CalculateSize()
     rectWidth_ = DEFAULT_WIDTH * minValue / DEFAULT_HOT_WIDTH;
 }
 
-void UIToggleButton::OnDraw(const Rect& invalidatedArea)
+void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     if ((image_[SELECTED].GetSrcType() != IMG_SRC_UNKNOWN) && (image_[UNSELECTED].GetSrcType() != IMG_SRC_UNKNOWN)) {
-        UICheckBox::OnDraw(invalidatedArea);
+        UICheckBox::OnDraw(gfxDstBuffer, invalidatedArea);
     } else {
         CalculateSize();
-        DrawRect::Draw(GetRect(), invalidatedArea, *style_, opaScale_);
+        BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opaScale_);
         Rect contentRect = GetContentRect();
         int16_t dx = (width_ - rectWidth_) >> 1;
         int16_t dy = (height_ >> 1) - corner_;
@@ -77,7 +76,7 @@ void UIToggleButton::OnDraw(const Rect& invalidatedArea)
                 styleSelect.bgColor_ = Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE);
                 styleSelect.bgOpa_ = OPA_OPAQUE;
                 if (isIntersect) {
-                    DrawRect::Draw(rectMid, trunc, styleSelect, opaScale_);
+                    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rectMid, trunc, styleSelect, opaScale_);
                 }
                 ArcInfo arcInfoRight = {
                     { static_cast<int16_t>(x + rectWidth_ - corner_), static_cast<int16_t>(y + corner_) }, { 0 },
@@ -87,7 +86,8 @@ void UIToggleButton::OnDraw(const Rect& invalidatedArea)
                 styleSelect.lineWidth_ = radius_;
                 styleSelect.lineColor_ = Color::White();
                 if (isIntersect) {
-                    DrawArc::GetInstance()->Draw(arcInfoRight, trunc, styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc,
+                                                        styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
                 }
                 break;
             }
@@ -97,7 +97,7 @@ void UIToggleButton::OnDraw(const Rect& invalidatedArea)
                 styleUnSelect.bgOpa_ = DEFAULT_UNSELECTED_OPA;
                 styleUnSelect.borderRadius_ = corner_;
                 if (isIntersect) {
-                    DrawRect::Draw(rectMid, trunc, styleUnSelect, opaScale_);
+                    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rectMid, trunc, styleUnSelect, opaScale_);
                 }
                 ArcInfo arcInfoLeft = {
                     { static_cast<int16_t>(x + corner_), static_cast<int16_t>(y + corner_) }, { 0 }, radius_, 0,
@@ -106,7 +106,8 @@ void UIToggleButton::OnDraw(const Rect& invalidatedArea)
                 styleUnSelect.lineColor_ = Color::White();
                 styleUnSelect.lineWidth_ = radius_;
                 if (isIntersect) {
-                    DrawArc::GetInstance()->Draw(arcInfoLeft, trunc, styleUnSelect, OPA_OPAQUE, CapType::CAP_NONE);
+                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc,
+                                                          styleUnSelect, OPA_OPAQUE, CapType::CAP_NONE);
                 }
                 break;
             }

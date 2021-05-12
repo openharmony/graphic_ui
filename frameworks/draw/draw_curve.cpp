@@ -15,11 +15,12 @@
 
 #include "draw/draw_curve.h"
 #include "animator/interpolation.h"
-#include "draw/draw_line.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 namespace OHOS {
-void DrawCurve::DrawCubicBezier(const Point& start, const Point& control1, const Point& control2, const Point& end,
-    const Rect& mask, int16_t width, const ColorType& color, OpacityType opacity)
+void DrawCurve::DrawCubicBezier(BufferInfo& gfxDstBuffer, const Point& start, const Point& control1,
+                                const Point& control2, const Point& end, const Rect& mask,
+                                int16_t width, const ColorType& color, OpacityType opacity)
 {
     if ((width == 0) || (opacity == OPA_TRANSPARENT)) {
         return;
@@ -33,7 +34,7 @@ void DrawCurve::DrawCubicBezier(const Point& start, const Point& control1, const
         if ((prePoint.x == point.x) && (prePoint.y == point.y)) {
             continue;
         }
-        DrawLine::Draw(prePoint, point, mask, width, color, opacity);
+        BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, prePoint, point, mask, width, color, opacity);
         prePoint = point;
     }
 }

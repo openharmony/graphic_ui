@@ -48,6 +48,7 @@
 #endif
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
+#include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/heap_base.h"
 #include "gfx_utils/image_info.h"
@@ -381,7 +382,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnDraw(const Rect& invalidatedArea);
+    virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
 
     /**
      * @brief Called after a view is drawn.
@@ -389,7 +390,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnPostDraw(const Rect& invalidatedArea) {}
+    virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) {}
 
     /**
      * @brief Remeasures the view size.

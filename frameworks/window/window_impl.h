@@ -16,10 +16,10 @@
 #ifndef GRAPHIC_LITE_WINDOW_IMPL_H
 #define GRAPHIC_LITE_WINDOW_IMPL_H
 
-#include "iwindow.h"
 #include "components/root_view.h"
+#include "engines/gfx/gfx_engine_manager.h"
+#include "iwindow.h"
 #include "window/window.h"
-#include "dock/screen_device.h"
 
 namespace OHOS {
 class WindowImpl : public Window {
@@ -49,9 +49,18 @@ public:
     void AddToDisplay();
     void RemoveFromDisplay();
 
+    BufferInfo* GetBufferInfo();
 private:
     void UpdateHalDisplayBuffer();
 
+    struct AllocationInfo {
+        uint8_t* virAddr;
+        uint8_t* phyAddr;
+        uint16_t width;
+        uint16_t height;
+        uint32_t stride;
+        ImagePixelFormat pixelFormat;
+    };
     RootView* rootView_;
     IWindow* iWindow_;
     WindowConfig config_;
