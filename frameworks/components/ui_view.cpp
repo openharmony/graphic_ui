@@ -819,12 +819,12 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     nextSibling_ = nullptr;
     parent_ = nullptr;
 
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
     if (bufferInfo == nullptr) {
         return false;
     }
-    int16_t screenWidth = bufferInfo->width;
-    int16_t screenHeight = bufferInfo->height;
+    int16_t screenWidth = bufferInfo->rect.GetWidth();
+    int16_t screenHeight = bufferInfo->rect.GetHeight();
     Rect screenRect(0, 0, screenWidth, screenHeight);
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();

@@ -89,7 +89,6 @@ void BaseGfxEngine::Blit(BufferInfo& dst,
 
 void BaseGfxEngine::Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color, const OpacityType opacity)
 {
-    uint8_t bufferPxSize = DrawUtils::GetByteSizeByColorMode(dst.mode);
     DrawUtils::GetInstance()->FillAreaWithSoftWare(dst, fillArea, color, opacity);
 }
 

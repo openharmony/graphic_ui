@@ -83,7 +83,10 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
+    if (bufferInfo == nullptr) {
+        return false;
+    }
     uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
     if (frameBuf == nullptr) {
         return false;
@@ -139,7 +142,10 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
+    if (bufferInfo == nullptr) {
+        return false;
+    }
     uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
     if (frameBuf == nullptr) {
         GRAPHIC_LOGE("GetBuffer failed");

@@ -39,7 +39,7 @@ uint16_t Screen::GetHeight()
 
 bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
 {
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
     if (bufferInfo == nullptr) {
         return false;
     }
@@ -48,6 +48,9 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
     info.header.colorMode = bufferInfo->mode;
     info.dataSize = screenWidth * screenHeight * DrawUtils::GetByteSizeByColorMode(info.header.colorMode);
     info.data = reinterpret_cast<uint8_t*>(ImageCacheMalloc(info));
+    if (info.data == nullptr) {
+        return false;
+    }
     info.header.width = screenWidth;
     info.header.height = screenHeight;
     info.header.reserved = 0;

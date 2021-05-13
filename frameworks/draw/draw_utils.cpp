@@ -187,7 +187,6 @@ void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer,
                               const ColorType& color,
                               OpacityType opa) const
 {
-    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Rect maskedArea;
     if (!maskedArea.Intersect(area, mask)) {
         return;
@@ -423,7 +422,6 @@ void DrawUtils::DrawImage(BufferInfo& gfxDstBuffer,
     if (image == nullptr) {
         return;
     }
-    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
     Rect maskedArea;
     if (!maskedArea.Intersect(area, mask)) {
         return;

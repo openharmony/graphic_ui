@@ -121,7 +121,7 @@ public:
 
     virtual void FreeBuffer(uint8_t* buffer);
 
-    virtual BufferInfo* GetBufferInfo()
+    virtual BufferInfo* GetFBBufferInfo()
     {
         return nullptr;
     }

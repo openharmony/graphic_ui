@@ -724,7 +724,7 @@ void RootView::DestroyMapBufferInfo()
 
 void RootView::InitDrawContext()
 {
-    dc_.bufferInfo = BaseGfxEngine::GetInstance()->GetBufferInfo();
+    dc_.bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
 
     if (dc_.bufferInfo != nullptr) {
         InitMapBufferInfo(dc_.bufferInfo);
