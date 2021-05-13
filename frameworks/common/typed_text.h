@@ -40,7 +40,7 @@ public:
 
     static Point GetTextSize(const char* text,
                              int16_t letterSpace,
-                             int16_t lineSpace,
+                             int16_t lineHeight,
                              int16_t maxWidth);
 
     static uint32_t GetNextLine(const char* text,

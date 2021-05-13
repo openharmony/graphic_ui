@@ -68,6 +68,27 @@ public:
      * @brief Test multiline line text color display
      */
     void UIKitFontTestDispaly008();
+
+    /**
+     * @brief Test font baseline alignment
+     */
+    void UIKitFontTestBaseline001();
+
+    /**
+     * @brief Test font baseline alignment
+     */
+    void UIKitFontTestBaseline002();
+
+    /**
+     * @brief Test font lineheight alignment
+     */
+    void UIKitFontTestLineHeight001();
+
+    /**
+     * @brief Test font lineheight alignment
+     */
+    void UIKitFontTestLineHeight002();
+
 #if ENABLE_MULTI_FONT
     /**
      * @brief Test multilingual display

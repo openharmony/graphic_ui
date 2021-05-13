@@ -160,7 +160,7 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     UIFont::GetInstance()->SetCurrentFontId(fontId_, fontSize_);
     int16_t maxWidth = (expandWidth_ ? COORD_MAX : textRect.GetWidth());
     if (maxWidth > 0) {
-        textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineSpace_, maxWidth);
+        textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineHeight_, maxWidth);
         FontHeader head;
         if (UIFont::GetInstance()->GetCurrentFontHeader(head) != 0) {
             return;
@@ -210,12 +210,15 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
 {
     Point offset = {offsetX, 0};
     int16_t lineMaxWidth = expandWidth_ ? textSize_.x : coords.GetWidth();
-    int16_t lineHeight = UIFont::GetInstance()->GetHeight() + style.lineSpace_;
+    int16_t lineHeight = style.lineHeight_;
+    if (lineHeight == 0) {
+        lineHeight = UIFont::GetInstance()->GetHeight();
+    }
     uint16_t lineBegin = 0;
     uint32_t maxLineBytes = 0;
     uint16_t lineCount = GetLine(lineMaxWidth, style.letterSpace_, ellipsisIndex, maxLineBytes);
     Point pos;
-    pos.y = TextPositionY(coords, (lineCount * lineHeight - style.lineSpace_));
+    pos.y = TextPositionY(coords, (lineCount * lineHeight));
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.textOpa_);
     for (int i = 0; i < lineCount; i++) {
         if (pos.y > mask.GetBottom()) {
@@ -335,12 +338,13 @@ uint16_t Text::GetEllipsisIndex(const Rect& textRect, const Style& style)
     Point p;
     p.x = textRect.GetWidth() - letterWidth * TEXT_ELLIPSIS_DOT_NUM;
     p.y = textRect.GetHeight();
-    int16_t height = fontEngine->GetHeight() + style.lineSpace_;
+    int16_t height = style.lineHeight_;
+    if (height == 0) {
+        height = fontEngine->GetHeight();
+    }
     if (height) {
         p.y -= p.y % height;
     }
-
-    p.y -= style.lineSpace_;
     return GetLetterIndexByPosition(textRect, style, p);
 }
 
@@ -351,7 +355,10 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     }
     uint32_t lineStart = 0;
     uint32_t nextLineStart = 0;
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t lineHeight = style.lineHeight_;
+    if (lineHeight == 0) {
+        lineHeight = UIFont::GetInstance()->GetHeight();
+    }
     int16_t y = 0;
     uint32_t textLen = static_cast<uint32_t>(strlen(text_));
     int16_t width = 0;
@@ -361,10 +368,10 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
         if (nextLineStart == 0) {
             break;
         }
-        if (pos.y <= y + letterHeight) {
+        if (pos.y <= y + lineHeight) {
             break;
         }
-        y += letterHeight + style.lineSpace_;
+        y += lineHeight;
         lineStart = nextLineStart;
     }
     /* Calculate the x coordinate */
