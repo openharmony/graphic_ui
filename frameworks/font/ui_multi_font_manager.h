@@ -32,12 +32,7 @@ public:
      *
      * @return UIMultiFontManager*
      */
-    static UIMultiFontManager *GetInstance()
-    {
-        static UIMultiFontManager instance;
-        return &instance;
-    }
-
+    static UIMultiFontManager* GetInstance();
     void ClearSearchFontList();
     int8_t SetSearchFontList(uint8_t fontListId, uint8_t *fontIds, uint8_t size);
     int8_t GetSearchFontList(uint8_t fontListId, uint8_t **fontIds);

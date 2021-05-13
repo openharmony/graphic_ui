@@ -19,6 +19,11 @@
 #include "hal_tick.h"
 
 namespace OHOS {
+TaskManager* TaskManager::GetInstance()
+{
+    static TaskManager taskManager;
+    return &taskManager;
+}
 void TaskManager::Add(Task* task)
 {
     if (task == nullptr) {

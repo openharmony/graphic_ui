@@ -36,6 +36,12 @@
 #endif // ENABLE_DEBUG
 namespace OHOS {
 #if ENABLE_DEBUG
+UIDumpDomTree* UIDumpDomTree::GetInstance()
+{
+    static UIDumpDomTree instance;
+    return &instance;
+}
+
 void UIDumpDomTree::AddNameField(UIViewType type, cJSON* usr) const
 {
     if (usr == nullptr) {

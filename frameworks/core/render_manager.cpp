@@ -28,6 +28,12 @@ RenderManager::RenderManager() : fps_(0.f), needResetFPS_(true), onFPSChangedLis
 
 RenderManager::~RenderManager() {}
 
+RenderManager& RenderManager::GetInstance()
+{
+    static RenderManager instance;
+    return instance;
+}
+
 void RenderManager::Init()
 {
     Task::Init();

@@ -18,6 +18,12 @@
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
+InputDeviceManager* InputDeviceManager::GetInstance()
+{
+    static InputDeviceManager instance;
+    return &instance;
+}
+
 void InputDeviceManager::Init()
 {
     if (INDEV_READ_PERIOD > 0) {

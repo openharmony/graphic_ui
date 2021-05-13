@@ -29,11 +29,7 @@ namespace {
 }
 class UITestApp {
 public:
-    static UITestApp* GetInstance()
-    {
-        static UITestApp instance;
-        return &instance;
-    }
+    static UITestApp* GetInstance();
     void Start();
     void Init();
 
@@ -56,11 +52,7 @@ private:
 
 class UIAutoTestApp {
 public:
-    static UIAutoTestApp* GetInstance()
-    {
-        static UIAutoTestApp instance;
-        return &instance;
-    }
+    static UIAutoTestApp* GetInstance();
     void Start();
 private:
     UIAutoTestApp() {}

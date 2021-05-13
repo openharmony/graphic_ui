@@ -40,13 +40,7 @@ public:
      * @since 3.0
      * @version 5.0
      */
-    static UILineBreakEngine& GetInstance()
-    {
-        if (instance_ == nullptr) {
-            instance_ = new UILineBreakEngine();
-        }
-        return *instance_;
-    }
+    static UILineBreakEngine& GetInstance();
 
     /**
      * @brief 初始化换行引擎，加载换行规则文件
@@ -142,7 +136,6 @@ private:
     void LoadRule();
     static constexpr const int32_t LINE_BREAK_STATE_START = 1;
     static constexpr const int32_t LINE_BREAK_STATE_STOP = 0;
-    static UILineBreakEngine* instance_;
     bool initSuccess_;
     char* addr_;
     int32_t size_;

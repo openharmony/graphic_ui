@@ -27,11 +27,7 @@ class MouseInput : public PointerInputDevice {
 public:
     MouseInput() : leftButtonDown_(false), lastX_(0), lastY_(0) {}
     virtual ~MouseInput() {}
-    static MouseInput* GetInstance()
-    {
-        static MouseInput mouseInput;
-        return &mouseInput;
-    }
+    static MouseInput* GetInstance();
     bool Read(DeviceData& data) override;
     void MouseHandler(QMouseEvent* event);
 

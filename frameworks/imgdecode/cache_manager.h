@@ -64,11 +64,7 @@ private:
 
 class CacheManager : public HeapBase {
 public:
-    static CacheManager& GetInstance()
-    {
-        static CacheManager instance;
-        return instance;
-    }
+    static CacheManager& GetInstance();
 
     RetCode Init(uint16_t size);
 

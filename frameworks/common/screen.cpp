@@ -21,6 +21,12 @@
 #include "securec.h"
 
 namespace OHOS {
+Screen& Screen::GetInstance()
+{
+    static Screen instance;
+    return instance;
+}
+
 uint16_t Screen::GetWidth()
 {
     return BaseGfxEngine::GetInstance()->GetScreenWidth();

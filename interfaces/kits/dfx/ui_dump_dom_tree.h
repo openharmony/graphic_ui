@@ -70,11 +70,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    static UIDumpDomTree* GetInstance()
-    {
-        static UIDumpDomTree instance;
-        return &instance;
-    }
+    static UIDumpDomTree* GetInstance();
 
     /**
      * @brief Exports information about a DOM tree starting from a specified DOM node and saves the information to

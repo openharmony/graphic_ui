@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,16 @@
 
 namespace OHOS {
 bool Monitor::isRegister_ = false;
+
+Monitor* Monitor::GetInstance()
+{
+    static Monitor instance;
+    if (!isRegister_) {
+        BaseGfxEngine::InitGfxEngine(&instance);
+        isRegister_ = true;
+    }
+    return &instance;
+}
 
 void Monitor::InitHal()
 {

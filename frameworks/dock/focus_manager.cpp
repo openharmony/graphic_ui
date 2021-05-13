@@ -19,6 +19,12 @@
 #include "gfx_utils/graphic_math.h"
 
 namespace OHOS {
+FocusManager* FocusManager::GetInstance()
+{
+    static FocusManager instance;
+    return &instance;
+}
+
 bool FocusManager::RequestFocus(UIView* view)
 {
     if (view == nullptr || view == focusView_ || !view->IsFocusable() ||

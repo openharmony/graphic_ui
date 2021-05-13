@@ -47,11 +47,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    static VibratorManager* GetInstance()
-    {
-        static VibratorManager instance;
-        return &instance;
-    }
+    static VibratorManager* GetInstance();
 
     void RegisterVibratorFunc(VibratorFunc vibratorFunc)
     {

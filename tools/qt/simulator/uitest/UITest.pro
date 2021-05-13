@@ -36,6 +36,7 @@ SOURCES += \
     ../../../../frameworks/animator/easing_equation.cpp \
     ../../../../frameworks/animator/interpolation.cpp \
     ../../../../frameworks/common/graphic_startup.cpp \
+    ../../../../frameworks/common/image_decode_ability.cpp \
     ../../../../frameworks/common/image.cpp \
     ../../../../frameworks/common/input_device_manager.cpp \
     ../../../../frameworks/common/screen.cpp \
@@ -81,12 +82,15 @@ SOURCES += \
     ../../../../frameworks/default_resource/check_box_res.cpp \
     ../../../../frameworks/dfx/event_injector.cpp \
     ../../../../frameworks/dfx/key_event_injector.cpp \
+    ../../../../frameworks/dfx/performance_task.cpp \
     ../../../../frameworks/dfx/point_event_injector.cpp \
     ../../../../frameworks/dfx/ui_dump_dom_tree.cpp \
     ../../../../frameworks/dock/input_device.cpp \
     ../../../../frameworks/dock/key_input_device.cpp \
     ../../../../frameworks/dock/pointer_input_device.cpp \
     ../../../../frameworks/dock/rotate_input_device.cpp \
+    ../../../../frameworks/dock/screen_device_proxy.cpp \
+    ../../../../frameworks/dock/vibrator_manager.cpp \
     ../../../../frameworks/dock/virtual_input_device.cpp \
     ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
@@ -121,6 +125,7 @@ SOURCES += \
     ../../../../../utils/frameworks/color.cpp \
     ../../../../../utils/frameworks/geometry2d.cpp \
     ../../../../../utils/frameworks/graphic_math.cpp \
+    ../../../../../utils/frameworks/graphic_performance.cpp \
     ../../../../../utils/frameworks/hal_tick.cpp \
     ../../../../../utils/frameworks/mem_api.cpp \
     ../../../../../utils/frameworks/style.cpp \

@@ -22,6 +22,12 @@ static int16_t g_rotate = 0;
 namespace OHOS {
 #if USE_MOUSEWHEEL
 #if ENABLE_ROTATE_INPUT
+MousewheelInput* MousewheelInput::GetInstance()
+{
+    static MousewheelInput mousewheelInput;
+    return &mousewheelInput;
+}
+
 bool MousewheelInput::Read(DeviceData &data)
 {
     data.rotate = g_rotate;

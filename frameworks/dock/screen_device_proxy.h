@@ -31,11 +31,7 @@ namespace OHOS {
 /** @brief A display device proxy */
 class ScreenDeviceProxy : public HeapBase {
 public:
-    static ScreenDeviceProxy* GetInstance()
-    {
-        static ScreenDeviceProxy instance;
-        return &instance;
-    }
+    static ScreenDeviceProxy* GetInstance();
 
     void SetDevice(ScreenDevice* device)
     {

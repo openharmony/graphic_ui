@@ -43,6 +43,12 @@ RootView::RootView()
     InitDrawContext();
 }
 
+RootView* RootView::GetInstance()
+{
+    static RootView instance;
+    return &instance;
+}
+
 RootView::~RootView()
 {
     DestroyDrawContext();

@@ -19,6 +19,12 @@
 
 namespace OHOS {
 #if USE_MOUSE
+MouseInput* MouseInput::GetInstance()
+{
+    static MouseInput mouseInput;
+    return &mouseInput;
+}
+
 bool MouseInput::Read(DeviceData& data)
 {
     data.point.x = lastX_;

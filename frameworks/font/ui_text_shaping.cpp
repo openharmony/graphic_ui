@@ -17,6 +17,12 @@
 #include "font/ui_text_shaping.h"
 
 namespace OHOS {
+UITextShaping* UITextShaping::GetInstance()
+{
+    static UITextShaping instance;
+    return &instance;
+}
+
 bool UITextShaping::IsSameTTFId(uint8_t fontId, uint32_t unicode)
 {
     // Need to be implemented

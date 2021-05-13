@@ -83,6 +83,12 @@ RetCode CacheEntry::SetSrc(const char* path)
     return RetCode::OK;
 }
 
+CacheManager& CacheManager::GetInstance()
+{
+    static CacheManager instance;
+    return instance;
+}
+
 RetCode CacheManager::Init(uint16_t size)
 {
     if ((size == 0) || (size > MAX_CACHE_ENTRY_NUM)) {

@@ -28,11 +28,7 @@ public:
      * @brief return TaskManager's singleton
      * @return TaskManager*
      */
-    static TaskManager* GetInstance()
-    {
-        static TaskManager taskManager;
-        return &taskManager;
-    }
+    static TaskManager* GetInstance();
 
     /**
      * @brief add task to task manager

@@ -19,6 +19,12 @@
 #include "imgdecode/image_load.h"
 
 namespace OHOS {
+FileImgDecoder& FileImgDecoder::GetInstance()
+{
+    static FileImgDecoder instance;
+    return instance;
+}
+
 RetCode FileImgDecoder::Open(ImgResDsc& dsc)
 {
 #ifdef _WIN32

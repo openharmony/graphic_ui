@@ -26,16 +26,7 @@ class Monitor : public QObject, public BaseGfxEngine {
 public:
     Monitor() : defaultColor_ (0x44) {}
     virtual ~Monitor() {}
-    static Monitor* GetInstance()
-    {
-        static Monitor instance;
-        if (!isRegister_) {
-            BaseGfxEngine::InitGfxEngine(&instance);
-            isRegister_ = true;
-        }
-        return &instance;
-    }
-
+    static Monitor* GetInstance();
     void InitHal();
     void InitFontEngine();
     void InitImageDecodeAbility();

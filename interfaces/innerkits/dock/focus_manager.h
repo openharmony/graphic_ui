@@ -42,11 +42,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    static FocusManager* GetInstance()
-    {
-        static FocusManager instance;
-        return &instance;
-    }
+    static FocusManager* GetInstance();
 
     /**
      * @brief Clear the focus.

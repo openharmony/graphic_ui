@@ -70,11 +70,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    static EventInjector* GetInstance()
-    {
-        static EventInjector instance;
-        return &instance;
-    }
+    static EventInjector* GetInstance();
 
     /**
      * @brief Registers an event injector of a specified type.

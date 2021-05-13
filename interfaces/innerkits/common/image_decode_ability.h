@@ -26,11 +26,7 @@ enum {
 };
 class ImageDecodeAbility : public HeapBase {
 public:
-    static ImageDecodeAbility& GetInstance()
-    {
-        static ImageDecodeAbility instance;
-        return instance;
-    }
+    static ImageDecodeAbility& GetInstance();
 
     void SetImageDecodeAbility(uint32_t imageType)
     {
