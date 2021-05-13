@@ -16,9 +16,10 @@
 #ifndef GRAPHIC_LITE_MONITOR_H
 #define GRAPHIC_LITE_MONITOR_H
 
+#include <QtCore/qobject.h>
+
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font_header.h"
-#include <QtCore/qobject.h>
 
 namespace OHOS {
 class Monitor : public QObject, public BaseGfxEngine {

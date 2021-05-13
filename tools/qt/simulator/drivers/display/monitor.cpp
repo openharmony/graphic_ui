@@ -72,7 +72,8 @@ BufferInfo* Monitor::GetFBBufferInfo()
         bufferInfo->mode = ARGB8888;
         bufferInfo->color = 0x44;
         bufferInfo->phyAddr = bufferInfo->virAddr = tftFb_;
-        bufferInfo->stride = HORIZONTAL_RESOLUTION * (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3); // 3: Shift right 3 bits
+        // 3: Shift right 3 bits
+        bufferInfo->stride = HORIZONTAL_RESOLUTION * (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3);
         bufferInfo->width = HORIZONTAL_RESOLUTION;
         bufferInfo->height = VERTICAL_RESOLUTION;
     }

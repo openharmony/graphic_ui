@@ -181,7 +181,7 @@ void DrawLine::DrawWuLine(BufferInfo& gfxDstBuffer, const Point& start, const Po
     // width is longer than distance between start point and end point, need swap direction of line.
     if (dx * dx + dy * dy < width * width) {
         if ((dx == 1) && (dy == 1)) {
-            DrawThinWuLine(gfxDstBuffer, { x0Int, y0Int }, { x3Int, y3Int }, mask, 2, color, opacity); // 2 : width of line
+            DrawThinWuLine(gfxDstBuffer, { x0Int, y0Int }, { x3Int, y3Int }, mask, 2, color, opacity); // 2 : line width
             return;
         }
         dx = MATH_ABS(x0Int - x1Int);

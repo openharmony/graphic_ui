@@ -560,7 +560,7 @@ void DrawUtils::BlendWithSoftWare(const uint8_t* src1,
     uint8_t* dest = dst + destStride * y;
     dest += destByteSize * x;
 
-    uint8_t pxByteSize = GetPxSizeByColorMode(srcMode) >> 3;
+    uint8_t pxByteSize = GetPxSizeByColorMode(srcMode) >> 3; // 3 : right shift 3 bits
     uint8_t* src = const_cast<uint8_t*>(src1) + srcStride * srcRect.GetY() + pxByteSize * srcRect.GetX();
     uint32_t width = srcRect.GetWidth();
     uint32_t height = srcRect.GetHeight();
@@ -860,7 +860,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, con
 static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                    uint8_t* screenBuffer,
                                                    int16_t len,
-												   const ColorMode bufferMode,
+                                                   const ColorMode bufferMode,
                                                    int32_t u,
                                                    int32_t v)
 {
