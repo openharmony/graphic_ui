@@ -113,7 +113,8 @@ private:
 
     int16_t GetDrawAngle(int16_t angle);
 
-    void DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa, bool anti);
+    void DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style,
+                              uint8_t opa, bool anti);
 
     void DrawAxisLine(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask, const Style& style, uint8_t opa);
 

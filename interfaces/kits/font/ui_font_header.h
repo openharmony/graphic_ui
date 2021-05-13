@@ -376,38 +376,5 @@ struct FileCommonHeader {
     uint32_t fileLength;
 };
 #pragma pack()
-
-/**
- * @brief Get the Text Lang Fonts Table
- * @param uint8_t langFontId [in] the font id
- * @return UITextLanguageFontParam* the font table, definition is in font tool
- */
-UITextLanguageFontParam* GetTextLangFontsTable(uint8_t langFontId);
-
-/**
- * @brief Get the Total Lang Id
- * @return uint8_t the total Lang id, definition is in font tool
- */
-uint8_t GetTotalLangId();
-
-/**
- * @brief Get the Total Font Id
- * @return uint8_t the total font id, definition is in font tool
- */
-uint8_t GetTotalFontId();
-
-uint8_t GetBitmapFontIdMax();
-
-/**
- * @brief Get the Total Text Id
- * @return uint8_t the total text id, definition is in font tool
- */
-uint16_t GetTotalTextId();
-
-/**
- * @brief Get the Lang Text default param table
- * @return LangTextParam* the param table, definition is in font tool
- */
-LangTextParam* GetLangTextDefaultParamTable();
 } // namespace OHOS
 #endif /* UI_FONT_HEADER_H */

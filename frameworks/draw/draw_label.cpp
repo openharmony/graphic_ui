@@ -115,7 +115,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         TypedText::GetArcLetterPos(arcCenter, arcTextInfo.radius, angle, posX, posY);
         angle += incrementAngle;
 
-        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, letter, Point{MATH_ROUND(posX), MATH_ROUND(posY)},
+        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, letter, Point { MATH_ROUND(posX), MATH_ROUND(posY) },
                              static_cast<int16_t>(rotateAngle), style.textColor_, opaScale);
     }
 }
@@ -165,7 +165,7 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     transMap.Rotate(rotateAngle, Vector2<float>(-node.left, node.top - head.ascender));
     TransformDataInfo letterTranDataInfo = {ImageHeader{colorMode, 0, 0, 0, node.cols, node.rows}, fontMap, fontWeight,
                                             BlurLevel::LEVEL0};
-    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point{0, 0}, color, opaScale, transMap,
+    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point { 0, 0 }, color, opaScale, transMap,
                                                 letterTranDataInfo);
 }
 } // namespace OHOS

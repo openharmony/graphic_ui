@@ -16,6 +16,7 @@
 #ifndef UI_TEST_VIEW_SCALE_ROTATE_H
 #define UI_TEST_VIEW_SCALE_ROTATE_H
 
+#include <cstdio>
 #include "components/ui_arc_label.h"
 #include "components/ui_box_progress.h"
 #include "components/ui_button.h"
@@ -27,10 +28,9 @@
 #include "components/ui_scroll_view.h"
 #include "components/ui_slider.h"
 #include "components/ui_swipe_view.h"
-#include "layout/list_layout.h"
 #include "gfx_utils/sys_info.h"
+#include "layout/list_layout.h"
 #include "ui_test.h"
-#include <stdio.h>
 
 namespace OHOS {
 class UITestViewScaleRotate : public UITest, public AnimatorCallback {

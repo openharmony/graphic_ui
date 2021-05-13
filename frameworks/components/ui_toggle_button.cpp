@@ -69,15 +69,16 @@ void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
         rectMid.SetRect(x, y, x + rectWidth_, y + (corner_ << 1) + 1);
         Rect trunc = invalidatedArea;
         bool isIntersect = trunc.Intersect(trunc, contentRect);
+        if (isIntersect == false) {
+            return;
+        }
         switch (state_) {
             case SELECTED: {
                 Style styleSelect = StyleDefault::GetBackgroundTransparentStyle();
                 styleSelect.borderRadius_ = corner_;
                 styleSelect.bgColor_ = Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE);
                 styleSelect.bgOpa_ = OPA_OPAQUE;
-                if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rectMid, trunc, styleSelect, opaScale_);
-                }
+                BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rectMid, trunc, styleSelect, opaScale_);
                 ArcInfo arcInfoRight = {
                     { static_cast<int16_t>(x + rectWidth_ - corner_), static_cast<int16_t>(y + corner_) }, { 0 },
                     radius_, 0, CIRCLE_IN_DEGREE, nullptr
@@ -85,10 +86,8 @@ void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
                 styleSelect.bgColor_ = Color::White();
                 styleSelect.lineWidth_ = radius_;
                 styleSelect.lineColor_ = Color::White();
-                if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc,
-                                                        styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
-                }
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc,
+                                                      styleSelect, OPA_OPAQUE, CapType::CAP_NONE);
                 break;
             }
             case UNSELECTED: {
@@ -96,19 +95,15 @@ void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
                 styleUnSelect.bgColor_ = Color::White();
                 styleUnSelect.bgOpa_ = DEFAULT_UNSELECTED_OPA;
                 styleUnSelect.borderRadius_ = corner_;
-                if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rectMid, trunc, styleUnSelect, opaScale_);
-                }
+                BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rectMid, trunc, styleUnSelect, opaScale_);
                 ArcInfo arcInfoLeft = {
                     { static_cast<int16_t>(x + corner_), static_cast<int16_t>(y + corner_) }, { 0 }, radius_, 0,
                     CIRCLE_IN_DEGREE, nullptr
                 };
                 styleUnSelect.lineColor_ = Color::White();
                 styleUnSelect.lineWidth_ = radius_;
-                if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc,
-                                                          styleUnSelect, OPA_OPAQUE, CapType::CAP_NONE);
-                }
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc,
+                                                      styleUnSelect, OPA_OPAQUE, CapType::CAP_NONE);
                 break;
             }
             default:

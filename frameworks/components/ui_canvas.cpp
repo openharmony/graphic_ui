@@ -687,7 +687,7 @@ void UICanvas::DoDrawImage(BufferInfo& gfxDstBuffer,
     cordsTmp.SetPosition(start.x, start.y);
     cordsTmp.SetHeight(imageParam->height);
     cordsTmp.SetWidth(imageParam->width);
-    DrawImage::DrawCommon(gfxDstBuffer,cordsTmp, invalidatedArea,
+    DrawImage::DrawCommon(gfxDstBuffer, cordsTmp, invalidatedArea,
                           imageParam->image->GetPath(), style, paint.GetOpacity());
 }
 

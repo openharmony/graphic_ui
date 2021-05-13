@@ -746,8 +746,7 @@ void UIChartPolyline::DrawGradientColor(BufferInfo& gfxDstBuffer,
         }
         start.y = enableReverse_ ? (start.y - startY) : (startY - start.y);
         end.y = enableReverse_ ? (end.y - startY) : (startY - end.y);
-        polyLine.start = start;
-        polyLine.end = end;
+        polyLine = { start, end };
         FindCrossPoints(linePoints, polyLine, cross);
         if (cross.firstFind && cross.secondFind) {
             cross.first.y = enableReverse_ ? (cross.first.y + startY) : (startY - cross.first.y);
@@ -760,8 +759,7 @@ void UIChartPolyline::DrawGradientColor(BufferInfo& gfxDstBuffer,
     }
 
     if (cross.firstFind && !cross.secondFind) {
-        cross.second.x = limitPoints.end.x;
-        cross.second.y = y;
+        cross.second = { limitPoints.end.x, y };
         cross.first.y = y;
         BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, cross.first, cross.second,
             invalidatedArea, 1, data->GetFillColor(), mixData_[mixScale]);

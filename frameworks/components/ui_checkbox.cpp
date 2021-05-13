@@ -156,15 +156,21 @@ void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
     styleSelect.lineOpa_ = backgroundOpacity_;
     uint8_t opa = DrawUtils::GetMixOpacity(opaScale_, backgroundOpacity_);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
+    // 2 : double
     BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, mid, trunc, rectLineWidth * 2, Color::White(),
-                                           opa); // 2 : double
+                                           opa);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoMid, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
+    // 2 : double
     BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, mid, end, trunc, rectLineWidth * 2, Color::White(),
-                                           opa); // 2 : double
+                                           opa);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
 }
 
-void UICheckBox::UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer, Rect rect, Rect trunc, int16_t borderRadius, int16_t rectLineWidth)
+void UICheckBox::UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
+                                                Rect rect,
+                                                Rect trunc,
+                                                int16_t borderRadius,
+                                                int16_t rectLineWidth)
 {
     Rect contentRect  = GetContentRect();
     Style styleUnSelect  = StyleDefault::GetBackgroundTransparentStyle();
