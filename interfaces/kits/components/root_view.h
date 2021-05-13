@@ -261,27 +261,27 @@ public:
     void DrawTop(UIView* view, const Rect& rect);
 
     /**
-     * @brief 根据FBBuffer信息更新内存信息.
+     * @brief update momory info based on FB buffer info.
      *
-     * @param bufferInfo FBBuffer信息
-     * @since 1.0
-     * @version 1.0
+     * @param fbBufferInfo FB buffer info
+     * @since 6.0
+     * @version 6.0
      */
     void UpdateBufferInfo(BufferInfo* fbBufferInfo);
 
     /**
-     * @brief 保存绘制上下文.
+     * @brief save the drawing context.
      *
-     * @since 1.0
-     * @version 1.0
+     * @since 6.0
+     * @version 6.0
      */
     void SaveDrawContext();
 
     /**
-     * @brief 恢复绘制上下文.
+     * @brief restore the drawing context.
      *
-     * @since 1.0
-     * @version 1.0
+     * @since 6.0
+     * @version 6.0
      */
     void RestoreDrawContext();
 private:
@@ -330,11 +330,11 @@ private:
     WindowImpl* boundWindow_ {nullptr};
 #endif
     /**
-     * @brief 绘制上下文结构信息.
-     * @param bufferInfo FB Buffer信息.
-     * @param mapBufferInfo 动效变换Buffer信息.
-     * @since 5.0
-     * @version 3.0
+     * @brief draw context info.
+     * @param bufferInfo dst drawing buffer info.
+     * @param mapBufferInfo dst animator drawing buffer info.
+     * @since 6.0
+     * @version 6.0
      */
     struct DrawContext {
         BufferInfo* bufferInfo;
