@@ -26,27 +26,21 @@
 namespace OHOS {
 class UILineBreakProxy;
 /**
- * @brief 使用ICU作为换行引擎核心部分
+ * @brief Using ICU as the core of lineBreakEngine.
  *
- * @since 3.0
- * @version 5.0
  */
 class UILineBreakEngine : public HeapBase {
 public:
     /**
-     * @brief 获取UILineBreakEngine实例
+     * @brief Get UILineBreakEngine instannce.
      *
      * @return UILineBreakEngine&
-     * @since 3.0
-     * @version 5.0
      */
     static UILineBreakEngine& GetInstance();
 
     /**
-     * @brief 初始化换行引擎，加载换行规则文件
+     * @brief Init the line break engine and load the line break rules.
      *
-     * @since 3.0
-     * @version 5.0
      */
     void Init()
     {
@@ -54,24 +48,20 @@ public:
     }
 
     /**
-     * @brief 获取下一个换行位置
+     * @brief Get the next line break position.
      *
-     * @param record UILineBreakProxy实例
-     * @return uint16_t 换行位置
-     * @since 3.0
-     * @version 5.0
+     * @param record UILineBreakProxy instance.
+     * @return uint16_t Next line break position.
      */
     uint16_t GetNextBreakPos(UILineBreakProxy& record);
 
     /**
-     * @brief 设置规则文件信息
+     * @brief Set the rule file path.
      *
-     * @param fp 文件fp
-     * @param offset 偏移量
-     * @param size 文件大小
-     * @return int32_t 设置规则文件返回值
-     * @since 3.0
-     * @version 5.0
+     * @param fp File descriptor.
+     * @param offset The offset of rule.
+     * @param size File size.
+     * @return int32_t Result.
      */
     int32_t SetRuleBinInfo(int32_t fp, int32_t offset, uint32_t size)
     {
@@ -86,11 +76,9 @@ public:
     }
 
     /**
-     * @brief 设置规则文件加载位置
+     * @brief Set the rule file load addr object.
      *
-     * @param addr 规则文件加载位置
-     * @since 3.0
-     * @version 5.0
+     * @param addr The rule file load addr.
      */
     void SetRuleFileLoadAddr(char* addr)
     {
@@ -98,11 +86,9 @@ public:
     }
 
     /**
-     * @brief 获取规则文件加载位置
+     * @brief Get the rule file load addr.
      *
-     * @return char* 规则文件加载位置
-     * @since 3.0
-     * @version 5.0
+     * @return char* The rule file load addr.
      */
     char* GetRuleFileLoadAddr() const
     {
@@ -110,11 +96,9 @@ public:
     }
 
     /**
-     * @brief 获取规则文件大小
+     * @brief Get the size of rule file.
      *
-     * @return int32_t 规则文件大小
-     * @since 3.0
-     * @version 5.0
+     * @return int32_t The size of rule file.
      */
     int32_t GetRuleFileSize() const
     {
@@ -146,19 +130,18 @@ private:
 };
 
 /**
- * @brief 换行代理类
+ * @brief Line break proxy.
+ *
  */
 class UILineBreakProxy : public HeapBase {
 public:
     UILineBreakProxy() = delete;
 
     /**
-     * @brief UILineBreakProxy对象构造函数
+     * @brief Construct a new UILineBreakProxy object.
      *
-     * @param str 输入字符串
-     * @param len 输入字符的长度
-     * @since 3.0
-     * @version 5.0
+     * @param str Input string.
+     * @param len The length of string.
      */
     UILineBreakProxy(uint16_t* str, uint16_t len) : str_(str), len_(len), prePos_(0) {}
 
@@ -170,11 +153,9 @@ public:
     }
 
     /**
-     * @brief 获取下一个换行位置
+     * @brief Get next line break position.
      *
-     * @return uint16_t 下一个换行位置
-     * @since 3.0
-     * @version 5.0
+     * @return uint16_t Next line break position.
      */
     uint16_t GetNextBreakPos()
     {
@@ -184,11 +165,9 @@ public:
     }
 
     /**
-     * @brief 获取字符串的长度
+     * @brief Get the length of string.
      *
-     * @return uint16_t 字符串的长度
-     * @since 3.0
-     * @version 5.0
+     * @return uint16_t The length of string.
      */
     uint16_t GetStrLen() const
     {
@@ -199,11 +178,9 @@ public:
     }
 
     /**
-     * @brief 获取字符串
+     * @brief Get the string.
      *
-     * @return uint16_t* 字符串位置
-     * @since 3.0
-     * @version 5.0
+     * @return uint16_t* The str setted.
      */
     const uint16_t* GetStr() const
     {
