@@ -68,16 +68,10 @@ public:
 private:
     const int16_t TITLE_HEIGHT = 29;
     const int16_t BUTTON_GROUP_WIDTH = 250;
-    UIScrollView scroll_;
-    GridLayout layoutButton_;
+    UIScrollView* scroll_ = nullptr;
+    GridLayout* layoutButton_ = nullptr;
     ListLayout* listScroll_ = nullptr;
-    UIViewGroup container_;
-    UILabel labelMargin_;
-    UIToggleButton margin_;
-    UILabel labelBorder_;
-    UIToggleButton border_;
-    UILabel labelPadding_;
-    UIToggleButton padding_;
+    UIViewGroup* container_ = nullptr;
     MarginListener* marginListener_ = nullptr;
     BorderListener* borderListener_ = nullptr;
     PaddingListener* paddingListener_ = nullptr;
@@ -88,91 +82,6 @@ private:
     UIPicker* picker_ = nullptr;
 
     void AddTitle(const char* text);
-};
-
-class MarginListener : public UIToggleButton::OnChangeListener {
-public:
-    explicit MarginListener(UITestBorderMarginPadding* view)
-    {
-        view_ = view;
-    }
-
-    virtual ~MarginListener() {}
-
-    virtual bool OnChange(UICheckBox::UICheckBoxState state)
-    {
-        if (state == UICheckBox::SELECTED) {
-            view_->style_.SetStyle(STYLE_MARGIN_LEFT, MARGIN_SIZE);
-            view_->style_.SetStyle(STYLE_MARGIN_TOP, MARGIN_SIZE);
-            view_->style_.SetStyle(STYLE_MARGIN_RIGHT, MARGIN_SIZE);
-            view_->style_.SetStyle(STYLE_MARGIN_BOTTOM, MARGIN_SIZE);
-        } else {
-            view_->style_.SetStyle(STYLE_MARGIN_LEFT, 0);
-            view_->style_.SetStyle(STYLE_MARGIN_TOP, 0);
-            view_->style_.SetStyle(STYLE_MARGIN_RIGHT, 0);
-            view_->style_.SetStyle(STYLE_MARGIN_BOTTOM, 0);
-        }
-        view_->ReloadTest();
-    }
-
-private:
-    static constexpr int16_t MARGIN_SIZE = 30;
-    UITestBorderMarginPadding* view_ = nullptr;
-};
-
-class BorderListener : public UIToggleButton::OnChangeListener {
-public:
-    explicit BorderListener(UITestBorderMarginPadding* view)
-    {
-        view_ = view;
-    }
-
-    virtual ~BorderListener() {}
-
-    virtual bool OnChange(UICheckBox::UICheckBoxState state)
-    {
-        if (state == UICheckBox::SELECTED) {
-            view_->style_.SetStyle(STYLE_BORDER_WIDTH, 20); // 20: border width
-            view_->style_.SetStyle(STYLE_BORDER_OPA, OPA_OPAQUE);
-            view_->style_.SetStyle(STYLE_BORDER_COLOR, Color::Blue().full);
-        } else {
-            view_->style_.SetStyle(STYLE_BORDER_WIDTH, 0);
-        }
-        view_->ReloadTest();
-    }
-
-private:
-    UITestBorderMarginPadding* view_ = nullptr;
-};
-
-class PaddingListener : public UIToggleButton::OnChangeListener {
-public:
-    explicit PaddingListener(UITestBorderMarginPadding* view)
-    {
-        view_ = view;
-    }
-
-    virtual ~PaddingListener() {}
-
-    virtual bool OnChange(UICheckBox::UICheckBoxState state)
-    {
-        if (state == UICheckBox::SELECTED) {
-            view_->style_.SetStyle(STYLE_PADDING_LEFT, PADDING_SIZE);
-            view_->style_.SetStyle(STYLE_PADDING_TOP, PADDING_SIZE);
-            view_->style_.SetStyle(STYLE_PADDING_RIGHT, PADDING_SIZE);
-            view_->style_.SetStyle(STYLE_PADDING_BOTTOM, PADDING_SIZE);
-        } else {
-            view_->style_.SetStyle(STYLE_PADDING_LEFT, 0);
-            view_->style_.SetStyle(STYLE_PADDING_TOP, 0);
-            view_->style_.SetStyle(STYLE_PADDING_RIGHT, 0);
-            view_->style_.SetStyle(STYLE_PADDING_BOTTOM, 0);
-        }
-        view_->ReloadTest();
-    }
-
-private:
-    static constexpr int16_t PADDING_SIZE = 30;
-    UITestBorderMarginPadding* view_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_BORDER_MARGIN_PADDING_H

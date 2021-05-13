@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+#include "ui_test_border_margin_padding.h"
 #include "common/screen.h"
 #include "components/text_adapter.h"
 #include "components/ui_arc_label.h"
@@ -27,7 +28,6 @@
 #include "components/ui_slider.h"
 #include "components/ui_swipe_view.h"
 #include "test_resource_config.h"
-#include "ui_test_border_margin_padding.h"
 
 namespace OHOS {
 static ImageAnimatorInfo g_imageAnimatorInfo[4] = {
@@ -37,64 +37,178 @@ static ImageAnimatorInfo g_imageAnimatorInfo[4] = {
     {IMAGE_ANIMATOR_3_PATH, {84, 108}, 116, 116, IMG_SRC_FILE_PATH},
 };
 
+class MarginListener : public UICheckBox::OnChangeListener {
+public:
+    explicit MarginListener(UITestBorderMarginPadding* view)
+    {
+        view_ = view;
+    }
+
+    virtual ~MarginListener() {}
+
+    bool OnChange(UICheckBox::UICheckBoxState state) override
+    {
+        if (state == UICheckBox::SELECTED) {
+            view_->style_.SetStyle(STYLE_MARGIN_LEFT, MARGIN_SIZE);
+            view_->style_.SetStyle(STYLE_MARGIN_TOP, MARGIN_SIZE);
+            view_->style_.SetStyle(STYLE_MARGIN_RIGHT, MARGIN_SIZE);
+            view_->style_.SetStyle(STYLE_MARGIN_BOTTOM, MARGIN_SIZE);
+        } else {
+            view_->style_.SetStyle(STYLE_MARGIN_LEFT, 0);
+            view_->style_.SetStyle(STYLE_MARGIN_TOP, 0);
+            view_->style_.SetStyle(STYLE_MARGIN_RIGHT, 0);
+            view_->style_.SetStyle(STYLE_MARGIN_BOTTOM, 0);
+        }
+        view_->ReloadTest();
+        return true;
+    }
+
+private:
+    static constexpr int16_t MARGIN_SIZE = 30;
+    UITestBorderMarginPadding* view_ = nullptr;
+};
+
+class BorderListener : public UICheckBox::OnChangeListener {
+public:
+    explicit BorderListener(UITestBorderMarginPadding* view)
+    {
+        view_ = view;
+    }
+
+    virtual ~BorderListener() {}
+
+    bool OnChange(UICheckBox::UICheckBoxState state) override
+    {
+        if (state == UICheckBox::SELECTED) {
+            view_->style_.SetStyle(STYLE_BORDER_WIDTH, 20); // 20: border width
+            view_->style_.SetStyle(STYLE_BORDER_OPA, OPA_OPAQUE);
+            view_->style_.SetStyle(STYLE_BORDER_COLOR, Color::Blue().full);
+        } else {
+            view_->style_.SetStyle(STYLE_BORDER_WIDTH, 0);
+        }
+        view_->ReloadTest();
+        return true;
+    }
+
+private:
+    UITestBorderMarginPadding* view_ = nullptr;
+};
+
+class PaddingListener : public UICheckBox::OnChangeListener {
+public:
+    explicit PaddingListener(UITestBorderMarginPadding* view)
+    {
+        view_ = view;
+    }
+
+    virtual ~PaddingListener() {}
+
+    bool OnChange(UICheckBox::UICheckBoxState state) override
+    {
+        if (state == UICheckBox::SELECTED) {
+            view_->style_.SetStyle(STYLE_PADDING_LEFT, PADDING_SIZE);
+            view_->style_.SetStyle(STYLE_PADDING_TOP, PADDING_SIZE);
+            view_->style_.SetStyle(STYLE_PADDING_RIGHT, PADDING_SIZE);
+            view_->style_.SetStyle(STYLE_PADDING_BOTTOM, PADDING_SIZE);
+        } else {
+            view_->style_.SetStyle(STYLE_PADDING_LEFT, 0);
+            view_->style_.SetStyle(STYLE_PADDING_TOP, 0);
+            view_->style_.SetStyle(STYLE_PADDING_RIGHT, 0);
+            view_->style_.SetStyle(STYLE_PADDING_BOTTOM, 0);
+        }
+        view_->ReloadTest();
+        return true;
+    }
+
+private:
+    static constexpr int16_t PADDING_SIZE = 30;
+    UITestBorderMarginPadding* view_ = nullptr;
+};
+
 void UITestBorderMarginPadding::SetUp()
 {
-    container_.SetPosition(0, 0, Screen::GetInstance().GetWidth(),
-                           Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
+    if (container_ == nullptr) {
+        container_ = new UIViewGroup();
+    }
+    if (scroll_ == nullptr) {
+        scroll_ = new UIScrollView();
+    }
+    if (layoutButton_ == nullptr) {
+        layoutButton_ = new GridLayout();
+    }
+    if (listScroll_ == nullptr) {
+        listScroll_ = new ListLayout();
+    }
 
-    scroll_.SetPosition(0, 0, Screen::GetInstance().GetWidth() - BUTTON_GROUP_WIDTH,
-                        Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
-    scroll_.SetThrowDrag(true);
-    scroll_.SetHorizontalScrollState(false);
-    scroll_.SetScrollBlankSize(100); // 100 ： blank size
+    UIToggleButton* marginBtn = new UIToggleButton();
+    UIToggleButton* borderBtn = new UIToggleButton();
+    UIToggleButton* paddingBtn = new UIToggleButton();
+    UILabel* labelMargin = new UILabel();
+    UILabel* labelBorder = new UILabel();
+    UILabel* labelPadding = new UILabel();
 
-    layoutButton_.SetPosition(Screen::GetInstance().GetWidth() - BUTTON_GROUP_WIDTH, 0, BUTTON_GROUP_WIDTH,
-                              Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
-    layoutButton_.SetRows(3); // 3: rows
-    layoutButton_.SetCols(2); // 2: cols
+    container_->SetPosition(0, 0, Screen::GetInstance().GetWidth(),
+                            Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
+
+    scroll_->SetPosition(0, 0, Screen::GetInstance().GetWidth() - BUTTON_GROUP_WIDTH,
+                         Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
+    scroll_->SetThrowDrag(true);
+    scroll_->SetHorizontalScrollState(false);
+    scroll_->SetScrollBlankSize(100); // 100 ： blank size
+
+    layoutButton_->SetPosition(Screen::GetInstance().GetWidth() - BUTTON_GROUP_WIDTH, 0, BUTTON_GROUP_WIDTH,
+                               Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
+    layoutButton_->SetRows(3); // 3: rows
+    layoutButton_->SetCols(2); // 2: cols
 
     listScroll_ = new ListLayout(ListLayout::VERTICAL);
     listScroll_->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
     listScroll_->SetStyle(STYLE_BACKGROUND_COLOR, Color::Olive().full);
     listScroll_->SetPosition(0, 0, Screen::GetInstance().GetWidth() - BUTTON_GROUP_WIDTH,
                              Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
-    scroll_.Add(listScroll_);
+    scroll_->Add(listScroll_);
 
-    container_.Add(&scroll_);
-    container_.Add(&layoutButton_);
-    margin_.Resize(64, 64);  // 64 : button size
-    border_.Resize(64, 64);  // 64 : button size
-    padding_.Resize(64, 64); // 64 : button size
+    container_->Add(scroll_);
+    container_->Add(layoutButton_);
+    marginBtn->Resize(64, 64);  // 64 : button size
+    borderBtn->Resize(64, 64);  // 64 : button size
+    paddingBtn->Resize(64, 64); // 64 : button size
 
-    labelMargin_.SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
-    labelMargin_.SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
-    labelMargin_.SetText("margin ON/OFF");
-    labelMargin_.ReMeasure();
+    labelMargin->SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
+    labelMargin->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
+    labelMargin->SetText("margin ON/OFF");
+    labelMargin->ReMeasure();
 
-    labelBorder_.SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
-    labelBorder_.SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
-    labelBorder_.SetText("border ON/OFF");
-    labelBorder_.ReMeasure();
+    labelBorder->SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
+    labelBorder->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
+    labelBorder->SetText("border ON/OFF");
+    labelBorder->ReMeasure();
 
-    labelPadding_.SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
-    labelPadding_.SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
-    labelPadding_.SetText("padding ON/OFF");
-    labelPadding_.ReMeasure();
+    labelPadding->SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
+    labelPadding->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
+    labelPadding->SetText("padding ON/OFF");
+    labelPadding->ReMeasure();
 
-    layoutButton_.Add(&labelMargin_);
-    layoutButton_.Add(&margin_);
-    layoutButton_.Add(&labelBorder_);
-    layoutButton_.Add(&border_);
-    layoutButton_.Add(&labelPadding_);
-    layoutButton_.Add(&padding_);
-    layoutButton_.LayoutChildren();
+    layoutButton_->Add(labelMargin);
+    layoutButton_->Add(marginBtn);
+    layoutButton_->Add(labelBorder);
+    layoutButton_->Add(borderBtn);
+    layoutButton_->Add(labelPadding);
+    layoutButton_->Add(paddingBtn);
+    layoutButton_->LayoutChildren();
 
-    BorderListener* borderListener_ = new BorderListener(this);
-    border_.SetOnChangeListener(borderListener_);
-    MarginListener* marginListener_ = new MarginListener(this);
-    margin_.SetOnChangeListener(marginListener_);
-    PaddingListener* paddingListener_ = new PaddingListener(this);
-    padding_.SetOnChangeListener(paddingListener_);
+    if (borderListener_ == nullptr) {
+        borderListener_ = new BorderListener(this);
+    }
+    borderBtn->SetOnChangeListener(borderListener_);
+    if (marginListener_ == nullptr) {
+        marginListener_ = new MarginListener(this);
+    }
+    marginBtn->SetOnChangeListener(marginListener_);
+    if (paddingListener_ == nullptr) {
+        paddingListener_ = new PaddingListener(this);
+    }
+    paddingBtn->SetOnChangeListener(paddingListener_);
 
     if (adapterData_ == nullptr) {
         adapterData_ = new List<const char*>();
@@ -133,8 +247,8 @@ void UITestBorderMarginPadding::TearDown()
         delete adapterData_;
         adapterData_ = nullptr;
     }
-    listScroll_->Remove(picker_);
     if (picker_ != nullptr) {
+        listScroll_->Remove(picker_);
         delete picker_;
         picker_ = nullptr;
     }
@@ -146,9 +260,10 @@ void UITestBorderMarginPadding::TearDown()
         delete chart_;
         chart_ = nullptr;
     }
-    layoutButton_.RemoveAll();
-    container_.RemoveAll();
-    DeleteChildren(listScroll_);
+    DeleteChildren(container_);
+    container_ = nullptr;
+    scroll_ = nullptr;
+    layoutButton_ = nullptr;
     listScroll_ = nullptr;
 }
 
@@ -157,7 +272,7 @@ void UITestBorderMarginPadding::ReloadTest()
     int16_t heightBefor = listScroll_->GetHeight();
     int16_t yBefor = listScroll_->GetY();
 
-    scroll_.Remove(listScroll_);
+    scroll_->RemoveAll();
     if (chart_ != nullptr) {
         listScroll_->Remove(chart_);
         chart_->ClearDataSerial();
@@ -179,12 +294,12 @@ void UITestBorderMarginPadding::ReloadTest()
                              Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
     listScroll_->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
     listScroll_->SetStyle(STYLE_BACKGROUND_COLOR, Color::Olive().full);
-    scroll_.Add(listScroll_);
+    scroll_->Add(listScroll_);
     GetTestView();
 
     int16_t yAfter = listScroll_->GetHeight() * yBefor / heightBefor;
-    scroll_.ScrollBy(0, yAfter);
-    container_.Invalidate();
+    scroll_->ScrollBy(0, yAfter);
+    container_->Invalidate();
 }
 
 const UIView* UITestBorderMarginPadding::GetTestView()
@@ -207,7 +322,7 @@ const UIView* UITestBorderMarginPadding::GetTestView()
     UIKit_UITestBorderMarginPadding_Test_016();
     UIKit_UITestBorderMarginPadding_Test_017();
     UIKit_UITestBorderMarginPadding_Test_018();
-    return &container_;
+    return container_;
 }
 
 void UITestBorderMarginPadding::AddTitle(const char* text)
