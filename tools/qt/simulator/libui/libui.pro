@@ -1,7 +1,6 @@
 CONFIG -= qt
 
 TEMPLATE = lib
-CONFIG += staticlib
 
 CONFIG += c++11
 
@@ -10,6 +9,7 @@ CONFIG += c++11
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS \
+    CJSON_HIDE_SYMBOLS \
     "ENABLE_SHAPING=0" \
     "ENABLE_ICU=1" \
     "ENABLE_VECTOR_FONT=1" \
@@ -30,6 +30,7 @@ SOURCES += \
     ../../../../frameworks/animator/easing_equation.cpp \
     ../../../../frameworks/animator/interpolation.cpp \
     ../../../../frameworks/common/graphic_startup.cpp \
+    ../../../../frameworks/common/image_decode_ability.cpp \
     ../../../../frameworks/common/image.cpp \
     ../../../../frameworks/common/input_device_manager.cpp \
     ../../../../frameworks/common/screen.cpp \
@@ -70,12 +71,12 @@ SOURCES += \
     ../../../../frameworks/components/ui_view.cpp \
     ../../../../frameworks/components/ui_view_group.cpp \
     ../../../../frameworks/dock/focus_manager.cpp \
-    ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
     ../../../../frameworks/core/render_manager.cpp \
     ../../../../frameworks/core/task_manager.cpp \
     ../../../../frameworks/default_resource/check_box_res.cpp \
     ../../../../frameworks/dfx/event_injector.cpp \
     ../../../../frameworks/dfx/key_event_injector.cpp \
+    ../../../../frameworks/dfx/performance_task.cpp \
     ../../../../frameworks/dfx/point_event_injector.cpp \
     ../../../../frameworks/dfx/ui_dump_dom_tree.cpp \
     ../../../../frameworks/dock/input_device.cpp \
@@ -83,7 +84,9 @@ SOURCES += \
     ../../../../frameworks/dock/pointer_input_device.cpp \
     ../../../../frameworks/dock/rotate_input_device.cpp \
     ../../../../frameworks/dock/screen_device_proxy.cpp \
+    ../../../../frameworks/dock/vibrator_manager.cpp \
     ../../../../frameworks/dock/virtual_input_device.cpp \
+    ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
     ../../../../frameworks/draw/draw_curve.cpp \
     ../../../../frameworks/draw/draw_image.cpp \
@@ -116,6 +119,7 @@ SOURCES += \
     ../../../../../utils/frameworks/color.cpp \
     ../../../../../utils/frameworks/geometry2d.cpp \
     ../../../../../utils/frameworks/graphic_math.cpp \
+    ../../../../../utils/frameworks/graphic_performance.cpp \
     ../../../../../utils/frameworks/hal_tick.cpp \
     ../../../../../utils/frameworks/mem_api.cpp \
     ../../../../../utils/frameworks/style.cpp \
@@ -126,7 +130,6 @@ SOURCES += \
     ../../../../../../../third_party/cJSON/cJSON.c
 
 HEADERS += \
-    ../../../../../surface/interfaces/kits/surface.h \
     ../../../../frameworks/common/typed_text.h \
     ../../../../frameworks/core/render_manager.h \
     ../../../../frameworks/default_resource/check_box_res.h \
@@ -154,9 +157,9 @@ HEADERS += \
     ../../../../interfaces/innerkits/common/task_manager.h \
     ../../../../interfaces/innerkits/dock/focus_manager.h \
     ../../../../interfaces/innerkits/dock/rotate_input_device.h \
-    ../../../../interfaces/innerkits/engines/gfx/gfx_engine_manager.h \
     ../../../../interfaces/innerkits/dock/vibrator_manager.h \
     ../../../../interfaces/innerkits/font/ui_font_builder.h \
+    ../../../../interfaces/innerkits/engines/gfx/gfx_engine_manager.h \
     ../../../../interfaces/kits/animator/animator.h \
     ../../../../interfaces/kits/animator/easing_equation.h \
     ../../../../interfaces/kits/animator/interpolation.h \
@@ -266,3 +269,10 @@ INCLUDEPATH += \
     ../../../../../../../third_party/libjpeg \
     ../../../../../../../third_party/libpng \
     ../../../../../../../third_party/qrcodegen/cpp
+
+LIBS += $$OUT_PWD/../libs/libpng.dll
+LIBS += $$OUT_PWD/../libs/libjpeg.dll
+LIBS += $$OUT_PWD/../libs/qrcodegen.dll
+LIBS += $$OUT_PWD/../libs/freetype.dll
+LIBS += $$OUT_PWD/../libs/libharfbuzz.a
+LIBS += $$OUT_PWD/../libs/icu.dll

@@ -173,6 +173,7 @@ void UITestFocusManager::SetUp()
 
 void UITestFocusManager::TearDown()
 {
+    FocusManager::GetInstance()->ClearFocus();
     if (testOnFocusListener_ != nullptr) {
         delete testOnFocusListener_;
         testOnFocusListener_ = nullptr;
@@ -221,7 +222,6 @@ void UITestFocusManager::TearDown()
         delete clearFocusListener_;
         clearFocusListener_ = nullptr;
     }
-    FocusManager::GetInstance()->ClearFocus();
     DeleteChildren(container_);
     container_ = nullptr;
 }
