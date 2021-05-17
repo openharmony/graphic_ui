@@ -15,7 +15,7 @@
 
 #include "ui_test_view_bitmap.h"
 
-#include <cstring>
+#include "securec.h"
 
 #include "common/screen.h"
 #include "components/ui_label_button.h"
@@ -26,7 +26,7 @@ class ViewBitmapListener : public UIView::OnClickListener {
 public:
     ViewBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img)
     {
-        memset(&info_, 0, sizeof(ImageInfo));
+        memset_s(&info_, sizeof(ImageInfo), 0, sizeof(ImageInfo));
         if ((img != nullptr) && (container != nullptr)) {
             container->Add(img);
             img->SetVisible(false);
@@ -64,7 +64,7 @@ class ScreenBitmapListener : public UIView::OnClickListener {
 public:
     ScreenBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img)
     {
-        memset(&info_, 0, sizeof(ImageInfo));
+        memset_s(&info_, sizeof(ImageInfo), 0, sizeof(ImageInfo));
         if ((img != nullptr) && (container != nullptr)) {
             container->Add(img);
             img->SetVisible(false);
