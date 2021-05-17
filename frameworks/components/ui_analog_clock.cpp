@@ -218,6 +218,7 @@ void UIAnalogClock::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidated
     if (GetWorkMode() == WorkMode::NORMAL) {
         DrawHand(gfxDstBuffer, current, invalidatedArea, secondHand_);
     }
+    UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
 }
 
 void UIAnalogClock::SetPosition(int16_t x, int16_t y)

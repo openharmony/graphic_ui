@@ -299,6 +299,7 @@ void UIButton::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     if (state_ == ButtonState::PRESSED) {
         animator_.DrawMask(gfxDstBuffer, invalidatedArea);
     }
+    UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
 }
 
 namespace {

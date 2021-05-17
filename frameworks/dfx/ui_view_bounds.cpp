@@ -13,34 +13,25 @@
  * limitations under the License.
  */
 
-#include "ui_test_app.h"
-#ifdef _WIN32
-#include <thread>
-#else
-#include <pthread.h>
-#endif // _WIN32
+#include "dfx/ui_view_bounds.h"
 
-#ifdef _WIN32
-void AutoTestThread()
-#else
-void* AutoTestThread(void*)
-#endif // _WIN32
+#if ENABLE_DEBUG
+#include "core/render_manager.h"
+
+namespace OHOS {
+UIViewBounds* UIViewBounds::GetInstance()
 {
-    OHOS::UIAutoTestApp::GetInstance()->Start();
+    static UIViewBounds instance;
+    return &instance;
 }
 
-
-void RunApp()
+void UIViewBounds::SetShowState(bool show)
 {
-    OHOS::UITestApp::GetInstance()->Start();
-#if ENABLE_UI_AUTO_TEST
-#ifdef _WIN32
-    std::thread autoTestPthread(AutoTestThread);
-    autoTestPthread.detach();
-#else
-    pthread_t thread;
-    pthread_create(&thread, 0, AutoTestThread, nullptr);
-    pthread_detach(thread);
-#endif // _WIN32
-#endif // ENABLE_UI_AUTO_TEST
+    if (showViewBounds_ != show) {
+        showViewBounds_ = show;
+        // when state changed, need redraw all view in screen
+        RenderManager::GetInstance().RefreshScreen();
+    }
 }
+} // namespace OHOS
+#endif // ENABLE_DEBUG

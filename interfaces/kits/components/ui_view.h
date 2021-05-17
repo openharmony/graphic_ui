@@ -136,7 +136,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnClick(UIView& view, const ClickEvent& event) { return false; }
+        virtual bool OnClick(UIView& view, const ClickEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief A destructor used to delete the <b>OnClickListener</b> instance.
@@ -165,7 +168,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnLongPress(UIView& view, const LongPressEvent& event) { return false; }
+        virtual bool OnLongPress(UIView& view, const LongPressEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief A destructor used to delete the <b>OnLongPressListener</b> instance.
@@ -193,7 +199,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnDragStart(UIView& view, const DragEvent& event) { return false; }
+        virtual bool OnDragStart(UIView& view, const DragEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief Called when a view is being dragged.
@@ -205,7 +214,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnDrag(UIView& view, const DragEvent& event) { return false; }
+        virtual bool OnDrag(UIView& view, const DragEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief Called when a view stops dragging.
@@ -217,7 +229,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnDragEnd(UIView& view, const DragEvent& event) { return false; }
+        virtual bool OnDragEnd(UIView& view, const DragEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief A destructor used to delete the <b>OnDragListener</b> instance.
@@ -246,7 +261,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnPress(UIView& view, const PressEvent& event) { return false; }
+        virtual bool OnPress(UIView& view, const PressEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief Called when a view is released.
@@ -258,7 +276,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnRelease(UIView& view, const ReleaseEvent& event) { return false; }
+        virtual bool OnRelease(UIView& view, const ReleaseEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief Called when a click event on a view is canceled.
@@ -270,7 +291,10 @@ public:
          * @since 1.0
          * @version 1.0
          */
-        virtual bool OnCancel(UIView& view, const CancelEvent& event) { return false; }
+        virtual bool OnCancel(UIView& view, const CancelEvent& event)
+        {
+            return false;
+        }
 
         /**
          * @brief A destructor used to delete the <b>OnTouchListener</b> instance.
@@ -297,7 +321,10 @@ public:
          * @since 5.0
          * @version 3.0
          */
-        virtual bool OnRotate(UIView& view, const RotateEvent& event) { return true; }
+        virtual bool OnRotate(UIView& view, const RotateEvent& event)
+        {
+            return true;
+        }
         /**
          * @brief A destructor used to delete an <b>OnRotateListener</b> instance.
          * @since 5.0
@@ -320,7 +347,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetOnRotateListener(OnRotateListener* onRotateListener) { onRotateListener_ = onRotateListener; }
+    void SetOnRotateListener(OnRotateListener* onRotateListener)
+    {
+        onRotateListener_ = onRotateListener;
+    }
 
     /**
      * @brief Obtains the rotation event listener for the view.
@@ -328,7 +358,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    OnRotateListener*& GetOnRotateListener() { return onRotateListener_; }
+    OnRotateListener*& GetOnRotateListener()
+    {
+        return onRotateListener_;
+    }
 #endif
 
     /**
@@ -390,7 +423,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) {}
+    virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
 
     /**
      * @brief Remeasures the view size.
@@ -508,7 +541,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnDragListener(OnDragListener* onDragListener) { onDragListener_ = onDragListener; }
+    void SetOnDragListener(OnDragListener* onDragListener)
+    {
+        onDragListener_ = onDragListener;
+    }
 
     /**
      * @brief Obtains the drag event listener for the view.
@@ -516,7 +552,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnDragListener*& GetOnDragListener() { return onDragListener_; }
+    OnDragListener*& GetOnDragListener()
+    {
+        return onDragListener_;
+    }
 
     /**
      * @brief Sets a click event listener for the view.
@@ -524,7 +563,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnClickListener(OnClickListener* onClickListener) { onClickListener_ = onClickListener; }
+    void SetOnClickListener(OnClickListener* onClickListener)
+    {
+        onClickListener_ = onClickListener;
+    }
 
     /**
      * @brief Obtains the click event listener for the view.
@@ -532,7 +574,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnClickListener*& GetOnClickListener() { return onClickListener_; }
+    OnClickListener*& GetOnClickListener()
+    {
+        return onClickListener_;
+    }
 
     /**
      * @brief Sets a long-press event listener for the view.
@@ -551,7 +596,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnLongPressListener*& GetOnLongPressListener() { return onLongPressListener_; }
+    OnLongPressListener*& GetOnLongPressListener()
+    {
+        return onLongPressListener_;
+    }
 
     /**
      * @brief Sets a touch event listener for the view.
@@ -559,7 +607,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnTouchListener(OnTouchListener* onTouchListener) { onTouchListener_ = onTouchListener; }
+    void SetOnTouchListener(OnTouchListener* onTouchListener)
+    {
+        onTouchListener_ = onTouchListener;
+    }
 
     /**
      * @brief Obtains the touch event listener for the view.
@@ -567,7 +618,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnTouchListener*& GetTouchListener() { return onTouchListener_; }
+    OnTouchListener*& GetTouchListener()
+    {
+        return onTouchListener_;
+    }
 
     /**
      * @brief Obtains the top-level view based on specified coordinates.
@@ -598,7 +652,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetParent(UIView* parent) { parent_ = parent; }
+    void SetParent(UIView* parent)
+    {
+        parent_ = parent;
+    }
 
     /**
      * @brief Obtains the parent view of the view.
@@ -606,7 +663,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIView* GetParent() const { return parent_; }
+    UIView* GetParent() const
+    {
+        return parent_;
+    }
 
     /**
      * @brief Sets the next sibling view for the view.
@@ -614,7 +674,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetNextSibling(UIView* sibling) { nextSibling_ = sibling; }
+    void SetNextSibling(UIView* sibling)
+    {
+        nextSibling_ = sibling;
+    }
 
     /**
      * @brief Obtains the next sibling view of the view.
@@ -622,7 +685,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIView* GetNextSibling() const { return nextSibling_; }
+    UIView* GetNextSibling() const
+    {
+        return nextSibling_;
+    }
 
     /**
      * @brief Sets whether the view is visible.
@@ -646,7 +712,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsVisible() const { return visible_; }
+    bool IsVisible() const
+    {
+        return visible_;
+    }
 
     /**
      * @brief Sets whether the view is touchable.
@@ -655,7 +724,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetTouchable(bool touch) { touchable_ = touch; }
+    void SetTouchable(bool touch)
+    {
+        touchable_ = touch;
+    }
 
     /**
      * @brief Checks whether the view is touchable.
@@ -663,7 +735,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsTouchable() const { return touchable_; }
+    bool IsTouchable() const
+    {
+        return touchable_;
+    }
 
     /**
      * @brief Sets whether the view is draggable.
@@ -684,7 +759,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsDraggable() const { return draggable_; }
+    bool IsDraggable() const
+    {
+        return draggable_;
+    }
 
     /**
      * @brief Sets whether to transfer the drag event to the parent view for processing when the view is being dragged.
@@ -694,7 +772,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetDragParentInstead(bool dragParentInstead) { dragParentInstead_ = dragParentInstead; }
+    void SetDragParentInstead(bool dragParentInstead)
+    {
+        dragParentInstead_ = dragParentInstead;
+    }
 
     /**
      * @brief Obtains whether the view transfers a drag event to the parent view for processing.
@@ -703,7 +784,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsDragParentInstead() const { return dragParentInstead_; }
+    bool IsDragParentInstead() const
+    {
+        return dragParentInstead_;
+    }
 
     /**
      * @brief Obtains the absolute rectangle area of the view. When the view has deformation such as rotation,
@@ -755,7 +839,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    Rect GetRelativeRect() const { return rect_; }
+    Rect GetRelativeRect() const
+    {
+        return rect_;
+    }
 
     /**
      * @brief Adjusts the size of the visible area. This operation may affect the final display size.
@@ -1023,7 +1110,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsViewGroup() const { return isViewGroup_; }
+    bool IsViewGroup() const
+    {
+        return isViewGroup_;
+    }
 
     /**
      * @brief Sets whether to intercept the input event. If intercepted, the view does not transfer the input event to
@@ -1033,7 +1123,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetIntercept(bool isIntercept) { isIntercept_ = isIntercept; }
+    void SetIntercept(bool isIntercept)
+    {
+        isIntercept_ = isIntercept;
+    }
 
     /**
      * @brief Gets whether to intercept the input event. If intercepted, the view does not transfer the input event to
@@ -1042,7 +1135,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsIntercept() { return isIntercept_; }
+    bool IsIntercept()
+    {
+        return isIntercept_;
+    }
 
     /**
      * @brief Sets the affine transformation matrix.
@@ -1072,7 +1168,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual UIView* GetChildById(const char* id) const { return nullptr; }
+    virtual UIView* GetChildById(const char* id) const
+    {
+        return nullptr;
+    }
 
     /**
      * @brief Sets the view ID.
@@ -1080,7 +1179,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetViewId(const char* id) { id_ = id; }
+    void SetViewId(const char* id)
+    {
+        id_ = id;
+    }
 
     /**
      * @brief Obtains the view ID.
@@ -1088,7 +1190,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    const char* GetViewId() const { return id_; }
+    const char* GetViewId() const
+    {
+        return id_;
+    }
 
     /**
      * @brief Sets the view index.
@@ -1096,7 +1201,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetViewIndex(int16_t index) { index_ = index; }
+    void SetViewIndex(int16_t index)
+    {
+        index_ = index;
+    }
 
     /**
      * @brief Obtains the view index.
@@ -1104,7 +1212,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetViewIndex() const { return index_; }
+    int16_t GetViewIndex() const
+    {
+        return index_;
+    }
 
     /**
      * @brief Obtains the view type.
@@ -1112,7 +1223,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual UIViewType GetViewType() const { return UI_NUMBER_MAX; }
+    virtual UIViewType GetViewType() const
+    {
+        return UI_NUMBER_MAX;
+    }
 
     /**
      * @brief Lays out all child views according to the preset arrangement mode.
@@ -1297,7 +1411,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual int64_t GetStyle(uint8_t key) const { return style_->GetStyle(key); }
+    virtual int64_t GetStyle(uint8_t key) const
+    {
+        return style_->GetStyle(key);
+    }
 
     /**
      * @brief Obtains the view style. This function applies to scenarios where the style does not need to be modified,
@@ -1306,7 +1423,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    const Style& GetStyleConst() const { return *style_; }
+    const Style& GetStyleConst() const
+    {
+        return *style_;
+    }
 
     /**
      * @brief Sets the opacity for the view.
@@ -1315,7 +1435,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOpaScale(uint8_t opaScale) { opaScale_ = opaScale; }
+    void SetOpaScale(uint8_t opaScale)
+    {
+        opaScale_ = opaScale;
+    }
 
     /**
      * @brief Obtains the view opacity.
@@ -1324,7 +1447,10 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint8_t GetOpaScale() const { return opaScale_; }
+    uint8_t GetOpaScale() const
+    {
+        return opaScale_;
+    }
 
     /**
      * @brief Obtains the extra message about a <b>UIView</b> instance. This field is ignored by the graphics
@@ -1334,7 +1460,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    ViewExtraMsg* GetExtraMsg() { return viewExtraMsg_; }
+    ViewExtraMsg* GetExtraMsg()
+    {
+        return viewExtraMsg_;
+    }
 
     /**
      * @brief Sets the extra message about a <b>UIView</b> instance. This field is ignored by the graphics
@@ -1344,7 +1473,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetExtraMsg(ViewExtraMsg* extraMsg) { viewExtraMsg_ = extraMsg; }
+    void SetExtraMsg(ViewExtraMsg* extraMsg)
+    {
+        viewExtraMsg_ = extraMsg;
+    }
 
     /**
      * @brief Rotates the view.
@@ -1396,7 +1528,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetFocusable(bool focusable) { focusable_ = focusable; }
+    void SetFocusable(bool focusable)
+    {
+        focusable_ = focusable;
+    }
 
     /**
      * @brief 获取视图是否可获焦.
@@ -1405,7 +1540,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    bool IsFocusable() const { return focusable_; }
+    bool IsFocusable() const
+    {
+        return focusable_;
+    }
 
     /**
      * @brief 组件获焦响应
@@ -1437,7 +1575,10 @@ public:
          * @since 5.0
          * @version 3.0
          */
-        virtual bool OnFocus(UIView& view) { return false; }
+        virtual bool OnFocus(UIView& view)
+        {
+            return false;
+        }
 
         /**
          * @brief 回调函数，视图失焦时触发.
@@ -1445,7 +1586,10 @@ public:
          * @since 5.0
          * @version 3.0
          */
-        virtual bool OnBlur(UIView& view) { return false; }
+        virtual bool OnBlur(UIView& view)
+        {
+            return false;
+        }
 
         /**
          * @brief 析构函数.
@@ -1461,7 +1605,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetOnFocusListener(OnFocusListener* onFocusListener) { onFocusListener_ = onFocusListener; }
+    void SetOnFocusListener(OnFocusListener* onFocusListener)
+    {
+        onFocusListener_ = onFocusListener;
+    }
 
     /**
      * @brief 获取当前视图焦点改变事件监听者.
@@ -1469,7 +1616,10 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    OnFocusListener* GetOnFocusListener() const { return onFocusListener_; }
+    OnFocusListener* GetOnFocusListener() const
+    {
+        return onFocusListener_;
+    }
 #endif
 
     /**
@@ -1514,6 +1664,7 @@ protected:
 
     uint8_t GetMixOpaScale() const;
     bool IsInvalid(float percent);
+    void DrawViewBounds(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
 
 private:
     Rect rect_;

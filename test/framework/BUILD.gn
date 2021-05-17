@@ -13,7 +13,7 @@ import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/config/subsystem/graphic/config.gni")
 
 config("graphic_test_config") {
-  defines = [ "ENABEL_UI_AUTO_TEST=1" ]
+  defines = [ "ENABLE_UI_AUTO_TEST=1" ]
 }
 
 test_sources = [
@@ -57,6 +57,7 @@ test_sources = [
   "../uitest/test_vector_font/ui_test_vector_font.cpp",
   "../uitest/test_video/ui_test_video.cpp",
   "../uitest/test_view_bitmap/ui_test_view_bitmap.cpp",
+  "../uitest/test_view_bounds/ui_test_view_bounds.cpp",
   "../uitest/test_view_group/ui_test_view_group.cpp",
   "../uitest/test_view_percent/ui_test_view_percent.cpp",
   "../uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp",

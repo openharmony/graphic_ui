@@ -71,6 +71,7 @@ graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/dfx/performance_task.cpp",
   "$GRAPHIC_UI_PATH/frameworks/dfx/point_event_injector.cpp",
   "$GRAPHIC_UI_PATH/frameworks/dfx/ui_dump_dom_tree.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/dfx/ui_view_bounds.cpp",
   "$GRAPHIC_UI_PATH/frameworks/dock/input_device.cpp",
   "$GRAPHIC_UI_PATH/frameworks/dock/key_input_device.cpp",
   "$GRAPHIC_UI_PATH/frameworks/dock/pointer_input_device.cpp",

@@ -67,6 +67,7 @@ SOURCES += \
     ../../../../test/uitest/test_ui_swipe_view/ui_test_ui_swipe_view.cpp \
     ../../../../test/uitest/test_vector_font/ui_test_vector_font.cpp \
     ../../../../test/uitest/test_view_bitmap/ui_test_view_bitmap.cpp \
+    ../../../../test/uitest/test_view_bounds/ui_test_view_bounds.cpp \
     ../../../../test/uitest/test_view_group/ui_test_view_group.cpp \
     ../../../../test/uitest/test_view_percent/ui_test_view_percent.cpp \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp

@@ -63,6 +63,7 @@
 #include "test_ui_scroll_view/ui_test_ui_scroll_view.h"
 #include "test_ui_swipe_view/ui_test_ui_swipe_view.h"
 #include "test_view_bitmap/ui_test_view_bitmap.h"
+#include "test_view_bounds/ui_test_view_bounds.h"
 #include "test_view_group/ui_test_view_group.h"
 #include "test_view_percent/ui_test_view_percent.h"
 #include "test_view_scale_rotate/ui_test_view_scale_rotate.h"
@@ -118,6 +119,7 @@ void UITestGroup::SetUpTestCase()
 #if ENABLE_DEBUG
     testCaseList_.PushBack(TestCaseInfo{"Event_Injector", new UITestEventInjector()});
     testCaseList_.PushBack(TestCaseInfo{"Dump_Dom", new UITestDumpDomTree()});
+    testCaseList_.PushBack(TestCaseInfo{"View Bounds", new UITestViewBounds()});
 #ifdef VERSION_STANDARD
     testCaseList_.PushBack(TestCaseInfo{"Screenshot", new UITestScreenshot()});
 #endif

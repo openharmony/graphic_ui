@@ -16,12 +16,13 @@
 #ifndef GRAPHIC_LITE_RENDER_MANAGER_H
 #define GRAPHIC_LITE_RENDER_MANAGER_H
 
-#include "components/ui_view.h"
-#include "components/root_view.h"
 #include "common/task_manager.h"
+#include "components/root_view.h"
+#include "components/ui_view.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/list.h"
 #include "gfx_utils/sys_info.h"
+
 #if ENABLE_WINDOW
 #include "window/window.h"
 #endif
@@ -71,8 +72,8 @@ public:
 
     void RemoveFromDisplay(Window* window);
 #endif
-
-static void RenderRect(const Rect& rect, RootView* rootView);
+    static void RenderRect(const Rect& rect, RootView* rootView);
+    void RefreshScreen();
 
 private:
     RenderManager();

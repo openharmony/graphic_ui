@@ -45,6 +45,7 @@ UIScrollView::UIScrollView()
 void UIScrollView::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     if (!xSlider_.IsVisible() && !ySlider_.IsVisible()) {
+        UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
         return;
     }
     Rect scrollRect = GetRect();
@@ -56,6 +57,7 @@ void UIScrollView::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedA
         ySlider_.SetPosition(scrollRect.GetX() + ySliderPos_.x, scrollRect.GetY() + ySliderPos_.y);
         ySlider_.OnDraw(gfxDstBuffer, invalidatedArea);
     }
+    UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
 }
 
 bool UIScrollView::OnDragEvent(const DragEvent& event)
