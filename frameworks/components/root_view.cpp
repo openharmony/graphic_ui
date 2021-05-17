@@ -729,6 +729,9 @@ void RootView::InitDrawContext()
     if (dc_.bufferInfo != nullptr) {
         InitMapBufferInfo(dc_.bufferInfo);
     }
+
+    bakDc_.bufferInfo = nullptr;
+    bakDc_.mapBufferInfo = nullptr;
 }
 
 void RootView::DestroyDrawContext()
