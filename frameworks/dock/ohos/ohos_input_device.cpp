@@ -14,6 +14,7 @@
  */
 
 #include "dock/ohos/ohos_input_device.h"
+#if ENABLE_WINDOW
 #include "gfx_utils/input_event_info.h"
 #include "iwindows_manager.h"
 
@@ -24,3 +25,4 @@ bool OHOSInputDevice::Read(DeviceData& data)
     return false;
 }
 }
+#endif // ENABLE_WINDOW
