@@ -10,4 +10,6 @@ SUBDIRS += \
     third_party/zlib \
     third_party/libpng \
     third_party/qrcodegen \
+    libui \
+    test \
     uitest/UITest.pro
