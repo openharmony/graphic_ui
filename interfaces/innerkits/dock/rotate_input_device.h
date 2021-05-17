@@ -25,7 +25,7 @@ namespace OHOS {
 class RotateInputDevice : public InputDevice {
 public:
     /** @brief Constructor */
-    RotateInputDevice(){};
+    RotateInputDevice();
     /** @brief Destructor */
     virtual ~RotateInputDevice(){};
 
@@ -35,14 +35,10 @@ public:
     }
 
 protected:
-#ifdef _WIN32
-    static constexpr int16_t ROTATE_INPUT_THRESHOLD = 1;
-#else
-    static constexpr int16_t ROTATE_INPUT_THRESHOLD = 10;
-#endif
     void DispatchEvent(const DeviceData& data) override;
-    bool rotateStart = false;
-    int16_t threshold_ = ROTATE_INPUT_THRESHOLD;
+    bool rotateStart_;
+    int16_t threshold_;
+    int16_t cachedRotation_;
 };
 } // namespace OHOS
 

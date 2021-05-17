@@ -19,6 +19,12 @@
 #include "draw/draw_rect.h"
 #include "themes/theme_manager.h"
 
+namespace {
+#if ENABLE_ROTATE_INPUT
+constexpr float DEFAULT_PICKER_ROTATE_FACTOR = 1.668;
+#endif
+}
+
 namespace OHOS {
 class PickerListScrollListener : public ListScrollListener {
 public:
@@ -163,7 +169,7 @@ UIPicker::UIPicker()
 
     list_.SetThrowDrag(true);
 #if ENABLE_ROTATE_INPUT
-    list_.rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    list_.rotateFactor_ = DEFAULT_PICKER_ROTATE_FACTOR;
 #endif
 #if ENABLE_VIBRATOR
     list_.SetMotorType(VibratorType::VIBRATOR_TYPE_TWO);
