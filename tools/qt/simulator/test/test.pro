@@ -1,7 +1,6 @@
 CONFIG -= qt
 
 TEMPLATE = lib
-CONFIG += staticlib
 
 CONFIG += c++11
 
@@ -151,3 +150,5 @@ INCLUDEPATH += \
     ../../../../../../../third_party/cJSON \
     ../../../../../../../third_party/libjpeg \
     ../../../../../../../third_party/libpng
+
+LIBS += $$OUT_PWD/../libs/libui.dll
