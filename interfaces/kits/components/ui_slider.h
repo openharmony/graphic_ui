@@ -269,6 +269,10 @@ public:
      */
     void SetRotateFactor(float factor)
     {
+        if (MATH_ABS(factor) > MAX_ROTATE_FACTOR) {
+            rotateFactor_ = (factor > 0) ? MAX_ROTATE_FACTOR : -MAX_ROTATE_FACTOR;
+            return;
+        }
         rotateFactor_ = factor;
     }
 
@@ -347,6 +351,7 @@ private:
     static constexpr uint8_t FOREGROUND_COLOR_R = 0x1f;
     static constexpr uint8_t FOREGROUND_COLOR_G = 0x71;
     static constexpr uint8_t FOREGROUND_COLOR_B = 0xff;
+    static constexpr uint8_t MAX_ROTATE_FACTOR = 128;
 #if ENABLE_SLIDER_KNOB
     void DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, const Rect& foregroundRect);
 #else
@@ -361,8 +366,7 @@ private:
     int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
     int32_t UpdateCurrentValue(const Point& knobPosition);
 #if ENABLE_ROTATE_INPUT
-    static constexpr float DEFAULT_ROTATE_FACTOR = -0.1;
-    float rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    float rotateFactor_;
 #endif
     UISliderEventListener* listener_;
 }; // class UISlider

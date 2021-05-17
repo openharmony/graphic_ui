@@ -17,22 +17,50 @@
 #include "dock/focus_manager.h"
 
 #if ENABLE_ROTATE_INPUT
+namespace {
+#ifdef _WIN32
+constexpr int16_t ROTATE_INPUT_THRESHOLD = 1;
+#else
+constexpr int16_t ROTATE_INPUT_THRESHOLD = 10;
+#endif
+}
+
 namespace OHOS {
+RotateInputDevice::RotateInputDevice() : rotateStart_(false), threshold_(ROTATE_INPUT_THRESHOLD), cachedRotation_(0) {}
+
 void RotateInputDevice::DispatchEvent(const DeviceData& data)
 {
+    bool cachedToRotate = false;
+    if (data.rotate == 0 || rotateStart_) {
+        cachedRotation_ = 0;
+    } else {
+        cachedRotation_ += data.rotate;
+        if (MATH_ABS(cachedRotation_) >= threshold_) {
+            cachedToRotate = true;
+        }
+    }
+
+    if (!cachedToRotate && !rotateStart_) {
+        return;
+    }
+
     UIView *view_ = FocusManager::GetInstance()->GetFocusedView();
     if (view_ == nullptr) {
         return;
-    } else if (data.rotate == 0 && rotateStart) {
-        view_->OnRotateEvent(0);
-        rotateStart = false;
-        return;
-    } else if (MATH_ABS(data.rotate) < threshold_) {
-        return;
-    } else {
-        view_->OnRotateEvent(data.rotate);
-        rotateStart = true;
     }
+    if (MATH_ABS(data.rotate) < threshold_ && !rotateStart_ && !cachedToRotate) {
+        return;
+    }
+    if (data.rotate == 0 && rotateStart_) {
+        view_->OnRotateEndEvent(0);
+        rotateStart_ = false;
+        return;
+    }
+    if (!rotateStart_) {
+        view_->OnRotateStartEvent(data.rotate);
+    }
+    view_->OnRotateEvent(data.rotate);
+    rotateStart_ = true;
 }
 } // namespace OHOS
 #endif

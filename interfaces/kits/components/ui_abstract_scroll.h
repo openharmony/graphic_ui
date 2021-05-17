@@ -245,7 +245,25 @@ public:
      */
     void SetRotateFactor(float factor)
     {
+        if (MATH_ABS(factor) > MAX_ROTATE_FACTOR) {
+            rotateFactor_ = (factor > 0) ? MAX_ROTATE_FACTOR : -MAX_ROTATE_FACTOR;
+            return;
+        }
         rotateFactor_ = factor;
+    }
+
+    /**
+     * @brief 设置触发惯性滑动的组件大小比例阈值.
+     *
+     * @param threshold 设置触发惯性滑动的比例阈值.
+     * @since 6
+     */
+    void SetRotateThreshold(uint8_t threshold)
+    {
+        if (threshold == 0) {
+            return;
+        }
+        threshold_ = threshold;
     }
 #endif
 
@@ -282,6 +300,7 @@ protected:
     static constexpr uint8_t MAX_DELTA_Y_SIZE = 3;
 
     static constexpr uint16_t SCROLL_BAR_WIDTH = 5;
+    static constexpr uint8_t MAX_ROTATE_FACTOR = 128;
 
     class ListAnimatorCallback : public AnimatorCallback {
     public:
@@ -370,8 +389,8 @@ protected:
     ListAnimatorCallback animatorCallback_;
     Animator scrollAnimator_;
 #if ENABLE_ROTATE_INPUT
-    static constexpr float DEFAULT_ROTATE_FACTOR = 1.0;
-    float rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    float rotateFactor_;
+    int16_t threshold_;
 #endif
     bool yScrollBarVisible_ = false;
     UIAbstractScrollBar* yScrollBar_ = nullptr;
