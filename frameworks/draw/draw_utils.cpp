@@ -187,6 +187,10 @@ void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer,
                               const ColorType& color,
                               OpacityType opa) const
 {
+    if (opa == OPA_TRANSPARENT) {
+        return;
+    }
+
     Rect maskedArea;
     if (!maskedArea.Intersect(area, mask)) {
         return;
