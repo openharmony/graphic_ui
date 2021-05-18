@@ -59,8 +59,7 @@ public:
      * @param u3 Indicates the coordinates for the end point of the cubic Bezier curve, within [0, 1024].
      *
      * @return Returns the coordinates for the current change rate.
-     * @since 1.0
-     * @version 1.0
+     * @since 3
      */
     static int16_t GetBezierInterpolation(int16_t t, int16_t u0, int16_t u1, int16_t u2, int16_t u3);
 
@@ -76,8 +75,7 @@ public:
      * @param u3 Indicates the coordinates for the end point of the cubic Bezier curve, within [0, 1].
      *
      * @return Returns the coordinates for the current change rate.
-     * @since 1.0
-     * @version 1.0
+     * @since 6
      */
     static float GetBezierInterpolation(float t, float u0, float u1, float u2, float u3);
 
@@ -94,8 +92,7 @@ public:
      * @param y2 Indicates the ordinate of the second control point of the cubic Bezier curve, within [0, 1].
      *
      * @return Returns the ordinate of the P.
-     * @since 1.0
-     * @version 1.0
+     * @since 6
      */
     static float GetBezierY(float x, float x1, float y1, float x2, float y2);
 

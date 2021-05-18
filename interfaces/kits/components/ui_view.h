@@ -943,8 +943,7 @@ public:
     /**
      * @brief 获取组件设置margin属性后margin的宽度，包括组件宽度加marginLeft 加 marginRight.
      * @return margin的宽度
-     * @since 3.0
-     * @version 3.0
+     * @since 6
      */
     int16_t GetWidthWithMargin()
     {
@@ -954,8 +953,7 @@ public:
     /**
      * @brief 获取组件设置margin属性后margin的高度度，包括组件宽度加marginTop 加 marginBottom.
      * @return margin的高度
-     * @since 3.0
-     * @version 3.0
+     * @since 6
      */
     int16_t GetHeightWithMargin()
     {
