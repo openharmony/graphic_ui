@@ -36,6 +36,7 @@
  */
 
 #include "components/ui_view.h"
+#if ENABLE_WINDOW
 #include "surface.h"
 
 #include <string>
@@ -173,4 +174,5 @@ private:
     const uint8_t DEFAULT_QUEUE_SIZE = 2;
 };
 } // namespace OHOS
+#endif // ENABLE_WINDOW
 #endif // GRAPHIC_LITE_UI_SURFACE_VIEW_H

@@ -14,7 +14,7 @@
  */
 
 #include "components/ui_surface_view.h"
-
+#if ENABLE_WINDOW
 #include <string>
 
 #include "draw/draw_rect.h"
@@ -155,3 +155,4 @@ void UISurfaceView::Draw(const Rect& invalidatedArea)
     }
 }
 } // namespace OHOS
+#endif // ENABLE_WINDOW
