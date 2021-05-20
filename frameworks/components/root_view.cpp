@@ -551,6 +551,12 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
     bool enableAnimator = false;
     TransformMap curTransMap;
 
+#if ENABLE_WINDOW
+    WindowImpl* boundWin = static_cast<WindowImpl*>(GetBoundWindow());
+    BufferInfo* gfxDstBuffer = boundWin->GetBufferInfo();
+    UpdateBufferInfo(gfxDstBuffer);
+#endif
+
     while (par != nullptr) {
         if (curView != nullptr) {
             if (curView->IsVisible()) {
@@ -726,7 +732,6 @@ void RootView::DestroyMapBufferInfo()
 void RootView::InitDrawContext()
 {
     dc_.bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
-
     if (dc_.bufferInfo != nullptr) {
         InitMapBufferInfo(dc_.bufferInfo);
     }
