@@ -302,7 +302,7 @@ void RootView::OptimizeInvalidView(UIView* curview, UIView* background, List<Rec
     Rect& invalidRect = mapEntry->second.Front();
     /* Transparent views should draw from background */
     if (((curview->GetStyleConst().bgOpa_ != OPA_OPAQUE) || (curview->GetOpaScale() != OPA_OPAQUE) ||
-        (!curview->IsTransInvalid())) &&
+         (!curview->IsTransInvalid())) &&
         (curview != this)) {
         AddInvalidateRect(invalidRect, background);
         invalidateMap_.erase(mapEntry);
@@ -361,7 +361,7 @@ void RootView::OptimizeInvalidMap()
             if (curview->IsViewGroup()) {
                 /* Set background/topview */
                 if (((curview->GetStyleConst().bgOpa_ == OPA_OPAQUE) && (curview->GetOpaScale() == OPA_OPAQUE) &&
-                    curview->IsTransInvalid()) ||
+                     curview->IsTransInvalid()) ||
                     (curview == this)) {
                     background[opaStackCount] = curview;
                 } else {
@@ -514,10 +514,9 @@ void RootView::BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Re
         imageInfo.header.height = dc_.mapBufferInfo->height;
         imageInfo.header.reserved = 0;
         imageInfo.data = reinterpret_cast<uint8_t*>(dc_.mapBufferInfo->virAddr);
-        TransformDataInfo imageTranDataInfo = {imageInfo.header, imageInfo.data, pxSize, LEVEL0,
-                                               BILINEAR};
-        BaseGfxEngine::GetInstance()->DrawTransform(*dc_.bufferInfo, invalidRect, {0, 0}, Color::Black(),
-                                                    OPA_OPAQUE, transMap, imageTranDataInfo);
+        TransformDataInfo imageTranDataInfo = {imageInfo.header, imageInfo.data, pxSize, LEVEL0, BILINEAR};
+        BaseGfxEngine::GetInstance()->DrawTransform(*dc_.bufferInfo, invalidRect, {0, 0}, Color::Black(), OPA_OPAQUE,
+                                                    transMap, imageTranDataInfo);
     }
 }
 
@@ -559,8 +558,9 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         origRect = curView->GetOrigRect();
                         relativeRect = curView->GetRelativeRect();
                         curView->GetTransformMap().SetInvalid(true);
-                        curView->SetPosition(relativeRect.GetX() - origRect.GetX(),
-                                             relativeRect.GetY() - origRect.GetY());
+                        curView->SetPosition(
+                            relativeRect.GetX() - origRect.GetX() - curView->GetStyle(STYLE_MARGIN_LEFT),
+                            relativeRect.GetY() - origRect.GetY() - curView->GetStyle(STYLE_MARGIN_TOP));
 
                         ClearMapBuffer();
                         curTransMap = curView->GetTransformMap();
@@ -601,7 +601,8 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         BlitMapBuffer(origRect, curTransMap, mask);
                         curView->GetTransformMap().SetInvalid(false);
                         enableAnimator = false;
-                        curView->SetPosition(relativeRect.GetX(), relativeRect.GetY());
+                        curView->SetPosition(relativeRect.GetX() - curView->GetStyle(STYLE_MARGIN_LEFT),
+                                             relativeRect.GetY() - curView->GetStyle(STYLE_MARGIN_TOP));
                     }
                 }
             }
@@ -621,7 +622,8 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                 BlitMapBuffer(origRect, curTransMap, mask);
                 transViewGroup->GetTransformMap().SetInvalid(false);
                 enableAnimator = false;
-                transViewGroup->SetPosition(relativeRect.GetX(), relativeRect.GetY());
+                transViewGroup->SetPosition(relativeRect.GetX() - curView->GetStyle(STYLE_MARGIN_LEFT),
+                                            relativeRect.GetY() - curView->GetStyle(STYLE_MARGIN_TOP));
                 transViewGroup = nullptr;
             }
             curView = g_viewStack[stackCount]->GetNextSibling();
@@ -696,7 +698,7 @@ bool RootView::FindSubView(const UIView& parentView, const UIView* subView)
 void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
 {
     uint32_t bufferSize = bufferInfo->width * bufferInfo->height *
-        (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3);  // 3: Shift right 3 bits
+                          (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3); // 3: Shift right 3 bits
 
     dc_.mapBufferInfo = new BufferInfo();
     if (dc_.mapBufferInfo == nullptr) {
@@ -715,7 +717,7 @@ void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
 void RootView::DestroyMapBufferInfo()
 {
     if (dc_.mapBufferInfo != nullptr) {
-        BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t *>(dc_.mapBufferInfo->virAddr));
+        BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t*>(dc_.mapBufferInfo->virAddr));
         dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr = nullptr;
         delete dc_.mapBufferInfo;
         dc_.mapBufferInfo = nullptr;
@@ -742,8 +744,7 @@ void RootView::UpdateBufferInfo(BufferInfo* fbBufferInfo)
         dc_.bufferInfo = fbBufferInfo;
         InitMapBufferInfo(fbBufferInfo);
     } else {
-        if (dc_.bufferInfo->width != fbBufferInfo->width ||
-            dc_.bufferInfo->height != fbBufferInfo->height ||
+        if (dc_.bufferInfo->width != fbBufferInfo->width || dc_.bufferInfo->height != fbBufferInfo->height ||
             dc_.bufferInfo->mode != fbBufferInfo->mode) {
             DestroyMapBufferInfo();
             InitMapBufferInfo(fbBufferInfo);
