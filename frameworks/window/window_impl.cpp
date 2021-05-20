@@ -214,9 +214,6 @@ void WindowImpl::UpdateHalDisplayBuffer()
             return;
         }
         surface->Lock((void**)&gfxAlloc_.virAddr, (void**)&gfxAlloc_.phyAddr, &gfxAlloc_.stride);
-
-        BufferInfo* bufferInfo = GetBufferInfo();
-        rootView_->UpdateBufferInfo(bufferInfo);
     }
 }
 
