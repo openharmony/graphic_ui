@@ -473,16 +473,21 @@ void RootView::Render()
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_lock(&lock_);
 #endif
+    Rect invalidRectTmp = invalidRect_;
+    invalidRect_ = {0, 0, 0, 0};
+    bool renderFlagTmp = renderFlag_;
+    renderFlag_ = false;
+#if defined __linux__ || defined __LITEOS__ || defined __APPLE__
+    pthread_mutex_unlock(&lock_);
+#endif
 
 #if LOCAL_RENDER
     if (!invalidateMap_.empty()) {
         RenderManager::RenderRect(GetRect(), this);
         invalidateMap_.clear();
 #else
-    if (renderFlag_) {
-        RenderManager::RenderRect(invalidRect_, this);
-        invalidRect_ = {0, 0, 0, 0};
-        renderFlag_ = false;
+    if (renderFlagTmp) {
+        RenderManager::RenderRect(invalidRectTmp, this);
 #endif
 
 #if ENABLE_WINDOW
@@ -493,10 +498,6 @@ void RootView::Render()
 #endif
         BaseGfxEngine::GetInstance()->Flush();
     }
-
-#if defined __linux__ || defined __LITEOS__ || defined __APPLE__
-    pthread_mutex_unlock(&lock_);
-#endif
 }
 
 void RootView::BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea)
