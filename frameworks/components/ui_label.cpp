@@ -275,6 +275,7 @@ void UILabel::SetY(int16_t y)
 
 void UILabel::RefreshLabel()
 {
+    Invalidate();
     ellipsisIndex_ = Text::TEXT_ELLIPSIS_END_INV;
     if (!needRefresh_) {
         needRefresh_ = true;
@@ -286,7 +287,6 @@ void UILabel::ReMeasure()
     if (!needRefresh_) {
         return;
     }
-    Invalidate();
     needRefresh_ = false;
     InitLabelText();
     Style style = GetStyleConst();
