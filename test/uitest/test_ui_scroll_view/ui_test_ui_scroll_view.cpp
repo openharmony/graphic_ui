@@ -112,6 +112,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_001()
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     scroll->SetXScrollBarVisible(false);
     scroll->SetYScrollBarVisible(false);
+    scroll->SetReboundSize(50);
     container_->Add(scroll);
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonW, g_buttonH);
