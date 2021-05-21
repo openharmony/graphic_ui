@@ -61,6 +61,7 @@ uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t shapi
     // shaping font is in search list, search shaping font first
     if (shapingFont > 1) {
         bitmap = instance_->GetBitmap(unicode, glyphNode, shapingFont);
+        SetCurrentFontId(currentFontId);
         if (bitmap != nullptr) {
             return bitmap;
         }
@@ -99,6 +100,7 @@ uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t shapingId)
 #if ENABLE_MULTI_FONT
     if (shapingId > 1) {
         result = instance_->GetWidth(unicode, shapingId);
+        SetCurrentFontId(currentFontId);
         if (result >= 0) {
             return result;
         }
