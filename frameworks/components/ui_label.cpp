@@ -131,6 +131,7 @@ UILabel::~UILabel()
     if (hasAnimator_) {
         animator_.animator->Stop();
         delete animator_.animator;
+        animator_.animator = nullptr;
         hasAnimator_ = false;
     }
     if (labelText_ != nullptr) {
@@ -196,6 +197,12 @@ void UILabel::SetLineBreakMode(const uint8_t lineBreakMode)
         labelText_->SetExpandHeight(true);
     } else {
         labelText_->SetExpandHeight(false);
+    }
+    if (lineBreakMode_ != LINE_BREAK_MARQUEE) {
+        offsetX_ = 0;
+        if (hasAnimator_) {
+            animator_.animator->Stop();
+        }
     }
     RefreshLabel();
 }
