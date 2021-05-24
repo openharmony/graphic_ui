@@ -68,7 +68,7 @@ void UITestApp::Init()
         testCaseLabel_->Resize(Screen::GetInstance().GetWidth(), BACK_BUTTON_HEIGHT);
         testCaseLabel_->SetAlign(TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_CENTER);
         testCaseLabel_->SetText("Test Case Name");
-        testCaseLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 32); // 32: means font size
+        testCaseLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 30); // 30: means font size
     }
     if (testLabel_ == nullptr) {
         testLabel_ = new UILabel();
@@ -76,7 +76,7 @@ void UITestApp::Init()
         testLabel_->SetAlign(TEXT_ALIGNMENT_LEFT, TEXT_ALIGNMENT_CENTER);
         testLabel_->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, 0);
         testLabel_->SetText("Test Demo");
-        testLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 32); // 32: means font size
+        testLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 30); // 30: means font size
         rootView_->Add(testLabel_);
     }
     if ((mainList_ == nullptr) && (adapter_ == nullptr)) {
