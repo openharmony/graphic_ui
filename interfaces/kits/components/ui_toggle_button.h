@@ -107,16 +107,20 @@ public:
 
 protected:
     void CalculateSize() override;
+#if DEFAULT_ANIMATION
+    virtual void Callback(UIView* view) override;
+    void OnStop(UIView& view) override;
+#endif
 
 private:
-    static constexpr int16_t DEFAULT_WIDTH = 32;
-    static constexpr int16_t DEFAULT_CORNER_RADIUS = 11;
-    static constexpr int16_t DEAFULT_RADIUS_DIFF = 2;
-    static constexpr uint8_t DEFAULT_UNSELECTED_OPA = 97;
-
-    uint16_t corner_;
-    uint16_t radius_;
-    int16_t rectWidth_;
+    uint16_t corner_ = 0;
+    uint16_t radius_ = 0;
+    int16_t rectWidth_ = 0;
+    Point leftCenter_ = {0, 0};
+    Point rightCenter_ = {0, 0};
+    Point currentCenter_ = {0, 0};
+    ColorType bgColor_ = Color::White();
+    Rect rectMid_ = {0, 0, 0, 0};
 }; // class UIToggleButton
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_TOGGLE_BUTTON_H

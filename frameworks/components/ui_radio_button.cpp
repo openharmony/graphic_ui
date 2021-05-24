@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_radio_button.h"
+
 #include "common/image.h"
 #include "components/root_view.h"
 #include "components/ui_view_group.h"
@@ -23,17 +24,25 @@
 #include "imgdecode/cache_manager.h"
 #include "securec.h"
 
+namespace {
+constexpr int16_t DEFAULT_RADIUS_BIG = 11;
+constexpr int16_t DEFAULT_RADIUS_SMALL = 6;
+constexpr int16_t DEFAULT_LINE_WIDTH = 1;
+#if DEFAULT_ANIMATION
+constexpr float SCALE_BEZIER_CONTROL_POINT_X_1 = 0.33;
+constexpr float SCALE_BEZIER_CONTROL_POINT_X_2 = 0.67;
+constexpr float ALPHA_BEZIER_CONTROL_POINT_X_1 = 0.2;
+constexpr float ALPHA_BEZIER_CONTROL_POINT_X_2 = 0.2;
+#endif
+} // namespace
 namespace OHOS {
-UIRadioButton::UIRadioButton() : name_(nullptr), radiusBig_(DEFAULT_RADIUS_BIG), radiusSmall_(DEFAULT_RADIUS_SMALL),
-                                 lineWidth_(DEFAULT_LINE_WIDTH)
-{
-    image_[UNSELECTED].SetSrc("");
-    image_[SELECTED].SetSrc("");
-    Resize(width_, height_);
-}
-
-UIRadioButton::UIRadioButton(const char* name) : name_(nullptr), radiusBig_(DEFAULT_RADIUS_BIG),
-                                                 radiusSmall_(DEFAULT_RADIUS_SMALL), lineWidth_(DEFAULT_LINE_WIDTH)
+UIRadioButton::UIRadioButton() : UIRadioButton(nullptr) {}
+UIRadioButton::UIRadioButton(const char* name)
+    : name_(nullptr),
+      radiusBig_(DEFAULT_RADIUS_BIG),
+      radiusSmall_(DEFAULT_RADIUS_SMALL),
+      lineWidth_(DEFAULT_LINE_WIDTH),
+      currentRadius_(0)
 {
     SetName(name);
     image_[UNSELECTED].SetSrc("");
@@ -43,7 +52,7 @@ UIRadioButton::UIRadioButton(const char* name) : name_(nullptr), radiusBig_(DEFA
 
 bool UIRadioButton::OnClickEvent(const ClickEvent& event)
 {
-    SetState(SELECTED);
+    SetState(SELECTED, true);
     Invalidate();
     UIView* view = this;
     while ((view != nullptr) && (view->GetParent() != nullptr)) {
@@ -55,19 +64,21 @@ bool UIRadioButton::OnClickEvent(const ClickEvent& event)
 
 void UIRadioButton::CalculateSize()
 {
-    int16_t width = GetWidth();
-    int16_t height = GetHeight();
-    if ((width_ == width) && (height_ == height)) {
-        return;
-    }
-    width_ = width;
-    height_ = height;
+    width_ = GetWidth();
+    height_ = GetHeight();
     int16_t minValue = (width_ > height_) ? height_ : width_;
     radiusBig_ = DEFAULT_RADIUS_BIG * minValue / DEFAULT_HOT_WIDTH;
     radiusSmall_ = DEFAULT_RADIUS_SMALL * minValue / DEFAULT_HOT_WIDTH;
     if (minValue >= DEFAULT_HOT_WIDTH) {
         lineWidth_ = DEFAULT_LINE_WIDTH * minValue / DEFAULT_HOT_WIDTH;
     }
+#if DEFAULT_ANIMATION
+    if (checkBoxAnimator_.GetState() != Animator::START) {
+        currentRadius_ = (state_ == SELECTED) ? radiusSmall_ : 0;
+    }
+#else
+    currentRadius_ = (state_ == SELECTED) ? radiusSmall_ : 0;
+#endif
 }
 
 void UIRadioButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
@@ -82,40 +93,26 @@ void UIRadioButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
         int16_t dy = height_ >> 1;
         int16_t x = contentRect.GetX() + dx;
         int16_t y = contentRect.GetY() + dy;
-        ArcInfo arcInfoBig = { { x, y }, { 0 }, radiusBig_, 0, CIRCLE_IN_DEGREE, nullptr };
-        ArcInfo arcInfoSmall = { { x, y }, { 0 }, radiusSmall_, 0, CIRCLE_IN_DEGREE, nullptr };
+        ArcInfo arcInfoBig = {{x, y}, {0}, radiusBig_, 0, CIRCLE_IN_DEGREE, nullptr};
+        ArcInfo arcInfoSmall = {{x, y}, {0}, currentRadius_, 0, CIRCLE_IN_DEGREE, nullptr};
         Rect trunc = invalidatedArea;
         bool isIntersect = trunc.Intersect(trunc, contentRect);
-        switch (state_) {
-            case SELECTED: {
-                Style styleSelect = StyleDefault::GetBackgroundTransparentStyle();
-                styleSelect.lineWidth_ = arcInfoBig.radius;
-                styleSelect.lineColor_ = Color::GetColorFromRGB(0x1F, 0x71, 0xFF);
-                if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, styleSelect,
-                                                          OPA_OPAQUE, CapType::CAP_NONE);
-                }
-                styleSelect.lineWidth_ = arcInfoSmall.radius;
-                styleSelect.lineColor_ = Color::White();
-                if (isIntersect) {
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoSmall, trunc, styleSelect,
-                                                          OPA_OPAQUE, CapType::CAP_NONE);
-                }
-                break;
+        if (isIntersect) {
+            Style style = StyleDefault::GetBackgroundTransparentStyle();
+            if (backgroundOpacity_ != OPA_OPAQUE) {
+                style.lineColor_ = Color::White();
+                style.lineWidth_ = lineWidth_;
+                // 0xa8 : opacity of drawing unselected button arc edge.
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, style, 0xa8, CapType::CAP_NONE);
             }
-            case UNSELECTED: {
-                Style styleUnSelect = StyleDefault::GetBackgroundTransparentStyle();
-                styleUnSelect.lineColor_ = Color::White();
-                styleUnSelect.lineWidth_ = lineWidth_;
-                if (isIntersect) {
-                    // 0xa8 : opacity of drawing unselected button arc edge.
-                    BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, styleUnSelect,
-                                                          0xa8, CapType::CAP_NONE);
-                }
-                break;
-            }
-            default:
-                break;
+            style.lineWidth_ = arcInfoBig.radius;
+            style.lineColor_ = Color::GetColorFromRGB(0x1F, 0x71, 0xFF);
+            BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, style, backgroundOpacity_,
+                                                  CapType::CAP_NONE);
+            style.lineWidth_ = arcInfoSmall.radius;
+            style.lineColor_ = Color::White();
+            BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoSmall, trunc, style, OPA_OPAQUE,
+                                                  CapType::CAP_NONE);
         }
     }
 }
@@ -160,7 +157,22 @@ void UIRadioButton::FindRadioButtonAndChangeState(UIView* view)
     }
     UIRadioButton* uiRadioButtonInfo = static_cast<UIRadioButton*>(view);
     if ((uiRadioButtonInfo->GetName() != nullptr) && (strcmp(uiRadioButtonInfo->GetName(), name_) == 0)) {
-        uiRadioButtonInfo->SetState(UNSELECTED);
+        uiRadioButtonInfo->SetState(UNSELECTED, true);
     }
 }
+#if DEFAULT_ANIMATION
+void UIRadioButton::Callback(UIView* view)
+{
+    runTime_ = checkBoxAnimator_.GetRunTime();
+    float x = static_cast<float>(runTime_) / checkBoxAnimator_.GetTime();
+    float coefficient =
+        Interpolation::GetBezierY(x, SCALE_BEZIER_CONTROL_POINT_X_1, 0, SCALE_BEZIER_CONTROL_POINT_X_2, 1);
+    backgroundOpacity_ = (state_ == SELECTED) ? (static_cast<uint8_t>(coefficient * OPA_OPAQUE)) :
+                                                (static_cast<uint8_t>((1 - coefficient) * OPA_OPAQUE));
+    coefficient = Interpolation::GetBezierY(x, ALPHA_BEZIER_CONTROL_POINT_X_1, 0, ALPHA_BEZIER_CONTROL_POINT_X_2, 1);
+    currentRadius_ = (state_ == SELECTED) ? (static_cast<uint8_t>(coefficient * radiusSmall_)) :
+                                            (static_cast<uint8_t>((1 - coefficient) * radiusSmall_));
+    Invalidate();
+}
+#endif
 } // namespace OHOS
