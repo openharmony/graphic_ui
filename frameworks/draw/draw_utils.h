@@ -38,8 +38,8 @@ namespace OHOS {
 
 // FixedPointed Related definition.
 #define FIXED_NUM_1 32768
-#define FO_TRANS_FLOAT_TO_FIXED(f) (static_cast<int32_t>((f) * FIXED_NUM_1))
-#define FO_TRANS_INTEGER_TO_FIXED(f) ((static_cast<int32_t>(f)) << 15)
+#define FO_TRANS_FLOAT_TO_FIXED(f) (static_cast<int64_t>((f) * FIXED_NUM_1))
+#define FO_TRANS_INTEGER_TO_FIXED(f) ((static_cast<int64_t>(f)) << 15)
 #define FO_DIV(n1, n2) ((static_cast<int64_t>(n1) << 15) / (n2))
 #define FO_TO_INTEGER(n) ((n) >= 0 ? ((n) >> 15) : (((n) >> 15) + 1))
 #define FO_DECIMAL(n) ((n) >= 0 ? ((n) & 32767) : ((n) | (-32768)))
@@ -88,26 +88,42 @@ struct LabelLetterInfo {
 };
 
 struct TransformInitState {
+#if ENABLE_FIXED_POINT
     // parameters below are Q15 fixed-point number
-    int32_t verticalU;
-    int32_t verticalV;
-    int32_t duHorizon;
-    int32_t dvHorizon;
-    int32_t duVertical;
-    int32_t dvVertical;
+    int64_t verticalU;
+    int64_t verticalV;
+    int64_t duHorizon;
+    int64_t dvHorizon;
+    int64_t duVertical;
+    int64_t dvVertical;
     // parameters above are Q15 fixed-point number
+#else
+    float verticalU;
+    float verticalV;
+    float duHorizon;
+    float dvHorizon;
+    float duVertical;
+    float dvVertical;
+#endif
 };
 
 struct TriangleEdge {
     TriangleEdge() {}
     TriangleEdge(int16_t x1, int16_t y1, int16_t duInt, int16_t dvInt);
     ~TriangleEdge();
+#if ENABLE_FIXED_POINT
     // parameters below are Q15 fixed-point number
-    int32_t curX = 0;
-    int32_t curY = 0;
-    int32_t du = 0;
-    int32_t dv = 0;
+    int64_t curX = 0;
+    int64_t curY = 0;
+    int64_t du = 0;
+    int64_t dv = 0;
     // parameters above are Q15 fixed-point number
+#else
+    float curX = 0.0f;
+    float curY = 0.0f;
+    float du = 0.0f;
+    float dv = 0.0f;
+#endif
 };
 
 struct TriangleTransformDataInfo {
