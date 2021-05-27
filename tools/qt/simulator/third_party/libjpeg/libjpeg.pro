@@ -60,8 +60,8 @@ SOURCES += \
     ../../../../../../../../third_party/libjpeg/jidctflt.c \
     ../../../../../../../../third_party/libjpeg/jidctfst.c \
     ../../../../../../../../third_party/libjpeg/jidctint.c \
-    ../../../../../../../../third_party/libjpeg/jmemansi.c \
     ../../../../../../../../third_party/libjpeg/jmemmgr.c \
+    ../../../../../../../../third_party/libjpeg/jmemnobs.c \
     ../../../../../../../../third_party/libjpeg/jquant1.c \
     ../../../../../../../../third_party/libjpeg/jquant2.c \
     ../../../../../../../../third_party/libjpeg/jutils.c \
