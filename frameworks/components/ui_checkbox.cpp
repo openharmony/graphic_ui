@@ -50,13 +50,6 @@ UICheckBox::UICheckBox()
 #endif
 }
 
-UICheckBox::~UICheckBox()
-{
-#if DEFAULT_ANIMATION
-    checkBoxAnimator_.Stop();
-#endif
-}
-
 void UICheckBox::SetState(UICheckBoxState state)
 {
     if (state_ == state) {

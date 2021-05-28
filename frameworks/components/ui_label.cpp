@@ -125,7 +125,6 @@ UILabel::UILabel()
 UILabel::~UILabel()
 {
     if (hasAnimator_) {
-        animator_.animator->Stop();
         delete animator_.animator;
         animator_.animator = nullptr;
         hasAnimator_ = false;
