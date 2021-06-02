@@ -57,6 +57,7 @@ void FocusManagerTest::SetUpTestCase(void)
 
 void FocusManagerTest::TearDownTestCase(void)
 {
+    FocusManager::GetInstance()->ClearFocus();
     if (viewGroup_ != nullptr) {
         viewGroup_->Remove(label1_);
         viewGroup_->Remove(label2_);
@@ -71,7 +72,6 @@ void FocusManagerTest::TearDownTestCase(void)
         delete label2_;
         label2_  = nullptr;
     }
-    FocusManager::GetInstance()->ClearFocus();
 }
 
 /**

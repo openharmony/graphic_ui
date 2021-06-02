@@ -233,6 +233,7 @@ private:
 
     BaseFont* instance_;
     BaseFont* defaultInstance_;
+    static bool setFontAllocFlag_;
 };
 } // namespace OHOS
 #endif
