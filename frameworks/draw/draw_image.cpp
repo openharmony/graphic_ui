@@ -28,32 +28,8 @@ void DrawImage::DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const R
     }
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.imageOpa_);
     uint8_t pxBitSize = DrawUtils::GetPxSizeByColorMode(img->header.colorMode);
-    LutColorMode lutColorMode = LUT_UNKNOW;
-    uint8_t size = 0;
-    switch (img->header.colorMode) {
-        case L1:
-            // One index represents 1 bit, 8 : convert to bytes, 1 : 2 color values
-            size = (img->dataSize - (img->header.width * img->header.height / 8)) >> 1;
-            break;
-        case L2:
-            // One index represents 2 bit, 4 : convert to bytes, 2 : 4 color values
-            size = (img->dataSize - (img->header.width * img->header.height / 4)) >> 2;
-            break;
-        case L4:
-            // One index represents 4 bit, 2 : convert to bytes, 4 : 16 color values
-            size = (img->dataSize - (img->header.width * img->header.height / 2)) >> 4;
-            break;
-        case L8:
-            // One index represents 8 bit, 8 : 256 color values
-            size = (img->dataSize - (img->header.width * img->header.height)) >> 8;
-            break;
-        default:
-            size = 0;
-            break;
-    }
-    lutColorMode = DrawUtils::GetLutColorModeBySize(size);
     DrawUtils::GetInstance()->DrawImage(gfxDstBuffer, coords, mask, img->data, opa, pxBitSize,
-                                        static_cast<ColorMode>(img->header.colorMode), lutColorMode);
+                                        static_cast<ColorMode>(img->header.colorMode));
 }
 
 void DrawImage::DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const Rect& mask,

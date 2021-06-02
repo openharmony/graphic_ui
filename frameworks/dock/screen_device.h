@@ -130,7 +130,6 @@ public:
      * @param srcStride Indicates the number of bytes in a single row of source memory
      * @param srcLineNumber Indicates the number of source memory rows
      * @param srcColorMode Indicates the source memory color format
-     * @param srcLutColorMode Indicates the source memory lut(Lookup Table) color format
      * @param color 32-bit XRGB8888 value
      *              (valid when the source memory is in a format with only alph information such as A1)
      * @param opa Indicates the transparency
@@ -148,7 +147,6 @@ public:
                                uint32_t srcStride,
                                uint32_t srcLineNumber,
                                ColorMode srcColorMode,
-                               LutColorMode srcLutColorMode,
                                uint32_t color,
                                OpacityType opa,
                                uint8_t* dst,
