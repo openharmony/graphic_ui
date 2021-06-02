@@ -249,6 +249,7 @@ void UIButton::Enable()
 void UIButton::SetState(ButtonState state)
 {
     state_ = state;
+    style_ = buttonStyles_[state_];
     Invalidate();
 }
 

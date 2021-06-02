@@ -27,6 +27,7 @@
 #endif
 
 namespace OHOS {
+bool UIFont::setFontAllocFlag_ = false;
 UIFont::UIFont() : instance_(nullptr), defaultInstance_(nullptr){};
 
 UIFont::~UIFont(){};
@@ -38,11 +39,13 @@ UIFont* UIFont::GetInstance()
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontVector();
         instance.instance_ = instance.defaultInstance_;
+        setFontAllocFlag_ = true;
     }
 #else
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontBitmap();
         instance.instance_ = instance.defaultInstance_;
+        setFontAllocFlag_ = true;
     }
 #endif
     return &instance;
@@ -51,9 +54,10 @@ UIFont* UIFont::GetInstance()
 void UIFont::SetFont(BaseFont* font)
 {
     if (font != nullptr) {
-        if (defaultInstance_ != nullptr) {
+        if (defaultInstance_ != nullptr && setFontAllocFlag_) {
             delete defaultInstance_;
             defaultInstance_ = nullptr;
+            setFontAllocFlag_ = false;
         }
         defaultInstance_ = font;
         instance_ = font;

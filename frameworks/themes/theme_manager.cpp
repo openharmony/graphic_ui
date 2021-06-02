@@ -24,9 +24,6 @@ ThemeManager& ThemeManager::GetInstance()
 
 void ThemeManager::SetCurrent(Theme* theme)
 {
-    if (theme_ != nullptr) {
-        delete theme_;
-    }
     theme_ = theme;
 }
 } // namespace OHOS

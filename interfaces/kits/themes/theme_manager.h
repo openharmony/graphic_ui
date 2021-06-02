@@ -78,7 +78,10 @@ public:
 
 private:
     ThemeManager() : theme_(nullptr) {}
-    ~ThemeManager() {}
+    virtual ~ThemeManager()
+    {
+        theme_ = nullptr;
+    }
 
     Theme* theme_;
 };
