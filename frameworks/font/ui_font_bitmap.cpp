@@ -27,7 +27,7 @@
 #endif
 
 namespace OHOS {
-UIFontBitmap::UIFontBitmap() : dynamicFont_(), dynamicFontRamUsed_(0), dynamicFontFd_(-1)
+UIFontBitmap::UIFontBitmap() : dynamicFont_(), dynamicFontRamUsed_(0), dynamicFontFd_(-1),  offset_(0)
 {
     SetBaseFontId(UIFontBuilder::GetInstance()->GetBitmapFontIdMax());
     bitmapCache_ = nullptr;
@@ -87,8 +87,7 @@ int8_t UIFontBitmap::SetFontPath(const char* dpath, const char* spath)
         return INVALID_RET_VALUE;
     }
     dynamicFont_.SetRamBuffer(GetRamAddr());
-    uint32_t start = 0;
-    int32_t ret = dynamicFont_.SetFile(dynamicFontFd_, start);
+    int32_t ret = dynamicFont_.SetFile(dynamicFontFd_, offset_);
     if (ret == INVALID_RET_VALUE) {
         close(dynamicFontFd_);
         dynamicFontFd_ = -1;
@@ -297,5 +296,10 @@ int16_t UIFontBitmap::GetWidthInFontId(uint32_t unicode, uint8_t fontId)
         SetCurrentFontId(fontId);
     }
     return GetDynamicFontWidth(unicode, GetBaseFontId());
+}
+
+void UIFontBitmap::SetFontFileOffset(uint32_t offset)
+{
+    offset_ = offset;
 }
 } // namespace

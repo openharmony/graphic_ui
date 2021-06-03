@@ -201,6 +201,8 @@ public:
         return 0;
     }
 
+    virtual void SetFontFileOffset(uint32_t offset) {}
+
     /**
      * @brief Get current font id
      *

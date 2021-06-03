@@ -223,6 +223,11 @@ public:
     static UIFont* GetInstance();
     void SetFont(BaseFont* font);
 
+    void SetFontFileOffset(uint32_t offset)
+    {
+        instance_->SetFontFileOffset(offset);
+    }
+
 private:
     UIFont();
     /**
