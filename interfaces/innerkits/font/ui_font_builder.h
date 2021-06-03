@@ -16,9 +16,10 @@
 #define GRAPHIC_LITE_UI_FONT_BUILDER_H
 
 #include "font/ui_font_header.h"
+#include "gfx_utils/heap_base.h"
 
 namespace OHOS {
-class UIFontBuilder {
+class UIFontBuilder : public HeapBase {
 public:
 
     static UIFontBuilder* GetInstance();
