@@ -354,10 +354,26 @@ bool UIView::OnCancelEvent(const CancelEvent& event)
 }
 
 #if ENABLE_ROTATE_INPUT
+bool UIView::OnRotateStartEvent(const RotateEvent& event)
+{
+    if (onRotateListener_ != nullptr) {
+        return onRotateListener_->OnRotateStart(*this, event);
+    }
+    return false;
+}
+
 bool UIView::OnRotateEvent(const RotateEvent& event)
 {
     if (onRotateListener_ != nullptr) {
         return onRotateListener_->OnRotate(*this, event);
+    }
+    return false;
+}
+
+bool UIView::OnRotateEndEvent(const RotateEvent& event)
+{
+    if (onRotateListener_ != nullptr) {
+        return onRotateListener_->OnRotateEnd(*this, event);
     }
     return false;
 }

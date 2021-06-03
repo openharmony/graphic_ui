@@ -23,6 +23,13 @@
 #include "imgdecode/cache_manager.h"
 #include "themes/theme_manager.h"
 
+namespace {
+#ifdef _WIN32
+constexpr float DEFAULT_SLIDER_ROTATE_FACTOR = -1;
+#else
+constexpr float DEFAULT_SLIDER_ROTATE_FACTOR = -0.1;
+#endif
+}
 namespace OHOS {
 UISlider::UISlider()
     : knobWidth_(0), knobWidthSetFlag_(false), knobStyleAllocFlag_(false), knobImage_(nullptr), listener_(nullptr)
@@ -30,7 +37,9 @@ UISlider::UISlider()
     touchable_ = true;
     draggable_ = true;
     dragParentInstead_ = false;
-
+#if ENABLE_ROTATE_INPUT
+    rotateFactor_ = DEFAULT_SLIDER_ROTATE_FACTOR;
+#endif
     SetBackgroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
     SetBackgroundStyle(STYLE_BACKGROUND_OPA, BACKGROUND_OPA);
     SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Black().full);
@@ -381,9 +390,6 @@ bool UISlider::OnDragEndEvent(const DragEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UISlider::OnRotateEvent(const RotateEvent& event)
 {
-    if (event.GetRotate() == 0) {
-        return false;
-    }
     int32_t lastValue = curValue_;
     int32_t tmp = static_cast<int32_t>(event.GetRotate()) * rotateFactor_;
     SetValue(curValue_ + tmp);
@@ -393,6 +399,7 @@ bool UISlider::OnRotateEvent(const RotateEvent& event)
 #if ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && lastValue != curValue_) {
+        GRAPHIC_LOGI("UISlider::OnRotateEvent Call vibrator function");
         vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
     }
 #endif

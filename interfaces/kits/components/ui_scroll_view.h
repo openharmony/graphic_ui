@@ -143,7 +143,11 @@ public:
     }
 
 #if ENABLE_ROTATE_INPUT
+    bool OnRotateStartEvent(const RotateEvent& event) override;
+
     bool OnRotateEvent(const RotateEvent& event) override;
+
+    bool OnRotateEndEvent(const RotateEvent& event) override;
 #endif
 
     void OnPostDraw(const Rect& invalidatedArea) override;
@@ -293,8 +297,11 @@ private:
     int16_t minScrollBarLen_;
     OnScrollListener* scrollListener_;
 #if ENABLE_ROTATE_INPUT
-    static constexpr float DEFAULT_ROTATE_FACTOR = 3.0;
     int16_t lastRotateLen_;
+#endif
+#if ENABLE_VIBRATOR
+    int16_t totalRotateLen_;
+    int16_t lastVibratorRotateLen_;
 #endif
 };
 } // namespace OHOS

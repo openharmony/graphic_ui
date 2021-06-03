@@ -15,6 +15,13 @@
 
 #include "components/ui_abstract_scroll.h"
 
+namespace {
+#if ENABLE_ROTATE_INPUT
+constexpr float DEFAULT_ABSTRACT_SCROLL_ROTATE_FACTOR = 2.5;
+constexpr uint8_t DEFAULT_ROTATE_THRESHOLD = 4;
+#endif
+}
+
 namespace OHOS {
 UIAbstractScroll::UIAbstractScroll()
     : scrollBlankSize_(0),
@@ -31,7 +38,8 @@ UIAbstractScroll::UIAbstractScroll()
       scrollAnimator_(&animatorCallback_, this, 0, true)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    rotateFactor_ = DEFAULT_ABSTRACT_SCROLL_ROTATE_FACTOR;
+    threshold_ = DEFAULT_ROTATE_THRESHOLD;
 #endif
     isViewGroup_ = true;
     touchable_ = true;

@@ -188,7 +188,11 @@ public:
     bool OnPressEvent(const PressEvent& event) override;
 
 #if ENABLE_ROTATE_INPUT
+    bool OnRotateStartEvent(const RotateEvent& event) override;
+
     bool OnRotateEvent(const RotateEvent& event) override;
+
+    bool OnRotateEndEvent(const RotateEvent& event) override;
 #endif
 
     /**
@@ -456,11 +460,10 @@ private:
     bool IsNeedReCalculateDragEnd();
     bool ReCalculateDragEnd();
 #if ENABLE_ROTATE_INPUT
-    bool isRotating_;
     int16_t lastRotateLen_;
-    static constexpr float DEFAULT_ROTATE_FACTOR = 5.0;
 #endif
 #if ENABLE_VIBRATOR
+    bool needVibration_;
     void SetMotorType(VibratorType vibratorType);
     VibratorType vibratorType_;
 #endif

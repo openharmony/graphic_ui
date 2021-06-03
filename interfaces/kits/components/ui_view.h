@@ -312,6 +312,18 @@ public:
     class OnRotateListener : public HeapBase {
     public:
         /**
+         * @brief Called when the view starts to rotate.
+         * @param view Indicates the view that responds to the rotation event.
+         * @param event Indicates the rotation event.
+         * @return Returns <b>true</b> if the rotation event is consumed; returns <b>false</b> otherwise.
+         * @since 6
+         */
+        virtual bool OnRotateStart(UIView& view, const RotateEvent& event)
+        {
+            return false;
+        }
+
+        /**
          * @brief Called when a rotation event occurs on a view.
          * @param view Indicates the view that responds to the rotation event.
          * @param event Indicates the rotation event.
@@ -321,8 +333,21 @@ public:
          */
         virtual bool OnRotate(UIView& view, const RotateEvent& event)
         {
-            return true;
+            return false;
         }
+
+        /**
+         * @brief Called when the view stops rotating.
+         * @param view Indicates the view that responds to the rotation event.
+         * @param event Indicates the rotation event.
+         * @return Returns <b>true</b> if the rotation event is consumed; returns <b>false</b> otherwise.
+         * @since 6
+         */
+        virtual bool OnRotateEnd(UIView& view, const RotateEvent& event)
+        {
+            return false;
+        }
+
         /**
          * @brief A destructor used to delete an <b>OnRotateListener</b> instance.
          * @since 5.0
@@ -332,12 +357,26 @@ public:
     };
 
     /**
+     * @brief Called when the view starts to rotate.
+     * @param event Indicates the rotation event.
+     * @since 6
+     */
+    virtual bool OnRotateStartEvent(const RotateEvent& event);
+
+    /**
      * @brief Called when a rotation event occurs on the view.
      * @param event Indicates the rotation event.
      * @since 5.0
      * @version 3.0
      */
     virtual bool OnRotateEvent(const RotateEvent& event);
+
+    /**
+     * @brief Called when the view stops rotating.
+     * @param event Indicates the rotation event.
+     * @since 6
+     */
+    virtual bool OnRotateEndEvent(const RotateEvent& event);
 
     /**
      * @brief Sets a rotation event listener for the view.

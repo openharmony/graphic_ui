@@ -14,6 +14,13 @@
  */
 
 #include "components/ui_list.h"
+#include "gfx_utils/graphic_log.h"
+
+namespace {
+#if ENABLE_ROTATE_INPUT
+constexpr float DEFAULT_LIST_ROTATE_FACTOR = 2.5;
+#endif
+} // namespace
 
 namespace OHOS {
 UIList::Recycle::~Recycle()
@@ -116,11 +123,11 @@ UIList::UIList(uint8_t direction)
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
-    isRotating_ = false;
+    rotateFactor_ = DEFAULT_LIST_ROTATE_FACTOR;
     lastRotateLen_ = 0;
 #endif
 #if ENABLE_VIBRATOR
+    needVibration_ = false;
     vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
 #endif
     direction_ = direction;
@@ -181,30 +188,49 @@ bool UIList::OnPressEvent(const PressEvent& event)
 }
 
 #if ENABLE_ROTATE_INPUT
+bool UIList::OnRotateStartEvent(const RotateEvent& event)
+{
+    if (scrollAnimator_.GetState() != Animator::STOP) {
+        UIAbstractScroll::StopAnimator();
+    }
+#if ENABLE_VIBRATOR
+    needVibration_ = true;
+#endif
+    isReCalculateDragEnd_ = true;
+    return UIView::OnRotateStartEvent(event);
+}
+
 bool UIList::OnRotateEvent(const RotateEvent& event)
 {
-    int16_t midPointX = static_cast<int16_t>(GetWidth() / 2);  // 2 : Get the middle point X coord of the view
-    int16_t midPointY = static_cast<int16_t>(GetHeight() / 2); // 2 : Get the middle point Y coord of the view
-    Point last, current;
-
-    isRotating_ = true;
-    if (throwDrag_ && event.GetRotate() == 0) {
-        last = Point {midPointX, midPointY};
-        (direction_ == VERTICAL) ? (current = Point {midPointX, static_cast<int16_t>(midPointY + lastRotateLen_)})
-                                 : (current = Point {static_cast<int16_t>(midPointX + lastRotateLen_), midPointY});
-        isReCalculateDragEnd_ = false;
-        DragThrowAnimator(current, last);
-        lastRotateLen_ = 0;
+    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    if (direction_ == VERTICAL) {
+        DragYInner(lastRotateLen_);
     } else {
-        lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
-        if (direction_ == VERTICAL) {
-            DragYInner(lastRotateLen_);
-        } else {
-            DragXInner(lastRotateLen_);
-        }
+        DragXInner(lastRotateLen_);
     }
-    isRotating_ = false;
     return UIView::OnRotateEvent(event);
+}
+
+bool UIList::OnRotateEndEvent(const RotateEvent& event)
+{
+    needVibration_ = false;
+    isReCalculateDragEnd_ = false;
+
+    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
+        (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
+    if (throwDrag_ && triggerAnimator) {
+        Point current;
+        if (direction_ == VERTICAL) {
+            current = {0, lastRotateLen_};
+        } else {
+            current = {lastRotateLen_, 0};
+        }
+        DragThrowAnimator(current, {0, 0});
+    } else {
+        DragThrowAnimator({0, 0}, {0, 0});
+    }
+    lastRotateLen_ = 0;
+    return UIView::OnRotateEndEvent(event);
 }
 #endif
 
@@ -285,8 +311,7 @@ bool UIList::DragYInner(int16_t distance)
         return MoveOffset(distance);
     }
     if (distance > 0) {
-        if (childrenHead_ &&
-            ((childrenHead_->GetY() + distance) >
+        if (childrenHead_ && ((childrenHead_->GetY() + distance) >
             (scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP)))) {
             distance =
                 scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP) - childrenHead_->GetY();
@@ -583,6 +608,13 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
                         scrollListener_->OnItemSelected(onSelectedIndex_, onSelectedView_);
                     }
                     isSelectViewFind = true;
+#if ENABLE_VIBRATOR
+                    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+                    if (needVibration_ && vibratorFunc != nullptr) {
+                        GRAPHIC_LOGI("UIList::MoveChildByOffset Call vibrator function");
+                        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
+                    }
+#endif
                 }
             } else {
                 width = view->GetRelativeRect().GetWidth();
@@ -595,18 +627,18 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
                         scrollListener_->OnItemSelected(onSelectedIndex_, onSelectedView_);
                     }
                     isSelectViewFind = true;
+#if ENABLE_VIBRATOR
+                    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+                    if (needVibration_ && vibratorFunc != nullptr) {
+                        GRAPHIC_LOGI("UIList::MoveChildByOffset Call vibrator function");
+                        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
+                    }
+#endif
                 }
             }
         }
         view = view->GetNextSibling();
     }
-
-#if ENABLE_ROTATE_INPUT && ENABLE_VIBRATOR
-    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-    if (isRotating_ && vibratorFunc != nullptr && isSelectViewFind) {
-        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
-    }
-#endif
 }
 
 void UIList::StopAnimator()
