@@ -84,7 +84,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual ~UICheckBox();
+    virtual ~UICheckBox() {};
 
     /**
      * @brief Represents a listener for changes of a check box.
