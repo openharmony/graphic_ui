@@ -59,7 +59,11 @@ public:
      * @brief Tear down display environment.
      *
      */
-    virtual void TearDown() = 0;
+    virtual void TearDown()
+    {
+        positionX_ = 0;
+        positionY_ = 0;
+    }
 
     /**
      * @brief Get test view to add to root view.

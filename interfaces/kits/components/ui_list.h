@@ -386,6 +386,10 @@ public:
         return alignTime_;
     }
 
+    void SetXScrollBarVisible(bool visible);
+
+    void SetYScrollBarVisible(bool visible);
+
     void RemoveAll() override;
 
     static constexpr int8_t NULL_SELECT_INDEX = -1;
@@ -404,18 +408,13 @@ private:
     friend class UIPicker;
     class Recycle : public HeapBase {
     public:
-        explicit Recycle(UIList* list) : adapter_(nullptr), listView_(list) {}
+        explicit Recycle(UIList* list) : adapter_(nullptr), listView_(list), hasInitialiszed_(false) {}
         virtual ~Recycle();
         void InitRecycle();
         UIView* GetView(int16_t index);
         void SetAdapter(AbstractAdapter* adapter)
         {
             adapter_ = adapter;
-        }
-
-        void SetList(UIList* listView)
-        {
-            listView_ = listView;
         }
 
         void AddScrapView(UIView* view)
@@ -433,12 +432,22 @@ private:
             scrapView_.Clear();
         }
 
+        bool HasInitialiszed()
+        {
+            return hasInitialiszed_;
+        }
+
+        Rect GetAdapterItemsReletiveRect();
+        void MoveAdapterItemsRelativeRect(int16_t x, int16_t y);
+        void MesureAdapterRelativeRect();
     private:
         void FillActiveView();
 
         List<UIView*> scrapView_;
         AbstractAdapter* adapter_;
         UIList* listView_;
+        Rect adapterRelativeRect_;
+        bool hasInitialiszed_;
     };
 
     void PushBack(UIView* view);
@@ -451,7 +460,8 @@ private:
     uint16_t GetIndexInc(uint16_t index);
     uint16_t GetIndexDec(uint16_t index);
 
-    bool MoveOffset(int16_t offset);
+    bool MoveOffset(int16_t x, int16_t y);
+    void UpdateScrollBar();
     bool IsNeedReCalculateDragEnd();
     bool ReCalculateDragEnd();
 #if ENABLE_ROTATE_INPUT
@@ -473,6 +483,7 @@ private:
     uint16_t selectPosition_;
     int16_t onSelectedIndex_;
     Recycle recycle_;
+    bool hasMeasuredAdapterRect_;
     ListScrollListener* scrollListener_;
     void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
 };

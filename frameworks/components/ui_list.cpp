@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_list.h"
+#include "components/ui_abstract_scroll_bar.h"
 
 namespace OHOS {
 UIList::Recycle::~Recycle()
@@ -33,6 +34,34 @@ UIList::Recycle::~Recycle()
     scrapView_.Clear();
 }
 
+void UIList::Recycle::MesureAdapterRelativeRect()
+{
+    uint16_t i = 0;
+    UIView* childHead = listView_->childrenHead_;
+    uint16_t idx = childHead->GetViewIndex();
+    if (listView_->direction_ == VERTICAL) {
+        int32_t height = 0;
+        for (; i < idx; i++) {
+            height += adapter_->GetItemHeightWithMargin(i);
+        }
+        int16_t y = childHead->GetRelativeRect().GetTop() - height - childHead->GetStyle(STYLE_MARGIN_TOP);
+        for (; i < adapter_->GetCount(); i++) {
+            height += adapter_->GetItemHeightWithMargin(i);
+        }
+        adapterRelativeRect_.SetRect(0, y, listView_->GetWidth() - 1, y + height - 1);
+    } else {
+        int32_t width = 0;
+        for (; i < idx; i++) {
+            width += adapter_->GetItemWidthWithMargin(i);
+        }
+        int16_t x = childHead->GetRelativeRect().GetLeft() - width - childHead->GetStyle(STYLE_MARGIN_LEFT);
+        for (; i < adapter_->GetCount(); i++) {
+            width += adapter_->GetItemWidthWithMargin(i);
+        }
+        adapterRelativeRect_.SetRect(x, 0, x + width - 1, listView_->GetHeight() - 1);
+    }
+}
+
 void UIList::Recycle::InitRecycle()
 {
     if ((adapter_ == nullptr) || (listView_ == nullptr)) {
@@ -40,6 +69,7 @@ void UIList::Recycle::InitRecycle()
     }
     FillActiveView();
     listView_->Invalidate();
+    hasInitialiszed_ = true;
 }
 
 UIView* UIList::Recycle::GetView(int16_t index)
@@ -64,9 +94,6 @@ UIView* UIList::Recycle::GetView(int16_t index)
 
 void UIList::Recycle::FillActiveView()
 {
-    if ((adapter_ == nullptr) || (listView_ == nullptr)) {
-        return;
-    }
     uint16_t index = listView_->GetStartIndex();
     if (listView_->GetDirection() == UIList::VERTICAL) {
         int16_t childBottom = 0;
@@ -99,6 +126,17 @@ void UIList::Recycle::FillActiveView()
     }
 }
 
+Rect UIList::Recycle::GetAdapterItemsReletiveRect()
+{
+    return adapterRelativeRect_;
+}
+
+void UIList::Recycle::MoveAdapterItemsRelativeRect(int16_t x, int16_t y)
+{
+    Rect& rect = adapterRelativeRect_;
+    rect.SetPosition(rect.GetX() + x, rect.GetY() + y);
+}
+
 UIList::UIList() : UIList(VERTICAL) {}
 
 UIList::UIList(uint8_t direction)
@@ -113,6 +151,7 @@ UIList::UIList(uint8_t direction)
       selectPosition_(0),
       onSelectedIndex_(0),
       recycle_(this),
+      hasMeasuredAdapterRect_(false),
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
@@ -243,7 +282,7 @@ bool UIList::DragXInner(int16_t distance)
     } while (ret);
 
     if (isLoopList_) {
-        return MoveOffset(distance);
+        return MoveOffset(distance, 0);
     }
     if (distance > 0) {
         if (childrenHead_ && ((childrenHead_->GetX() + distance) >
@@ -263,7 +302,7 @@ bool UIList::DragXInner(int16_t distance)
             }
         }
     }
-    return MoveOffset(distance);
+    return MoveOffset(distance, 0);
 }
 
 bool UIList::DragYInner(int16_t distance)
@@ -271,7 +310,7 @@ bool UIList::DragYInner(int16_t distance)
     if (IsNeedReCalculateDragEnd()) {
         return false;
     }
-    int16_t listHeigh = GetHeight();
+    int16_t listHeight = GetHeight();
     if (distance == 0) {
         return true;
     }
@@ -285,11 +324,10 @@ bool UIList::DragYInner(int16_t distance)
     } while (ret);
 
     if (isLoopList_) {
-        return MoveOffset(distance);
+        return MoveOffset(0, distance);
     }
     if (distance > 0) {
-        if (childrenHead_ &&
-            ((childrenHead_->GetY() + distance) >
+        if (childrenHead_ && ((childrenHead_->GetY() + distance) >
             (scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP)))) {
             distance =
                 scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP) - childrenHead_->GetY();
@@ -297,27 +335,27 @@ bool UIList::DragYInner(int16_t distance)
     } else {
         if (childrenTail_) {
             if (childrenTail_->GetRelativeRect().GetBottom() <=
-                (listHeigh - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
+                (listHeight - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
                 distance = 0;
-            } else if ((listHeigh - childrenTail_->GetY() - childrenTail_->GetRelativeRect().GetHeight() - distance) >
-                       (scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
-                distance = listHeigh - scrollBlankSize_ - reboundSize - childrenTail_->GetY() -
+            } else if ((listHeight - childrenTail_->GetY() - childrenTail_->GetRelativeRect().GetHeight() - distance) >
+                (scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
+                distance = listHeight - scrollBlankSize_ - reboundSize - childrenTail_->GetY() -
                            childrenTail_->GetRelativeRect().GetHeight() - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM);
             }
         }
     }
-    return MoveOffset(distance);
+    return MoveOffset(0, distance);
 }
 
-bool UIList::MoveOffset(int16_t offset)
+bool UIList::MoveOffset(int16_t x, int16_t y)
 {
-    if (offset == 0) {
+    if ((x == 0) && (y == 0)) {
         return false;
     }
-    if (direction_ == VERTICAL) {
-        MoveChildByOffset(0, offset);
-    } else {
-        MoveChildByOffset(offset, 0);
+    MoveChildByOffset(x, y);
+    if (xScrollBarVisible_ || yScrollBarVisible_) {
+        recycle_.MoveAdapterItemsRelativeRect(x, y);
+        UpdateScrollBar();
     }
     Invalidate();
     if (scrollListener_ && (scrollListener_->GetScrollState() == ListScrollListener::SCROLL_STATE_STOP)) {
@@ -326,6 +364,17 @@ bool UIList::MoveOffset(int16_t offset)
     }
 
     return true;
+}
+
+void UIList::UpdateScrollBar()
+{
+    Rect allItemsRect = recycle_.GetAdapterItemsReletiveRect();
+    int16_t totalHeight = allItemsRect.GetHeight() + 2 * scrollBlankSize_; // 2: two blank spaces on both sides
+    int16_t height = GetHeight();
+    yScrollBar_->SetForegroundProportion(static_cast<float>(height) / totalHeight);
+    yScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - allItemsRect.GetTop()) /
+                                   (totalHeight - height));
+    RefreshAnimator();
 }
 
 bool UIList::IsNeedReCalculateDragEnd()
@@ -423,6 +472,12 @@ void UIList::SetAdapter(AbstractAdapter* adapter)
 {
     recycle_.SetAdapter(adapter);
     recycle_.InitRecycle();
+    if (xScrollBarVisible_ || yScrollBarVisible_) {
+        recycle_.MesureAdapterRelativeRect();
+        hasMeasuredAdapterRect_ = true;
+    } else {
+        hasMeasuredAdapterRect_ = false;
+    }
 }
 
 UIView* UIList::GetSelectView()
@@ -533,9 +588,9 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
     int16_t width;
 
     if ((onSelectedIndex_ != NULL_SELECT_INDEX) && (selectPosition_ != 0)) {
-        if (direction_ == VERTICAL) {
+        if (yOffset != 0) {
             height = view->GetRelativeRect().GetHeight();
-            if ((GetChildrenHead()->GetY() + yOffset > selectPosition_) ||
+            if ((view->GetY() + yOffset > selectPosition_) ||
                 (childrenTail_->GetY() + height + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) + yOffset <
                 selectPosition_)) {
                 onSelectedIndex_ = NULL_SELECT_INDEX;
@@ -544,9 +599,10 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
                     scrollListener_->OnItemSelected(onSelectedIndex_, onSelectedView_);
                 }
             }
-        } else {
+        }
+        if (xOffset != 0) {
             width = view->GetRelativeRect().GetWidth();
-            if ((GetChildrenHead()->GetX() + xOffset > selectPosition_) ||
+            if ((view->GetX() + xOffset > selectPosition_) ||
                 (childrenTail_->GetX() + width + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) < selectPosition_)) {
                 onSelectedIndex_ = NULL_SELECT_INDEX;
                 onSelectedView_ = nullptr;
@@ -557,7 +613,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
         }
     }
     bool isSelectViewFind = false;
-    while (view != nullptr) {
+    do {
         x = view->GetX() + xOffset;
         y = view->GetY() + yOffset;
         view->SetPosition(x, y);
@@ -590,7 +646,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
             }
         }
         view = view->GetNextSibling();
-    }
+    } while (view != nullptr);
 
 #if ENABLE_ROTATE_INPUT && ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
@@ -646,6 +702,12 @@ void UIList::ScrollTo(uint16_t index)
     onSelectedView_ = nullptr;
     SetStartIndex(index);
     recycle_.InitRecycle();
+    if (xScrollBarVisible_ || yScrollBarVisible_) {
+        recycle_.MesureAdapterRelativeRect();
+        hasMeasuredAdapterRect_ = true;
+    } else {
+        hasMeasuredAdapterRect_ = false;
+    }
 }
 
 void UIList::RefreshList()
@@ -677,6 +739,12 @@ void UIList::RefreshList()
         startIndex_ = topIndex;
     }
     recycle_.InitRecycle();
+    if (xScrollBarVisible_ || yScrollBarVisible_) {
+        recycle_.MesureAdapterRelativeRect();
+        hasMeasuredAdapterRect_ = true;
+    } else {
+        hasMeasuredAdapterRect_ = false;
+    }
     startIndex_ = tmpStartIndex;
 
     if (direction_ == VERTICAL) {
@@ -691,6 +759,32 @@ void UIList::RemoveAll()
 {
     UIViewGroup::RemoveAll();
     recycle_.ClearScrapView();
+}
+
+void UIList::SetXScrollBarVisible(bool visible)
+{
+    UIAbstractScroll::SetXScrollBarVisible(visible);
+    if (!recycle_.HasInitialiszed() || !xScrollBarVisible_) {
+        hasMeasuredAdapterRect_ = false;
+        return;
+    }
+    if (!hasMeasuredAdapterRect_) {
+        recycle_.MesureAdapterRelativeRect();
+        hasMeasuredAdapterRect_ = true;
+    }
+}
+
+void UIList::SetYScrollBarVisible(bool visible)
+{
+    UIAbstractScroll::SetYScrollBarVisible(visible);
+    if (!recycle_.HasInitialiszed() || !yScrollBarVisible_) {
+        hasMeasuredAdapterRect_ = false;
+        return;
+    }
+    if (!hasMeasuredAdapterRect_) {
+        recycle_.MesureAdapterRelativeRect();
+        hasMeasuredAdapterRect_ = true;
+    }
 }
 
 void UIList::CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY)

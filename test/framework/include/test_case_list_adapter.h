@@ -30,8 +30,9 @@ public:
           testLabel_(testTitleLabel) {}
     ~TestCaseListAdapter() {}
     UIView* GetView(UIView* inView, int16_t index) override;
+    int16_t GetItemWidthWithMargin(int16_t index) override;
+    int16_t GetItemHeightWithMargin(int16_t index) override;
     uint16_t GetCount() override;
-
 private:
     RootView* rootView_;
     UIView* mainList_;

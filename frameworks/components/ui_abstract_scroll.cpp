@@ -14,24 +14,128 @@
  */
 
 #include "components/ui_abstract_scroll.h"
+#include "animator/interpolation.h"
+#include "components/ui_abstract_scroll_bar.h"
+#include "graphic_timer.h"
+
+#if RECTANGLE_SCREEN
+#include "components/ui_box_scroll_bar.h"
+#define BAR_OP(obj, op, ...)              \
+    do {                                  \
+        obj.yScrollBar_->op(__VA_ARGS__); \
+        obj.xScrollBar_->op(__VA_ARGS__); \
+    } while (0)
+#else
+#include "components/ui_arc_scroll_bar.h"
+#define BAR_OP(obj, op, ...) obj.yScrollBar_->op(__VA_ARGS__)
+#endif
 
 namespace OHOS {
+#if DEFAULT_ANIMATION
+class BarEaseInOutAnimator final : private AnimatorCallback {
+public:
+    BarEaseInOutAnimator() = delete;
+    BarEaseInOutAnimator(const BarEaseInOutAnimator&) = delete;
+    BarEaseInOutAnimator& operator=(const BarEaseInOutAnimator&) = delete;
+    BarEaseInOutAnimator(BarEaseInOutAnimator&&) = delete;
+    BarEaseInOutAnimator& operator=(BarEaseInOutAnimator&&) = delete;
+
+    BarEaseInOutAnimator(UIAbstractScroll& scrollView)
+        : scrollView_(scrollView),
+          timer_(APPEAR_PERIOD, TimerCb, this),
+          animator_(this, nullptr, ANIMATOR_DURATION, false) {}
+
+    ~BarEaseInOutAnimator()
+    {
+        timer_.Stop();
+        animator_.Stop();
+    }
+
+    void RefreshBar()
+    {
+        if (animator_.GetState() == Animator::START) {
+            if (!isEaseIn_) {
+                animator_.SetRunTime(ANIMATOR_DURATION - animator_.GetRunTime());
+            }
+        } else if (scrollView_.yScrollBar_->GetOpacity() == OPA_TRANSPARENT) {
+            animator_.Start();
+        } else {
+            timer_.Start(); // updates the start time of timer, ensuring that timer is triggered two seconds after the
+                            // last operation
+        }
+        isEaseIn_ = true;
+    }
+
+private:
+    void Callback(UIView* view) override
+    {
+        uint8_t opa = OPA_OPAQUE * animator_.GetRunTime() / ANIMATOR_DURATION;
+        if (!isEaseIn_) {
+            opa = OPA_OPAQUE - opa;
+        }
+        float bezielY = opa;
+        bezielY =
+            Interpolation::GetBezierY(bezielY / OPA_OPAQUE, 0, BEZIER_CONTROL_POINT_Y_1, BEZIER_CONTROL_POINT_X_2, 1);
+        opa = static_cast<uint8_t>(bezielY * opa);
+        BAR_OP(scrollView_, SetOpacity, opa);
+        scrollView_.Invalidate();
+    }
+
+    void OnStop(UIView& view) override
+    {
+        if (isEaseIn_) {
+            BAR_OP(scrollView_, SetOpacity, OPA_OPAQUE);
+            timer_.Start(); // The timer is triggered when animation stops.
+        } else {
+            BAR_OP(scrollView_, SetOpacity, OPA_TRANSPARENT);
+        }
+        scrollView_.Invalidate();
+    }
+
+    static void TimerCb(void* arg)
+    {
+        BarEaseInOutAnimator* barAnimator = reinterpret_cast<BarEaseInOutAnimator*>(arg);
+        barAnimator->isEaseIn_ = false;
+        barAnimator->animator_.Start();
+    }
+    static constexpr uint16_t ANIMATOR_DURATION = 250;
+    static constexpr uint16_t APPEAR_PERIOD = 2000;
+    static constexpr float BEZIER_CONTROL_POINT_Y_1 = 0.33f;
+    static constexpr float BEZIER_CONTROL_POINT_X_2 = 0.67f;
+    UIAbstractScroll& scrollView_;
+    GraphicTimer timer_;
+    Animator animator_;
+    bool isEaseIn_ = true;
+};
+#endif
+
 UIAbstractScroll::UIAbstractScroll()
-    : scrollBlankSize_(0),
-      reboundSize_(0),
-      maxScrollDistance_(0),
-      lastDeltaY_{0},
-      dragAccCoefficient_(DRAG_ACC_FACTOR),
-      swipeAccCoefficient_(0),
-      direction_(VERTICAL),
+    : direction_(VERTICAL),
       deltaYIndex_(0),
       reserve_(0),
-      throwDrag_(false),
       easingFunc_(EasingEquation::CubicEaseOut),
       scrollAnimator_(&animatorCallback_, this, 0, true)
 {
-#if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+#if RECTANGLE_SCREEN
+    xScrollBar_ = new UIBoxScrollBar();
+    if (xScrollBar_ == nullptr) {
+        GRAPHIC_LOGE("new UIBoxScrollBar fail");
+        return;
+    }
+    yScrollBar_ = new UIBoxScrollBar();
+#else
+    yScrollBar_ = new UIArcScrollBar();
+#endif
+    if (yScrollBar_ == nullptr) {
+        GRAPHIC_LOGE("new ScrollBar fail");
+        return;
+    }
+#if DEFAULT_ANIMATION
+    barEaseInOutAnimator_ = new BarEaseInOutAnimator(*this);
+    if (barEaseInOutAnimator_ == nullptr) {
+        GRAPHIC_LOGE("new BarEaseInOutAnimator fail");
+        return;
+    }
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -40,6 +144,20 @@ UIAbstractScroll::UIAbstractScroll()
     touchable_ = true;
     draggable_ = true;
     dragParentInstead_ = false;
+}
+
+UIAbstractScroll::~UIAbstractScroll()
+{
+#if DEFAULT_ANIMATION
+    delete barEaseInOutAnimator_;
+    barEaseInOutAnimator_ = nullptr;
+#endif
+#if RECTANGLE_SCREEN
+    delete xScrollBar_;
+    xScrollBar_ = nullptr;
+#endif
+    delete yScrollBar_;
+    yScrollBar_ = nullptr;
 }
 
 void UIAbstractScroll::MoveChildByOffset(int16_t offsetX, int16_t offsetY)
@@ -56,6 +174,21 @@ void UIAbstractScroll::MoveChildByOffset(int16_t offsetX, int16_t offsetY)
         view->SetPosition(x, y);
         view = view->GetNextSibling();
     }
+
+    Rect childrenRect = GetAllChildRelativeRect();
+    /* calculate scrollBar's the proportion of foreground */
+    int16_t totalLen = childrenRect.GetHeight() + 2 * scrollBlankSize_; // 2: two blank space on both sizes
+    int16_t len = GetHeight();
+    yScrollBar_->SetForegroundProportion(static_cast<float>(len) / totalLen);
+    /* calculate scrolling progress */
+    yScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetTop()) / (totalLen - len));
+#if RECTANGLE_SCREEN
+    /* so do x-bar */
+    totalLen = childrenRect.GetWidth() + 2 * scrollBlankSize_; // 2: two blank space on both sizes
+    len = GetWidth();
+    xScrollBar_->SetForegroundProportion(static_cast<float>(len) / totalLen);
+    xScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetLeft()) / (totalLen - len));
+#endif
     Invalidate();
 }
 
@@ -175,5 +308,38 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
     } else {
         scrollView->StopAnimator();
     }
+}
+
+void UIAbstractScroll::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
+{
+    Rect scrollRect = GetRect();
+    uint8_t opa = GetMixOpaScale();
+#if RECTANGLE_SCREEN
+    if (yScrollBarVisible_) {
+        yScrollBar_->SetPosition(scrollRect.GetRight() - SCROLL_BAR_WIDTH + 1, scrollRect.GetTop(), SCROLL_BAR_WIDTH,
+                                 scrollRect.GetHeight());
+        yScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
+    }
+    if (xScrollBarVisible_) {
+        xScrollBar_->SetPosition(scrollRect.GetLeft(), scrollRect.GetBottom() - SCROLL_BAR_WIDTH + 1,
+                                 scrollRect.GetWidth() - SCROLL_BAR_WIDTH, SCROLL_BAR_WIDTH);
+        xScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
+    }
+#else
+    if (yScrollBarVisible_) {
+        int16_t x = scrollRect.GetX() + (GetWidth() / 2); // 2: half
+        int16_t y = scrollRect.GetY() + (GetHeight() / 2); // 2: half
+        yScrollBar_->SetPosition(x, y, SCROLL_BAR_WIDTH, GetWidth() / 2); // 2: half
+        yScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
+    }
+#endif
+    UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
+}
+
+void UIAbstractScroll::RefreshAnimator()
+{
+#if DEFAULT_ANIMATION
+    barEaseInOutAnimator_->RefreshBar();
+#endif
 }
 } // namespace OHOS

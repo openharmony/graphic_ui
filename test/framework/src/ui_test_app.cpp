@@ -81,11 +81,14 @@ void UITestApp::Init()
     }
     if ((mainList_ == nullptr) && (adapter_ == nullptr)) {
         uint8_t deltaHeight = 60; // 60: UIList height(64) - first button border width(4)
+        constexpr uint8_t margin = 24; // 24: x-coordinate
         mainList_ = new UIList(UIList::VERTICAL);
-        mainList_->SetPosition(24, deltaHeight); // 24: x-coordinate
-        mainList_->Resize(Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight() - deltaHeight);
+        mainList_->SetPosition(margin, deltaHeight);
+        mainList_->Resize(Screen::GetInstance().GetWidth() - margin, Screen::GetInstance().GetHeight() - deltaHeight);
         mainList_->SetThrowDrag(true);
+        mainList_->SetReboundSize(50); // 50: rebound size
         mainList_->SetViewId(UI_TEST_MAIN_LIST_ID);
+        mainList_->SetYScrollBarVisible(true);
         adapter_ = new TestCaseListAdapter(rootView_, mainList_, backBtn_, testCaseLabel_, testLabel_);
         UITestGroup::SetUpTestCase();
         mainList_->SetAdapter(adapter_);

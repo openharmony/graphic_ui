@@ -195,4 +195,15 @@ UIView* TestCaseListAdapter::GetView(UIView* inView, int16_t index)
     item->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
     return item;
 }
+
+int16_t TestCaseListAdapter::GetItemWidthWithMargin(int16_t index)
+{
+    // 2: two borders on both sides 
+    return Screen::GetInstance().GetWidth() - TEXT_DISTANCE_TO_LEFT_SIDE + STYLE_BORDER_WIDTH_VALUE * 2;
+}
+
+int16_t TestCaseListAdapter::GetItemHeightWithMargin(int16_t index)
+{
+    return TESTCASE_BUTTON_HEIGHT + STYLE_BORDER_WIDTH_VALUE * 2; // 2: two borders on both sides
+}
 } // namespace OHOS

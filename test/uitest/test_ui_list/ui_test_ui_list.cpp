@@ -104,6 +104,8 @@ void UITestUIList::TearDown()
     setAutoAlignOffBtn_ = nullptr;
     setAutoAlignACCIncBtn_ = nullptr;
     setAutoAlignACCDncBtn_ = nullptr;
+    setYScrollBarVisableBtn_ = nullptr;
+    setYScrollBarInvisableBtn_ = nullptr;
     lastX_ = 0;
     lastY_ = 0;
 }
@@ -138,6 +140,7 @@ void UITestUIList::UIKit_List_Init_Test_Full_Screen_001()
     list->SetStartIndex(5); // 5: list start index
     list->GetStartIndex();
     list->SetAdapter(adapter1_);
+    list->SetYScrollBarVisible(true);
     container_->Add(list);
 }
 
@@ -163,6 +166,7 @@ void UITestUIList::UIKit_List_Init_Test_halh_Screen_001()
     list->SetPosition(Screen::GetInstance().GetWidth() / 2 + VIEW_DISTANCE_TO_LEFT_SIDE, VIEW_DISTANCE_TO_TOP_SIDE,
                       g_listW, g_listH - 150); // 150: decrease height
     list->SetAdapter(adapter2_);
+    list->SetYScrollBarVisible(true);
     container_->Add(list);
 }
 
@@ -208,7 +212,12 @@ void UITestUIList::SetControlButton()
     if (setAutoAlignACCDncBtn_ == nullptr) {
         setAutoAlignACCDncBtn_ = new UILabelButton();
     }
-
+    if (setYScrollBarVisableBtn_ == nullptr) {
+        setYScrollBarVisableBtn_ = new UILabelButton();
+    }
+    if (setYScrollBarInvisableBtn_ == nullptr) {
+        setYScrollBarInvisableBtn_ = new UILabelButton();
+    }
     positionX_ += 5; // 5: increase y-coordinate
     SetUpButton(setBlankBtn_, "开启blank");
     SetUpButton(setBlankOffBtn_, "关闭blank");
@@ -225,6 +234,8 @@ void UITestUIList::SetControlButton()
     SetUpButton(setAutoAlignOffBtn_, "关闭自动对齐 ");
     SetUpButton(setAutoAlignACCIncBtn_, "增加自动对齐时间 ");
     SetUpButton(setAutoAlignACCDncBtn_, "减少自动对齐时间 ");
+    SetUpButton(setYScrollBarVisableBtn_, "显示纵向滚动条");
+    SetUpButton(setYScrollBarInvisableBtn_, "不显示纵向滚动条");
 }
 
 void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
@@ -249,6 +260,7 @@ void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
     list->SetIntercept(true);
     list->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     list->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, g_listH - 95, g_listW, g_listH); // 95: decrease y-coordinate
+    list->SetYScrollBarVisible(true);
     list->SetAdapter(adapter4_);
     list->SetScrollStateListener(this);
     currentList_ = list;
@@ -322,6 +334,10 @@ bool UITestUIList::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == setAutoAlignACCDncBtn_) {
         autoAlignTime_ -= ALINE_TIME_CHANGE_VALUE;
         currentList_->SetAutoAlignTime(autoAlignTime_);
+    } else if (&view == setYScrollBarVisableBtn_) {
+        currentList_->SetYScrollBarVisible(true);
+    } else if (&view == setYScrollBarInvisableBtn_) {
+        currentList_->SetYScrollBarVisible(false);
     }
     return true;
 }
