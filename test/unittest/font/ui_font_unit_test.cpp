@@ -80,7 +80,6 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetInstance_001, TestSize.Level0)
  */
 HWTEST_F(UIFontTest, Graphic_Font_Test_IsVectorFont_001, TestSize.Level1)
 {
-    UIFont::GetInstance()->SetFont(font_);
 #if ENABLE_VECTOR_FONT
     bool ret = UIFont::GetInstance()->IsVectorFont();
     EXPECT_EQ(ret, true);

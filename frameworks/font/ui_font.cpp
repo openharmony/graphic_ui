@@ -27,6 +27,7 @@
 #endif
 
 namespace OHOS {
+bool UIFont::setFontAllocFlag_ = false;
 UIFont::UIFont() : instance_(nullptr), defaultInstance_(nullptr){};
 
 UIFont::~UIFont(){};
@@ -38,11 +39,13 @@ UIFont* UIFont::GetInstance()
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontVector();
         instance.instance_ = instance.defaultInstance_;
+        setFontAllocFlag_ = true;
     }
 #else
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontBitmap();
         instance.instance_ = instance.defaultInstance_;
+        setFontAllocFlag_ = true;
     }
 #endif
     return &instance;
@@ -51,9 +54,10 @@ UIFont* UIFont::GetInstance()
 void UIFont::SetFont(BaseFont* font)
 {
     if (font != nullptr) {
-        if (defaultInstance_ != nullptr) {
+        if (defaultInstance_ != nullptr && setFontAllocFlag_) {
             delete defaultInstance_;
             defaultInstance_ = nullptr;
+            setFontAllocFlag_ = false;
         }
         defaultInstance_ = font;
         instance_ = font;
@@ -68,6 +72,7 @@ uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t shapi
     // shaping font is in search list, search shaping font first
     if (shapingFont > 1) {
         bitmap = instance_->GetBitmap(unicode, glyphNode, shapingFont);
+        SetCurrentFontId(currentFontId);
         if (bitmap != nullptr) {
             return bitmap;
         }
@@ -106,6 +111,7 @@ uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t shapingId)
 #if ENABLE_MULTI_FONT
     if (shapingId > 1) {
         result = instance_->GetWidth(unicode, shapingId);
+        SetCurrentFontId(currentFontId);
         if (result >= 0) {
             return result;
         }

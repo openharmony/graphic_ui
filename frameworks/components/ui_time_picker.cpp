@@ -53,6 +53,9 @@ UITimePicker::UITimePicker()
     } else {
         style_ = &(StyleDefault::GetPickerHighlightStyle());
     }
+#if ENABLE_FOCUS_MANAGER
+    focusable_ = true;
+#endif
     highlightFontId_ = style_->font_;
     highlightColor_ = style_->textColor_;
 

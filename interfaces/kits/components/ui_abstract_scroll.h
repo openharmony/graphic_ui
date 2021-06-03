@@ -64,7 +64,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual ~UIAbstractScroll();
+    virtual ~UIAbstractScroll() {};
 
     /**
      * @brief Obtains the view type.

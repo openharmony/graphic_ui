@@ -42,11 +42,6 @@ UIAbstractScroll::UIAbstractScroll()
     dragParentInstead_ = false;
 }
 
-UIAbstractScroll::~UIAbstractScroll()
-{
-    scrollAnimator_.Stop();
-}
-
 void UIAbstractScroll::MoveChildByOffset(int16_t offsetX, int16_t offsetY)
 {
     if ((offsetX == 0) && (offsetY == 0)) {

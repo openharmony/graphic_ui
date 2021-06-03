@@ -629,8 +629,8 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                 BlitMapBuffer(origRect, curTransMap, mask);
                 transViewGroup->GetTransformMap().SetInvalid(false);
                 enableAnimator = false;
-                transViewGroup->SetPosition(relativeRect.GetX() - curView->GetStyle(STYLE_MARGIN_LEFT),
-                                            relativeRect.GetY() - curView->GetStyle(STYLE_MARGIN_TOP));
+                transViewGroup->SetPosition(relativeRect.GetX() - transViewGroup->GetStyle(STYLE_MARGIN_LEFT),
+                                            relativeRect.GetY() - transViewGroup->GetStyle(STYLE_MARGIN_TOP));
                 transViewGroup = nullptr;
             }
             curView = g_viewStack[stackCount]->GetNextSibling();
