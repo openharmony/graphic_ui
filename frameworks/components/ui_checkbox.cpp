@@ -21,27 +21,31 @@
 
 namespace OHOS {
 namespace {
-    constexpr uint8_t DEFAULT_UNSELECT_BG_OPA = 168; // default background opacity
-    constexpr float DEFAULT_COEFFICIENT_START_DX = 0.22; // start point: x-cordinate offset
-    constexpr float DEFAULT_COEFFICIENT_START_DY = 0.5; // start point: y-cordinate offset
-    constexpr float DEFAULT_COEFFICIENT_MID_DX = 0.2; // middle point: y-cordinate offset
-    constexpr float DEFAULT_COEFFICIENT_MID_DY = 0.38; // middle point: y-cordinate offset
-    constexpr int16_t DEFAULT_RATIO_BORDER_RADIUS_LINE_WIDTH = 4;
+constexpr uint8_t DEFAULT_UNSELECT_BG_OPA = 168;     // default background opacity
+constexpr float DEFAULT_COEFFICIENT_START_DX = 0.22; // start point: x-cordinate offset
+constexpr float DEFAULT_COEFFICIENT_START_DY = 0.5;  // start point: y-cordinate offset
+constexpr float DEFAULT_COEFFICIENT_MID_DX = 0.2;    // middle point: y-cordinate offset
+constexpr float DEFAULT_COEFFICIENT_MID_DY = 0.38;   // middle point: y-cordinate offset
+constexpr int16_t DEFAULT_RATIO_BORDER_RADIUS_LINE_WIDTH = 4;
 #if DEFAULT_ANIMATION
-    constexpr int16_t DEFAULT_ANIMATOR_TIME = 200;
-    constexpr float BEZIER_CONTROL_POINT_X_1 = 0.33;
-    constexpr float BEZIER_CONTROL_POINT_X_2 = 0.67;
+constexpr int16_t DEFAULT_ANIMATOR_TIME = 200;
+constexpr float BEZIER_CONTROL_POINT_X_1 = 0.33;
+constexpr float BEZIER_CONTROL_POINT_X_2 = 0.67;
 #endif
-}
+} // namespace
 UICheckBox::UICheckBox()
-    : state_(UNSELECTED), onStateChangeListener_(nullptr), width_(DEFAULT_HOT_WIDTH), height_(DEFAULT_HOT_HEIGHT),
-      borderWidth_(DEFAULT_BORDER_WIDTH), backgroundOpacity_(0)
+    : state_(UNSELECTED),
+      onStateChangeListener_(nullptr),
+      width_(DEFAULT_HOT_WIDTH),
+      height_(DEFAULT_HOT_HEIGHT),
+      borderWidth_(DEFAULT_BORDER_WIDTH),
+      backgroundOpacity_(0)
 {
     touchable_ = true;
     style_ = &(StyleDefault::GetBackgroundTransparentStyle());
     image_[UNSELECTED].SetSrc(GetCheckBoxOffInfo());
     image_[SELECTED].SetSrc(GetCheckBoxOnInfo());
-    ImageHeader header = { 0 };
+    ImageHeader header = {0};
     image_[UNSELECTED].GetHeader(header);
     Resize(header.width, header.height);
 #if DEFAULT_ANIMATION
@@ -50,19 +54,23 @@ UICheckBox::UICheckBox()
 #endif
 }
 
-void UICheckBox::SetState(UICheckBoxState state)
+void UICheckBox::SetState(UICheckBoxState state, bool needAnimater)
 {
     if (state_ == state) {
         return;
     }
     state_ = state;
     if ((image_[SELECTED].GetSrcType() == IMG_SRC_UNKNOWN) || (image_[UNSELECTED].GetSrcType() == IMG_SRC_UNKNOWN)) {
+        if (needAnimater) {
 #if DEFAULT_ANIMATION
-        checkBoxAnimator_.Start();
-        ResetCallback();
+            checkBoxAnimator_.Start();
+            ResetCallback();
 #else
-        backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : 0;
+            backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : 0;
 #endif
+        } else {
+            backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : 0;
+        }
     }
     if (onStateChangeListener_ != nullptr) {
         onStateChangeListener_->OnChange(state);
@@ -73,9 +81,9 @@ void UICheckBox::SetState(UICheckBoxState state)
 void UICheckBox::ReverseState()
 {
     if (state_ == SELECTED) {
-        SetState(UNSELECTED);
+        SetState(UNSELECTED, true);
     } else {
-        SetState(SELECTED);
+        SetState(SELECTED, true);
     }
 }
 
@@ -108,7 +116,7 @@ void UICheckBox::CalculateSize()
     width_ = width;
     height_ = height;
     int16_t minValue = (width_ > height_) ? height_ : width_;
-    borderWidth_ =  DEFAULT_BORDER_WIDTH * minValue / DEFAULT_HOT_WIDTH;
+    borderWidth_ = DEFAULT_BORDER_WIDTH * minValue / DEFAULT_HOT_WIDTH;
 }
 
 void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
@@ -127,35 +135,39 @@ void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
     BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, trunc, styleSelect, opaScale_);
     int16_t dx = borderWidth_ * DEFAULT_COEFFICIENT_START_DX;
     int16_t dy = borderWidth_ * DEFAULT_COEFFICIENT_START_DY;
-    Point start = { static_cast<int16_t>(rect.GetX() + dx), static_cast<int16_t>(rect.GetY() + dy) };
+    Point start = {static_cast<int16_t>(rect.GetX() + dx), static_cast<int16_t>(rect.GetY() + dy)};
     dx = borderWidth_ * DEFAULT_COEFFICIENT_MID_DX;
-    Point mid = { static_cast<int16_t>(start.x + dx), static_cast<int16_t>(start.y + dx) };
+    Point mid = {static_cast<int16_t>(start.x + dx), static_cast<int16_t>(start.y + dx)};
     dx = borderWidth_ * DEFAULT_COEFFICIENT_MID_DY;
-    Point end = { static_cast<int16_t>(mid.x + dx), static_cast<int16_t>(mid.y - dx) };
+    Point end = {static_cast<int16_t>(mid.x + dx), static_cast<int16_t>(mid.y - dx)};
     const int16_t half = 2; // 2 ：half
-    ArcInfo arcInfoLeft = {
-        start, { 0, 0 }, static_cast<uint16_t>(rectLineWidth), SEMICIRCLE_IN_DEGREE + QUARTER_IN_DEGREE / half,
-        QUARTER_IN_DEGREE / half, nullptr
-    };
-    ArcInfo arcInfoMid = {
-        mid, { 0, 0 }, static_cast<uint16_t>(rectLineWidth), SEMICIRCLE_IN_DEGREE - QUARTER_IN_DEGREE / half,
-        SEMICIRCLE_IN_DEGREE + QUARTER_IN_DEGREE / half, nullptr
-    };
-    ArcInfo arcInfoRight = {
-        end, { 0, 0 }, static_cast<uint16_t>(rectLineWidth), CIRCLE_IN_DEGREE - QUARTER_IN_DEGREE / half,
-        SEMICIRCLE_IN_DEGREE - QUARTER_IN_DEGREE / half, nullptr
-    };
+    ArcInfo arcInfoLeft = {start,
+                           {0, 0},
+                           static_cast<uint16_t>(rectLineWidth),
+                           SEMICIRCLE_IN_DEGREE + QUARTER_IN_DEGREE / half,
+                           QUARTER_IN_DEGREE / half,
+                           nullptr};
+    ArcInfo arcInfoMid = {mid,
+                          {0, 0},
+                          static_cast<uint16_t>(rectLineWidth),
+                          SEMICIRCLE_IN_DEGREE - QUARTER_IN_DEGREE / half,
+                          SEMICIRCLE_IN_DEGREE + QUARTER_IN_DEGREE / half,
+                          nullptr};
+    ArcInfo arcInfoRight = {end,
+                            {0, 0},
+                            static_cast<uint16_t>(rectLineWidth),
+                            CIRCLE_IN_DEGREE - QUARTER_IN_DEGREE / half,
+                            SEMICIRCLE_IN_DEGREE - QUARTER_IN_DEGREE / half,
+                            nullptr};
     styleSelect.lineColor_ = Color::White();
     styleSelect.lineOpa_ = backgroundOpacity_;
     uint8_t opa = DrawUtils::GetMixOpacity(opaScale_, backgroundOpacity_);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoLeft, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
     // 2 : double
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, mid, trunc, rectLineWidth * 2, Color::White(),
-                                           opa);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, mid, trunc, rectLineWidth * 2, Color::White(), opa);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoMid, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
     // 2 : double
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, mid, end, trunc, rectLineWidth * 2, Color::White(),
-                                           opa);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, mid, end, trunc, rectLineWidth * 2, Color::White(), opa);
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoRight, trunc, styleSelect, opaScale_, CapType::CAP_NONE);
 }
 
@@ -165,8 +177,8 @@ void UICheckBox::UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
                                                 int16_t borderRadius,
                                                 int16_t rectLineWidth)
 {
-    Rect contentRect  = GetContentRect();
-    Style styleUnSelect  = StyleDefault::GetBackgroundTransparentStyle();
+    Rect contentRect = GetContentRect();
+    Style styleUnSelect = StyleDefault::GetBackgroundTransparentStyle();
     styleUnSelect.borderWidth_ = rectLineWidth;
     styleUnSelect.borderRadius_ = borderRadius;
     styleUnSelect.borderColor_ = Color::White();
@@ -211,7 +223,7 @@ void UICheckBox::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
         coords.SetWidth(imgWidth);
         coords.SetHeight(imgHeight);
         BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opaScale_);
-        int16_t offsetLeft = (GetWidth() - imgWidth) / 2; // 2 : half
+        int16_t offsetLeft = (GetWidth() - imgWidth) / 2;  // 2 : half
         int16_t offsetTop = (GetHeight() - imgHeight) / 2; // 2 : half
         coords.SetX(coords.GetX() + offsetLeft);
         coords.SetY(coords.GetY() + offsetTop);
@@ -226,11 +238,11 @@ void UICheckBox::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
         }
         CalculateSize();
         int16_t rectLineWidth = borderWidth_ / DEFAULT_BORDER_WIDTH;
-        int16_t borderRadius  = rectLineWidth * DEFAULT_RATIO_BORDER_RADIUS_LINE_WIDTH;
+        int16_t borderRadius = rectLineWidth * DEFAULT_RATIO_BORDER_RADIUS_LINE_WIDTH;
         BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetRect(), invalidatedArea, *style_, opaScale_);
-        int16_t x = contentRect.GetX() + (width_ - borderWidth_) / 2; // 2: half
+        int16_t x = contentRect.GetX() + (width_ - borderWidth_) / 2;  // 2: half
         int16_t y = contentRect.GetY() + (height_ - borderWidth_) / 2; // 2: half
-        Rect rect(x, y, x + borderWidth_,  y + borderWidth_);
+        Rect rect(x, y, x + borderWidth_, y + borderWidth_);
 #if DEFAULT_ANIMATION
         UnSelectedStateSoftwareDrawing(gfxDstBuffer, rect, trunc, borderRadius, rectLineWidth);
         SelectedStateSoftwareDrawing(gfxDstBuffer, rect, trunc, borderRadius, rectLineWidth);

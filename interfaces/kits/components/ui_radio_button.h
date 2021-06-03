@@ -134,16 +134,16 @@ public:
 
 protected:
     void CalculateSize() override;
+#if DEFAULT_ANIMATION
+    void Callback(UIView* view) override;
+#endif
 
 private:
     void FindRadioButtonAndChangeState(UIView* view);
-    static constexpr int16_t DEFAULT_RADIUS_BIG = 11;
-    static constexpr int16_t DEFAULT_RADIUS_SMALL = 6;
-    static constexpr int16_t DEFAULT_LINE_WIDTH = 1;
-
     char* name_;
     uint16_t radiusBig_;
     uint16_t radiusSmall_;
+    uint16_t currentRadius_;
     int16_t lineWidth_;
 };
 } // namespace OHOS

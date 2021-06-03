@@ -216,13 +216,15 @@ public:
      * @brief Sets the state for this check box.
      *
      * @param state Indicates the state of this check box. For details, see {@link UICheckBoxState}.
+     * @param needAnimater Whether the state change process can be animated, the setting takes effect when the
+     *        DEFAULT_ANIMATION is 1, {@link DEFAULT_ANIMATION}
      * @since 1.0
      * @version 1.0
      */
-    void SetState(UICheckBoxState state);
+    void SetState(UICheckBoxState state, bool needAnimater = false);
 
 protected:
-    virtual void ReverseState();
+    void ReverseState();
     virtual void CalculateSize();
     void SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
                                       Rect rect,
