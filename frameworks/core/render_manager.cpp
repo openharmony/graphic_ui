@@ -186,6 +186,25 @@ void RenderManager::RenderRect(const Rect& rect, RootView* rootView)
 #endif
 }
 
+void RenderManager::RefreshScreen()
+{
+#if ENABLE_WINDOW
+    ListNode<Window*>* winNode = winList_.Begin();
+    while (winNode != winList_.End()) {
+        WindowImpl* windowImpl = reinterpret_cast<WindowImpl*>(winNode->data_);
+        RootView* rootView = windowImpl->GetRootView();
+        if (rootView == nullptr) {
+            winNode = winNode->next_;
+            continue;
+        }
+        rootView->Invalidate();
+        winNode = winNode->next_;
+    }
+#else
+    RootView::GetInstance()->Invalidate();
+#endif
+}
+
 #if ENABLE_WINDOW
 void RenderManager::AddToDisplay(Window* window)
 {

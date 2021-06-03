@@ -79,6 +79,7 @@ SOURCES += \
     ../../../../frameworks/dfx/performance_task.cpp \
     ../../../../frameworks/dfx/point_event_injector.cpp \
     ../../../../frameworks/dfx/ui_dump_dom_tree.cpp \
+    ../../../../frameworks/dfx/ui_view_bounds.cpp \
     ../../../../frameworks/dock/input_device.cpp \
     ../../../../frameworks/dock/key_input_device.cpp \
     ../../../../frameworks/dock/pointer_input_device.cpp \
@@ -135,6 +136,7 @@ HEADERS += \
     ../../../../frameworks/default_resource/check_box_res.h \
     ../../../../frameworks/dfx/key_event_injector.h \
     ../../../../frameworks/dfx/point_event_injector.h \
+    ../../../../frameworks/dfx/ui_view_bounds.h \
     ../../../../frameworks/dock/input_device.h \
     ../../../../frameworks/dock/pointer_input_device.h \
     ../../../../frameworks/dock/virtual_input_device.h \

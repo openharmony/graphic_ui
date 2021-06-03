@@ -81,6 +81,7 @@ if (ohos_build_type == "debug") {
       "components/ui_view_group_unit_test.cpp",
       "components/ui_view_unit_test.cpp",
       "dfx/event_injector_unit_test.cpp",
+      "dfx/view_bounds_unit_test.cpp",
       "events/cancel_event_unit_test.cpp",
       "events/click_event_unit_test.cpp",
       "events/drag_event_unit_test.cpp",

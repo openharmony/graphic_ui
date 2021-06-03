@@ -14,8 +14,10 @@
  */
 
 #include "components/ui_view.h"
+
 #include "components/root_view.h"
 #include "core/render_manager.h"
+#include "dfx/ui_view_bounds.h"
 #include "dock/focus_manager.h"
 #include "draw/draw_utils.h"
 #include "engines/gfx/gfx_engine_manager.h"
@@ -103,6 +105,71 @@ void UIView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     uint8_t opa = GetMixOpaScale();
     BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, GetOrigRect(), invalidatedArea, *style_, opa);
+}
+
+void UIView::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
+{
+    DrawViewBounds(gfxDstBuffer, invalidatedArea);
+}
+
+void UIView::DrawViewBounds(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
+{
+#if ENABLE_DEBUG
+    if (!UIViewBounds::GetInstance()->GetShowState()) {
+        return;
+    }
+    Style* style = new Style();
+    style->SetStyle(STYLE_BACKGROUND_OPA, OPA_TRANSPARENT);
+    style->SetStyle(STYLE_BORDER_COLOR, Color::Red().full);
+    style->SetStyle(STYLE_BORDER_WIDTH, 1);
+    style->SetStyle(STYLE_BORDER_OPA, OPA_OPAQUE / 2); // 2: half opacity
+    Rect viewRect(GetRect());
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, viewRect, invalidatedArea, *style, OPA_OPAQUE);
+
+    style->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
+    style->SetStyle(STYLE_BACKGROUND_COLOR, Color::Blue().full);
+    style->SetStyle(STYLE_BORDER_WIDTH, 0);
+    Rect tmpRect(viewRect);
+    int16_t length = 10; // 10: corner length
+
+    // left top corner
+    tmpRect.SetRight(viewRect.GetLeft() + length);
+    tmpRect.SetBottom(viewRect.GetTop());
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+    tmpRect.SetRight(viewRect.GetLeft());
+    tmpRect.SetBottom(viewRect.GetTop() + length);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+
+    // left bottom corner
+    tmpRect.SetLeft(viewRect.GetLeft());
+    tmpRect.SetTop(viewRect.GetBottom() - length);
+    tmpRect.SetRight(viewRect.GetLeft());
+    tmpRect.SetBottom(viewRect.GetBottom());
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+    tmpRect.SetTop(viewRect.GetBottom());
+    tmpRect.SetRight(viewRect.GetLeft() + length);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+
+    // right top corner
+    tmpRect.SetLeft(viewRect.GetRight() - length);
+    tmpRect.SetTop(viewRect.GetTop());
+    tmpRect.SetRight(viewRect.GetRight());
+    tmpRect.SetBottom(viewRect.GetTop());
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+    tmpRect.SetLeft(viewRect.GetRight());
+    tmpRect.SetBottom(viewRect.GetTop() + length);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+
+    // right bottom corner
+    tmpRect = viewRect;
+    tmpRect.SetLeft(viewRect.GetRight());
+    tmpRect.SetTop(viewRect.GetBottom() - length);
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+    tmpRect.SetLeft(viewRect.GetRight() - length);
+    tmpRect.SetTop(viewRect.GetBottom());
+    BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, tmpRect, invalidatedArea, *style, OPA_OPAQUE);
+    delete style;
+#endif // ENABLE_DEBUG
 }
 
 void UIView::SetupThemeStyles()
