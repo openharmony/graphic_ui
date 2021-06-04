@@ -146,8 +146,6 @@ public:
     bool OnRotateEvent(const RotateEvent& event) override;
 #endif
 
-    void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
-
     bool OnDragEvent(const DragEvent& event) override;
 
     bool OnDragEndEvent(const DragEvent& event) override;
@@ -225,32 +223,6 @@ public:
     bool GetVerticalScrollState() const
     {
         return yScrollable_;
-    }
-
-    /**
-     * @brief Sets whether the horizontal scroll bar is visible.
-     *
-     * @param state Specifies whether the horizontal scroll bar is visible. <b>true</b> indicates the horizontal scroll
-     *              bar is visible, and <b> false</b> indicates the opposite case.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetXScrollBarVisible(bool state)
-    {
-        xSlider_.SetVisible(state);
-    }
-
-    /**
-     * @brief Sets whether the vertical scroll bar is visible.
-     *
-     * @param state Specifies whether this vertical scroll bar is visible. <b>true</b> indicates the horizontal scroll
-     *              bar is visible, and <b> false</b> indicates the opposite case.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetYScrollBarVisible(bool state)
-    {
-        ySlider_.SetVisible(state);
     }
 
     /**

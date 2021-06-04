@@ -25,6 +25,7 @@ DEFINES += QT_COMPILER
 DESTDIR = ../libs
 
 SOURCES += \
+    ../../../../../utils/frameworks/graphic_timer.cpp \
     ../../../../frameworks/animator/animator.cpp \
     ../../../../frameworks/animator/animator_manager.cpp \
     ../../../../frameworks/animator/easing_equation.cpp \
@@ -42,10 +43,13 @@ SOURCES += \
     ../../../../frameworks/components/ui_abstract_clock.cpp \
     ../../../../frameworks/components/ui_abstract_progress.cpp \
     ../../../../frameworks/components/ui_abstract_scroll.cpp \
+    ../../../../frameworks/components/ui_abstract_scroll_bar.cpp \
     ../../../../frameworks/components/ui_analog_clock.cpp \
     ../../../../frameworks/components/ui_arc_label.cpp \
+    ../../../../frameworks/components/ui_arc_scroll_bar.cpp \
     ../../../../frameworks/components/ui_axis.cpp \
     ../../../../frameworks/components/ui_box_progress.cpp \
+    ../../../../frameworks/components/ui_box_scroll_bar.cpp \
     ../../../../frameworks/components/ui_button.cpp \
     ../../../../frameworks/components/ui_canvas.cpp \
     ../../../../frameworks/components/ui_chart.cpp \
@@ -131,6 +135,7 @@ SOURCES += \
     ../../../../../../../third_party/cJSON/cJSON.c
 
 HEADERS += \
+    ../../../../../utils/interfaces/innerkits/graphic_timer.h \
     ../../../../frameworks/common/typed_text.h \
     ../../../../frameworks/core/render_manager.h \
     ../../../../frameworks/default_resource/check_box_res.h \

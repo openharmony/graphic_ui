@@ -63,4 +63,13 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
     }
     return true;
 }
+
+ScreenShape Screen::GetScreenShape()
+{
+#if RECTANGLE_SCREEN
+    return ScreenShape::RECTANGLE;
+#else
+    return ScreenShape::CIRCLE;
+#endif
+}
 } // namespace OHOS

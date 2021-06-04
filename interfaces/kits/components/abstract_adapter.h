@@ -87,12 +87,28 @@ public:
      * @version 1.0
      */
     virtual UIView* GetView(UIView* inView, int16_t index) = 0;
+    
+    virtual void DeleteView(UIView*& view)
+    {
+        delete view;
+        view = nullptr;
+    };
 
-    virtual void DeleteView(UIView*& view){};
+    virtual int16_t GetItemWidthWithMargin(int16_t index)
+    {
+        UIView *view = GetView(nullptr, index);
+        int16_t width = view->GetWidthWithMargin();
+        DeleteView(view);
+        return width;
+    }
 
-protected:
-    static const uint16_t DEFAULT_WIDTH = 200;
-    static const uint16_t DEFAULT_HEIGHT = 50;
+    virtual int16_t GetItemHeightWithMargin(int16_t index)
+    {
+        UIView *view = GetView(nullptr, index);
+        int16_t height = view->GetHeightWithMargin();
+        DeleteView(view);
+        return height;
+    }
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_ABSTRACT_ADAPTER_H

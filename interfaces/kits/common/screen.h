@@ -40,6 +40,14 @@
 
 namespace OHOS {
 /**
+ * @brief Enumerates screen shapes.
+ */
+enum ScreenShape {
+    RECTANGLE = 0, // rectangular screen
+    CIRCLE         // circular screen
+};
+
+/**
  * @brief Represents the screen info of the device.
  *
  * @since 1.0
@@ -79,6 +87,13 @@ public:
      * @version 3.0
      */
     bool GetCurrentScreenBitmap(ImageInfo& info);
+
+    /**
+     * @brief 获取当前屏幕的形状.
+     * @return 当前屏幕形状.
+     * @since 6
+     */
+    ScreenShape GetScreenShape();
 
 private:
     Screen() {}

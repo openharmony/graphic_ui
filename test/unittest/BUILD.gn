@@ -71,6 +71,7 @@ if (ohos_build_type == "debug") {
       "components/ui_qrcode_unit_test.cpp",
       "components/ui_radio_button_unit_test.cpp",
       "components/ui_repeat_button_unit_test.cpp",
+      "components/ui_scroll_bar_test.cpp",
       "components/ui_scroll_view_unit_test.cpp",
       "components/ui_slider_unit_test.cpp",
       "components/ui_surface_view_unit_test.cpp",

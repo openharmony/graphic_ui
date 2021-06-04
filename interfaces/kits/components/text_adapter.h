@@ -253,7 +253,6 @@ public:
     {
         formatter_ = formatter;
     }
-
 protected:
     virtual UILabel* GetTextView(UIView* inView, int16_t index);
     uint8_t dataMode_;
