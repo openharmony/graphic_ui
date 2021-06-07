@@ -16,13 +16,25 @@
 #include "components/ui_swipe_view.h"
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
+#include "gfx_utils/graphic_log.h"
+
+namespace {
+#if ENABLE_ROTATE_INPUT
+constexpr float DEFAULT_SWIPE_ROTATE_FACTOR = 5;
+#endif
+} // namespace
 
 namespace OHOS {
 UISwipeView::UISwipeView(uint8_t direction)
     : swipeListener_(nullptr), curIndex_(0), blankSize_(DEFAULT_BLANK_SIZE), curView_(nullptr), loop_(false)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_ROTATE_FACTOR;
+    rotateFactor_ = DEFAULT_SWIPE_ROTATE_FACTOR;
+    lastRotateLen_ = 0;
+#endif
+#if ENABLE_VIBRATOR
+    lastIndex_ = 0;
+    needVibration_ = false;
 #endif
     direction_ = direction;
     tickTime_ = ANIMATOR_TIME;
@@ -164,26 +176,37 @@ bool UISwipeView::OnDragEndEvent(const DragEvent& event)
 }
 
 #if ENABLE_ROTATE_INPUT
-bool UISwipeView::OnRotateEvent(const RotateEvent& event)
+bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
 {
-    if (rotateFactor_ == 0) {
-        return UIView::OnRotateEvent(event);
-    }
-    uint16_t lastIndex_ = curIndex_;
-    if (event.GetRotate() != 0) {
-        int16_t rotateLen = event.GetRotate() * rotateFactor_;
-        (direction_ == HORIZONTAL) ? DragXInner(rotateLen) : DragYInner(rotateLen);
-        RefreshCurrentView(rotateLen);
-    } else {
-        SwitchToPage(curIndex_);
+    if (scrollAnimator_.GetState() != Animator::STOP) {
+        UIAbstractScroll::StopAnimator();
     }
 #if ENABLE_VIBRATOR
-    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-    if (vibratorFunc != nullptr && curIndex_ != lastIndex_) {
-        vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
-    }
+    needVibration_ = true;
 #endif
+    return UIView::OnRotateStartEvent(event);
+}
+
+bool UISwipeView::OnRotateEvent(const RotateEvent& event)
+{
+    lastRotateLen_ =  event.GetRotate() * rotateFactor_;
+    if (direction_ == HORIZONTAL) {
+        DragXInner(lastRotateLen_);
+    } else {
+        DragYInner(lastRotateLen_);
+    }
+    RefreshCurrentView(lastRotateLen_);
     return UIView::OnRotateEvent(event);
+}
+
+bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
+{
+    SwitchToPage(curIndex_);
+    lastRotateLen_ = 0;
+#if ENABLE_VIBRATOR
+    needVibration_ = false;
+#endif
+    return UIView::OnRotateEndEvent(event);
 }
 #endif
 
@@ -370,6 +393,14 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
             }
         }
     }
+#if ENABLE_VIBRATOR
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (vibratorFunc != nullptr && needVibration_ && curIndex_ != lastIndex_) {
+        GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner Call vibrator function");
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
+        lastIndex_ = curIndex_;
+    }
+#endif
 }
 
 void UISwipeView::RefreshCurrentView(int16_t distance)

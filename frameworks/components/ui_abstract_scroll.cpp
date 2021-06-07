@@ -30,6 +30,13 @@
 #define BAR_OP(obj, op, ...) obj.yScrollBar_->op(__VA_ARGS__)
 #endif
 
+namespace {
+#if ENABLE_ROTATE_INPUT
+constexpr float DEFAULT_ABSTRACT_SCROLL_ROTATE_FACTOR = 2.5;
+constexpr uint8_t DEFAULT_ROTATE_THRESHOLD = 4;
+#endif
+}
+
 namespace OHOS {
 #if DEFAULT_ANIMATION
 class BarEaseInOutAnimator final : private AnimatorCallback {
@@ -139,6 +146,10 @@ UIAbstractScroll::UIAbstractScroll()
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
+#endif
+#if ENABLE_ROTATE_INPUT
+    rotateFactor_ = DEFAULT_ABSTRACT_SCROLL_ROTATE_FACTOR;
+    threshold_ = DEFAULT_ROTATE_THRESHOLD;
 #endif
     isViewGroup_ = true;
     touchable_ = true;
