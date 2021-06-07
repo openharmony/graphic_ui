@@ -62,10 +62,10 @@ public:
 #endif // ENABLE_WINDOW
 };
 
-class UITestView : public UIView {
+class UIBoundsTestView : public UIView {
 public:
-    UITestView() {}
-    virtual ~UITestView() {}
+    UIBoundsTestView() {}
+    virtual ~UIBoundsTestView() {}
 
     void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override
     {
@@ -73,10 +73,10 @@ public:
     }
 };
 
-class UITestViewGroup : public UIViewGroup {
+class UIBoundsViewGroup : public UIViewGroup {
 public:
-    UITestViewGroup() {}
-    virtual ~UITestViewGroup() {}
+    UIBoundsViewGroup() {}
+    virtual ~UIBoundsViewGroup() {}
 
     void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override
     {
@@ -103,26 +103,46 @@ HWTEST_F(ViewBoundsTest, ViewBoundsSetState001, TestSize.Level0)
 
 /**
  * @tc.name: ViewBoundsOnPostDraw001
- * @tc.desc: Test if trigger redraw when change view bounds state with sigle rootview
+ * @tc.desc: Test if trigger redraw when change view bounds state with sigle window
  * @tc.type: FUNC
  * @tc.require: AR000FQNFN
  */
+#if ENABLE_WINDOW
 HWTEST_F(ViewBoundsTest, ViewBoundsOnPostDraw001, TestSize.Level0)
 {
-    UITestView* view = new UITestView();
-    view->Resize(20, 20);
-    UITestViewGroup* viewGroup = new UITestViewGroup();
-    viewGroup->Resize(20, 20);
-    viewGroup->Add(view);
-    RootView::GetInstance()->Add(viewGroup);
+    RootView* rootView = RootView::GetWindowRootView();
+    rootView->SetWidth(600);  // 600: width
+    rootView->SetHeight(500); // 500: height
+    rootView->SetPosition(0, 0);
+    UIBoundsTestView* view1 = new UIBoundsTestView();
+    UIBoundsViewGroup* vg1 = new UIBoundsViewGroup();
+    rootView->Add(vg1);
+    vg1->Add(view1);
+    rootView->Invalidate();
+    ViewBoundsTest::CreateDefaultWindow(rootView, 0, 0);
     // clear invalidate area
     TaskManager::GetInstance()->TaskHandler();
 
+    // init show state false
+    UIViewBounds::GetInstance()->SetShowState(false);
+
     usleep(DEFAULT_TASK_PERIOD * 1000); // DEFAULT_TASK_PERIOD * 1000: wait next render task
-    UIViewBounds::GetInstance()->SetShowState(true);
     g_drawCount = 0;
+    UIViewBounds::GetInstance()->SetShowState(true);
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_drawCount, 2); // 2: redraw view count
+
+    usleep(DEFAULT_TASK_PERIOD * 1000); // DEFAULT_TASK_PERIOD * 1000: wait next render task
+    g_drawCount = 0;
+    UIViewBounds::GetInstance()->SetShowState(false);
+    TaskManager::GetInstance()->TaskHandler();
+    EXPECT_EQ(g_drawCount, 2); // 2: redraw view count
+
+    rootView->RemoveAll();
+    delete view1;
+    delete vg1;
+    ViewBoundsTest::DestoryWindow(rootView);
+    RootView::DestoryWindowRootView(rootView);
 }
 
 /**
@@ -131,15 +151,14 @@ HWTEST_F(ViewBoundsTest, ViewBoundsOnPostDraw001, TestSize.Level0)
  * @tc.type: FUNC
  * @tc.require: AR000FQNFN
  */
-#if ENABLE_WINDOW
 HWTEST_F(ViewBoundsTest, ViewBoundsOnPostDraw002, TestSize.Level0)
 {
     RootView* rootView1 = RootView::GetWindowRootView();
     rootView1->SetWidth(600);  // 600: width
     rootView1->SetHeight(500); // 500: height
     rootView1->SetPosition(0, 0);
-    UITestView* view1 = new UITestView();
-    UITestViewGroup* vg1 = new UITestViewGroup();
+    UIBoundsTestView* view1 = new UIBoundsTestView();
+    UIBoundsViewGroup* vg1 = new UIBoundsViewGroup();
     rootView1->Add(vg1);
     vg1->Add(view1);
     rootView1->Invalidate();
@@ -149,8 +168,8 @@ HWTEST_F(ViewBoundsTest, ViewBoundsOnPostDraw002, TestSize.Level0)
     rootView2->SetWidth(600);  // 600: width
     rootView2->SetHeight(500); // 500: height
     rootView2->SetPosition(0, 0);
-    UITestView* view2 = new UITestView();
-    UITestViewGroup* vg2 = new UITestViewGroup();
+    UIBoundsTestView* view2 = new UIBoundsTestView();
+    UIBoundsViewGroup* vg2 = new UIBoundsViewGroup();
     rootView2->Add(vg2);
     vg2->Add(view2);
     rootView2->Invalidate();
@@ -160,8 +179,15 @@ HWTEST_F(ViewBoundsTest, ViewBoundsOnPostDraw002, TestSize.Level0)
 
     usleep(DEFAULT_TASK_PERIOD * 1000); // DEFAULT_TASK_PERIOD * 1000: wait next render task
     g_drawCount = 0;
+    UIViewBounds::GetInstance()->SetShowState(true);
     TaskManager::GetInstance()->TaskHandler();
-    EXPECT_EQ(g_drawCount, 4); // 4: measure view
+    EXPECT_EQ(g_drawCount, 4); // 4: redraw view count
+
+    usleep(DEFAULT_TASK_PERIOD * 1000); // DEFAULT_TASK_PERIOD * 1000: wait next render task
+    g_drawCount = 0;
+    UIViewBounds::GetInstance()->SetShowState(false);
+    TaskManager::GetInstance()->TaskHandler();
+    EXPECT_EQ(g_drawCount, 4); // 4: redraw view count
 
     rootView1->RemoveAll();
     delete view1;
