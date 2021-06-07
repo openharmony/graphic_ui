@@ -378,6 +378,7 @@ void UIImageView::ReMeasure()
     colorFormat_ = header.colorMode;
 
     if (autoEnable_) {
+        Invalidate();
         Resize(imageWidth_, imageHeight_);
         Invalidate();
     }
