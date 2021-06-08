@@ -201,7 +201,6 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_004()
     scroll->SetPosition(positionX_, positionY_, g_scrollW, g_scrollH);
     VISIBLE_XBAR(true);
     scroll->SetYScrollBarVisible(true);
-    scroll->SetScrollbarWidth(20); // 20: means scroll bar width
     container_->Add(scroll);
     UIButton* button1 = new UIButton();
     button1->SetPosition(0, 0, g_smallButtonW, g_smallButtonH);

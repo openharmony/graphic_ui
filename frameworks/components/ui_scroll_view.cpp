@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_scroll_view.h"
+#include "components/ui_abstract_scroll_bar.h"
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
 #include "draw/draw_rect.h"
@@ -30,12 +31,8 @@ constexpr float DEFAULT_VIBRATOR_LEN = 1.0;
 
 namespace OHOS {
 UIScrollView::UIScrollView()
-    : xSliderPos_({0, 0}),
-      ySliderPos_({0, 0}),
-      scrollBarWidth_(DEFAULT_BAR_WIDTH),
-      xScrollable_(true),
+    : xScrollable_(true),
       yScrollable_(true),
-      minScrollBarLen_(DEFAULT_MIN_BAR_LEN),
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
@@ -50,10 +47,6 @@ UIScrollView::UIScrollView()
     focusable_ = true;
 #endif
     direction_ = HORIZONTAL_AND_VERTICAL;
-    xSlider_.SetVisible(false);
-    ySlider_.SetVisible(false);
-    xSlider_.SetStyle(StyleDefault::GetBrightStyle());
-    ySlider_.SetStyle(StyleDefault::GetBrightStyle());
 }
 
 bool UIScrollView::OnDragEvent(const DragEvent& event)
@@ -62,7 +55,6 @@ bool UIScrollView::OnDragEvent(const DragEvent& event)
         UIAbstractScroll::StopAnimator();
     }
     Drag(event);
-    RefreshAnimator();
     return UIView::OnDragEvent(event);
 }
 
@@ -141,7 +133,6 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
         lastVibratorRotateLen_ = totalRotateLen_;
     }
 #endif
-    RefreshAnimator();
     return UIView::OnRotateEvent(event);
 }
 
@@ -200,18 +191,10 @@ bool UIScrollView::DragXInner(int16_t distance)
     } else {
         int16_t childRight = childRect.GetRight();
         int16_t scrollWidth = GetWidth();
-        if (yScrollable_ && ySlider_.IsVisible()) {
-            if (childRight < scrollWidth - ySlider_.GetWidth() - (scrollBlankSize_ + reboundSize)) {
-                distance = 0;
-            } else if (childRight + distance < scrollWidth - ySlider_.GetWidth() - (scrollBlankSize_ + reboundSize)) {
-                distance = scrollWidth - ySlider_.GetWidth() - (scrollBlankSize_ + reboundSize) - childRight;
-            }
-        } else {
-            if (childRight < scrollWidth - (scrollBlankSize_ + reboundSize)) {
-                distance = 0;
-            } else if (childRight + distance < scrollWidth - (scrollBlankSize_ + reboundSize)) {
-                distance = scrollWidth - (scrollBlankSize_ + reboundSize) - childRight - 1;
-            }
+        if (childRight < scrollWidth - (scrollBlankSize_ + reboundSize)) {
+            distance = 0;
+        } else if (childRight + distance < scrollWidth - (scrollBlankSize_ + reboundSize)) {
+            distance = scrollWidth - (scrollBlankSize_ + reboundSize) - childRight - 1;
         }
     }
 
@@ -239,19 +222,10 @@ bool UIScrollView::DragYInner(int16_t distance)
     } else {
         int16_t childBottom = childRect.GetBottom();
         int16_t scrollHeight = GetHeight();
-        if (xScrollable_ && xSlider_.IsVisible()) {
-            if (childBottom < scrollHeight - xSlider_.GetHeight() - (scrollBlankSize_ + reboundSize)) {
+        if (childBottom < scrollHeight - (scrollBlankSize_ + reboundSize)) {
                 distance = 0;
-            } else if (childBottom + distance <
-                       scrollHeight - xSlider_.GetHeight() - (scrollBlankSize_ + reboundSize)) {
-                distance = scrollHeight - xSlider_.GetHeight() - (scrollBlankSize_ + reboundSize) - childBottom;
-            }
-        } else {
-            if (childBottom < scrollHeight - (scrollBlankSize_ + reboundSize)) {
-                distance = 0;
-            } else if (childBottom + distance < scrollHeight - (scrollBlankSize_ + reboundSize)) {
+        } else if (childBottom + distance < scrollHeight - (scrollBlankSize_ + reboundSize)) {
                 distance = scrollHeight - (scrollBlankSize_ + reboundSize) - childBottom - 1;
-            }
         }
     }
 
@@ -267,8 +241,10 @@ bool UIScrollView::MoveOffset(int16_t offsetX, int16_t offsetY)
             scrollListener_->SetScrollState(OnScrollListener::SCROLL_STATE_MOVE);
         }
         UIAbstractScroll::MoveChildByOffset(offsetX, offsetY);
+        if (xScrollBarVisible_ || yScrollBarVisible_) {
+            RefreshScrollBar();
+        }
         Invalidate();
-        RefreshScrollBarPosition();
         return true;
     }
     return false;
@@ -276,148 +252,25 @@ bool UIScrollView::MoveOffset(int16_t offsetX, int16_t offsetY)
 
 void UIScrollView::RefreshScrollBar()
 {
-    Rect childRect = GetAllChildRelativeRect();
-    if (xScrollable_ && (childRect.GetWidth() <= GetWidth())) {
-        xSliderPos_.y = GetHeight() - scrollBarWidth_;
-        xSlider_.SetHeight(scrollBarWidth_);
-        // y scroll bar is on, x scroll bar width should be group width - scroll bar width
-        if (yScrollable_) {
-            xSlider_.SetWidth(GetWidth() - scrollBarWidth_);
-        } else {
-            xSlider_.SetWidth(GetWidth());
-        }
+    Rect childrenRect = GetAllChildRelativeRect();
+    /* calculate scrollBar's the proportion of foreground */
+    int16_t totalLen = childrenRect.GetHeight() + 2 * scrollBlankSize_; // 2: two blank space on both sizes
+    int16_t len = GetHeight();
+    if (yScrollBarVisible_) {
+        yScrollBar_->SetForegroundProportion(static_cast<float>(len) / totalLen);
+        /* calculate scrolling progress */
+        yScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetTop()) /
+            (totalLen - len));
     }
-
-    if (yScrollable_ && (childRect.GetHeight() <= GetHeight())) {
-        ySliderPos_.x = GetWidth() - scrollBarWidth_;
-        ySliderPos_.y = 0;
-        ySlider_.SetWidth(scrollBarWidth_);
-        // x scroll bar is on, y scroll bar height should be group height - scroll bar width
-        if (xScrollable_) {
-            ySlider_.SetHeight(GetHeight() - scrollBarWidth_);
-        } else {
-            ySlider_.SetHeight(GetHeight());
-        }
+    if (xScrollBarVisible_) {
+        /* so do x-bar */
+        totalLen = childrenRect.GetWidth() + 2 * scrollBlankSize_; // 2: two blank space on both sizes
+        len = GetWidth();
+        xScrollBar_->SetForegroundProportion(static_cast<float>(len) / totalLen);
+        xScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetLeft()) /
+            (totalLen - len));
     }
-    float multiple;
-
-    // child width is larger than group width, resize the x scroll bar width
-    if (xScrollable_ && (childRect.GetWidth() > GetWidth()) && (childRect.GetWidth() != 0)) {
-        int16_t groupWidth = GetWidth();
-        int16_t xWidth;
-        if (yScrollable_) {
-            multiple = static_cast<float>(groupWidth - scrollBarWidth_) / childRect.GetWidth();
-            xWidth = static_cast<int16_t>((groupWidth - scrollBarWidth_) * multiple);
-        } else {
-            multiple = static_cast<float>(groupWidth) / childRect.GetWidth();
-            xWidth = static_cast<int16_t>(groupWidth * multiple);
-        }
-        if (xWidth < minScrollBarLen_) {
-            xWidth = minScrollBarLen_;
-        }
-
-        xSliderPos_.x = GetXScrollOffset(childRect);
-        xSliderPos_.y = GetHeight() - scrollBarWidth_;
-        xSlider_.SetWidth(xWidth);
-        xSlider_.SetHeight(scrollBarWidth_);
-    }
-
-    // child height is larger than group height, resize the y scroll height
-    if (yScrollable_ && (childRect.GetHeight() > GetHeight()) && (childRect.GetHeight() != 0)) {
-        int16_t groupHeight = GetHeight();
-        int16_t yHeight;
-        if (xScrollable_) {
-            multiple = static_cast<float>(groupHeight - scrollBarWidth_) / childRect.GetHeight();
-            yHeight = static_cast<int16_t>((groupHeight - scrollBarWidth_) * multiple);
-        } else {
-            multiple = static_cast<float>(groupHeight) / childRect.GetHeight();
-            yHeight = static_cast<int16_t>(groupHeight * multiple);
-        }
-
-        // scroll bar may be too small, keep it min size
-        if (yHeight < minScrollBarLen_) {
-            yHeight = minScrollBarLen_;
-        }
-
-        ySliderPos_.x = GetWidth() - scrollBarWidth_;
-        ySliderPos_.y = GetYScrollOffset(childRect);
-        ySlider_.SetHeight(yHeight);
-        ySlider_.SetWidth(scrollBarWidth_);
-    }
-}
-
-void UIScrollView::RefreshScrollBarPosition()
-{
-    if (!xSlider_.IsVisible() && !ySlider_.IsVisible()) {
-        return;
-    }
-    Rect childRect = GetAllChildRelativeRect();
-    if ((childRect.GetWidth() == 0) || (childRect.GetHeight() == 0)) {
-        return;
-    }
-    if (xScrollable_) {
-        int16_t xOffset = GetXScrollOffset(childRect);
-        xSliderPos_.x = xOffset;
-        Invalidate();
-    }
-    if (yScrollable_) {
-        int16_t yOffset = GetYScrollOffset(childRect);
-        ySliderPos_.y = yOffset;
-        Invalidate();
-    }
-}
-
-int16_t UIScrollView::GetXScrollOffset(const Rect& childRect)
-{
-    Rect scrollRect = GetRelativeRect();
-    int16_t xOffset;
-    int16_t scrollBarOffset = 0;
-
-    if (yScrollable_) {
-        scrollBarOffset = scrollBarWidth_;
-    }
-
-    int16_t childRectLeft = childRect.GetLeft();
-    int16_t childRectWidth = childRect.GetWidth();
-    int16_t scrollRectWidth = scrollRect.GetWidth();
-    int16_t xSliderWidth = xSlider_.GetWidth();
-    if ((childRectLeft >= 0) || (childRectWidth - scrollRectWidth + scrollBarOffset == 0)) {
-        xOffset = 0;
-    } else {
-        float multiple = static_cast<float>(scrollRectWidth - scrollBarOffset - xSliderWidth) /
-                         (childRectWidth - scrollRectWidth + scrollBarOffset);
-        xOffset = static_cast<int16_t>(-childRectLeft * multiple);
-    }
-    return xOffset;
-}
-
-int16_t UIScrollView::GetYScrollOffset(const Rect& childRect)
-{
-    Rect scrollRect = GetRelativeRect();
-    int16_t yOffset;
-    int16_t scrollBarOffset = 0;
-
-    if (xScrollable_) {
-        scrollBarOffset = scrollBarWidth_;
-    }
-
-    int16_t childRectTop = childRect.GetTop();
-    int16_t childRectHeight = childRect.GetHeight();
-    int16_t scrollRectHeight = scrollRect.GetHeight();
-    int16_t ySliderHeight = ySlider_.GetHeight();
-    if ((childRectTop >= 0) || (childRectHeight - scrollRectHeight + scrollBarOffset == 0)) {
-        yOffset = 0;
-    } else {
-        float multiple = static_cast<float>(scrollRectHeight - scrollBarOffset - ySliderHeight) /
-                         (childRectHeight - scrollRectHeight + scrollBarOffset);
-        yOffset = static_cast<int16_t>(-childRectTop * multiple);
-    }
-    return yOffset;
-}
-
-void UIScrollView::OnChildChanged()
-{
-    RefreshScrollBar();
+    RefreshAnimator();
 }
 
 void UIScrollView::CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY)

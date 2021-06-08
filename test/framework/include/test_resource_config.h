@@ -66,5 +66,6 @@ namespace OHOS {
 #define VIDEO_SOURCE_DIRECTORY (IMAGE_DIR "video.mp4")
 #define TEST_RIGHT_ARROW (IMAGE_DIR "ic_arrow_right.png")
 #define TEST_BACK_LEFT_ARROW (IMAGE_DIR "ic_back.png")
+#define TEST_CIRCLE_FORE_IMAGE (FACE_DIR "fore.png")
 } // namespace OHOS
 #endif // TEST_RESOURCE_CONFIG_H

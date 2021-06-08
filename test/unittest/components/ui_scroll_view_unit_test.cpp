@@ -19,10 +19,6 @@
 
 using namespace testing::ext;
 namespace OHOS {
-namespace {
-    constexpr uint8_t DEFAULT_BAR_WIDTH = 5;
-}
-
 class ScrollViewTest : public testing::Test {
 public:
     static void SetUpTestCase();

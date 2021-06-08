@@ -21,7 +21,7 @@
 namespace OHOS {
 class UIArcScrollBar : public UIAbstractScrollBar {
 public:
-    UIArcScrollBar() = default;
+    UIArcScrollBar();
 
     virtual ~UIArcScrollBar() = default;
 
@@ -29,19 +29,14 @@ public:
 
     void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa) override;
 
-    void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa);
-
-    void DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa);
-
 protected:
-    static constexpr uint16_t START_ANGLE_IN_DEGREE = 60;
-    static constexpr uint16_t END_ANGLE_IN_DEGREE = 120;
-    static constexpr uint16_t SCROLL_BAR_WIDTH = 5;
-    int16_t radius_ = 0;
-    int16_t width_ = SCROLL_BAR_WIDTH;
-    uint16_t startAngle_ = START_ANGLE_IN_DEGREE;
-    uint16_t endAngle_ = END_ANGLE_IN_DEGREE;
-    Point center_ = {0, 0};
+    void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa);
+    void DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa);
+    int16_t radius_;
+    int16_t width_;
+    uint16_t startAngle_;
+    uint16_t endAngle_;
+    Point center_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_ARC_SCROLL_BAR_H

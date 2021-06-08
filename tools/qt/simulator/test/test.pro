@@ -56,6 +56,7 @@ SOURCES += \
     ../../../../test/uitest/test_qrcode/ui_test_qrcode.cpp \
     ../../../../test/uitest/test_render/ui_test_render.cpp \
     ../../../../test/uitest/test_rotate_input/ui_test_rotate_input.cpp \
+    ../../../../test/uitest/test_scroll_bar/ui_test_scroll_bar.cpp \
     ../../../../test/uitest/test_slider/ui_test_slider.cpp \
     ../../../../test/uitest/test_texture_mapper/ui_test_texture_mapper.cpp \
     ../../../../test/uitest/test_transform/ui_test_transform.cpp \
@@ -112,6 +113,7 @@ HEADERS += \
     ../../../../test/uitest/test_qrcode/ui_test_qrcode.cpp \
     ../../../../test/uitest/test_render/ui_test_render.h \
     ../../../../test/uitest/test_rotate_input/ui_test_rotate_input.h \
+    ../../../../test/uitest/test_scroll_bar/ui_test_scroll_bar.h \
     ../../../../test/uitest/test_slider/ui_test_slider.h \
     ../../../../test/uitest/test_texture_mapper/ui_test_texture_mapper.h \
     ../../../../test/uitest/test_transform/ui_test_transform.h \

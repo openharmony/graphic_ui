@@ -40,14 +40,6 @@
 
 namespace OHOS {
 /**
- * @brief Enumerates screen shapes.
- */
-enum ScreenShape {
-    RECTANGLE = 0, // rectangular screen
-    CIRCLE         // circular screen
-};
-
-/**
  * @brief Represents the screen info of the device.
  *
  * @since 1.0

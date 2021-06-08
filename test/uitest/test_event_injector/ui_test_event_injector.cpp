@@ -16,9 +16,9 @@
 #include "graphic_config.h"
 
 #if ENABLE_DEBUG
-#include "common/screen.h"
 #include "components/root_view.h"
 #include "dfx/event_injector.h"
+#include "engines/gfx/gfx_engine_manager.h"
 #include "ui_test_event_injector.h"
 #include <string>
 #if ENABLE_WINDOW

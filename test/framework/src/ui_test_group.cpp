@@ -53,6 +53,7 @@
 #include "test_screenshot/ui_test_screenshot.h"
 #endif
 #include "test_digital_clock/ui_test_digital_clock.h"
+#include "test_scroll_bar/ui_test_scroll_bar.h"
 #include "test_slider/ui_test_slider.h"
 #include "test_texture_mapper/ui_test_texture_mapper.h"
 #include "test_transform/ui_test_transform.h"
@@ -145,6 +146,7 @@ void UITestGroup::SetUpTestCase()
     testCaseList_.PushBack(TestCaseInfo{"FocusManager", new UITestFocusManager()});
 #endif
     testCaseList_.PushBack(TestCaseInfo{"Border_Margin_Padding", new UITestBorderMarginPadding()});
+    testCaseList_.PushBack(TestCaseInfo{"ScrollBar", new UITestScrollBar()});
 }
 
 List<TestCaseInfo>& UITestGroup::GetTestCase()

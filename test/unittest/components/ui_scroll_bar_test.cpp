@@ -118,29 +118,27 @@ HWTEST_F(ScrollBarTest, UIScrollBarSetPosition, TestSize.Level0)
     EXPECT_NE(boxBar.GetWidth(), ZERO_LEN);
 }
 
-HWTEST_F(ScrollBarTest, UIScrollBarSetBarStyle, TestSize.Level0)
+HWTEST_F(ScrollBarTest, UIScrollBarGetBarStyle, TestSize.Level0)
 {
-    Style& defaultBackStyle = StyleDefault::GetProgressBackgroundStyle();
-    Style& defaultForeStyle = StyleDefault::GetProgressForegroundStyle();
-    Style testStyle;
+    Style& defaultBackStyle = StyleDefault::GetScrollBarBackgroundStyle();
+    Style& defaultForeStyle = StyleDefault::GetScrollBarForegroundStyle();
 
     TestArcScrollBarTest arcBar;
+    TestBoxScrollBarTest boxBar;
+
     EXPECT_EQ(arcBar.GetBackStyle()->GetStyle(STYLE_LINE_COLOR), defaultBackStyle.GetStyle(STYLE_LINE_COLOR));
     EXPECT_EQ(arcBar.GetForeStyle()->GetStyle(STYLE_LINE_COLOR), defaultForeStyle.GetStyle(STYLE_LINE_COLOR));
 
-    arcBar.SetBackgroundStyle(testStyle);
-    EXPECT_EQ(arcBar.GetBackStyle()->GetStyle(STYLE_LINE_COLOR), testStyle.GetStyle(STYLE_LINE_COLOR));
-    arcBar.SetForegroundStyle(testStyle);
-    EXPECT_EQ(arcBar.GetForeStyle()->GetStyle(STYLE_LINE_COLOR), defaultForeStyle.GetStyle(STYLE_LINE_COLOR));
+    EXPECT_EQ(arcBar.GetBackStyle()->GetStyle(STYLE_LINE_OPA), defaultBackStyle.GetStyle(STYLE_LINE_OPA));
+    EXPECT_EQ(arcBar.GetForeStyle()->GetStyle(STYLE_LINE_OPA), defaultForeStyle.GetStyle(STYLE_LINE_OPA));
 
-    TestBoxScrollBarTest boxBar;
-    EXPECT_EQ(boxBar.GetBackStyle()->GetStyle(STYLE_LINE_COLOR), defaultBackStyle.GetStyle(STYLE_LINE_COLOR));
-    EXPECT_EQ(boxBar.GetForeStyle()->GetStyle(STYLE_LINE_COLOR), defaultForeStyle.GetStyle(STYLE_LINE_COLOR));
+    EXPECT_EQ(boxBar.GetBackStyle()->GetStyle(STYLE_BACKGROUND_COLOR),
+              defaultBackStyle.GetStyle(STYLE_BACKGROUND_COLOR));
+    EXPECT_EQ(boxBar.GetForeStyle()->GetStyle(STYLE_BACKGROUND_COLOR),
+              defaultForeStyle.GetStyle(STYLE_BACKGROUND_COLOR));
 
-    boxBar.SetBackgroundStyle(testStyle);
-    EXPECT_EQ(boxBar.GetBackStyle()->GetStyle(STYLE_LINE_COLOR), testStyle.GetStyle(STYLE_LINE_COLOR));
-    boxBar.SetForegroundStyle(testStyle);
-    EXPECT_EQ(boxBar.GetForeStyle()->GetStyle(STYLE_LINE_COLOR), defaultForeStyle.GetStyle(STYLE_LINE_COLOR));
+    EXPECT_EQ(boxBar.GetBackStyle()->GetStyle(STYLE_BACKGROUND_OPA), defaultBackStyle.GetStyle(STYLE_BACKGROUND_OPA));
+    EXPECT_EQ(boxBar.GetForeStyle()->GetStyle(STYLE_BACKGROUND_OPA), defaultForeStyle.GetStyle(STYLE_BACKGROUND_OPA));
 }
 
 HWTEST_F(ScrollBarTest, UIScrollBarSetForegroundProportion, TestSize.Level0)

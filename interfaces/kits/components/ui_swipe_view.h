@@ -318,6 +318,10 @@ public:
      */
     static constexpr uint8_t VERTICAL = 1;
 
+    void SetXScrollBarVisible(bool visible) = delete;
+
+    void SetYScrollBarVisible(bool visible) = delete;
+
 protected:
     bool DragXInner(int16_t distance) override;
     bool DragYInner(int16_t distance) override;

@@ -14,12 +14,12 @@
  */
 
 #include "ui_test_rotate_input.h"
-#include "common/screen.h"
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "cstdio"
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 #if ENABLE_ROTATE_INPUT
 namespace OHOS {
