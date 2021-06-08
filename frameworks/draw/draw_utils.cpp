@@ -244,20 +244,6 @@ uint8_t DrawUtils::GetByteSizeByColorMode(uint8_t colorMode)
     }
 }
 
-LutColorMode DrawUtils::GetLutColorModeBySize(uint8_t size)
-{
-    switch (size) {
-        case 2: // 2: 2 Byte
-            return LUT_RGB565;
-        case 3: // 3: 3 Byte
-            return LUT_RGB888;
-        case 4: // 4: 4 Byte
-            return LUT_ARGB8888;
-        default:
-            return LUT_UNKNOW;
-    }
-}
-
 void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
                           int16_t x,
                           int16_t y,
@@ -420,8 +406,7 @@ void DrawUtils::DrawImage(BufferInfo& gfxDstBuffer,
                           const uint8_t* image,
                           OpacityType opa,
                           uint8_t pxBitSize,
-                          ColorMode colorMode,
-                          LutColorMode LutColorMode) const
+                          ColorMode colorMode) const
 {
     if (image == nullptr) {
         return;

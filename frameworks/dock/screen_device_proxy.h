@@ -62,7 +62,6 @@ public:
                        uint32_t srcStride,
                        uint32_t srcLineNumber,
                        ColorMode srcColorMode,
-                       LutColorMode srcLutColorMode,
                        uint32_t color,
                        OpacityType opa,
                        uint8_t* dst,
@@ -72,7 +71,7 @@ public:
                        uint32_t y)
     {
         if (device_ != nullptr) {
-            return device_->HardwareBlend(src, srcRect, srcStride, srcLineNumber, srcColorMode, srcLutColorMode,
+            return device_->HardwareBlend(src, srcRect, srcStride, srcLineNumber, srcColorMode,
                                           color, opa, dst, dstStride, dstColorMode, x, y);
         }
         return false;
