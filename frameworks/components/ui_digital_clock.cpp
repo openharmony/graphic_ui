@@ -241,6 +241,7 @@ UIDigitalClock::~UIDigitalClock()
 {
     for (uint8_t i = 0; i < TIME_ELEMENT_COUNT; i++) {
         if (timeLabels_[i] != nullptr) {
+            Remove(timeLabels_[i]);
             delete timeLabels_[i];
             timeLabels_[i] = nullptr;
         }
