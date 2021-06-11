@@ -289,7 +289,7 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
 
     UIAbstractScroll* scrollView = static_cast<UIAbstractScroll*>(view);
     scrollView->isDragging_ = true;
-
+    curtTime_++;
     if (curtTime_ <= dragTimes_) {
         bool needStopX = false;
         bool needStopY = false;
@@ -313,8 +313,6 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
         }
         if (needStopX && needStopY) {
             scrollView->StopAnimator();
-        } else {
-            curtTime_++;
         }
     } else {
         scrollView->StopAnimator();
