@@ -93,7 +93,6 @@ public:
     void SetKnobWidth(int16_t width)
     {
         knobWidth_ = width;
-        knobWidthSetFlag_ = true;
     }
 
     /**
@@ -104,59 +103,46 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetKnobWidth();
-
-    /**
-     * @brief Sets the images as pixel maps for this slider, including the background, foreground, and knob images.
-     *
-     * @param backgroundImage Indicates the background image to set.
-     * @param foregroundImage Indicates the foreground image to set.
-     * @param knobImage Indicates the knob image to set.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage, const ImageInfo* knobImage);
-
-    /**
-     * @brief Sets the images for this slider, including the background, foreground, and knob images.
-     *
-     * @param backgroundImage Indicates the background image to set.
-     * @param foregroundImage Indicates the foreground image to set.
-     * @param knobImage Indicates the knob image to set.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetImage(const char* backgroundImage, const char* foregroundImage, const char* knobImage);
-
-    /**
-     * @brief Sets the colors for this slider, including the background, foreground, and knob colors.
-     *
-     * @param backgroundColor Indicates the background color to set.
-     * @param foregroundColor Indicates the foreground color to set.
-     * @param knobColor Indicates the knob color to set.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetSliderColor(const ColorType backgroundColor, const ColorType foregroundColor, const ColorType knobColor)
+    int16_t GetKnobWidth()
     {
-        SetBackgroundStyle(STYLE_BACKGROUND_COLOR, backgroundColor.full);
-        SetForegroundStyle(STYLE_BACKGROUND_COLOR, foregroundColor.full);
+        return knobWidth_;
+    }
+
+    /**
+     * @brief Sets the image as pixel maps for this slider's knob.
+     *
+     * @param knobImage Indicates the knob image to set.
+     * @since 6
+     */
+    void SetKnobImage(const ImageInfo* knobImage);
+
+    /**
+     * @brief Sets the image for this slider's knob.
+     *
+     * @param knobImage Indicates the knob image to set.
+     * @since 6
+     */
+    void SetKnobImage(const char* knobImage);
+
+    /**
+     * @brief Sets the color for this slider's knob.
+     *
+     * @param knobColor Indicates the knob color to set.
+     * @since 6
+     */
+    void SetKnobColor(const ColorType knobColor)
+    {
         SetKnobStyle(STYLE_BACKGROUND_COLOR, knobColor.full);
     }
 
     /**
-     * @brief Sets the corner radiuses for this slider, including the background, foreground, and knob corner radiuses.
+     * @brief Sets the corner radius for this slider's knob.
      *
-     * @param backgroundRadius Indicates the background corner radius to set.
-     * @param foregroundRadius Indicates the foreground corner radius to set.
      * @param knobRadius Indicates the knob corner radius to set.
-     * @since 1.0
-     * @version 1.0
+     * @since 6
      */
-    void SetSliderRadius(int16_t backgroundRadius, int16_t foregroundRadius, int16_t knobRadius)
+    void SetKnobRadius(int16_t knobRadius)
     {
-        SetBackgroundStyle(STYLE_BORDER_RADIUS, backgroundRadius);
-        SetForegroundStyle(STYLE_BORDER_RADIUS, foregroundRadius);
         SetKnobStyle(STYLE_BORDER_RADIUS, knobRadius);
     }
 
@@ -200,7 +186,7 @@ public:
     int64_t GetKnobStyle(uint8_t key) const;
 
     /**
-     * @brief Sets the images as pixel maps for this slider, including the background, foreground, and knob images.
+     * @brief Sets the images as pixel maps for this slider, including the background, foreground images.
      *
      * @param backgroundImage Indicates the background image to set.
      * @param foregroundImage Indicates the foreground image to set.
@@ -210,7 +196,7 @@ public:
     void SetImage(const ImageInfo* backgroundImage, const ImageInfo* foregroundImage);
 
     /**
-     * @brief Sets the images for this slider, including the background, foreground, and knob images.
+     * @brief Sets the images for this slider, including the background, foreground images.
      *
      * @param backgroundImage Indicates the background image to set.
      * @param foregroundImage Indicates the foreground image to set.
@@ -220,7 +206,7 @@ public:
     void SetImage(const char* backgroundImage, const char* foregroundImage);
 
     /**
-     * @brief Sets the colors for this slider, including the background, foreground, and knob colors.
+     * @brief Sets the colors for this slider, including the background, foreground colors.
      *
      * @param backgroundColor Indicates the background color to set.
      * @param foregroundColor Indicates the foreground color to set.
@@ -234,7 +220,7 @@ public:
     }
 
     /**
-     * @brief Sets the corner radiuses for this slider, including the background, foreground, and knob corner radiuses.
+     * @brief Sets the corner radiuses for this slider, including the background, foreground corner radiuses.
      *
      * @param backgroundRadius Indicates the background corner radius to set.
      * @param foregroundRadius Indicates the foreground corner radius to set.
@@ -347,22 +333,15 @@ protected:
     bool InitImage() override;
 
 private:
-    static constexpr int8_t BACKGROUND_OPA = 38;
-    static constexpr uint8_t FOREGROUND_COLOR_R = 0x1f;
-    static constexpr uint8_t FOREGROUND_COLOR_G = 0x71;
-    static constexpr uint8_t FOREGROUND_COLOR_B = 0xff;
     static constexpr uint8_t MAX_ROTATE_FACTOR = 128;
-#if ENABLE_SLIDER_KNOB
-    void DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, const Rect& foregroundRect);
-#else
+    
     int16_t knobWidth_;
-    bool knobWidthSetFlag_;
     bool knobStyleAllocFlag_;
     Style* knobStyle_;
     Image* knobImage_;
 
+    void DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, const Rect& foregroundRect);
     void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Rect& coords);
-#endif
     int32_t CalculateCurrentValue(int16_t length, int16_t totalLength);
     int32_t UpdateCurrentValue(const Point& knobPosition);
 #if ENABLE_ROTATE_INPUT

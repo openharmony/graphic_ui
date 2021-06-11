@@ -302,12 +302,9 @@ void UITestDumpDomTree::UIKit_TestDumpDom_003()
         slider->SetStep(0);
         slider->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::GetColorFromRGB(0, 182, 191).full); // 182, 191: color
         slider->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::GetColorFromRGB(255, 152, 0).full); // 255, 152: color
-#if ENABLE_SLIDER_KNOB
         slider->SetKnobWidth(50); // 50: knob width
         slider->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
-        slider->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                         static_cast<ImageInfo*>(nullptr));
-#endif
+        slider->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr));
         slider->EnableBackground(true);
         slider->SetViewId("dump_slider");
         group5->Add(slider);

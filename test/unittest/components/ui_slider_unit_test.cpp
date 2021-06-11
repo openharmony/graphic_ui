@@ -57,7 +57,7 @@ HWTEST_F(UISliderTest, UISliderGetViewType_001, TestSize.Level1)
     }
     EXPECT_EQ(slider_->GetViewType(), UI_SLIDER);
 }
-#if ENABLE_SLIDER_KNOB
+
 /**
  * @tc.name:UISliderSetKnobWidth_001
  * @tc.desc: Verify SetKnobWidth function, equal.
@@ -91,5 +91,4 @@ HWTEST_F(UISliderTest, UISliderSetKnobStyle_001, TestSize.Level0)
     slider_->SetKnobStyle(STYLE_BACKGROUND_COLOR, Color::Gray().full);
     EXPECT_EQ(slider_->GetKnobStyle().bgColor_.full, Color::Gray().full);
 }
-#endif // ENABLE_SLIDER_KNOB
 } // namespace OHOS
