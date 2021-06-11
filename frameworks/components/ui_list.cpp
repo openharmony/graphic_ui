@@ -183,6 +183,7 @@ UIList::~UIList()
     UIView* view = GetChildrenHead();
     while (view != nullptr) {
         UIView* tmp = view->GetNextSibling();
+        UIViewGroup::Remove(view);
         delete view;
         view = tmp;
     }

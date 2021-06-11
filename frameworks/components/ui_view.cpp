@@ -65,6 +65,9 @@ UIView::UIView()
 
 UIView::~UIView()
 {
+    if (parent_ != nullptr) {
+        GRAPHIC_LOGE("UIView::~UIView failed, parent is not nullptr! Need to remove from parent component first");
+    }
     if (transMap_ != nullptr) {
         delete transMap_;
         transMap_ = nullptr;

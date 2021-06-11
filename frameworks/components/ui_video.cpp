@@ -36,6 +36,7 @@ UIVideo::~UIVideo()
         sliderAnimator_ = nullptr;
     }
     if (surfaceView_ != nullptr) {
+        Remove(surfaceView_);
         delete surfaceView_;
         surfaceView_ = nullptr;
     }
@@ -517,6 +518,7 @@ void UIVideo::DeleteController()
 {
     if (controllerGroup_ != nullptr) {
         controllerGroup_->RemoveAll();
+        Remove(controllerGroup_);
         delete controllerGroup_;
         controllerGroup_ = nullptr;
     }
