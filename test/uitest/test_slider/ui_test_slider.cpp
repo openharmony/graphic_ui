@@ -19,12 +19,12 @@
 
 namespace OHOS {
 namespace {
-const int16_t LABEL_HEIGHT = 29;
-const int16_t BUTTON_WIDTH = 120;
-const int16_t BUTTON_HEIGHT = 40;
-const int16_t DELTA_X_COORDINATE = 8;
-const int16_t DELTA_Y_COORDINATE = 12;
-const int16_t DELTA_Y_COORDINATE_2 = 19;
+constexpr int16_t LABEL_HEIGHT = 29;
+constexpr int16_t BUTTON_WIDTH = 120;
+constexpr int16_t BUTTON_HEIGHT = 40;
+constexpr int16_t DELTA_X_COORDINATE = 8;
+constexpr int16_t DELTA_Y_COORDINATE = 12;
+constexpr int16_t DELTA_Y_COORDINATE_2 = 19;
 static bool g_onChange = false;
 static bool g_onRelease = false;
 static bool g_onClick = false;
@@ -36,6 +36,10 @@ static uint16_t g_height = 250;
 static int16_t g_min = 0;
 static int16_t g_max = 100;
 static int16_t g_knobWidth = 50;
+constexpr int8_t BACKGROUND_OPA = 38;
+constexpr uint8_t FOREGROUND_COLOR_R = 0x1f;
+constexpr uint8_t FOREGROUND_COLOR_G = 0x71;
+constexpr uint8_t FOREGROUND_COLOR_B = 0xff;
 } // namespace
 
 void TestUISliderEventListener::OnChange(int32_t progress)
@@ -133,9 +137,6 @@ void UITestSlider::SetUp()
         uiViewGroupFrame_->SetStyle(STYLE_BACKGROUND_OPA, 0);
 
         slider_ = new UISlider();
-#if !ENABLE_SLIDER_KNOB
-        slider_->SetSliderColor(Color::Silver(), Color::Blue());
-#endif
         slider_->SetPosition(10, 10, 50, 300); // 10:position x; 10: position y; 50: width; 300: height
         slider_->SetValidHeight(250);          // 250: valid height;
         slider_->SetValue(20);                 // 20:  progress bar current value
@@ -186,6 +187,7 @@ UIView* UITestSlider::GetTestView()
     UIKit_Slider_Test_SetOnReleaseListener_014();
     UIKit_Slider_Test_SetOnClickCallback_015();
     UIKit_Slider_Test_SetOnDragCallback_016();
+    UIKit_Slider_Test_SetCircularStyle_017();
 
     return container_;
 }
@@ -365,7 +367,7 @@ void UITestSlider::UIKit_Slider_Test_SetRadius_012()
     radiusBtn_ = new UILabelButton();
     positionX_ = 336; // 336: x-coordinate
     positionY_ += BUTTON_HEIGHT + DELTA_Y_COORDINATE_2;
-    SetUpLabel("设置lider圆角弧度:", positionX_, positionY_);
+    SetUpLabel("设置Slider圆角弧度:", positionX_, positionY_);
     positionY_ += LABEL_HEIGHT + DELTA_X_COORDINATE;
     SetUpButton(radiusBtn_, "圆角弧度", positionX_, positionY_);
 }
@@ -409,6 +411,16 @@ void UITestSlider::UIKit_Slider_Test_SetOnDragCallback_016()
     positionY_ += LABEL_HEIGHT + DELTA_X_COORDINATE;
     SetUpButton(onDragBtn_, "OnDrag回调", positionX_, positionY_);
 }
+
+void UITestSlider::UIKit_Slider_Test_SetCircularStyle_017()
+{
+    circularStyleBtn_ = new UILabelButton();
+    positionX_ = 336; // 336: x-coordinate
+    positionY_ += BUTTON_HEIGHT + DELTA_Y_COORDINATE_2;
+    SetUpLabel("Slider设置圆角无滑块样式:", positionX_, positionY_);
+    positionY_ += LABEL_HEIGHT + DELTA_X_COORDINATE;
+    SetUpButton(circularStyleBtn_, "圆角无滑块样式", positionX_, positionY_);
+}
 bool UITestSlider::OnClick(UIView& view, const ClickEvent& event)
 {
     if (&view == resetBtn_) {
@@ -423,19 +435,15 @@ bool UITestSlider::OnClick(UIView& view, const ClickEvent& event)
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-#if ENABLE_SLIDER_KNOB
         slider_->SetKnobWidth(50); // 50: knob width
-#endif
         slider_->SetRange(g_max, g_min);
         slider_->SetValue(g_progress);
         slider_->SetStep(g_step);
         slider_->SetBackgroundStyle(StyleDefault::GetProgressBackgroundStyle());
         slider_->SetForegroundStyle(StyleDefault::GetProgressForegroundStyle());
-#if ENABLE_SLIDER_KNOB
         slider_->SetKnobStyle(StyleDefault::GetSliderKnobStyle());
-        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                          static_cast<ImageInfo*>(nullptr));
-#endif
+        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr));
+        slider_->SetKnobImage(static_cast<ImageInfo*>(nullptr));
         slider_->EnableBackground(true);
     } else if (&view == incProgressBtn_) {
         g_progress++;
@@ -516,19 +524,16 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
     if (&view == imageBtn_) {
         slider_->SetValidHeight(DEFAULT_HEIGHT);
         slider_->SetValidWidth(5); // 5 valid width
-#if ENABLE_SLIDER_KNOB
         slider_->SetKnobWidth(40); // 40: knob width
-        slider_->SetImage(SLIDER_BACKGROUND_IMAGE_PATH, SLIDER_INDICATOR_IMAGE_PATH, SLIDER_KNOB_IMAGE_PATH);
-#endif
+        slider_->SetImage(SLIDER_BACKGROUND_IMAGE_PATH, SLIDER_INDICATOR_IMAGE_PATH);
+        slider_->SetKnobImage(SLIDER_KNOB_IMAGE_PATH);
         slider_->SetDirection(UISlider::Direction::DIR_BOTTOM_TO_TOP);
     } else if (&view == noImageBtn_) {
         slider_->SetValidHeight(g_height);
         slider_->SetValidWidth(g_width);
-#if ENABLE_SLIDER_KNOB
         slider_->SetKnobWidth(g_knobWidth);
-        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr),
-                          static_cast<ImageInfo*>(nullptr));
-#endif
+        slider_->SetImage(static_cast<ImageInfo*>(nullptr), static_cast<ImageInfo*>(nullptr));
+        slider_->SetKnobImage(static_cast<ImageInfo*>(nullptr));
     } else if (&view == setStyleBtn_) {
         Style style = StyleDefault::GetDefaultStyle();
         style.bgColor_ = Color::Green();
@@ -536,37 +541,23 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
         style.bgColor_ = Color::Red();
         slider_->SetForegroundStyle(style);
         style.bgColor_ = Color::Gray();
-#if ENABLE_SLIDER_KNOB
         slider_->SetKnobStyle(style);
-#endif
     } else if (&view == getStyleBtn_) {
         slider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
         slider_->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::Yellow().full);
-#if ENABLE_SLIDER_KNOB
         slider_->SetKnobStyle(STYLE_BACKGROUND_COLOR, Color::Green().full);
-#endif
     } else if (&view == incKnobWidthBtn_) {
-#if ENABLE_SLIDER_KNOB
         g_knobWidth++;
         slider_->SetKnobWidth(g_knobWidth);
-#endif
     } else if (&view == decKnobWidthBtn_) {
-#if ENABLE_SLIDER_KNOB
         g_knobWidth--;
         slider_->SetKnobWidth(g_knobWidth);
-#endif
     } else if (&view == colorBtn_) {
-#if ENABLE_SLIDER_KNOB
-        slider_->SetSliderColor(Color::Silver(), Color::Blue(), Color::White());
-#else
         slider_->SetSliderColor(Color::Silver(), Color::Blue());
-#endif
+        slider_->SetKnobColor(Color::White());
     } else if (&view == radiusBtn_) {
-#if ENABLE_SLIDER_KNOB
-        slider_->SetSliderRadius(DEFAULT_RADIUS, DEFAULT_RADIUS, DEFAULT_RADIUS);
-#else
         slider_->SetSliderRadius(DEFAULT_RADIUS, DEFAULT_RADIUS);
-#endif
+        slider_->SetKnobRadius(DEFAULT_RADIUS);
     } else if (&view == onChangeBtn_) {
         g_onChange = true;
     } else if (&view == onReleaseBtn_) {
@@ -575,6 +566,14 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
         g_onClick = true;
     } else if (&view == onDragBtn_) {
         g_onDrag = true;
+    } else if (&view == circularStyleBtn_) {
+        slider_->SetKnobWidth(0);
+        slider_->SetBackgroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
+        slider_->SetBackgroundStyle(STYLE_BACKGROUND_OPA, BACKGROUND_OPA);
+        slider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Black().full);
+        slider_->SetForegroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
+        slider_->SetForegroundStyle(STYLE_BACKGROUND_COLOR,
+            Color::GetColorFromRGB(FOREGROUND_COLOR_R, FOREGROUND_COLOR_G, FOREGROUND_COLOR_B).full);
     }
     return true;
 }
