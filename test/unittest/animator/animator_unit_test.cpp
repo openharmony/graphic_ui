@@ -52,13 +52,13 @@ public:
         return false;
     }
 
-    virtual void Callback(UIView* view) override
+    void Callback(UIView* view) override
     {
         int16_t pos = EasingEquation::LinearEaseNone(START_POS, END_POS, animator_->GetRunTime(), animator_->GetTime());
         view_->SetX(pos);
     }
 
-    virtual void OnStop(UIView& view) override
+    void OnStop(UIView& view) override
     {
         view_->SetX(END_POS);
     }

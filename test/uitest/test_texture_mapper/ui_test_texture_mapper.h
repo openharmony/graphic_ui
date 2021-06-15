@@ -30,27 +30,31 @@ public:
     {
         if (viewGroup != nullptr) {
             viewGroup_ = viewGroup;
-            label_ = new UILabel();
-            viewGroup_->Add(label_);
-            label_->SetPosition(0, 0, 200, TITLE_LABEL_DEFAULT_HEIGHT); // 200: width;
-            label_->SetText("OnAnimatorStop");
-            label_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-            label_->SetStyle(STYLE_TEXT_COLOR, Color::Black().full);
-            label_->SetStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
-            label_->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
-            label_->SetVisible(false);
+            viewGroup_->Add(&label_);
+            label_.SetPosition(0, 0, 200, TITLE_LABEL_DEFAULT_HEIGHT); // 200: width;
+            label_.SetText("OnAnimatorStop");
+            label_.SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
+            label_.SetStyle(STYLE_TEXT_COLOR, Color::Black().full);
+            label_.SetStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
+            label_.SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
+            label_.SetVisible(false);
         }
     }
 
-    ~TestTextureMapperStopListener() {};
+    ~TestTextureMapperStopListener()
+    {
+        if (viewGroup_ != nullptr) {
+            viewGroup_->Remove(&label_);
+        }
+    };
 
     void OnAnimatorStop(UIView& view) override
     {
-        label_->SetVisible(true);
-        label_->Invalidate();
+        label_.SetVisible(true);
+        label_.Invalidate();
     }
 private:
-    UILabel* label_ = nullptr;
+    UILabel label_;
     UIViewGroup* viewGroup_ = nullptr;
 };
 
