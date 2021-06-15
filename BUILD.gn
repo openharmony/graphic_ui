@@ -161,10 +161,7 @@ shared_library("ui") {
 
   public_deps = [ "//foundation/graphic/utils:lite_graphic_utils" ]
   public_configs = [ ":graphic_define_config" ]
-  cflags = [
-    "-Wall",
-    "-fno-exceptions",
-  ]
+  cflags = [ "-Wall" ]
   cflags_cc = cflags
   ldflags = [ "-Wl,-rpath-link=$ohos_root_path/$root_out_dir" ]
 }
