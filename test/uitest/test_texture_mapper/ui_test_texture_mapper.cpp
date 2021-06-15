@@ -79,12 +79,12 @@ void UITestTextureMapper::SetUp()
 
 void UITestTextureMapper::TearDown()
 {
+    delete listener_;
+    listener_ = nullptr;
     DeleteChildren(container_);
     container_ = nullptr;
     textureMapper_ = nullptr;
     layout_ = nullptr;
-    delete listener_;
-    listener_ = nullptr;
 }
 
 const UIView* UITestTextureMapper::GetTestView()

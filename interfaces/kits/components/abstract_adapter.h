@@ -96,7 +96,10 @@ public:
 
     virtual int16_t GetItemWidthWithMargin(int16_t index)
     {
-        UIView *view = GetView(nullptr, index);
+        UIView* view = GetView(nullptr, index);
+        if (view == nullptr) {
+            return 0;
+        }
         int16_t width = view->GetWidthWithMargin();
         DeleteView(view);
         return width;
@@ -104,7 +107,10 @@ public:
 
     virtual int16_t GetItemHeightWithMargin(int16_t index)
     {
-        UIView *view = GetView(nullptr, index);
+        UIView* view = GetView(nullptr, index);
+        if (view == nullptr) {
+            return 0;
+        }
         int16_t height = view->GetHeightWithMargin();
         DeleteView(view);
         return height;

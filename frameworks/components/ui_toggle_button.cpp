@@ -65,8 +65,8 @@ void UIToggleButton::CalculateSize()
     rectWidth_ = TOGGLE_BTN_WIDTH * minValue / DEFAULT_HOT_WIDTH;
 
     Rect contentRect = GetContentRect();
-    int16_t dx = (width_ - rectWidth_) >> 1;
-    int16_t dy = (height_ >> 1) - corner_;
+    int16_t dx = (width_ - rectWidth_) / 2; // 2: half
+    int16_t dy = (height_ / 2) - corner_; // 2: half
     int16_t x = contentRect.GetX() + dx;
     int16_t y = contentRect.GetY() + dy;
     leftCenter_ = {static_cast<int16_t>(x + corner_), static_cast<int16_t>(y + corner_)};

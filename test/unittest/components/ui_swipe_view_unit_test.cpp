@@ -220,7 +220,7 @@ class OnTestSwipeListener : public UISwipeView::OnSwipeListener {
 public:
     OnTestSwipeListener() {}
     virtual ~OnTestSwipeListener() {}
-    virtual void OnSwipe(UISwipeView& view) override
+    void OnSwipe(UISwipeView& view) override
     {
         view.SetWidth(DEFAULT_WIDTH);
         return;
