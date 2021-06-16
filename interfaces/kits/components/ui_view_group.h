@@ -260,7 +260,6 @@ protected:
 
 private:
     void AutoResize();
-    void RemoveAllChildren();
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_VIEW_GROUP_H
