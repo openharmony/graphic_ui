@@ -202,7 +202,7 @@ void DrawUtils::DrawColorArea(BufferInfo& gfxDstBuffer,
 uint8_t DrawUtils::GetPxSizeByColorMode(uint8_t colorMode)
 {
     switch (colorMode) {
-        case TSC:
+        case TSC6:
         case ARGB8888:
             return 32; // 32: 32 bit
         case RGB888:
