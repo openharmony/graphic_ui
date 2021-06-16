@@ -54,7 +54,7 @@ void UITestViewBounds::TearDown()
     container_ = nullptr;
 }
 
-UIView* UITestViewBounds::GetTestView()
+const UIView* UITestViewBounds::GetTestView()
 {
     UIKitViewBoundsSetState001();
     UIKitViewBoundsMargin001();
