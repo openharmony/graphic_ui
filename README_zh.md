@@ -75,8 +75,10 @@
 ## 编译构建<a name="section137768191623"></a>
 
 ```
-# 通过gn编译，在out目录下对应产品的文件夹中生成libui.so
-hb build lite_ui
+# 通过gn编译，在out目录下对应产品的文件夹中生成图形库
+hb build -T //foundation/graphic/ui:lite_ui -f  # 编译libui.so
+hb build -T //foundation/graphic/wms/test:sample_ui -f # 编译UI用例
+hb build -T //foundation/graphic/ui/test/unittest:lite_graphic_ui_test -f # 编译TDD用例
 
 # 编译qt库可直接参考qt模拟器工程：graphic/ui/tools/qt/simulator/simulator.pro
 ```
@@ -97,7 +99,7 @@ hb build lite_ui
 
 foundation/graphic/ui/test/uitest中提供了图形所有组件和功能接口的使用范例。
 
--   Windows环境可运行QT工程调试
+-   Windows环境可运行QT工程调试，详见[使用说明](https://gitee.com/openharmony/ace_engine_lite/tree/master/frameworks/tools/qt/simulator)
 
     工程文件路径：
 
@@ -106,10 +108,6 @@ foundation/graphic/ui/test/uitest中提供了图形所有组件和功能接口�
     ```
 
 -   其他调试环境可以编译运行foundation/graphic/wms/test:sample\_ui
-
-    ```
-    hb build lite_wms -b debug
-    ```
 
     编译成功后得到可执行程序out/\[product\_name\]/dev\_tools/bin/sample\_ui，在实际环境上运行即可观察对应组件显示效果。
 

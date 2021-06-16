@@ -76,7 +76,9 @@ Platform Constraints
 
 ```
 # Generate the libui.so file in the out directory of the product folder through GN compilation.
-hb build lite_ui
+hb build -T //foundation/graphic/ui:lite_ui -f  #build libui.so
+hb build -T //foundation/graphic/wms/test:sample_ui -f # build UI demo
+hb build -T //foundation/graphic/ui/test/unittest:lite_graphic_ui_test -f # build TDD testcases
 
 # To compile the Qt library, see the Qt simulator project at graphic/ui/tools/qt/simulator/simulator.pro.
 ```
@@ -97,7 +99,7 @@ Components are classified into basic components and container components.
 
 For details about how to use components and APIs of graphics, see the examples provided in  **foundation/graphic/ui/test/uitest**.
 
--   The Qt project can be debugged in the Windows environment.
+-   The Qt project can be debugged in the Windows environment. [User Guide](https://gitee.com/openharmony/ace_engine_lite/tree/master/frameworks/tools/qt/simulator)
 
     Project file path:
 
@@ -106,10 +108,6 @@ For details about how to use components and APIs of graphics, see the examples p
     ```
 
 -   For other debugging environments, you can run  **foundation/graphic/wms/test:sample\_ui**.
-
-    ```
-    hb build lite_wms -b debug
-    ```
 
     After the building is successful, the executable program  **out/\[product\_name\]/dev\_tools/bin/sample\_ui**  is obtained. You can run the program in an environment to view the display effect of a specific component.
 
