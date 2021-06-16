@@ -32,10 +32,7 @@ UIViewGroup::UIViewGroup()
     isViewGroup_ = true;
 }
 
-UIViewGroup::~UIViewGroup()
-{
-    RemoveAllChildren();
-}
+UIViewGroup::~UIViewGroup() {}
 
 void UIViewGroup::Add(UIView* view)
 {
@@ -143,7 +140,17 @@ void UIViewGroup::Remove(UIView* view)
 
 void UIViewGroup::RemoveAll()
 {
-    RemoveAllChildren();
+    UIView* node = childrenHead_;
+    childrenHead_ = nullptr;
+    childrenTail_ = nullptr;
+    childrenNum_ = 0;
+    UIView* tmp = nullptr;
+    while (node != nullptr) {
+        tmp = node;
+        node = node->GetNextSibling();
+        tmp->SetParent(nullptr);
+        tmp->SetNextSibling(nullptr);
+    }
     OnChildChanged();
 }
 
@@ -287,20 +294,5 @@ void UIViewGroup::AutoResize()
     Rect rect = GetAllChildRelativeRect();
     SetWidth(rect.GetWidth() + rect.GetLeft());
     SetHeight(rect.GetHeight() + rect.GetTop());
-}
-
-void UIViewGroup::RemoveAllChildren()
-{
-    UIView* node = childrenHead_;
-    childrenHead_ = nullptr;
-    childrenTail_ = nullptr;
-    childrenNum_ = 0;
-    UIView* tmp = nullptr;
-    while (node != nullptr) {
-        tmp = node;
-        node = node->GetNextSibling();
-        tmp->SetParent(nullptr);
-        tmp->SetNextSibling(nullptr);
-    }
 }
 } // namespace OHOS
