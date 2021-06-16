@@ -286,7 +286,6 @@ protected:
 
 private:
     void AutoResize();
-    void RemoveAllChildren();
 #if ENABLE_FOCUS_MANAGER
     bool isInterceptFocus_ : 1;
 #endif
