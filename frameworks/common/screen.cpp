@@ -66,10 +66,6 @@ bool Screen::GetCurrentScreenBitmap(ImageInfo& info)
 
 ScreenShape Screen::GetScreenShape()
 {
-#if RECTANGLE_SCREEN
-    return ScreenShape::RECTANGLE;
-#else
-    return ScreenShape::CIRCLE;
-#endif
+    return BaseGfxEngine::GetInstance()->GetScreenShape();
 }
 } // namespace OHOS

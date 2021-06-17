@@ -77,6 +77,9 @@ void UIList::Recycle::InitRecycle()
     FillActiveView();
     listView_->Invalidate();
     hasInitialiszed_ = true;
+    if (listView_->xScrollBarVisible_ || listView_->yScrollBarVisible_) {
+        MesureAdapterRelativeRect();
+    }
 }
 
 UIView* UIList::Recycle::GetView(int16_t index)
@@ -158,7 +161,6 @@ UIList::UIList(uint8_t direction)
       selectPosition_(0),
       onSelectedIndex_(0),
       recycle_(this),
-      hasMeasuredAdapterRect_(false),
       scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
@@ -499,12 +501,6 @@ void UIList::SetAdapter(AbstractAdapter* adapter)
 {
     recycle_.SetAdapter(adapter);
     recycle_.InitRecycle();
-    if (xScrollBarVisible_ || yScrollBarVisible_) {
-        recycle_.MesureAdapterRelativeRect();
-        hasMeasuredAdapterRect_ = true;
-    } else {
-        hasMeasuredAdapterRect_ = false;
-    }
 }
 
 UIView* UIList::GetSelectView()
@@ -736,12 +732,6 @@ void UIList::ScrollTo(uint16_t index)
     onSelectedView_ = nullptr;
     SetStartIndex(index);
     recycle_.InitRecycle();
-    if (xScrollBarVisible_ || yScrollBarVisible_) {
-        recycle_.MesureAdapterRelativeRect();
-        hasMeasuredAdapterRect_ = true;
-    } else {
-        hasMeasuredAdapterRect_ = false;
-    }
 }
 
 void UIList::RefreshList()
@@ -773,12 +763,6 @@ void UIList::RefreshList()
         startIndex_ = topIndex;
     }
     recycle_.InitRecycle();
-    if (xScrollBarVisible_ || yScrollBarVisible_) {
-        recycle_.MesureAdapterRelativeRect();
-        hasMeasuredAdapterRect_ = true;
-    } else {
-        hasMeasuredAdapterRect_ = false;
-    }
     startIndex_ = tmpStartIndex;
 
     if (direction_ == VERTICAL) {
@@ -797,27 +781,27 @@ void UIList::RemoveAll()
 
 void UIList::SetXScrollBarVisible(bool visible)
 {
+    bool lastVisible = xScrollBarVisible_;
     UIAbstractScroll::SetXScrollBarVisible(visible);
-    if (!recycle_.HasInitialiszed() || !xScrollBarVisible_) {
-        hasMeasuredAdapterRect_ = false;
-        return;
-    }
-    if (!hasMeasuredAdapterRect_) {
-        recycle_.MesureAdapterRelativeRect();
-        hasMeasuredAdapterRect_ = true;
+    if (!lastVisible && xScrollBarVisible_) {
+        if (recycle_.HasInitialiszed()) {
+            recycle_.MesureAdapterRelativeRect();
+        } else {
+            recycle_.InitRecycle();
+        }
     }
 }
 
 void UIList::SetYScrollBarVisible(bool visible)
 {
+    bool lastVisible = yScrollBarVisible_;
     UIAbstractScroll::SetYScrollBarVisible(visible);
-    if (!recycle_.HasInitialiszed() || !yScrollBarVisible_) {
-        hasMeasuredAdapterRect_ = false;
-        return;
-    }
-    if (!hasMeasuredAdapterRect_) {
-        recycle_.MesureAdapterRelativeRect();
-        hasMeasuredAdapterRect_ = true;
+    if (!lastVisible && yScrollBarVisible_) {
+        if (recycle_.HasInitialiszed()) {
+            recycle_.MesureAdapterRelativeRect();
+        } else {
+            recycle_.InitRecycle();
+        }
     }
 }
 

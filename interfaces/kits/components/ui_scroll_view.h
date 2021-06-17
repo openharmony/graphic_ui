@@ -167,19 +167,6 @@ public:
     void ScrollBy(int16_t xDistance, int16_t yDistance);
 
     /**
-     * @brief Sets the width for this scroll bar.
-     *
-     * @param width Indicates the width to set. The default value is {@link DEFAULT_BAR_WIDTH}.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetScrollbarWidth(uint8_t width)
-    {
-        scrollBarWidth_ = width;
-        minScrollBarLen_ = scrollBarWidth_ * MIN_BAR_MULTIPLE;
-    }
-
-    /**
      * @brief Sets whether a horizontal scroll is enabled.
      *
      * @param state Specifies whether a horizontal scroll is enabled. <b>true</b> indicates a horizontal scroll is
@@ -241,8 +228,6 @@ public:
         scrollListener_ = scrollListener;
     }
 
-    void RefreshScrollBar();
-
 protected:
     void StopAnimator() override;
     bool DragXInner(int16_t distance) override;
@@ -250,23 +235,11 @@ protected:
 
 private:
     void Drag(const DragEvent& event);
-    void RefreshScrollBarPosition();
     bool MoveOffset(int16_t offsetX, int16_t offsetY);
-    int16_t GetXScrollOffset(const Rect& childRect);
-    int16_t GetYScrollOffset(const Rect& childRect);
-    void OnChildChanged() override;
     void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
-    static constexpr uint8_t DEFAULT_BAR_WIDTH = 5;
-    static constexpr uint8_t MIN_BAR_MULTIPLE = 2;
-    static constexpr uint8_t DEFAULT_MIN_BAR_LEN = DEFAULT_BAR_WIDTH * MIN_BAR_MULTIPLE;
-    UIView xSlider_;
-    UIView ySlider_;
-    Point xSliderPos_;
-    Point ySliderPos_;
-    int16_t scrollBarWidth_;
+    void RefreshScrollBar();
     bool xScrollable_;
     bool yScrollable_;
-    int16_t minScrollBarLen_;
     OnScrollListener* scrollListener_;
 #if ENABLE_ROTATE_INPUT
     int16_t lastRotateLen_;

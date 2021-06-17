@@ -410,6 +410,7 @@ protected:
 
 private:
     friend class UIPicker;
+    friend class Recycle;
     class Recycle : public HeapBase {
     public:
         explicit Recycle(UIList* list) : adapter_(nullptr), listView_(list), hasInitialiszed_(false) {}
@@ -418,7 +419,13 @@ private:
         UIView* GetView(int16_t index);
         void SetAdapter(AbstractAdapter* adapter)
         {
+            hasInitialiszed_ = false;
             adapter_ = adapter;
+        }
+
+        bool HasInitialiszed()
+        {
+            return hasInitialiszed_;
         }
 
         void AddScrapView(UIView* view)
@@ -434,11 +441,6 @@ private:
         void ClearScrapView()
         {
             scrapView_.Clear();
-        }
-
-        bool HasInitialiszed()
-        {
-            return hasInitialiszed_;
         }
 
         Rect GetAdapterItemsReletiveRect();
@@ -486,7 +488,6 @@ private:
     uint16_t selectPosition_;
     int16_t onSelectedIndex_;
     Recycle recycle_;
-    bool hasMeasuredAdapterRect_;
     ListScrollListener* scrollListener_;
     void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
 };

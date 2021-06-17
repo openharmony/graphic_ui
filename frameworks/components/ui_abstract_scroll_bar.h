@@ -25,15 +25,11 @@ class UIAbstractScrollBar : public HeapBase {
 public:
     UIAbstractScrollBar();
 
-    virtual ~UIAbstractScrollBar();
+    virtual ~UIAbstractScrollBar() {};
 
     virtual void SetPosition(int16_t x, int16_t y, int16_t width, int16_t height) {}
 
     virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa) {}
-
-    void SetBackgroundStyle(const Style& backroundStyle);
-
-    void SetForegroundStyle(const Style& foregroundStyle);
 
     void SetScrollProgress(float scrollProgress)
     {
@@ -59,8 +55,6 @@ public:
     }
 
 protected:
-    bool backgroundStyleAllocFlag_ : 1;
-    bool foregroundStyleAllocFlag_ : 1;
     uint8_t opacity_ = OPA_TRANSPARENT;
     float scrollProgress_ = 0;
     float foregroundProportion_ = 0;

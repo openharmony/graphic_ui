@@ -18,7 +18,21 @@
 #include "draw/draw_arc.h"
 #include "engines/gfx/gfx_engine_manager.h"
 
+namespace {
+constexpr uint16_t START_ANGLE_IN_DEGREE = 60;
+constexpr uint16_t END_ANGLE_IN_DEGREE = 120;
+constexpr uint16_t SCROLL_BAR_WIDTH = 4;
+constexpr uint16_t SCROLL_BAR_MIN_ARC = 10;
+} // namespace
+
 namespace OHOS {
+UIArcScrollBar::UIArcScrollBar()
+    : radius_(0),
+      width_(SCROLL_BAR_WIDTH),
+      startAngle_(START_ANGLE_IN_DEGREE),
+      endAngle_(END_ANGLE_IN_DEGREE),
+      center_({0, 0}) {}
+
 void UIArcScrollBar::SetPosition(int16_t x, int16_t y, int16_t width, int16_t radius)
 {
     if ((width > 0) && (radius > 0)) {
@@ -40,6 +54,9 @@ void UIArcScrollBar::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
 void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa)
 {
     uint16_t foregoundAngleRange = foregroundProportion_ * (END_ANGLE_IN_DEGREE - START_ANGLE_IN_DEGREE);
+    if (foregoundAngleRange < SCROLL_BAR_MIN_ARC) {
+        foregoundAngleRange = SCROLL_BAR_MIN_ARC;
+    }
     int16_t minAngle = START_ANGLE_IN_DEGREE;
     int16_t maxAngle = END_ANGLE_IN_DEGREE - foregoundAngleRange;
     int16_t startAngle = minAngle + scrollProgress_ * (maxAngle - minAngle);
@@ -54,8 +71,6 @@ void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invali
     arcInfo.center = center_;
     arcInfo.startAngle = MATH_MAX(startAngle, START_ANGLE_IN_DEGREE);
     arcInfo.endAngle = MATH_MIN(endAngle, END_ANGLE_IN_DEGREE);
-    foregroundStyle_->lineCap_ = CapType::CAP_ROUND;
-    foregroundStyle_->lineWidth_ = width_;
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, *foregroundStyle_, backgroundOpa,
                                           foregroundStyle_->lineCap_);
 }
@@ -67,8 +82,6 @@ void UIArcScrollBar::DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invali
     arcInfo.center = center_;
     arcInfo.startAngle = START_ANGLE_IN_DEGREE;
     arcInfo.endAngle = END_ANGLE_IN_DEGREE;
-    backgroundStyle_->lineCap_ = CapType::CAP_ROUND;
-    backgroundStyle_->lineWidth_ = width_;
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, *backgroundStyle_, backgroundOpa,
                                           backgroundStyle_->lineCap_);
 }

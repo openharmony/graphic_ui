@@ -38,7 +38,6 @@
 
 #include "animator/animator.h"
 #include "animator/easing_equation.h"
-#include "common/screen.h"
 #include "components/ui_view_group.h"
 
 namespace OHOS {
@@ -267,19 +266,9 @@ public:
     }
 #endif
 
-    void SetXScrollBarVisible(bool visible)
-    {
-        if (Screen::GetInstance().GetScreenShape() == ScreenShape::CIRCLE) {
-            xScrollBarVisible_ = false;
-            return;
-        }
-        xScrollBarVisible_ = visible;
-    }
+    void SetXScrollBarVisible(bool visible);
 
-    void SetYScrollBarVisible(bool visible)
-    {
-        yScrollBarVisible_ = visible;
-    }
+    void SetYScrollBarVisible(bool visible);
 
     void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
@@ -299,7 +288,7 @@ protected:
     /* the maximum number of historical drag data */
     static constexpr uint8_t MAX_DELTA_Y_SIZE = 3;
 
-    static constexpr uint16_t SCROLL_BAR_WIDTH = 5;
+    static constexpr uint16_t SCROLL_BAR_WIDTH = 4;
     static constexpr uint8_t MAX_ROTATE_FACTOR = 128;
 
     class ListAnimatorCallback : public AnimatorCallback {

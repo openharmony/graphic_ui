@@ -138,6 +138,16 @@ public:
         return height_;
     }
 
+    virtual void SetScreenShape(ScreenShape screenShape)
+    {
+        screenShape_ = screenShape;
+    }
+
+    virtual ScreenShape GetScreenShape()
+    {
+        return screenShape_;
+    }
+
     static BaseGfxEngine* GetInstance()
     {
         return baseEngine_;
@@ -156,6 +166,7 @@ protected:
     static BaseGfxEngine* baseEngine_;
     uint16_t width_ = HORIZONTAL_RESOLUTION;
     uint16_t height_ = VERTICAL_RESOLUTION;
+    ScreenShape screenShape_ = RECTANGLE;
 };
 }
 
