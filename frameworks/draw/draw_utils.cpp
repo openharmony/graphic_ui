@@ -1290,9 +1290,11 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in, co
         {
             DEBUG_PERFORMANCE_TRACE("DrawTriangleTrueColorBilinear8888");
 #if ENABLE_FIXED_POINT
-            DrawFixedTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, bufferMode, in.init.verticalU, in.init.verticalV);
+            DrawFixedTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, bufferMode,
+                                                        in.init.verticalU, in.init.verticalV);
 #else
-            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, bufferMode, in.init.verticalU, in.init.verticalV);
+            DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, xMax - xMin + 1, bufferMode, in.init.verticalU,
+                                                   in.init.verticalV);
 #endif
         }
 #endif

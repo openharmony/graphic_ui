@@ -42,11 +42,11 @@ public:
     {
         return radius_;
     }
-    Style* GetBackStyle()
+    const Style* GetBackStyle()
     {
         return backgroundStyle_;
     }
-    Style* GetForeStyle()
+    const Style* GetForeStyle()
     {
         return foregroundStyle_;
     }
@@ -70,11 +70,11 @@ public:
     {
         return backgroundRect_.GetHeight();
     }
-    Style* GetBackStyle()
+    const Style* GetBackStyle()
     {
         return backgroundStyle_;
     }
-    Style* GetForeStyle()
+    const Style* GetForeStyle()
     {
         return foregroundStyle_;
     }

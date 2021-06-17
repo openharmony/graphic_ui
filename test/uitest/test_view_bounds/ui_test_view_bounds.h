@@ -31,7 +31,7 @@ public:
     ~UITestViewBounds();
     void SetUp() override;
     void TearDown() override;
-    UIView* GetTestView() override;
+    const UIView* GetTestView() override;
 
     /**
      * @brief test show or hide view bounds
