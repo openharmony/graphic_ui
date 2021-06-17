@@ -36,6 +36,7 @@ SOURCES += \
     ../../../../test/uitest/test_canvas/ui_test_canvas.cpp \
     ../../../../test/uitest/test_chart/ui_test_chart_pillar.cpp \
     ../../../../test/uitest/test_chart/ui_test_chart_polyline.cpp \
+    ../../../../test/uitest/test_clip/ui_test_clip.cpp \
     ../../../../test/uitest/test_dialog/ui_test_dialog.cpp \
     ../../../../test/uitest/test_digital_clock/ui_test_digital_clock.cpp \
     ../../../../test/uitest/test_draw_line/ui_test_draw_line.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
     ../../../../test/uitest/test_canvas/ui_test_canvas.h \
     ../../../../test/uitest/test_chart/ui_test_chart_pillar.h \
     ../../../../test/uitest/test_chart/ui_test_chart_polyline.h \
+    ../../../../test/uitest/test_clip/ui_test_clip.cpp \
     ../../../../test/uitest/test_dialog/ui_test_dialog.h \
     ../../../../test/uitest/test_digital_clock/ui_test_digital_clock.h \
     ../../../../test/uitest/test_draw_line/ui_test_draw_line.h \
