@@ -14,6 +14,9 @@
  */
 
 #include "engines/gfx/gfx_engine_manager.h"
+
+#include <cstdlib>
+
 #include "draw/draw_arc.h"
 #include "draw/draw_curve.h"
 #include "draw/draw_line.h"

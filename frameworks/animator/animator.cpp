@@ -61,6 +61,10 @@ void Animator::Run()
     runTime_ = (UINT32_MAX - elapse > runTime_) ? (runTime_ + elapse) : period_;
 
     if (!repeat_ && (runTime_ >= period_)) {
+        runTime_ = period_;
+        if (callback_ != nullptr) {
+            callback_->Callback(view_);
+        }
         Stop();
         return;
     }
