@@ -1240,9 +1240,9 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
 #if ENABLE_FIXED_POINT
         int64_t fixedU = FO_TRANS_FLOAT_TO_FIXED(u);
         int64_t fixedV = FO_TRANS_FLOAT_TO_FIXED(v);
-        DrawFixedTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8, bufferMode, fixedU, fixedV);
+        DrawFixedTriangleTrueColorBilinear8888Inner(in, screenBuffer, len, bufferMode, fixedU, fixedV);
 #else
-        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, NEON_STEP_8, bufferMode, u, v);
+        DrawTriangleTrueColorBilinear8888Inner(in, screenBuffer, len, bufferMode, u, v);
 #endif
     }
 }
@@ -1415,7 +1415,7 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
 {
 #if ENABLE_FIXED_POINT
 // parameters below are Q15 fixed-point number
-    int32_t yMin = FO_TRANS_INTEGER_TO_FIXED(part.yMin);
+    int64_t yMin = FO_TRANS_INTEGER_TO_FIXED(part.yMin);
     part.edge1.curX += (static_cast<int64_t>(part.edge1.du) *  (yMin - part.edge1.curY) / part.edge1.dv);
     part.edge1.curY = yMin;
     part.edge2.curX += (static_cast<int64_t>(part.edge2.du) *  (yMin - part.edge2.curY) / part.edge2.dv);
