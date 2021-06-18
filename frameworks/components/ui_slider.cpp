@@ -120,30 +120,30 @@ void UISlider::SetKnobImage(const char* knobImage)
 
 void UISlider::DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, const Rect& foregroundRect)
 {
-    int16_t halfKnobWidth = GetKnobWidth() >> 1;
+    int16_t halfKnobWidth = GetKnobWidth() / 2; // 2: half
     int16_t offset;
     Rect knobBar;
     switch (direction_) {
         case Direction::DIR_LEFT_TO_RIGHT: {
-            offset = (knobWidth_ - progressHeight_) >> 1;
+            offset = (knobWidth_ - progressHeight_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetRight() - halfKnobWidth, foregroundRect.GetTop() - offset,
                 foregroundRect.GetRight() + halfKnobWidth, foregroundRect.GetBottom() + offset);
             break;
         }
         case Direction::DIR_RIGHT_TO_LEFT: {
-            offset = (knobWidth_ - progressHeight_) >> 1;
+            offset = (knobWidth_ - progressHeight_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetLeft() - halfKnobWidth, foregroundRect.GetTop() - offset,
                 foregroundRect.GetLeft() + halfKnobWidth, foregroundRect.GetBottom() + offset);
             break;
         }
         case Direction::DIR_BOTTOM_TO_TOP: {
-            offset = (knobWidth_ - progressWidth_) >> 1;
+            offset = (knobWidth_ - progressWidth_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetTop() - halfKnobWidth,
                 foregroundRect.GetRight() + offset, foregroundRect.GetTop() + halfKnobWidth);
             break;
         }
         case Direction::DIR_TOP_TO_BOTTOM: {
-            offset = (knobWidth_ - progressWidth_) >> 1;
+            offset = (knobWidth_ - progressWidth_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetBottom() - halfKnobWidth,
                 foregroundRect.GetRight() + offset, foregroundRect.GetBottom() + halfKnobWidth);
             break;
