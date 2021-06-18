@@ -40,7 +40,7 @@ void UIDigitalClock::InitTimeLabels()
         if (timeLabels_[i] == nullptr) {
             timeLabels_[i] = new UILabel;
             if (timeLabels_[i] == nullptr) {
-                GRAPHIC_LOGE("new UILabel fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
                 return;
             }
             timeLabels_[i]->SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);

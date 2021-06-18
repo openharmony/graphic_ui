@@ -38,13 +38,13 @@ PointEventInjector::~PointEventInjector()
 bool PointEventInjector::SetPointEvent(const DeviceData& data)
 {
     if (dataList_.Size() >= MAX_LIST_SIZE) {
-        GRAPHIC_LOGI("PointEventInjector::SetPointEvent data list is full.");
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "PointEventInjector::SetPointEvent data list is full.");
         return false;
     }
 
     DeviceData* tmpData = new DeviceData;
     if (tmpData == nullptr) {
-        GRAPHIC_LOGE("PointEventInjector::SetPointEvent memory allocation failed Err!");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "PointEventInjector::SetPointEvent memory allocation failed Err!");
         return false;
     }
     tmpData->point = data.point;

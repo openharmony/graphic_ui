@@ -115,9 +115,9 @@ bool CompareTools::CompareBinary(const char* filePath, size_t length)
         }
     }
     if (ret) {
-        GRAPHIC_LOGI("[SUCCESS]:fileName=%s", filePath);
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SUCCESS]:fileName=%s", filePath);
     } else {
-        GRAPHIC_LOGI("[FAILURE]:fileName=%s", filePath);
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[FAILURE]:fileName=%s", filePath);
     }
     delete[] readBuf;
     fclose(fd);
@@ -148,7 +148,7 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
     }
     uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
     if (frameBuf == nullptr) {
-        GRAPHIC_LOGE("GetBuffer failed");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GetBuffer failed");
         return false;
     }
     uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(bufferInfo->mode);
@@ -162,7 +162,7 @@ bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
         return false;
     }
     fclose(fd);
-    GRAPHIC_LOGI("[SAVEBIN]:fileName=%s", filePath);
+    HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SAVEBIN]:fileName=%s", filePath);
     if (enableLog_) {
         char logBuf[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
         if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[SAVEBIN]:fileName=%s\n", filePath) < 0) {
@@ -195,7 +195,7 @@ void CompareTools::SetLogPath(const char* filePath, size_t length)
         }
 
         if (memcpy_s(logPath_, length, filePath, length) != EOK) {
-            GRAPHIC_LOGE("memcpy filepath failed");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "memcpy filepath failed");
             return;
         }
         enableLog_ = true;
@@ -218,12 +218,12 @@ bool CompareTools::SaveLog(const char* buff, size_t bufSize)
     }
     FILE* log = fopen(logPath_, "a");
     if (log == nullptr) {
-        GRAPHIC_LOGE("open log failed");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "open log failed");
         return false;
     }
     if (fwrite(buff, 1, bufSize, log) < 0) {
         fclose(log);
-        GRAPHIC_LOGE("write log failed");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "write log failed");
         return false;
     }
     fclose(log);

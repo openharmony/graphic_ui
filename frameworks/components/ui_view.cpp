@@ -66,7 +66,8 @@ UIView::UIView()
 UIView::~UIView()
 {
     if (parent_ != nullptr) {
-        GRAPHIC_LOGE("UIView::~UIView failed, parent is not nullptr! Need to remove from parent component first");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC,
+            "UIView::~UIView failed, parent is not nullptr! Need to remove from parent component first");
     }
     if (transMap_ != nullptr) {
         delete transMap_;
@@ -199,7 +200,7 @@ void UIView::SetStyle(uint8_t key, int64_t value)
     if (!styleAllocFlag_) {
         style_ = new Style(*style_);
         if (style_ == nullptr) {
-            GRAPHIC_LOGE("new Style fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style fail");
             return;
         }
         styleAllocFlag_ = true;
@@ -234,7 +235,7 @@ void UIView::Rotate(int16_t angle, const Vector2<float>& pivot)
         ReMeasure();
         transMap_ = new TransformMap();
         if (transMap_ == nullptr) {
-            GRAPHIC_LOGE("new TransformMap fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TransformMap fail");
             return;
         }
     }
@@ -252,7 +253,7 @@ void UIView::Scale(const Vector2<float>& scale, const Vector2<float>& pivot)
         ReMeasure();
         transMap_ = new TransformMap();
         if (transMap_ == nullptr) {
-            GRAPHIC_LOGE("new TransformMap fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TransformMap fail");
             return;
         }
     }
@@ -275,7 +276,7 @@ void UIView::Translate(const Vector2<int16_t>& trans)
         ReMeasure();
         transMap_ = new TransformMap(GetOrigRect());
         if (transMap_ == nullptr) {
-            GRAPHIC_LOGE("new TransformMap fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TransformMap fail");
             return;
         }
     }

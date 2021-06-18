@@ -173,7 +173,7 @@ void UIDialog::SetButton(DialogButtonType buttonType, const char* text, UIView::
             if (button1_ == nullptr) {
                 button1_ = new UIDialogLabelButton(this);
                 if (button1_ == nullptr) {
-                    GRAPHIC_LOGE("new UIDialogLabelButton fail");
+                    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIDialogLabelButton fail");
                     return;
                 }
                 button1_->SetViewId(BUTTON1_ID);
@@ -187,7 +187,7 @@ void UIDialog::SetButton(DialogButtonType buttonType, const char* text, UIView::
             if (button2_ == nullptr) {
                 button2_ = new UIDialogLabelButton(this);
                 if (button2_ == nullptr) {
-                    GRAPHIC_LOGE("new UIDialogLabelButton fail");
+                    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIDialogLabelButton fail");
                     return;
                 }
                 button2_->SetViewId(BUTTON2_ID);
@@ -201,7 +201,7 @@ void UIDialog::SetButton(DialogButtonType buttonType, const char* text, UIView::
             if (button3_ == nullptr) {
                 button3_ = new UIDialogLabelButton(this);
                 if (button3_ == nullptr) {
-                    GRAPHIC_LOGE("new UIDialogLabelButton fail");
+                    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIDialogLabelButton fail");
                     return;
                 }
                 AddButton(buttonType, button3_, text, listener);
@@ -257,7 +257,7 @@ void UIDialog::SetTitleLabel()
     if (title_ == nullptr) {
         title_ = new UILabel();
         if (title_ == nullptr) {
-            GRAPHIC_LOGE("new UILabel fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
             return;
         }
         title_->SetViewId(TITLE_ID);
@@ -278,7 +278,7 @@ void UIDialog::SetTextLabel()
     if (text_ == nullptr) {
         text_ = new UILabel();
         if (text_ == nullptr) {
-            GRAPHIC_LOGE("new UILabel fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
             return;
         }
         text_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, TEXT_FONT_SIZE);
@@ -294,7 +294,7 @@ void UIDialog::InitDialog()
     if (dialogLayer_ == nullptr) {
         dialogLayer_ = new UIViewGroup();
         if (dialogLayer_ == nullptr) {
-            GRAPHIC_LOGE("new UIViewGroup fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIViewGroup fail");
             return;
         }
         dialogLayer_->SetStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
@@ -309,7 +309,7 @@ void UIDialog::InitDialog()
     if (dialogClickListener_ == nullptr) {
         dialogClickListener_ = new UIDialogClickListener(this);
         if (dialogClickListener_ == nullptr) {
-            GRAPHIC_LOGE("new UIDialogClickListener fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIDialogClickListener fail");
             return;
         }
         windowRootView_->SetOnClickListener(dialogClickListener_);
@@ -336,7 +336,7 @@ void UIDialog::AddComponents()
     if (buttonNum_ > 1) {
         line1_ = new UIView();
         if (line1_ == nullptr) {
-            GRAPHIC_LOGE("new UIView fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIView fail");
             return;
         }
         line1_->SetHeight(LINE_HEIGHT);
@@ -348,7 +348,7 @@ void UIDialog::AddComponents()
     if (buttonNum_ == 3) { // 3: three buttons
         line2_ = new UIView();
         if (line2_ == nullptr) {
-            GRAPHIC_LOGE("new UIView fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIView fail");
             return;
         }
         line2_->SetHeight(LINE_HEIGHT);
@@ -565,7 +565,7 @@ void UIDialog::CreateDialogWindow()
     if (window_ != nullptr) {
         window_->BindRootView(windowRootView_);
     } else {
-        GRAPHIC_LOGE("Create window false!");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Create window false!");
     }
 }
 

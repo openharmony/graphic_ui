@@ -128,7 +128,7 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && needVibration &&
         MATH_ABS(totalRotateLen_ - lastVibratorRotateLen_) > DEFAULT_VIBRATOR_LEN) {
-        GRAPHIC_LOGI("UIScrollView::OnRotateEvent Call vibrator function");
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "UIScrollView::OnRotateEvent Call vibrator function");
         vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
         lastVibratorRotateLen_ = totalRotateLen_;
     }

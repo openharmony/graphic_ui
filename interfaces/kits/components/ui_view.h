@@ -897,7 +897,7 @@ public:
         if (visibleRect_ == nullptr) {
             visibleRect_ = new Rect();
             if (visibleRect_ == nullptr) {
-                GRAPHIC_LOGE("new Rect fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Rect fail");
                 return;
             }
         }
