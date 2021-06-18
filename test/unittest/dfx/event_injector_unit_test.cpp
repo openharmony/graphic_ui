@@ -419,6 +419,8 @@ HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_SetKeyEvent_002, Test
  */
 HWTEST_F(EventInjectorTest, Graphic_EventInjectorTest_Test_UnregisterEventInjector_001, TestSize.Level0)
 {
+    isRepeat_ = false;
+    usleep(10000); /* 10000:10ms */
     EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::POINT_TYPE);
     if (!EventInjector::GetInstance()->IsEventInjectorRegistered(EventDataType::POINT_TYPE)) {
         UNREGISTER_POINT_FLAG = FLAG1;
