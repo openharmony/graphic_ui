@@ -17,6 +17,7 @@
 
 #include <cstdlib>
 
+#include "draw/clip_utils.h"
 #include "draw/draw_arc.h"
 #include "draw/draw_curve.h"
 #include "draw/draw_line.h"
@@ -67,7 +68,7 @@ void BaseGfxEngine::DrawRect(BufferInfo& dst,
     DrawRect::Draw(dst, rect, dirtyRect, style, opacity);
 }
 
-void BaseGfxEngine::DrawTransform(BufferInfo& dst, 
+void BaseGfxEngine::DrawTransform(BufferInfo& dst,
                                   const Rect& mask,
                                   const Point& position,
                                   ColorType color,
@@ -77,6 +78,15 @@ void BaseGfxEngine::DrawTransform(BufferInfo& dst,
 {
     DrawUtils::GetInstance()->DrawTransform(dst, mask, position, color,
         opacity, transMap, dataInfo);
+}
+
+void BaseGfxEngine::ClipCircle(const ImageInfo* info, float x, float y, float radius)
+{
+    ClipPath path;
+    path.Circle({x, y}, radius);
+    ClipImageBlitter blitter(info);
+    ClipUtils clip;
+    clip.PerformScan(path, blitter);
 }
 
 void BaseGfxEngine::Blit(BufferInfo& dst,

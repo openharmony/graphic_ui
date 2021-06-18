@@ -938,6 +938,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     newBufferInfo.width = bufferWidth;
     newBufferInfo.height = bufferHeight;
     newBufferInfo.mode = bufferInfo->mode;
+    newBufferInfo.stride = bufferWidth *  DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
 
     RootView::GetInstance()->SaveDrawContext();
     RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);

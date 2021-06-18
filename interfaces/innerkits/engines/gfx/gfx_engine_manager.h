@@ -106,6 +106,9 @@ public:
                                const TransformMap& transMap,
                                const TransformDataInfo& dataInfo);
 
+    // x/y: center of a circle
+    virtual void ClipCircle(const ImageInfo* info, float x, float y, float radius);
+
     virtual void Blit(BufferInfo& dst,
                       const Point& dstPos,
                       const BufferInfo& src,
