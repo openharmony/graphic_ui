@@ -73,7 +73,7 @@ private:
         }
         float bezielY = opa;
         bezielY =
-            Interpolation::GetBezierY(bezielY / OPA_OPAQUE, 0, BEZIER_CONTROL_POINT_Y_1, BEZIER_CONTROL_POINT_X_2, 1);
+            Interpolation::GetBezierY(bezielY / OPA_OPAQUE, BEZIER_CONTROL_POINT_X_1, 0, BEZIER_CONTROL_POINT_X_2, 1);
         opa = static_cast<uint8_t>(bezielY * opa);
         if (scrollView_.yScrollBarVisible_) {
             scrollView_.yScrollBar_->SetOpacity(opa);
@@ -114,7 +114,7 @@ private:
     }
     static constexpr uint16_t ANIMATOR_DURATION = 250;
     static constexpr uint16_t APPEAR_PERIOD = 2000;
-    static constexpr float BEZIER_CONTROL_POINT_Y_1 = 0.33f;
+    static constexpr float BEZIER_CONTROL_POINT_X_1 = 0.33f;
     static constexpr float BEZIER_CONTROL_POINT_X_2 = 0.67f;
     UIAbstractScroll& scrollView_;
     GraphicTimer timer_;
