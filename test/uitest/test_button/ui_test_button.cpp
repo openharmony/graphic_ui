@@ -128,14 +128,16 @@ void UITestBUTTON::UIKit_Check_Box_Test_001() const
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
 
         UICheckBox* checkbox = new UICheckBox();
-        checkbox->SetPosition(30, 30); // 30: x-coordinate, 30: y-coordinate
+        checkbox->SetPosition(30, 30, 100, 100); // 30: x-coordinate, 30: y-coordinate, 100 : width, 100 : height
+        checkbox->SetImages("", "");
 
         UICheckBox* checkbox2 = new UICheckBox();
-        checkbox2->SetPosition(100, 30); // 100: x-coordinate, 30: y-coordinate
+        checkbox2->SetPosition(140, 30, 100, 120); // 140: x-coordinate, 30: y-coordinate, 100 : width, 120 : height
+        checkbox2->SetImages("", "");
 
         UICheckBox* checkbox3 = new UICheckBox();
         checkbox3->SetImages("", "");
-        checkbox3->SetPosition(170, 30, 100, 100); // 170: x-coordinate, 30: y-coordinate, 100 : width, 100 : height
+        checkbox3->SetPosition(250, 30, 120, 100); // 250: x-coordinate, 30: y-coordinate, 120 : width, 100 : height
 
         container_->Add(checkbox);
         container_->Add(checkbox2);
@@ -332,8 +334,16 @@ void UITestBUTTON::UIKit_Check_Box_Test_002() const
         checkbox2->SetHeight(130);        // 130: height
         checkbox2->SetImages(GREEN_IMAGE_PATH, RED_IMAGE_PATH);
 
+        UICheckBox* checkbox3 = new UICheckBox();
+        checkbox3->SetPosition(350, 430); // 350: x-coordinate, 430: y-coordinate
+
+        UICheckBox* checkbox4 = new UICheckBox();
+        checkbox4->SetPosition(450, 430); // 450: x-coordinate, 430: y-coordinate
+
         container_->Add(checkbox);
         container_->Add(checkbox2);
+        container_->Add(checkbox3);
+        container_->Add(checkbox4);
     }
 }
 
