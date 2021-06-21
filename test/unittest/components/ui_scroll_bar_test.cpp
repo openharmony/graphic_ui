@@ -18,6 +18,9 @@
 
 #include "components/ui_arc_scroll_bar.h"
 #include "components/ui_box_scroll_bar.h"
+#include "components/ui_list.h"
+#include "components/ui_scroll_view.h"
+#include "engines/gfx/gfx_engine_manager.h"
 
 using namespace testing::ext;
 
@@ -34,27 +37,32 @@ void ScrollBarTest::TearDownTestCase() {}
 
 class TestArcScrollBarTest : public UIArcScrollBar {
 public:
-    int16_t GetWidth()
+    int16_t GetWidth() const
     {
         return width_;
     }
-    int16_t GetRadius()
+
+    int16_t GetRadius() const
     {
         return radius_;
     }
-    const Style* GetBackStyle()
+
+    const Style* GetBackStyle() const
     {
         return backgroundStyle_;
     }
-    const Style* GetForeStyle()
+
+    const Style* GetForeStyle() const
     {
         return foregroundStyle_;
     }
-    float GetProportion()
+
+    float GetProportion() const
     {
         return foregroundProportion_;
     }
-    uint8_t GetOpacity()
+
+    uint8_t GetOpacity() const
     {
         return opacity_;
     }
@@ -62,32 +70,95 @@ public:
 
 class TestBoxScrollBarTest : public UIBoxScrollBar {
 public:
-    int16_t GetWidth()
+    int16_t GetWidth() const
     {
         return backgroundRect_.GetWidth();
     }
-    int16_t GetHeight()
+
+    int16_t GetHeight() const
     {
         return backgroundRect_.GetHeight();
     }
-    const Style* GetBackStyle()
+
+    const Style* GetBackStyle() const
     {
         return backgroundStyle_;
     }
-    const Style* GetForeStyle()
+
+    const Style* GetForeStyle() const
     {
         return foregroundStyle_;
     }
-    float GetProportion()
+
+    float GetProportion() const
     {
         return foregroundProportion_;
     }
-    uint8_t GetOpacity()
+
+    uint8_t GetOpacity() const
     {
         return opacity_;
     }
 };
 
+class TestUIScrollView : public UIScrollView {
+public:
+    bool GetXScrollBarVisible() const
+    {
+        return xScrollBarVisible_;
+    }
+
+    bool GetYScrollBarVisible() const
+    {
+        return yScrollBarVisible_;
+    }
+};
+
+class TestUIList : public UIList {
+public:
+    bool GetXScrollBarVisible() const
+    {
+        return xScrollBarVisible_;
+    }
+
+    bool GetYScrollBarVisible() const
+    {
+        return yScrollBarVisible_;
+    }
+};
+
+HWTEST_F(ScrollBarTest, UIScrollBarSetXScrollBarVisible, TestSize.Level0)
+{
+    TestUIScrollView scrollView;
+    TestUIList uiList;
+
+    EXPECT_FALSE(scrollView.GetXScrollBarVisible());
+    EXPECT_FALSE(uiList.GetXScrollBarVisible());
+    BaseGfxEngine::GetInstance()->SetScreenShape(ScreenShape::CIRCLE);
+    scrollView.SetXScrollBarVisible(true);
+    uiList.SetXScrollBarVisible(true);
+    EXPECT_FALSE(scrollView.GetXScrollBarVisible());
+    EXPECT_FALSE(uiList.GetXScrollBarVisible());
+
+    BaseGfxEngine::GetInstance()->SetScreenShape(ScreenShape::RECTANGLE);
+    scrollView.SetXScrollBarVisible(true);
+    uiList.SetXScrollBarVisible(true);
+    EXPECT_TRUE(scrollView.GetXScrollBarVisible());
+    EXPECT_TRUE(uiList.GetXScrollBarVisible());
+}
+
+HWTEST_F(ScrollBarTest, UIScrollBarSetYScrollBarVisible, TestSize.Level0)
+{
+    TestUIScrollView scrollView;
+    TestUIList uiList;
+
+    EXPECT_FALSE(scrollView.GetYScrollBarVisible());
+    EXPECT_FALSE(uiList.GetYScrollBarVisible());
+    scrollView.SetYScrollBarVisible(true);
+    uiList.SetYScrollBarVisible(true);
+    EXPECT_TRUE(scrollView.GetYScrollBarVisible());
+    EXPECT_TRUE(uiList.GetYScrollBarVisible());
+}
 HWTEST_F(ScrollBarTest, UIScrollBarSetPosition, TestSize.Level0)
 {
     constexpr int16_t VALID_POSITION = 5;
