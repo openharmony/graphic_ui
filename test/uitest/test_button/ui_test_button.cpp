@@ -37,6 +37,42 @@ void UITestBUTTON::SetUp()
 
 void UITestBUTTON::TearDown()
 {
+    if (checkBoxChangeListener_ != nullptr) {
+        delete checkBoxChangeListener_;
+        checkBoxChangeListener_ = nullptr;
+    }
+    if (checkBoxChangeListener1_ != nullptr) {
+        delete checkBoxChangeListener1_;
+        checkBoxChangeListener1_ = nullptr;
+    }
+    if (checkBoxChangeListener2_ != nullptr) {
+        delete checkBoxChangeListener2_;
+        checkBoxChangeListener2_ = nullptr;
+    }
+    if (radioChangeListener_ != nullptr) {
+        delete radioChangeListener_;
+        radioChangeListener_ = nullptr;
+    }
+    if (radioChangeListener1_ != nullptr) {
+        delete radioChangeListener1_;
+        radioChangeListener1_ = nullptr;
+    }
+    if (radioChangeListener2_ != nullptr) {
+        delete radioChangeListener2_;
+        radioChangeListener2_ = nullptr;
+    }
+    if (toggleChangeListener_ != nullptr) {
+        delete toggleChangeListener_;
+        toggleChangeListener_ = nullptr;
+    }
+    if (toggleChangeListener1_ != nullptr) {
+        delete toggleChangeListener1_;
+        toggleChangeListener1_ = nullptr;
+    }
+    if (toggleChangeListener2_ != nullptr) {
+        delete toggleChangeListener2_;
+        toggleChangeListener2_ = nullptr;
+    }
     if (clickEnableVisiableListener_ != nullptr) {
         delete clickEnableVisiableListener_;
         clickEnableVisiableListener_ = nullptr;
@@ -93,17 +129,30 @@ void UITestBUTTON::TearDown()
         delete clickSmallListener_;
         clickSmallListener_ = nullptr;
     }
-    if (toggleChangeListener_ != nullptr) {
-        delete toggleChangeListener_;
-        toggleChangeListener_ = nullptr;
-    }
-    if (toggleChangeListener1_ != nullptr) {
-        delete toggleChangeListener1_;
-        toggleChangeListener1_ = nullptr;
-    }
     DeleteChildren(container_);
     container_ = nullptr;
 }
+
+class TestBtnOnStateChangeListener : public OHOS::UICheckBox::OnChangeListener {
+public:
+    explicit TestBtnOnStateChangeListener(UILabel* uiLabel) : uiLabel_(uiLabel) {}
+
+    ~TestBtnOnStateChangeListener() {}
+
+    bool OnChange(UICheckBox::UICheckBoxState state) override
+    {
+        if (state == UICheckBox::UICheckBoxState::SELECTED) {
+            uiLabel_->SetText("ON");
+        } else {
+            uiLabel_->SetText("OFF");
+        }
+        uiLabel_->Invalidate();
+        return true;
+    }
+
+private:
+    UILabel* uiLabel_;
+};
 
 const UIView* UITestBUTTON::GetTestView()
 {
@@ -117,7 +166,44 @@ const UIView* UITestBUTTON::GetTestView()
     return container_;
 }
 
-void UITestBUTTON::UIKit_Check_Box_Test_001() const
+UIViewGroup* UITestBUTTON::CreateButtonGroup(int16_t posX, int16_t posY, int16_t width, int16_t height,
+                                             UICheckBox::OnChangeListener** listener,
+                                             UIViewType type,
+                                             const char* name)
+{
+    UIViewGroup* group = new UIViewGroup();
+    group->SetPosition(posX, posY, 300, 150); // 300: width, 150: height
+    UILabel* label = new UILabel();
+    group->Add(label);
+    label->SetPosition(10, 30, 80, 20); // 10: posX 30 posY 80 width 20 height
+    label->SetText("State: ");
+
+    UILabel* label1 = new UILabel();
+    group->Add(label1);
+    label1->SetPosition(70, 30, 40, 20); // 70: posX 30 posY 40 width 20 height
+    *listener = static_cast<UICheckBox::OnChangeListener*>(new TestBtnOnStateChangeListener(label1));
+
+    UICheckBox* checkBox = nullptr;
+    if (type == UIViewType::UI_TOGGLE_BUTTON) {
+        checkBox = static_cast<UICheckBox*>(new UIToggleButton());
+    } else if (type == UIViewType::UI_RADIO_BUTTON) {
+        checkBox = static_cast<UICheckBox*>(new UIRadioButton(name));
+    } else {
+        checkBox = new UICheckBox();
+        checkBox->SetImages("", "");
+    }
+    group->Add(checkBox);
+    checkBox->SetOnChangeListener(*listener);
+    checkBox->SetPosition(100, 0, width, height);  // 100: posX 0: posY
+    if (checkBox->GetState() == UICheckBox::SELECTED) {
+        label1->SetText("ON");
+    } else {
+        label1->SetText("OFF");
+    }
+    return group;
+}
+
+void UITestBUTTON::UIKit_Check_Box_Test_001()
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -126,26 +212,19 @@ void UITestBUTTON::UIKit_Check_Box_Test_001() const
                            Screen::GetInstance().GetWidth(), TITLE_LABEL_DEFAULT_HEIGHT);
         label->SetText("checkbox功能");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-
-        UICheckBox* checkbox = new UICheckBox();
-        checkbox->SetPosition(30, 30, 100, 100); // 30: x-coordinate, 30: y-coordinate, 100 : width, 100 : height
-        checkbox->SetImages("", "");
-
-        UICheckBox* checkbox2 = new UICheckBox();
-        checkbox2->SetPosition(140, 30, 100, 120); // 140: x-coordinate, 30: y-coordinate, 100 : width, 120 : height
-        checkbox2->SetImages("", "");
-
-        UICheckBox* checkbox3 = new UICheckBox();
-        checkbox3->SetImages("", "");
-        checkbox3->SetPosition(250, 30, 120, 100); // 250: x-coordinate, 30: y-coordinate, 120 : width, 100 : height
-
-        container_->Add(checkbox);
-        container_->Add(checkbox2);
-        container_->Add(checkbox3);
+        // 40: posX 35 posY 100 width 100 height
+        UIViewGroup* group = CreateButtonGroup(40, 35, 100, 100, &checkBoxChangeListener_);
+        // 250: posX 35 posY 100 width 100 height
+        UIViewGroup* group1 = CreateButtonGroup(250, 35, 100, 100, &checkBoxChangeListener1_);
+        // 500: posX 35 posY 100 width 100 height
+        UIViewGroup* group2 = CreateButtonGroup(500, 35, 100, 100, &checkBoxChangeListener2_);
+        container_->Add(group);
+        container_->Add(group1);
+        container_->Add(group2);
     }
 }
 
-void UITestBUTTON::UIKit_Radio_Button_Test_001() const
+void UITestBUTTON::UIKit_Radio_Button_Test_001()
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -155,93 +234,20 @@ void UITestBUTTON::UIKit_Radio_Button_Test_001() const
                            TITLE_LABEL_DEFAULT_HEIGHT);
         label->SetText("radiobutton功能");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-
-        UIRadioButton* radioButton = new UIRadioButton("aaa");
-        radioButton->SetPosition(0, 10); // 0: x-coordinate, 10: y-coordinate
-
-        UIRadioButton* radioButton2 = new UIRadioButton("aaa");
-        radioButton2->SetPosition(50, 10); // 50: x-coordinate, 10: y-coordinate
-        radioButton2->SetWidth(40);        // 40: width
-        radioButton2->SetHeight(30);       // 30: height
-
-        UIRadioButton* radioButton3 = new UIRadioButton("aaa");
-        radioButton3->SetPosition(110, 10); // 110: x-coordinate, 10: y-coordinate
-        radioButton3->SetWidth(80);         // 80: width
-        radioButton3->SetHeight(60);        // 60: height
-
-        UIRadioButton* radioButton4 = new UIRadioButton("aaa");
-        radioButton4->SetPosition(10, 10); // 10: x-coordinate, 10: y-coordinate
-        radioButton4->SetWidth(70);        // 70: width
-        radioButton4->SetHeight(90);       // 90: width
-        radioButton4->SetState(UICheckBox::SELECTED);
-
-        UIRadioButton* radioButton5 = new UIRadioButton("aaa");
-        radioButton5->SetPosition(110, 10); // 110: x-coordinate, 10: y-coordinate
-        radioButton5->SetWidth(-1);         // -1: width
-        radioButton5->SetHeight(90);        // 90: width
-
-        UIRadioButton* radioButton6 = new UIRadioButton("aaa");
-        radioButton6->SetPosition(130, 10); // 130: x-coordinate, 10: y-coordinate
-        radioButton6->SetWidth(0);          // 0: width
-        radioButton6->SetHeight(0);         // 0: width
-
-        UIRadioButton* radioButton7 = new UIRadioButton("aaa");
-        radioButton7->SetPosition(140, 10); // 140: x-coordinate, 10: y-coordinate
-        radioButton7->SetWidth(1000);       // 1000: width
-        radioButton7->SetHeight(50);        // 50: width
-
-        OHOS::UIViewGroup* viewGroup = new UIViewGroup();
-        viewGroup->SetPosition(30, 150);                             // 30: x-coordinate, 150: y-coordinate
-        viewGroup->SetWidth(Screen::GetInstance().GetWidth() / 2);   // 2: half width
-        viewGroup->SetHeight(Screen::GetInstance().GetHeight() / 2); // 2: half height
-
-        OHOS::UIViewGroup* viewGroup2 = new UIViewGroup();
-        // 40, increase width, 2: half width, 150: y-coordinate
-        viewGroup2->SetPosition(40 + Screen::GetInstance().GetWidth() / 2, 150);
-        viewGroup2->SetWidth(Screen::GetInstance().GetWidth() / 2);   // 2: half width
-        viewGroup2->SetHeight(Screen::GetInstance().GetHeight() / 2); // 2: half height
-
-        viewGroup2->Add(radioButton4);
-        viewGroup2->Add(radioButton5);
-        viewGroup2->Add(radioButton6);
-        viewGroup2->Add(radioButton7);
-
-        viewGroup->Add(radioButton);
-        viewGroup->Add(radioButton2);
-        viewGroup->Add(radioButton3);
-        viewGroup->SetStyle(STYLE_BACKGROUND_OPA, 0);
-
-        container_->Add(viewGroup);
-        container_->Add(viewGroup2);
+        // 40: posX 160 posY 100 width 100 height
+        UIViewGroup* group = CreateButtonGroup(40, 160, 100, 100, &radioChangeListener_,
+                                               UIViewType::UI_RADIO_BUTTON, "bb");
+        // 250: posX 160 posY 100 width 100 height
+        UIViewGroup* group1 = CreateButtonGroup(250, 160, 100, 100, &radioChangeListener1_,
+                                                UIViewType::UI_RADIO_BUTTON, "bb");
+        // 500: posX 160 posY 100 width 100 height
+        UIViewGroup* group2 = CreateButtonGroup(500, 160, 100, 100, &radioChangeListener2_,
+                                                UIViewType::UI_RADIO_BUTTON, "bb");
+        container_->Add(group);
+        container_->Add(group1);
+        container_->Add(group2);
     }
 }
-
-class TestBtnOnStateChangeListener : public OHOS::UICheckBox::OnChangeListener {
-public:
-    explicit TestBtnOnStateChangeListener(UIView* uiView)
-    {
-        uiView_ = uiView;
-    }
-
-    ~TestBtnOnStateChangeListener() {}
-
-    bool OnChange(UICheckBox::UICheckBoxState state) override
-    {
-        int16_t xPos = uiView_->GetX();
-        int16_t yPos = uiView_->GetY();
-        uiView_->Invalidate();
-        xPos += 10; // 10: increase xPos
-        yPos += 10; // 10: increase yPos
-
-        uiView_->SetX(xPos);
-        uiView_->SetY(yPos);
-        uiView_->Invalidate();
-        return true;
-    }
-
-private:
-    UIView* uiView_;
-};
 
 void UITestBUTTON::UIKit_Toggle_Button_Test_001()
 {
@@ -254,61 +260,18 @@ void UITestBUTTON::UIKit_Toggle_Button_Test_001()
         label->SetText("togglebutton功能");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
 
-        UIToggleButton* togglebutton = new UIToggleButton();
-        togglebutton->SetPosition(20, 300);              // 20: x-coordinate, 300: y-coordinate
-        togglebutton->SetStyle(STYLE_BACKGROUND_OPA, 0); // 0: opacity
-        togglebutton->SetState(false);
-
-        UIToggleButton* togglebutton2 = new UIToggleButton();
-        togglebutton2->SetPosition(100, 300);             // 100: x-coordinate, 300: y-coordinate
-        togglebutton2->SetStyle(STYLE_BACKGROUND_OPA, 0); // 0: opacity
-        togglebutton2->SetState(false);
-        togglebutton2->SetWidth(60);  // 60: width
-        togglebutton2->SetHeight(40); // 40: height
-
-        UIToggleButton* togglebutton3 = new UIToggleButton();
-        togglebutton3->SetPosition(190, 300);             // 190: x-coordinate, 300: y-coordinate
-        togglebutton3->SetStyle(STYLE_BACKGROUND_OPA, 0); // 0: opacity
-        togglebutton3->SetState(false);
-        togglebutton3->SetWidth(50);  // 50: width
-        togglebutton3->SetHeight(70); // 70: height
-
-        UIToggleButton* togglebutton4 = new UIToggleButton();
-
-        if (toggleChangeListener_ == nullptr) {
-            toggleChangeListener_ = static_cast<UICheckBox::OnChangeListener*>(
-                new TestBtnOnStateChangeListener(reinterpret_cast<UIView*>(togglebutton4)));
-        }
-        togglebutton4->SetOnChangeListener(toggleChangeListener_);
-        togglebutton4->SetPosition(250, 300);             // 250: x-coordinate, 300: y-coordinate
-        togglebutton4->SetStyle(STYLE_BACKGROUND_OPA, 0); // 0: opacity
-        togglebutton4->SetState(false);
-        togglebutton4->SetWidth(80);  // 80: width
-        togglebutton4->SetHeight(80); // 80: height
-        togglebutton4->SetState(true);
-
-        UIToggleButton* togglebutton5 = new UIToggleButton();
-        togglebutton5->SetPosition(340, 300); // 340: x-coordinate, 300: y-coordinate
-        togglebutton5->SetWidth(-1);          // -1: width
-        togglebutton5->SetHeight(90);         // 90: width
-
-        UIToggleButton* togglebutton6 = new UIToggleButton();
-        togglebutton6->SetPosition(350, 300); // 350: x-coordinate, 300: y-coordinate
-        togglebutton6->SetWidth(0);           // 0: width
-        togglebutton6->SetHeight(0);          // 0: width
-
-        UIToggleButton* togglebutton7 = new UIToggleButton();
-        togglebutton7->SetPosition(360, 300); // 360: x-coordinate, 300: y-coordinate
-        togglebutton7->SetWidth(1000);        // 1000: width
-        togglebutton7->SetHeight(50);         // 50: width
-
-        container_->Add(togglebutton);
-        container_->Add(togglebutton2);
-        container_->Add(togglebutton3);
-        container_->Add(togglebutton4);
-        container_->Add(togglebutton5);
-        container_->Add(togglebutton6);
-        container_->Add(togglebutton7);
+        // 40: posX 300 posY 100 width 100 height
+        UIViewGroup* group = CreateButtonGroup(40, 300, 100, 100, &toggleChangeListener_,
+                                               UIViewType::UI_TOGGLE_BUTTON);
+        // 250: posX 300 posY 100 width 100 height
+        UIViewGroup* group1 = CreateButtonGroup(250, 300, 100, 100, &toggleChangeListener1_,
+                                                UIViewType::UI_TOGGLE_BUTTON);
+        // 500: posX 300 posY 100 width 100 height
+        UIViewGroup* group2 = CreateButtonGroup(500, 300, 100, 100, &toggleChangeListener2_,
+                                                UIViewType::UI_TOGGLE_BUTTON);
+        container_->Add(group);
+        container_->Add(group1);
+        container_->Add(group2);
     }
 }
 void UITestBUTTON::UIKit_Check_Box_Test_002() const
@@ -403,11 +366,6 @@ void UITestBUTTON::UIKit_Toggle_Button_Test_002()
         togglebutton->SetImages(BLUE_IMAGE_PATH, YELLOW_IMAGE_PATH);
 
         UIToggleButton* togglebutton2 = new UIToggleButton();
-        if (toggleChangeListener1_ == nullptr) {
-            toggleChangeListener1_ = static_cast<UICheckBox::OnChangeListener*>(
-                new TestBtnOnStateChangeListener(reinterpret_cast<UIView*>(togglebutton2)));
-        }
-        togglebutton2->SetOnChangeListener(toggleChangeListener1_);
         togglebutton2->SetPosition(200, 770);             // 200: x-coordinate, 770: y-coordinate
         togglebutton2->SetStyle(STYLE_BACKGROUND_OPA, 0); // 0: opacity
         togglebutton2->SetState(false);

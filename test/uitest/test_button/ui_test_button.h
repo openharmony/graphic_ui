@@ -33,7 +33,7 @@ public:
     /**
      * @brief Test Checkbox Function
      */
-    void UIKit_Check_Box_Test_001() const;
+    void UIKit_Check_Box_Test_001();
 
     /**
      * @brief Test Checkbox's SetImage Function
@@ -43,7 +43,7 @@ public:
     /**
      * @brief Test Radiobutton Function
      */
-    void UIKit_Radio_Button_Test_001() const;
+    void UIKit_Radio_Button_Test_001();
 
     /**
      * @brief Test Radiobutton's SetImage Function
@@ -67,11 +67,22 @@ public:
 
 private:
     void UIKit_Button_Test_002(UIScrollView* container, UIButton* button);
+    UIViewGroup* CreateButtonGroup(int16_t posX, int16_t posY, int16_t width, int16_t height,
+                                    UICheckBox::OnChangeListener** listener,
+                                    UIViewType type = UI_CHECK_BOX,
+                                    const char* name = "aa");
     static constexpr int16_t CHANGE_SIZE = 10;
     UIScrollView* container_ = nullptr;
 
+    UICheckBox::OnChangeListener* checkBoxChangeListener_ = nullptr;
+    UICheckBox::OnChangeListener* checkBoxChangeListener1_ = nullptr;
+    UICheckBox::OnChangeListener* checkBoxChangeListener2_ = nullptr;
+    UICheckBox::OnChangeListener* radioChangeListener_ = nullptr;
+    UICheckBox::OnChangeListener* radioChangeListener1_ = nullptr;
+    UICheckBox::OnChangeListener* radioChangeListener2_ = nullptr;
     UICheckBox::OnChangeListener* toggleChangeListener_ = nullptr;
     UICheckBox::OnChangeListener* toggleChangeListener1_ = nullptr;
+    UICheckBox::OnChangeListener* toggleChangeListener2_ = nullptr;
 
     UIView::OnClickListener* clickEnableVisiableListener_ = nullptr;
     UIView::OnClickListener* clickDisableVisiableListener_ = nullptr;
