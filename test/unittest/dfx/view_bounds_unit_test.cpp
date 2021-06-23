@@ -102,6 +102,44 @@ HWTEST_F(ViewBoundsTest, ViewBoundsSetState001, TestSize.Level0)
 }
 
 /**
+ * @tc.name: ViewBoundsSetState002
+ * @tc.desc: Verity if view bounds state equal when calling multi times
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFN
+ */
+HWTEST_F(ViewBoundsTest, ViewBoundsSetState002, TestSize.Level1)
+{
+    uint16_t count = 10000; // 10000: call times
+    for (uint16_t i = 0; i < count; i++) {
+        UIViewBounds::GetInstance()->SetShowState(true);
+    }
+    bool state = UIViewBounds::GetInstance()->GetShowState();
+    EXPECT_EQ(state, true);
+
+    for (uint16_t i = 0; i < count; i++) {
+        UIViewBounds::GetInstance()->SetShowState(false);
+    }
+    state = UIViewBounds::GetInstance()->GetShowState();
+    EXPECT_EQ(state, false);
+
+    for (uint16_t i = 0; i < count; i++) {
+        UIViewBounds::GetInstance()->SetShowState(true);
+        UIViewBounds::GetInstance()->SetShowState(false);
+        UIViewBounds::GetInstance()->SetShowState(true);
+    }
+    state = UIViewBounds::GetInstance()->GetShowState();
+    EXPECT_EQ(state, true);
+
+    for (uint16_t i = 0; i < count; i++) {
+        UIViewBounds::GetInstance()->SetShowState(false);
+        UIViewBounds::GetInstance()->SetShowState(true);
+        UIViewBounds::GetInstance()->SetShowState(false);
+    }
+    state = UIViewBounds::GetInstance()->GetShowState();
+    EXPECT_EQ(state, false);
+}
+
+/**
  * @tc.name: ViewBoundsOnPostDraw001
  * @tc.desc: Test if trigger redraw when change view bounds state with sigle window
  * @tc.type: FUNC
