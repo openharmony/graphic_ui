@@ -505,7 +505,8 @@ void UIVideo::InitControllerSlider()
         playSlider_->SetRange(100, 0);                          // 100:range max
         playSlider_->SetValue(0);
         playSlider_->SetKnobWidth(KNOB_WIDTH);
-        playSlider_->SetSliderRadius(5, 5, KNOB_WIDTH / 2); // 5:background radius, 5:foreground radius, 2:half
+        playSlider_->SetSliderRadius(5, 5); // 5:background radius, 5:foreground radius
+        playSlider_->SetKnobRadius(KNOB_WIDTH / 2); // 2:half
         playSlider_->SetKnobStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
         playSlider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, 0x1A888888); // 0x1A888888:slider background color
         playSlider_->SetBackgroundStyle(STYLE_BACKGROUND_OPA, 90);           // 90:background opa

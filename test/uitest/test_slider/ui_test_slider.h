@@ -75,6 +75,7 @@ public:
     void UIKit_Slider_Test_SetOnReleaseListener_014();
     void UIKit_Slider_Test_SetOnClickCallback_015();
     void UIKit_Slider_Test_SetOnDragCallback_016();
+    void UIKit_Slider_Test_SetCircularStyle_017();
 
 private:
     static constexpr int32_t DEFAULT_VALUE = 20;
@@ -114,6 +115,7 @@ private:
     UILabelButton* onReleaseBtn_ = nullptr;
     UILabelButton* onClickBtn_ = nullptr;
     UILabelButton* onDragBtn_ = nullptr;
+    UILabelButton* circularStyleBtn_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_SLIDER_H
