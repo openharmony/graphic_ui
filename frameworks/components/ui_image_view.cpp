@@ -341,7 +341,7 @@ void UIImageView::SetSrc(const char* src)
         if (gifImageAnimator_ == nullptr) {
             gifImageAnimator_ = new GifImageAnimator(this, src);
             if (gifImageAnimator_ == nullptr) {
-                GRAPHIC_LOGE("new GifImageAnimator fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new GifImageAnimator fail");
                 return;
             }
         }

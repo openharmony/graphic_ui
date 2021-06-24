@@ -336,7 +336,7 @@ void UILabel::RemeasureForMarquee(int16_t textWidth)
         } else {
             LabelAnimator* animator = new LabelAnimator(textWidth, rectWidth, offsetX_, this);
             if (animator == nullptr) {
-                GRAPHIC_LOGE("new LabelAnimator fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new LabelAnimator fail");
                 return;
             }
             animator->SetAnimatorSpeed(animator_.speed);

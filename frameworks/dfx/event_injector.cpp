@@ -48,7 +48,8 @@ bool EventInjector::RegisterEventInjector(EventDataType type)
             if (pointEventInjector_ == nullptr) {
                 pointEventInjector_ = new PointEventInjector();
                 if (pointEventInjector_ == nullptr) {
-                    GRAPHIC_LOGE("EventInjector::RegisterEventInjector register pointEventInjector failed Err!\n");
+                    HILOG_ERROR(HILOG_MODULE_GRAPHIC,
+                        "EventInjector::RegisterEventInjector register pointEventInjector failed Err!");
                     return false;
                 }
                 InputDeviceManager::GetInstance()->Add(pointEventInjector_);
@@ -58,7 +59,8 @@ bool EventInjector::RegisterEventInjector(EventDataType type)
             if (keyEventInjector_ == nullptr) {
                 keyEventInjector_ = new KeyEventInjector();
                 if (keyEventInjector_ == nullptr) {
-                    GRAPHIC_LOGE("EventInjector::RegisterEventInjector register keyEventInjector failed Err!\n");
+                    HILOG_ERROR(HILOG_MODULE_GRAPHIC,
+                        "EventInjector::RegisterEventInjector register keyEventInjector failed Err!");
                     return false;
                 }
                 InputDeviceManager::GetInstance()->Add(keyEventInjector_);
@@ -147,7 +149,7 @@ bool EventInjector::SetClickEvent(const Point& clickPoint)
 {
     uint16_t clickArrayLen = 2; /* 2:click event point */
     if (clickArrayLen > pointEventInjector_->GetLeftSize()) {
-        GRAPHIC_LOGE("front points need to be read.(left size in pointer queue is not enough)");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "front points need to be read.(left size in pointer queue is not enough)");
         return false;
     }
     bool setResult = true;
@@ -170,7 +172,7 @@ bool EventInjector::SetLongPressEvent(const Point& longPressPoint)
 {
     uint16_t pointCount = INDEV_LONG_PRESS_TIME / INDEV_READ_PERIOD + 1;
     if (pointCount > pointEventInjector_->GetLeftSize()) {
-        GRAPHIC_LOGE("front points need to be read.(left size in pointer queue is not enough)");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "front points need to be read.(left size in pointer queue is not enough)");
         return false;
     }
     bool setResult = true;
@@ -195,11 +197,12 @@ bool EventInjector::SetDragEvent(const Point& startPoint, const Point& endPoint,
     uint16_t pointCount = (dragTime / INDEV_READ_PERIOD) + 1;
     /* 3: at least 3 points in drag event */
     if (pointCount < 3) {
-        GRAPHIC_LOGE("dragTime is too short.(drag event needs at least 3 points)");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "dragTime is too short.(drag event needs at least 3 points)");
         return false;
     }
     if (pointCount > pointEventInjector_->GetLeftSize()) {
-        GRAPHIC_LOGE("dragTime is too long or front points need to be read.(left size in pointer queue is not enough)");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC,
+            "dragTime is too long or front points need to be read.(left size in pointer queue is not enough)");
         return false;
     }
     bool setResult = true;
@@ -244,7 +247,8 @@ bool EventInjector::SetKeyEvent(uint16_t keyId, uint16_t state)
 {
     uint16_t kevArrayLen = 1;
     if (kevArrayLen > keyEventInjector_->GetLeftSize()) {
-        GRAPHIC_LOGE("front key event need to be read.(left size in key event queue is not enough)");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC,
+            "front key event need to be read.(left size in key event queue is not enough)");
         return false;
     }
     bool setResult = true;
