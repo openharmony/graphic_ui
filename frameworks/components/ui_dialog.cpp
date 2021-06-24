@@ -478,17 +478,17 @@ uint16_t UIDialog::MeasureButtonWidth()
     if (button1_ != nullptr) {
         const char* text1 = button1_->GetText();
         buttonTextWidth = MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text1,
-            button1_->GetStyleConst().letterSpace_, button1_->GetStyleConst().lineSpace_, widthMax_).x);
+            button1_->GetStyleConst().letterSpace_, button1_->GetStyleConst().lineHeight_, widthMax_).x);
     }
     if (button2_ != nullptr) {
         const char* text2 = button2_->GetText();
         buttonTextWidth = MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text2,
-            button2_->GetStyleConst().letterSpace_, button2_->GetStyleConst().lineSpace_, widthMax_).x);
+            button2_->GetStyleConst().letterSpace_, button2_->GetStyleConst().lineHeight_, widthMax_).x);
     }
     if (button3_ != nullptr) {
         const char* text3 = button3_->GetText();
         buttonTextWidth = MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text3,
-            button3_->GetStyleConst().letterSpace_, button3_->GetStyleConst().lineSpace_, widthMax_).x);
+            button3_->GetStyleConst().letterSpace_, button3_->GetStyleConst().lineHeight_, widthMax_).x);
     }
     return (buttonTextWidth + BUTTON_HEIGHT) > buttonMaxWidth ? buttonMaxWidth : (buttonTextWidth + BUTTON_HEIGHT);
 }

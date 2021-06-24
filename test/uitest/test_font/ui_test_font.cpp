@@ -33,7 +33,7 @@ const uint16_t LABEL_WIDTH = 400;
 const uint16_t LABEL_HEIGHT = 50;
 const uint16_t FONT_SIZE = 30;
 const char* SOURCE_HAN_SANS_SC_REGULAR = "SourceHanSansSC-Regular.otf";
-const char* ROBOTO_CONDENSED_REGULAR = "RobotoCondensed-Regulat.ttf";
+const char* ROBOTO_CONDENSED_REGULAR = "RobotoCondensed-Regular.ttf";
 } // namespace
 
 void UITestFont::SetUp()
@@ -79,6 +79,10 @@ const UIView* UITestFont::GetTestView()
     UIKitFontTestDispaly006();
     UIKitFontTestDispaly007();
     UIKitFontTestDispaly008();
+    UIKitFontTestBaseline001();
+    UIKitFontTestBaseline002();
+    UIKitFontTestLineHeight001();
+    UIKitFontTestLineHeight002();
 #if ENABLE_MULTI_FONT
     UIKitFontMultiLanguage001();
     UIKitFontMultiLanguage002();
@@ -248,6 +252,142 @@ void UITestFont::UIKitFontTestDispaly008()
     label->SetStyle(STYLE_TEXT_COLOR, Color::Yellow().full);
     label->SetText("你好\n 轻量级图形 uikit");
     container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+
+void UITestFont::UIKitFontTestBaseline001()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle("Font baseline alignment");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT); // 2 : half
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("hello, uikit");
+
+    UILabel* label2 = new UILabel();
+    label2->SetPosition(positionX_ + (LABEL_WIDTH / 2), positionY_); // 2 : half
+    label2->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
+    label2->SetFont(ROBOTO_CONDENSED_REGULAR, FONT_SIZE);
+#else
+    label2->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
+#endif
+    label2->SetText("hello, uikit");
+
+    container_->Add(label);
+    container_->Add(label2);
+    positionY_ += LABEL_HEIGHT + GAP;
+}
+
+void UITestFont::UIKitFontTestBaseline002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Font baseline alignment");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT); // 2 : half
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("hello, uikit");
+    label->SetStyle(STYLE_LINE_HEIGHT, 30); // 30 : line height
+
+    UILabel* label2 = new UILabel();
+    label2->SetPosition(positionX_ + (LABEL_WIDTH / 2), positionY_); // 2 : half
+    label2->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
+    label2->SetFont(ROBOTO_CONDENSED_REGULAR, FONT_SIZE);
+#else
+    label2->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
+#endif
+    label2->SetText("hello, uikit");
+    label2->SetStyle(STYLE_LINE_HEIGHT, 30); // 30 : line height
+
+    container_->Add(label);
+    container_->Add(label2);
+    positionY_ += LABEL_HEIGHT + GAP;
+}
+
+void UITestFont::UIKitFontTestLineHeight001()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Font lineheight alignment");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT * 2); // 2 : half
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("hello,\n uikit");
+
+    UILabel* label2 = new UILabel();
+    label2->SetPosition(positionX_ + (LABEL_WIDTH / 2), positionY_); // 2 : half
+    label2->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT * 2); // 2 : half
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
+    label2->SetFont(ROBOTO_CONDENSED_REGULAR, FONT_SIZE);
+#else
+    label2->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
+#endif
+    label2->SetText("hello,\n uikit");
+
+    container_->Add(label);
+    container_->Add(label2);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+
+void UITestFont::UIKitFontTestLineHeight002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Font lineheight alignment");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT * 2); // 2 : half
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("hello,\n uikit");
+    label->SetStyle(STYLE_LINE_HEIGHT, 40); // 40 : line height
+
+    UILabel* label2 = new UILabel();
+    label2->SetPosition(positionX_ + (LABEL_WIDTH / 2), positionY_); // 2 : half
+    label2->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT * 2); // 2 : half
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
+    label2->SetFont(ROBOTO_CONDENSED_REGULAR, FONT_SIZE);
+#else
+    label2->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
+#endif
+    label2->SetText("hello,\n uikit");
+    label2->SetStyle(STYLE_LINE_HEIGHT, 40); // 40 : line height
+
+    container_->Add(label);
+    container_->Add(label2);
     positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
 
