@@ -242,15 +242,17 @@ void UITestClip::UIKitClipTest003()
     int32_t x = 50;
     // 50: The y-coordinate of the starting point
     int32_t y = 50;
+    // 180.0: The angle corresponding to PI
+    float pi = 180.0;
     ClipPath path;
     // 5: Needs to calculate five vertices
-    for(int32_t i = 0; i < 5; i++) {
-        // 18, 72: constant; 180.0: The angle corresponding to PI
-        path.LineTo({static_cast<float>(cos((18 + 72 * i - rot) / 180.0 * UI_PI) * outerR + x),
-            static_cast<float>(-sin((18 + 72 * i - rot ) / 180.0 * UI_PI) * outerR + y)});
-        // 54, 72: constant; 180.0: The angle corresponding to PI
-        path.LineTo({static_cast<float>(cos((54 + 72 * i - rot) / 180.0 * UI_PI) * innerR + x),
-            static_cast<float>(-sin((54 + 72 * i - rot ) / 180.0 * UI_PI) * innerR + y)});
+    for (int32_t i = 0; i < 5; i++) {
+        // 18: constant 72: constant;
+        path.LineTo({static_cast<float>(cos((18 + 72 * i - rot) / pi * UI_PI) * outerR + x),
+            static_cast<float>(-sin((18 + 72 * i - rot) / pi * UI_PI) * outerR + y)}); // 18: constant 72: constant;
+        // 54: constant 72: constant;
+        path.LineTo({static_cast<float>(cos((54 + 72 * i - rot) / pi * UI_PI) * innerR + x),
+            static_cast<float>(-sin((54 + 72 * i - rot) / pi * UI_PI) * innerR + y)}); // 54: constant 72: constant;
     }
 
     UIImageView* imageView = CreateImageView();

@@ -313,7 +313,6 @@ const UIView* UITestBorderMarginPadding::GetTestView()
     UIKit_UITestBorderMarginPadding_Test_007();
     UIKit_UITestBorderMarginPadding_Test_008();
     UIKit_UITestBorderMarginPadding_Test_009();
-    // UIKit_UITestBorderMarginPadding_Test_010();
     UIKit_UITestBorderMarginPadding_Test_011();
     UIKit_UITestBorderMarginPadding_Test_012();
     UIKit_UITestBorderMarginPadding_Test_013();
@@ -516,6 +515,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPadding_Test_009()
     circleProgress->SetValue(20);              // 20: value
     listScroll_->Add(circleProgress);
 }
+
 void UITestBorderMarginPadding::UIKit_UITestBorderMarginPadding_Test_010()
 {
     AddTitle("UIImageAnimatorView");

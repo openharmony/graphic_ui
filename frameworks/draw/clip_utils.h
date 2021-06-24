@@ -35,7 +35,7 @@ struct PointF {
     float y;
 };
 
-/* Indicates a rectangle in flaot*/
+/* Indicates a rectangle in flaot */
 struct RectF {
     float left;
     float top;
