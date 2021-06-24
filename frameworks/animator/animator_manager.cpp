@@ -39,7 +39,7 @@ void AnimatorManager::Add(Animator* animator)
     ListNode<Animator*>* pos = list_.Begin();
     while (pos != list_.End()) {
         if (pos->data_ == animator) {
-            GRAPHIC_LOGI("do not add animator multi times");
+            HILOG_INFO(HILOG_MODULE_GRAPHIC, "do not add animator multi times");
             return;
         }
         pos = pos->next_;

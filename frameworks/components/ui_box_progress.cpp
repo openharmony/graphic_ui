@@ -52,7 +52,7 @@ void UIBoxProgress::DrawValidRect(BufferInfo& gfxDstBuffer,
                 cordsTmp.SetPosition(area.GetLeft(), area.GetBottom() + radius - header.height);
                 break;
             default:
-                GRAPHIC_LOGE("UIBoxProgress: DrawValidRect direction Err!\n");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIBoxProgress: DrawValidRect direction Err!\n");
                 break;
         }
         cordsTmp.SetHeight(header.height);
@@ -109,7 +109,7 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
             break;
         }
         default:
-            GRAPHIC_LOGE("UIBoxProgress: DrawRoundCap direction Err!\n");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIBoxProgress: DrawRoundCap direction Err!\n");
             break;
     }
 
@@ -185,7 +185,7 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
                 break;
             }
             default:
-                GRAPHIC_LOGE("UIBoxProgress: DrawRoundCap direction Err!\n");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIBoxProgress: DrawRoundCap direction Err!\n");
                 break;
         }
     }
@@ -221,7 +221,7 @@ void UIBoxProgress::GetBackgroundParam(Point& startPoint,
                 startPoint.y += radius;
                 break;
             default:
-                GRAPHIC_LOGE("UIBoxProgress: GetBackgroundParam direction Err!\n");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIBoxProgress: GetBackgroundParam direction Err!\n");
                 return;
         }
     }
@@ -273,7 +273,7 @@ void UIBoxProgress::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalid
             break;
         }
         default: {
-            GRAPHIC_LOGE("UIBoxProgress: DrawForeground direction Err!\n");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIBoxProgress: DrawForeground direction Err!\n");
             return;
         }
     }

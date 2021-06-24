@@ -138,12 +138,12 @@ public:
     {
         if (UIDumpDomTree::GetInstance()->DumpDomTree(id_)) {
             if (id_ == nullptr) {
-                GRAPHIC_LOGI("dump tree from rootView success\n");
+                HILOG_INFO(HILOG_MODULE_GRAPHIC, "dump tree from rootView success\n");
             } else {
-                GRAPHIC_LOGI("dump tree from id success\n");
+                HILOG_INFO(HILOG_MODULE_GRAPHIC, "dump tree from id success\n");
             }
         } else {
-            GRAPHIC_LOGI("dump tree failed\n");
+            HILOG_INFO(HILOG_MODULE_GRAPHIC, "dump tree failed\n");
         }
         uiView_->Invalidate();
         return true;

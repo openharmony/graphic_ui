@@ -295,7 +295,7 @@ protected:
         if (labelButtonText_ == nullptr) {
             labelButtonText_ = new Text();
             if (labelButtonText_ == nullptr) {
-                GRAPHIC_LOGE("new Text fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Text fail");
                 return;
             }
             labelButtonText_->SetAlign(TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_CENTER);

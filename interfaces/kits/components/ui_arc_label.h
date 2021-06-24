@@ -366,7 +366,7 @@ protected:
         if (arcLabelText_ == nullptr) {
             arcLabelText_ = new Text();
             if (arcLabelText_ == nullptr) {
-                GRAPHIC_LOGE("new Text fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Text fail");
                 return;
             }
         }

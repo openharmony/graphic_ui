@@ -75,14 +75,14 @@ void ScreenDeviceProxy::SetAnimatorRect(const Rect& rect)
     SetAnimatorbufferWidth(bufferWidth);
     if (memset_s(reinterpret_cast<void*>(const_cast<uint8_t*>(animatorImageInfo_.data)), animatorImageInfo_.dataSize, 0,
                  animatorImageInfo_.dataSize) != EOK) {
-        GRAPHIC_LOGE("animator buffer memset failed.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "animator buffer memset failed.");
     }
 }
 
 void ScreenDeviceProxy::SetScreenSize(uint16_t width, uint16_t height)
 {
     if ((width == 0) || (height == 0)) {
-        GRAPHIC_LOGE("screen size can not be zero.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "screen size can not be zero.");
         return;
     }
     width_ = width;
@@ -97,13 +97,13 @@ uint8_t* ScreenDeviceProxy::GetBuffer()
     flush_.Wait();
     if (useAnimatorBuff_) {
         if (animatorBufferAddr_ == nullptr) {
-            GRAPHIC_LOGE("Invalid param animatorBufferAddr_.");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Invalid param animatorBufferAddr_.");
             return nullptr;
         }
         return animatorBufferAddr_;
     }
     if (frameBufferAddr_ == nullptr) {
-        GRAPHIC_LOGE("Invalid param frameBufferAddr_.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Invalid param frameBufferAddr_.");
         return nullptr;
     }
     return frameBufferAddr_;

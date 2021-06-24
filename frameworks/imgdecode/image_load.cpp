@@ -47,14 +47,14 @@ bool ImageLoad::CreateImage(ImageInfo& imageInfo)
             bytePerPixel = 2; // 2 bytes per pixel
             break;
         default:
-            GRAPHIC_LOGE("CreateImage invalid colorMode.");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "CreateImage invalid colorMode.");
             return false;
     }
 
     imageInfo.dataSize = imageHeader.width * imageHeader.height * bytePerPixel;
     imageInfo.data = static_cast<uint8_t*>(ImageCacheMalloc(imageInfo));
     if (imageInfo.data == nullptr) {
-        GRAPHIC_LOGE("ImageCacheMalloc error.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "ImageCacheMalloc error.");
         return false;
     }
 
@@ -64,7 +64,7 @@ bool ImageLoad::CreateImage(ImageInfo& imageInfo)
 bool ImageLoad::UncompressImageInZip(ImageInfo& imageInfo, uint8_t* buffer, uint32_t size)
 {
     if (!CreateImage(imageInfo)) {
-        GRAPHIC_LOGE("Create image error.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Create image error.");
         return false;
     }
 
@@ -81,7 +81,7 @@ bool ImageLoad::UnzipImage(uint8_t* imageBuffer, uint32_t size, ImageInfo& image
     uint32_t count = 0;
 
     if ((imageBuffer == nullptr) || (size == 0)) {
-        GRAPHIC_LOGE("imageHeader is null.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "imageHeader is null.");
         return false;
     }
 
@@ -120,7 +120,7 @@ bool ImageLoad::UnzipImage(uint8_t* imageBuffer, uint32_t size, ImageInfo& image
 bool ImageLoad::Unzip24Image(uint8_t* imageBuffer, uint32_t size, ImageInfo& imageInfo)
 {
     if ((imageBuffer == nullptr) || (size == 0)) {
-        GRAPHIC_LOGE("imageHeader is null.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "imageHeader is null.");
         return false;
     }
 
@@ -196,7 +196,7 @@ bool ImageLoad::GetImageInfo(int32_t fd, uint32_t size, ImageInfo& imageInfo)
 
     if (read(fd, buffer, size) != static_cast<int32_t>(size)) {
         UIFree(buffer);
-        GRAPHIC_LOGE("SeekImageFile error.");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "SeekImageFile error.");
         return false;
     }
     bool ret = UnZip2ImageInfo(imageInfo, buffer, size);

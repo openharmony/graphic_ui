@@ -38,7 +38,7 @@ void UICanvas::BeginPath()
 
     path_ = new UICanvasPath();
     if (path_ == nullptr) {
-        GRAPHIC_LOGE("new UICanvasPath fail");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UICanvasPath fail");
         return;
     }
 }
@@ -187,7 +187,7 @@ void UICanvas::DrawLine(const Point& startPoint, const Point& endPoint, const Pa
 {
     LineParam* lineParam = new LineParam;
     if (lineParam == nullptr) {
-        GRAPHIC_LOGE("new LineParam fail");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new LineParam fail");
         return;
     }
     lineParam->start = startPoint;
@@ -217,7 +217,7 @@ void UICanvas::DrawCurve(const Point& startPoint,
 {
     CurveParam* curveParam = new CurveParam;
     if (curveParam == nullptr) {
-        GRAPHIC_LOGE("new CurveParam fail");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new CurveParam fail");
         return;
     }
     curveParam->start = startPoint;
@@ -244,7 +244,7 @@ void UICanvas::DrawRect(const Point& startPoint, int16_t height, int16_t width, 
     if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
         RectParam* rectParam = new RectParam;
         if (rectParam == nullptr) {
-            GRAPHIC_LOGE("new RectParam fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new RectParam fail");
             return;
         }
         rectParam->start = startPoint;
@@ -262,7 +262,7 @@ void UICanvas::DrawRect(const Point& startPoint, int16_t height, int16_t width, 
     if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
         RectParam* rectParam = new RectParam;
         if (rectParam == nullptr) {
-            GRAPHIC_LOGE("new RectParam fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new RectParam fail");
             return;
         }
         rectParam->start = startPoint;
@@ -284,7 +284,7 @@ void UICanvas::DrawCircle(const Point& center, uint16_t radius, const Paint& pai
 {
     CircleParam* circleParam = new CircleParam;
     if (circleParam == nullptr) {
-        GRAPHIC_LOGE("new CircleParam fail");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new CircleParam fail");
         return;
     }
     circleParam->center = center;
@@ -321,7 +321,7 @@ void UICanvas::DrawArc(const Point& center, uint16_t radius, int16_t startAngle,
     if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
         ArcParam* arcParam = new ArcParam;
         if (arcParam == nullptr) {
-            GRAPHIC_LOGE("new ArcParam fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new ArcParam fail");
             return;
         }
         arcParam->center = center;
@@ -364,7 +364,7 @@ void UICanvas::DrawLabel(const Point& startPoint,
     if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
         UILabel* label = new UILabel();
         if (label == nullptr) {
-            GRAPHIC_LOGE("new UILabel fail");
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
             return;
         }
         label->SetLineBreakMode(UILabel::LINE_BREAK_CLIP);
@@ -397,7 +397,7 @@ void UICanvas::DrawImage(const Point& startPoint, const char* image, const Paint
 
     ImageParam* imageParam = new ImageParam;
     if (imageParam == nullptr) {
-        GRAPHIC_LOGE("new ImageParam fail");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new ImageParam fail");
         return;
     }
     imageParam->image = new Image();
@@ -433,7 +433,7 @@ void UICanvas::DrawPath(const Paint& paint)
     path_->strokeCount_++;
     PathParam* param = new PathParam;
     if (param == nullptr) {
-        GRAPHIC_LOGE("new PathParam fail");
+        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new PathParam fail");
         return;
     }
     param->path = path_;

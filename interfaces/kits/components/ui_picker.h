@@ -386,7 +386,7 @@ protected:
         if (textAdapter_ == nullptr) {
             textAdapter_ = new TextAdapter();
             if (textAdapter_ == nullptr) {
-                GRAPHIC_LOGE("new TextAdapter fail");
+                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TextAdapter fail");
                 return;
             }
         }
