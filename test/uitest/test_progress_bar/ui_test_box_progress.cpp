@@ -388,8 +388,9 @@ bool UITestBoxProgress::OnClick(UIView& view, const ClickEvent& event)
         style.bgColor_ = Color::Blue();
         boxProgress_->SetForegroundStyle(style);
     } else if (&view == getStyleBtn_) {
-        boxProgress_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
-        boxProgress_->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::Yellow().full);
+        boxProgress_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
+        boxProgress_->SetBackgroundStyle(STYLE_BACKGROUND_OPA, 128); // 128: opa
+        boxProgress_->SetForegroundStyle(STYLE_BACKGROUND_COLOR, Color::Blue().full);
     } else if (&view == roundCapBtn_) {
         boxProgress_->SetCapType(CapType::CAP_ROUND);
     } else if (&view == noneCapBtn_) {
