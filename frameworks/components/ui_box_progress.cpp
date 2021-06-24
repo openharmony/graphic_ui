@@ -127,7 +127,16 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
     arcInfo.imgPos = imgPos;
     arcInfo.imgSrc = image;
 
-    if (rect.GetWidth() % 2 == 0) { // 2: determine the odd or even number of the width
+    bool isEvenLen = false;
+    if (direction_ == Direction::DIR_LEFT_TO_RIGHT || direction_ == Direction::DIR_RIGHT_TO_LEFT) {
+        if (rect.GetHeight() % 2 == 0) { // 2: determine the odd or even number of the height
+            isEvenLen = true;
+        }
+    } else if (rect.GetWidth() % 2 == 0) { // 2: determine the odd or even number of the width
+        isEvenLen = true;
+    }
+
+    if (isEvenLen) {
         arcInfo.center = leftTop;
         arcInfo.startAngle = THREE_QUARTER_IN_DEGREE;
         arcInfo.endAngle = 0;

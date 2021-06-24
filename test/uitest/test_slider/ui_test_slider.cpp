@@ -571,7 +571,7 @@ bool UITestSlider::ExpandClick2(UIView& view, const ClickEvent& event)
         slider_->SetKnobWidth(0);
         slider_->SetBackgroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
         slider_->SetBackgroundStyle(STYLE_BACKGROUND_OPA, BACKGROUND_OPA);
-        slider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::Black().full);
+        slider_->SetBackgroundStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
         slider_->SetForegroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
         slider_->SetForegroundStyle(STYLE_BACKGROUND_COLOR,
             Color::GetColorFromRGB(FOREGROUND_COLOR_R, FOREGROUND_COLOR_G, FOREGROUND_COLOR_B).full);
