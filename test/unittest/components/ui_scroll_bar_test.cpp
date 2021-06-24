@@ -159,6 +159,7 @@ HWTEST_F(ScrollBarTest, UIScrollBarSetYScrollBarVisible, TestSize.Level0)
     EXPECT_TRUE(scrollView.GetYScrollBarVisible());
     EXPECT_TRUE(uiList.GetYScrollBarVisible());
 }
+
 HWTEST_F(ScrollBarTest, UIScrollBarSetPosition, TestSize.Level0)
 {
     constexpr int16_t VALID_POSITION = 5;

@@ -49,10 +49,6 @@ void ScreenDeviceProxy::DrawAnimatorBuffer(const Rect& invalidatedArea)
         uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(animatorImageInfo_.header.colorMode);
         TransformDataInfo imageTranDataInfo = {animatorImageInfo_.header, animatorImageInfo_.data, pxSize, LEVEL0,
                                                BILINEAR};
-#if 0 // to do delete
-        DrawUtils::GetInstance()->DrawTransform(invalidRect, {0, 0}, Color::Black(), OPA_OPAQUE, transMap_,
-                                               imageTranDataInfo);
-#endif
     }
 }
 
@@ -74,7 +70,7 @@ void ScreenDeviceProxy::SetAnimatorRect(const Rect& rect)
 
     SetAnimatorbufferWidth(bufferWidth);
     if (memset_s(reinterpret_cast<void*>(const_cast<uint8_t*>(animatorImageInfo_.data)), animatorImageInfo_.dataSize, 0,
-                 animatorImageInfo_.dataSize) != EOK) {
+        animatorImageInfo_.dataSize) != EOK) {
         GRAPHIC_LOGE("animator buffer memset failed.");
     }
 }

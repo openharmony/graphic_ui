@@ -21,7 +21,7 @@
 
 namespace OHOS {
 namespace {
-static const float EPS = 0.01f;
+constexpr float EPS = 0.01f;
 };
 
 #define I_PART(X) ((int)(X))
@@ -32,7 +32,7 @@ do {                     \
     float tmp = a;       \
     a = b;               \
     b = tmp;             \
-} while(0)
+} while (0)
 
 /*
  * Note that the square of the distance from point B to the straight line AD is dB,
@@ -57,9 +57,8 @@ bool ClipPath::CheckoutSplineError(const Spline& spline) const
 
 void ClipPath::MidPointOfLine(const PointF& a, const PointF& b, PointF& mid) const
 {
-    // 2: half
-    mid.x = a.x + (b.x - a.x) / 2;
-    mid.y = a.y + (b.y - a.y) / 2;
+    mid.x = a.x + (b.x - a.x) / 2; // 2: half
+    mid.y = a.y + (b.y - a.y) / 2; // 2: half
 }
 
 void ClipPath::SplitSpline(Spline& s1, Spline& s2) const
@@ -199,7 +198,7 @@ void ClipPath::ArcInner(const PointF& center, float radius, int16_t startAngle, 
         float x3 = center.x + cosB;
         float y3 = center.y + sinB;
         int16_t addAngle = endAngle - startAngle;
-        // a = 4 * tan(angle / 4) / 3;
+        // a = 4.0 * tan(angle / 4) / 3.0;
         float a = 4.0 * Sin(addAngle / 4) / Sin(QUARTER_IN_DEGREE - addAngle / 4) / 3.0;
         float x1 = x0 - a * (y0 - center.y);
         float y1 = y0 + a * (x0 - center.x);
