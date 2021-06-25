@@ -103,13 +103,7 @@ UILabel* TextAdapter::GetDynamicText(UIView* inView, int16_t index)
     for (int16_t i = 0; i < index; i++) {
         node = node->next_;
     }
-    UILabel* newView = nullptr;
-    if (inView == nullptr) {
-        newView = new UILabel();
-    } else {
-        newView = static_cast<UILabel*>(inView);
-    }
-
+    UILabel* newView = CreateUILabel(inView);
     if (newView != nullptr) {
         newView->SetText(node->data_);
         if (fontName_ == nullptr) {
@@ -127,13 +121,7 @@ UILabel* TextAdapter::GetIntegerText(UIView* inView, int16_t index)
     if ((index < 0) || ((integerTextEnd_ - integerTextStart_) < index)) {
         return nullptr;
     }
-    UILabel* newView = nullptr;
-    if (inView == nullptr) {
-        newView = new UILabel();
-    } else {
-        newView = static_cast<UILabel*>(inView);
-    }
-
+    UILabel* newView = CreateUILabel(inView);
     if (newView != nullptr) {
         char buf[BUF_LEN] = {0};
         if (formatter_ != nullptr) {
@@ -164,6 +152,14 @@ UILabel* TextAdapter::GetIntegerText(UIView* inView, int16_t index)
         newView->SetDirect(direct_);
     }
     return newView;
+}
+
+UILabel* TextAdapter::CreateUILabel(UIView* inView)
+{
+    if (inView == nullptr) {
+        return new UILabel();
+    }
+    return static_cast<UILabel*>(inView);
 }
 
 void TextAdapter::ClearDynamicText()
