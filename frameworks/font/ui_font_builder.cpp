@@ -17,8 +17,8 @@
 #include "font/ui_font.h"
 
 namespace OHOS {
-UIFontBuilder::UIFontBuilder() : totalLangId_(0), totalFontId_(0), totalTextId_(0),
-                                 uiTextLangFontsTable_(nullptr), langTextDefaultParamTable_(nullptr) {}
+UIFontBuilder::UIFontBuilder() : uiTextLangFontsTable_(nullptr), langTextDefaultParamTable_(nullptr),
+                                 totalLangId_(0), totalFontId_(0), totalTextId_(0) {}
 
 UIFontBuilder* UIFontBuilder::GetInstance()
 {

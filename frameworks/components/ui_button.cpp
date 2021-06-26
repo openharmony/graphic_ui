@@ -25,11 +25,7 @@
 
 namespace OHOS {
 UIButton::UIButton()
-    :
-#if DEFAULT_ANIMATION
-      animator_(*this),
-#endif
-      defaultImgSrc_(nullptr),
+    : defaultImgSrc_(nullptr),
       triggeredImgSrc_(nullptr),
       currentImgSrc_(ButtonImageSrc::BTN_IMAGE_DEFAULT),
       imgX_(0),
@@ -38,6 +34,9 @@ UIButton::UIButton()
       contentHeight_(0),
       state_(RELEASED),
       styleState_(RELEASED),
+#if DEFAULT_ANIMATION
+      animator_(*this),
+#endif
       buttonStyleAllocFlag_(false)
 {
     touchable_ = true;
