@@ -981,6 +981,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, con
     }
 }
 
+#if !ENABLE_FIXED_POINT
 static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                    uint8_t* screenBuffer,
                                                    int16_t len,
@@ -1046,6 +1047,7 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
         screenBuffer += in.bufferPxSize;
     }
 }
+#endif
 
 static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                    uint8_t* screenBuffer,
@@ -1440,7 +1442,13 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
     TransformInitState init;
     GetTransformInitState(part.transMap, part.position, line, init);
 
-    DRAW_UTILS_PREPROCESS(gfxDstBuffer, OPA_OPAQUE);
+    uint8_t* screenBuffer = static_cast<uint8_t*>(gfxDstBuffer.virAddr);
+    if (screenBuffer == nullptr) {
+        return;
+    }
+    ColorMode bufferMode = gfxDstBuffer.mode;
+    uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);
+
     uint8_t pixelSize;
     DrawTriangleTransformFuc fuc;
     bool isTrueColor = (part.info.header.colorMode == ARGB8888) || (part.info.header.colorMode == RGB888) ||

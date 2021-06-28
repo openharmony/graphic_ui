@@ -279,7 +279,7 @@ protected:
     /**
      * @brief Represents the color format of this image.
      */
-    uint8_t colorFormat_ : 4;
+    uint8_t colorFormat_;
     /**
      * @brief Represents the blur level of this image when it is rotated or scaled.
      */
