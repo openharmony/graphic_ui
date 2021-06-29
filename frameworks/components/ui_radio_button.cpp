@@ -41,8 +41,8 @@ UIRadioButton::UIRadioButton(const char* name)
     : name_(nullptr),
       radiusBig_(DEFAULT_RADIUS_BIG),
       radiusSmall_(DEFAULT_RADIUS_SMALL),
-      lineWidth_(DEFAULT_LINE_WIDTH),
-      currentRadius_(0)
+      currentRadius_(0),
+      lineWidth_(DEFAULT_LINE_WIDTH)
 {
     SetName(name);
     image_[UNSELECTED].SetSrc("");

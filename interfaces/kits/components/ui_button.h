@@ -409,14 +409,6 @@ protected:
     ButtonState state_;
     ButtonState styleState_;
     Style* buttonStyles_[BTN_STATE_NUM];
-    bool buttonStyleAllocFlag_;
-
-private:
-    /** Sets up the theme styles */
-    void SetupThemeStyles();
-
-    void DrawImg(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, OpacityType opaScale);
-
 #if DEFAULT_ANIMATION
     friend class ButtonAnimator;
     class ButtonAnimator final : public AnimatorCallback {
@@ -441,6 +433,13 @@ private:
         UIButton& button_;
     } animator_;
 #endif
+    bool buttonStyleAllocFlag_;
+
+private:
+    /** Sets up the theme styles */
+    void SetupThemeStyles();
+
+    void DrawImg(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, OpacityType opaScale);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_BUTTON_H
