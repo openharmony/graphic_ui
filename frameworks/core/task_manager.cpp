@@ -79,4 +79,18 @@ void TaskManager::TaskHandler()
 
     isHandlerRunning_ = false;
 }
+
+/**
+ * @brief TaskManager::ResetTaskHandlerMutex Reset the running flag.
+ *
+ * Because the rending implementation is shared between native and third-party APP under liteos-m, and for
+ * some exception cases (the app is destroyed unexpectedly during the task handling process), as the task
+ * handling process will set the flag to true for avoiding reentry of the handling process itself, and as
+ * TaskManager is one single instance, so must reset this flag to false for other task's normal rendring
+ * process, for example, native app.
+ */
+void TaskManager::ResetTaskHandlerMutex()
+{
+    isHandlerRunning_ = false;
+}
 } // namespace OHOS
