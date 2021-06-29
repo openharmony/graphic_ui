@@ -37,7 +37,6 @@
 
 #include "common/text.h"
 #include "components/ui_button.h"
-#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 /**
@@ -290,17 +289,7 @@ public:
     }
 
 protected:
-    virtual void InitLabelButtonText()
-    {
-        if (labelButtonText_ == nullptr) {
-            labelButtonText_ = new Text();
-            if (labelButtonText_ == nullptr) {
-                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Text fail");
-                return;
-            }
-            labelButtonText_->SetAlign(TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_CENTER);
-        }
-    }
+    virtual void InitLabelButtonText();
 
     Text* labelButtonText_;
 

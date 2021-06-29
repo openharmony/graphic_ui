@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_video.h"
+#include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
 #ifndef VERSION_LITE

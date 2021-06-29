@@ -20,6 +20,7 @@
 #include "draw/draw_label.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/file.h"
+#include "gfx_utils/graphic_log.h"
 #include "gfx_utils/image_info.h"
 #include "gfx_utils/mem_api.h"
 #include "imgdecode/cache_manager.h"

@@ -16,6 +16,7 @@
 #include "animator/animator_manager.h"
 
 #include "common/task_manager.h"
+#include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 
 namespace OHOS {
