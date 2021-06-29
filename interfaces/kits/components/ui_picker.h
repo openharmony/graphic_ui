@@ -381,16 +381,7 @@ protected:
     void RefreshList();
     virtual void ClearList();
     virtual void Refresh();
-    virtual void InitTextAdapter()
-    {
-        if (textAdapter_ == nullptr) {
-            textAdapter_ = new TextAdapter();
-            if (textAdapter_ == nullptr) {
-                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TextAdapter fail");
-                return;
-            }
-        }
-    }
+    virtual void InitTextAdapter();
 
     bool isWidthSet_ : 1;
     bool isHeightSet_ : 1;

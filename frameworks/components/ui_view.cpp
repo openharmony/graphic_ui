@@ -548,6 +548,20 @@ Rect UIView::GetContentRect()
     return contentRect;
 }
 
+void UIView::ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height)
+{
+    if (visibleRect_ == nullptr) {
+        visibleRect_ = new Rect();
+        if (visibleRect_ == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Rect fail");
+            return;
+        }
+    }
+    visibleRect_->SetWidth(width);
+    visibleRect_->SetHeight(height);
+    visibleRect_->SetPosition(x, y);
+}
+
 Rect UIView::GetOrigRect() const
 {
     int16_t x = rect_.GetX();

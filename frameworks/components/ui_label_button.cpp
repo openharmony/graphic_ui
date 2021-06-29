@@ -17,6 +17,7 @@
 #include "common/typed_text.h"
 #include "draw/draw_label.h"
 #include "font/ui_font.h"
+#include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
 UILabelButton::UILabelButton() : labelButtonText_(nullptr), offset_({ 0, 0 })
@@ -37,6 +38,18 @@ void UILabelButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
     uint16_t ellipsisIndex = labelButtonText_->GetEllipsisIndex(textRect, labelStyle_);
     labelButtonText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(), textRect, 0,
                              labelStyle_, ellipsisIndex, opa);
+}
+
+void UILabelButton::InitLabelButtonText()
+{
+    if (labelButtonText_ == nullptr) {
+        labelButtonText_ = new Text();
+        if (labelButtonText_ == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Text fail");
+            return;
+        }
+        labelButtonText_->SetAlign(TEXT_ALIGNMENT_CENTER, TEXT_ALIGNMENT_CENTER);
+    }
 }
 
 UILabelButton::~UILabelButton()

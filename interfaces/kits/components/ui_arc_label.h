@@ -361,16 +361,7 @@ public:
 protected:
     Text* arcLabelText_;
 
-    virtual void InitArcLabelText()
-    {
-        if (arcLabelText_ == nullptr) {
-            arcLabelText_ = new Text();
-            if (arcLabelText_ == nullptr) {
-                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Text fail");
-                return;
-            }
-        }
-    }
+    virtual void InitArcLabelText();
     void RefreshArcLabel();
 
 private:

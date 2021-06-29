@@ -18,6 +18,7 @@
 #include "draw/draw_label.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
+#include "gfx_utils/graphic_log.h"
 #include "themes/theme_manager.h"
 
 namespace OHOS {
@@ -207,6 +208,17 @@ void UIArcLabel::MeasureArcTextInfo()
         }
         arcTextInfo_.startAngle += TypedText::GetAngleForArcLen(gapLength, letterHeight, arcTextInfo_.radius,
             arcTextInfo_.direct, orientation_);
+    }
+}
+
+void UIArcLabel::InitArcLabelText()
+{
+    if (arcLabelText_ == nullptr) {
+        arcLabelText_ = new Text();
+        if (arcLabelText_ == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Text fail");
+            return;
+        }
     }
 }
 } // namespace OHOS
