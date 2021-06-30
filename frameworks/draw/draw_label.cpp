@@ -84,7 +84,10 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
     float posX;
     float posY;
     float rotateAngle;
-    bool xorFlag = (orientation == UIArcLabel::TextOrientation::INSIDE) ^ (arcTextInfo.direct == TEXT_DIRECT_LTR);
+
+    bool orientationFlag = (orientation == UIArcLabel::TextOrientation::INSIDE);
+    bool directFlag = (arcTextInfo.direct == TEXT_DIRECT_LTR);
+    bool xorFlag = !((orientationFlag && directFlag) || (!orientationFlag && !directFlag));
 
     while (i < arcTextInfo.lineEnd) {
         uint32_t tmp = i;
