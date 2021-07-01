@@ -20,6 +20,7 @@
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "components/ui_list.h"
+#include "graphic_thread.h"
 #include "test_case_list_adapter.h"
 
 namespace OHOS {
@@ -27,11 +28,15 @@ namespace {
     constexpr char* UI_TEST_MAIN_LIST_ID = "main_list";
     constexpr char* UI_TEST_BACK_BUTTON_ID = "back_button";
 }
+#ifdef _WIN32
+DWORD AutoTestThread(LPVOID);
+#elif defined __linux__ || defined __LITEOS__ || defined __APPLE__
+void* AutoTestThread(void*);
+#endif // _WIN32
 class UITestApp {
 public:
     static UITestApp* GetInstance();
     void Start();
-    void Init();
 
 private:
     UITestApp() {}
@@ -42,26 +47,18 @@ private:
     UITestApp(UITestApp&&) = delete;
     UITestApp& operator=(UITestApp&&) = delete;
 
+    void Init();
+    void InitMainMenu();
+    void InitBackBtn();
+    void InitTestLabel();
     RootView* rootView_ = nullptr;
     UIList* mainList_ = nullptr;
     TestCaseListAdapter* adapter_ = nullptr;
     UILabelButton* backBtn_ = nullptr;
     UILabel* testCaseLabel_ = nullptr;
     UILabel* testLabel_ = nullptr;
-};
-
-class UIAutoTestApp {
-public:
-    static UIAutoTestApp* GetInstance();
-    void Start();
-private:
-    UIAutoTestApp() {}
-    virtual ~UIAutoTestApp();
-
-    UIAutoTestApp(const UIAutoTestApp&) = delete;
-    UIAutoTestApp& operator=(const UIAutoTestApp&) = delete;
-    UIAutoTestApp(UIAutoTestApp&&) = delete;
-    UIAutoTestApp& operator=(UIAutoTestApp&&) = delete;
+    UILabelButton* autoTestBtn_ = nullptr;
+    UIViewGroup* mainMenu_ = nullptr;
 };
 } // namespace OHOS
 #endif

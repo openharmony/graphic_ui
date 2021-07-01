@@ -14,19 +14,35 @@
  */
 
 #include "ui_test_app.h"
-#include "common/screen.h"
+
+#include "auto_test_app.h"
 #include "compare_tools.h"
-#include "dfx/event_injector.h"
 #include "test_resource_config.h"
 #include "ui_auto_test.h"
-#include "ui_auto_test_group.h"
-#include "ui_test.h"
 #include "ui_test_group.h"
-#if ENABLE_WINDOW
-#include "window/window.h"
-#endif
+#include "ui_test.h"
 
 namespace OHOS {
+#ifdef _WIN32
+DWORD AutoTestThread(LPVOID)
+#elif defined __linux__ || defined __LITEOS__ || defined __APPLE__
+void* AutoTestThread(void*)
+#endif // _WIN32
+{
+#ifdef _WIN32
+    const char logPath[] = ".\\auto_test_log.txt";
+    CompareTools::SetLogPath(logPath, sizeof(logPath));
+#else
+    const char logPath[] = "./auto_test_log.txt";
+    CompareTools::SetLogPath(logPath, sizeof(logPath));
+#endif
+    // 装载用例
+    UIAutoTest::SetUpTestCase();
+    AutoTestApp::GetInstance()->Start();
+    AutoTestCaseGroup::TearDownTestCase();
+    CompareTools::UnsetLogPath();
+}
+
 UITestApp* UITestApp::GetInstance()
 {
     static UITestApp instance;
@@ -39,11 +55,88 @@ void UITestApp::Start()
         rootView_ = RootView::GetInstance();
         rootView_->SetPosition(0, 0);
         rootView_->Resize(Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight());
+        if (mainMenu_ == nullptr) {
+            mainMenu_ = new UIViewGroup();
+            mainMenu_->SetPosition(0, 0, Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight());
+            rootView_->Add(mainMenu_);
+            rootView_->Invalidate();
+        }
     }
     Init();
 }
 
+class BtnOnClickOnAutoTestListener : public UIView::OnClickListener {
+public:
+    BtnOnClickOnAutoTestListener() {}
+    virtual ~BtnOnClickOnAutoTestListener() {}
+
+    bool OnClick(UIView& view, const ClickEvent& event) override
+    {
+        ThreadCreate(AutoTestThread, nullptr, nullptr);
+    }
+};
+
 void UITestApp::Init()
+{
+    InitBackBtn();
+    InitTestLabel();
+    InitMainMenu();
+}
+
+void UITestApp::InitMainMenu()
+{
+    if (mainMenu_ != nullptr) {
+        if (testLabel_ == nullptr) {
+            testLabel_ = new UILabel();
+            testLabel_->Resize(300, BACK_BUTTON_HEIGHT); // 300: test Label width;
+            testLabel_->SetAlign(TEXT_ALIGNMENT_LEFT, TEXT_ALIGNMENT_CENTER);
+            testLabel_->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, 0);
+            testLabel_->SetText("Test Demo");
+            testLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 30); // 30: means font size
+            mainMenu_->Add(testLabel_);
+        }
+        if (autoTestBtn_ == nullptr) {
+            autoTestBtn_ = new UILabelButton();
+            autoTestBtn_->Resize(163, 64); // 163: button width; 64: button height
+            autoTestBtn_->SetPosition(Screen::GetInstance().GetWidth() - autoTestBtn_->GetWidth(), 0);
+            autoTestBtn_->SetText("自动测试");
+            auto listern = new BtnOnClickOnAutoTestListener();
+            autoTestBtn_->SetOnClickListener(listern);
+            autoTestBtn_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: means font size
+            autoTestBtn_->SetStyleForState(STYLE_BORDER_RADIUS, 0, UIButton::RELEASED);
+            autoTestBtn_->SetStyleForState(STYLE_BORDER_RADIUS, 0, UIButton::PRESSED);
+            autoTestBtn_->SetStyleForState(STYLE_BORDER_RADIUS, 0, UIButton::INACTIVE);
+            autoTestBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::RELEASED);
+            autoTestBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::PRESSED);
+            autoTestBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::INACTIVE);
+            mainMenu_->Add(autoTestBtn_);
+        }
+        if ((mainList_ == nullptr) && (adapter_ == nullptr)) {
+            uint8_t deltaHeight = 60; // 60: UIList height(64) - first button border width(4)
+            constexpr uint8_t margin = 24; // 24: x-coordinate
+            mainList_ = new UIList(UIList::VERTICAL);
+            mainList_->SetPosition(margin, deltaHeight);
+            mainList_->Resize(Screen::GetInstance().GetWidth() - margin,
+                Screen::GetInstance().GetHeight() - deltaHeight);
+            mainList_->SetThrowDrag(true);
+            mainList_->SetReboundSize(50); // 50: rebound size
+            mainList_->SetViewId(UI_TEST_MAIN_LIST_ID);
+            mainList_->SetYScrollBarVisible(true);
+            if (backBtn_ == nullptr) {
+                InitBackBtn();
+            }
+            if (testCaseLabel_ == nullptr) {
+                InitTestLabel();
+            }
+            adapter_ = new TestCaseListAdapter(mainMenu_, backBtn_, testCaseLabel_);
+            UITestGroup::SetUpTestCase();
+            mainList_->SetAdapter(adapter_);
+            mainMenu_->Add(mainList_);
+        }
+    }
+}
+
+void UITestApp::InitBackBtn()
 {
     if (backBtn_ == nullptr) {
         backBtn_ = new UILabelButton();
@@ -63,6 +156,10 @@ void UITestApp::Init()
         backBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::PRESSED);
         backBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::INACTIVE);
     }
+}
+
+void UITestApp::InitTestLabel()
+{
     if (testCaseLabel_ == nullptr) {
         testCaseLabel_ = new UILabel();
         testCaseLabel_->Resize(Screen::GetInstance().GetWidth(), BACK_BUTTON_HEIGHT);
@@ -70,40 +167,15 @@ void UITestApp::Init()
         testCaseLabel_->SetText("Test Case Name");
         testCaseLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 30); // 30: means font size
     }
-    if (testLabel_ == nullptr) {
-        testLabel_ = new UILabel();
-        testLabel_->Resize(Screen::GetInstance().GetWidth(), BACK_BUTTON_HEIGHT);
-        testLabel_->SetAlign(TEXT_ALIGNMENT_LEFT, TEXT_ALIGNMENT_CENTER);
-        testLabel_->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, 0);
-        testLabel_->SetText("Test Demo");
-        testLabel_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 30); // 30: means font size
-        rootView_->Add(testLabel_);
-    }
-    if ((mainList_ == nullptr) && (adapter_ == nullptr)) {
-        uint8_t deltaHeight = 60; // 60: UIList height(64) - first button border width(4)
-        constexpr uint8_t margin = 24; // 24: x-coordinate
-        mainList_ = new UIList(UIList::VERTICAL);
-        mainList_->SetPosition(margin, deltaHeight);
-        mainList_->Resize(Screen::GetInstance().GetWidth() - margin, Screen::GetInstance().GetHeight() - deltaHeight);
-        mainList_->SetThrowDrag(true);
-        mainList_->SetReboundSize(50); // 50: rebound size
-        mainList_->SetViewId(UI_TEST_MAIN_LIST_ID);
-        mainList_->SetYScrollBarVisible(true);
-        adapter_ = new TestCaseListAdapter(rootView_, mainList_, backBtn_, testCaseLabel_, testLabel_);
-        UITestGroup::SetUpTestCase();
-        mainList_->SetAdapter(adapter_);
-        rootView_->Add(mainList_);
-        rootView_->Invalidate();
-    }
 }
 
 UITestApp::~UITestApp()
 {
-    if (mainList_ != nullptr) {
+    if (adapter_ != nullptr) {
         delete adapter_;
         adapter_ = nullptr;
     }
-    if (adapter_ != nullptr) {
+    if (mainList_ != nullptr) {
         delete mainList_;
         mainList_ = nullptr;
     }
@@ -114,52 +186,18 @@ UITestApp::~UITestApp()
     if (rootView_ != nullptr) {
         rootView_ = nullptr;
     }
-}
-
-UIAutoTestApp* UIAutoTestApp::GetInstance()
-{
-    static UIAutoTestApp instance;
-    return &instance;
-}
-
-void UIAutoTestApp::Start()
-{
-    EventInjector::GetInstance()->RegisterEventInjector(EventDataType::POINT_TYPE);
-    EventInjector::GetInstance()->RegisterEventInjector(EventDataType::KEY_TYPE);
-#ifdef _WIN32
-    char logPath[] = ".\\auto_test_log.txt";
-    CompareTools::SetLogPath(logPath, sizeof(logPath));
-#else
-    char logPath[] = "./auto_test_log.txt";
-    CompareTools::SetLogPath(logPath, sizeof(logPath));
-#endif
-
-#if ENABLE_WINDOW
-    Window* window = RootView::GetInstance()->GetBoundWindow();
-    if (window != nullptr) {
-        EventInjector::GetInstance()->SetWindowId(window->GetWindowId());
+    if (autoTestBtn_ != nullptr) {
+        auto listener = autoTestBtn_->GetOnClickListener();
+        if (listener != nullptr) {
+            delete listener;
+            autoTestBtn_->SetOnClickListener(nullptr);
+        }
+        delete autoTestBtn_;
+        autoTestBtn_ = nullptr;
     }
-#endif
-    CompareTools::WaitSuspend();
-
-    UIAutoTestGroup::SetUpTestCase();
-    ListNode<UIAutoTest*>* node = UIAutoTestGroup::GetTestCase().Begin();
-    while (node != UIAutoTestGroup::GetTestCase().End()) {
-        node->data_->RunTestList();
-        node->data_->ResetMainMenu();
-        node = node->next_;
+    if (mainMenu_ != nullptr) {
+        delete mainMenu_;
+        mainMenu_ = nullptr;
     }
-}
-
-UIAutoTestApp::~UIAutoTestApp()
-{
-    if (EventInjector::GetInstance()->IsEventInjectorRegistered(EventDataType::POINT_TYPE)) {
-        EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::POINT_TYPE);
-    }
-    if (EventInjector::GetInstance()->IsEventInjectorRegistered(EventDataType::KEY_TYPE)) {
-        EventInjector::GetInstance()->UnregisterEventInjector(EventDataType::KEY_TYPE);
-    }
-    CompareTools::UnsetLogPath();
-    UIAutoTestGroup::TearDownTestCase();
 }
 } // namespace OHOS

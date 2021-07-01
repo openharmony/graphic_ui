@@ -14,11 +14,14 @@
  */
 
 #include "ui_auto_test.h"
+
 #include "compare_tools.h"
 #include "components/root_view.h"
 #include "components/ui_list.h"
 #include "components/ui_view_group.h"
 #include "dfx/event_injector.h"
+#include "test_layout/ui_auto_test_basic_layout.h"
+#include "test_render/ui_auto_test_render.h"
 #include "ui_test_app.h"
 #include "ui_test_group.h"
 
@@ -100,9 +103,15 @@ void UIAutoTest::CompareByBinary(const char* fileName) const
     char filePath[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
     CompareTools::StrnCatPath(filePath, DEFAULT_FILE_NAME_MAX_LENGTH, fileName, strlen(fileName));
     if (CompareTools::CheckFileExist(filePath, sizeof(filePath))) {
-        CompareTools::CompareFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+        CompareTools::CompareFile(filePath, sizeof(filePath));
     } else {
-        CompareTools::SaveFile(filePath, sizeof(filePath), CompareTools::CompareMode::COMPARE_BINARY);
+        CompareTools::SaveFile(filePath, sizeof(filePath));
     }
+}
+
+void UIAutoTest::SetUpTestCase()
+{
+    AutoTestCaseGroup::AddTestCase(new UIAutoTestRender());
+    AutoTestCaseGroup::AddTestCase(new UIAutoTestBasicLayout());
 }
 } // namespace OHOS

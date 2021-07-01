@@ -14,33 +14,13 @@
  */
 
 #include "ui_test_app.h"
-#ifdef _WIN32
-#include <thread>
-#else
-#include <pthread.h>
-#endif // _WIN32
-
-#ifdef _WIN32
-void AutoTestThread()
-#else
-void* AutoTestThread(void*)
-#endif // _WIN32
-{
-    OHOS::UIAutoTestApp::GetInstance()->Start();
-}
-
+#include "graphic_thread.h"
 
 void RunApp()
 {
     OHOS::UITestApp::GetInstance()->Start();
-#if ENABLE_UI_AUTO_TEST
-#ifdef _WIN32
-    std::thread autoTestPthread(AutoTestThread);
-    autoTestPthread.detach();
-#else
-    pthread_t thread;
-    pthread_create(&thread, 0, AutoTestThread, nullptr);
-    pthread_detach(thread);
-#endif // _WIN32
-#endif // ENABLE_UI_AUTO_TEST
+#if ENABEL_UI_AUTO_TEST
+    ThreadAttr attr;
+    ThreadCreate(OHOS::AutoTestThread, nullptr, &attr);
+#endif // ENABEL_UI_AUTO_TEST
 }

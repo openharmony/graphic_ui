@@ -13,31 +13,31 @@
  * limitations under the License.
  */
 
-#include "ui_auto_test_group.h"
+#include "auto_test_case_group.h"
 #include "graphic_config.h"
-#include "test_render/ui_auto_test_render.h"
 
 namespace OHOS {
-List<UIAutoTest*> UIAutoTestGroup::testCaseList_;
+List<AutoTestCaseGroup::AutoTestCase*> AutoTestCaseGroup::testCaseList_;
 
-void UIAutoTestGroup::SetUpTestCase()
-{
-    testCaseList_.PushBack(new UIAutoTestRender());
-}
-
-List<UIAutoTest*>& UIAutoTestGroup::GetTestCase()
+List<AutoTestCaseGroup::AutoTestCase*>& AutoTestCaseGroup::GetTestCase()
 {
     return testCaseList_;
 }
 
-void UIAutoTestGroup::TearDownTestCase()
+void AutoTestCaseGroup::TearDownTestCase()
 {
-    ListNode<UIAutoTest*>* node = testCaseList_.Begin();
+    ListNode<AutoTestCase*>* node = testCaseList_.Begin();
     while (node != testCaseList_.End()) {
         delete node->data_;
-        node->data_ = nullptr;
         node = node->next_;
     }
     testCaseList_.Clear();
+}
+
+void AutoTestCaseGroup::AddTestCase(AutoTestCase* testCaseInfo)
+{
+    if (testCaseInfo != nullptr) {
+        testCaseList_.PushBack(testCaseInfo);
+    }
 }
 } // namespace OHOS

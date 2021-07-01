@@ -23,28 +23,36 @@
 #include <unistd.h>
 #endif // _WIN32
 
-#ifdef _WIN32
-#define UI_AUTO_TEST_RESOURCE_PATH  "..\\simulator\\config\\auto_test\\"
-#else
-#define UI_AUTO_TEST_RESOURCE_PATH  (RESOURCE_DIR "auto_test/")
-#endif
-
 namespace OHOS {
 namespace {
     constexpr uint16_t DEFAULT_WAIT_TIME_MS = 300;
     constexpr size_t DEFAULT_FILE_NAME_MAX_LENGTH = 256;
+    constexpr uint8_t BITMAP_HEADER_SIZE = 54;
 }
 class CompareTools {
 public:
-    enum CompareMode : uint8_t {
-        COMPARE_BINARY,
-        COMPARE_IMAGE
+    struct BitmapInfoHeader {
+        uint32_t bfSize;
+        uint16_t bfReserved1;
+        uint16_t bfReserved2;
+        uint32_t bfOffBits;
+        uint32_t biSize;
+        int32_t biWidth;
+        int32_t biHeight;
+        uint16_t biPlanes;
+        uint16_t biBitCount;
+        uint32_t biCompression;
+        uint32_t biSizeImage;
+        uint32_t biXPelsPerMeter;
+        uint32_t biYPelsPerMeter;
+        uint32_t biClrUsed;
+        uint32_t biClrImportant;
     };
 
     static void WaitSuspend();
     static bool StrnCatPath(char* filePath, size_t pathMax, const char* fileName, size_t count);
-    static bool CompareFile(const char* filePath, size_t length, uint8_t flag);
-    static bool SaveFile(const char* filePath, size_t length, uint8_t flag);
+    static bool CompareFile(const char* filePath, size_t length);
+    static bool SaveFile(const char* filePath, size_t length);
     static bool CheckFileExist(const char* filePath, size_t length);
     static void SetLogPath(const char* filePath, size_t length);
     static void UnsetLogPath();
@@ -54,9 +62,8 @@ private:
     virtual ~CompareTools() {}
 
     static bool SaveLog(const char* buff, size_t bufSize);
-    static bool CompareBinary(const char* filePath, size_t length);
-    static bool SaveFrameBuffToBinary(const char* filePath, size_t length);
-
+    static bool CompareByBit(uint32_t fd);
+    static bool SaveByBit(uint32_t fd);
     static bool enableLog_;
     static char* logPath_;
 };

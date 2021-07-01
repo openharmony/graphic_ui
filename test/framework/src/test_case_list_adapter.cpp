@@ -38,11 +38,10 @@ uint16_t TestCaseListAdapter::GetCount()
 class BtnOnClickBackListener : public UIView::OnClickListener {
 public:
     BtnOnClickBackListener(UIViewGroup* uiView,
-                           UIView* mainList,
+                           UIViewGroup* mainMenu,
                            UITest* uiTest,
-                           UILabel* testCaseLabel,
-                           UILabel* testLabel)
-        : rootView_(uiView), mainList_(mainList), uiTest_(uiTest), testCaseLabel_(testCaseLabel), testLabel_(testLabel)
+                           UILabel* testCaseLabel)
+        : rootView_(uiView), mainMenu_(mainMenu), uiTest_(uiTest), testCaseLabel_(testCaseLabel)
     {
     }
 
@@ -50,8 +49,7 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
-        if ((rootView_ == nullptr) || (mainList_ == nullptr) || (uiTest_ == nullptr) || (testCaseLabel_ == nullptr) ||
-            (testLabel_ == nullptr)) {
+        if ((rootView_ == nullptr) || (mainMenu_ == nullptr) || (uiTest_ == nullptr) || (testCaseLabel_ == nullptr)) {
             return false;
         }
 
@@ -64,33 +62,29 @@ public:
             uiTest_->TearDown();
         }
 
-        rootView_->Add(testLabel_);
-        rootView_->Add(mainList_);
+        rootView_->Add(mainMenu_);
         rootView_->Invalidate();
         return true;
     }
 
 private:
     UIViewGroup* rootView_;
-    UIView* mainList_;
+    UIViewGroup* mainMenu_;
     UILabel* testCaseLabel_;
-    UILabel* testLabel_;
     UITest* uiTest_;
 };
 
 class BtnOnClickUiTestListener : public UIView::OnClickListener {
 public:
     BtnOnClickUiTestListener(UIViewGroup* uiView,
-                             UIView* mainList,
+                             UIViewGroup* mainMenu_,
                              UILabelButton* backBtn,
                              TestCaseInfo* uiTestInfo,
-                             UILabel* testCaseLabel,
-                             UILabel* testLabel)
+                             UILabel* testCaseLabel)
         : rootView_(uiView),
-          mainList_(mainList),
+          mainMenu_(mainMenu_),
           backBtn_(backBtn),
           testCaseLabel_(testCaseLabel),
-          testLabel_(testLabel),
           uiTest_(nullptr),
           sliceId_(nullptr)
     {
@@ -102,19 +96,18 @@ public:
     ~BtnOnClickUiTestListener() {}
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
-        if ((rootView_ == nullptr) || (mainList_ == nullptr) || (backBtn_ == nullptr) || (testCaseLabel_ == nullptr) ||
-            (testLabel_ == nullptr) || (uiTest_ == nullptr) || (sliceId_ == nullptr)) {
+        if ((rootView_ == nullptr) || (mainMenu_ == nullptr) || (backBtn_ == nullptr) || (testCaseLabel_ == nullptr) ||
+            (uiTest_ == nullptr) || (sliceId_ == nullptr)) {
             return false;
         }
-        rootView_->Remove(testLabel_);
-        rootView_->Remove(mainList_);
+        rootView_->Remove(mainMenu_);
 
         UIView::OnClickListener* click = backBtn_->GetOnClickListener();
         if (click != nullptr) {
             delete click;
             click = nullptr;
         }
-        click = new BtnOnClickBackListener(rootView_, mainList_, uiTest_, testCaseLabel_, testLabel_);
+        click = new BtnOnClickBackListener(rootView_, mainMenu_, uiTest_, testCaseLabel_);
         backBtn_->SetOnClickListener(click);
         rootView_->Add(backBtn_);
         if (testCaseLabel_ != nullptr) {
@@ -135,8 +128,7 @@ public:
 
 private:
     UIViewGroup* rootView_;
-    UIView* mainList_;
-    UILabel* testLabel_;
+    UIViewGroup* mainMenu_;
     UILabelButton* backBtn_;
     UITest* uiTest_;
     UILabel* testCaseLabel_;
@@ -176,7 +168,7 @@ UIView* TestCaseListAdapter::GetView(UIView* inView, int16_t index)
     for (uint16_t i = 0; i < index; i++) {
         node = node->next_;
     }
-    listener = new BtnOnClickUiTestListener(rootView_, mainList_, backBtn_, &node->data_, testCaseLabel_, testLabel_);
+    listener = new BtnOnClickUiTestListener(rootView_, mainMenu_, backBtn_, &node->data_, testCaseLabel_);
     item->SetOnClickListener(listener);
     item->SetText(node->data_.sliceId);
     item->SetViewId(node->data_.sliceId);
@@ -198,7 +190,7 @@ UIView* TestCaseListAdapter::GetView(UIView* inView, int16_t index)
 
 int16_t TestCaseListAdapter::GetItemWidthWithMargin(int16_t index)
 {
-    // 2: two borders on both sides 
+    // 2: two borders on both sides
     return Screen::GetInstance().GetWidth() - TEXT_DISTANCE_TO_LEFT_SIDE + STYLE_BORDER_WIDTH_VALUE * 2;
 }
 
