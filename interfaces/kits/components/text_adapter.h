@@ -255,6 +255,7 @@ public:
     }
 protected:
     virtual UILabel* GetTextView(UIView* inView, int16_t index);
+    virtual UILabel* CreateUILabel(UIView* inView);
     uint8_t dataMode_;
 
 private:
