@@ -25,7 +25,7 @@ namespace {
 constexpr float DEFAULT_SCROLL_ROTATE_FACTOR = 2.5;
 #endif
 #if ENABLE_VIBRATOR
-constexpr float DEFAULT_VIBRATOR_LEN = 1.0;
+constexpr uint8_t DEFAULT_VIBRATOR_LEN = 3;
 #endif
 } // namespace
 
@@ -126,11 +126,16 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
         }
     }
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-    if (vibratorFunc != nullptr && needVibration &&
-        MATH_ABS(totalRotateLen_ - lastVibratorRotateLen_) > DEFAULT_VIBRATOR_LEN) {
-        GRAPHIC_LOGI("UIScrollView::OnRotateEvent Call vibrator function");
-        vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
-        lastVibratorRotateLen_ = totalRotateLen_;
+    if (vibratorFunc != nullptr && needVibration) {
+        uint16_t rotateLen = MATH_ABS(totalRotateLen_ - lastVibratorRotateLen_);
+        if (rotateLen > DEFAULT_VIBRATOR_LEN) {
+            uint16_t vibrationCnt = rotateLen / DEFAULT_VIBRATOR_LEN;
+            for (uint16_t i = 0; i < vibrationCnt; i++) {
+                GRAPHIC_LOGI("UIScrollView::OnRotateEvent Call vibrator function");
+                vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
+            }
+            lastVibratorRotateLen_ = totalRotateLen_;
+        }   
     }
 #endif
     return UIView::OnRotateEvent(event);
