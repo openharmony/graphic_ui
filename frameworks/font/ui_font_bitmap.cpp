@@ -28,7 +28,7 @@
 #endif
 
 namespace OHOS {
-UIFontBitmap::UIFontBitmap() : dynamicFont_(), dynamicFontRamUsed_(0), dynamicFontFd_(-1),  offset_(0)
+UIFontBitmap::UIFontBitmap() : offset_(0), dynamicFont_(), dynamicFontRamUsed_(0), dynamicFontFd_(-1)
 {
     SetBaseFontId(UIFontBuilder::GetInstance()->GetBitmapFontIdMax());
     bitmapCache_ = nullptr;

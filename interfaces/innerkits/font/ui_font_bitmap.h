@@ -53,6 +53,7 @@ protected:
     void PutCacheSpace(uint8_t* addr);
     int8_t SetDynamicFontId(uint8_t fontId);
     int16_t GetDynamicFontWidth(uint32_t unicode, uint8_t fontId);
+    uint32_t offset_;
 
 private:
     uint8_t* SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
@@ -66,7 +67,6 @@ private:
     uint32_t bitmapRamUsed_;
     UIFontCache* bitmapCache_;
     int32_t dynamicFontFd_;
-    uint32_t offset_;
 };
 } // namespce OHOS
 #endif // UI_FONT_BITMAP_H
