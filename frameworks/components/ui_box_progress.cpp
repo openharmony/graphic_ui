@@ -170,7 +170,7 @@ void UIBoxProgress::DrawRoundCap(BufferInfo& gfxDstBuffer,
                 BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,
                                                       CapType::CAP_NONE);
 
-                arcInfo.center = leftBottom;
+                arcInfo.center = rightTop;
                 arcInfo.startAngle = 0;
                 arcInfo.endAngle = SEMICIRCLE_IN_DEGREE;
                 BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, capStyle, opaScale_,

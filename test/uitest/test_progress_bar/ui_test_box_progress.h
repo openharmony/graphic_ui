@@ -55,8 +55,10 @@ private:
     UIViewGroup* uiViewGroupFrame_ = nullptr;
 
     UILabelButton* resetBtn_ = nullptr;
-    UILabelButton* widthBtn_ = nullptr;
-    UILabelButton* heightBtn_ = nullptr;
+    UILabelButton* incWidthBtn_ = nullptr;
+    UILabelButton* incHeightBtn_ = nullptr;
+    UILabelButton* decWidthBtn_ = nullptr;
+    UILabelButton* decHeightBtn_ = nullptr;
     UILabelButton* incProgressBtn_ = nullptr;
     UILabelButton* decProgressBtn_ = nullptr;
     UILabelButton* incMinProgressBtn_ = nullptr;
