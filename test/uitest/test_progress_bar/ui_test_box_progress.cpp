@@ -263,15 +263,23 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetStep_010()
 
 void UITestBoxProgress::UIKit_BoxProgress_Test_SetValidSize_011()
 {
-    widthBtn_ = new UILabelButton();
-    heightBtn_ = new UILabelButton();
+    incWidthBtn_ = new UILabelButton();
+    incHeightBtn_ = new UILabelButton();
+    decWidthBtn_ = new UILabelButton();
+    decHeightBtn_ = new UILabelButton();
     positionX_ = DELTA_X_COORDINATE_2;
     positionY_ += BUTTON_HEIGHT + DELTA_Y_COORDINATE_2;
     SetUpLabel("设置条形进度条有效区域宽高：", positionX_, positionY_);
-    positionY_ += LABEL_HEIGHT + DELTA_X_COORDINATE;
-    SetUpButton(heightBtn_, "box高度-", positionX_, positionY_);
-    positionX_ += BUTTON_WIDTH + DELTA_Y_COORDINATE;
-    SetUpButton(widthBtn_, "box宽度-", positionX_, positionY_);
+    positionX_ = DELTA_X_COORDINATE_2;
+    positionY_ += LABEL_HEIGHT + DELTA_Y_COORDINATE_2;
+    SetUpButton(incHeightBtn_, "box高度+", positionX_, positionY_);
+    positionX_ += BUTTON_WIDTH + DELTA_Y_COORDINATE_2;
+    SetUpButton(incWidthBtn_, "box宽度+", positionX_, positionY_);
+    positionX_ = DELTA_X_COORDINATE_2;
+    positionY_ += LABEL_HEIGHT + DELTA_Y_COORDINATE_2;
+    SetUpButton(decHeightBtn_, "box高度-", positionX_, positionY_);
+    positionX_ += BUTTON_WIDTH + DELTA_Y_COORDINATE_2;
+    SetUpButton(decWidthBtn_, "box宽度-", positionX_, positionY_);
 }
 
 void UITestBoxProgress::UIKit_BoxProgress_Test_SetBorderAndPadding_012()
@@ -339,10 +347,16 @@ bool UITestBoxProgress::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == stepBtn_) {
         step++;
         boxProgress_->SetStep(step);
-    } else if (&view == widthBtn_) {
+    } else if (&view == incWidthBtn_) {
+        width++;
+        boxProgress_->SetValidWidth(width);
+    } else if (&view == incHeightBtn_) {
+        height++;
+        boxProgress_->SetValidHeight(height);
+    } else if (&view == decWidthBtn_) {
         width--;
         boxProgress_->SetValidWidth(width);
-    } else if (&view == heightBtn_) {
+    } else if (&view == decHeightBtn_) {
         height--;
         boxProgress_->SetValidHeight(height);
     } else if (&view == incMinProgressBtn_) {
