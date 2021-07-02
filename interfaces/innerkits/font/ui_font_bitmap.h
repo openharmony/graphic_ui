@@ -41,6 +41,7 @@ public:
     int8_t GetFontVersion(char* dVersion, uint8_t dLen, char* sVersion, uint8_t sLen) const override;
     int8_t SetCurrentLangId(uint8_t langId) override;
     UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const override;
+    void SetFontFileOffset(uint32_t offset) override;
 
 protected:
     uint32_t GetBitmapRamUsed();
@@ -65,6 +66,7 @@ private:
     uint32_t bitmapRamUsed_;
     UIFontCache* bitmapCache_;
     int32_t dynamicFontFd_;
+    uint32_t offset_;
 };
 } // namespce OHOS
 #endif // UI_FONT_BITMAP_H
