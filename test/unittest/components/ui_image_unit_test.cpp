@@ -220,25 +220,25 @@ HWTEST_F(UIImageViewTest, UIImageViewSetSrc003, TestSize.Level0)
         EXPECT_EQ(1, 0);
         return;
     }
-    ImageHeader header {A8, 0, 0, 0, 0, 0, 0};
+    ImageHeader header {A8, 0, 0, 0, 0, 0};
     const ImageInfo imageInfo {header, 0, nullptr, nullptr};
     imageView_->SetSrc(&imageInfo);
     EXPECT_EQ(imageView_->GetImageInfo()->dataSize, 0);
 }
 
 /**
- * @tc.name: UIImageViewSetSrc003
+ * @tc.name: UIImageViewSetSrc004
  * @tc.desc: Verify SetSrc function, equal.
  * @tc.type: FUNC
  * @tc.require: AR000FQNFD
  */
-HWTEST_F(UIImageViewTest, UIImageViewSetSrc003, TestSize.Level0)
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc004, TestSize.Level0)
 {
     if (imageView_ == nullptr) {
         EXPECT_EQ(1, 0);
         return;
     }
-    ImageHeader header {A8, 0, 0, 0, 0, 0, 0};
+    ImageHeader header {A8, 0, 0, 0, 0, 0};
     const ImageInfo imageInfo {header, 0, nullptr, nullptr};
     imageView_->SetSrc(&imageInfo);
     ColorMode colorMode = static_cast<ColorMode>(imageView_->GetImageInfo()->header.colorMode);
