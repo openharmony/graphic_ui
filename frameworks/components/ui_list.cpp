@@ -546,7 +546,7 @@ void UIList::PushBack(UIView* view)
         if (direction_ == VERTICAL) {
             view->SetPosition(0, childrenTail_->GetY() + childrenTail_->GetHeightWithMargin());
         } else {
-            view->SetPosition(childrenTail_->GetX() + childrenTail_->GetHeightWithMargin(), 0);
+            view->SetPosition(childrenTail_->GetX() + childrenTail_->GetWidthWithMargin(), 0);
         }
         bottomIndex_ = GetIndexInc(bottomIndex_);
     }
