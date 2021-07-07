@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include "components/root_view.h"
 #include "components/ui_view_group.h"
+#include "draw/draw_utils.h"
 #include "test_resource_config.h"
 
 using namespace testing::ext;
@@ -171,6 +172,78 @@ HWTEST_F(UIImageViewTest, UIImageViewSetSrc_004, TestSize.Level0)
     ImageInfo* srcPath2 = nullptr;
     imageView_->SetSrc(srcPath2);
     EXPECT_EQ(imageView_->GetImageInfo(), srcPath2);
+}
+
+/**
+ * @tc.name: UIImageViewSetSrc001
+ * @tc.desc: Verify SetSrc function, equal.
+ * @tc.type: FUNC
+ * @tc.require: SR000FQNFC
+ */
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc001, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    const ImageInfo* imageInfo = nullptr;
+    imageView_->SetSrc(imageInfo);
+    EXPECT_EQ(imageView_->GetImageInfo(), nullptr);
+}
+
+/**
+ * @tc.name: UIImageViewSetSrc002
+ * @tc.desc: Verify SetSrc function, equal.
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFD
+ */
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc002, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    const ImageInfo imageInfo {0};
+    imageView_->SetSrc(&imageInfo);
+    EXPECT_EQ(imageView_->GetImageInfo()->dataSize, 0);
+}
+
+/**
+ * @tc.name: UIImageViewSetSrc003
+ * @tc.desc: Verify SetSrc function, equal.
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFD
+ */
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc003, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    ImageHeader header {A8, 0, 0, 0, 0, 0};
+    const ImageInfo imageInfo {header, 0, nullptr, nullptr};
+    imageView_->SetSrc(&imageInfo);
+    EXPECT_EQ(imageView_->GetImageInfo()->dataSize, 0);
+}
+
+/**
+ * @tc.name: UIImageViewSetSrc004
+ * @tc.desc: Verify SetSrc function, equal.
+ * @tc.type: FUNC
+ * @tc.require: AR000FQNFD
+ */
+HWTEST_F(UIImageViewTest, UIImageViewSetSrc004, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    ImageHeader header {A8, 0, 0, 0, 0, 0};
+    const ImageInfo imageInfo {header, 0, nullptr, nullptr};
+    imageView_->SetSrc(&imageInfo);
+    ColorMode colorMode = static_cast<ColorMode>(imageView_->GetImageInfo()->header.colorMode);
+    uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(colorMode);
+    EXPECT_EQ(pxSize, 8); // 8 bits
 }
 
 /**
