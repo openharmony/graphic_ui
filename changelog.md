@@ -10,6 +10,8 @@
 6. 点阵字体解耦：字库工具更新
 7. 支持UICheckBox/UIRadioButton/UIToggleButton动效
 8. UIButton支持点击动效
+9. 支持A4、A8、LUT4、LUT8图片格式，ColorMode新增TSC6枚举类型
+10. 支持多语言对齐，Style中lineHeight_替换lineSpace_,STYLE_LINE_HEIGHT替换STYLE_LINE_SPACE.
 
 详情：
 1. 新增DFX维测能力：UIKit支持显示控件轮廓
@@ -76,3 +78,19 @@
    （2）支持UIRadioButton和UIToggleButton动效，默认软件绘制。
 
 8. UIButton支持点击动效，默认开启，不需要开发者适配。
+
+9. 支持A4、A8、LUT4、LUT8图片格式，ColorMode新增TSC枚举类型
+
+    (1) ColorMode新增TSC6枚举 类型。
+
+    (2) UIImageView成员变量colorFromat由4位修改为8位。
+
+    (3) 合入时间2021.6.17
+
+10. 支持多语言对齐，Style中lineHeight_替换lineSpace_，STYLE_LINE_HEIGHT替换STYLE_LINE_SPACE.
+
+    (1) lineHeight_：为两行文字baseline之间的距离。
+
+    (2) 使用方法：调用SetStyle(STYLE_LINE_HEIGHT, value)。
+
+    (3) 合入时间2021.6.24
