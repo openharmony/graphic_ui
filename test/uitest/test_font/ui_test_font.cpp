@@ -276,7 +276,7 @@ void UITestFont::UIKitFontMultiLanguage001()
 #else
     label->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
 #endif
-    label->SetText("Hello, 鸿蒙轻量级GUI");
+    label->SetText("Hello, HarmonyOS Lite GUI");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT + GAP;
 }
@@ -305,7 +305,7 @@ void UITestFont::UIKitFontMultiLanguage002()
 #else
     label->SetFontId(F_ROBOTOCONDENSED_REGULAR_30_4);
 #endif
-    label->SetText("Hello\n 鸿蒙轻量级GUI");
+    label->SetText("Hello\n HarmonyOS Lite GUI");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
