@@ -137,8 +137,8 @@ float TypedText::GetAngleForArcLen(float len,
 
 void TypedText::GetArcLetterPos(const Point& arcCenter, uint16_t radius, float angle, float& posX, float& posY)
 {
-    posX = arcCenter.x + (static_cast<float>(radius) * Sin(MATH_ROUND(angle)));
-    posY = arcCenter.y - (static_cast<float>(radius) * Sin(MATH_ROUND(angle + QUARTER_IN_DEGREE)));
+    posX = arcCenter.x + (static_cast<float>(radius) * Sin(angle));
+    posY = arcCenter.y - (static_cast<float>(radius) * Sin(angle + QUARTER_IN_DEGREE));
 }
 
 uint32_t TypedText::GetNextLine(const char* text, int16_t letterSpace, int16_t maxWidth)
