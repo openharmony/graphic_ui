@@ -36,6 +36,7 @@ config("graphic_define_config") {
     "ENABLE_SHAPING=0",
     "ENABLE_ICU=1",
     "ENABLE_MULTI_FONT=0",
+    "DEFAULT_ANIMATION=1"
   ]
 
   if (ohos_kernel_type == "linux") {

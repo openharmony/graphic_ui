@@ -19,7 +19,9 @@
 #include "components/ui_abstract_scroll_bar.h"
 #include "components/ui_arc_scroll_bar.h"
 #include "components/ui_box_scroll_bar.h"
+#if DEFAULT_ANIMATION
 #include "graphic_timer.h"
+#endif
 
 namespace {
 #if ENABLE_ROTATE_INPUT
