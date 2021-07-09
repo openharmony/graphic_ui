@@ -70,6 +70,9 @@ public:
             preRunTime_ = curTime;
             return;
         }
+        if (curTime == preRunTime_) {
+            return;
+        }
         uint32_t time = (curTime > preRunTime_) ? (curTime - preRunTime_) : (UINT32_MAX - preRunTime_ + curTime);
         // 1000: 1000 milliseconds is 1 second
         float floatStep = (static_cast<float>(time * speed_) / 1000) + decimal_;
