@@ -43,13 +43,12 @@ UIQrcode::~UIQrcode()
 void UIQrcode::SetQrcodeInfo(const char* val, ColorType backgroundColor, ColorType qrColor)
 {
     if (val == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::SetQrcodeInfo val is null!\n");
+        GRAPHIC_LOGE("UIQrcode::SetQrcodeInfo val is null!\n");
         return;
     }
     uint32_t length = static_cast<uint32_t>(strlen(val));
     if ((length > QRCODE_VAL_MAX) || (length == 0)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-            "UIQrcode::SetQrcodeInfo val length is equal 0 or greater than QRCODE_VAL_MAX!\n");
+        GRAPHIC_LOGE("UIQrcode::SetQrcodeInfo val length is equal 0 or greater than QRCODE_VAL_MAX!\n");
         return;
     }
     backgroundColor_ = backgroundColor;
@@ -89,7 +88,7 @@ void UIQrcode::ReMeasure()
     }
     needDraw_ = false;
     if (qrcodeVal_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::ReMeasure qrcodeVal_ is null!\n");
+        GRAPHIC_LOGE("UIQrcode::ReMeasure qrcodeVal_ is null!\n");
         return;
     }
     QrCode qr = QrCode::encodeText(qrcodeVal_, QrCode::Ecc::LOW);
@@ -120,7 +119,7 @@ void UIQrcode::SetImageInfo(qrcodegen::QrCode& qrcode)
     int16_t height = GetHeight();
     width_ = (width >= height) ? height : width;
     if (width_ < qrcode.getSize()) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::SetImageInfo width is less than the minimum qrcode width!\n");
+        GRAPHIC_LOGE("UIQrcode::SetImageInfo width is less than the minimum qrcode width!\n");
         return;
     }
     imageInfo_.header.width = width;
@@ -133,7 +132,7 @@ void UIQrcode::SetImageInfo(qrcodegen::QrCode& qrcode)
     }
     imageInfo_.data = reinterpret_cast<uint8_t*>(ImageCacheMalloc(imageInfo_));
     if (imageInfo_.data == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::SetImageInfo imageInfo_.data is null!\n");
+        GRAPHIC_LOGE("UIQrcode::SetImageInfo imageInfo_.data is null!\n");
         return;
     }
     GenerateQrCode(qrcode);
@@ -150,7 +149,7 @@ void UIQrcode::FillQrCodeColor(qrcodegen::QrCode& qrcode)
 {
     int32_t qrWidth = qrcode.getSize();
     if (qrWidth <= 0) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::FillQrCodeColor generated qrcode size is less or equal 0!\n");
+        GRAPHIC_LOGE("UIQrcode::FillQrCodeColor generated qrcode size is less or equal 0!\n");
         return;
     }
     int16_t width = imageInfo_.header.width;
@@ -185,7 +184,7 @@ void UIQrcode::FillQrCodeBackgroundColor()
     for (int16_t col = 1; col < imageInfo_.header.width; ++col) {
         initColorData += QRCODE_FACTOR_NUM;
         if (memcpy_s(initColorData, QRCODE_FACTOR_NUM, tempColorData, QRCODE_FACTOR_NUM) != EOK) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::FillQrCodeBackgroundColor memcpy_s failed!\n");
+            GRAPHIC_LOGE("UIQrcode::FillQrCodeBackgroundColor memcpy_s failed!\n");
             return;
         }
     }
@@ -194,7 +193,7 @@ void UIQrcode::FillQrCodeBackgroundColor()
     for (int16_t row = 1; row < imageInfo_.header.height; ++row) {
         initColorData += deltaWidth;
         if (memcpy_s(initColorData, deltaWidth, tempColorData, deltaWidth) != EOK) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIQrcode::FillQrCodeBackgroundColor memcpy_s failed!\n");
+            GRAPHIC_LOGE("UIQrcode::FillQrCodeBackgroundColor memcpy_s failed!\n");
             return;
         }
     }

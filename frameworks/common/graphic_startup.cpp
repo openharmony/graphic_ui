@@ -49,19 +49,19 @@ void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr,
 {
     UIFont* uiFont = UIFont::GetInstance();
     if (uiFont == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Get UIFont error");
+        GRAPHIC_LOGE("Get UIFont error");
         return;
     }
     uiFont->SetPsramMemory(cacheMemAddr, cacheMemLen);
     int8_t ret = uiFont->SetFontPath(const_cast<char*>(dPath), nullptr);
     if (ret == INVALID_RET_VALUE) {
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "SetFontPath failed");
+        GRAPHIC_LOGW("SetFontPath failed");
     }
     if (uiFont->IsVectorFont()) {
         if (ttfName != nullptr) {
             uint8_t ret2 = uiFont->RegisterFontInfo(ttfName);
             if (ret2 == INVALID_UCHAR_ID) {
-                HILOG_WARN(HILOG_MODULE_GRAPHIC, "SetTtfName failed");
+                GRAPHIC_LOGW("SetTtfName failed");
             }
         }
     } else {
@@ -79,7 +79,7 @@ void GraphicStartUp::InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheM
     uint32_t len = static_cast<uint32_t>(strlen(path) + strlen(fileName) + 1);
     char* lineBreakRuleFile = reinterpret_cast<char*>(UIMalloc(len));
     if (lineBreakRuleFile == nullptr) {
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "UIMalloc failed");
+        GRAPHIC_LOGW("UIMalloc failed");
         return;
     }
     if (strcpy_s(lineBreakRuleFile, len, path) != EOK) {
@@ -101,7 +101,7 @@ void GraphicStartUp::InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheM
     if (fp < 0) {
         UIFree(reinterpret_cast<void*>(lineBreakRuleFile));
         lineBreakRuleFile = nullptr;
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "Open lineBreak rule file failed");
+        GRAPHIC_LOGW("Open lineBreak rule file failed");
         return;
     }
     int32_t lineBreakSize = lseek(fp, 0, SEEK_END);
@@ -139,7 +139,7 @@ void GraphicStartUp::Init()
 #ifdef VERSION_STANDARD
     OHOSInputDevice* input = new OHOSInputDevice();
     if (input == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new OHOSInputDevice fail");
+        GRAPHIC_LOGE("new OHOSInputDevice fail");
         return;
     }
     InputDeviceManager::GetInstance()->Add(input);

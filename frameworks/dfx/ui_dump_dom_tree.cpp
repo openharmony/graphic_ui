@@ -261,7 +261,7 @@ void UIDumpDomTree::OutputDomNode(UIView* view)
     /* Output current view's info into cJSON structure. */
     cJSON* dumpUsr = cJSON_CreateObject();
     if (dumpUsr == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::OutputDomNode cJSON create object failed Err!\n");
+        GRAPHIC_LOGE("UIDumpDomTree::OutputDomNode cJSON create object failed Err!\n");
         return;
     }
 
@@ -278,7 +278,7 @@ bool UIDumpDomTree::WriteDumpFile() const
     unlink(path_);
     int32_t fd = open(path_, O_CREAT | O_RDWR, DEFAULT_FILE_PERMISSION);
     if (fd < 0) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::WriteDumpFile open file failed Err!\n");
+        GRAPHIC_LOGE("UIDumpDomTree::WriteDumpFile open file failed Err!\n");
         return false;
     }
 
@@ -289,7 +289,7 @@ bool UIDumpDomTree::WriteDumpFile() const
 
     uint32_t length = strlen(pJson_);
     if (static_cast<uint32_t>(write(fd, pJson_, length)) != length) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::WriteDumpFile write file failed Err!\n");
+        GRAPHIC_LOGE("UIDumpDomTree::WriteDumpFile write file failed Err!\n");
         close(fd);
         return false;
     }
@@ -311,7 +311,7 @@ void UIDumpDomTree::OutputDomTree(UIView* view, cJSON* usr)
         dumpUsr = cJSON_CreateObject();
         if (dumpUsr == nullptr) {
             allocErrorFlag_ = true;
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::OutputDomTree cJSON create object failed Err!\n");
+            GRAPHIC_LOGE("UIDumpDomTree::OutputDomTree cJSON create object failed Err!\n");
             return;
         }
         /* usr must be a array. */
@@ -326,7 +326,7 @@ void UIDumpDomTree::OutputDomTree(UIView* view, cJSON* usr)
         cJSON* arrayJson = cJSON_CreateArray();
         if (arrayJson == nullptr) {
             allocErrorFlag_ = true;
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::OutputDomTree cJSON create object failed Err!\n");
+            GRAPHIC_LOGE("UIDumpDomTree::OutputDomTree cJSON create object failed Err!\n");
             return;
         }
 
@@ -402,7 +402,7 @@ bool UIDumpDomTree::DumpDomTree(const char* id, const char* path)
     UIView* currView = static_cast<UIView*>(rootView);
     rootJson_ = cJSON_CreateObject();
     if (rootJson_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::DumpDomTree cJSON create object failed Err!\n");
+        GRAPHIC_LOGE("UIDumpDomTree::DumpDomTree cJSON create object failed Err!\n");
         return false;
     }
 
@@ -413,7 +413,7 @@ bool UIDumpDomTree::DumpDomTree(const char* id, const char* path)
         if (!searchFlag_) {
             cJSON_Delete(rootJson_);
             rootJson_ = nullptr;
-            HILOG_INFO(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::DumpDomTree can not find the node \n");
+            GRAPHIC_LOGI("UIDumpDomTree::DumpDomTree can not find the node \n");
             return false;
         }
         /* Reset the search flag. */
@@ -424,14 +424,14 @@ bool UIDumpDomTree::DumpDomTree(const char* id, const char* path)
     cJSON_Delete(rootJson_);
     rootJson_ = nullptr;
     if (pJson_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::DumpDomTree convert cJSON object to string failed Err!\n");
+        GRAPHIC_LOGE("UIDumpDomTree::DumpDomTree convert cJSON object to string failed Err!\n");
         return false;
     }
 
     if (!WriteDumpFile()) {
         cJSON_free(pJson_);
         pJson_ = nullptr;
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIDumpDomTree::DumpDomTree file operation failed Err!\n");
+        GRAPHIC_LOGE("UIDumpDomTree::DumpDomTree file operation failed Err!\n");
         return false;
     }
 

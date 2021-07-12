@@ -183,7 +183,7 @@ bool CacheManager::GetImageHeader(const char* path, ImageHeader& header)
     Style useless;
     RetCode ret = Open(path, useless, entry);
     if (ret != RetCode::OK) {
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "CacheManager::GetImageHeader Image get info found unknown src type\n");
+        GRAPHIC_LOGW("CacheManager::GetImageHeader Image get info found unknown src type\n");
         return false;
     }
 

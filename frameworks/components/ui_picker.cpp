@@ -17,7 +17,6 @@
 #include "dock/vibrator_manager.h"
 #include "draw/draw_line.h"
 #include "draw/draw_rect.h"
-#include "gfx_utils/graphic_log.h"
 #include "themes/theme_manager.h"
 
 namespace {
@@ -243,17 +242,6 @@ void UIPicker::Refresh()
         RefreshValues(rangeValue_, rangeValueCount_);
     } else if ((startValue_ != 0) || (endValue_ != 0)) {
         RefreshValues(startValue_, endValue_);
-    }
-}
-
-void UIPicker::InitTextAdapter()
-{
-    if (textAdapter_ == nullptr) {
-        textAdapter_ = new TextAdapter();
-        if (textAdapter_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TextAdapter fail");
-            return;
-        }
     }
 }
 

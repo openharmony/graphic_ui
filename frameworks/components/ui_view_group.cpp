@@ -40,11 +40,11 @@ UIViewGroup::~UIViewGroup() {}
 void UIViewGroup::Add(UIView* view)
 {
     if ((view == this) || (view == nullptr)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "view can not be nullptr and added to self");
+        GRAPHIC_LOGE("view can not be nullptr and added to self");
         return;
     }
     if (view->GetParent() != nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "can not add view multi times");
+        GRAPHIC_LOGE("can not add view multi times");
         return;
     }
 
@@ -69,12 +69,12 @@ void UIViewGroup::Add(UIView* view)
 void UIViewGroup::Insert(UIView* prevView, UIView* insertView)
 {
     if ((insertView == nullptr) || (insertView == this)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "insertView can not be nullptr and insert to self");
+        GRAPHIC_LOGE("insertView can not be nullptr and insert to self");
         return;
     }
 
     if (insertView->GetParent() != nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "can not insert view multi times");
+        GRAPHIC_LOGE("can not insert view multi times");
         return;
     }
 

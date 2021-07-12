@@ -66,8 +66,7 @@ UIView::UIView()
 UIView::~UIView()
 {
     if (parent_ != nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-            "UIView::~UIView failed, parent is not nullptr! Need to remove from parent component first");
+        GRAPHIC_LOGE("UIView::~UIView failed, parent is not nullptr! Need to remove from parent component first");
     }
     if (transMap_ != nullptr) {
         delete transMap_;
@@ -200,7 +199,7 @@ void UIView::SetStyle(uint8_t key, int64_t value)
     if (!styleAllocFlag_) {
         style_ = new Style(*style_);
         if (style_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style fail");
+            GRAPHIC_LOGE("new Style fail");
             return;
         }
         styleAllocFlag_ = true;
@@ -235,7 +234,7 @@ void UIView::Rotate(int16_t angle, const Vector2<float>& pivot)
         ReMeasure();
         transMap_ = new TransformMap();
         if (transMap_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TransformMap fail");
+            GRAPHIC_LOGE("new TransformMap fail");
             return;
         }
     }
@@ -253,7 +252,7 @@ void UIView::Scale(const Vector2<float>& scale, const Vector2<float>& pivot)
         ReMeasure();
         transMap_ = new TransformMap();
         if (transMap_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TransformMap fail");
+            GRAPHIC_LOGE("new TransformMap fail");
             return;
         }
     }
@@ -276,7 +275,7 @@ void UIView::Translate(const Vector2<int16_t>& trans)
         ReMeasure();
         transMap_ = new TransformMap(GetOrigRect());
         if (transMap_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new TransformMap fail");
+            GRAPHIC_LOGE("new TransformMap fail");
             return;
         }
     }
@@ -546,20 +545,6 @@ Rect UIView::GetContentRect()
     contentRect.SetWidth(GetWidth());
     contentRect.SetHeight(GetHeight());
     return contentRect;
-}
-
-void UIView::ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height)
-{
-    if (visibleRect_ == nullptr) {
-        visibleRect_ = new Rect();
-        if (visibleRect_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Rect fail");
-            return;
-        }
-    }
-    visibleRect_->SetWidth(width);
-    visibleRect_->SetHeight(height);
-    visibleRect_->SetPosition(x, y);
 }
 
 Rect UIView::GetOrigRect() const

@@ -14,7 +14,6 @@
  */
 
 #include "components/ui_video.h"
-#include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
 #ifndef VERSION_LITE
@@ -331,7 +330,7 @@ void UIVideo::InitVideo()
     if (surfaceView_ == nullptr) {
         surfaceView_ = new UISurfaceView();
         if (surfaceView_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UISurfaceView fail");
+            GRAPHIC_LOGE("new UISurfaceView fail");
             return;
         }
         surfaceView_->SetPosition(0, 0);
@@ -342,7 +341,7 @@ void UIVideo::InitVideo()
     if (controllerGroup_ == nullptr) {
         controllerGroup_ = new UIViewGroup();
         if (controllerGroup_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIViewGroup fail");
+            GRAPHIC_LOGE("new UIViewGroup fail");
             return;
         }
         controllerGroup_->SetPosition(0, 0, DEFAULT_VIEW_WIDTH, DEFAULT_VIEW_HEIGHT);
@@ -359,7 +358,7 @@ void UIVideo::InitVideo()
     if (sliderAnimatorCallback_ == nullptr) {
         sliderAnimatorCallback_ = new SliderAnimatorCallback(this, playSlider_, currentTimeLabel_);
         if (sliderAnimatorCallback_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new SliderAnimatorCallback fail");
+            GRAPHIC_LOGE("new SliderAnimatorCallback fail");
             return;
         }
         sliderAnimatorCallback_->SetPlayButton(playButton_);
@@ -367,7 +366,7 @@ void UIVideo::InitVideo()
     if (sliderAnimator_ == nullptr) {
         sliderAnimator_ = new Animator(sliderAnimatorCallback_, this, 0, true);
         if (sliderAnimator_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Animator fail");
+            GRAPHIC_LOGE("new Animator fail");
             return;
         }
         sliderAnimatorCallback_->SetSliderAnimator(sliderAnimator_);
@@ -379,7 +378,7 @@ void UIVideo::InitControllerLabel()
     if (titleLabel_ == nullptr) {
         titleLabel_ = new UILabel();
         if (titleLabel_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
+            GRAPHIC_LOGE("new UILabel fail");
             return;
         }
         titleLabel_->SetPosition(322, 28, 316, 29); // 322:pos x, 28:pos y, 316:width, 29:height
@@ -393,7 +392,7 @@ void UIVideo::InitControllerLabel()
     if (totalTimeLabel_ == nullptr) {
         totalTimeLabel_ = new UILabel();
         if (totalTimeLabel_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
+            GRAPHIC_LOGE("new UILabel fail");
             return;
         }
         // 580:pos x, 56:pos y offset
@@ -408,7 +407,7 @@ void UIVideo::InitControllerLabel()
     if (currentTimeLabel_ == nullptr) {
         currentTimeLabel_ = new UILabel();
         if (currentTimeLabel_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UILabel fail");
+            GRAPHIC_LOGE("new UILabel fail");
             return;
         }
         // 80:pos x, 56:pos y offset
@@ -427,7 +426,7 @@ void UIVideo::InitControllerButton()
     if (playButton_ == nullptr) {
         playButton_ = new UIToggleButton();
         if (playButton_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIToggleButton fail");
+            GRAPHIC_LOGE("new UIToggleButton fail");
             return;
         }
         // 24:pox x, 88:pos y offset
@@ -440,7 +439,7 @@ void UIVideo::InitControllerButton()
     if (pauseButton_ == nullptr) {
         pauseButton_ = new UIToggleButton();
         if (pauseButton_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIToggleButton fail");
+            GRAPHIC_LOGE("new UIToggleButton fail");
             return;
         }
         // 448:pox x, 208:pos y 2:double width 2:double height
@@ -453,7 +452,7 @@ void UIVideo::InitControllerButton()
     if (volumeButton_ == nullptr) {
         volumeButton_ = new UIToggleButton();
         if (volumeButton_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIToggleButton fail");
+            GRAPHIC_LOGE("new UIToggleButton fail");
             return;
         }
         // 56:pox x offset, 88:pos y offset
@@ -494,7 +493,7 @@ void UIVideo::InitControllerSlider()
     if (playSlider_ == nullptr) {
         playSlider_ = new UISlider();
         if (playSlider_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UISlider fail");
+            GRAPHIC_LOGE("new UISlider fail");
             return;
         }
         // 80:pos x, 74:width offset, 5:multiply, 6:divide, 4:height

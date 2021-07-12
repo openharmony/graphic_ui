@@ -129,7 +129,7 @@ void UITimePicker::InitPicker(UIPicker*& picker, int16_t start, int16_t end)
 {
     picker = new UIPicker();
     if (picker == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new UIPicker fail");
+        GRAPHIC_LOGE("new UIPicker fail");
         return;
     }
     picker->SetPosition(xPos_, 0, pickerWidth_, GetHeight());

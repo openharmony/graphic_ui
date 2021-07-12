@@ -27,7 +27,7 @@ Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t line
     Point size{0, 0};
 
     if (text == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "TypedText::GetTextSize invalid parameter");
+        GRAPHIC_LOGE("TypedText::GetTextSize invalid parameter");
         return size;
     }
 
@@ -69,7 +69,7 @@ Rect TypedText::GetArcTextRect(const char* text,
                                const UIArcLabel::ArcTextInfo& arcTextInfo)
 {
     if ((text == nullptr) || (arcTextInfo.lineStart == arcTextInfo.lineEnd) || (arcTextInfo.radius == 0)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "TypedText::GetArcTextRect invalid parameter\n");
+        GRAPHIC_LOGE("TypedText::GetArcTextRect invalid parameter\n");
         return Rect();
     }
 
@@ -229,7 +229,7 @@ bool TypedText::GetWrapPoint(const char* text, uint32_t& breakPoint)
 int16_t TypedText::GetTextWidth(const char* text, uint16_t length, int16_t letterSpace)
 {
     if ((text == nullptr) || (length == 0) || (length > strlen(text))) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "TypedText::GetTextWidth invalid parameter\n");
+        GRAPHIC_LOGE("TypedText::GetTextWidth invalid parameter\n");
         return 0;
     }
 
@@ -273,7 +273,7 @@ uint32_t TypedText::GetUTF8Next(const char* text, uint32_t i, uint32_t& j)
 {
     uint32_t unicode = 0;
     if (text == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "text invalid parameter");
+        GRAPHIC_LOGE("text invalid parameter");
         return 0;
     }
 
@@ -312,7 +312,7 @@ uint32_t TypedText::GetUTF8Next(const char* text, uint32_t i, uint32_t& j)
 uint32_t TypedText::GetByteIndexFromUTF8Id(const char* text, uint32_t utf8Id)
 {
     if (text == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "TypedText::GetByteIndexFromUTF8Id text invalid parameter\n");
+        GRAPHIC_LOGE("TypedText::GetByteIndexFromUTF8Id text invalid parameter\n");
         return 0;
     }
     uint32_t byteIndex = 0;
@@ -329,7 +329,7 @@ uint32_t TypedText::GetUTF8CharacterSize(const char* text, uint32_t byteIndex)
     uint32_t size = 0;
 
     if (text == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "TypedText::GetUTF8CharacterSize text invalid parameter\n");
+        GRAPHIC_LOGE("TypedText::GetUTF8CharacterSize text invalid parameter\n");
         return 0;
     }
     while ((text[i] != '\0') && (i < byteIndex)) {
@@ -343,7 +343,7 @@ uint32_t TypedText::GetUTF8CharacterSize(const char* text, uint32_t byteIndex)
 void TypedText::Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t len)
 {
     if ((utf8Str == nullptr) || (utf16Str == nullptr)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "utf8Str or u16Str is null");
+        GRAPHIC_LOGE("utf8Str or u16Str is null");
         return;
     }
 
@@ -362,7 +362,7 @@ void TypedText::Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t le
                                                           UTF16_HIGH_PARAM2); // high
                 }
             } else {
-                HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Invalid unicode");
+                GRAPHIC_LOGE("Invalid unicode");
                 return;
             }
             cnt++;
@@ -373,7 +373,7 @@ void TypedText::Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t le
 uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
 {
     if (utf8Str == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "text invalid parameter");
+        GRAPHIC_LOGE("text invalid parameter");
         return 0;
     }
     uint32_t len = 0;
@@ -386,7 +386,7 @@ uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
         } else if (unicode <= MAX_UINT16_HIGH_SCOPE) {
             len += 2; // 2: low and high, two uint16_t numbers
         } else {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Invalid unicode");
+            GRAPHIC_LOGE("Invalid unicode");
             return 0;
         }
     }

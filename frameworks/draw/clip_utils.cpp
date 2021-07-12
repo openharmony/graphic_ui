@@ -332,7 +332,7 @@ void ClipImageBlitter::DrawPixel(int16_t x, int16_t y, uint8_t opa)
             break;
         }
         default: {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Only images in ARGB8888 format are supported!");
+            GRAPHIC_LOGE("Only images in ARGB8888 format are supported!");
             break;
         }
     }

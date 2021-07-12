@@ -492,7 +492,7 @@ void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
             {
                 DEBUG_PERFORMANCE_TRACE("memcpy");
                 if (memcpy_s(dest, dstMaxSize, memStart, memSize) != EOK) {
-                    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "DrawUtils::FillAreaWithSoftWare memcpy failed!\n");
+                    GRAPHIC_LOGE("DrawUtils::FillAreaWithSoftWare memcpy failed!\n");
                     return;
                 }
             }

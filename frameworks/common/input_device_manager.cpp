@@ -35,7 +35,7 @@ void InputDeviceManager::Init()
 void InputDeviceManager::Add(InputDevice* device)
 {
     if (device == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "InputDeviceManager::Add invalid param\n");
+        GRAPHIC_LOGE("InputDeviceManager::Add invalid param\n");
         return;
     }
     deviceList_.PushBack(device);

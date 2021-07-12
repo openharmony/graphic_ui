@@ -71,7 +71,7 @@ void UISlider::SetKnobStyle(const Style& style)
     if (!knobStyleAllocFlag_) {
         knobStyle_ = new Style;
         if (knobStyle_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style fail");
+            GRAPHIC_LOGE("new Style fail");
             return;
         }
         knobStyleAllocFlag_ = true;
@@ -84,7 +84,7 @@ void UISlider::SetKnobStyle(uint8_t key, int64_t value)
     if (!knobStyleAllocFlag_) {
         knobStyle_ = new Style(*knobStyle_);
         if (knobStyle_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style fail");
+            GRAPHIC_LOGE("new Style fail");
             return;
         }
         knobStyleAllocFlag_ = true;
@@ -149,7 +149,7 @@ void UISlider::DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, c
             break;
         }
         default: {
-            HILOG_WARN(HILOG_MODULE_GRAPHIC, "UISlider::DrawKnob Direction error!\n");
+            GRAPHIC_LOGW("UISlider::DrawKnob Direction error!\n");
         }
     }
     DrawValidRect(gfxDstBuffer, knobImage_, knobBar, invalidatedArea, *knobStyle_, 0);
@@ -163,7 +163,7 @@ bool UISlider::InitImage()
     if (knobImage_ == nullptr) {
         knobImage_ = new Image();
         if (knobImage_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Image fail");
+            GRAPHIC_LOGE("new Image fail");
             return false;
         }
     }
@@ -245,7 +245,7 @@ void UISlider::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedA
             break;
         }
         default: {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISlider: DrawForeground direction Err!\n");
+            GRAPHIC_LOGE("UISlider: DrawForeground direction Err!\n");
             return;
         }
     }
@@ -323,7 +323,7 @@ int32_t UISlider::UpdateCurrentValue(const Point& knobPosition)
             }
             break;
         default:
-            HILOG_WARN(HILOG_MODULE_GRAPHIC, "UISlider::UpdateCurrentValue Direction error!\n");
+            GRAPHIC_LOGW("UISlider::UpdateCurrentValue Direction error!\n");
     }
     SetValue(value);
     return value;
@@ -376,7 +376,7 @@ bool UISlider::OnRotateEvent(const RotateEvent& event)
 #if ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && lastValue != curValue_) {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "UISlider::OnRotateEvent Call vibrator function");
+        GRAPHIC_LOGI("UISlider::OnRotateEvent Call vibrator function");
         vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
     }
 #endif

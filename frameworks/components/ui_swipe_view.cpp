@@ -396,7 +396,7 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
 #if ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && needVibration_ && curIndex_ != lastIndex_) {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "UISwipeView::RefreshCurrentViewInner Call vibrator function");
+        GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner Call vibrator function");
         vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
         lastIndex_ = curIndex_;
     }

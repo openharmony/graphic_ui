@@ -69,7 +69,7 @@ Image::ImageType Image::CheckImgType(const char* src)
     int32_t fd = open(src, O_RDONLY);
 #endif
     if (fd < 0) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "can't open %s\n", src);
+        GRAPHIC_LOGE("can't open %s\n", src);
         return IMG_UNKNOWN;
     }
     if (read(fd, buf, IMG_BYTES_TO_CHECK) != IMG_BYTES_TO_CHECK) {
@@ -235,7 +235,7 @@ void Image::DrawImage(BufferInfo& gfxDstBuffer,
     } else if (srcType_ == IMG_SRC_FILE) {
         DrawImage::DrawCommon(gfxDstBuffer, coords, mask, path_, style, opaScale);
     } else {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Image::DrawImage:: failed with error srctype!\n");
+        GRAPHIC_LOGE("Image::DrawImage:: failed with error srctype!\n");
     }
 }
 
@@ -256,7 +256,7 @@ bool Image::SetPNGSrc(const char* src)
         return false;
     }
     if ((infile = fopen(src, "rb")) == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "can't open %s\n", src);
+        GRAPHIC_LOGE("can't open %s\n", src);
         srcType_ = IMG_SRC_UNKNOWN;
         png_destroy_read_struct(&png, &info, nullptr);
         return false;
@@ -380,7 +380,7 @@ bool Image::SetJPEGSrc(const char* src)
     FILE* infile = nullptr;
 
     if ((infile = fopen(src, "rb")) == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "can't open %s\n", src);
+        GRAPHIC_LOGE("can't open %s\n", src);
         srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }

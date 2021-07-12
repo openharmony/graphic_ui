@@ -526,7 +526,7 @@ void RootView::ClearMapBuffer()
     uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode);
     uint32_t dataSize = dc_.mapBufferInfo->width * dc_.mapBufferInfo->height * (pxSize >> 3);
     if (memset_s(dc_.mapBufferInfo->virAddr, dataSize, 0, dataSize) != EOK) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "animator buffer memset failed.");
+        GRAPHIC_LOGE("animator buffer memset failed.");
     }
 }
 
