@@ -70,7 +70,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                             OpacityType opaScale)
 {
     if ((text == nullptr) || (arcTextInfo.lineStart == arcTextInfo.lineEnd) || (arcTextInfo.radius == 0)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "DrawLabel::DrawArcText invalid parameter\n");
+        GRAPHIC_LOGE("DrawLabel::DrawArcText invalid parameter\n");
         return;
     }
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.textOpa_);

@@ -27,7 +27,7 @@ UISurfaceView::UISurfaceView()
 {
     surface_ = Surface::CreateSurface();
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::UISurfaceView surface create failed\n");
+        GRAPHIC_LOGE("UISurfaceView::UISurfaceView surface create failed\n");
         return;
     }
     surface_->SetWidthAndHeight(GetWidth(), GetHeight());
@@ -47,7 +47,7 @@ void UISurfaceView::SetPosition(int16_t x, int16_t y)
 {
     UIView::SetPosition(x, y);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::SetPosition surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::SetPosition surface is null\n");
         return;
     }
     x = GetRect().GetLeft();
@@ -60,7 +60,7 @@ void UISurfaceView::SetPosition(int16_t x, int16_t y, int16_t width, int16_t hei
 {
     UIView::SetPosition(x, y, width, height);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::SetPosition surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::SetPosition surface is null\n");
         return;
     }
     x = GetRect().GetLeft();
@@ -75,7 +75,7 @@ void UISurfaceView::Resize(int16_t width, int16_t height)
 {
     UIView::Resize(width, height);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::Resize surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::Resize surface is null\n");
         return;
     }
     surface_->SetUserData(REGION_WIDTH, std::to_string(width));
@@ -86,7 +86,7 @@ void UISurfaceView::SetWidth(int16_t width)
 {
     UIView::SetWidth(width);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::SetWidth surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::SetWidth surface is null\n");
         return;
     }
     surface_->SetUserData(REGION_WIDTH, std::to_string(width));
@@ -96,7 +96,7 @@ void UISurfaceView::SetHeight(int16_t height)
 {
     UIView::SetHeight(height);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::SetHeight surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::SetHeight surface is null\n");
         return;
     }
     surface_->SetUserData(REGION_HEIGHT, std::to_string(height));
@@ -106,7 +106,7 @@ void UISurfaceView::SetX(int16_t x)
 {
     UIView::SetX(x);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::SetX surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::SetX surface is null\n");
         return;
     }
     x = GetRect().GetLeft();
@@ -117,7 +117,7 @@ void UISurfaceView::SetY(int16_t y)
 {
     UIView::SetY(y);
     if (surface_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UISurfaceView::SetY surface is null\n");
+        GRAPHIC_LOGE("UISurfaceView::SetY surface is null\n");
         return;
     }
     y = GetRect().GetTop();
@@ -144,8 +144,7 @@ void UISurfaceView::Draw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     SurfaceBuffer* acquireBuffer = (surface_ != nullptr) ? surface_->AcquireBuffer() : nullptr;
     if (acquireBuffer != nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-            "UISurfaceView::Draw acquireBufferVirAddr=%p ", acquireBuffer->GetVirAddr());
+        GRAPHIC_LOGE("UISurfaceView::Draw acquireBufferVirAddr=%p \n", acquireBuffer->GetVirAddr());
         // fill with buffer
         DrawUtils::GetInstance()->DrawWithBuffer(gfxDstBuffer, GetRect(), invalidatedArea,
                                                  reinterpret_cast<const ColorType*>(acquireBuffer->GetVirAddr()));

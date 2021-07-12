@@ -131,7 +131,7 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
         if (rotateLen > DEFAULT_VIBRATOR_LEN) {
             uint16_t vibrationCnt = rotateLen / DEFAULT_VIBRATOR_LEN;
             for (uint16_t i = 0; i < vibrationCnt; i++) {
-                HILOG_INFO(HILOG_MODULE_GRAPHIC, "UIScrollView::OnRotateEvent Call vibrator function");
+                GRAPHIC_LOGI("UIScrollView::OnRotateEvent Call vibrator function");
                 vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
             }
             lastVibratorRotateLen_ = totalRotateLen_;

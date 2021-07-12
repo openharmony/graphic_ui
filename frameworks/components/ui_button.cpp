@@ -135,7 +135,7 @@ void UIButton::SetStyleForState(uint8_t key, int64_t value, ButtonState state)
                 Style styleSaved = *buttonStyles_[i];
                 buttonStyles_[i] = new Style;
                 if (buttonStyles_[i] == nullptr) {
-                    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style fail");
+                    GRAPHIC_LOGE("new Style fail");
                     return;
                 }
                 *(buttonStyles_[i]) = styleSaved;
@@ -257,14 +257,14 @@ bool UIButton::InitImage()
     if (defaultImgSrc_ == nullptr) {
         defaultImgSrc_ = new Image();
         if (defaultImgSrc_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Image fail");
+            GRAPHIC_LOGE("new Image fail");
             return false;
         }
     }
     if (triggeredImgSrc_ == nullptr) {
         triggeredImgSrc_ = new Image();
         if (triggeredImgSrc_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Image fail");
+            GRAPHIC_LOGE("new Image fail");
             return false;
         }
     }

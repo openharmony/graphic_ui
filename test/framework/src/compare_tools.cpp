@@ -119,7 +119,7 @@ bool CompareTools::CompareFile(const char* filePath, size_t length)
     bool flag = CompareByBit(fd);
     close(fd);
     if (flag) {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[COMPARE_SUCCESS]:fileName=%s", filePath);
+        GRAPHIC_LOGI("[COMPARE_SUCCESS]:fileName=%s", filePath);
         if (enableLog_) {
             char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
             if (sprintf_s(logInfo, sizeof(logInfo), "[COMPARE_SUCCESS]:fileName=%s\n", filePath) < 0) {
@@ -128,7 +128,7 @@ bool CompareTools::CompareFile(const char* filePath, size_t length)
             SaveLog(logInfo, strlen(logInfo));
         }
     } else {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[COMPARE_FAILURE]:fileName=%s", filePath);
+        GRAPHIC_LOGI("[COMPARE_FAILURE]:fileName=%s", filePath);
         if (enableLog_) {
             char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
             if (sprintf_s(logInfo, sizeof(logInfo), "[COMPARE_FAILURE]:fileName=%s\n", filePath) < 0) {
@@ -185,7 +185,7 @@ bool CompareTools::SaveFile(const char* filePath, size_t length)
     bool flag = SaveByBit(fd);
     close(fd);
     if (flag) {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SAVE_SUCCESS]:filePath = %s", filePath);
+        GRAPHIC_LOGI("[SAVE_SUCCESS]:filePath = %s", filePath);
         if (enableLog_) {
             char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
             if (sprintf_s(logInfo, sizeof(logInfo), "[SAVE_SUCCESS]:fileName=%s\n", filePath) < 0) {
@@ -194,7 +194,7 @@ bool CompareTools::SaveFile(const char* filePath, size_t length)
             SaveLog(logInfo, strlen(logInfo));
         }
     } else {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SAVE_FAILURE]:filePath = %s", filePath);
+        GRAPHIC_LOGI("[SAVE_FAILURE]:filePath = %s", filePath);
         if (enableLog_) {
             char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
             if (sprintf_s(logInfo, sizeof(logInfo), "[SAVE_FAILURE]:fileName=%s\n", filePath) < 0) {
@@ -227,7 +227,7 @@ void CompareTools::SetLogPath(const char* filePath, size_t length)
             return;
         }
         if (memcpy_s(logPath_, length, filePath, length) != EOK) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "memcpy filepath failed");
+            GRAPHIC_LOGE("memcpy filepath failed");
             return;
         }
         enableLog_ = true;
@@ -250,12 +250,12 @@ bool CompareTools::SaveLog(const char* buff, size_t bufSize)
     }
     uint32_t logFd = open(logPath_, O_WRONLY | O_CREAT | O_APPEND);
     if (logFd == -1) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "open log failed");
+        GRAPHIC_LOGE("open log failed");
         return false;
     }
     if (write(logFd, buff, bufSize) < 0) {
         close(logFd);
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "write log failed");
+        GRAPHIC_LOGE("write log failed");
         return false;
     }
     close(logFd);

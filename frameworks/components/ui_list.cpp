@@ -656,7 +656,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
 #if ENABLE_VIBRATOR
                     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
                     if (needVibration_ && vibratorFunc != nullptr) {
-                        HILOG_INFO(HILOG_MODULE_GRAPHIC, "UIList::MoveChildByOffset Call vibrator function");
+                        GRAPHIC_LOGI("UIList::MoveChildByOffset Call vibrator function");
                         vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
                     }
 #endif
@@ -675,7 +675,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
 #if ENABLE_VIBRATOR
                     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
                     if (needVibration_ && vibratorFunc != nullptr) {
-                        HILOG_INFO(HILOG_MODULE_GRAPHIC, "UIList::MoveChildByOffset Call vibrator function");
+                        GRAPHIC_LOGI("UIList::MoveChildByOffset Call vibrator function");
                         vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
                     }
 #endif

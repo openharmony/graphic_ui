@@ -55,14 +55,12 @@ public:
         UIFree(reinterpret_cast<void*>(filePath_));
         filePath_ = nullptr;
         if (fd < 0) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-                "UIScreenshotListener::OnScreenshotEnd open file failed Err!");
+            GRAPHIC_LOGE("UIScreenshotListener::OnScreenshotEnd open file failed Err!\n");
             return;
         }
 
         if (write(fd, &header, sizeof(ImageHeader)) != sizeof(ImageHeader)) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-                "UIScreenshotListener::OnScreenshotEnd write image header failed Err!");
+            GRAPHIC_LOGE("UIScreenshotListener::OnScreenshotEnd write image header failed Err!\n");
             close(fd);
             return;
         }
@@ -72,8 +70,7 @@ public:
         uint32_t size = row * width * sizeof(uint32_t);
         uint32_t* argb8888Addr = static_cast<uint32_t*>(UIMalloc(size));
         if (argb8888Addr == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-                "UIScreenshotListener::OnScreenshotEnd memory allocation failed Err!");
+            GRAPHIC_LOGE("UIScreenshotListener::OnScreenshotEnd memory allocation failed Err!");
             close(fd);
             return;
         }
@@ -114,7 +111,7 @@ private:
                 }
             } else if (format == IMAGE_PIXEL_FORMAT_ARGB8888) {
                 if (memcpy_s(buffer, width * DEFAULT_COLOR_SIZE, startAddr, width * DEFAULT_COLOR_SIZE) != EOK) {
-                    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "memcpy_s error!");
+                    GRAPHIC_LOGE("memcpy_s error!");
                 }
             }
             startAddr += stride;
@@ -123,8 +120,7 @@ private:
 
         uint32_t blockSize = row * width * sizeof(uint32_t);
         if (static_cast<uint32_t>(write(fd, argb8888Addr, blockSize)) != blockSize) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-                "UIScreenshotListener::WriteBlockToFile wrong amount of written data Err!");
+            GRAPHIC_LOGE("UIScreenshotListener::WriteBlockToFile wrong amount of written data Err!");
             return false;
         }
         return true;
@@ -150,8 +146,7 @@ bool UIScreenshot::ScreenshotToFile(const char* path)
     if (screenshotListener_ == nullptr) {
         screenshotListener_ = new UIScreenshotListener();
         if (screenshotListener_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC,
-                "UIScreenshot::ScreenshotToFile register screenshot listener failed Err!");
+            GRAPHIC_LOGE("UIScreenshot::ScreenshotToFile register screenshot listener failed Err!\n");
             return false;
         }
         IWindowsManager::GetInstance()->SetScreenshotListener(screenshotListener_);

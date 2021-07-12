@@ -69,7 +69,7 @@ uint8_t UIFontBitmap::GetFontWeight(uint8_t fontId)
 {
     UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
     if (fontParam == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::GetFontWeigh invalid fontId");
+        GRAPHIC_LOGE("UIFontBitmap::GetFontWeigh invalid fontId");
         return 0;
     }
     return fontParam->fontWeight;
@@ -78,22 +78,22 @@ uint8_t UIFontBitmap::GetFontWeight(uint8_t fontId)
 int8_t UIFontBitmap::SetFontPath(const char* dpath, const char* spath)
 {
     if (dpath == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::SetFontPath invalid parameter");
+        GRAPHIC_LOGE("UIFontBitmap::SetFontPath invalid parameter");
         return INVALID_RET_VALUE;
     }
 #ifdef _WIN32
     dynamicFontFd_ = open(dpath, O_RDONLY | O_BINARY);
-#else
+#else 
     dynamicFontFd_ = open(dpath, O_RDONLY);
 #endif
     if (dynamicFontFd_ < 0) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::SetFontPath file Open failed");
+        GRAPHIC_LOGE("UIFontBitmap::SetFontPath file Open failed");
         return INVALID_RET_VALUE;
     }
     dynamicFont_.SetRamBuffer(GetRamAddr());
     int32_t ret = dynamicFont_.SetFile(dynamicFontFd_, offset_);
     if (ret == INVALID_RET_VALUE) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile failed");
+        GRAPHIC_LOGE("GlyphsManager::SetFile failed");
         close(dynamicFontFd_);
         dynamicFontFd_ = -1;
         return ret;
@@ -172,7 +172,7 @@ int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode)
         glyphNode = *node;
         return RET_VALUE_OK;
     }
-    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::GetGlyphNode get glyphNode failed");
+    GRAPHIC_LOGE("UIFontBitmap::GetGlyphNode get glyphNode failed");
     return INVALID_RET_VALUE;
 }
 
@@ -225,7 +225,7 @@ uint8_t* UIFontBitmap::GetCacheBitmap(uint8_t fontId, uint32_t unicode)
     if (bitmapCache_ != nullptr) {
         return bitmapCache_->GetBitmap(fontId, unicode);
     }
-    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::GetCacheBitmap invalid bitmapCache");
+    GRAPHIC_LOGE("UIFontBitmap::GetCacheBitmap invalid bitmapCache");
     return nullptr;
 }
 
@@ -234,7 +234,7 @@ uint8_t* UIFontBitmap::GetCacheSpace(uint8_t fontId, uint32_t unicode, uint32_t 
     if (bitmapCache_ != nullptr) {
         return bitmapCache_->GetSpace(fontId, unicode, size);
     }
-    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::GetCacheSpace invalid bitmapCache");
+    GRAPHIC_LOGE("UIFontBitmap::GetCacheSpace invalid bitmapCache");
     return nullptr;
 }
 
@@ -243,7 +243,7 @@ void UIFontBitmap::PutCacheSpace(uint8_t* addr)
     if (bitmapCache_ != nullptr) {
         bitmapCache_->PutSpace(addr);
     }
-    HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::PutCacheSpace invalid bitmapCache");
+    GRAPHIC_LOGE("UIFontBitmap::PutCacheSpace invalid bitmapCache");
 }
 
 int8_t UIFontBitmap::SetDynamicFontId(uint8_t fontId)
@@ -263,7 +263,7 @@ int16_t UIFontBitmap::GetDynamicFontWidth(uint32_t unicode, uint8_t fontId)
 uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
     if (!UIFontAdaptor::IsSameTTFId(fontId, unicode)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::GetWidthInFontId fontId and unicode not match");
+        GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
         return nullptr;
     }
     if (fontId != GetBaseFontId()) {
@@ -299,7 +299,7 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
 int16_t UIFontBitmap::GetWidthInFontId(uint32_t unicode, uint8_t fontId)
 {
     if (!UIFontAdaptor::IsSameTTFId(fontId, unicode)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "UIFontBitmap::GetWidthInFontId fontId and unicode not match");
+        GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
         return INVALID_RET_VALUE;
     }
     if (fontId != GetBaseFontId()) {

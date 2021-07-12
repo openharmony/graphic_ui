@@ -130,7 +130,7 @@ void Text::SetFont(const char* name, uint8_t size, char*& destName, uint8_t& des
 void Text::SetFontId(uint8_t fontId)
 {
     if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontId_ == fontId)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Text::SetFontId invalid fontId(%d)", fontId);
+        GRAPHIC_LOGE("Text::SetFontId invalid fontId(%d)", fontId);
         return;
     }
     UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);

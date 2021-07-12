@@ -361,7 +361,16 @@ public:
 protected:
     Text* arcLabelText_;
 
-    virtual void InitArcLabelText();
+    virtual void InitArcLabelText()
+    {
+        if (arcLabelText_ == nullptr) {
+            arcLabelText_ = new Text();
+            if (arcLabelText_ == nullptr) {
+                GRAPHIC_LOGE("new Text fail");
+                return;
+            }
+        }
+    }
     void RefreshArcLabel();
 
 private:

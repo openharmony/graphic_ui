@@ -81,7 +81,7 @@ void UIAbstractProgress::SetRange(int32_t rangeMax, int32_t rangeMin)
         lastValue_ = rangeMin;
         SetValue(curValue_);
     } else {
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "UIAbstractProgress::SetRange rangeMax less than rangeMin !\n");
+        GRAPHIC_LOGW("UIAbstractProgress::SetRange rangeMax less than rangeMin !\n");
     }
 };
 
@@ -142,7 +142,7 @@ void UIAbstractProgress::SetBackgroundStyle(const Style& style)
     if (!backgroundStyleAllocFlag_) {
         backgroundStyle_ = new Style();
         if (backgroundStyle_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style1 fail");
+            GRAPHIC_LOGE("new Style1 fail");
             return;
         }
         backgroundStyleAllocFlag_ = true;
@@ -155,7 +155,7 @@ void UIAbstractProgress::SetBackgroundStyle(uint8_t key, int64_t value)
     if (!backgroundStyleAllocFlag_) {
         backgroundStyle_ = new Style(*backgroundStyle_);
         if (backgroundStyle_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style1 fail");
+            GRAPHIC_LOGE("new Style1 fail");
             return;
         }
         backgroundStyleAllocFlag_ = true;
@@ -178,7 +178,7 @@ void UIAbstractProgress::SetForegroundStyle(const Style& style)
     if (!foregroundStyleAllocFlag_) {
         foregroundStyle_ = new Style();
         if (foregroundStyle_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style1 fail");
+            GRAPHIC_LOGE("new Style1 fail");
             return;
         }
         foregroundStyleAllocFlag_ = true;
@@ -191,7 +191,7 @@ void UIAbstractProgress::SetForegroundStyle(uint8_t key, int64_t value)
     if (!foregroundStyleAllocFlag_) {
         foregroundStyle_ = new Style(*foregroundStyle_);
         if (foregroundStyle_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Style1 fail");
+            GRAPHIC_LOGE("new Style1 fail");
             return;
         }
         foregroundStyleAllocFlag_ = true;
@@ -214,14 +214,14 @@ bool UIAbstractProgress::InitImage()
     if (backgroundImage_ == nullptr) {
         backgroundImage_ = new Image();
         if (backgroundImage_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Image fail");
+            GRAPHIC_LOGE("new Image fail");
             return false;
         }
     }
     if (foregroundImage_ == nullptr) {
         foregroundImage_ = new Image();
         if (foregroundImage_ == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "new Image fail");
+            GRAPHIC_LOGE("new Image fail");
             return false;
         }
     }

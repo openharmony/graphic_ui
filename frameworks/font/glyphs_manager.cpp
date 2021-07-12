@@ -63,7 +63,7 @@ int8_t GlyphsManager::GlyphNodeCacheInit()
 
     int32_t ret = read(fp_, indexCache_, size);
     if (ret != static_cast<int32_t>(size)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GlyphNodeCacheInit read failed");
+        GRAPHIC_LOGE("GlyphsManager::GlyphNodeCacheInit read failed");
         return INVALID_RET_VALUE;
     }
 
@@ -139,7 +139,7 @@ GlyphNode* GlyphsManager::GetNodeFromFile(uint32_t unicode)
         offset += key * sizeof(uint16_t);
         idx = *(reinterpret_cast<uint16_t*>(curIndexCache_ + offset));
         if (idx == 0) {
-            HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetNodeFromFile unicode not found");
+            GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile unicode not found");
             return nullptr;
         }
     }
@@ -147,13 +147,13 @@ GlyphNode* GlyphsManager::GetNodeFromFile(uint32_t unicode)
     offset = curGlyphNodeSectionStart_ + (idx - 1) * sizeof(GlyphNode);
     int32_t ret = lseek(fp_, offset, SEEK_SET);
     if (ret != static_cast<int32_t>(offset)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetNodeFromFile lseek failed");
+        GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile lseek failed");
         return nullptr;
     }
     GlyphNode* node = GetNodeCacheSpace(unicode);
     ret = read(fp_, node, sizeof(GlyphNode));
     if (ret < 0) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetNodeFromFile read failed");
+        GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile read failed");
         return nullptr;
     }
 
@@ -169,7 +169,7 @@ void GlyphsManager::SetRamBuffer(uintptr_t ramAddr)
 int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
 {
     if (!isRamSet_) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile Ram not set");
+        GRAPHIC_LOGE("GlyphsManager::SetFile Ram not set");
         return INVALID_RET_VALUE;
     }
 
@@ -177,19 +177,19 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
     start_ = start;
     int32_t ret = lseek(fp_, start_, SEEK_SET);
     if (ret < 0) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile lseek failed");
+        GRAPHIC_LOGE("GlyphsManager::SetFile lseek failed");
         return INVALID_RET_VALUE;
     }
     ret = read(fp_, &binHeader_, sizeof(binHeader_));
     if (ret != sizeof(binHeader_)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile read failed");
+        GRAPHIC_LOGE("GlyphsManager::SetFile read failed");
         return INVALID_RET_VALUE;
     }
     if (strncmp(binHeader_.fontMagic, FONT_MAGIC_NUMBER, FONT_MAGIC_NUM_LEN) != 0) {
         return INVALID_RET_VALUE;
     }
     if (binHeader_.fontNum > UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile data error, fontNum need less than max fontId");
+        GRAPHIC_LOGE("GlyphsManager::SetFile data error, fontNum need less than max fontId");
         return INVALID_RET_VALUE;
     }
 
@@ -204,7 +204,7 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
 
     ret = read(fp_, fontHeaderCache_, size);
     if (ret != size) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile read failed");
+        GRAPHIC_LOGE("GlyphsManager::SetFile read failed");
         return INVALID_RET_VALUE;
     }
 
@@ -219,7 +219,7 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
     bitMapSectionStart_ = glyphNodeSectionStart_ + size;
     ret = GlyphNodeCacheInit();
     if (ret == RET_VALUE_OK) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetFile GlyphNodeCacheInit failed");
+        GRAPHIC_LOGE("GlyphsManager::SetFile GlyphNodeCacheInit failed");
         isFileSet_ = true;
     }
 
@@ -231,11 +231,11 @@ int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
 {
     uint16_t fontIdx = 0;
     if (!isFileSet_) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetCurrentFontId file not set");
+        GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId file not set");
         return INVALID_RET_VALUE;
     }
     if (fontId > UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetCurrentFontId fontId need less than max fontId");
+        GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId fontId need less than max fontId");
         return INVALID_RET_VALUE;
     }
     if (fontId_ == fontId) {
@@ -262,7 +262,7 @@ int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
         isFontIdSet_ = false;
         curFontHeader_ = nullptr;
         fontId_ = UIFontBuilder::GetInstance()->GetBitmapFontIdMax();
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::SetCurrentFontId fontId not found");
+        GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId fontId not found");
         return INVALID_RET_VALUE;
     }
 
@@ -285,7 +285,7 @@ int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
 int32_t GlyphsManager::GetRamUsedLen() const
 {
     if (!isFileSet_) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetRamUsedLen file not set");
+        GRAPHIC_LOGE("GlyphsManager::GetRamUsedLen file not set");
         return INVALID_RET_VALUE;
     }
     return ramUsedLen_;
@@ -294,15 +294,15 @@ int32_t GlyphsManager::GetRamUsedLen() const
 int8_t GlyphsManager::GetFontVersion(char* version, uint8_t len) const
 {
     if (!isFileSet_ || (version == nullptr) || (len > FONT_VERSION_LEN)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontVersion invalid parameters");
+        GRAPHIC_LOGE("GlyphsManager::GetFontVersion invalid parameters");
         return INVALID_RET_VALUE;
     }
     if (memset_s(version, len, 0, len) != EOK) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontVersion memset_s failed");
+        GRAPHIC_LOGE("GlyphsManager::GetFontVersion memset_s failed");
         return INVALID_RET_VALUE;
     }
     if (strcpy_s(version, len, binHeader_.fontVersion) != EOK) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontVersion strcpy_s failed");
+        GRAPHIC_LOGE("GlyphsManager::GetFontVersion strcpy_s failed");
         return INVALID_RET_VALUE;
     }
     return RET_VALUE_OK;
@@ -347,12 +347,12 @@ const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode)
 int16_t GlyphsManager::GetFontHeight() const
 {
     if (!isFontIdSet_) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontHeight fontId not set");
+        GRAPHIC_LOGE("GlyphsManager::GetFontHeight fontId not set");
         return INVALID_RET_VALUE;
     }
 
     if (curFontHeader_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontHeight curFontHeader is nullptr");
+        GRAPHIC_LOGE("GlyphsManager::GetFontHeight curFontHeader is nullptr");
         return INVALID_RET_VALUE;
     }
 
@@ -364,12 +364,12 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode)
     const GlyphNode* node = nullptr;
 
     if (!isFontIdSet_) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontWidth fontId not set");
+        GRAPHIC_LOGE("GlyphsManager::GetFontWidth fontId not set");
         return INVALID_RET_VALUE;
     }
     node = GetGlyphNode(unicode);
     if (node == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetFontWidth node not found");
+        GRAPHIC_LOGE("GlyphsManager::GetFontWidth node not found");
         return INVALID_RET_VALUE;
     }
     return node->advance;
@@ -378,17 +378,17 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode)
 int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap)
 {
     if (bitmap == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetBitmap invalid parameter");
+        GRAPHIC_LOGE("GlyphsManager::GetBitmap invalid parameter");
         return INVALID_RET_VALUE;
     }
     if (!isFontIdSet_) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetBitmap fontId not set");
+        GRAPHIC_LOGE("GlyphsManager::GetBitmap fontId not set");
         return INVALID_RET_VALUE;
     }
 
     const GlyphNode* node = GetGlyphNode(unicode);
     if (node == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetBitmap node not found");
+        GRAPHIC_LOGE("GlyphsManager::GetBitmap node not found");
         return INVALID_RET_VALUE;
     }
 
@@ -396,13 +396,13 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap)
     uint32_t size = node->kernOff - node->dataOff;
     int32_t ret = lseek(fp_, offset, SEEK_SET);
     if (ret != static_cast<int32_t>(offset)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetBitmap lseek failed");
+        GRAPHIC_LOGE("GlyphsManager::GetBitmap lseek failed");
         return INVALID_RET_VALUE;
     }
 
     int32_t readSize = read(fp_, bitmap, size);
     if (readSize != static_cast<int32_t>(size)) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GlyphsManager::GetBitmap read failed");
+        GRAPHIC_LOGE("GlyphsManager::GetBitmap read failed");
         return INVALID_RET_VALUE;
     }
 

@@ -25,7 +25,7 @@ void DrawRect::Draw(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirt
                     const Style& style, OpacityType opaScale)
 {
     if ((rect.GetWidth() <= 0) || (rect.GetHeight() <= 0)) {
-        HILOG_DEBUG(HILOG_MODULE_GRAPHIC, "DrawRect::Draw width or height is zero\n");
+        GRAPHIC_LOGD("DrawRect::Draw width or height is zero\n");
         return;
     }
 

@@ -25,7 +25,7 @@ WindowImpl::~WindowImpl() {}
 
 bool WindowImpl::Create(const WindowConfig& config)
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "Create");
+    GRAPHIC_LOGI("Create");
     if (iWindow_ == nullptr) {
         config_ = config;
         LiteWinConfig liteConfig;
@@ -53,13 +53,13 @@ void WindowImpl::Destory()
 
 void WindowImpl::AddToDisplay()
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "AddToDisplay");
+    GRAPHIC_LOGI("AddToDisplay");
     RenderManager::GetInstance().AddToDisplay(this);
 }
 
 void WindowImpl::RemoveFromDisplay()
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "RemoveFromDisplay");
+    GRAPHIC_LOGI("RemoveFromDisplay");
     RenderManager::GetInstance().RemoveFromDisplay(this);
 }
 
@@ -69,14 +69,14 @@ void WindowImpl::BindRootView(RootView* rootView)
         return;
     }
     UnbindRootView();
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "BindRootView");
+    GRAPHIC_LOGI("BindRootView");
     rootView_ = rootView;
     rootView_->boundWindow_ = this;
 }
 
 void WindowImpl::UnbindRootView()
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "UnbindRootView");
+    GRAPHIC_LOGI("UnbindRootView");
     if (rootView_ != nullptr) {
         rootView_->boundWindow_ = nullptr;
         rootView_ = nullptr;
@@ -120,7 +120,7 @@ void WindowImpl::Hide()
 
 void WindowImpl::MoveTo(int16_t x, int16_t y)
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "MoveTo");
+    GRAPHIC_LOGI("MoveTo");
     config_.rect.SetPosition(x, y);
     if (iWindow_ != nullptr) {
         iWindow_->MoveTo(x, y);
@@ -129,7 +129,7 @@ void WindowImpl::MoveTo(int16_t x, int16_t y)
 
 void WindowImpl::Resize(int16_t width, int16_t height)
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "Resize");
+    GRAPHIC_LOGI("Resize");
     if ((width == config_.rect.GetWidth()) && (height == config_.rect.GetHeight())) {
         return;
     }
@@ -147,7 +147,7 @@ void WindowImpl::Resize(int16_t width, int16_t height)
 
 void WindowImpl::RaiseToTop()
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "RaiseToTop");
+    GRAPHIC_LOGI("RaiseToTop");
     if (iWindow_ != nullptr) {
         iWindow_->RaiseToTop();
     }
@@ -155,7 +155,7 @@ void WindowImpl::RaiseToTop()
 
 void WindowImpl::LowerToBottom()
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "LowerToBottom");
+    GRAPHIC_LOGI("LowerToBottom");
     if (iWindow_ != nullptr) {
         iWindow_->LowerToBottom();
     }
@@ -165,7 +165,7 @@ void WindowImpl::Render()
 {
     UpdateHalDisplayBuffer();
     if (gfxAlloc_.virAddr == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "window buffer is null, windId=%d", GetWindowId());
+        GRAPHIC_LOGE("window buffer is null, windId=%d", GetWindowId());
         return;
     }
 
@@ -188,14 +188,14 @@ int32_t WindowImpl::GetWindowId()
     if (iWindow_ != nullptr) {
         return iWindow_->GetWindowId();
     } else {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "iwindow is null!");
+        GRAPHIC_LOGE("iwindow is null!");
         return INVALID_WINDOW_ID;
     }
 }
 
 void WindowImpl::Flush()
 {
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "Flush");
+    GRAPHIC_LOGI("Flush");
     if (iWindow_ == nullptr) {
         return;
     }

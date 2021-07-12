@@ -137,7 +137,7 @@ void EventInjectorTest::TestApp()
     config.rect.SetRect(0, 0, Screen::GetInstance().GetWidth() - 1, Screen::GetInstance().GetHeight() - 1);
     window_ = Window::CreateWindow(config);
     if (window_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "Create window false!");
+        GRAPHIC_LOGE("Create window false!");
         return;
     }
     window_->BindRootView(RootView::GetInstance());

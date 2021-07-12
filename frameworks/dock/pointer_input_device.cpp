@@ -76,7 +76,7 @@ void PointerInputDevice::DispatchPressEvent(UIViewGroup* rootView)
     if (!pressState_) {
         rootView->GetTargetView(curPos_, &touchableView_, &targetView_);
         if (touchableView_ == nullptr) {
-            HILOG_DEBUG(HILOG_MODULE_GRAPHIC, "PointerInputDevice::DispatchPressEvent cannot find target view!\n");
+            GRAPHIC_LOGD("PointerInputDevice::DispatchPressEvent cannot find target view!\n");
             return;
         }
         draggableView_ = GetDraggableView(touchableView_);

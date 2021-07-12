@@ -381,7 +381,16 @@ protected:
     void RefreshList();
     virtual void ClearList();
     virtual void Refresh();
-    virtual void InitTextAdapter();
+    virtual void InitTextAdapter()
+    {
+        if (textAdapter_ == nullptr) {
+            textAdapter_ = new TextAdapter();
+            if (textAdapter_ == nullptr) {
+                GRAPHIC_LOGE("new TextAdapter fail");
+                return;
+            }
+        }
+    }
 
     bool isWidthSet_ : 1;
     bool isHeightSet_ : 1;

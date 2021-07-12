@@ -16,7 +16,6 @@
 #include "animator/animator_manager.h"
 
 #include "common/task_manager.h"
-#include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 
 namespace OHOS {
@@ -40,7 +39,7 @@ void AnimatorManager::Add(Animator* animator)
     ListNode<Animator*>* pos = list_.Begin();
     while (pos != list_.End()) {
         if (pos->data_ == animator) {
-            HILOG_INFO(HILOG_MODULE_GRAPHIC, "do not add animator multi times");
+            GRAPHIC_LOGI("do not add animator multi times");
             return;
         }
         pos = pos->next_;

@@ -158,7 +158,7 @@ uint16_t UIAnalogClock::ConvertHandValueToAngle(uint8_t handValue, uint8_t range
     uint8_t secondHandValue, uint8_t ratio) const
 {
     if ((range == 0) || (ratio == 0)) {
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "UIAnalogClock::ConvertHandValueToAngle Invalid range or ratio\n");
+        GRAPHIC_LOGW("UIAnalogClock::ConvertHandValueToAngle Invalid range or ratio\n");
         return 0;
     }
     /*
@@ -175,7 +175,7 @@ uint16_t UIAnalogClock::ConvertHandValueToAngle(uint8_t handValue, uint8_t range
 uint16_t UIAnalogClock::ConvertHandValueToAngle(uint8_t handValue, uint8_t range) const
 {
     if (range == 0) {
-        HILOG_WARN(HILOG_MODULE_GRAPHIC, "UIAnalogClock::ConvertHandValueToAngle Invalid range or ratio\n");
+        GRAPHIC_LOGW("UIAnalogClock::ConvertHandValueToAngle Invalid range or ratio\n");
         return 0;
     }
     /*

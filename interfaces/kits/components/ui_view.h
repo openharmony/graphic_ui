@@ -49,6 +49,7 @@
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_buffer.h"
+#include "gfx_utils/graphic_log.h"
 #include "gfx_utils/heap_base.h"
 #include "gfx_utils/image_info.h"
 #include "gfx_utils/style.h"
@@ -891,7 +892,19 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height);
+    void ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height)
+    {
+        if (visibleRect_ == nullptr) {
+            visibleRect_ = new Rect();
+            if (visibleRect_ == nullptr) {
+                GRAPHIC_LOGE("new Rect fail");
+                return;
+            }
+        }
+        visibleRect_->SetWidth(width);
+        visibleRect_->SetHeight(height);
+        visibleRect_->SetPosition(x, y);
+    }
 
     /**
      * @brief Sets the width for the view.
