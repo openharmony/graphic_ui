@@ -24,21 +24,20 @@
 namespace OHOS {
 class TestCaseListAdapter : public AbstractAdapter {
 public:
-    TestCaseListAdapter(RootView* rootView, UIView* mainList, UILabelButton* backBtn,
-        UILabel* label, UILabel* testTitleLabel)
-        : rootView_(rootView), mainList_(mainList), backBtn_(backBtn), testCaseLabel_(label),
-          testLabel_(testTitleLabel) {}
+    TestCaseListAdapter(UIViewGroup* mainMenu, UILabelButton* backBtn,  UILabel* testTitleLabel)
+        : rootView_(RootView::GetInstance()), mainMenu_(mainMenu), backBtn_(backBtn),
+          testCaseLabel_(testTitleLabel) {}
     ~TestCaseListAdapter() {}
     UIView* GetView(UIView* inView, int16_t index) override;
     int16_t GetItemWidthWithMargin(int16_t index) override;
     int16_t GetItemHeightWithMargin(int16_t index) override;
     uint16_t GetCount() override;
+
 private:
     RootView* rootView_;
-    UIView* mainList_;
+    UIViewGroup* mainMenu_;
     UILabelButton* backBtn_;
     UILabel* testCaseLabel_;
-    UILabel* testLabel_;
 };
 } // namespace OHOS
 #endif // TEST_CASE_LIST_ADAPTER_H

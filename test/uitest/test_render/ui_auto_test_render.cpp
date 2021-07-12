@@ -32,14 +32,14 @@ void UIAutoTestRender::RunTestList()
 
 void UIAutoTestRender::UIKitRenderTestRender001() const
 {
-    const char* fileName = "ui_test_render_001.bin";
+    const char* fileName = "ui_test_render_001.bmp";
     CompareByBinary(fileName);
 }
 
 void UIAutoTestRender::UIKitRenderTestRenderMeasure001() const
 {
-    ClickViewById(UI_TEST_RENDER_UPDATA_BUTTON_ID_01);
-    const char* fileName = "ui_test_render_measure_001.bin";
+    ClickViewById(UI_TEST_RENDER_UPDATA_BUTTON_ID_01);    
+    const char* fileName = "ui_test_render_measure_001.bmp";
     CompareByBinary(fileName);
 }
 } // namespace OHOS

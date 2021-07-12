@@ -13,24 +13,23 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_UI_AUTO_TEST_H
-#define GRAPHIC_LITE_UI_AUTO_TEST_H
-
-#include "auto_test_case_group.h"
-#include "components/ui_view.h"
+#ifndef GRAPHIC_LITE_AUTO_TEST_APP_H
+#define GRAPHIC_LITE_AUTO_TEST_APP_H
 
 namespace OHOS {
-class UIAutoTest : public AutoTestCaseGroup::AutoTestCase {
+class AutoTestApp {
 public:
-    UIAutoTest() {}
-    virtual ~UIAutoTest() {}
+    static AutoTestApp* GetInstance();
+    void Start();
 
-    static void SetUpTestCase();
-    void ResetMainMenu() const;
-    void EnterSubMenu(const char* id) const;
-    void ClickViewById(const char* id) const;
-    void DragViewToHead(const char* id) const;
-    void CompareByBinary(const char* fileName) const;
+private:
+    AutoTestApp() {}
+    virtual ~AutoTestApp();
+
+    AutoTestApp(const AutoTestApp&) = delete;
+    AutoTestApp& operator=(const AutoTestApp&) = delete;
+    AutoTestApp(AutoTestApp&&) = delete;
+    AutoTestApp& operator=(AutoTestApp&&) = delete;
 };
 } // namespace OHOS
-#endif // GRAPHIC_LITE_UI_AUTO_TEST_H
+#endif // GRAPHIC_LITE_AUTO_TEST_APP_H

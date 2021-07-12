@@ -14,13 +14,20 @@
  */
 
 #include "compare_tools.h"
-
 #include <cstring>
+#include "common/screen.h"
+#include "dock/screen_device_proxy.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
+#include "gfx_utils/graphic_math.h"
 #include "graphic_config.h"
 #include "securec.h"
+
+#ifdef _WIN32
+    #define STR(STRING) #STRING
+    #define STRPATH(STRING) STR(STRING)
+#endif
 
 namespace OHOS {
 bool CompareTools::enableLog_ = false;
@@ -40,137 +47,163 @@ bool CompareTools::StrnCatPath(char* filePath, size_t pathMax, const char* fileN
     if ((filePath == nullptr) || (pathMax > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    char dest[DEFAULT_FILE_NAME_MAX_LENGTH] = UI_AUTO_TEST_RESOURCE_PATH;
+#ifdef _WIN32
+    char dest[DEFAULT_FILE_NAME_MAX_LENGTH] = STRPATH(AUTO_TEST_RESOURCE_PATH);
+#else
+    char dest[DEFAULT_FILE_NAME_MAX_LENGTH] = AUTO_TEST_RESOURCE_PATH;
+#endif // _WIN32
     if (strncat_s(dest, DEFAULT_FILE_NAME_MAX_LENGTH, fileName, count) != EOK) {
         return false;
     }
-    if (memcpy_s(static_cast<void*>(filePath), pathMax, dest, DEFAULT_FILE_NAME_MAX_LENGTH) != EOK) {
+    if (memcpy_s(static_cast<void *>(filePath), pathMax, dest, DEFAULT_FILE_NAME_MAX_LENGTH) != EOK) {
         return false;
     }
     return true;
 }
 
-bool CompareTools::CompareFile(const char* src, size_t length, uint8_t flag)
+bool CompareTools::CompareByBit(uint32_t fd)
 {
-    switch (flag) {
-        case COMPARE_BINARY:
-            return CompareBinary(src, length);
-        case COMPARE_IMAGE:
-            // Unrealized : image for comparison
-            break;
-        default:
-            break;
+    ImageInfo imageBit;
+    if (!(Screen::GetInstance().GetCurrentScreenBitmap(imageBit))) {
+        return false;
     }
-    return false;
+    struct BitmapInfoHeader bitmapInfo = {0};
+    lseek(fd, sizeof(uint16_t), SEEK_SET);
+    if (read(fd, &bitmapInfo, sizeof(bitmapInfo)) < 0) {
+        ImageCacheFree(imageBit);
+        return false;
+    }
+    if (bitmapInfo.biSizeImage != imageBit.dataSize) {
+        ImageCacheFree(imageBit);
+        return false;
+    }
+    bool flag = true;
+    uint32_t buffSize = bitmapInfo.biSizeImage / MATH_ABS(bitmapInfo.biHeight);
+    auto buff = new uint8_t[buffSize];
+    for (uint32_t i = 0; i < MATH_ABS(bitmapInfo.biHeight); i++) {
+        if (flag && (memset_s(buff, buffSize, 0, buffSize) != EOK)) {
+            flag = false;
+            break;
+        }
+        uint32_t ret = read(fd, buff, buffSize);
+        if (ret < 0) {
+            flag = false;
+            break;
+        }
+        for (uint32_t j = 0; j < ret; j++) {
+            if (buff[j] != imageBit.data[i * buffSize + j]) {
+                flag = false;
+                break;
+            }
+        }
+    }
+    ImageCacheFree(imageBit);
+    delete [] buff;
+    buff = nullptr;
+    return flag;
 }
 
-bool CompareTools::SaveFile(const char* src, size_t length, uint8_t flag)
-{
-    switch (flag) {
-        case COMPARE_BINARY:
-            return SaveFrameBuffToBinary(src, length);
-        case COMPARE_IMAGE:
-            // Unrealized : save frame buff as image
-            break;
-        default:
-            break;
-    }
-    return false;
-}
-
-bool CompareTools::CompareBinary(const char* filePath, size_t length)
+bool CompareTools::CompareFile(const char* filePath, size_t length)
 {
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
-    if (bufferInfo == nullptr) {
+#ifdef _WIN32
+    uint32_t fd = open(filePath, O_RDONLY | O_BINARY);
+#else
+    uint32_t fd = open(filePath, O_RDONLY);
+#endif
+    if (fd == -1) {
         return false;
     }
-    uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
-    if (frameBuf == nullptr) {
-        return false;
-    }
-    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(bufferInfo->mode);
-    uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
-    uint8_t* readBuf = new uint8_t[buffSize];
-    if (readBuf == nullptr) {
-        return false;
-    }
-    FILE* fd = fopen(filePath, "rb");
-    if (fd == nullptr) {
-        delete[] readBuf;
-        return false;
-    }
-    if (fread(readBuf, sizeof(uint8_t), buffSize, fd) < 0) {
-        delete[] readBuf;
-        fclose(fd);
-        return false;
-    }
-    bool ret = true;
-    for (int32_t i = 0; i < (buffSize / sizeof(uint8_t)); i++) {
-        if (readBuf[i] != frameBuf[i]) {
-            ret = false;
-            break;
+    bool flag = CompareByBit(fd);
+    close(fd);
+    if (flag) {
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[COMPARE_SUCCESS]:fileName=%s", filePath);
+        if (enableLog_) {
+            char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+            if (sprintf_s(logInfo, sizeof(logInfo), "[COMPARE_SUCCESS]:fileName=%s\n", filePath) < 0) {
+                return false;
+            }
+            SaveLog(logInfo, strlen(logInfo));
         }
-    }
-    if (ret) {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SUCCESS]:fileName=%s", filePath);
     } else {
-        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[FAILURE]:fileName=%s", filePath);
-    }
-    delete[] readBuf;
-    fclose(fd);
-    if (enableLog_) {
-        char logBuf[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
-        if (ret) {
-            if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[SUCCESS]:fileName=%s\n", filePath) < 0) {
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[COMPARE_FAILURE]:fileName=%s", filePath);
+        if (enableLog_) {
+            char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+            if (sprintf_s(logInfo, sizeof(logInfo), "[COMPARE_FAILURE]:fileName=%s\n", filePath) < 0) {
                 return false;
             }
-        } else {
-            if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[FAILURE]:fileName=%s\n", filePath) < 0) {
-                return false;
-            }
+            SaveLog(logInfo, strlen(logInfo));
         }
-        SaveLog(logBuf, strlen(logBuf));
     }
-    return ret;
+    return flag;
 }
 
-bool CompareTools::SaveFrameBuffToBinary(const char* filePath, size_t length)
+bool CompareTools::SaveByBit(uint32_t fd)
+{
+    ImageInfo imageBit;
+    if (!(Screen::GetInstance().GetCurrentScreenBitmap(imageBit))) {
+        return false;
+    }
+    bool flag = false;
+    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(ScreenDeviceProxy::GetInstance()->GetBufferMode());
+    uint16_t bfType = 0x4D42;
+    struct BitmapInfoHeader bitmapInfo = {0};
+    bitmapInfo.bfSize = imageBit.dataSize + BITMAP_HEADER_SIZE;
+    bitmapInfo.bfOffBits = BITMAP_HEADER_SIZE;
+    bitmapInfo.biSize = 40; // 40: bitmap infomation header size
+    bitmapInfo.biWidth = imageBit.header.width;
+    bitmapInfo.biHeight = -imageBit.header.height;
+    bitmapInfo.biPlanes = 1;
+    bitmapInfo.biBitCount = sizeByColorMode * 8; // 8: uint8_t bit
+    bitmapInfo.biSizeImage = imageBit.dataSize;
+    if (!flag && (write(fd, &bfType, sizeof(bfType)) > 0)) {
+        if (write(fd, &bitmapInfo, sizeof(bitmapInfo)) > 0) {
+            if (write(fd, imageBit.data, imageBit.dataSize) > 0) {
+                flag = true;
+            }
+        }
+    }
+    ImageCacheFree(imageBit);
+    return flag;
+}
+
+bool CompareTools::SaveFile(const char* filePath, size_t length)
 {
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
-    if (bufferInfo == nullptr) {
+#ifdef _WIN32
+    uint32_t fd = open(filePath, O_WRONLY | O_CREAT | O_BINARY);
+#else
+    uint32_t fd = open(filePath, O_WRONLY | O_CREAT);
+#endif
+    if (fd == -1) {
         return false;
     }
-    uint8_t* frameBuf = static_cast<uint8_t*>(bufferInfo->virAddr);
-    if (frameBuf == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_GRAPHIC, "GetBuffer failed");
-        return false;
-    }
-    uint8_t sizeByColorMode = DrawUtils::GetByteSizeByColorMode(bufferInfo->mode);
-    uint32_t buffSize = HORIZONTAL_RESOLUTION * VERTICAL_RESOLUTION * sizeByColorMode;
-    FILE* fd = fopen(filePath, "wb+");
-    if (fd == nullptr) {
-        return false;
-    }
-    if (fwrite(frameBuf, sizeof(uint8_t), buffSize, fd) < 0) {
-        fclose(fd);
-        return false;
-    }
-    fclose(fd);
-    HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SAVEBIN]:fileName=%s", filePath);
-    if (enableLog_) {
-        char logBuf[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
-        if (sprintf_s(logBuf, DEFAULT_FILE_NAME_MAX_LENGTH, "[SAVEBIN]:fileName=%s\n", filePath) < 0) {
-            return false;
+    bool flag = SaveByBit(fd);
+    close(fd);
+    if (flag) {
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SAVE_SUCCESS]:filePath = %s", filePath);
+        if (enableLog_) {
+            char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+            if (sprintf_s(logInfo, sizeof(logInfo), "[SAVE_SUCCESS]:fileName=%s\n", filePath) < 0) {
+                return false;
+            }
+            SaveLog(logInfo, strlen(logInfo));
         }
-        SaveLog(logBuf, strlen(logBuf));
+    } else {
+        HILOG_INFO(HILOG_MODULE_GRAPHIC, "[SAVE_FAILURE]:filePath = %s", filePath);
+        if (enableLog_) {
+            char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
+            if (sprintf_s(logInfo, sizeof(logInfo), "[SAVE_FAILURE]:fileName=%s\n", filePath) < 0) {
+                return false;
+            }
+            SaveLog(logInfo, strlen(logInfo));
+        }
     }
-    return true;
+    return flag;
 }
 
 bool CompareTools::CheckFileExist(const char* filePath, size_t length)
@@ -178,11 +211,11 @@ bool CompareTools::CheckFileExist(const char* filePath, size_t length)
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
         return false;
     }
-    FILE* fd = fopen(filePath, "r");
-    if (fd == nullptr) {
+    uint32_t fd = open(filePath, O_RDONLY);
+    if (fd == -1) {
         return false;
     }
-    fclose(fd);
+    close(fd);
     return true;
 }
 
@@ -193,7 +226,6 @@ void CompareTools::SetLogPath(const char* filePath, size_t length)
         if (logPath_ == nullptr) {
             return;
         }
-
         if (memcpy_s(logPath_, length, filePath, length) != EOK) {
             HILOG_ERROR(HILOG_MODULE_GRAPHIC, "memcpy filepath failed");
             return;
@@ -216,17 +248,17 @@ bool CompareTools::SaveLog(const char* buff, size_t bufSize)
     if ((buff == nullptr) || (logPath_ == nullptr)) {
         return false;
     }
-    FILE* log = fopen(logPath_, "a");
-    if (log == nullptr) {
+    uint32_t logFd = open(logPath_, O_WRONLY | O_CREAT | O_APPEND);
+    if (logFd == -1) {
         HILOG_ERROR(HILOG_MODULE_GRAPHIC, "open log failed");
         return false;
     }
-    if (fwrite(buff, 1, bufSize, log) < 0) {
-        fclose(log);
+    if (write(logFd, buff, bufSize) < 0) {
+        close(logFd);
         HILOG_ERROR(HILOG_MODULE_GRAPHIC, "write log failed");
         return false;
     }
-    fclose(log);
+    close(logFd);
     return true;
 }
 } // namespace OHOS

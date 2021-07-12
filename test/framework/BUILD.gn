@@ -13,7 +13,11 @@ import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/config/subsystem/graphic/config.gni")
 
 config("graphic_test_config") {
-  defines = [ "ENABLE_UI_AUTO_TEST=1" ]
+  if (ohos_kernel_type == "linux") {
+    defines = [ "AUTO_TEST_RESOURCE_PATH=\"/storage/data/auto_test/\"" ]
+  } else {
+    defines = [ "AUTO_TEST_RESOURCE_PATH=\"/user/data/auto_test/\"" ]
+  }
 }
 
 test_sources = [
@@ -71,14 +75,18 @@ test_sources = [
   "src/ui_test_group.cpp",
 ]
 
-test_sources += [
+auto_test_sources = [
+  "../uitest/test_layout/ui_auto_test_basic_layout.cpp",
   "../uitest/test_render/ui_auto_test_render.cpp",
+  "src/auto_test_app.cpp",
+  "src/auto_test_case_group.cpp",
   "src/compare_tools.cpp",
   "src/ui_auto_test.cpp",
-  "src/ui_auto_test_group.cpp",
 ]
+
 static_library("framework") {
   sources = test_sources
+  sources += auto_test_sources
 
   include_dirs = [
     "common",
@@ -98,11 +106,12 @@ static_library("framework") {
     "//foundation/graphic/wms:wms_client",
   ]
   configs += [ "//foundation/graphic/ui:graphic_define_config" ]
+  public_configs = [ ":graphic_test_config" ]
 }
 
 static_library("auto_framework") {
   sources = test_sources
-
+  sources += auto_test_sources
   include_dirs = [
     "common",
     "include",
@@ -114,7 +123,7 @@ static_library("auto_framework") {
     "//foundation/multimedia/utils/lite/interfaces/kits",
     "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
   ]
-
+  defines = [ "ENABEL_UI_AUTO_TEST=1" ]
   ldflags = [
     "-lstdc++",
     "-lpthread",
@@ -125,10 +134,8 @@ static_library("auto_framework") {
     "//foundation/graphic/ui:ui",
     "//foundation/graphic/wms:wms_client",
   ]
-  configs += [
-    ":graphic_test_config",
-    "//foundation/graphic/ui:graphic_define_config",
-  ]
+  configs += [ "//foundation/graphic/ui:graphic_define_config" ]
+  public_configs = [ ":graphic_test_config" ]
 }
 
 group("lite_graphic_test_framework") {

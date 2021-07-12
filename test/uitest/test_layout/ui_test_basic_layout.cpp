@@ -97,11 +97,11 @@ void UITestBasicLayout::TearDown()
 
 const UIView* UITestBasicLayout::GetTestView()
 {
-    UIKit_Layout_Test_Basic_Layout_001();
+    UIKitLayoutTestBasicLayout001();
     return container_;
 }
 
-void UITestBasicLayout::UIKit_Layout_Test_Basic_Layout_001()
+void UITestBasicLayout::UIKitLayoutTestBasicLayout001()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();
@@ -157,25 +157,25 @@ void UITestBasicLayout::UIKit_Layout_Test_Basic_Layout_001()
 
 void UITestBasicLayout::InitSetUpButton()
 {
-    SetUpButton(resetBtn_, "重置");
-    SetUpButton(marginBtn_, "margin");
-    SetUpButton(padBtn_, "padding");
-    SetUpButton(lCenterOfParentBtn_, "居中");
-    SetUpButton(lLeftOfParentBtn_, "居左");
-    SetUpButton(lRightOfParentBtn_, "居右");
-    SetUpButton(lTopOfParentBtn_, "居上");
-    SetUpButton(lBottomOfParentBtn_, "居下");
-    SetUpButton(aLeftToSiblingBtn_, "左侧对齐兄弟");
-    SetUpButton(aRightToSiblingBtn_, "右侧对齐兄弟");
-    SetUpButton(aTopToSiblingBtn_, "上侧对齐兄弟");
-    SetUpButton(aBottomToSiblingBtn_, "下侧对齐兄弟");
-    SetUpButton(aHorCenterToSiblingBtn_, "水平居中对齐");
-    SetUpButton(aVerCenterToSiblingBtn_, "竖直居中对齐");
-    SetUpButton(lLeftToSiblingBtn_, "放至兄弟左侧");
-    SetUpButton(lRightToSiblingBtn_, "放至兄弟右侧");
-    SetUpButton(lTopToSiblingBtn_, "放至兄弟上侧");
-    SetUpButton(lBottomToSiblingBtn_, "放至兄弟下侧");
-    SetUpButton(lInvalidLayoutBtn_, "非法节点布局");
+    SetUpButton(resetBtn_, "重置", UI_TEST_BASIC_LAYOUT_RESET_BTN_ID);
+    SetUpButton(marginBtn_, "margin", UI_TEST_BASIC_LAYOUT_MARGIN_BTN_ID);
+    SetUpButton(padBtn_, "padding", UI_TEST_BASIC_LAYOUT_PADDING_BTN_ID);
+    SetUpButton(lCenterOfParentBtn_, "居中", UI_TEST_BASIC_LAYOUT_CENTEROFPARENT_BTN_ID);
+    SetUpButton(lLeftOfParentBtn_, "居左", UI_TEST_BASIC_LAYOUT_LEFTOFPARENT_BTN_ID);
+    SetUpButton(lRightOfParentBtn_, "居右", UI_TEST_BASIC_LAYOUT_RIGHTOFPARENT_BTN_ID);
+    SetUpButton(lTopOfParentBtn_, "居上", UI_TEST_BASIC_LAYOUT_TOPOFPARENT_BTN_ID);
+    SetUpButton(lBottomOfParentBtn_, "居下", UI_TEST_BASIC_LAYOUT_BOTTOMOFPARENT_BTN_ID);
+    SetUpButton(aLeftToSiblingBtn_, "左侧对齐兄弟", UI_TEST_BASIC_LAYOUT_LEFTOFSIBLING_BTN_ID);
+    SetUpButton(aRightToSiblingBtn_, "右侧对齐兄弟", UI_TEST_BASIC_LAYOUT_RIGHTOFSIBLING_BTN_ID);
+    SetUpButton(aTopToSiblingBtn_, "上侧对齐兄弟", UI_TEST_BASIC_LAYOUT_TOPOFSIBLING_BTN_ID);
+    SetUpButton(aBottomToSiblingBtn_, "下侧对齐兄弟", UI_TEST_BASIC_LAYOUT_BOTTOMOFSIBLING_BTN_ID);
+    SetUpButton(aHorCenterToSiblingBtn_, "水平居中对齐", UI_TEST_BASIC_LAYOUT_HORCENTEROFSIBLING_BTN_ID);
+    SetUpButton(aVerCenterToSiblingBtn_, "竖直居中对齐", UI_TEST_BASIC_LAYOUT_VERCENTEROFSIBLING_BTN_ID);
+    SetUpButton(lLeftToSiblingBtn_, "放至兄弟左侧", UI_TEST_BASIC_LAYOUT_LEFTTOSIBLING_BTN_ID);
+    SetUpButton(lRightToSiblingBtn_, "放至兄弟右侧", UI_TEST_BASIC_LAYOUT_RIGHTTOSIBLING_BTN_ID);
+    SetUpButton(lTopToSiblingBtn_, "放至兄弟上侧", UI_TEST_BASIC_LAYOUT_TOPTOSIBLING_BTN_ID);
+    SetUpButton(lBottomToSiblingBtn_, "放至兄弟下侧", UI_TEST_BASIC_LAYOUT_BOTTOMTOSIBLING_BTN_ID);
+    SetUpButton(lInvalidLayoutBtn_, "非法节点布局", UI_TEST_BASIC_LAYOUT_INVALIDLAYOUT_BTN_ID);
 }
 
 void UITestBasicLayout::OnClickButton(UIView& view)

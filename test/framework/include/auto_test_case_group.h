@@ -13,21 +13,29 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
-#define GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
+#ifndef GRAPHIC_LITE_AUTO_TEST_CASE_GROUP_H
+#define GRAPHIC_LITE_AUTO_TEST_CASE_GROUP_H
 
 #include "gfx_utils/list.h"
-#include "ui_auto_test.h"
 
 namespace OHOS {
-class UIAutoTestGroup {
+class AutoTestCaseGroup {
 public:
-    static void SetUpTestCase();
-    static List<UIAutoTest*>& GetTestCase();
+    class AutoTestCase {
+    public:
+        AutoTestCase() {}
+        virtual ~AutoTestCase() {}
+        virtual void RunTestList() = 0;
+        virtual void Reset() const = 0;
+        virtual void ResetMainMenu() const = 0;
+    };
+
+    static List<AutoTestCase*>& GetTestCase();
     static void TearDownTestCase();
+    static void AddTestCase(AutoTestCase* testCaseInfo);
 
 private:
-    static List<UIAutoTest*> testCaseList_;
+    static List<AutoTestCase*> testCaseList_;
 };
 } // namespace OHOS
-#endif // GRAPHIC_LITE_UI_AUTO_TEST_GROUP_H
+#endif // GRAPHIC_LITE_AUTO_TEST_CASE_GROUP_H
