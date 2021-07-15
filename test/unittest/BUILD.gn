@@ -24,8 +24,6 @@ config("graphic_test_config") {
     "//foundation/graphic/surface/interfaces/kits",
     "//third_party/bounds_checking_function/include",
     "//third_party/freetype/include",
-    "//kernel/liteos_a/kernel/include/",
-    "//kernel/liteos_a/kernel/common",
     "//foundation/distributedschedule/samgr_lite/interfaces/kits/registry",
     "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
     "//foundation/distributedschedule/samgr_lite/interfaces/kits/communication/broadcast",
