@@ -395,6 +395,12 @@ public:
         styleState_ = state;
     }
 
+#if DEFAULT_ANIMATION
+    void EnableButtonAnimation(bool enable)
+    {
+        enableAnimation_ = enable;
+    }
+#endif
 protected:
     Image* defaultImgSrc_;
     Image* triggeredImgSrc_;
@@ -410,6 +416,7 @@ protected:
     ButtonState styleState_;
     Style* buttonStyles_[BTN_STATE_NUM];
 #if DEFAULT_ANIMATION
+    bool enableAnimation_;
     friend class ButtonAnimator;
     class ButtonAnimator final : public AnimatorCallback {
     public:

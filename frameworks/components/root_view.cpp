@@ -704,9 +704,6 @@ bool RootView::FindSubView(const UIView& parentView, const UIView* subView)
 
 void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
 {
-    uint32_t bufferSize = bufferInfo->width * bufferInfo->height *
-                          (DrawUtils::GetPxSizeByColorMode(bufferInfo->mode) >> 3); // 3: Shift right 3 bits
-
     dc_.mapBufferInfo = new BufferInfo();
     if (dc_.mapBufferInfo == nullptr) {
         return;
@@ -717,6 +714,10 @@ void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
         dc_.mapBufferInfo = nullptr;
         return;
     }
+    dc_.mapBufferInfo->mode = ARGB8888;
+    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
+        (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift right 3 bits
+    uint32_t bufferSize = dc_.mapBufferInfo->stride * dc_.mapBufferInfo->height;
     dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr =
         BaseGfxEngine::GetInstance()->AllocBuffer(bufferSize, BUFFER_MAP_SURFACE);
 }
