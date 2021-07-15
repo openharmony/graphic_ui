@@ -32,7 +32,7 @@ constexpr uint8_t DEFAULT_ROTATE_THRESHOLD = 4;
 
 namespace OHOS {
 #if DEFAULT_ANIMATION
-class BarEaseInOutAnimator final : private AnimatorCallback {
+class BarEaseInOutAnimator final : public AnimatorCallback {
 public:
     BarEaseInOutAnimator() = delete;
     BarEaseInOutAnimator(const BarEaseInOutAnimator&) = delete;
