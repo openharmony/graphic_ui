@@ -35,6 +35,7 @@ UIButton::UIButton()
       state_(RELEASED),
       styleState_(RELEASED),
 #if DEFAULT_ANIMATION
+      enableAnimation_(true),
       animator_(*this),
 #endif
       buttonStyleAllocFlag_(false)
@@ -175,7 +176,9 @@ bool UIButton::OnPressEvent(const PressEvent& event)
     Resize(contentWidth_, contentHeight_);
     Invalidate();
 #if DEFAULT_ANIMATION
-    animator_.Start();
+    if (enableAnimation_) {
+        animator_.Start();
+    }
 #endif
     return UIView::OnPressEvent(event);
 }
@@ -187,7 +190,9 @@ bool UIButton::OnReleaseEvent(const ReleaseEvent& event)
     Resize(contentWidth_, contentHeight_);
     Invalidate();
 #if DEFAULT_ANIMATION
-    animator_.Start();
+    if (enableAnimation_) {
+        animator_.Start();
+    }
 #endif
     return UIView::OnReleaseEvent(event);
 }
@@ -199,7 +204,9 @@ bool UIButton::OnCancelEvent(const CancelEvent& event)
     Resize(contentWidth_, contentHeight_);
     Invalidate();
 #if DEFAULT_ANIMATION
-    animator_.Start();
+    if (enableAnimation_) {
+        animator_.Start();
+    }
 #endif
     return UIView::OnCancelEvent(event);
 }
@@ -296,7 +303,7 @@ bool UIButton::OnPreDraw(Rect& invalidatedArea) const
 #if DEFAULT_ANIMATION
 void UIButton::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
-    if (state_ == ButtonState::PRESSED) {
+    if (state_ == ButtonState::PRESSED && enableAnimation_) {
         animator_.DrawMask(gfxDstBuffer, invalidatedArea);
     }
     UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
