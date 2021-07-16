@@ -101,6 +101,14 @@ void UITestBUTTON::TearDown()
         delete toggleChangeListener1_;
         toggleChangeListener1_ = nullptr;
     }
+    if (enableAnimationListener_ != nullptr) {
+        delete enableAnimationListener_;
+        enableAnimationListener_ = nullptr;
+    }
+    if (disableAnimationListener_ != nullptr) {
+        delete disableAnimationListener_;
+        disableAnimationListener_ = nullptr;
+    }
     DeleteChildren(container_);
     container_ = nullptr;
 }
@@ -608,6 +616,27 @@ private:
     bool touchable_;
 };
 
+#if DEFAULT_ANIMATION
+class TestBtnAnimationListener : public UIView::OnClickListener {
+public:
+    TestBtnAnimationListener(UIView* uiView, bool enableAnimation)
+        : uiView_(uiView),
+          enableAnimation_(enableAnimation) {}
+
+    ~TestBtnAnimationListener() {}
+
+    bool OnClick(UIView& view, const ClickEvent& event) override
+    {
+        static_cast<UIButton*>(uiView_)->EnableButtonAnimation(enableAnimation_);
+        return true;
+    }
+
+private:
+    UIView* uiView_;
+    bool enableAnimation_;
+};
+#endif
+
 UILabel* GetTestUILabel(const char* titlename)
 {
     if (titlename == nullptr) {
@@ -711,6 +740,26 @@ void UITestBUTTON::UIKit_Button_Test_002(UIScrollView* container, UIButton* butt
     container->Add(button13);
     container->Add(button14);
     container->Add(button15);
+
+#if DEFAULT_ANIMATION
+    UILabelButton* button16 = GetTestUIButton("开启动效", 340, 1040, button); // 340: x-coordinate, 1040: y-coordinate
+    if (enableAnimationListener_ == nullptr) {
+        enableAnimationListener_ =
+            static_cast<UIView::OnClickListener*>(new TestBtnAnimationListener((UIView*)button, true));
+    }
+    button16->SetOnClickListener(enableAnimationListener_);
+
+    UILabelButton* button17 = GetTestUIButton("关闭动效", 340, 1090, button); // 340: x-coordinate, 1090: y-coordinate
+    if (disableAnimationListener_ == nullptr) {
+        disableAnimationListener_ =
+            static_cast<UIView::OnClickListener*>(new TestBtnAnimationListener((UIView*)button, false));
+    }
+    button17->EnableButtonAnimation(false);
+    button17->SetOnClickListener(disableAnimationListener_);
+
+    container->Add(button16);
+    container->Add(button17);
+#endif
 }
 
 void UITestBUTTON::UIKit_Button_Test_001()

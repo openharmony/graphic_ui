@@ -87,6 +87,8 @@ private:
     UIView::OnClickListener* clickUpListener_ = nullptr;
     UIView::OnClickListener* clickDownListener_ = nullptr;
     UIView::OnClickListener* clickSmallListener_ = nullptr;
+    UIView::OnClickListener* enableAnimationListener_ = nullptr;
+    UIView::OnClickListener* disableAnimationListener_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_BUTTON_H
