@@ -142,7 +142,9 @@ void UITestGroup::SetUpTestCase()
     testCaseList_.PushBack(TestCaseInfo{"UIViewGroup", new UITestViewGroup()});
     testCaseList_.PushBack(TestCaseInfo{"View Bitmap", new UITestViewBitmap()});
 #ifndef VERSION_LITE
+#if ENABLE_VIDEO_COMPONENT
     testCaseList_.PushBack(TestCaseInfo{"Video", new UITestVideo()});
+#endif
 #endif
 #if ENABLE_FOCUS_MANAGER
     testCaseList_.PushBack(TestCaseInfo{"FocusManager", new UITestFocusManager()});
