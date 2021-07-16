@@ -61,7 +61,6 @@ test_sources = [
   "../uitest/test_ui_scroll_view/ui_test_ui_scroll_view.cpp",
   "../uitest/test_ui_swipe_view/ui_test_ui_swipe_view.cpp",
   "../uitest/test_vector_font/ui_test_vector_font.cpp",
-  "../uitest/test_video/ui_test_video.cpp",
   "../uitest/test_view_bitmap/ui_test_view_bitmap.cpp",
   "../uitest/test_view_bounds/ui_test_view_bounds.cpp",
   "../uitest/test_view_group/ui_test_view_group.cpp",
@@ -74,6 +73,12 @@ test_sources = [
   "src/ui_test_app.cpp",
   "src/ui_test_group.cpp",
 ]
+
+if (enable_video_component) {
+  test_sources += [
+    "../uitest/test_video/ui_test_video.cpp",
+  ]
+}
 
 auto_test_sources = [
   "../uitest/test_layout/ui_auto_test_basic_layout.cpp",
