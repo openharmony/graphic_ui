@@ -105,7 +105,6 @@ shared_library("ui") {
     "frameworks/components/ui_texture_mapper.cpp",
     "frameworks/components/ui_time_picker.cpp",
     "frameworks/components/ui_toggle_button.cpp",
-    "frameworks/components/ui_video.cpp",
     "frameworks/components/ui_view.cpp",
     "frameworks/components/ui_view_group.cpp",
     "frameworks/core/render_manager.cpp",
@@ -162,13 +161,13 @@ shared_library("ui") {
     "frameworks/engines/gfx/gfx_engine_manager.cpp",
     "frameworks/engines/gfx/hi3516/hi3516_engine.cpp",
   ]
+
   include_dirs = [ "//foundation/graphic/ui/frameworks" ]
   deps = [
     "//build/lite/config/component/cJSON:cjson_shared",
     "//foundation/graphic/surface:lite_surface",
     "//foundation/graphic/utils:lite_graphic_hals",
     "//foundation/graphic/wms:lite_wms",
-    "//foundation/multimedia/media_lite/frameworks/player_lite:player_lite",
     "//third_party/bounds_checking_function:libsec_shared",
     "//third_party/freetype:freetype",
     "//third_party/giflib:libgif",
@@ -177,6 +176,17 @@ shared_library("ui") {
     "//third_party/libpng:libpng",
     "//third_party/qrcodegen:qrcodegen",
   ]
+
+  if (enable_video_component) {
+    defines += [ "ENABLE_VIDEO_COMPONENT=1" ]
+    source += [
+      "frameworks/components/ui_video.cpp",
+    ]
+
+    deps += [
+      "//foundation/multimedia/media_lite/frameworks/player_lite:player_lite",
+    ]
+  }
 
   public_deps = [ "//foundation/graphic/utils:lite_graphic_utils" ]
   public_configs = [ ":graphic_define_config" ]

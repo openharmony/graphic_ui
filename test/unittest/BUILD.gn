@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import("//build/lite/config/subsystem/graphic/config.gni")
 import("//build/lite/config/test.gni")
 
 group("lite_graphic_ui_test") {
@@ -76,7 +76,6 @@ if (ohos_build_type == "debug") {
       "components/ui_swipe_view_unit_test.cpp",
       "components/ui_time_picker_unit_test.cpp",
       "components/ui_toggle_button_unit_test.cpp",
-      "components/ui_video_unit_test.cpp",
       "components/ui_view_group_unit_test.cpp",
       "components/ui_view_unit_test.cpp",
       "dfx/event_injector_unit_test.cpp",
@@ -98,6 +97,11 @@ if (ohos_build_type == "debug") {
       "rotate/ui_rotate_input_unit_test.cpp",
       "themes/theme_manager_unit_test.cpp",
     ]
+    if (enable_video_component) {
+      sources += [
+        "components/ui_video_unit_test.cpp",
+      ]
+    }
     deps = [
       "//foundation/graphic/ui:ui",
       "//foundation/multimedia/media_lite/frameworks/player_lite:player_lite",
