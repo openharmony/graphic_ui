@@ -20,10 +20,19 @@
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
+#include "components/ui_checkbox.h"
+#include "components/ui_radio_button.h"
 #include "layout/grid_layout.h"
 #include "ui_test.h"
 
 namespace OHOS {
+enum ImageScaleMode {
+    FILL,
+    AUTO,
+    CONTAIN,
+    TILING,
+};
+
 class UITestTransform : public UITest, public UIView::OnClickListener {
 public:
     UITestTransform() {}
@@ -40,7 +49,16 @@ public:
     void UIKit_Transform_Test_Scale_002();
     void UIKit_Transform_Test_Translate_003();
 
+    void SetScaleMode(ImageScaleMode mode);
 private:
+    UILabel* AddLable(int16_t x, int16_t y, const char* data);
+    UIRadioButton* AddRadioButton(Rect rect, const char* name, UICheckBox::OnChangeListener* listener);
+    Rect GetRect(int16_t x, int16_t y, int16_t w, int16_t h) const
+    {
+        return Rect(x, y, x + w - 1, y + h - 1);
+    }
+    void SetTransMap(int16_t angle, float scale, int16_t trans, Vector2<float> pivot);
+
     UIScrollView* container_ = nullptr;
     GridLayout* layout_ = nullptr;
     UIImageView* imageView_ = nullptr;
@@ -49,6 +67,28 @@ private:
     UILabelButton* rotateBtn_ = nullptr;
     UILabelButton* scaleBtn_ = nullptr;
     UILabelButton* translateBtn_ = nullptr;
+    int16_t angle_ = 0;
+    float scale_ = 1.0;
+    int16_t trans_ = 0;
+};
+
+class StateChangeListener : public UICheckBox::OnChangeListener {
+public:
+    explicit StateChangeListener(ImageScaleMode mode, UITestTransform* testInstance_);
+    ~StateChangeListener() {}
+    bool OnChange(UICheckBox::UICheckBoxState state) override;
+private:
+    ImageScaleMode mode_ = ImageScaleMode::AUTO;
+    UITestTransform* testInstance_ = nullptr;
+};
+
+class UITestRadioButton : public UIRadioButton {
+public:
+    explicit UITestRadioButton(const char* name);
+    ~UITestRadioButton();
+    void SetOnChangeListener(UICheckBox::OnChangeListener* listener);
+private:
+    UICheckBox::OnChangeListener* listener_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_TRANSFORM_H
