@@ -24,10 +24,11 @@
 namespace OHOS {
 namespace {
 static int16_t g_buttonH = 80;
-static int16_t g_buttonW = 300;
+static int16_t g_buttonW = 400;
 static int16_t g_blank = 20;
 static int16_t g_swipeH = 200;
 static int16_t g_swipeW = 400;
+static int16_t g_swipeHorH = 110;
 static int16_t g_deltaCoordinateY = 19;
 static int16_t g_deltaCoordinateY2 = 37;
 } // namespace
@@ -60,6 +61,7 @@ const UIView* UITestUISwipeView::GetTestView()
 {
     UIKit_Swipe_View_Test_Horizontal_001();
     UIKit_Swipe_View_Test_Horizontal_002();
+    UIKit_Swipe_View_Test_Horizontal_003();
     UIKit_Swipe_View_Test_Align_001(UISwipeView::ALIGN_LEFT);
     UIKit_Swipe_View_Test_Align_001(UISwipeView::ALIGN_CENTER);
     UIKit_Swipe_View_Test_Align_001(UISwipeView::ALIGN_RIGHT);
@@ -76,7 +78,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
     if (container_ == nullptr) {
         return;
     }
-    UILabel* label = GetTitleLabel("UISwipeView水平滑动");
+    UILabel* label = GetTitleLabel("两个子元素UISwipeView循环水平滑动");
     container_->Add(label);
     positionX_ = TEXT_DISTANCE_TO_LEFT_SIDE;
     positionY_ = TEXT_DISTANCE_TO_TOP_SIDE;
@@ -85,8 +87,9 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
 
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
     swipe->SetIntercept(true);
+    swipe->SetLoopState(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
-    swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeH);
+    swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeHorH);
     swipe->SetBlankSize(100); // 100: is blank size
     container_->Add(swipe);
     UILabelButton* button1 = new UILabelButton();
@@ -98,10 +101,43 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
     button2->SetText("button2");
     swipe->Add(button2);
     SetLastPos(swipe);
-    positionY_ += g_swipeH;
+    positionY_ += g_swipeHorH;
 }
 
 void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    UILabel* label = GetTitleLabel("UISwipeView水平滑动");
+    container_->Add(label);
+    positionY_ += g_deltaCoordinateY;
+    label->SetPosition(positionX_, positionY_);
+    positionY_ += g_deltaCoordinateY2;
+
+    UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
+    swipe->SetIntercept(true);
+    swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
+    swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeHorH);
+    swipe->SetAnimatorTime(100); // 100: mean animator drag time(ms)
+    container_->Add(swipe);
+    UILabelButton* button1 = new UILabelButton();
+    button1->SetPosition(0, 0, g_buttonW, g_buttonH);
+    button1->SetText("button1");
+    swipe->Add(button1);
+    UILabelButton* button2 = new UILabelButton();
+    button2->SetPosition(0, 0, g_buttonW, g_buttonH);
+    button2->SetText("button2");
+    swipe->Add(button2);
+    UILabelButton* button3 = new UILabelButton();
+    button3->SetPosition(0, 0, g_buttonW, g_buttonH);
+    button3->SetText("button3");
+    swipe->Add(button3);
+    SetLastPos(swipe);
+    positionY_ += g_swipeHorH;
+}
+
+void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_003()
 {
     if (container_ == nullptr) {
         return;
@@ -115,7 +151,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
     swipe->SetIntercept(true);
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
-    swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeH);
+    swipe->SetPosition(positionX_, positionY_, g_swipeW, g_swipeHorH);
     swipe->SetLoopState(true);
     swipe->SetAnimatorTime(100); // 100: mean animator drag time(ms)
     container_->Add(swipe);
@@ -132,7 +168,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
     button3->SetText("button3");
     swipe->Add(button3);
     SetLastPos(swipe);
-    positionY_ += g_swipeH;
+    positionY_ += g_swipeHorH;
 }
 
 void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_001()
