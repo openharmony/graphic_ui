@@ -302,9 +302,9 @@ void UISwipeView::SortChild()
 
     while (next != nullptr) {
         if (direction_ == HORIZONTAL) {
-            next->SetX(pre->GetRelativeRect().GetRight() + pre->GetStyle(STYLE_MARGIN_RIGHT));
+            next->SetX(pre->GetRelativeRect().GetRight() + pre->GetStyle(STYLE_MARGIN_RIGHT) + 1);
         } else {
-            next->SetY(pre->GetRelativeRect().GetBottom() + pre->GetStyle(STYLE_MARGIN_BOTTOM));
+            next->SetY(pre->GetRelativeRect().GetBottom() + pre->GetStyle(STYLE_MARGIN_BOTTOM) + 1);
         }
         pre = next;
         next->SetViewIndex(index);
