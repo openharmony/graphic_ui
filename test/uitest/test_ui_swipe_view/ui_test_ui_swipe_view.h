@@ -33,6 +33,7 @@ public:
 
     void UIKit_Swipe_View_Test_Horizontal_001();
     void UIKit_Swipe_View_Test_Horizontal_002();
+    void UIKit_Swipe_View_Test_Horizontal_003();
     void UIKit_Swipe_View_Test_Ver_001();
     void UIKit_Swipe_View_Test_Ver_002();
     void UIKit_Swipe_View_Test_Remove_001();
