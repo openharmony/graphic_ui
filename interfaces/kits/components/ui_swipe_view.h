@@ -329,6 +329,7 @@ protected:
     void StopAnimator() override;
     virtual void SwitchToPage(int16_t dst, bool needAnimator = true);
     void MoveChildByOffset(int16_t xOffset, int16_t yOffset) override;
+    void MoveHeadOrTailChild();
 
     /**
      * @brief Indicates that the animation duration is 12 ticks.

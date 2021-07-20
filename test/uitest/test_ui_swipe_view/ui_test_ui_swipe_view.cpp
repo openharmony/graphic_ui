@@ -31,6 +31,7 @@ static int16_t g_swipeW = 400;
 static int16_t g_swipeHorH = 110;
 static int16_t g_deltaCoordinateY = 19;
 static int16_t g_deltaCoordinateY2 = 37;
+static uint16_t g_MaxIndex = 3;
 } // namespace
 
 void UITestUISwipeView::SetUp()
@@ -53,6 +54,8 @@ void UITestUISwipeView::TearDown()
     removeHeadBtn_ = nullptr;
     removeMidBtn_ = nullptr;
     removeAllBtn_ = nullptr;
+    loopBtn_ = nullptr;
+    changePageBtn_ = nullptr;
     lastX_ = 0;
     lastY_ = 0;
 }
@@ -69,6 +72,8 @@ const UIView* UITestUISwipeView::GetTestView()
     UIKit_Swipe_View_Test_Ver_001();
     UIKit_Swipe_View_Test_Ver_002();
     UIKit_Swipe_View_Test_Remove_001();
+
+    UIKit_Swipe_View_Test_SetCurrentPage();
 
     return container_;
 }
@@ -344,6 +349,55 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode a
     SetLastPos(swipe);
 }
 
+void UITestUISwipeView::UIKit_Swipe_View_Test_SetCurrentPage()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    positionY_ += g_deltaCoordinateY;
+    UILabel* label = GetTitleLabel("UISwipeView切换页面");
+    container_->Add(label);
+    positionY_ += g_deltaCoordinateY;
+    label->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, positionY_);
+    positionY_ += g_deltaCoordinateY2;
+
+    UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);
+    swipe->SetIntercept(true);
+    swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
+    swipe->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, positionY_, g_swipeW, g_swipeH);
+    swipe->SetLoopState(loop_);
+    swipe->SetAnimatorTime(1000); // 100: mean animator drag time(ms)
+    currentSwipe_ = swipe;
+    container_->Add(swipe);
+    UIView* view1 = new UIView();
+    view1->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
+    view1->Resize(g_swipeW, g_swipeH);
+    swipe->Add(view1);
+    UIView* view2 = new UIView();
+    view2->SetStyle(STYLE_BACKGROUND_COLOR, Color::White().full);
+    view2->Resize(g_swipeW, g_swipeH);
+    swipe->Add(view2);
+    UIView* view3 = new UIView();
+    view3->SetStyle(STYLE_BACKGROUND_COLOR, Color::Blue().full);
+    view3->Resize(g_swipeW, g_swipeH);
+    swipe->Add(view3);
+    UIView* view4 = new UIView();
+    view4->SetStyle(STYLE_BACKGROUND_COLOR, Color::Yellow().full);
+    view4->Resize(g_swipeW, g_swipeH);
+    swipe->Add(view4);
+    if (loopBtn_ == nullptr) {
+        loopBtn_ = new UILabelButton();
+    }
+    if (changePageBtn_ == nullptr) {
+        changePageBtn_ = new UILabelButton();
+    }
+
+    positionX_ = TEXT_DISTANCE_TO_LEFT_SIDE + swipe->GetWidth() + 20; // 20: is interval between button and swipe
+    positionY_ += g_deltaCoordinateY2;
+    SetUpButton(loopBtn_, "设置循环 关 ");
+    SetUpButton(changePageBtn_, "切换页面 ");
+}
+
 bool UITestUISwipeView::OnClick(UIView& view, const ClickEvent& event)
 {
     if (currentSwipe_ == nullptr) {
@@ -371,6 +425,21 @@ bool UITestUISwipeView::OnClick(UIView& view, const ClickEvent& event)
         currentSwipe_->Remove(view);
     } else if (&view == removeAllBtn_) {
         currentSwipe_->RemoveAll();
+    } else if (&view == loopBtn_) {
+        loop_ = !loop_;
+        currentSwipe_->SetLoopState(loop_);
+        if (!loop_) {
+            loopBtn_->SetText("设置循环 关 ");
+        } else {
+            loopBtn_->SetText("设置循环 开 ");
+        }
+    } else if (&view == changePageBtn_) {
+        uint16_t currentIndex = currentSwipe_->GetCurrentPage();
+        if (currentIndex < g_MaxIndex) {
+            currentSwipe_->SetCurrentPage(++currentIndex, true);
+        } else {
+            currentSwipe_->SetCurrentPage(0, true);
+        }
     }
     currentSwipe_->Invalidate();
     btnNum_++;

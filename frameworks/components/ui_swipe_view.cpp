@@ -75,8 +75,32 @@ void UISwipeView::Remove(UIView* view)
     Invalidate();
 }
 
+void UISwipeView::MoveHeadOrTailChild()
+{
+    if (loop_) {
+        if (direction_ == HORIZONTAL) {
+            while (childrenHead_->GetX() >= 0) {
+                MoveLastChildToFirst();
+            }
+            while (childrenTail_->GetX() + childrenTail_->GetWidth() <= GetWidth()) {
+                MoveFirstChildToLast();
+            }
+        } else {
+            while (childrenHead_->GetY() >= 0) {
+                MoveLastChildToFirst();
+            }
+            while (childrenTail_->GetY() + childrenTail_->GetHeight() <= GetHeight()) {
+                MoveFirstChildToLast();
+            }
+        }
+    }
+}
+
 void UISwipeView::SetCurrentPage(uint16_t index, bool needAnimator)
 {
+    if (needAnimator) {
+        MoveHeadOrTailChild();
+    }
     SwitchToPage(index, needAnimator);
     Invalidate();
 }
@@ -415,21 +439,7 @@ void UISwipeView::RefreshCurrentView(int16_t distance)
 void UISwipeView::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
 {
     UIViewGroup::MoveChildByOffset(xOffset, yOffset);
-    if (direction_ == HORIZONTAL) {
-        while (isNeedLoop() && (childrenHead_->GetX() > 0)) {
-            MoveLastChildToFirst();
-        }
-        while (isNeedLoop() && (childrenTail_->GetX() + childrenTail_->GetWidth() < GetWidth())) {
-            MoveFirstChildToLast();
-        }
-    } else {
-        while (isNeedLoop() && (childrenHead_->GetY() > 0)) {
-            MoveLastChildToFirst();
-        }
-        while (isNeedLoop() && (childrenTail_->GetY() + childrenTail_->GetHeight() < GetHeight())) {
-            MoveFirstChildToLast();
-        }
-    }
+    MoveHeadOrTailChild();
 }
 
 bool UISwipeView::isNeedLoop()
