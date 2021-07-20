@@ -175,9 +175,9 @@ bool CompareTools::SaveFile(const char* filePath, size_t length)
         return false;
     }
 #ifdef _WIN32
-    uint32_t fd = open(filePath, O_WRONLY | O_CREAT | O_BINARY);
+    uint32_t fd = open(filePath, O_WRONLY | O_CREAT | O_BINARY, DEFAULT_FILE_PERMISSION);
 #else
-    uint32_t fd = open(filePath, O_WRONLY | O_CREAT);
+    uint32_t fd = open(filePath, O_WRONLY | O_CREAT, DEFAULT_FILE_PERMISSION);
 #endif
     if (fd == -1) {
         return false;
@@ -248,7 +248,7 @@ bool CompareTools::SaveLog(const char* buff, size_t bufSize)
     if ((buff == nullptr) || (logPath_ == nullptr)) {
         return false;
     }
-    uint32_t logFd = open(logPath_, O_WRONLY | O_CREAT | O_APPEND);
+    uint32_t logFd = open(logPath_, O_WRONLY | O_CREAT | O_APPEND, DEFAULT_FILE_PERMISSION);
     if (logFd == -1) {
         GRAPHIC_LOGE("open log failed");
         return false;
