@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ class UITestRadioButton : public UIRadioButton {
 public:
     explicit UITestRadioButton(const char* name);
     ~UITestRadioButton();
-    void SetOnChangeListener(UICheckBox::OnChangeListener* listener);
+    void SetListener(UICheckBox::OnChangeListener* listener);
 private:
     UICheckBox::OnChangeListener* listener_ = nullptr;
 };
