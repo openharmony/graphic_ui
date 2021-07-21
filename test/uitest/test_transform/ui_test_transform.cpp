@@ -58,6 +58,19 @@ void UITestTransform::SetUp()
         layout_->SetRows(3); // 3:two rows
         layout_->SetCols(1); // 1:three cols
     }
+    AddLable(layout_->GetOrigRect().GetRight() + 34, 50, "Auto"); // 34 : increase x-coordinate; 50: position y
+    AddLable(layout_->GetOrigRect().GetRight() + 34, 100, "Fill"); // 34 : increase x-coordinate; 100: position y
+    AddLable(layout_->GetOrigRect().GetRight() + 34, 150, "Contain"); // 34 : increase x-coordinate; 150: position y
+    AddLable(layout_->GetOrigRect().GetRight() + 34, 200, "Tiling"); // 34 : increase x-coordinate; 200: position y
+    AddRadioButton(GetRect(560, 40, 50, 50), // 560:position x 40:position y 50:width and height
+        "RB", new StateChangeListener(ImageScaleMode::AUTO, this))->SetState(
+        UICheckBox::UICheckBoxState::SELECTED);
+    AddRadioButton(GetRect(560, 90, 50, 50), // 560:position x 90:position y 50:width and height
+        "RB", new StateChangeListener(ImageScaleMode::FILL, this));
+    AddRadioButton(GetRect(560, 140, 50, 50), // 560:position x 90:position y 50:width and height
+        "RB", new StateChangeListener(ImageScaleMode::CONTAIN, this));
+    AddRadioButton(GetRect(560, 190, 50, 50), // 560:position x 90:position y 50:width and height
+        "RB", new StateChangeListener(ImageScaleMode::TILING, this));
 }
 
 void UITestTransform::TearDown()
@@ -119,16 +132,123 @@ bool UITestTransform::OnClick(UIView& view, const ClickEvent& event)
 {
     Rect viewRect = imageView_->GetOrigRect();
     TransformMap transMap(viewRect);
-    Vector2<float> pivot_(58, 58); // 58:x value 58:y value
+    Vector2<float> pivot(58, 58); // 58:x value 58:y value
     if (&view == rotateBtn_) {
-        transMap.Rotate(90, pivot_); // 90:degree
+        angle_ = (angle_ + 90) % 360; // 90: increase angle; 360: wrapping value
     } else if (&view == scaleBtn_) {
-        transMap.Scale(Vector2<float>(1.5, 1.5), pivot_); // 1.5:x scale 1.5:y scale
+        scale_ += 0.1f; // 0.1: increase scale
     } else if (&view == translateBtn_) {
-        transMap.Translate(Vector2<int16_t>(80, -30)); // 80:x-axis translation distance -30:y-axis translation distance
+        trans_ += 10; // 10: increase translate
     }
-    imageView_->SetTransformMap(transMap);
-
+    SetTransMap(angle_, scale_, trans_, pivot);
     return true;
+}
+
+void UITestTransform::SetScaleMode(ImageScaleMode mode)
+{
+    // must the position fisrt
+    switch (mode) {
+        case ImageScaleMode::AUTO:
+            imageView_->SetAutoEnable(true);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::NONE);
+            break;
+        case ImageScaleMode::CONTAIN:
+            imageView_->SetAutoEnable(false);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::CONTAIN);
+            break;
+        case ImageScaleMode::FILL:
+            imageView_->SetAutoEnable(false);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::FILL);
+            break;
+        case ImageScaleMode::TILING:
+            imageView_->SetAutoEnable(false);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::NONE);
+            break;
+        default:
+            break;
+    }
+    if (mode != ImageScaleMode::AUTO) {
+        imageView_->SetWidth(200); // 200: width
+        imageView_->SetHeight(200); // 200: height
+    }
+    // reset the transmap
+    SetTransMap(0, 1.0f, 0, {0.0f,  0.0f});
+    uiViewGroupFrame_->Invalidate();
+}
+
+void UITestTransform::SetTransMap(int16_t angle, float scale, int16_t trans, Vector2<float> pivot)
+{
+    angle_ = angle;
+    scale_ = scale;
+    trans_ = trans;
+    Rect viewRect = imageView_->GetOrigRect();
+    TransformMap transMap(viewRect);
+    transMap.Rotate(angle_, pivot);
+    transMap.Scale(Vector2<float>(scale_, scale_), pivot);
+    transMap.Translate(Vector2<int16_t>(trans, 0));
+    imageView_->SetTransformMap(transMap);
+}
+
+UILabel* UITestTransform::AddLable(int16_t x, int16_t y, const char* data)
+{
+    UILabel* label = new UILabel();
+    container_->Add(label);
+    label->SetPosition(x, y, Screen::GetInstance().GetWidth(),
+        TITLE_LABEL_DEFAULT_HEIGHT);
+    label->SetText(data);
+    label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
+    return label;
+}
+
+UIRadioButton* UITestTransform::AddRadioButton(Rect rect, const char* name, UICheckBox::OnChangeListener* listener)
+{
+    if (listener == nullptr || name == nullptr) {
+        return nullptr;
+    }
+    auto radioButton = new UITestRadioButton("dddd");
+    container_->Add(radioButton);
+    radioButton->SetOnChangeListener(listener);
+    radioButton->SetPosition(rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight());
+    if (radioButton->GetState() == UICheckBox::SELECTED) {
+        listener->OnChange(UICheckBox::SELECTED);
+    }
+    return radioButton;
+}
+
+StateChangeListener::StateChangeListener(ImageScaleMode mode, UITestTransform* testInstance)
+    : mode_(mode),
+      testInstance_(testInstance)
+{
+
+}
+
+bool StateChangeListener::OnChange(UICheckBox::UICheckBoxState state)
+{
+    if (state == UICheckBox::UICheckBoxState::SELECTED) {
+        testInstance_->SetScaleMode(mode_);
+    }
+}
+
+UITestRadioButton::UITestRadioButton(const char*  name)
+    : UIRadioButton(name)
+{
+
+}
+
+UITestRadioButton::~UITestRadioButton()
+{
+    if (listener_ != nullptr) {
+        delete listener_;
+        listener_ = nullptr;
+    }
+}
+
+void UITestRadioButton::SetOnChangeListener(UICheckBox::OnChangeListener* listener)
+{
+    UIRadioButton::SetOnChangeListener(listener);
+    if (listener_ != nullptr) {
+        delete listener_;
+    }
+    listener_ = listener;
 }
 } // namespace OHOS

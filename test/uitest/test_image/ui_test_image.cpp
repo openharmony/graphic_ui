@@ -74,6 +74,7 @@ const UIView* UITestImage::GetTestView()
     UIKit_UIImage_Test_SetImage_016();
 #endif
     UIKit_UIImage_Test_Uncompress_001();
+    UIKit_UIImage_Test_Resize_001();
     return container_;
 }
 
@@ -512,7 +513,51 @@ void UITestImage::UIKit_UIImage_Test_Uncompress_001()
         container_->Add(imageView1);
         container_->Add(imageView2);
         container_->Add(imageView3);
-        g_height += 100; // offset=100
+        g_height += 150; // offset=150
+    }
+}
+
+UILabel* UITestImage::AddLable(int16_t x, int16_t y, const char* data)
+{
+    UILabel* label = new UILabel();
+    container_->Add(label);
+    label->SetPosition(x, y, Screen::GetInstance().GetWidth(),
+        TITLE_LABEL_DEFAULT_HEIGHT);
+    label->SetText(data);
+    label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
+    return label;
+}
+
+UIImageView* UITestImage::AddImageView(const Rect rect, const char* src, bool autoEnable,
+    UIImageView::ImageResizeMode mode)
+{
+    UIImageView* imageView = new UIImageView();
+    imageView->SetAutoEnable(autoEnable);
+    imageView->SetPosition(rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight());
+    imageView->SetSrc(src);
+    imageView->SetResizeMode(mode);
+    container_->Add(imageView);
+}
+
+void UITestImage::UIKit_UIImage_Test_Resize_001()
+{
+    if (container_ != nullptr) {
+        AddLable(TEXT_DISTANCE_TO_LEFT_SIDE, g_height, "图片缩放模式测试");
+        AddLable(48, g_height + 30, "Fill mode"); // 48: position x; 30: increase y-coordinate
+        AddLable(160, g_height + 30, "Contain mode"); // 160: position x; 30: increase y-coordinate
+        AddLable(320, g_height + 30, "Auto mode"); // 320: position x; 30: increase y-coordinate
+        AddLable(480, g_height + 30, "Tiling mode"); // 480: position x; 30: increase y-coordinate
+        UIImageView* imageView;
+        // 48: position x; 70: increase y-coordinate; 100: width and height
+        AddImageView(GetRect(48, g_height + 70, 100, 100), RED_IMAGE_PATH, false, UIImageView::ImageResizeMode::FILL);
+        // 160: position x; 70: increase y-coordinate; 100: width and height
+        AddImageView(GetRect(160, g_height + 70, 100, 50), RED_IMAGE_PATH,
+            false, UIImageView::ImageResizeMode::CONTAIN);
+        // 320: position x; 70: increase y-coordinate; 100: width and height
+        AddImageView(GetRect(320, g_height + 70, 100, 100), RED_IMAGE_PATH, true, UIImageView::ImageResizeMode::NONE);
+        // 480: position x; 70: increase y-coordinate; 100: width and height
+        AddImageView(GetRect(480, g_height + 70, 100, 100), RED_IMAGE_PATH, false, UIImageView::ImageResizeMode::NONE);
+        g_height += 150; // offset 150
     }
 }
 } // namespace OHOS

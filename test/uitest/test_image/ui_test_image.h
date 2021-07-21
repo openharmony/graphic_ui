@@ -19,9 +19,9 @@
 #include "components/ui_scroll_view.h"
 #include "imgdecode/cache_manager.h"
 #include "ui_test.h"
+#include "components/ui_image_view.h"
 
 #ifndef VERSION_LITE
-#include "components/ui_image_view.h"
 #include "components/ui_label_button.h"
 #include "test_resource_config.h"
 #endif
@@ -56,7 +56,7 @@ public:
     void UIKit_UIImage_Test_SetImage_016();
 #endif
     void UIKit_UIImage_Test_Uncompress_001();
-
+    void UIKit_UIImage_Test_Resize_001();
 private:
     const char* GetCharByImageSrcType(ImageSrcType srcType) const;
 #ifndef VERSION_LITE
@@ -74,6 +74,13 @@ private:
     UILabelButton* gifToBin03_ = nullptr;
     UILabelButton* gifToBin04_ = nullptr;
 #endif
+private:
+    UILabel* AddLable(int16_t x, int16_t y, const char* data);
+    UIImageView* AddImageView(const Rect rect, const char* src, bool autoEnable, UIImageView::ImageResizeMode mode);
+    Rect GetRect(int16_t x, int16_t y, int16_t w, int16_t h) const
+    {
+        return Rect(x, y, x + w , y + h);
+    }
 };
 } // namespace OHOS
 #endif // UI_TEST_IMAGE_H
