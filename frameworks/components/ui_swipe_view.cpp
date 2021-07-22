@@ -98,7 +98,9 @@ void UISwipeView::MoveHeadOrTailChild()
 
 void UISwipeView::SetCurrentPage(uint16_t index, bool needAnimator)
 {
-    MoveHeadOrTailChild();
+    if (needAnimator) {
+        MoveHeadOrTailChild();
+    }
     SwitchToPage(index, needAnimator);
     Invalidate();
 }
