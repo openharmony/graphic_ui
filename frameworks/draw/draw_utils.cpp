@@ -273,28 +273,60 @@ void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
 
 void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const
 {
-    OpacityType opa = letterInfo.opa;
-    Color32 fillColor;
-    fillColor.full = Color::ColorTo32(letterInfo.color);
-
-    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, letterInfo.opa);
     UIFont* fontEngine = UIFont::GetInstance();
-    FontHeader head;
-    GlyphNode node;
-    if (fontEngine->GetCurrentFontHeader(head) != 0) {
-        return;
-    }
 
+    GlyphNode node;
     const uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
+
     uint16_t letterW = node.cols;
     uint16_t letterH = node.rows;
-    uint8_t opacityMask;
     int16_t posX;
     int16_t posY = letterInfo.pos.y + letterInfo.fontSize - node.top - letterInfo.offsetY;
+
+    if (letterInfo.direct == TEXT_DIRECT_RTL) {
+        /* RTL */
+        posX = letterInfo.pos.x - node.advance + node.left + letterInfo.offsetX;
+    } else {
+        /* LTR */
+        posX = letterInfo.pos.x + node.left + letterInfo.offsetX;
+    }
+
+    if ((posX + letterW < letterInfo.mask.GetLeft()) || (posX > letterInfo.mask.GetRight()) ||
+        (posY + letterH < letterInfo.mask.GetTop()) || (posY > letterInfo.mask.GetBottom())) {
+        return;
+    }
+
+    uint16_t rowStart = (posY >= letterInfo.mask.GetTop()) ? 0 : (letterInfo.mask.GetTop() - posY);
+    uint16_t rowEnd =
+        (posY + letterH <= letterInfo.mask.GetBottom()) ? letterH : (letterInfo.mask.GetBottom() - posY + 1);
+    uint16_t colStart = (posX >= letterInfo.mask.GetLeft()) ? 0 : (letterInfo.mask.GetLeft() - posX);
+    uint16_t colEnd =
+        (posX + letterW <= letterInfo.mask.GetRight()) ? letterW : (letterInfo.mask.GetRight() - posX + 1);
+
+    Rect srcRect(posX, posY, posX + letterW - 1, posY + letterH - 1);
+    Rect subRect(posX + colStart, posY + rowStart, colEnd - 1 + posX, rowEnd - 1 + posY);
+
     uint8_t fontWeight = fontEngine->GetFontWeight(letterInfo.fontId);
+    BaseGfxEngine::GetInstance()->DrawLetter(gfxDstBuffer, fontMap, srcRect, subRect, fontWeight, letterInfo.color,
+                                             letterInfo.opa);
+    return;
+}
+
+void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer,
+                           const uint8_t* fontMap,
+                           const Rect& fontRect,
+                           const Rect& subRect,
+                           const uint8_t fontWeight,
+                           const ColorType& color,
+                           const OpacityType opa) const
+{
+    Color32 fillColor;
+    fillColor.full = Color::ColorTo32(color);
+    uint8_t opacityMask;
     uint8_t colorMode = 0;
     uint8_t opacityStep = 1;
     switch (fontWeight) {
@@ -321,57 +353,21 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
             return;
     }
 
-    if (letterInfo.direct == TEXT_DIRECT_RTL) {
-        /* RTL */
-        posX = letterInfo.pos.x - node.advance + node.left + letterInfo.offsetX;
-    } else {
-        /* LTR */
-        posX = letterInfo.pos.x + node.left + letterInfo.offsetX;
-    }
-
-    if ((posX + letterW < letterInfo.mask.GetLeft()) || (posX > letterInfo.mask.GetRight()) ||
-        (posY + letterH < letterInfo.mask.GetTop()) || (posY > letterInfo.mask.GetBottom())) {
-        return;
-    }
-
-    uint16_t rowStart = (posY >= letterInfo.mask.GetTop()) ? 0 : (letterInfo.mask.GetTop() - posY);
-    uint16_t rowEnd =
-        (posY + letterH <= letterInfo.mask.GetBottom()) ? letterH : (letterInfo.mask.GetBottom() - posY + 1);
-    uint16_t colStart = (posX >= letterInfo.mask.GetLeft()) ? 0 : (letterInfo.mask.GetLeft() - posX);
-    uint16_t colEnd =
-        (posX + letterW <= letterInfo.mask.GetRight()) ? letterW : (letterInfo.mask.GetRight() - posX + 1);
-
-    uint8_t letterWidthInByte = (letterW * fontWeight) >> SHIFT_3;
-    if ((letterW * fontWeight) & 0x7) { // 0x7 : less than 1 byte is counted as 1 byte
+    uint8_t letterWidthInByte = (fontRect.GetWidth() * fontWeight) >> SHIFT_3;
+    if ((fontRect.GetWidth() * fontWeight) & 0x7) { // 0x7 : less than 1 byte is counted as 1 byte
         letterWidthInByte++;
     }
+    int16_t rowStart = subRect.GetY() - fontRect.GetY();
+    int16_t rowEnd = rowStart + subRect.GetHeight();
+    int16_t colStart = subRect.GetX() - fontRect.GetX();
+    int16_t colEnd = colStart + subRect.GetWidth();
 
-    int16_t dstPosX = posX + colStart;
-    int16_t dstPosY = posY + rowStart;
-
-#if ENABLE_HARDWARE_ACCELERATION && ENABLE_HARDWARE_ACCELERATION_FOR_TEXT
-    Rect srcRect(colStart, rowStart, colEnd - 1, rowEnd - 1);
-    BufferInfo src;
-    src.rect = srcRect;
-    src.virAddr = static_cast<void*>(const_cast<uint8_t*>(fontMap));
-    src.stride = letterWidthInByte;
-    src.mode = static_cast<ColorMode>(colorMode);
-    src.color = Color::ColorTo32(letterInfo.color);
-
-    Point dstPos = {dstPosX, dstPosY};
-    BlendOption blendOption;
-    blendOption.opacity = opa;
-
-    Rect subRect(dstPosX, dstPosY, letterW, letterH);
-    BaseGfxEngine::GetInstance()->Blit(*gfxDstBuffer, dstPos, src, subRect, blendOption);
-    return;
-#endif
-
-    screenBuffer += ((dstPosY * screenBufferWidth) + dstPosX) * bufferPxSize;
+    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opa);
+    screenBuffer += ((subRect.GetY() * screenBufferWidth) + subRect.GetX()) * bufferPxSize;
     fontMap += (rowStart * letterWidthInByte) + ((colStart * fontWeight) >> SHIFT_3);
 
     uint8_t offsetInFont = (colStart * fontWeight) % FONT_WEIGHT_8;
-    int16_t temp = (colEnd - colStart) * fontWeight - FONT_WEIGHT_8 + offsetInFont;
+    int16_t temp = subRect.GetWidth() * fontWeight - FONT_WEIGHT_8 + offsetInFont;
     if (temp < 0) {
         temp = 0;
     }
@@ -402,7 +398,7 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
             tempOffset = 0;
             tempFontByte = *(fontMap++);
         }
-        fontMap += (letterWidthInByte)-validWidthInByte - 1;
+        fontMap += letterWidthInByte - validWidthInByte - 1;
         screenBuffer += (screenBufferWidth - (colEnd - colStart)) * bufferPxSize;
     }
 }
@@ -1579,16 +1575,6 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     if (!trans.Intersect(trans, mask)) {
         return;
     }
-#if ENABLE_HARDWARE_ACCELERATION    // to do for backends
-    DRAW_UTILS_PREPROCESS(gfxDstBuffer, opaScale);
-    TransformOption option;
-    option.algorithm = dataInfo.algorithm;
-    if (ScreenDeviceProxy::GetInstance()->HardwareTransform(dataInfo.data,
-        static_cast<ColorMode>(dataInfo.header.colorMode), transMap.GetTransMapRect(), transMap.GetTransformMatrix(),
-        opaScale, Color::ColorTo32(color), mask, screenBuffer, screenBufferWidth * bufferPxSize, bufferMode, option)) {
-        return;
-    }
-#endif
 
     TriangleTransformDataInfo triangleInfo{
         dataInfo,
