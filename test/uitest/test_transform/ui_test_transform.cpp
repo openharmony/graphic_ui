@@ -205,9 +205,9 @@ UIRadioButton* UITestTransform::AddRadioButton(Rect rect, const char* name, UICh
     if (listener == nullptr || name == nullptr) {
         return nullptr;
     }
-    auto radioButton = new UITestRadioButton("dddd");
+    auto radioButton = new UITestRadioButton(name);
     container_->Add(radioButton);
-    radioButton->SetOnChangeListener(listener);
+    radioButton->SetListener(listener);
     radioButton->SetPosition(rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight());
     if (radioButton->GetState() == UICheckBox::SELECTED) {
         listener->OnChange(UICheckBox::SELECTED);
@@ -227,6 +227,7 @@ bool StateChangeListener::OnChange(UICheckBox::UICheckBoxState state)
     if (state == UICheckBox::UICheckBoxState::SELECTED) {
         testInstance_->SetScaleMode(mode_);
     }
+    return true;
 }
 
 UITestRadioButton::UITestRadioButton(const char*  name)
@@ -243,7 +244,7 @@ UITestRadioButton::~UITestRadioButton()
     }
 }
 
-void UITestRadioButton::SetOnChangeListener(UICheckBox::OnChangeListener* listener)
+void UITestRadioButton::SetListener(UICheckBox::OnChangeListener* listener)
 {
     UIRadioButton::SetOnChangeListener(listener);
     if (listener_ != nullptr) {

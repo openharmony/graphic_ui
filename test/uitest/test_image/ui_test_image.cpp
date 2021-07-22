@@ -537,6 +537,7 @@ UIImageView* UITestImage::AddImageView(const Rect rect, const char* src, bool au
     imageView->SetSrc(src);
     imageView->SetResizeMode(mode);
     container_->Add(imageView);
+    return imageView;
 }
 
 void UITestImage::UIKit_UIImage_Test_Resize_001()
@@ -547,7 +548,6 @@ void UITestImage::UIKit_UIImage_Test_Resize_001()
         AddLable(160, g_height + 30, "Contain mode"); // 160: position x; 30: increase y-coordinate
         AddLable(320, g_height + 30, "Auto mode"); // 320: position x; 30: increase y-coordinate
         AddLable(480, g_height + 30, "Tiling mode"); // 480: position x; 30: increase y-coordinate
-        UIImageView* imageView;
         // 48: position x; 70: increase y-coordinate; 100: width and height
         AddImageView(GetRect(48, g_height + 70, 100, 100), RED_IMAGE_PATH, false, UIImageView::ImageResizeMode::FILL);
         // 160: position x; 70: increase y-coordinate; 100: width and height

@@ -306,16 +306,17 @@ void UIImageView::UpdateContentMatrix()
         }
     }
     auto scaleMatrix = Matrix3<float>::Scale(Vector2<float>(scaleX, scaleY),
-        Vector2<float>(GetOrigRect().GetX(), GetOrigRect().GetY()));
+        Vector2<float>(viewRect.GetX(), viewRect.GetY()));
     auto translateMatrix = Matrix3<float>::Translate(Vector2<float>(translate.x_, translate.y_));
     *contentMatrix_ = translateMatrix * scaleMatrix;
 }
 
 void UIImageView::UpdateDrawTransMap(bool updateContentMatrix)
 {
+    auto viewRect = GetOrigRect();
     if (updateContentMatrix || (drawTransMap_ != nullptr &&
-        (drawTransMap_->GetTransMapRect().GetX() != GetOrigRect().GetX() ||
-        drawTransMap_->GetTransMapRect().GetY() != GetOrigRect().GetY()))) {
+        (drawTransMap_->GetTransMapRect().GetX() != viewRect.GetX() ||
+        drawTransMap_->GetTransMapRect().GetY() != viewRect.GetY()))) {
         UpdateContentMatrix();
     }
     // has no transformation
@@ -333,7 +334,6 @@ void UIImageView::UpdateDrawTransMap(bool updateContentMatrix)
             return;
         }
     }
-    auto viewRect = GetOrigRect();
     if (contentMatrix_ != nullptr) {
         drawTransMap_->SetTransMapRect(Rect(viewRect.GetX(), viewRect.GetY(),
             viewRect.GetX() + imageWidth_ - 1, viewRect.GetY() + imageHeight_ - 1));
