@@ -300,6 +300,11 @@ void UILabel::ReMeasure()
     InitLabelText();
     Style style = GetStyleConst();
     style.textColor_ = GetTextColor();
+    bool flag = false;
+    if ((transMap_ != nullptr) && !transMap_->IsInvalid()) {
+        transMap_->SetInvalid(true);
+        flag = true;
+    }
     labelText_->ReMeasureTextSize(GetContentRect(), style);
     Point textSize = labelText_->GetTextSize();
     switch (lineBreakMode_) {
@@ -321,6 +326,9 @@ void UILabel::ReMeasure()
             break;
         default:
             break;
+    }
+    if ((transMap_ != nullptr) && flag) {
+        transMap_->SetInvalid(false);
     }
 }
 
