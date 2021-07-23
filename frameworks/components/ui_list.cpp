@@ -44,7 +44,13 @@ UIList::Recycle::~Recycle()
 void UIList::Recycle::MesureAdapterRelativeRect()
 {
     uint16_t i = 0;
+    if (listView_ == nullptr) {
+        return;
+    }
     UIView* childHead = listView_->childrenHead_;
+    if (childHead == nullptr) {
+        return;
+    }
     uint16_t idx = childHead->GetViewIndex();
     if (listView_->direction_ == VERTICAL) {
         int32_t height = 0;
