@@ -273,7 +273,6 @@ void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
 
 void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const
 {
-    DRAW_UTILS_PREPROCESS(gfxDstBuffer, letterInfo.opa);
     UIFont* fontEngine = UIFont::GetInstance();
 
     GlyphNode node;
