@@ -917,7 +917,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     mask.Intersect(mask, screenRect);
     uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
     uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
-    bitmap.header.colorMode = bufferInfo->mode;
+    bitmap.header.colorMode = ARGB8888;
     bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
     bitmap.header.width = bufferWidth;
     bitmap.header.height = bufferHeight;
@@ -937,7 +937,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     newBufferInfo.rect = mask;
     newBufferInfo.width = bufferWidth;
     newBufferInfo.height = bufferHeight;
-    newBufferInfo.mode = bufferInfo->mode;
+    newBufferInfo.mode = ARGB8888;
     newBufferInfo.stride = bufferWidth *  DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
 
     RootView::GetInstance()->SaveDrawContext();
