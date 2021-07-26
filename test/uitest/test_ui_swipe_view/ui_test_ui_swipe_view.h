@@ -38,6 +38,7 @@ public:
     void UIKit_Swipe_View_Test_Ver_002();
     void UIKit_Swipe_View_Test_Remove_001();
     void UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode alignMode);
+    void UIKit_Swipe_View_Test_SetCurrentPage();
 
 private:
     void SetUpButton(UILabelButton* btn, const char* title);
@@ -50,7 +51,9 @@ private:
     UILabelButton* removeHeadBtn_ = nullptr;
     UILabelButton* removeMidBtn_ = nullptr;
     UILabelButton* removeAllBtn_ = nullptr;
-
+    UILabelButton* loopBtn_ = nullptr;
+    UILabelButton* changePageBtn_ = nullptr;
+    bool loop_ = false;
     int16_t lastX_ = 0;
     int16_t lastY_ = 0;
     int16_t btnNum_ = 0;
