@@ -21,14 +21,13 @@
 namespace {
 constexpr uint16_t START_ANGLE_IN_DEGREE = 60;
 constexpr uint16_t END_ANGLE_IN_DEGREE = 120;
-constexpr uint16_t SCROLL_BAR_WIDTH = 4;
 constexpr uint16_t SCROLL_BAR_MIN_ARC = 10;
 } // namespace
 
 namespace OHOS {
 UIArcScrollBar::UIArcScrollBar()
     : radius_(0),
-      width_(SCROLL_BAR_WIDTH),
+      width_(0),
       startAngle_(START_ANGLE_IN_DEGREE),
       endAngle_(END_ANGLE_IN_DEGREE),
       center_({0, 0}) {}
@@ -67,7 +66,7 @@ void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invali
     }
 
     ArcInfo arcInfo = {0};
-    arcInfo.radius = radius_;
+    arcInfo.radius = (radius_ > 0) ? (radius_ - 1) : 0;
     arcInfo.center = center_;
     arcInfo.startAngle = MATH_MAX(startAngle, START_ANGLE_IN_DEGREE);
     arcInfo.endAngle = MATH_MIN(endAngle, END_ANGLE_IN_DEGREE);

@@ -639,6 +639,11 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
         }
         stackCount = 0;
         curView = par->GetNextSibling();
+        if (enableAnimator) {
+            par->OnPostDraw(*dc_.mapBufferInfo, curViewRect);
+        } else {
+            par->OnPostDraw(*dc_.bufferInfo, curViewRect);
+        }
         par = par->GetParent();
     }
 }
