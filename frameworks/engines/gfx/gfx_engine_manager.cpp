@@ -46,6 +46,17 @@ void BaseGfxEngine::DrawLine(BufferInfo& dst,
     DrawLine::Draw(dst, start, end, mask, width, color, opacity);
 }
 
+void BaseGfxEngine::DrawLetter(BufferInfo& gfxDstBuffer,
+                               const uint8_t* fontMap,
+                               const Rect& fontRect,
+                               const Rect& subRect,
+                               const uint8_t fontWeight,
+                               const ColorType& color,
+                               const OpacityType opa)
+{
+    DrawUtils::GetInstance()->DrawLetter(gfxDstBuffer, fontMap, fontRect, subRect, fontWeight, color, opa);
+}
+
 void BaseGfxEngine::DrawCubicBezier(BufferInfo& dst,
                                     const Point& start,
                                     const Point& control1,
