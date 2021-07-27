@@ -157,11 +157,9 @@ public:
     void SetAutoEnable(bool enable)
     {
         if (autoEnable_ != enable) {
-            if (enable) {
-                SetResizeMode(ImageResizeMode::NONE);
-            }
             needRefresh_ = autoEnable_ ? needRefresh_ : true;
             autoEnable_ = enable;
+            UpdateDrawTransMap(true);
         }
     }
 
@@ -264,10 +262,14 @@ public:
 
     enum ImageResizeMode : uint8_t {
         NONE,
-        FILL,
+        COVER,
         CONTAIN,
+        FILL,
+        CENTER,
+        SCALE_DOWN,
     };
-
+    void AdjustScaleAndTranslate(Vector2<float>& scale, Vector2<int16_t>& translate,
+        int16_t widgetWidth, int16_t widgetHeight) const;
     void SetResizeMode(ImageResizeMode mode);
     void SetWidth(int16_t width) override;
     void SetHeight(int16_t height) override;
