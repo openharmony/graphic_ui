@@ -463,8 +463,8 @@ void ClipUtils::CreateEdgeList(const ClipPath& path)
     ClipPolygon polygon;
     path.GeneratePolygon(polygon);
     Graphic::Vector<PointF>& points = polygon.points_;
-    maxY_ = floor(polygon.bound_.bottom);
-    minY_ = ceil(polygon.bound_.top);
+    maxY_ = static_cast<int16_t>(floor(polygon.bound_.bottom));
+    minY_ = static_cast<int16_t>(ceil(polygon.bound_.top));
 
     uint16_t size = points.Size();
     for (int16_t i = 0; i < size; i++) {
@@ -485,15 +485,15 @@ void ClipUtils::CreateEdgeList(const ClipPath& path)
             float dy = (y1 - y2) / (x1 - x2);
             edge.dy = MATH_ABS(dy);
             if (x1 > x2) {
-                edge.x = floor(x1);
+                edge.x = static_cast<int16_t>(floor(x1));
                 edge.y = y1 + (x1 - edge.x) * edge.dy;
                 edge.sx = -1;
-                edge.xIndex = edge.x - ceil(x2) + 1;
+                edge.xIndex = edge.x - static_cast<int16_t>(ceil(x2)) + 1;
             } else {
-                edge.x = ceil(x1);
+                edge.x = static_cast<int16_t>(ceil(x1));
                 edge.y = y1 + (edge.x - x1) * edge.dy;
                 edge.sx = 1;
-                edge.xIndex = floor(x2) - edge.x + 1;
+                edge.xIndex = static_cast<int16_t>(floor(x2)) - edge.x + 1;
             }
             if (edge.xIndex > 0) {
                 auto it = aaList_.Begin();
@@ -508,8 +508,8 @@ void ClipUtils::CreateEdgeList(const ClipPath& path)
         }
 
         /* Insert the edges to edgeList_ */
-        int16_t ymax = floor(y2);
-        int16_t ymin = floor(y1) + 1;
+        int16_t ymax =  static_cast<int16_t>(floor(y2));
+        int16_t ymin =  static_cast<int16_t>(floor(y1)) + 1;
         if (ymax < ymin) {
             continue;
         }
@@ -568,17 +568,20 @@ void ClipUtils::PerformScan(const ClipPath& path, Blitter& blitter)
         auto iter = activeEdgeList.Begin();
         auto endIt = activeEdgeList.End();
         while (iter != endIt && iter->next_ != endIt) {
-            int16_t xLeft = ceil(iter->data_.x);
-            int16_t xRight = floor(iter->next_->data_.x);
+            int16_t xLeft =  static_cast<int16_t>(ceil(iter->data_.x));
+            int16_t xRight =  static_cast<int16_t>(floor(iter->next_->data_.x));
             InsertSpan(*span0_, xLeft, xRight, OPA_OPAQUE);
 
             /* Anti aliasing on both sides */
             uint8_t opa =  MATH_ROUND(RF_PART(iter->data_.x) * OPA_OPAQUE);
-            InsertSpan(*span0_, iter->data_.x, iter->data_.x, opa);
-            InsertSpan(*span0_, iter->data_.x + 1, iter->data_.x + 1, OPA_OPAQUE - opa);
-            opa =  MATH_ROUND(RF_PART(iter->next_->data_.x) * OPA_OPAQUE);
-            InsertSpan(*span0_, iter->next_->data_.x, iter->next_->data_.x, opa);
-            InsertSpan(*span0_, iter->next_->data_.x + 1, iter->next_->data_.x + 1, OPA_OPAQUE - opa);
+            InsertSpan(*span0_,  static_cast<int16_t>(iter->data_.x),  static_cast<int16_t>(iter->data_.x), opa);
+            InsertSpan(*span0_, static_cast<int16_t>(iter->data_.x) + 1, static_cast<int16_t>(iter->data_.x) + 1,
+                       OPA_OPAQUE - opa);
+            opa = MATH_ROUND(RF_PART(iter->next_->data_.x) * OPA_OPAQUE);
+            InsertSpan(*span0_, static_cast<int16_t>(iter->next_->data_.x), static_cast<int16_t>(iter->next_->data_.x),
+                       opa);
+            InsertSpan(*span0_, static_cast<int16_t>(iter->next_->data_.x) + 1,
+                       static_cast<int16_t>(iter->next_->data_.x) + 1, OPA_OPAQUE - opa);
 
             iter = iter->next_->next_;
         }
