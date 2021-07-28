@@ -172,6 +172,7 @@ UIPicker::UIPicker()
     highlightColor_ = style_->textColor_;
 
     list_.SetThrowDrag(true);
+    list_.SetStyle(StyleDefault::GetBackgroundTransparentStyle());
 #if ENABLE_ROTATE_INPUT
     list_.rotateFactor_ = DEFAULT_PICKER_ROTATE_FACTOR;
 #endif
