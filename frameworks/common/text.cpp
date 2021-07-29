@@ -374,6 +374,9 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
         y += lineHeight;
         lineStart = nextLineStart;
     }
+    if (nextLineStart == textLen) {
+        return TEXT_ELLIPSIS_END_INV;
+    }
     /* Calculate the x coordinate */
     width = pos.x;
     lineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width, true);
