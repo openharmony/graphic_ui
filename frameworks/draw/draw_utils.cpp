@@ -1562,6 +1562,88 @@ BottomHalf:
     DrawTriangleTransformPart(gfxDstBuffer, part);
 }
 
+void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
+{
+    int16_t border = 1; // 1 : border width
+    int16_t offset = border * 2; // 2 : offset
+    uint16_t width = newDataInfo.header.width;
+    uint16_t height = newDataInfo.header.height;
+    int16_t diff = 0;
+    if (newDataInfo.pxSize > FONT_WEIGHT_8) {
+        width += offset;
+        height += offset;
+        diff = border * newDataInfo.pxSize / FONT_WEIGHT_8;
+    } else {
+        width += offset * FONT_WEIGHT_8 / newDataInfo.pxSize;
+        height += offset;
+        diff = border;
+    }
+    uint16_t widthInByte = width * newDataInfo.pxSize / FONT_WEIGHT_8;
+    if ((width * newDataInfo.pxSize) % FONT_WEIGHT_8 != 0) {
+        widthInByte++;
+    }
+    uint8_t* newData = static_cast<uint8_t*>(UIMalloc(widthInByte * height));
+    if (newData == nullptr) {
+        return;
+    }
+    if (memset_s(newData, widthInByte * height, 0, widthInByte * height) != EOK) {
+        UIFree(static_cast<void*>(newData));
+        newData = nullptr;
+        return;
+    }
+    uint8_t* tmp = newData;
+    uint8_t* data = const_cast<uint8_t*>(newDataInfo.data);
+    tmp += widthInByte * border + diff;
+    for (int i = 0; i < newDataInfo.header.height; ++i) {
+        // 2 : double
+        if (memcpy_s(tmp, widthInByte - diff * 2, data, widthInByte - diff * 2) != EOK) {
+            UIFree(static_cast<void*>(newData));
+            newData = nullptr;
+            return;
+        }
+        tmp += widthInByte;
+        data += widthInByte - diff * 2; // 2 : double
+    }
+    newDataInfo.header.width = width;
+    newDataInfo.header.height = height;
+    newDataInfo.data = newData;
+}
+
+void DrawUtils::UpdateTransMap(int16_t width, int16_t height, TransformMap& transMap)
+{
+    Rect rect = transMap.GetTransMapRect();
+    Matrix3<float> matrix = transMap.GetTransformMatrix();
+    matrix = matrix * (Matrix3<float>::Translate(Vector2<float>(-rect.GetX(), -rect.GetY())));
+    int16_t offsetX = (width - rect.GetWidth()) / 2;  //  2 : half;
+    int16_t offsetY = (height - rect.GetHeight()) / 2;  //  2 : half;
+    rect.SetPosition(rect.GetX() - offsetX, rect.GetY() - offsetY);
+    rect.Resize(width, height);
+    Polygon polygon = Polygon(rect);
+    uint8_t vertexNum = transMap.GetPolygon().GetVertexNum();
+    Vector3<float> imgPoint3;
+    for (uint8_t i = 0; i < vertexNum; i++) {
+        Vector3<float> point(polygon[i].x_, polygon[i].y_, 1);
+        imgPoint3 = matrix * point;
+        if (imgPoint3.x_ < COORD_MIN) {
+            polygon[i].x_ = COORD_MIN;
+        } else if (imgPoint3.x_ > COORD_MAX) {
+            polygon[i].x_ = COORD_MAX;
+        } else {
+            polygon[i].x_ = MATH_ROUND(imgPoint3.x_);
+        }
+
+        if (imgPoint3.y_ < COORD_MIN) {
+            polygon[i].y_ = COORD_MIN;
+        } else if (imgPoint3.y_ > COORD_MAX) {
+            polygon[i].y_ = COORD_MAX;
+        } else {
+            polygon[i].y_ = MATH_ROUND(imgPoint3.y_);
+        }
+    }
+    transMap.SetPolygon(polygon);
+    transMap.invMatrix_ = (matrix * (Matrix3<float>::Translate(Vector2<float>(rect.GetX(), rect.GetY())))).Inverse();
+}
+
 void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
                               const Rect& mask,
                               const Point& position,
@@ -1573,10 +1655,25 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     if (opaScale == OPA_TRANSPARENT) {
         return;
     }
-    Rect trans = transMap.GetBoxRect();
+    TransformDataInfo newDataInfo = dataInfo;
+    TransformMap newTransMap = transMap;
+    // If the width and height of the rectangle of transMap are not equal to the width and height of the ImageHeader,
+    // a border of transparency values to the data cannot be added.
+    if ((transMap.GetTransMapRect().GetWidth() == dataInfo.header.width) &&
+        (transMap.GetTransMapRect().GetHeight() == dataInfo.header.height)) {
+        // Add a border of transparency values to the data
+        AddBorderToImageData(newDataInfo);
+        // Update the transMap according to new rect width and height
+        UpdateTransMap(newDataInfo.header.width, newDataInfo.header.height, newTransMap);
+    }
+
+    Rect trans = newTransMap.GetBoxRect();
     trans.SetX(trans.GetX() + position.x);
     trans.SetY(trans.GetY() + position.y);
     if (!trans.Intersect(trans, mask)) {
+        if (newDataInfo.data != dataInfo.data) {
+            UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(newDataInfo.data)));
+        }
         return;
     }
 #if ENABLE_HARDWARE_ACCELERATION    // to do for backends
@@ -1591,9 +1688,9 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
 #endif
 
     TriangleTransformDataInfo triangleInfo{
-        dataInfo,
+        newDataInfo,  
     };
-    Polygon polygon = transMap.GetPolygon();
+    Polygon polygon = newTransMap.GetPolygon();
     Point p1;
     p1.x = polygon[0].x_ + position.x; // 0:first point
     p1.y = polygon[0].y_ + position.y; // 0:first point
@@ -1611,7 +1708,7 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     triangleInfo.p2 = p2;
     triangleInfo.p3 = p3;
     if ((triangleInfo.p1.y <= mask.GetBottom()) && (triangleInfo.p3.y >= mask.GetTop())) {
-        DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, transMap, triangleInfo);
+        DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, newTransMap, triangleInfo);
     }
 
     triangleInfo.ignoreJunctionPoint = true;
@@ -1628,7 +1725,10 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     triangleInfo.p2 = p3;
     triangleInfo.p3 = p4;
     if ((triangleInfo.p1.y <= mask.GetBottom()) && (triangleInfo.p3.y >= mask.GetTop())) {
-        DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, transMap, triangleInfo);
+        DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, newTransMap, triangleInfo);
+    }
+    if (newDataInfo.data != dataInfo.data) {
+        UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(newDataInfo.data)));
     }
 }
 
