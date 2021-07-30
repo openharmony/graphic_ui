@@ -760,14 +760,25 @@ void DrawUtils::DrawTriangleAlphaBilinear(const TriangleScanInfo& in, const Colo
 
 void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
+    int16_t maskLeft = in.mask.GetLeft();
+    int16_t maskRight = in.mask.GetRight();
+    int16_t xMinErr = 0;
+    int16_t xMaxErr = 0;
+    GetXAxisErrForJunctionLine(in.ignoreJunctionPoint, in.isRightPart, xMinErr, xMaxErr);
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
 #if ENABLE_FIXED_POINT
-        int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
-        int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX) + xMinErr;
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX) + xMaxErr;
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+        int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
 #else
-        int16_t xMin = static_cast<int16_t>(in.edge1.curX);
-        int16_t xMax = static_cast<int16_t>(in.edge2.curX);
+        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX + xMinErr), maskLeft);
+        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX + xMaxErr), maskRight);
+        int16_t diffX = (xMin - static_cast<int32_t>(in.edge1.curX));
 #endif
+        in.init.verticalU += in.init.duHorizon * diffX;
+        in.init.verticalV += in.init.dvHorizon * diffX;
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
 #if ENABLE_FIXED_POINT
         // parameters below are Q15 fixed-point number
@@ -869,14 +880,25 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in, con
 
 void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
+    int16_t maskLeft = in.mask.GetLeft();
+    int16_t maskRight = in.mask.GetRight();
+    int16_t xMinErr = 0;
+    int16_t xMaxErr = 0;
+    GetXAxisErrForJunctionLine(in.ignoreJunctionPoint, in.isRightPart, xMinErr, xMaxErr);
     for (int16_t y = in.yMin; y <= in.yMax; y++) {
 #if ENABLE_FIXED_POINT
-        int16_t xMin = FO_TO_INTEGER(in.edge1.curX);
-        int16_t xMax = FO_TO_INTEGER(in.edge2.curX);
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX) + xMinErr;
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX) + xMaxErr;
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+        int16_t diffX = xMin - FO_TO_INTEGER(in.edge1.curX);
 #else
-        int16_t xMin = static_cast<int16_t>(in.edge1.curX);
-        int16_t xMax = static_cast<int16_t>(in.edge2.curX);
+        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX + xMinErr), maskLeft);
+        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX + xMaxErr), maskRight);
+        int16_t diffX = (xMin - static_cast<int32_t>(in.edge1.curX));
 #endif
+        in.init.verticalU += in.init.duHorizon * diffX;
+        in.init.verticalV += in.init.dvHorizon * diffX;
         uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
 #if ENABLE_FIXED_POINT
         // parameters below are Q15 fixed-point number
