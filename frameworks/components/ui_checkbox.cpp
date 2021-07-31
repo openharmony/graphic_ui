@@ -27,6 +27,9 @@ constexpr float DEFAULT_COEFFICIENT_START_DY = 0.5;  // start point: y-cordinate
 constexpr float DEFAULT_COEFFICIENT_MID_DX = 0.2;    // middle point: y-cordinate offset
 constexpr float DEFAULT_COEFFICIENT_MID_DY = 0.38;   // middle point: y-cordinate offset
 constexpr int16_t DEFAULT_RATIO_BORDER_RADIUS_LINE_WIDTH = 4;
+constexpr uint8_t DEFAULT_BG_RED = 31;
+constexpr uint8_t DEFAULT_BG_GREEN = 113;
+constexpr uint8_t DEFAULT_BG_BLUE = 255;
 #if DEFAULT_ANIMATION
 constexpr int16_t DEFAULT_ANIMATOR_TIME = 200;
 constexpr float BEZIER_CONTROL_POINT_X_1 = 0.33;
@@ -52,6 +55,7 @@ UICheckBox::UICheckBox()
     runTime_ = 0;
     checkBoxAnimator_ = Animator(this, this, DEFAULT_ANIMATOR_TIME, false);
 #endif
+    selectedStateColor_ = Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE);
 }
 
 void UICheckBox::SetState(UICheckBoxState state, bool needAnimater)
@@ -130,7 +134,7 @@ void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
     }
     Style styleSelect = StyleDefault::GetBackgroundTransparentStyle();
     styleSelect.borderRadius_ = borderRadius;
-    styleSelect.bgColor_ = Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE);
+    styleSelect.bgColor_ = selectedStateColor_;
     styleSelect.bgOpa_ = backgroundOpacity_;
     BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, trunc, styleSelect, opaScale_);
     int16_t dx = borderWidth_ * DEFAULT_COEFFICIENT_START_DX;
@@ -254,5 +258,15 @@ void UICheckBox::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
         }
 #endif
     }
+}
+
+void UICheckBox::SetSelectedStateColor(ColorType color)
+{
+    selectedStateColor_ = color;
+}
+
+ColorType UICheckBox::GetSelectedStateColor() const
+{
+    return selectedStateColor_;
 }
 } // namespace OHOS

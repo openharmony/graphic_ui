@@ -223,6 +223,25 @@ public:
      */
     void SetState(UICheckBoxState state, bool needAnimater = false);
 
+    /**
+     * @brief Sets the selected state color for this check box.
+     *
+     * @param color Indicates the selected state color of this check box.
+     *
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetSelectedStateColor(ColorType color);
+
+    /**
+     * @brief Obtains the selected state color of this check box.
+     *
+     * @return Returns the selected state color of this check box
+     * @since 5.0
+     * @version 3.0
+     */
+    ColorType GetSelectedStateColor() const;
+
 protected:
     void ReverseState();
     virtual void CalculateSize();
@@ -244,9 +263,6 @@ protected:
     static constexpr int16_t DEFAULT_HOT_WIDTH = 46;
     static constexpr int16_t DEFAULT_HOT_HEIGHT = 46;
     static constexpr int16_t DEFAULT_BORDER_WIDTH = 22;
-    static constexpr uint8_t DEFAULT_BG_RED = 31;
-    static constexpr uint8_t DEFAULT_BG_GREEN = 113;
-    static constexpr uint8_t DEFAULT_BG_BLUE = 255;
 
     UICheckBoxState state_;
     OnChangeListener* onStateChangeListener_;
@@ -259,6 +275,7 @@ protected:
     Animator checkBoxAnimator_;
     uint32_t runTime_;
 #endif
+    ColorType selectedStateColor_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_CHECKBOX_H
