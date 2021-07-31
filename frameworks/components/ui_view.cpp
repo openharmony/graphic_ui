@@ -942,6 +942,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
 
     RootView::GetInstance()->SaveDrawContext();
     RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
+    RootView::GetInstance()->Measure();
     RootView::GetInstance()->DrawTop(this, mask);
     bitmap.data = viewBitmapBuffer;
     RootView::GetInstance()->RestoreDrawContext();
