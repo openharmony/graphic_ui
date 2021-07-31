@@ -106,7 +106,7 @@ void UIRadioButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
                 BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, style, 0xa8, CapType::CAP_NONE);
             }
             style.lineWidth_ = arcInfoBig.radius;
-            style.lineColor_ = Color::GetColorFromRGB(0x1F, 0x71, 0xFF);
+            style.lineColor_ = selectedStateColor_;
             BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfoBig, trunc, style, backgroundOpacity_,
                                                   CapType::CAP_NONE);
             style.lineWidth_ = arcInfoSmall.radius;

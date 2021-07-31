@@ -75,14 +75,12 @@ void UIToggleButton::CalculateSize()
     if (checkBoxAnimator_.GetState() != Animator::START) {
         currentCenter_ = (state_ == SELECTED) ? rightCenter_ : leftCenter_;
         backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : TOGGLE_BTN_UNSELECTED_OPA;
-        bgColor_ = (state_ == SELECTED) ? Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE) :
-                                          Color::White();
+        bgColor_ = (state_ == SELECTED) ? selectedStateColor_ : Color::White();
     }
 #else
     currentCenter_ = (state_ == SELECTED) ? rightCenter_ : leftCenter_;
     backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : TOGGLE_BTN_UNSELECTED_OPA;
-    bgColor_ = (state_ == SELECTED) ? Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE) :
-                                      Color::White();
+    bgColor_ = (state_ == SELECTED) ? selectedStateColor_ : Color::White();
 #endif
     rectMid_.SetRect(x, y, x + rectWidth_, y + (corner_ << 1) + 1);
 }
@@ -122,14 +120,12 @@ void UIToggleButton::Callback(UIView* view)
         currentCenter_.y = rightCenter_.y;
         currentCenter_.x = (rightCenter_.x - leftCenter_.x) * coefficient + leftCenter_.x;
         backgroundOpacity_ = TOGGLE_BTN_UNSELECTED_OPA + (OPA_OPAQUE - TOGGLE_BTN_UNSELECTED_OPA) * coefficient;
-        bgColor_ = Color::GetMixColor(Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE),
-                                      Color::White(), OPA_OPAQUE * coefficient);
+        bgColor_ = Color::GetMixColor(selectedStateColor_, Color::White(), OPA_OPAQUE * coefficient);
     } else {
         currentCenter_.y = leftCenter_.y;
         currentCenter_.x = rightCenter_.x - (rightCenter_.x - leftCenter_.x) * coefficient;
         backgroundOpacity_ = OPA_OPAQUE - (OPA_OPAQUE - TOGGLE_BTN_UNSELECTED_OPA) * coefficient;
-        bgColor_ = Color::GetMixColor(Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE),
-                                      Color::White(), OPA_OPAQUE * (1 - coefficient));
+        bgColor_ = Color::GetMixColor(selectedStateColor_, Color::White(), OPA_OPAQUE * (1 - coefficient));
     }
     Invalidate();
 }
@@ -137,7 +133,7 @@ void UIToggleButton::Callback(UIView* view)
 void UIToggleButton::OnStop(UIView& view)
 {
     if (state_ == SELECTED) {
-        bgColor_ = Color::GetColorFromRGB(DEFAULT_BG_RED, DEFAULT_BG_GREEN, DEFAULT_BG_BLUE);
+        bgColor_ = selectedStateColor_;
     } else {
         bgColor_ = Color::White();
     }
