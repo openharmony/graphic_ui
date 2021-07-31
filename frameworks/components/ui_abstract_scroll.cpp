@@ -198,7 +198,7 @@ void UIAbstractScroll::StopAnimator()
     isDragging_ = false;
 }
 
-bool UIAbstractScroll::DragThrowAnimator(Point currentPos, Point lastPos)
+bool UIAbstractScroll::DragThrowAnimator(Point currentPos, Point lastPos, uint8_t dragDirection)
 {
     if (!throwDrag_ && (reboundSize_ == 0)) {
         return false;
@@ -206,7 +206,7 @@ bool UIAbstractScroll::DragThrowAnimator(Point currentPos, Point lastPos)
     int16_t dragDistanceX = 0;
     int16_t dragDistanceY = 0;
     if (throwDrag_) {
-        CalculateDragDistance(currentPos, lastPos, dragDistanceX, dragDistanceY);
+        CalculateDragDistance(currentPos, lastPos, dragDirection, dragDistanceX, dragDistanceY);
     }
     if (reboundSize_ != 0) {
         CalculateReboundDistance(dragDistanceX, dragDistanceY);
@@ -230,14 +230,15 @@ void UIAbstractScroll::StartAnimator(int16_t dragDistanceX, int16_t dragDistance
 
 void UIAbstractScroll::CalculateDragDistance(Point currentPos,
                                              Point lastPos,
+                                             uint8_t dragDirection,
                                              int16_t& dragDistanceX,
                                              int16_t& dragDistanceY)
 {
     if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dragDistanceY = (currentPos.y - lastPos.y) * DRAG_DISTANCE_COEFFICIENT;
-        if (dragDistanceY > 0) {
+        if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
             dragDistanceY += GetMaxDeltaY() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
-        } else {
+        } else if (dragDistanceY < 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP)) {
             dragDistanceY -= GetMaxDeltaY() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
         }
     }
