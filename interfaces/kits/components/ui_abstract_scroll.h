@@ -348,7 +348,7 @@ protected:
         int16_t previousValueY_;
     };
 
-    bool DragThrowAnimator(Point currentPos, Point lastPos);
+    bool DragThrowAnimator(Point currentPos, Point lastPos, uint8_t dragDirection);
     virtual void StopAnimator();
     virtual bool DragXInner(int16_t distance) = 0;
     virtual bool DragYInner(int16_t distance) = 0;
@@ -358,7 +358,8 @@ protected:
         deltaYIndex_++;
     }
 
-    void CalculateDragDistance(Point currentPos, Point lastPos, int16_t& dragDistanceX, int16_t& dragDistanceY);
+    void CalculateDragDistance(Point currentPos, Point lastPos, uint8_t dragDirection,
+                               int16_t& dragDistanceX, int16_t& dragDistanceY);
     void StartAnimator(int16_t dragDistanceX, int16_t dragDistanceY);
     virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) {};
     int16_t GetMaxDeltaY() const;

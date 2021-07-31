@@ -223,7 +223,7 @@ bool UIList::OnDragEndEvent(const DragEvent& event)
         current = event.GetCurrentPos();
     }
     isReCalculateDragEnd_ = false;
-    if (!DragThrowAnimator(current, last)) {
+    if (!DragThrowAnimator(current, last, event.GetDragDirection())) {
         if (scrollListener_ && (scrollListener_->GetScrollState() == ListScrollListener::SCROLL_STATE_MOVE)) {
             scrollListener_->SetScrollState(ListScrollListener::SCROLL_STATE_STOP);
             scrollListener_->OnScrollEnd(onSelectedIndex_, onSelectedView_);
@@ -267,6 +267,16 @@ bool UIList::OnRotateEndEvent(const RotateEvent& event)
     needVibration_ = false;
     isReCalculateDragEnd_ = false;
 
+    for (uint8_t i = 0; i < MAX_DELTA_Y_SIZE; i++) {
+        lastDeltaY_[i] = 0;
+    }
+    uint8_t dir;
+    if (direction_ == VERTICAL) {
+        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
+    } else {
+        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
+    }
+    
     bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
         (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
     if (throwDrag_ && triggerAnimator) {
@@ -276,9 +286,9 @@ bool UIList::OnRotateEndEvent(const RotateEvent& event)
         } else {
             current = {lastRotateLen_, 0};
         }
-        DragThrowAnimator(current, {0, 0});
+        DragThrowAnimator(current, {0, 0}, dir);
     } else {
-        DragThrowAnimator({0, 0}, {0, 0});
+        DragThrowAnimator({0, 0}, {0, 0}, dir);
     }
     lastRotateLen_ = 0;
     return UIView::OnRotateEndEvent(event);
