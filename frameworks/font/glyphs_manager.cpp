@@ -219,7 +219,6 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
     bitMapSectionStart_ = glyphNodeSectionStart_ + size;
     ret = GlyphNodeCacheInit();
     if (ret == RET_VALUE_OK) {
-        GRAPHIC_LOGE("GlyphsManager::SetFile GlyphNodeCacheInit failed");
         isFileSet_ = true;
     }
 
