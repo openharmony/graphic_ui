@@ -449,6 +449,9 @@ void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
                                      const ColorType& color,
                                      const OpacityType& opa) const
 {
+    if (gfxDstBuffer.virAddr == nullptr) {
+        return;
+    }
     ColorMode mode = gfxDstBuffer.mode;
     uint8_t destByteSize = GetByteSizeByColorMode(mode);
     int16_t destWidth = gfxDstBuffer.width;
@@ -545,6 +548,9 @@ void DrawUtils::BlendWithSoftWare(const uint8_t* src1,
                                   uint32_t x,
                                   uint32_t y) const
 {
+    if ((dst == nullptr) || (src1 == nullptr)) {
+        return;
+    }
     uint8_t destByteSize = GetByteSizeByColorMode(destMode);
     uint8_t srcByteSize = GetByteSizeByColorMode(srcMode);
 
@@ -1670,6 +1676,9 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
                               const TransformDataInfo& dataInfo) const
 {
     if (opaScale == OPA_TRANSPARENT) {
+        return;
+    }
+    if ((gfxDstBuffer.virAddr == nullptr) || (dataInfo.data == nullptr)) {
         return;
     }
     TransformDataInfo newDataInfo = dataInfo;
