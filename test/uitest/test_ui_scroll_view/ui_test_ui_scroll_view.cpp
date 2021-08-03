@@ -285,6 +285,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scroll_Blank_Set_001()
     scroll->SetScrollBlankSize(50); // (50): means scroll blank size
     VISIBLE_XBAR(true);
     scroll->SetYScrollBarVisible(true);
+    scroll->SetScrollBarSide(SCROLL_BAR_LEFT_SIDE);
     container_->Add(scroll);
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonW, g_buttonH);

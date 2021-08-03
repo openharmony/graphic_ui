@@ -270,6 +270,17 @@ public:
 
     void SetYScrollBarVisible(bool visible);
 
+    void SetScrollBarSide(uint8_t side)
+    {
+        scrollBarSide_ = side;
+    }
+
+    void SetScrollBarCenter(const Point& center)
+    {
+        scrollBarCenter_ = center;
+        scrollBarCenterSetFlag_ = true;
+    }
+
     void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     static constexpr uint8_t HORIZONTAL = 0;
@@ -386,6 +397,9 @@ protected:
     UIAbstractScrollBar* yScrollBar_ = nullptr;
     bool xScrollBarVisible_ = false;
     UIAbstractScrollBar* xScrollBar_ = nullptr;
+    uint8_t scrollBarSide_;
+    Point scrollBarCenter_;
+    bool scrollBarCenterSetFlag_;
 #if DEFAULT_ANIMATION
     friend class BarEaseInOutAnimator;
     BarEaseInOutAnimator* barEaseInOutAnimator_ = nullptr;

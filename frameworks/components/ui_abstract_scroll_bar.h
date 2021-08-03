@@ -31,6 +31,8 @@ public:
 
     virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa) {}
 
+    virtual void SetScrollBarSide(uint8_t side) {}
+
     void SetScrollProgress(float scrollProgress)
     {
         scrollProgress_ = scrollProgress;
@@ -53,7 +55,6 @@ public:
     {
         return opacity_;
     }
-
 protected:
     uint8_t opacity_ = OPA_TRANSPARENT;
     float scrollProgress_ = 0;

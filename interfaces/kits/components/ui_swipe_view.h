@@ -322,6 +322,9 @@ public:
 
     void SetYScrollBarVisible(bool visible) = delete;
 
+    void SetScrollBarSide(uint8_t side) = delete;
+
+    void SetScrollBarCenter(Point center) = delete;
 protected:
     bool DragXInner(int16_t distance) override;
     bool DragYInner(int16_t distance) override;
