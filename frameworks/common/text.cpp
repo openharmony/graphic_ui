@@ -160,7 +160,7 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     UIFont::GetInstance()->SetCurrentFontId(fontId_, fontSize_);
     int16_t maxWidth = (expandWidth_ ? COORD_MAX : textRect.GetWidth());
     if (maxWidth > 0) {
-        textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineHeight_, maxWidth);
+        textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineHeight_, maxWidth, style.lineSpace_);
         FontHeader head;
         if (UIFont::GetInstance()->GetCurrentFontHeader(head) != 0) {
             return;
@@ -212,13 +212,17 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
     int16_t lineMaxWidth = expandWidth_ ? textSize_.x : coords.GetWidth();
     int16_t lineHeight = style.lineHeight_;
     if (lineHeight == 0) {
-        lineHeight = UIFont::GetInstance()->GetHeight();
+        lineHeight = UIFont::GetInstance()->GetHeight() + style.lineSpace_;
     }
     uint16_t lineBegin = 0;
     uint32_t maxLineBytes = 0;
     uint16_t lineCount = GetLine(lineMaxWidth, style.letterSpace_, ellipsisIndex, maxLineBytes);
     Point pos;
-    pos.y = TextPositionY(coords, (lineCount * lineHeight));
+    if (lineHeight == style.lineHeight_) {
+        pos.y = TextPositionY(coords, (lineCount * lineHeight));
+    } else {
+        pos.y = TextPositionY(coords, (lineCount * lineHeight - style.lineSpace_));
+    }
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.textOpa_);
     for (int i = 0; i < lineCount; i++) {
         if (pos.y > mask.GetBottom()) {
@@ -227,21 +231,9 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         int16_t nextLine = pos.y + lineHeight;
         if (nextLine >= mask.GetTop()) {
             pos.x = LineStartPos(coords, textLine_[i].linePixelWidth);
-            LabelLineInfo labelLine{pos,
-                                    offset,
-                                    mask,
-                                    lineHeight,
-                                    textLine_[i].lineBytes,
-                                    0,
-                                    opa,
-                                    style,
-                                    &text_[lineBegin],
-                                    textLine_[i].lineBytes,
-                                    lineBegin,
-                                    fontId_,
-                                    fontSize_,
-                                    0,
-                                    static_cast<UITextLanguageDirect>(direct_),
+            LabelLineInfo labelLine{pos, offset, mask, lineHeight, textLine_[i].lineBytes,
+                                    0, opa, style, &text_[lineBegin], textLine_[i].lineBytes,
+                                    lineBegin, fontId_, fontSize_, 0, static_cast<UITextLanguageDirect>(direct_),
                                     nullptr};
             DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
             if ((i == (lineCount - 1)) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
@@ -340,10 +332,13 @@ uint16_t Text::GetEllipsisIndex(const Rect& textRect, const Style& style)
     p.y = textRect.GetHeight();
     int16_t height = style.lineHeight_;
     if (height == 0) {
-        height = fontEngine->GetHeight();
+        height = fontEngine->GetHeight() + style.lineSpace_;
     }
     if (height) {
         p.y -= p.y % height;
+    }
+    if (height != style.lineHeight_) {
+        p.y -= style.lineSpace_;
     }
     return GetLetterIndexByPosition(textRect, style, p);
 }
@@ -356,8 +351,15 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     uint32_t lineStart = 0;
     uint32_t nextLineStart = 0;
     uint16_t lineHeight = style.lineHeight_;
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
     if (lineHeight == 0) {
-        lineHeight = UIFont::GetInstance()->GetHeight();
+        lineHeight = letterHeight + style.lineSpace_;
+    }
+    uint16_t height = 0;
+    if (lineHeight != style.lineHeight_) {
+        height = letterHeight;
+    } else {
+        height = lineHeight;
     }
     int16_t y = 0;
     uint32_t textLen = static_cast<uint32_t>(strlen(text_));
@@ -368,7 +370,7 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
         if (nextLineStart == 0) {
             break;
         }
-        if (pos.y <= y + lineHeight) {
+        if (pos.y <= y + height) {
             break;
         }
         y += lineHeight;
