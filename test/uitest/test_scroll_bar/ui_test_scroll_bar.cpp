@@ -76,10 +76,12 @@ void UITestScrollBar::SetUp()
     scrollView_->SetYScrollBarVisible(true);
     scrollView_->SetHorizontalScrollState(false);
     scrollView_->SetReboundSize(50); // 50: rebound size
+    scrollView_->SetScrollBarCenter({200, 200}); // 200: x, y of center
 
     container_->Add(list_);
     list_->SetPosition(450, 0, VIEW_WIDTH, VIEW_HEIGHT); // 450: x
     list_->SetYScrollBarVisible(true);
+    list_->SetScrollBarSide(SCROLL_BAR_LEFT_SIDE);
     list_->SetReboundSize(50); // 50: rebound size
 }
 
