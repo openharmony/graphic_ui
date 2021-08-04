@@ -55,6 +55,7 @@ void UIListTest::TearDownTestCase(void)
 {
     if (list_ != nullptr) {
         delete list_;
+        list_ = nullptr;
     }
     if (adapterData1_ != nullptr) {
         adapterData1_->Clear();
