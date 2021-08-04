@@ -130,7 +130,10 @@ UIAbstractScroll::UIAbstractScroll()
       deltaYIndex_(0),
       reserve_(0),
       easingFunc_(EasingEquation::CubicEaseOut),
-      scrollAnimator_(&animatorCallback_, this, 0, true)
+      scrollAnimator_(&animatorCallback_, this, 0, true),
+      scrollBarSide_(SCROLL_BAR_RIGHT_SIDE),
+      scrollBarCenter_({0, 0}),
+      scrollBarCenterSetFlag_(false)
 {
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -335,19 +338,38 @@ void UIAbstractScroll::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalida
     uint8_t opa = GetMixOpaScale();
     if (Screen::GetInstance().GetScreenShape() == ScreenShape::RECTANGLE) {
         if (yScrollBarVisible_) {
-            yScrollBar_->SetPosition(scrollRect.GetRight() - SCROLL_BAR_WIDTH + 1, scrollRect.GetTop(),
-                SCROLL_BAR_WIDTH, scrollRect.GetHeight());
+            if (scrollBarSide_ == SCROLL_BAR_RIGHT_SIDE) {
+                yScrollBar_->SetPosition(scrollRect.GetRight() - SCROLL_BAR_WIDTH + 1, scrollRect.GetTop(),
+                                         SCROLL_BAR_WIDTH, scrollRect.GetHeight());
+            } else {
+                yScrollBar_->SetPosition(scrollRect.GetLeft(), scrollRect.GetTop(),
+                                         SCROLL_BAR_WIDTH, scrollRect.GetHeight());
+            }
             yScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
         }
         if (xScrollBarVisible_) {
-            xScrollBar_->SetPosition(scrollRect.GetLeft(), scrollRect.GetBottom() - SCROLL_BAR_WIDTH + 1,
-                scrollRect.GetWidth() - SCROLL_BAR_WIDTH, SCROLL_BAR_WIDTH);
+            if (scrollBarSide_ == SCROLL_BAR_RIGHT_SIDE) {
+                xScrollBar_->SetPosition(scrollRect.GetLeft(), scrollRect.GetBottom() - SCROLL_BAR_WIDTH + 1,
+                                         scrollRect.GetWidth() - SCROLL_BAR_WIDTH, SCROLL_BAR_WIDTH);
+            } else {
+                xScrollBar_->SetPosition(scrollRect.GetLeft() + SCROLL_BAR_WIDTH,
+                                         scrollRect.GetBottom() - SCROLL_BAR_WIDTH + 1,
+                                         scrollRect.GetWidth() - SCROLL_BAR_WIDTH, SCROLL_BAR_WIDTH);
+            }
             xScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
         }
     } else {
         if (yScrollBarVisible_) {
-            int16_t x = scrollRect.GetX() + (GetWidth() / 2); // 2: half
-            int16_t y = scrollRect.GetY() + (GetHeight() / 2); // 2: half
+            yScrollBar_->SetScrollBarSide(scrollBarSide_);
+            int16_t x;
+            int16_t y;
+            if (scrollBarCenterSetFlag_) {
+                x = scrollRect.GetX() + scrollBarCenter_.x;
+                y = scrollRect.GetY() + scrollBarCenter_.y;
+            } else {
+                x = scrollRect.GetX() + (GetWidth() / 2); // 2: half
+                y = scrollRect.GetY() + (GetHeight() / 2); // 2: half
+            }
             yScrollBar_->SetPosition(x, y, SCROLL_BAR_WIDTH, GetWidth() / 2); // 2: half
             yScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
         }

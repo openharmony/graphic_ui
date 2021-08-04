@@ -29,6 +29,7 @@ public:
 
     void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa) override;
 
+    void SetScrollBarSide(uint8_t side) override;
 protected:
     void DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa);
     void DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa);
@@ -37,6 +38,7 @@ protected:
     uint16_t startAngle_;
     uint16_t endAngle_;
     Point center_;
+    uint8_t side_;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_ARC_SCROLL_BAR_H
