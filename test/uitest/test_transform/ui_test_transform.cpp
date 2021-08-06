@@ -67,9 +67,9 @@ void UITestTransform::SetUp()
         UICheckBox::UICheckBoxState::SELECTED);
     AddRadioButton(GetRect(560, 90, 50, 50), // 560:position x 90:position y 50:width and height
         "RB", new StateChangeListener(ImageScaleMode::FILL, this));
-    AddRadioButton(GetRect(560, 140, 50, 50), // 560:position x 90:position y 50:width and height
+    AddRadioButton(GetRect(560, 140, 50, 50), // 560:position x 140:position y 50:width and height
         "RB", new StateChangeListener(ImageScaleMode::CONTAIN, this));
-    AddRadioButton(GetRect(560, 190, 50, 50), // 560:position x 90:position y 50:width and height
+    AddRadioButton(GetRect(560, 190, 50, 50), // 560:position x 190:position y 50:width and height
         "RB", new StateChangeListener(ImageScaleMode::TILING, this));
 }
 
@@ -219,7 +219,6 @@ StateChangeListener::StateChangeListener(ImageScaleMode mode, UITestTransform* t
     : mode_(mode),
       testInstance_(testInstance)
 {
-
 }
 
 bool StateChangeListener::OnChange(UICheckBox::UICheckBoxState state)
@@ -233,7 +232,6 @@ bool StateChangeListener::OnChange(UICheckBox::UICheckBoxState state)
 UITestRadioButton::UITestRadioButton(const char*  name)
     : UIRadioButton(name)
 {
-
 }
 
 UITestRadioButton::~UITestRadioButton()

@@ -366,7 +366,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_SetCurrentPage()
     swipe->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     swipe->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, positionY_, g_swipeW, g_swipeH);
     swipe->SetLoopState(loop_);
-    swipe->SetAnimatorTime(1000); // 100: mean animator drag time(ms)
+    swipe->SetAnimatorTime(1000); // 1000: mean animator drag time(ms)
     currentSwipe_ = swipe;
     container_->Add(swipe);
     UIView* view1 = new UIView();

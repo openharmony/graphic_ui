@@ -79,7 +79,7 @@ private:
     UIImageView* AddImageView(const Rect rect, const char* src, bool autoEnable, UIImageView::ImageResizeMode mode);
     Rect GetRect(int16_t x, int16_t y, int16_t w, int16_t h) const
     {
-        return Rect(x, y, x + w , y + h);
+        return Rect(x, y, x + w, y + h);
     }
 };
 } // namespace OHOS
