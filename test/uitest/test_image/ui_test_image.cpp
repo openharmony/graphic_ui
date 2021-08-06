@@ -550,7 +550,7 @@ void UITestImage::UIKit_UIImage_Test_Resize_001()
         AddLable(480, g_height + 30, "Tiling mode"); // 480: position x; 30: increase y-coordinate
         // 48: position x; 70: increase y-coordinate; 100: width and height
         AddImageView(GetRect(48, g_height + 70, 100, 100), RED_IMAGE_PATH, false, UIImageView::ImageResizeMode::FILL);
-        // 160: position x; 70: increase y-coordinate; 100: width and height
+        // 160: position x; 70: increase y-coordinate; 100: width; 50: height 
         AddImageView(GetRect(160, g_height + 70, 100, 50), RED_IMAGE_PATH,
             false, UIImageView::ImageResizeMode::CONTAIN);
         // 320: position x; 70: increase y-coordinate; 100: width and height

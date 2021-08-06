@@ -275,12 +275,10 @@ void UIImageView::UpdateContentMatrix()
         }
         return;
     }
-    // 2: the width should exclude the border-left and border-right, which equal borderwidth
-    int16_t widgetWidth = viewRect.GetWidth() -
-        style_->paddingLeft_ - style_->paddingRight_ - style_->borderWidth_ * 2;
-    // 2: the height should exclude the border-top and border-bottom, which equal borderwidth
-    int16_t widgetHeight = viewRect.GetHeight() -
-        style_->paddingTop_ - style_->paddingBottom_ - style_->borderWidth_ * 2;
+    int16_t widgetWidth = viewRect.GetWidth() - style_->paddingLeft_ - style_->paddingRight_ -
+        style_->borderWidth_ * 2; // 2: excludes the border-left and border-right
+    int16_t widgetHeight = viewRect.GetHeight() - style_->paddingTop_ - style_->paddingBottom_ -
+        style_->borderWidth_ * 2; // 2: excludes the border-top and border-bottom
 
     float scaleX = static_cast<float>(widgetWidth) / static_cast<float>(imageWidth_);
     float scaleY = static_cast<float>(widgetHeight) / static_cast<float>(imageHeight_);

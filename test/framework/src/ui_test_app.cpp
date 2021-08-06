@@ -19,8 +19,8 @@
 #include "compare_tools.h"
 #include "test_resource_config.h"
 #include "ui_auto_test.h"
-#include "ui_test_group.h"
 #include "ui_test.h"
+#include "ui_test_group.h"
 
 namespace OHOS {
 #ifdef _WIN32
