@@ -210,6 +210,7 @@ uint8_t DrawUtils::GetPxSizeByColorMode(uint8_t colorMode)
 {
     switch (colorMode) {
         case TSC6:
+        case TSC6A:
         case ARGB8888:
             return 32; // 32: 32 bit
         case RGB888:
