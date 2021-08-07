@@ -79,6 +79,8 @@ const UIView* UITestFont::GetTestView()
     UIKitFontTestDispaly006();
     UIKitFontTestDispaly007();
     UIKitFontTestDispaly008();
+    UIKitFontTestDispaly009();
+    UIKitFontTestDispaly010();
     UIKitFontTestBaseline001();
     UIKitFontTestBaseline002();
     UIKitFontTestLineHeight001();
@@ -254,6 +256,53 @@ void UITestFont::UIKitFontTestDispaly008()
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
+
+
+void UITestFont::UIKitFontTestDispaly009()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Display multiline text color");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_ + 100, positionY_);  // 100 : offset x
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+    label->SetLineBreakMode(UILabel::LineBreakMode::LINE_BREAK_ADAPT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->Rotate(90, Vector2<float>{0, 0}); // 90 : angle
+    label->SetText("轻量级图形");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 4 + GAP; // 4 : coefficient
+}
+
+
+void UITestFont::UIKitFontTestDispaly010()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Display multiline text color");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_ + 100, positionY_); // 100 : offset x
+    label->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT); // 2 : half
+    label->SetLineBreakMode(UILabel::LineBreakMode::LINE_BREAK_MARQUEE);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->Rotate(90, Vector2<float>{0, 0}); // 90 : angle
+    label->SetText("轻量级图形,轻量级图形,轻量级图形");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 4 + GAP; // 4 : coefficient
+}
+
 
 void UITestFont::UIKitFontTestBaseline001()
 {

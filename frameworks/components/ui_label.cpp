@@ -266,22 +266,6 @@ void UILabel::SetHeight(int16_t height)
     }
 }
 
-void UILabel::SetX(int16_t x)
-{
-    if (GetX() != x) {
-        UIView::SetX(x);
-        RefreshLabel();
-    }
-}
-
-void UILabel::SetY(int16_t y)
-{
-    if (GetY() != y) {
-        UIView::SetY(y);
-        RefreshLabel();
-    }
-}
-
 void UILabel::RefreshLabel()
 {
     Invalidate();
@@ -389,11 +373,19 @@ void UILabel::SetRollSpeed(uint16_t speed)
 void UILabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
     InitLabelText();
-    UIView::OnDraw(gfxDstBuffer, invalidatedArea);
+    Rect mask = invalidatedArea;
+    if (transMap_ != nullptr) {
+        Rect textRect = GetContentRect();
+        TransformMap reverseMap(invalidatedArea);
+        reverseMap.Rotate(-transMap_->GetRotateAngle(), Vector2<float>{0, 0});
+        mask = reverseMap.GetBoxRect();
+        mask.SetPosition(0, 0);
+    }
+    UIView::OnDraw(gfxDstBuffer, mask);
     Style style = GetStyleConst();
     style.textColor_ = GetTextColor();
     OpacityType opa = GetMixOpaScale();
-    labelText_->OnDraw(gfxDstBuffer, invalidatedArea, GetOrigRect(),
+    labelText_->OnDraw(gfxDstBuffer, mask, GetOrigRect(),
                        GetContentRect(), offsetX_, style, ellipsisIndex_, opa);
 }
 } // namespace OHOS
