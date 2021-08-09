@@ -320,7 +320,7 @@ void UIView::ClearFocus()
 
 void UIView::Invalidate()
 {
-    InvalidateRect(GetOrigRect());
+    InvalidateRect(GetRect());
 }
 
 void UIView::InvalidateRect(const Rect& invalidatedArea)

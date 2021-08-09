@@ -88,6 +88,14 @@ public:
     virtual void DrawLine(BufferInfo& dst, const Point& start, const Point& end,
                           const Rect& mask, int16_t width, ColorType color, OpacityType opacity);
 
+    virtual void DrawLetter(BufferInfo& gfxDstBuffer,
+                            const uint8_t* fontMap,
+                            const Rect& fontRect,
+                            const Rect& subRect,
+                            const uint8_t fontWeight,
+                            const ColorType& color,
+                            const OpacityType opa);
+
     virtual void DrawCubicBezier(BufferInfo& dst, const Point& start, const Point& control1,
                                  const Point& control2, const Point& end, const Rect& mask,
                                  int16_t width, ColorType color, OpacityType opacity);

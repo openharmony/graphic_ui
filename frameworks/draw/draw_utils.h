@@ -190,6 +190,14 @@ public:
 
     void DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const;
 
+    void DrawLetter(BufferInfo& gfxDstBuffer,
+                    const uint8_t* fontMap,
+                    const Rect& fontRect,
+                    const Rect& subRect,
+                    const uint8_t fontWeight,
+                    const ColorType& color,
+                    const OpacityType opa) const;
+
     void DrawImage(BufferInfo& gfxDstBuffer, const Rect& area, const Rect& mask,
                    const uint8_t* image, OpacityType opa, uint8_t pxBitSize, ColorMode colorMode) const;
 
