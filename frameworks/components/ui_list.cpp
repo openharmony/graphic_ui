@@ -15,16 +15,8 @@
 
 #include "components/ui_list.h"
 
-#include "securec.h"
-
 #include "components/ui_abstract_scroll_bar.h"
 #include "gfx_utils/graphic_log.h"
-
-namespace {
-#if ENABLE_ROTATE_INPUT
-constexpr float DEFAULT_LIST_ROTATE_FACTOR = 2.5;
-#endif
-} // namespace
 
 namespace OHOS {
 UIList::Recycle::~Recycle()
@@ -255,47 +247,11 @@ bool UIList::OnRotateStartEvent(const RotateEvent& event)
     return UIView::OnRotateStartEvent(event);
 }
 
-bool UIList::OnRotateEvent(const RotateEvent& event)
-{
-    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
-    if (direction_ == VERTICAL) {
-        DragYInner(lastRotateLen_);
-    } else {
-        DragXInner(lastRotateLen_);
-    }
-    return UIView::OnRotateEvent(event);
-}
-
 bool UIList::OnRotateEndEvent(const RotateEvent& event)
 {
     needVibration_ = false;
     isReCalculateDragEnd_ = false;
-
-    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
-        return false;
-    }
-
-    uint8_t dir;
-    if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
-    } else {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
-    }
-    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
-        (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
-    if (throwDrag_ && triggerAnimator) {
-        Point current;
-        if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-            current = {0, lastRotateLen_};
-        } else {
-            current = {lastRotateLen_, 0};
-        }
-        DragThrowAnimator(current, {0, 0}, dir);
-    } else {
-        DragThrowAnimator({0, 0}, {0, 0}, dir);
-    }
-    lastRotateLen_ = 0;
-    return UIView::OnRotateEndEvent(event);
+    return UIAbstractScroll::OnRotateEndEvent(event);
 }
 #endif
 
@@ -673,13 +629,6 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
                         scrollListener_->OnItemSelected(onSelectedIndex_, onSelectedView_);
                     }
                     isSelectViewFind = true;
-#if ENABLE_VIBRATOR
-                    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-                    if (needVibration_ && vibratorFunc != nullptr) {
-                        GRAPHIC_LOGI("UIList::MoveChildByOffset Call vibrator function");
-                        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
-                    }
-#endif
                 }
             } else {
                 width = view->GetRelativeRect().GetWidth();
@@ -692,15 +641,20 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
                         scrollListener_->OnItemSelected(onSelectedIndex_, onSelectedView_);
                     }
                     isSelectViewFind = true;
-#if ENABLE_VIBRATOR
-                    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-                    if (needVibration_ && vibratorFunc != nullptr) {
-                        GRAPHIC_LOGI("UIList::MoveChildByOffset Call vibrator function");
-                        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
-                    }
-#endif
                 }
             }
+#if ENABLE_VIBRATOR
+            VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+            if (isSelectViewFind && needVibration_ && vibratorFunc != nullptr) {
+                if (!isLoopList_ && (onSelectedIndex_ == 0 || onSelectedIndex_ == recycle_.adapter_->GetCount() - 1)) {
+                    vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
+                    GRAPHIC_LOGI("UIList::MoveChildByOffset calls TYPE_THREE vibrator");
+                } else {
+                    vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
+                    GRAPHIC_LOGI("UIList::MoveChildByOffset calls TYPE_TWO vibrator");
+                }
+            }
+#endif
         }
         view = view->GetNextSibling();
     } while (view != nullptr);

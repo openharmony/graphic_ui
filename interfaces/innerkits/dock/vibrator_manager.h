@@ -29,6 +29,7 @@ namespace OHOS {
 enum class VibratorType {
     VIBRATOR_TYPE_ONE,
     VIBRATOR_TYPE_TWO,
+    VIBRATOR_TYPE_THREE
 };
 
 /**
