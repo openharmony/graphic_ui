@@ -264,6 +264,10 @@ public:
         }
         threshold_ = threshold;
     }
+
+    bool OnRotateEvent(const RotateEvent& event) override;
+
+    bool OnRotateEndEvent(const RotateEvent& event) override;
 #endif
 
     void SetXScrollBarVisible(bool visible);
@@ -311,6 +315,7 @@ public:
 
 protected:
     static constexpr uint8_t HORIZONTAL_AND_VERTICAL = 2;
+    static constexpr uint8_t HORIZONTAL_NOR_VERTICAL = 3;
     /* calculate drag throw distance, last drag distance in one tick * DRAG_DISTANCE_COEFFICIENT */
     static constexpr uint8_t DRAG_DISTANCE_COEFFICIENT = 5;
     /* calculate drag throw times, drag distance / DRAG_TIMES_COEFFICIENT */
@@ -431,6 +436,7 @@ protected:
 #if ENABLE_ROTATE_INPUT
     float rotateFactor_;
     int16_t threshold_;
+    int16_t lastRotateLen_;
 #endif
     bool yScrollBarVisible_ = false;
     UIAbstractScrollBar* yScrollBar_ = nullptr;

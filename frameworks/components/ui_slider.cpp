@@ -23,13 +23,6 @@
 #include "imgdecode/cache_manager.h"
 #include "themes/theme_manager.h"
 
-namespace {
-#ifdef _WIN32
-constexpr float DEFAULT_SLIDER_ROTATE_FACTOR = -1;
-#else
-constexpr float DEFAULT_SLIDER_ROTATE_FACTOR = -0.1;
-#endif
-}
 namespace OHOS {
 UISlider::UISlider()
     : knobWidth_(0), knobStyleAllocFlag_(false), knobImage_(nullptr), listener_(nullptr)
@@ -42,6 +35,7 @@ UISlider::UISlider()
 #endif
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SLIDER_ROTATE_FACTOR;
+    cachedRotation_ = 0;
 #endif
 
     Theme* theme = ThemeManager::GetInstance().GetCurrent();
@@ -367,20 +361,40 @@ bool UISlider::OnDragEndEvent(const DragEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UISlider::OnRotateEvent(const RotateEvent& event)
 {
+    int32_t realRotation = 0;
+    cachedRotation_ += event.GetRotate() * rotateFactor_;
+    realRotation = static_cast<int32_t>(cachedRotation_);
+    if (realRotation == 0) {
+        return UIView::OnRotateEvent(event);
+    }
+    cachedRotation_ = 0;
     int32_t lastValue = curValue_;
-    int32_t tmp = static_cast<int32_t>(event.GetRotate()) * rotateFactor_;
-    SetValue(curValue_ + tmp);
+    SetValue(curValue_ + realRotation);
     if (listener_ != nullptr) {
         listener_->OnChange(curValue_);
     }
 #if ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && lastValue != curValue_) {
-        GRAPHIC_LOGI("UISlider::OnRotateEvent Call vibrator function");
-        vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
+        if (curValue_ == rangeMin_ || curValue_ == rangeMax_) {
+            GRAPHIC_LOGI("UISlider::OnRotateEvent calls TYPE_THREE vibrator");
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
+        } else {
+            int32_t changedValue = MATH_ABS(curValue_ - lastValue);
+            for (int32_t i = 0; i < changedValue; i++) {
+                GRAPHIC_LOGI("UISlider::OnRotateEvent calls TYPE_TWO vibrator");
+                vibratorFunc(VibratorType::VIBRATOR_TYPE_TWO);
+            }
+        }
     }
 #endif
     return UIView::OnRotateEvent(event);
+}
+
+bool UISlider::OnRotateEndEvent(const RotateEvent& event)
+{
+    cachedRotation_ = 0;
+    return UIView::OnRotateEndEvent(event);
 }
 #endif
 } // namespace OHOS

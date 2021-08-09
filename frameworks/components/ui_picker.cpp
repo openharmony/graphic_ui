@@ -19,12 +19,6 @@
 #include "draw/draw_rect.h"
 #include "themes/theme_manager.h"
 
-namespace {
-#if ENABLE_ROTATE_INPUT
-constexpr float DEFAULT_PICKER_ROTATE_FACTOR = 1.668;
-#endif
-}
-
 namespace OHOS {
 class PickerListScrollListener : public ListScrollListener {
 public:
