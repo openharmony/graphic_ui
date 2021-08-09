@@ -70,6 +70,16 @@ public:
     void UIKitFontTestDispaly008();
 
     /**
+     * @brief Test text rotate
+     */
+    void UIKitFontTestDispaly009();
+
+    /**
+     * @brief Test text rotate
+     */
+    void UIKitFontTestDispaly010();
+
+    /**
      * @brief Test font baseline alignment
      */
     void UIKitFontTestBaseline001();
