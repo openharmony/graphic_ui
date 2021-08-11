@@ -102,6 +102,8 @@ void UITestUIList::TearDown()
     setSelectOffBtn_ = nullptr;
     setAutoAlignBtn_ = nullptr;
     setAutoAlignOffBtn_ = nullptr;
+    setBackAlignBtn_ = nullptr;
+    setBackAlignOffBtn_ = nullptr;
     setAutoAlignACCIncBtn_ = nullptr;
     setAutoAlignACCDncBtn_ = nullptr;
     setYScrollBarVisableBtn_ = nullptr;
@@ -205,7 +207,12 @@ void UITestUIList::SetControlButton()
     if (setAutoAlignOffBtn_ == nullptr) {
         setAutoAlignOffBtn_ = new UILabelButton();
     }
-
+    if (setBackAlignBtn_ == nullptr) {
+        setBackAlignBtn_ = new UILabelButton();
+    }
+    if (setBackAlignOffBtn_ == nullptr) {
+        setBackAlignOffBtn_ = new UILabelButton();
+    }
     if (setAutoAlignACCIncBtn_ == nullptr) {
         setAutoAlignACCIncBtn_ = new UILabelButton();
     }
@@ -232,6 +239,8 @@ void UITestUIList::SetControlButton()
     SetUpButton(setSelectOffBtn_, "关闭select");
     SetUpButton(setAutoAlignBtn_, "开启自动对齐 ");
     SetUpButton(setAutoAlignOffBtn_, "关闭自动对齐 ");
+    SetUpButton(setBackAlignBtn_, "开启弹回对齐 ");
+    SetUpButton(setBackAlignOffBtn_, "关闭弹回对齐 ");
     SetUpButton(setAutoAlignACCIncBtn_, "增加自动对齐时间 ");
     SetUpButton(setAutoAlignACCDncBtn_, "减少自动对齐时间 ");
     SetUpButton(setYScrollBarVisableBtn_, "显示纵向滚动条");
@@ -328,6 +337,10 @@ bool UITestUIList::OnClick(UIView& view, const ClickEvent& event)
         currentList_->EnableAutoAlign(true);
     } else if (&view == setAutoAlignOffBtn_) {
         currentList_->EnableAutoAlign(false);
+    } else if (&view == setBackAlignBtn_) {
+        currentList_->EnableCrossDragBack(true);
+    } else if (&view == setBackAlignOffBtn_) {
+        currentList_->EnableCrossDragBack(false);
     } else if (&view == setAutoAlignACCIncBtn_) {
         autoAlignTime_ += ALINE_TIME_CHANGE_VALUE;
         currentList_->SetAutoAlignTime(autoAlignTime_);

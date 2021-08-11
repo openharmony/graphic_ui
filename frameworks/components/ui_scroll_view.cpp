@@ -14,6 +14,9 @@
  */
 
 #include "components/ui_scroll_view.h"
+
+#include "securec.h"
+
 #include "components/ui_abstract_scroll_bar.h"
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
@@ -143,11 +146,12 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
 
 bool UIScrollView::OnRotateEndEvent(const RotateEvent& event)
 {
-    for (uint8_t i = 0; i < MAX_DELTA_Y_SIZE; i++) {
-        lastDeltaY_[i] = 0;
+    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
+        return false;
     }
+
     uint8_t dir;
-    if (direction_ == VERTICAL) {
+    if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
     } else {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
