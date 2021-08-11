@@ -56,6 +56,8 @@ private:
     UILabelButton* setSelectOffBtn_ = nullptr;
     UILabelButton* setAutoAlignBtn_ = nullptr;
     UILabelButton* setAutoAlignOffBtn_ = nullptr;
+    UILabelButton* setBackAlignBtn_ = nullptr;
+    UILabelButton* setBackAlignOffBtn_ = nullptr;
     UILabelButton* setAutoAlignACCIncBtn_ = nullptr;
     UILabelButton* setAutoAlignACCDncBtn_ = nullptr;
     UILabelButton* setYScrollBarVisableBtn_ = nullptr;

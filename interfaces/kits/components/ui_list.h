@@ -196,29 +196,6 @@ public:
 #endif
 
     /**
-     * @brief Sets the list direction.
-     *
-     * @param direction Indicates the list direction, either {@link HORIZONTAL} or {@link VERTICAL}.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetDirection(uint8_t direction)
-    {
-        direction_ = direction;
-    }
-
-    /**
-     * @brief Obtains the list direction.
-     * @return Returns the list direction, either {@link HORIZONTAL} or {@link VERTICAL}.
-     * @since 1.0
-     * @version 1.0
-     */
-    uint8_t GetDirection() const
-    {
-        return direction_;
-    }
-
-    /**
      * @brief Sets the adapter for this list. The content of this list is initialized when the adapter is set.
      *
      * @param adapter Indicates the adapter to set. For details, see {@link AbstractAdapter}.
@@ -379,6 +356,23 @@ public:
     }
 
     /**
+     * @brief Sets the automatic alignment mode for this list when auto align state is enabled.
+     *
+     * @param dragBack mode of alignment.
+     *        true means list item will move back when its position crosses the line of select
+     *        position partly (but not all of it).
+     *        false means list item will move front when its position crosses the line of select
+     *        position (no matter how many it crosses).
+     * 
+     * @since 3.0
+     * @version 3.0
+     */
+    void EnableCrossDragBack(bool dragBack)
+    {
+        dragBack_ = dragBack;
+    }
+
+    /**
      * @brief 获取自动对齐动画时长。
      *
      * @return 自动对齐动画时长。
@@ -399,11 +393,10 @@ public:
     static constexpr int8_t NULL_SELECT_INDEX = -1;
 
     UIView* onSelectedView_;
-
 protected:
     static constexpr int16_t RECALCULATE_DRAG_DISTANCE = 10;
     static constexpr int16_t RECALCULATE_DRAG_TIMES = 10;
-    static constexpr int16_t DEFAULT_ALINE_TIMES = 100;
+    static constexpr int16_t DEFAULT_ALIGN_TIMES = 100;
     void StopAnimator() override;
     bool DragXInner(int16_t distance) override;
     bool DragYInner(int16_t distance) override;
@@ -470,6 +463,10 @@ private:
     void UpdateScrollBar();
     bool IsNeedReCalculateDragEnd();
     bool ReCalculateDragEnd();
+    void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
+    void FixDistance(int16_t& distanceX, int16_t& distanceY) override;
+    void FixHorDistance(int16_t& distanceX);
+    void FixVerDistance(int16_t& distanceY);
 #if ENABLE_ROTATE_INPUT
     int16_t lastRotateLen_;
 #endif
@@ -489,7 +486,7 @@ private:
     int16_t onSelectedIndex_;
     Recycle recycle_;
     ListScrollListener* scrollListener_;
-    void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
+    bool dragBack_ = true;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_LIST_H
