@@ -309,6 +309,8 @@ private:
     void DestroyMapBufferInfo();
     void BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea);
     void ClearMapBuffer();
+    void UpdateMapBufferInfo(Rect& invalidatedArea, const TransformMap& transMap);
+    void RestoreMapBufferInfo();
 #if LOCAL_RENDER
     void RemoveViewFromInvalidMap(UIView *view);
     void DrawInvalidMap(const Rect &buffRect);
