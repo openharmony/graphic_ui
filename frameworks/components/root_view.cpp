@@ -530,14 +530,14 @@ void RootView::ClearMapBuffer()
     }
 }
 
-void RootView::UpdateMapBufferInfo(Rect& invalidatedArea, const TransformMap& transMap)
+void RootView::UpdateMapBufferInfo(Rect& invalidatedArea)
 {
-    TransformMap reverseMap(invalidatedArea);
-    reverseMap.Rotate(-QUARTER_IN_DEGREE, Vector2<float>{0, 0});
-    invalidatedArea = reverseMap.GetBoxRect();
-    invalidatedArea.SetPosition(0, 0);
-    dc_.mapBufferInfo->width = invalidatedArea.GetWidth();
-    dc_.mapBufferInfo->height = invalidatedArea.GetHeight();
+    int16_t width = invalidatedArea.GetWidth();
+    int16_t height = invalidatedArea.GetHeight();
+    invalidatedArea.SetWidth(height);
+    invalidatedArea.SetHeight(width);
+    dc_.mapBufferInfo->width = height;
+    dc_.mapBufferInfo->height = width;
     dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
                                 (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
 }
@@ -600,7 +600,7 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         invalidatedArea.SetWidth(dc_.mapBufferInfo->width);
                         invalidatedArea.SetHeight(dc_.mapBufferInfo->height);
                         if (invalidatedArea.GetWidth() < curView->GetWidth()) {
-                            UpdateMapBufferInfo(invalidatedArea, curTransMap);
+                            UpdateMapBufferInfo(invalidatedArea);
                             updateMapBufferInfo = true;
                         }
                         curView->OnDraw(*dc_.mapBufferInfo, invalidatedArea);
