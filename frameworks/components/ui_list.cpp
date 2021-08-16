@@ -14,6 +14,9 @@
  */
 
 #include "components/ui_list.h"
+
+#include "securec.h"
+
 #include "components/ui_abstract_scroll_bar.h"
 #include "gfx_utils/graphic_log.h"
 
@@ -160,7 +163,7 @@ UIList::UIList(uint8_t direction)
       isLoopList_(false),
       isReCalculateDragEnd_(true),
       autoAlign_(false),
-      alignTime_(DEFAULT_ALINE_TIMES),
+      alignTime_(DEFAULT_ALIGN_TIMES),
       startIndex_(0),
       topIndex_(0),
       bottomIndex_(0),
@@ -202,13 +205,14 @@ bool UIList::OnDragEvent(const DragEvent& event)
     if (scrollAnimator_.GetState() != Animator::STOP) {
         UIAbstractScroll::StopAnimator();
     }
+    isReCalculateDragEnd_ = true;
     int16_t xDistance = event.GetDeltaX();
     int16_t yDistance = event.GetDeltaY();
-    isReCalculateDragEnd_ = true;
     if (direction_ == VERTICAL) {
-        RefreshDeltaY(yDistance);
+        RefreshDelta(yDistance);
         DragYInner(yDistance);
     } else {
+        RefreshDelta(xDistance);
         DragXInner(xDistance);
     }
     return UIView::OnDragEvent(event);
@@ -223,7 +227,7 @@ bool UIList::OnDragEndEvent(const DragEvent& event)
         current = event.GetCurrentPos();
     }
     isReCalculateDragEnd_ = false;
-    if (!DragThrowAnimator(current, last, event.GetDragDirection())) {
+    if (!DragThrowAnimator(current, last, event.GetDragDirection(), dragBack_)) {
         if (scrollListener_ && (scrollListener_->GetScrollState() == ListScrollListener::SCROLL_STATE_MOVE)) {
             scrollListener_->SetScrollState(ListScrollListener::SCROLL_STATE_STOP);
             scrollListener_->OnScrollEnd(onSelectedIndex_, onSelectedView_);
@@ -267,21 +271,21 @@ bool UIList::OnRotateEndEvent(const RotateEvent& event)
     needVibration_ = false;
     isReCalculateDragEnd_ = false;
 
-    for (uint8_t i = 0; i < MAX_DELTA_Y_SIZE; i++) {
-        lastDeltaY_[i] = 0;
+    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
+        return false;
     }
+
     uint8_t dir;
-    if (direction_ == VERTICAL) {
+    if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
     } else {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
     }
-    
     bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
         (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
     if (throwDrag_ && triggerAnimator) {
         Point current;
-        if (direction_ == VERTICAL) {
+        if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
             current = {0, lastRotateLen_};
         } else {
             current = {lastRotateLen_, 0};
@@ -453,7 +457,7 @@ bool UIList::ReCalculateDragEnd()
         // 2: half
         offsetX = selectPosition_ - (onSelectedView_->GetX() + (onSelectedView_->GetRelativeRect().GetWidth() / 2));
     }
-    animatorCallback_.RsetCallback();
+    animatorCallback_.ResetCallback();
     animatorCallback_.SetDragStartValue(0, 0);
     animatorCallback_.SetDragEndValue(offsetX, offsetY);
     animatorCallback_.SetDragTimes(GetAutoAlignTime() / DEFAULT_TASK_PERIOD);
@@ -859,6 +863,62 @@ void UIList::CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDista
             }
             dragDistanceX += scrollWidth - scrollBlankSize_ - 1 - (right + dragDistanceX);
         }
+    }
+}
+
+/* this is a temporary impementation just used for list and will be replaced later,
+   we assume size of all items in scroll are equal for now. */
+void UIList::FixDistance(int16_t& distanceX, int16_t& distanceY)
+{
+    if (childrenHead_ == nullptr) {
+        GRAPHIC_LOGW("cannot fix drag distance without children!");
+        return;
+    }
+
+    if (direction_ == VERTICAL) {
+        FixVerDistance(distanceY);
+    } else {
+        FixHorDistance(distanceX);
+    }
+}
+
+void UIList::FixHorDistance(int16_t& distanceX)
+{
+    UIView* targetView = childrenHead_;
+    while (targetView != nullptr) {
+        int16_t pos = targetView->GetX();
+        int16_t width = targetView->GetRelativeRect().GetWidth();
+        if (pos <= selectPosition_ && pos + width >= selectPosition_) {
+            int16_t offset = selectPosition_ - (pos + width / 2); // 2 : half of width
+            if ((distanceX < 0) && (offset > 0)) {
+                offset = offset - width;
+            } else if ((distanceX > 0) && (offset < 0)) {
+                offset = offset + width;
+            }
+            distanceX = (distanceX / width) * width + offset;
+            return;
+        }
+        targetView = targetView->GetNextSibling();
+    }
+}
+
+void UIList::FixVerDistance(int16_t& distanceY)
+{
+    UIView* targetView = childrenHead_;
+    while (targetView != nullptr) {
+        int16_t pos = targetView->GetY();
+        int16_t height = targetView->GetRelativeRect().GetHeight();
+        if (pos <= selectPosition_ && pos + height >= selectPosition_) {
+            int16_t offset = selectPosition_ - (pos + height / 2); // 2 : half of height
+            if ((distanceY < 0) && (offset > 0)) {
+                offset = offset - height;
+            } else if ((distanceY > 0) && (offset < 0)) {
+                offset = offset + height;
+            }
+            distanceY = (distanceY / height) * height + offset;
+            return;
+        }
+        targetView = targetView->GetNextSibling();
     }
 }
 
