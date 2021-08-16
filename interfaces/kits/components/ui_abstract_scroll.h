@@ -281,6 +281,29 @@ public:
         scrollBarCenterSetFlag_ = true;
     }
 
+    /**
+     * @brief Sets the list direction.
+     *
+     * @param direction Indicates the list direction, either {@link HORIZONTAL} or {@link VERTICAL}.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetDirection(uint8_t direction)
+    {
+        direction_ = direction;
+    }
+
+    /**
+     * @brief Obtains the list direction.
+     * @return Returns the list direction, either {@link HORIZONTAL} or {@link VERTICAL}.
+     * @since 1.0
+     * @version 1.0
+     */
+    uint8_t GetDirection() const
+    {
+        return direction_;
+    }
+
     void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     static constexpr uint8_t HORIZONTAL = 0;
@@ -297,7 +320,7 @@ protected:
     /* acceleration calculation coefficient */
     static constexpr uint8_t DRAG_ACC_FACTOR = 10;
     /* the maximum number of historical drag data */
-    static constexpr uint8_t MAX_DELTA_Y_SIZE = 3;
+    static constexpr uint8_t MAX_DELTA_SIZE = 3;
 
     static constexpr uint16_t SCROLL_BAR_WIDTH = 4;
     static constexpr uint8_t MAX_ROTATE_FACTOR = 128;
@@ -337,7 +360,7 @@ protected:
             endValueY_ = endValueY;
         }
 
-        void RsetCallback()
+        void ResetCallback()
         {
             curtTime_ = 0;
             dragTimes_ = 0;
@@ -359,31 +382,47 @@ protected:
         int16_t previousValueY_;
     };
 
-    bool DragThrowAnimator(Point currentPos, Point lastPos, uint8_t dragDirection);
+    bool DragThrowAnimator(Point currentPos,
+                           Point lastPos,
+                           uint8_t dragDirection,
+                           bool dragBack = true);
+
     virtual void StopAnimator();
+
     virtual bool DragXInner(int16_t distance) = 0;
+
     virtual bool DragYInner(int16_t distance) = 0;
-    void RefreshDeltaY(int16_t distance)
+
+    void RefreshDelta(int16_t distance)
     {
-        lastDeltaY_[deltaYIndex_ % MAX_DELTA_Y_SIZE] = distance;
-        deltaYIndex_++;
+        lastDelta_[deltaIndex_ % MAX_DELTA_SIZE] = distance;
+        deltaIndex_++;
     }
 
-    void CalculateDragDistance(Point currentPos, Point lastPos, uint8_t dragDirection,
-                               int16_t& dragDistanceX, int16_t& dragDistanceY);
+    void CalculateDragDistance(Point currentPos,
+                               Point lastPos,
+                               uint8_t dragDirection,
+                               int16_t& dragDistanceX,
+                               int16_t& dragDistanceY);
+
     void StartAnimator(int16_t dragDistanceX, int16_t dragDistanceY);
+
     virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) {};
-    int16_t GetMaxDeltaY() const;
+
+    int16_t GetMaxDelta() const;
+
     void RefreshAnimator();
+
+    virtual void FixDistance(int16_t& distanceX, int16_t& distanceY) {}
 
     uint16_t scrollBlankSize_ = 0;
     uint16_t reboundSize_ = 0;
     uint16_t maxScrollDistance_ = 0;
-    int16_t lastDeltaY_[MAX_DELTA_Y_SIZE] = {0};
+    int16_t lastDelta_[MAX_DELTA_SIZE] = {0};
     uint8_t dragAccCoefficient_ = DRAG_ACC_FACTOR;
     uint8_t swipeAccCoefficient_ = 0;
     uint8_t direction_ : 2;
-    uint8_t deltaYIndex_ : 2;
+    uint8_t deltaIndex_ : 2;
     uint8_t reserve_ : 4;
     bool throwDrag_ = false;
     EasingFunc easingFunc_;
@@ -406,4 +445,4 @@ protected:
 #endif
 };
 } // namespace OHOS
-#endif // GRAPHIC_LITE_UI_ABSTRACT_LIST_VIEW_H
+#endif // GRAPHIC_LITE_UI_ABSTRACT_SCROLL_H

@@ -171,10 +171,10 @@ bool UISwipeView::OnDragEvent(const DragEvent& event)
 
     if (direction_ == HORIZONTAL) {
         DragXInner(event.GetDeltaX());
-        RefreshDeltaY(event.GetDeltaX());
+        RefreshDelta(event.GetDeltaX());
     } else {
         DragYInner(event.GetDeltaY());
-        RefreshDeltaY(event.GetDeltaY());
+        RefreshDelta(event.GetDeltaY());
     }
     return UIView::OnDragEvent(event);
 }
@@ -385,7 +385,7 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
         return;
     }
 
-    int16_t accelerationOffset = GetMaxDeltaY() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+    int16_t accelerationOffset = GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
     if (distance < 0) {
         /*
          * 7, 10 : Check whether the current view is dragged by more than 1/5,
