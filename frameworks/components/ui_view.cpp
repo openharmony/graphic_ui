@@ -206,21 +206,37 @@ void UIView::SetStyle(uint8_t key, int64_t value)
     }
     int16_t width = GetWidth();
     int16_t height = GetHeight();
+    int16_t x = GetX();
+    int16_t y = GetY();
     style_->SetStyle(key, value);
+    Rect rect(x, y, x + width - 1, y + height -  1);
+    UpdateRectInfo(key, rect);
+}
+
+void UIView::UpdateRectInfo(uint8_t key, const Rect& rect)
+{
     switch (key) {
         case STYLE_BORDER_WIDTH: {
-            SetWidth(width);
-            SetHeight(height);
+            SetWidth(rect.GetWidth());
+            SetHeight(rect.GetHeight());
             break;
         }
         case STYLE_PADDING_LEFT:
         case STYLE_PADDING_RIGHT: {
-            SetWidth(width);
+            SetWidth(rect.GetWidth());
             break;
         }
         case STYLE_PADDING_TOP:
         case STYLE_PADDING_BOTTOM: {
-            SetHeight(height);
+            SetHeight(rect.GetHeight());
+            break;
+        }
+        case STYLE_MARGIN_LEFT: {
+            SetX(rect.GetX());
+            break;
+        }
+        case STYLE_MARGIN_TOP: {
+            SetY(rect.GetY());
             break;
         }
         default:

@@ -1702,6 +1702,7 @@ protected:
     uint8_t GetMixOpaScale() const;
     bool IsInvalid(float percent);
     void DrawViewBounds(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea);
+    void UpdateRectInfo(uint8_t key, const Rect& rect);
 
 private:
     Rect rect_;
