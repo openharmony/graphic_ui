@@ -190,8 +190,6 @@ public:
 #if ENABLE_ROTATE_INPUT
     bool OnRotateStartEvent(const RotateEvent& event) override;
 
-    bool OnRotateEvent(const RotateEvent& event) override;
-
     bool OnRotateEndEvent(const RotateEvent& event) override;
 #endif
 
@@ -440,6 +438,7 @@ private:
         void MoveAdapterItemsRelativeRect(int16_t x, int16_t y);
         void MesureAdapterRelativeRect();
     private:
+        friend class UIList;
         void FillActiveView();
 
         List<UIView*> scrapView_;
@@ -467,9 +466,6 @@ private:
     void FixDistance(int16_t& distanceX, int16_t& distanceY) override;
     void FixHorDistance(int16_t& distanceX);
     void FixVerDistance(int16_t& distanceY);
-#if ENABLE_ROTATE_INPUT
-    int16_t lastRotateLen_;
-#endif
 #if ENABLE_VIBRATOR
     bool needVibration_;
     void SetMotorType(VibratorType vibratorType);

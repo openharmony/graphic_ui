@@ -18,18 +18,12 @@
 #include "dock/vibrator_manager.h"
 #include "gfx_utils/graphic_log.h"
 
-namespace {
-#if ENABLE_ROTATE_INPUT
-constexpr float DEFAULT_SWIPE_ROTATE_FACTOR = 5;
-#endif
-} // namespace
-
 namespace OHOS {
 UISwipeView::UISwipeView(uint8_t direction)
     : swipeListener_(nullptr), curIndex_(0), blankSize_(DEFAULT_BLANK_SIZE), curView_(nullptr), loop_(false)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_SWIPE_ROTATE_FACTOR;
+    rotateFactor_ = DEFAULT_SWIPE_VIEW_ROTATE_FACTOR;
     lastRotateLen_ = 0;
 #endif
 #if ENABLE_VIBRATOR
@@ -211,20 +205,12 @@ bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
     return UIView::OnRotateStartEvent(event);
 }
 
-bool UISwipeView::OnRotateEvent(const RotateEvent& event)
-{
-    lastRotateLen_ =  event.GetRotate() * rotateFactor_;
-    if (direction_ == HORIZONTAL) {
-        DragXInner(lastRotateLen_);
-    } else {
-        DragYInner(lastRotateLen_);
-    }
-    RefreshCurrentView(lastRotateLen_);
-    return UIView::OnRotateEvent(event);
-}
-
 bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
 {
+    RefreshCurrentView(lastRotateLen_);
+    if (curView_ == nullptr) {
+        return UIView::OnRotateEndEvent(event);
+    }
     SwitchToPage(curIndex_);
     lastRotateLen_ = 0;
 #if ENABLE_VIBRATOR
@@ -420,8 +406,13 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
 #if ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && needVibration_ && curIndex_ != lastIndex_) {
-        GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner Call vibrator function");
-        vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
+        if (!loop_ && (curIndex_ == 0 || curIndex_ == childrenNum_ - 1)) {
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
+            GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner calls TYPE_THREE vibrator");
+        } else {
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
+            GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner calls TYPE_ONE vibrator");
+        }
         lastIndex_ = curIndex_;
     }
 #endif
