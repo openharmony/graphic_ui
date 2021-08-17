@@ -15,31 +15,18 @@
 
 #include "components/ui_scroll_view.h"
 
-#include "securec.h"
-
 #include "components/ui_abstract_scroll_bar.h"
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
 #include "draw/draw_rect.h"
 #include "gfx_utils/graphic_log.h"
 
-namespace {
-#if ENABLE_ROTATE_INPUT
-constexpr float DEFAULT_SCROLL_ROTATE_FACTOR = 2.5;
-#endif
-#if ENABLE_VIBRATOR
-constexpr uint8_t DEFAULT_VIBRATOR_LEN = 3;
-#endif
-} // namespace
-
 namespace OHOS {
 UIScrollView::UIScrollView()
-    : xScrollable_(true),
-      yScrollable_(true),
-      scrollListener_(nullptr)
+    : scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_SCROLL_ROTATE_FACTOR;
+    rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
     lastRotateLen_ = 0;
 #endif
 #if ENABLE_VIBRATOR
@@ -84,10 +71,10 @@ void UIScrollView::Drag(const DragEvent& event)
     int16_t xDistance = event.GetDeltaX();
     int16_t yDistance = event.GetDeltaY();
 
-    if (xScrollable_ && xDistance != 0) {
+    if ((direction_ == HORIZONTAL || direction_ == HORIZONTAL_AND_VERTICAL) && xDistance != 0) {
         DragXInner(xDistance);
     }
-    if (yScrollable_ && yDistance != 0) {
+    if ((direction_ == VERTICAL || direction_ == HORIZONTAL_AND_VERTICAL) && yDistance != 0) {
         DragYInner(yDistance);
     }
 }
@@ -109,36 +96,56 @@ bool UIScrollView::OnRotateStartEvent(const RotateEvent& event)
 
 bool UIScrollView::OnRotateEvent(const RotateEvent& event)
 {
+    if (direction_ == HORIZONTAL_NOR_VERTICAL) {
+        return UIView::OnRotateEvent(event);
+    }
     lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
-    if (yScrollable_) {
-        DragYInner(lastRotateLen_);
+#if ENABLE_VIBRATOR
+    bool lastIsEdge = false;
+    Rect childRect = GetAllChildRelativeRect();
+    if (direction_ == HORIZONTAL) {
+        if (childRect.GetLeft() - scrollBlankSize_ >= 0 || childRect.GetRight() + scrollBlankSize_ <= GetWidth()) {
+            lastIsEdge = true;
+        }
     } else {
+        if (childRect.GetTop() - scrollBlankSize_ >= 0 || childRect.GetBottom() + scrollBlankSize_ <= GetHeight()) {
+            lastIsEdge = true;
+        }
+    }
+#endif
+    if (direction_ == HORIZONTAL) {
         DragXInner(lastRotateLen_);
+    } else {
+        DragYInner(lastRotateLen_);
     }
 #if ENABLE_VIBRATOR
     totalRotateLen_ += lastRotateLen_;
-    Rect childRect = GetAllChildRelativeRect();
-    bool needVibration = true;
-    if (yScrollable_) {
-        if (childRect.GetTop() - scrollBlankSize_ >= 0 || childRect.GetBottom() + scrollBlankSize_ <= GetHeight()) {
-            needVibration = false;
+    childRect = GetAllChildRelativeRect();
+    bool isEdge = false;
+    if (direction_ == HORIZONTAL) {
+        if (childRect.GetLeft() - scrollBlankSize_ >= 0 || childRect.GetRight() + scrollBlankSize_ <= GetWidth()) {
+            isEdge = true;
         }
     } else {
-        if (childRect.GetLeft() - scrollBlankSize_ >= 0 || childRect.GetRight() + scrollBlankSize_ <= GetWidth()) {
-            needVibration = false;
+        if (childRect.GetTop() - scrollBlankSize_ >= 0 || childRect.GetBottom() + scrollBlankSize_ <= GetHeight()) {
+            isEdge = true;
         }
     }
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-    if (vibratorFunc != nullptr && needVibration) {
+    if (vibratorFunc != nullptr && !isEdge) {
         uint16_t rotateLen = MATH_ABS(totalRotateLen_ - lastVibratorRotateLen_);
-        if (rotateLen > DEFAULT_VIBRATOR_LEN) {
-            uint16_t vibrationCnt = rotateLen / DEFAULT_VIBRATOR_LEN;
+        if (rotateLen > DEFAULT_SCROLL_VIEW_VIBRATION_LEN) {
+            uint16_t vibrationCnt = rotateLen / DEFAULT_SCROLL_VIEW_VIBRATION_LEN;
             for (uint16_t i = 0; i < vibrationCnt; i++) {
-                GRAPHIC_LOGI("UIScrollView::OnRotateEvent Call vibrator function");
+                GRAPHIC_LOGI("UIScrollView::OnRotateEvent calls TYPE_ONE vibrator");
                 vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
             }
             lastVibratorRotateLen_ = totalRotateLen_;
-        }   
+        }
+    }
+    if (vibratorFunc != nullptr && (!lastIsEdge && isEdge)) {
+        GRAPHIC_LOGI("UIScrollView::OnRotateEvent calls TYPE_THREE vibrator");
+        vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
     }
 #endif
     return UIView::OnRotateEvent(event);
@@ -146,40 +153,19 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
 
 bool UIScrollView::OnRotateEndEvent(const RotateEvent& event)
 {
-    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
-        return false;
+    if (direction_ == HORIZONTAL_NOR_VERTICAL) {
+        return UIView::OnRotateEvent(event);
     }
-
-    uint8_t dir;
-    if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
-    } else {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
-    }
-    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
-        (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
-    if (throwDrag_ && triggerAnimator) {
-        Point current;
-        if (yScrollable_) {
-            current = {0, lastRotateLen_};
-        } else {
-            current = {lastRotateLen_, 0};
-        }
-        DragThrowAnimator(current, {0, 0}, dir);
-    } else {
-        DragThrowAnimator({0, 0}, {0, 0}, dir);
-    }
-    lastRotateLen_ = 0;
-    return UIView::OnRotateEndEvent(event);
+    return UIAbstractScroll::OnRotateEndEvent(event);
 }
 #endif
 
 void UIScrollView::ScrollBy(int16_t xDistance, int16_t yDistance)
 {
-    if (xScrollable_ && xDistance != 0) {
+    if ((direction_ == HORIZONTAL || direction_ == HORIZONTAL_AND_VERTICAL) && xDistance != 0) {
         DragXInner(xDistance);
     }
-    if (yScrollable_ && yDistance != 0) {
+    if ((direction_ == VERTICAL || direction_ == HORIZONTAL_AND_VERTICAL) && yDistance != 0) {
         DragYInner(yDistance);
     }
     if ((scrollListener_ != nullptr) && (scrollListener_->GetScrollState() == OnScrollListener::SCROLL_STATE_MOVE)) {
@@ -196,7 +182,8 @@ bool UIScrollView::DragXInner(int16_t distance)
         reboundSize = 0;
     }
 
-    if (childRect.GetWidth() <= (GetWidth() - (scrollBlankSize_ << 1)) || !xScrollable_) {
+    if (childRect.GetWidth() <= (GetWidth() - (scrollBlankSize_ << 1)) ||
+        !(direction_ == HORIZONTAL || direction_ == HORIZONTAL_AND_VERTICAL)) {
         return false;
     }
 
@@ -227,7 +214,8 @@ bool UIScrollView::DragYInner(int16_t distance)
         reboundSize = 0;
     }
 
-    if (childRect.GetHeight() <= (GetHeight() - (scrollBlankSize_ << 1)) || !yScrollable_) {
+    if (childRect.GetHeight() <= (GetHeight() - (scrollBlankSize_ << 1)) ||
+        !(direction_ == VERTICAL || direction_ == HORIZONTAL_AND_VERTICAL)) {
         return false;
     }
 

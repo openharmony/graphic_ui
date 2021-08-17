@@ -216,8 +216,6 @@ public:
 #if ENABLE_ROTATE_INPUT
     bool OnRotateStartEvent(const RotateEvent& event) override;
 
-    bool OnRotateEvent(const RotateEvent& event) override;
-
     bool OnRotateEndEvent(const RotateEvent& event) override;
 #endif
 
@@ -366,9 +364,6 @@ protected:
     UIView* curView_;
     AlignMode alignMode_ = ALIGN_CENTER;
     bool loop_;
-#if ENABLE_ROTATE_INPUT
-    int16_t lastRotateLen_;
-#endif
 #if ENABLE_VIBRATOR
     uint16_t lastIndex_;
     bool needVibration_;

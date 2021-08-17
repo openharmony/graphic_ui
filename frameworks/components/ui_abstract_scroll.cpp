@@ -14,6 +14,9 @@
  */
 
 #include "components/ui_abstract_scroll.h"
+
+#include "securec.h"
+
 #include "animator/interpolation.h"
 #include "common/screen.h"
 #include "components/ui_abstract_scroll_bar.h"
@@ -25,7 +28,6 @@
 
 namespace {
 #if ENABLE_ROTATE_INPUT
-constexpr float DEFAULT_ABSTRACT_SCROLL_ROTATE_FACTOR = 2.5;
 constexpr uint8_t DEFAULT_ROTATE_THRESHOLD = 4;
 #endif
 }
@@ -139,8 +141,9 @@ UIAbstractScroll::UIAbstractScroll()
     focusable_ = true;
 #endif
 #if ENABLE_ROTATE_INPUT
-    rotateFactor_ = DEFAULT_ABSTRACT_SCROLL_ROTATE_FACTOR;
+    rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
     threshold_ = DEFAULT_ROTATE_THRESHOLD;
+    lastRotateLen_ = 0;
 #endif
     isViewGroup_ = true;
     touchable_ = true;
@@ -312,6 +315,48 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
         scrollView->StopAnimator();
     }
 }
+
+#if ENABLE_ROTATE_INPUT
+bool UIAbstractScroll::OnRotateEvent(const RotateEvent& event)
+{
+    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    if (direction_ == HORIZONTAL) {
+        DragXInner(lastRotateLen_);
+    } else {
+        DragYInner(lastRotateLen_);
+    }
+    return UIView::OnRotateEvent(event);
+}
+
+bool UIAbstractScroll::OnRotateEndEvent(const RotateEvent& event)
+{
+    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
+        return UIView::OnRotateEndEvent(event);
+    }
+
+    uint8_t dir;
+    if (direction_ == HORIZONTAL) {
+        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
+    } else {
+        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
+    }
+    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
+        (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
+    if (throwDrag_ && triggerAnimator) {
+        Point current;
+        if (direction_ == HORIZONTAL) {
+            current = {lastRotateLen_, 0};
+        } else {
+            current = {0, lastRotateLen_};
+        }
+        DragThrowAnimator(current, {0, 0}, dir);
+    } else {
+        DragThrowAnimator({0, 0}, {0, 0}, dir);
+    }
+    lastRotateLen_ = 0;
+    return UIView::OnRotateEndEvent(event);
+}
+#endif
 
 void UIAbstractScroll::SetXScrollBarVisible(bool visible)
 {

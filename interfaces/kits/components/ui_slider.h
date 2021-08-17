@@ -263,6 +263,8 @@ public:
     }
 
     bool OnRotateEvent(const RotateEvent& event) override;
+
+    bool OnRotateEndEvent(const RotateEvent& event) override;
 #endif
     bool OnClickEvent(const ClickEvent& event) override;
 
@@ -346,6 +348,7 @@ private:
     int32_t UpdateCurrentValue(const Point& knobPosition);
 #if ENABLE_ROTATE_INPUT
     float rotateFactor_;
+    float cachedRotation_;
 #endif
     UISliderEventListener* listener_;
 }; // class UISlider

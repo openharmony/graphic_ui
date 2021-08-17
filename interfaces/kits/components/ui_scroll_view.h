@@ -176,7 +176,11 @@ public:
      */
     void SetHorizontalScrollState(bool state)
     {
-        xScrollable_ = state;
+        if (direction_ == VERTICAL || direction_ == HORIZONTAL_AND_VERTICAL) {
+            direction_ = state ? HORIZONTAL_AND_VERTICAL : VERTICAL;
+        } else {
+            direction_ = state ? HORIZONTAL : HORIZONTAL_NOR_VERTICAL;
+        }
     }
 
     /**
@@ -188,7 +192,7 @@ public:
      */
     bool GetHorizontalScrollState() const
     {
-        return xScrollable_;
+        return (direction_ == HORIZONTAL || direction_ == HORIZONTAL_AND_VERTICAL);
     }
 
     /**
@@ -201,7 +205,11 @@ public:
      */
     void SetVerticalScrollState(bool state)
     {
-        yScrollable_ = state;
+        if (direction_ == HORIZONTAL || direction_ == HORIZONTAL_AND_VERTICAL) {
+            direction_ = state ? HORIZONTAL_AND_VERTICAL : HORIZONTAL;
+        } else {
+            direction_ = state ? VERTICAL : HORIZONTAL_NOR_VERTICAL;
+        }
     }
 
     /**
@@ -213,7 +221,7 @@ public:
      */
     bool GetVerticalScrollState() const
     {
-        return yScrollable_;
+        return (direction_ == VERTICAL || direction_ == HORIZONTAL_AND_VERTICAL);
     }
 
     /**
@@ -238,12 +246,7 @@ private:
     bool MoveOffset(int16_t offsetX, int16_t offsetY);
     void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
     void RefreshScrollBar();
-    bool xScrollable_;
-    bool yScrollable_;
     OnScrollListener* scrollListener_;
-#if ENABLE_ROTATE_INPUT
-    int16_t lastRotateLen_;
-#endif
 #if ENABLE_VIBRATOR
     int16_t totalRotateLen_;
     int16_t lastVibratorRotateLen_;

@@ -50,6 +50,9 @@ void Print(VibratorType vibratorType)
         case VibratorType::VIBRATOR_TYPE_TWO:
             printf("VIBRATOR_TYPE_TWO\n");
             break;
+        case VibratorType::VIBRATOR_TYPE_THREE:
+            printf("VIBRATOR_TYPE_THREE\n");
+            break;
         default:
             break;
     }
