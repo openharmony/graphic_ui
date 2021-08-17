@@ -146,26 +146,11 @@ void UIButton::SetStyleForState(uint8_t key, int64_t value, ButtonState state)
         style_ = buttonStyles_[RELEASED];
         int16_t width = GetWidth();
         int16_t height = GetHeight();
+        int16_t x = GetX();
+        int16_t y = GetY();
         buttonStyles_[state]->SetStyle(key, value);
-        switch (key) {
-            case STYLE_BORDER_WIDTH: {
-                SetWidth(width);
-                SetHeight(height);
-                break;
-            }
-            case STYLE_PADDING_LEFT:
-            case STYLE_PADDING_RIGHT: {
-                SetWidth(width);
-                break;
-            }
-            case STYLE_PADDING_TOP:
-            case STYLE_PADDING_BOTTOM: {
-                SetHeight(height);
-                break;
-            }
-            default:
-                break;
-        }
+        Rect rect(x, y, x + width - 1, y + height -  1);
+        UpdateRectInfo(key, rect);
     }
 }
 
