@@ -44,22 +44,33 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
         return;
     }
 
-    UIView *view_ = FocusManager::GetInstance()->GetFocusedView();
-    if (view_ == nullptr) {
+    UIView* view = FocusManager::GetInstance()->GetFocusedView();
+    if (view == nullptr) {
+        return;
+    }
+
+    UIView* par = view;
+    while (par->GetParent() != nullptr) {
+        if (!par->IsVisible()) {
+            return;
+        }
+        par = par->GetParent();
+    }
+    if (par->GetViewType() != UI_ROOT_VIEW) {
         return;
     }
     if (MATH_ABS(data.rotate) < threshold_ && !rotateStart_ && !cachedToRotate) {
         return;
     }
     if (data.rotate == 0 && rotateStart_) {
-        view_->OnRotateEndEvent(0);
+        view->OnRotateEndEvent(0);
         rotateStart_ = false;
         return;
     }
     if (!rotateStart_) {
-        view_->OnRotateStartEvent(data.rotate);
+        view->OnRotateStartEvent(data.rotate);
     }
-    view_->OnRotateEvent(data.rotate);
+    view->OnRotateEvent(data.rotate);
     rotateStart_ = true;
 }
 } // namespace OHOS
