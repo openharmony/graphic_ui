@@ -328,6 +328,87 @@ public:
      */
     void SetTextFormatter(TextFormatter* formatter);
 
+    /**
+     * @brief Sets the easing function that specifies a scroll animation after a finger lifts the screen.
+     *
+     * @param func Indicates the easing function to set. The default function is {@link EasingEquation::CubicEaseOut}.
+     *             For details, see {@link EasingEquation}.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetDragFunc(EasingFunc func)
+    {
+        list_.SetDragFunc(func);
+    }
+
+    /**
+     * @brief Sets the rebound size, which is the distance a knob moves after being released when it reaches the end of
+     *        a scrollbar.
+     *
+     * @param size Indicates the rebound size to set.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetReboundSize(uint16_t size)
+    {
+        list_.SetReboundSize(size);
+    }
+
+    /**
+     * @brief 设置自动对齐动画时长，单位为毫秒，默认为100毫秒。该功能依赖EnableAutoAlign()方法，自动对齐设置为true情况下才生效。
+     *
+     * @param value 自动对齐动画时长,0表示无动画。
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetAutoAlignTime(uint16_t time)
+    {
+        list_.SetAutoAlignTime(time);
+    }
+
+    /**
+     * @brief Sets the drag acceleration.
+     *
+     * @param value Indicates the drag acceleration to set. The default value is <b>10</b>. A larger drag acceleration
+     *              indicates a higher inertial scroll velocity.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetDragACCLevel(uint16_t value)
+    {
+        list_.SetDragACCLevel(value);
+    }
+
+    /**
+     * @brief Sets the compensation distance after a finger lifts the screen.
+     *
+     * @param value Indicates the compensation distance to set. The default value is <b>0</b>.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetSwipeACCLevel(uint16_t value)
+    {
+        list_.SetSwipeACCLevel(value);
+    }
+
+    /**
+     * @brief Sets the blank size for this scroll view.
+     *
+     *
+     * @param value Indicates the blank size to set. The default value is <b>0</b>. Taking a vertical scroll as an
+     *              example, the value <b>0</b> indicates that the head node can only scroll downwards the top of the
+     *              view and the tail node scroll upwards the bottom; the value <b>10</b> indicates that the head node
+     *              can continue scrolling down by 10 pixels after it reaches the top of the view.
+     * @since 5.0
+     * @version 3.0
+     */
+    void SetScrollBlankSize(uint16_t size)
+    {
+        scrollBlankSize_ = size;
+        isScrollBlankSizeSet_ = true;
+        Refresh();
+    }
+
 #if ENABLE_ROTATE_INPUT
     /**
      * @brief Requests the focus on the view.
@@ -402,6 +483,9 @@ private:
     friend class PickerListScrollListener;
     bool RefreshValues(const char* value[], uint16_t count);
     bool RefreshValues(int16_t start, int16_t end);
+
+    bool isScrollBlankSizeSet_ : 1;
+    uint16_t scrollBlankSize_;
 
     uint16_t backgroundFontId_;
     uint16_t highlightFontId_;
