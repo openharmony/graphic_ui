@@ -135,6 +135,8 @@ UIPicker::UIPicker()
       maxCount_(0),
       setSelectedIndex_(0),
       backgroundFontSize_(0),
+      isScrollBlankSizeSet_(false),
+      scrollBlankSize_(0),
       highlightFontSize_(0),
       backgroundFontName_(nullptr),
       highlightFontName_(nullptr),
@@ -299,8 +301,12 @@ void UIPicker::RefreshList()
     list_.SetHeight(height);
     list_.SetWidth(itemsWidth_);
     list_.LayoutCenterOfParent();
-    list_.SetScrollBlankSize((height - itemsHeight_) / 2); // 2: half
     list_.SetSelectPosition(height / 2);                   // 2: half
+    if (isScrollBlankSizeSet_) {
+        list_.SetScrollBlankSize(scrollBlankSize_);
+    } else {
+        list_.SetScrollBlankSize((height - itemsHeight_) / 2); // 2: half
+    }
     if (!isSetAdaptered_) {
         list_.SetAdapter(textAdapter_);
         isSetAdaptered_ = true;
