@@ -266,7 +266,7 @@ void UIImageView::SetResizeMode(ImageResizeMode mode)
     }
 }
 
-void UIImageView::AdjustScaleAndTranslate(Vector2<float>& scale, Vector2<int16_t>& translate,
+void UIImageView::AdjustScaleAndTranslate(Vector3<float>& scale, Vector3<int16_t>& translate,
     int16_t widgetWidth, int16_t widgetHeight) const
 {
     // adjust scale
@@ -314,7 +314,7 @@ void UIImageView::UpdateContentMatrix()
         return;
     }
     if (contentMatrix_ == nullptr) {
-        contentMatrix_ = new Matrix3<float>();
+        contentMatrix_ = new Matrix4<float>();
         if (contentMatrix_ == nullptr) {
             GRAPHIC_LOGE("can not new contentMatrix");
             return;
@@ -327,13 +327,13 @@ void UIImageView::UpdateContentMatrix()
 
     float scaleX = static_cast<float>(widgetWidth) / static_cast<float>(imageWidth_);
     float scaleY = static_cast<float>(widgetHeight) / static_cast<float>(imageHeight_);
-    Vector2<float> scale(scaleX, scaleY);
-    Vector2<int16_t> translate(style_->paddingLeft_ + style_->borderWidth_,
-        style_->paddingTop_ + style_->borderWidth_);
+    Vector3<float> scale(scaleX, scaleY, 1.0f);
+    Vector3<int16_t> translate(style_->paddingLeft_ + style_->borderWidth_,
+        style_->paddingTop_ + style_->borderWidth_, 0);
     AdjustScaleAndTranslate(scale, translate, widgetWidth, widgetHeight);
 
-    auto scaleMatrix = Matrix3<float>::Scale(scale, Vector2<float>(viewRect.GetX(), viewRect.GetY()));
-    auto translateMatrix = Matrix3<float>::Translate(Vector2<float>(translate.x_, translate.y_));
+    auto scaleMatrix = Matrix4<float>::Scale(scale, Vector3<float>(viewRect.GetX(), viewRect.GetY(), 0));
+    auto translateMatrix = Matrix4<float>::Translate(Vector3<float>(translate.x_, translate.y_, 0));
     *contentMatrix_ = translateMatrix * scaleMatrix;
 }
 
@@ -382,7 +382,7 @@ void UIImageView::UpdateDrawTransMap(bool updateContentMatrix)
     }
     // merge the transMap and content matrix
     auto rect = transMap_->GetTransMapRect();
-    auto translate = Matrix3<float>::Translate(Vector2<float>(-rect.GetX(), -rect.GetY()));
+    auto translate = Matrix4<float>::Translate(Vector3<float>(-rect.GetX(), -rect.GetY(), 0));
     auto matrix = transMap_->GetTransformMatrix() * translate;
     matrix = matrix * (*contentMatrix_);
     drawTransMap_->SetMatrix(matrix);

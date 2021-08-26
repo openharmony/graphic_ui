@@ -37,13 +37,14 @@ namespace OHOS {
     SWAP_INT16(y1, y2);
 
 // FixedPointed Related definition.
-#define FIXED_NUM_1 32768
+#define FIXED_NUM_1 1048576
+#define FIXED_Q_NUM 20
 #define FO_TRANS_FLOAT_TO_FIXED(f) (static_cast<int64_t>((f) * FIXED_NUM_1))
-#define FO_TRANS_INTEGER_TO_FIXED(f) ((static_cast<int64_t>(f)) << 15)
-#define FO_DIV(n1, n2) ((static_cast<int64_t>(n1) << 15) / (n2))
-#define FO_TO_INTEGER(n) ((n) >= 0 ? ((n) >> 15) : (((n) >> 15) + 1))
-#define FO_DECIMAL(n) ((n) >= 0 ? ((n) & 32767) : ((n) | (-32768)))
-#define FO_MUL(n1, n2) ((static_cast<int64_t>(n1) * (n2)) >> 15)
+#define FO_TRANS_INTEGER_TO_FIXED(f) ((static_cast<int64_t>(f)) << FIXED_Q_NUM)
+#define FO_DIV(n1, n2) ((static_cast<int64_t>(n1) << FIXED_Q_NUM) / (n2))
+#define FO_TO_INTEGER(n) ((n) >= 0 ? ((n) >> FIXED_Q_NUM) : (((n) >> FIXED_Q_NUM) + 1))
+#define FO_DECIMAL(n) ((n) >= 0 ? ((n) & (FIXED_NUM_1 - 1)) : ((n) | (-FIXED_NUM_1)))
+#define FO_MUL(n1, n2) ((static_cast<int64_t>(n1) * (n2)) >> FIXED_Q_NUM)
 
 struct EdgeSides {
     int16_t left;
@@ -154,6 +155,7 @@ struct TriangleScanInfo {
     const Rect& mask;
     bool isRightPart;
     bool ignoreJunctionPoint;
+    Matrix3<float> matrix;
 };
 
 struct TrianglePartInfo {
@@ -300,6 +302,8 @@ private:
     static void DrawTriangleTrueColorBilinear565(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
     static void DrawTriangleTrueColorBilinear888(const TriangleScanInfo& triangle, const ColorMode bufferMode);
+
+    static void Draw3DTriangleTrueColorBilinear8888(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
     static void DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
