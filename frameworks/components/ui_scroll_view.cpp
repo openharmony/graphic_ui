@@ -75,6 +75,7 @@ void UIScrollView::Drag(const DragEvent& event)
         DragXInner(xDistance);
     }
     if ((direction_ == VERTICAL || direction_ == HORIZONTAL_AND_VERTICAL) && yDistance != 0) {
+        RefreshDelta(yDistance);
         DragYInner(yDistance);
     }
 }
