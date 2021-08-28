@@ -181,7 +181,7 @@ bool UISwipeView::OnDragEndEvent(const DragEvent& event)
     } else {
         distance = event.GetCurrentPos().y - event.GetPreLastPoint().y;
     }
-    RefreshCurrentView(distance);
+    RefreshCurrentView(distance, event.GetDragDirection());
 
     if (curView_ == nullptr) {
         return UIView::OnDragEndEvent(event);
@@ -207,7 +207,13 @@ bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
 
 bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
 {
-    RefreshCurrentView(lastRotateLen_);
+    uint8_t dir;
+    if (direction_ == HORIZONTAL) {
+        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
+    } else {
+        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
+    }
+    RefreshCurrentView(lastRotateLen_, dir);
     if (curView_ == nullptr) {
         return UIView::OnRotateEndEvent(event);
     }
@@ -328,6 +334,7 @@ void UISwipeView::SortChild()
 }
 
 void UISwipeView::RefreshCurrentViewInner(int16_t distance,
+                                          uint8_t dragDirection,
                                           int16_t (UIView::*pfnGetXOrY)() const,
                                           int16_t (UIView::*pfnGetWidthOrHeight)())
 {
@@ -340,6 +347,10 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
     curIndex_ = 0;
     curView_ = nullptr;
 
+    /*
+     * It needs to be modified that swipemid should be calculated by the width and height of the current
+     * sub view itself, not the width and height of the parent, especially for ALIGN_LEFT and ALIGN_RIGHT.
+     */
     uint16_t swipeMid;
     if (alignMode_ == ALIGN_LEFT) {
         swipeMid = 0;
@@ -401,6 +412,20 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
             if ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) > swipeMid) {
                 curIndex_--;
             }
+        } else {
+            /*
+             * If the absolute value of the offset is greater than the page turning threshold,
+             * page turning is considered.
+             */
+            int16_t offset = (curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) - swipeMid;
+            int16_t threshold = (this->*pfnGetWidthOrHeight)() >> 2; // 2: 1/4 width or height
+            if (offset > threshold && (dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM ||
+                                       dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
+                curIndex_--;
+            } else if ((offset < -threshold) && (dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP ||
+                                                 dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
+                curIndex_++;
+            }
         }
     }
 #if ENABLE_VIBRATOR
@@ -418,12 +443,12 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
 #endif
 }
 
-void UISwipeView::RefreshCurrentView(int16_t distance)
+void UISwipeView::RefreshCurrentView(int16_t distance, uint8_t dragDirection)
 {
     if (direction_ == HORIZONTAL) {
-        RefreshCurrentViewInner(distance, &UIView::GetX, &UIView::GetWidthWithMargin);
+        RefreshCurrentViewInner(distance, dragDirection, &UIView::GetX, &UIView::GetWidthWithMargin);
     } else {
-        RefreshCurrentViewInner(distance, &UIView::GetY, &UIView::GetHeightWithMargin);
+        RefreshCurrentViewInner(distance, dragDirection, &UIView::GetY, &UIView::GetHeightWithMargin);
     }
 }
 
