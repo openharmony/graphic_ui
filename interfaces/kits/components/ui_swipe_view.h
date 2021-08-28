@@ -370,8 +370,9 @@ protected:
 #endif
 
 private:
-    void RefreshCurrentView(int16_t distance);
+    void RefreshCurrentView(int16_t distance, uint8_t dragDirection);
     void RefreshCurrentViewInner(int16_t distance,
+                                 uint8_t dragDirection,
                                  int16_t (UIView::*pfnGetXOrY)() const,
                                  int16_t (UIView::*pfnGetWidthOrHeight)());
 
