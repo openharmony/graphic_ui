@@ -240,10 +240,10 @@ protected:
     void StopAnimator() override;
     bool DragXInner(int16_t distance) override;
     bool DragYInner(int16_t distance) override;
+    bool MoveOffset(int16_t offsetX, int16_t offsetY);
 
 private:
     void Drag(const DragEvent& event);
-    bool MoveOffset(int16_t offsetX, int16_t offsetY);
     void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) override;
     void RefreshScrollBar();
     OnScrollListener* scrollListener_;
