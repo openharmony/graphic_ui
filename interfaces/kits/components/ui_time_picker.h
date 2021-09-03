@@ -340,7 +340,6 @@ private:
     char selectedSecond_[BUF_SIZE];
     bool secVisible_;
     bool loopState_[PICKER_MAX];
-    const char* setSelectedTime_;
     uint16_t pickerWidth_;
     uint16_t itemsHeight_;
     int16_t xPos_;
