@@ -169,7 +169,6 @@ UIList::UIList(uint8_t direction)
     lastRotateLen_ = 0;
 #endif
 #if ENABLE_VIBRATOR
-    needVibration_ = false;
     vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
 #endif
 #if ENABLE_FOCUS_MANAGER
@@ -240,16 +239,12 @@ bool UIList::OnRotateStartEvent(const RotateEvent& event)
     if (scrollAnimator_.GetState() != Animator::STOP) {
         UIAbstractScroll::StopAnimator();
     }
-#if ENABLE_VIBRATOR
-    needVibration_ = true;
-#endif
     isReCalculateDragEnd_ = true;
-    return UIView::OnRotateStartEvent(event);
+    return UIAbstractScroll::OnRotateStartEvent(event);
 }
 
 bool UIList::OnRotateEndEvent(const RotateEvent& event)
 {
-    needVibration_ = false;
     isReCalculateDragEnd_ = false;
     return UIAbstractScroll::OnRotateEndEvent(event);
 }
@@ -645,7 +640,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
             }
 #if ENABLE_VIBRATOR
             VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-            if (isSelectViewFind && needVibration_ && vibratorFunc != nullptr) {
+            if (isSelectViewFind && isRotating_ && vibratorFunc != nullptr) {
                 if (!isLoopList_ && (onSelectedIndex_ == 0 || onSelectedIndex_ == recycle_.adapter_->GetCount() - 1)) {
                     vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
                     GRAPHIC_LOGI("UIList::MoveChildByOffset calls TYPE_THREE vibrator");
