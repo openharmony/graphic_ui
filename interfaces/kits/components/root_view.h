@@ -261,6 +261,11 @@ public:
     void DrawTop(UIView* view, const Rect& rect);
 
     /**
+     * @brief Measure all child view under RootView
+     */
+    void Measure();
+
+    /**
      * @brief update momory info based on FB buffer info.
      *
      * @param fbBufferInfo FB buffer info
@@ -299,7 +304,6 @@ private:
     inline Rect GetScreenRect();
     void AddInvalidateRectWithLock(Rect& rect, UIView *view);
     void AddInvalidateRect(Rect& rect, UIView* view);
-    void Measure();
     void MeasureView(UIView* view);
     void Render();
     UIView* GetTopUIView(const Rect& rect);
