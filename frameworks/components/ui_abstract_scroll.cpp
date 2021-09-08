@@ -330,7 +330,7 @@ bool UIAbstractScroll::OnRotateEvent(const RotateEvent& event)
 
 bool UIAbstractScroll::OnRotateEndEvent(const RotateEvent& event)
 {
-    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
+    if (memset_s(lastDelta_, sizeof(lastDelta_), 0, sizeof(lastDelta_)) != EOK) {
         return UIView::OnRotateEndEvent(event);
     }
 
