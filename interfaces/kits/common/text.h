@@ -323,6 +323,11 @@ public:
      */
     uint16_t GetEllipsisIndex(const Rect& textRect, const Style& style);
 
+    void SetSupportBaseLine(bool baseLine)
+    {
+        baseLine_ = baseLine;
+    }
+
 protected:
     struct TextLine {
         uint16_t lineBytes;
@@ -362,7 +367,8 @@ protected:
     bool needRefresh_ : 1;
     bool expandWidth_ : 1;
     bool expandHeight_ : 1;
-    uint8_t direct_ : 5; // UITextLanguageDirect
+    bool baseLine_ : 1;
+    uint8_t direct_ : 4; // UITextLanguageDirect
 
 private:
     uint8_t horizontalAlign_ : 4; // UITextLanguageAlignment
