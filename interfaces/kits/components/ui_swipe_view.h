@@ -366,7 +366,6 @@ protected:
     bool loop_;
 #if ENABLE_VIBRATOR
     uint16_t lastIndex_;
-    bool needVibration_;
 #endif
 
 private:

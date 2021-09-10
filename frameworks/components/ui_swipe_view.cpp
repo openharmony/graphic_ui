@@ -28,7 +28,6 @@ UISwipeView::UISwipeView(uint8_t direction)
 #endif
 #if ENABLE_VIBRATOR
     lastIndex_ = 0;
-    needVibration_ = false;
 #endif
     direction_ = direction;
     tickTime_ = ANIMATOR_TIME;
@@ -199,14 +198,12 @@ bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
     if (scrollAnimator_.GetState() != Animator::STOP) {
         UIAbstractScroll::StopAnimator();
     }
-#if ENABLE_VIBRATOR
-    needVibration_ = true;
-#endif
-    return UIView::OnRotateStartEvent(event);
+    return UIAbstractScroll::OnRotateStartEvent(event);
 }
 
 bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
 {
+    isRotating_ = false;
     uint8_t dir;
     if (direction_ == HORIZONTAL) {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
@@ -219,9 +216,6 @@ bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
     }
     SwitchToPage(curIndex_);
     lastRotateLen_ = 0;
-#if ENABLE_VIBRATOR
-    needVibration_ = false;
-#endif
     return UIView::OnRotateEndEvent(event);
 }
 #endif
@@ -430,7 +424,7 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
     }
 #if ENABLE_VIBRATOR
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-    if (vibratorFunc != nullptr && needVibration_ && curIndex_ != lastIndex_) {
+    if (vibratorFunc != nullptr && isRotating_ && curIndex_ != lastIndex_) {
         if (!loop_ && (curIndex_ == 0 || curIndex_ == childrenNum_ - 1)) {
             vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
             GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner calls TYPE_THREE vibrator");

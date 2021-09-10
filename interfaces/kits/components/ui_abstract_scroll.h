@@ -255,15 +255,18 @@ public:
      * @brief 设置触发惯性滑动的组件大小比例阈值.
      *
      * @param threshold 设置触发惯性滑动的比例阈值.
+     *                  旋转表冠结束，如果最后一次旋转位移数值大于组件的宽或高除以threshold，则触发惯性滑动.
      * @since 6
      */
-    void SetRotateThreshold(uint8_t threshold)
+    void SetRotateThrowThreshold(uint8_t threshold)
     {
         if (threshold == 0) {
             return;
         }
-        threshold_ = threshold;
+        rotateThrowthreshold_ = threshold;
     }
+
+    bool OnRotateStartEvent(const RotateEvent& event) override;
 
     bool OnRotateEvent(const RotateEvent& event) override;
 
@@ -435,8 +438,9 @@ protected:
     Animator scrollAnimator_;
 #if ENABLE_ROTATE_INPUT
     float rotateFactor_;
-    int16_t threshold_;
+    int16_t rotateThrowthreshold_;
     int16_t lastRotateLen_;
+    bool isRotating_;
 #endif
     bool yScrollBarVisible_ = false;
     UIAbstractScrollBar* yScrollBar_ = nullptr;
