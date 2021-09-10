@@ -33,6 +33,7 @@ Text::Text()
       needRefresh_(false),
       expandWidth_(false),
       expandHeight_(false),
+      baseLine_(true),
       direct_(TEXT_DIRECT_LTR),
       horizontalAlign_(TEXT_ALIGNMENT_LEFT),
       verticalAlign_(TEXT_ALIGNMENT_TOP)
@@ -161,11 +162,13 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     int16_t maxWidth = (expandWidth_ ? COORD_MAX : textRect.GetWidth());
     if (maxWidth > 0) {
         textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineHeight_, maxWidth, style.lineSpace_);
-        FontHeader head;
-        if (UIFont::GetInstance()->GetCurrentFontHeader(head) != 0) {
-            return;
+        if (baseLine_) {
+            FontHeader head;
+            if (UIFont::GetInstance()->GetCurrentFontHeader(head) != 0) {
+                return;
+            }
+            textSize_.y += fontSize_ - head.ascender;
         }
-        textSize_.y += fontSize_ - head.ascender;
     }
 }
 
@@ -234,7 +237,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
             LabelLineInfo labelLine{pos, offset, mask, lineHeight, textLine_[i].lineBytes,
                                     0, opa, style, &text_[lineBegin], textLine_[i].lineBytes,
                                     lineBegin, fontId_, fontSize_, 0, static_cast<UITextLanguageDirect>(direct_),
-                                    nullptr};
+                                    nullptr, baseLine_};
             DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
             if ((i == (lineCount - 1)) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
                 labelLine.offset.x = 0;

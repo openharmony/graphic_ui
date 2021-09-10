@@ -285,8 +285,16 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
     uint16_t letterW = node.cols;
     uint16_t letterH = node.rows;
     int16_t posX;
-    int16_t posY = letterInfo.pos.y + letterInfo.fontSize - node.top - letterInfo.offsetY;
-
+    int16_t posY;
+    if (letterInfo.baseLine) {
+        posY = letterInfo.pos.y + letterInfo.fontSize - node.top - letterInfo.offsetY;
+    } else {
+        FontHeader head;
+        if (fontEngine->GetCurrentFontHeader(head) != 0) {
+            return;
+        }
+        posY = letterInfo.pos.y + head.ascender - node.top - letterInfo.offsetY;
+    }
     if (letterInfo.direct == TEXT_DIRECT_RTL) {
         /* RTL */
         posX = letterInfo.pos.x - node.advance + node.left + letterInfo.offsetX;
