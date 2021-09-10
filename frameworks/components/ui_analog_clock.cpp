@@ -212,6 +212,7 @@ void UIAnalogClock::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea
 
 void UIAnalogClock::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
+    UpdateClock(true);
     Rect current = GetOrigRect();
     DrawHand(gfxDstBuffer, current, invalidatedArea, hourHand_);
     DrawHand(gfxDstBuffer, current, invalidatedArea, minuteHand_);
@@ -219,18 +220,6 @@ void UIAnalogClock::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidated
         DrawHand(gfxDstBuffer, current, invalidatedArea, secondHand_);
     }
     UIView::OnPostDraw(gfxDstBuffer, invalidatedArea);
-}
-
-void UIAnalogClock::SetPosition(int16_t x, int16_t y)
-{
-    UIViewGroup::SetPosition(x, y);
-    UpdateClock(true);
-}
-
-void UIAnalogClock::SetPosition(int16_t x, int16_t y, int16_t width, int16_t height)
-{
-    UIViewGroup::SetPosition(x, y, width, height);
-    UpdateClock(true);
 }
 
 void UIAnalogClock::CalculateRedrawArea(const Rect& current, Hand& hand, bool clockInit)
