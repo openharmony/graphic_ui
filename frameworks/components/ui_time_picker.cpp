@@ -29,7 +29,6 @@ UITimePicker::UITimePicker()
       selectedSecond_{0},
       secVisible_(false),
       loopState_{false},
-      setSelectedTime_(nullptr),
       pickerWidth_(0),
       itemsHeight_(0),
       xPos_(0),
@@ -104,12 +103,7 @@ void UITimePicker::InitTimePicker()
         minutePicker_->SetLoopState(loopState_[PICKER_MIN]);
     }
 
-    if (setSelectedTime_ == nullptr) {
-        const char* curTime = secVisible_ ? "00:00:00" : "00:00";
-        RefreshSelected(curTime);
-    } else {
-        RefreshSelected(setSelectedTime_);
-    }
+    RefreshSelected(selectedValue_);
 }
 
 void UITimePicker::DeInitTimePicker()
@@ -207,7 +201,20 @@ void UITimePicker::GetValueByIndex(char* value, uint8_t len, uint16_t index, int
 
 bool UITimePicker::SetSelected(const char* value)
 {
-    setSelectedTime_ = value;
+    if (strcpy_s(selectedValue_, SELECTED_VALUE_SIZE, value) != EOK) {
+        return false;
+    }
+    if (secVisible_) {
+        if (sscanf_s(value, "%[^:]%*c%[^:]%*c%[^\n]", selectedHour_, BUF_SIZE,
+                     selectedMinute_, BUF_SIZE, selectedSecond_, BUF_SIZE) < 3) { // 3: three variables
+            return false;
+        }
+    } else {
+        if (sscanf_s(value, "[^:]%*c%[^\n]", selectedHour_, BUF_SIZE,
+                     selectedMinute_, BUF_SIZE) < 2) { // 2: two variables
+            return false;
+        }
+    }
     return RefreshSelected(value);
 }
 

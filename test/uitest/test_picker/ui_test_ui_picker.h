@@ -49,6 +49,7 @@ private:
     UILabelButton* setSelectBtn_ = nullptr;
     UILabelButton* setLeftToRightBtn_ = nullptr;
     UILabelButton* setRightToLeftBtn_ = nullptr;
+    UILabelButton* setMarginBtn_ = nullptr;
     UILabel* selectIndex_ = nullptr;
     UILabel* selectTime_ = nullptr;
     UIScrollView* container_ = nullptr;
@@ -57,6 +58,7 @@ private:
     UITimePicker* picker2_ = nullptr;
     int16_t lastX_ = 0;
     int16_t lastY_ = 0;
+    int16_t margin_ = 0;
 };
 } // namespace OHOS
 #endif // UI_TEST_UI_PICKER_H
