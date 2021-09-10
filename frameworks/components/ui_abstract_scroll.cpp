@@ -26,12 +26,6 @@
 #include "graphic_timer.h"
 #endif
 
-namespace {
-#if ENABLE_ROTATE_INPUT
-constexpr uint8_t DEFAULT_ROTATE_THRESHOLD = 4;
-#endif
-}
-
 namespace OHOS {
 #if DEFAULT_ANIMATION
 class BarEaseInOutAnimator final : public AnimatorCallback {
@@ -142,8 +136,9 @@ UIAbstractScroll::UIAbstractScroll()
 #endif
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
-    threshold_ = DEFAULT_ROTATE_THRESHOLD;
+    rotateThrowthreshold_ = DEFAULT_ROTATE_THROW_THRESHOLD;
     lastRotateLen_ = 0;
+    isRotating_ = false;
 #endif
     isViewGroup_ = true;
     touchable_ = true;
@@ -249,7 +244,12 @@ void UIAbstractScroll::CalculateDragDistance(Point currentPos,
                                              int16_t& dragDistanceY)
 {
     if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-        dragDistanceY = (currentPos.y - lastPos.y) * DRAG_DISTANCE_COEFFICIENT;
+        dragDistanceY = currentPos.y - lastPos.y;
+        if (isRotating_) {
+            dragDistanceY *= ROTATE_DISTANCE_COEFFICIENT;
+        } else {
+            dragDistanceY *= DRAG_DISTANCE_COEFFICIENT;
+        }
         if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
             dragDistanceY += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
         } else if (dragDistanceY < 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP)) {
@@ -258,7 +258,12 @@ void UIAbstractScroll::CalculateDragDistance(Point currentPos,
     }
 
     if ((direction_ == HORIZONTAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-        dragDistanceX = (currentPos.x - lastPos.x) * DRAG_DISTANCE_COEFFICIENT;
+        dragDistanceX = currentPos.x - lastPos.x;
+        if (isRotating_) {
+            dragDistanceX *= ROTATE_DISTANCE_COEFFICIENT;
+        } else {
+            dragDistanceX *= DRAG_DISTANCE_COEFFICIENT;
+        }
         if (dragDistanceX > 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
             dragDistanceX += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
         } else if (dragDistanceX < 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
@@ -317,6 +322,12 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
 }
 
 #if ENABLE_ROTATE_INPUT
+bool UIAbstractScroll::OnRotateStartEvent(const RotateEvent& event)
+{
+    isRotating_ = true;
+    return UIView::OnRotateStartEvent(event);
+}
+
 bool UIAbstractScroll::OnRotateEvent(const RotateEvent& event)
 {
     lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
@@ -330,6 +341,7 @@ bool UIAbstractScroll::OnRotateEvent(const RotateEvent& event)
 
 bool UIAbstractScroll::OnRotateEndEvent(const RotateEvent& event)
 {
+    isRotating_ = false;
     if (memset_s(lastDelta_, sizeof(lastDelta_), 0, sizeof(lastDelta_)) != EOK) {
         return UIView::OnRotateEndEvent(event);
     }
@@ -340,8 +352,8 @@ bool UIAbstractScroll::OnRotateEndEvent(const RotateEvent& event)
     } else {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
     }
-    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
-        (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
+    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / rotateThrowthreshold_)) ||
+        (MATH_ABS(lastRotateLen_) >= (GetHeight() / rotateThrowthreshold_));
     if (throwDrag_ && triggerAnimator) {
         Point current;
         if (direction_ == HORIZONTAL) {

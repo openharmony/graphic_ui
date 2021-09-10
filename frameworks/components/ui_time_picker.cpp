@@ -143,15 +143,11 @@ void UITimePicker::InitPicker(UIPicker*& picker, int16_t start, int16_t end)
 #if ENABLE_ROTATE_INPUT
     if (end == HOUR_END) {
         picker->GetChildrenHead()->SetViewId(HOUR_LIST_NAME);
-        return;
-    } else if (end == MIN_END) {
-        if (minutePicker_->GetChildById(MIN_LIST_NAME) == nullptr) {
-            picker->GetChildrenHead()->SetViewId(MIN_LIST_NAME);
-            return;
-        }
+    } else if (end == MIN_END && secondPicker_ == nullptr) {
+        picker->GetChildrenHead()->SetViewId(MIN_LIST_NAME);
+    } else if (end == SEC_END) {
+        picker->GetChildrenHead()->SetViewId(SEC_LIST_NAME);
     }
-    picker->GetChildrenHead()->SetViewId(SEC_LIST_NAME);
-    return;
 #endif
 }
 
