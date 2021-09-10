@@ -318,28 +318,6 @@ public:
     virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
-     * @brief Sets the position for this analog clock.
-     *
-     * @param x Indicates the x-coordinate to set.
-     * @param y Indicates the y-coordinate to set.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetPosition(int16_t x, int16_t y) override;
-
-    /**
-     * @brief Sets the position and size for this analog clock.
-     *
-     * @param x Indicates the x-coordinate to set.
-     * @param y Indicates the y-coordinate to set.
-     * @param width Indicates the width to set.
-     * @param height Indicates the height to set.
-     * @since 1.0
-     * @version 1.0
-     */
-    void SetPosition(int16_t x, int16_t y, int16_t width, int16_t height) override;
-
-    /**
      * @brief Sets the working mode for this analog clock.
      *
      * @param newMode Indicates the working mode to set. For details, see {@link WorkMode}.
