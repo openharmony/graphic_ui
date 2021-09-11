@@ -48,7 +48,8 @@ void DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& l
                                    labelLine.direct,
                                    labelLine.fontId,
                                    0,
-                                   labelLine.fontSize};
+                                   labelLine.fontSize,
+                                   labelLine.baseLine};
         DrawUtils::GetInstance()->DrawLetter(gfxDstBuffer, letterInfo);
         letterWidth = fontEngine->GetWidth(letter, 0);
         if (labelLine.direct == TEXT_DIRECT_RTL) {
