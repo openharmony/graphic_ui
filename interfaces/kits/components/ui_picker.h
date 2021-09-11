@@ -455,6 +455,18 @@ public:
     {
         return list_.GetRotateFactor();
     }
+
+    /**
+     * @brief 设置触发惯性滑动的组件大小比例阈值.
+     *
+     * @param threshold 设置触发惯性滑动的比例阈值.
+     *                  旋转表冠结束，如果最后一次旋转位移数值大于组件的宽或高除以threshold，则触发惯性滑动.
+     * @since 6
+     */
+    void SetRotateThrowThreshold(uint8_t threshold)
+    {
+        list_.SetRotateThrowThreshold(threshold);
+    }
 #endif
 
 protected:

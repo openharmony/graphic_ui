@@ -467,7 +467,6 @@ private:
     void FixHorDistance(int16_t& distanceX);
     void FixVerDistance(int16_t& distanceY);
 #if ENABLE_VIBRATOR
-    bool needVibration_;
     void SetMotorType(VibratorType vibratorType);
     VibratorType vibratorType_;
 #endif
