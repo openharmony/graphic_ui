@@ -203,7 +203,6 @@ bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
 
 bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
 {
-    isRotating_ = false;
     uint8_t dir;
     if (direction_ == HORIZONTAL) {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
@@ -216,6 +215,7 @@ bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
     }
     SwitchToPage(curIndex_);
     lastRotateLen_ = 0;
+    isRotating_ = false;
     return UIView::OnRotateEndEvent(event);
 }
 #endif
