@@ -41,7 +41,7 @@ public:
 
     const GlyphNode* GetGlyphNode(uint32_t unicode);
 
-    int8_t GetBitmap(uint32_t unicode, uint8_t* bitmap);
+    int8_t GetBitmap(uint32_t unicode, uint8_t* bitmap, GlyphNode* glyphNode = nullptr);
 
     void SetRamBuffer(uintptr_t ramAddr);
 
