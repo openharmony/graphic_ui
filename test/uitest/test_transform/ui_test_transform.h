@@ -27,10 +27,13 @@
 
 namespace OHOS {
 enum ImageScaleMode {
-    FILL,
     AUTO,
-    CONTAIN,
     TILING,
+    COVER,
+    CONTAIN,
+    FILL,
+    CENTER,
+    SCALE_DOWN,
 };
 
 class UITestTransform : public UITest, public UIView::OnClickListener {
@@ -51,6 +54,7 @@ public:
 
     void SetScaleMode(ImageScaleMode mode);
 private:
+    void AddRadioGroup();
     UILabel* AddLable(int16_t x, int16_t y, const char* data);
     UIRadioButton* AddRadioButton(Rect rect, const char* name, UICheckBox::OnChangeListener* listener);
     Rect GetRect(int16_t x, int16_t y, int16_t w, int16_t h) const
@@ -74,7 +78,7 @@ private:
 
 class StateChangeListener : public UICheckBox::OnChangeListener {
 public:
-    explicit StateChangeListener(ImageScaleMode mode, UITestTransform* testInstance_);
+    explicit StateChangeListener(ImageScaleMode mode, UITestTransform* testInstance);
     ~StateChangeListener() {}
     bool OnChange(UICheckBox::UICheckBoxState state) override;
 private:

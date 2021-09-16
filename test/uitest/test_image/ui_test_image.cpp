@@ -534,6 +534,8 @@ UIImageView* UITestImage::AddImageView(const Rect rect, const char* src, bool au
     UIImageView* imageView = new UIImageView();
     imageView->SetAutoEnable(autoEnable);
     imageView->SetPosition(rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight());
+    imageView->SetStyle(STYLE_BORDER_COLOR, Color::Blue().full);
+    imageView->SetStyle(STYLE_BORDER_WIDTH, 1);
     imageView->SetSrc(src);
     imageView->SetResizeMode(mode);
     container_->Add(imageView);
@@ -544,20 +546,49 @@ void UITestImage::UIKit_UIImage_Test_Resize_001()
 {
     if (container_ != nullptr) {
         AddLable(TEXT_DISTANCE_TO_LEFT_SIDE, g_height, "图片缩放模式测试");
-        AddLable(48, g_height + 30, "Fill mode"); // 48: position x; 30: increase y-coordinate
-        AddLable(160, g_height + 30, "Contain mode"); // 160: position x; 30: increase y-coordinate
-        AddLable(320, g_height + 30, "Auto mode"); // 320: position x; 30: increase y-coordinate
-        AddLable(480, g_height + 30, "Tiling mode"); // 480: position x; 30: increase y-coordinate
-        // 48: position x; 70: increase y-coordinate; 100: width and height
-        AddImageView(GetRect(48, g_height + 70, 100, 100), RED_IMAGE_PATH, false, UIImageView::ImageResizeMode::FILL);
-        // 160: position x; 70: increase y-coordinate; 100: width; 50: height 
-        AddImageView(GetRect(160, g_height + 70, 100, 50), RED_IMAGE_PATH,
+        constexpr uint16_t STEP = 110; // 110: increase y-coordinate per step
+        const uint16_t LABLE_Y = g_height + 30;
+        const uint16_t IMAGE_Y = g_height + 70;
+        uint16_t x = 40; // 40: the orign x-coordinate
+
+        AddLable(x, LABLE_Y, "Auto");
+        // 100: width and height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 100), IMAGE_RESIZEMODE_PATH, true, UIImageView::ImageResizeMode::NONE);
+
+        x +=  STEP;
+        AddLable(x, LABLE_Y, "Tiling");
+        // 100: width and height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 100), IMAGE_RESIZEMODE_PATH, false, UIImageView::ImageResizeMode::NONE);
+
+        x +=  STEP;
+        AddLable(x, LABLE_Y, "Fill");
+        // 100: width and height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 100), IMAGE_RESIZEMODE_PATH, false, UIImageView::ImageResizeMode::FILL);
+
+        x +=  STEP;
+        AddLable(x, LABLE_Y, "Contain");
+        // 100: width; 50: height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 50), IMAGE_RESIZEMODE_PATH,
             false, UIImageView::ImageResizeMode::CONTAIN);
-        // 320: position x; 70: increase y-coordinate; 100: width and height
-        AddImageView(GetRect(320, g_height + 70, 100, 100), RED_IMAGE_PATH, true, UIImageView::ImageResizeMode::NONE);
-        // 480: position x; 70: increase y-coordinate; 100: width and height
-        AddImageView(GetRect(480, g_height + 70, 100, 100), RED_IMAGE_PATH, false, UIImageView::ImageResizeMode::NONE);
-        g_height += 150; // offset 150
+
+        x +=  STEP;
+        AddLable(x, LABLE_Y, "Cover");
+        // 100: width and height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 100), IMAGE_RESIZEMODE_PATH, false,
+            UIImageView::ImageResizeMode::COVER);
+
+        x +=  STEP;
+        AddLable(x, LABLE_Y, "Center");
+        // 100: width and height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 100), IMAGE_RESIZEMODE_PATH, false,
+            UIImageView::ImageResizeMode::CENTER);
+
+        x +=  STEP;
+        AddLable(x, LABLE_Y, "Scale Down");
+        // 100: width and height
+        AddImageView(GetRect(x, IMAGE_Y, 100, 100), IMAGE_RESIZEMODE_PATH, false,
+            UIImageView::ImageResizeMode::SCALE_DOWN);
+        g_height += 200; // offset 200
     }
 }
 } // namespace OHOS
