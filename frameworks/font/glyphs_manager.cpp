@@ -374,7 +374,7 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode)
     return node->advance;
 }
 
-int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, GlyphNode* glyphNode)
+int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
 {
     if (bitmap == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap invalid parameter");
@@ -384,9 +384,9 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, GlyphNode* gl
         GRAPHIC_LOGE("GlyphsManager::GetBitmap fontId not set");
         return INVALID_RET_VALUE;
     }
-
-    const GlyphNode* node = glyphNode;
-    if (glyphNode == nullptr) {
+    const GlyphNode* node = GetGlyphNode(unicode);
+    while ((fontId != 0) && (node != nullptr) && (node->reserve != fontId)) {
+        SetCurrentFontId(fontId);
         node = GetGlyphNode(unicode);
     }
     if (node == nullptr) {
@@ -394,6 +394,9 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, GlyphNode* gl
         return INVALID_RET_VALUE;
     }
 
+    if ((fontId != 0) && (fontId_ != fontId)) {
+        SetCurrentFontId(fontId);
+    }
     uint32_t offset = curBitMapSectionStart_ + node->dataOff;
     uint32_t size = node->kernOff - node->dataOff;
     int32_t ret = lseek(fp_, offset, SEEK_SET);
