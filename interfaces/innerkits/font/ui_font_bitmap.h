@@ -47,7 +47,7 @@ protected:
     uint32_t GetBitmapRamUsed();
     uint32_t GetDynamicFontRamUsed();
     uint32_t GetRamUsedLen(uint32_t textManagerRamUsed, uint32_t langFontRamUsed);
-    int8_t GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, GlyphNode* glyphNode = nullptr);
+    int8_t GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId = 0);
     uint8_t* GetCacheBitmap(uint8_t fontId, uint32_t unicode);
     uint8_t* GetCacheSpace(uint8_t fontId, uint32_t unicode, uint32_t size);
     void PutCacheSpace(uint8_t* addr);
