@@ -374,7 +374,7 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode)
     return node->advance;
 }
 
-int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap)
+int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, GlyphNode* glyphNode)
 {
     if (bitmap == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap invalid parameter");
@@ -385,7 +385,10 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap)
         return INVALID_RET_VALUE;
     }
 
-    const GlyphNode* node = GetGlyphNode(unicode);
+    const GlyphNode* node = glyphNode;
+    if (glyphNode == nullptr) {
+        node = GetGlyphNode(unicode);
+    }
     if (node == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap node not found");
         return INVALID_RET_VALUE;
