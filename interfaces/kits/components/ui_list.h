@@ -466,10 +466,6 @@ private:
     void FixDistance(int16_t& distanceX, int16_t& distanceY) override;
     void FixHorDistance(int16_t& distanceX);
     void FixVerDistance(int16_t& distanceY);
-#if ENABLE_VIBRATOR
-    void SetMotorType(VibratorType vibratorType);
-    VibratorType vibratorType_;
-#endif
     bool isLoopList_;
     bool isReCalculateDragEnd_;
     bool autoAlign_;

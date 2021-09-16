@@ -172,9 +172,6 @@ UIPicker::UIPicker()
 #if ENABLE_ROTATE_INPUT
     list_.rotateFactor_ = DEFAULT_PICKER_ROTATE_FACTOR;
 #endif
-#if ENABLE_VIBRATOR
-    list_.SetMotorType(VibratorType::VIBRATOR_TYPE_TWO);
-#endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
 #endif

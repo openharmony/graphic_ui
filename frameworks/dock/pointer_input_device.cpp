@@ -38,12 +38,13 @@ void PointerInputDevice::DispatchEvent(const DeviceData& data)
     curPos_.x = curPos_.x - window->GetRect().GetLeft();
     curPos_.y = curPos_.y - window->GetRect().GetTop();
     UIViewGroup* rootView = window->GetRootView();
-    if (rootView == nullptr) {
-        return;
-    }
 #else
     UIViewGroup* rootView = RootView::GetInstance();
 #endif
+    if (rootView == nullptr) {
+        GRAPHIC_LOGE("No valid rootview to dispatch input event!\n");
+        return;
+    }
     // invalid touchable and draggable view will be reset to nullptr
     if ((touchableView_ != nullptr) && !RootView::FindSubView(*rootView, touchableView_)) {
         touchableView_ = nullptr;
@@ -69,9 +70,6 @@ void PointerInputDevice::DispatchEvent(const DeviceData& data)
 
 void PointerInputDevice::DispatchPressEvent(UIViewGroup* rootView)
 {
-    if (rootView == nullptr) {
-        return;
-    }
     // first time to press
     if (!pressState_) {
         rootView->GetTargetView(curPos_, &touchableView_, &targetView_);
@@ -168,7 +166,7 @@ bool PointerInputDevice::ProcessReleaseEvent()
 
 void PointerInputDevice::DispatchReleaseEvent(UIViewGroup* rootView)
 {
-    if (!pressState_ || (rootView == nullptr)) {
+    if (!pressState_) {
         return;
     }
 
