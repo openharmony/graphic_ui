@@ -26,9 +26,6 @@ UISwipeView::UISwipeView(uint8_t direction)
     rotateFactor_ = DEFAULT_SWIPE_VIEW_ROTATE_FACTOR;
     lastRotateLen_ = 0;
 #endif
-#if ENABLE_VIBRATOR
-    lastIndex_ = 0;
-#endif
     direction_ = direction;
     tickTime_ = ANIMATOR_TIME;
     swipeAccCoefficient_ = DRAG_ACC_FACTOR;
@@ -165,9 +162,11 @@ bool UISwipeView::OnDragEvent(const DragEvent& event)
     if (direction_ == HORIZONTAL) {
         DragXInner(event.GetDeltaX());
         RefreshDelta(event.GetDeltaX());
+        RefreshCurrentViewByPosition(&UIView::GetX, &UIView::GetWidthWithMargin);
     } else {
         DragYInner(event.GetDeltaY());
         RefreshDelta(event.GetDeltaY());
+        RefreshCurrentViewByPosition(&UIView::GetY, &UIView::GetHeightWithMargin);
     }
     return UIView::OnDragEvent(event);
 }
@@ -177,10 +176,11 @@ bool UISwipeView::OnDragEndEvent(const DragEvent& event)
     int16_t distance = 0;
     if (direction_ == HORIZONTAL) {
         distance = event.GetCurrentPos().x - event.GetPreLastPoint().x;
+        RefreshCurrentViewByThrow(distance, event.GetDragDirection(), &UIView::GetX, &UIView::GetWidthWithMargin);
     } else {
         distance = event.GetCurrentPos().y - event.GetPreLastPoint().y;
+        RefreshCurrentViewByThrow(distance, event.GetDragDirection(), &UIView::GetY, &UIView::GetHeightWithMargin);
     }
-    RefreshCurrentView(distance, event.GetDragDirection());
 
     if (curView_ == nullptr) {
         return UIView::OnDragEndEvent(event);
@@ -201,6 +201,20 @@ bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
     return UIAbstractScroll::OnRotateStartEvent(event);
 }
 
+bool UISwipeView::OnRotateEvent(const RotateEvent& event)
+{
+    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    if (direction_ == HORIZONTAL) {
+        DragXInner(lastRotateLen_);
+        RefreshCurrentViewByPosition(&UIView::GetX, &UIView::GetWidthWithMargin);
+    } else {
+        DragYInner(lastRotateLen_);
+        RefreshCurrentViewByPosition(&UIView::GetY, &UIView::GetHeightWithMargin);
+    }
+
+    return UIView::OnRotateEvent(event);
+}
+
 bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
 {
     uint8_t dir;
@@ -209,7 +223,11 @@ bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
     } else {
         dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
     }
-    RefreshCurrentView(lastRotateLen_, dir);
+    if (direction_ == HORIZONTAL) {
+        RefreshCurrentViewByThrow(lastRotateLen_, dir, &UIView::GetX, &UIView::GetWidthWithMargin);
+    } else {
+        RefreshCurrentViewByThrow(lastRotateLen_, dir, &UIView::GetY, &UIView::GetHeightWithMargin);
+    }
     if (curView_ == nullptr) {
         return UIView::OnRotateEndEvent(event);
     }
@@ -243,7 +261,7 @@ void UISwipeView::SetAnimatorTime(uint16_t time)
 
 void UISwipeView::SwitchToPage(int16_t dst, bool needAnimator)
 {
-    if (isNeedLoop()) {
+    if (IsNeedLoop()) {
         dst = (dst + childrenNum_) % childrenNum_;
     } else if (dst < 0) {
         dst = 0;
@@ -327,10 +345,8 @@ void UISwipeView::SortChild()
     loop_ = tmpLoop;
 }
 
-void UISwipeView::RefreshCurrentViewInner(int16_t distance,
-                                          uint8_t dragDirection,
-                                          int16_t (UIView::*pfnGetXOrY)() const,
-                                          int16_t (UIView::*pfnGetWidthOrHeight)())
+void UISwipeView::RefreshCurrentViewByPosition(int16_t (UIView::*pfnGetXOrY)() const,
+                                               int16_t (UIView::*pfnGetWidthOrHeight)())
 {
     if (childrenHead_ == nullptr) {
         curIndex_ = 0;
@@ -338,6 +354,9 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
         return;
     }
 
+#if ENABLE_VIBRATOR
+    uint16_t lastIndex = curIndex_;
+#endif
     curIndex_ = 0;
     curView_ = nullptr;
 
@@ -372,8 +391,36 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
             view = view->GetNextSibling();
         }
     }
+#if ENABLE_VIBRATOR
+    if (lastIndex != curIndex_) {
+        Vibrator();
+    }
+#endif
+}
+
+void UISwipeView::RefreshCurrentViewByThrow(int16_t distance,
+                                            uint8_t dragDirection,
+                                            int16_t (UIView::*pfnGetXOrY)() const,
+                                            int16_t (UIView::*pfnGetWidthOrHeight)())
+{
     if (curView_ == nullptr) {
         return;
+    }
+#if ENABLE_VIBRATOR
+    uint16_t lastIndex = curIndex_;
+#endif
+
+    /*
+     * It needs to be modified that swipemid should be calculated by the width and height of the current
+     * sub view itself, not the width and height of the parent, especially for ALIGN_LEFT and ALIGN_RIGHT.
+     */
+    uint16_t swipeMid;
+    if (alignMode_ == ALIGN_LEFT) {
+        swipeMid = 0;
+    } else if (alignMode_ == ALIGN_RIGHT) {
+        swipeMid = (this->*pfnGetWidthOrHeight)();
+    } else {
+        swipeMid = (this->*pfnGetWidthOrHeight)() >> 1;
     }
 
     int16_t accelerationOffset = GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
@@ -384,8 +431,8 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
          */
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) < swipeMid) &&
             ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 7 / 10) - accelerationOffset <
-            swipeMid)) {
-            curIndex_++;
+             swipeMid)) {
+            CurrentIndexInc();
         }
     } else if (distance > 0) {
         /*
@@ -394,17 +441,17 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
          */
         if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) > swipeMid) &&
             ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() * 3 / 10) + accelerationOffset >
-            swipeMid)) {
-            curIndex_--;
+             swipeMid)) {
+            CurrentIndexDec();
         }
     } else {
         if (alignMode_ == ALIGN_LEFT) {
             if (((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) < swipeMid)) {
-                curIndex_++;
+                CurrentIndexInc();
             }
         } else if (alignMode_ == ALIGN_RIGHT) {
             if ((curView_->*pfnGetXOrY)() + ((curView_->*pfnGetWidthOrHeight)() >> 1) > swipeMid) {
-                curIndex_--;
+                CurrentIndexDec();
             }
         } else {
             /*
@@ -415,35 +462,18 @@ void UISwipeView::RefreshCurrentViewInner(int16_t distance,
             int16_t threshold = (this->*pfnGetWidthOrHeight)() >> 2; // 2: 1/4 width or height
             if (offset > threshold && (dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM ||
                                        dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
-                curIndex_--;
+                CurrentIndexDec();
             } else if ((offset < -threshold) && (dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP ||
                                                  dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
-                curIndex_++;
+                CurrentIndexInc();
             }
         }
     }
 #if ENABLE_VIBRATOR
-    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-    if (vibratorFunc != nullptr && isRotating_ && curIndex_ != lastIndex_) {
-        if (!loop_ && (curIndex_ == 0 || curIndex_ == childrenNum_ - 1)) {
-            vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
-            GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner calls TYPE_THREE vibrator");
-        } else {
-            vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
-            GRAPHIC_LOGI("UISwipeView::RefreshCurrentViewInner calls TYPE_ONE vibrator");
-        }
-        lastIndex_ = curIndex_;
+    if (lastIndex != curIndex_) {
+        Vibrator();
     }
 #endif
-}
-
-void UISwipeView::RefreshCurrentView(int16_t distance, uint8_t dragDirection)
-{
-    if (direction_ == HORIZONTAL) {
-        RefreshCurrentViewInner(distance, dragDirection, &UIView::GetX, &UIView::GetWidthWithMargin);
-    } else {
-        RefreshCurrentViewInner(distance, dragDirection, &UIView::GetY, &UIView::GetHeightWithMargin);
-    }
 }
 
 void UISwipeView::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
@@ -452,7 +482,7 @@ void UISwipeView::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
     MoveHeadOrTailChild();
 }
 
-bool UISwipeView::isNeedLoop()
+bool UISwipeView::IsNeedLoop()
 {
     if (!loop_ || (childrenHead_ == nullptr) || (childrenTail_ == nullptr)) {
         return false;
@@ -521,4 +551,44 @@ void UISwipeView::CalculateInvalidate()
         view = view->GetNextSibling();
     }
 }
+
+void UISwipeView::CurrentIndexInc()
+{
+    if (curIndex_ >= childrenNum_ - 1) {
+        if (IsNeedLoop()) {
+            curIndex_ = curIndex_ % childrenNum_;
+        } else {
+            curIndex_ = childrenNum_ - 1;
+        }
+    } else {
+        curIndex_++;
+    }
+}
+
+void UISwipeView::CurrentIndexDec()
+{
+    if (curIndex_ == 0) {
+        if (IsNeedLoop()) {
+            curIndex_ = childrenNum_ - 1;
+        }
+    } else {
+        curIndex_--;
+    }
+}
+
+#if ENABLE_VIBRATOR
+void UISwipeView::Vibrator()
+{
+    VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
+    if (vibratorFunc != nullptr && isRotating_) {
+        if (!loop_ && (curIndex_ == 0 || curIndex_ == childrenNum_ - 1)) {
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
+            GRAPHIC_LOGI("UISwipeView::Vibrator calls TYPE_THREE vibrator");
+        } else {
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
+            GRAPHIC_LOGI("UISwipeView::Vibrator calls TYPE_ONE vibrator");
+        }
+    }
+}
+#endif
 } // namespace OHOS
