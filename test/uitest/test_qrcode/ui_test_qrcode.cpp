@@ -103,7 +103,7 @@ void UITestQrcode::UIKitUIQrcodeTestDisplay002()
 void UITestQrcode::UIKitUIQrcodeTestDisplay003()
 {
     if (container_ != nullptr) {
-        UIViewGroup* group = CreateTestCaseGroup(" display qrcode 400 * 200, MAX_LENGTH");
+        UIViewGroup* group = CreateTestCaseGroup(" display qrcode 400 * 200");
         group->Resize(Screen::GetInstance().GetWidth(), 450); // 450 : height
         group->SetViewId("UIKitUIQrcodeTestDisplay003");
 
@@ -153,11 +153,13 @@ void UITestQrcode::UIKitUIQrcodeTestDisplay005()
 
         UIQrcode* qrcode = new UIQrcode();
         qrcode->SetPosition(20, 30, 250, 250); // 20 x 30 y 250 width 250 height
-        const char* str =
-            "Hello\n GUIddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd \
-            ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd \
-            ddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
-        qrcode->SetQrcodeInfo(str);
+        const int16_t length = 2050; // 2050 length
+        char text[length];
+        for (int i = 0; i < length - 1; i++) {
+            text[i] = 'd';
+        }
+        text[length - 1] = '\0';
+        qrcode->SetQrcodeInfo(text);
         group->Add(qrcode);
         container_->Add(group);
         group->LayoutBottomToSibling("UIKitUIQrcodeTestDisplay004", 10); // 10: height
