@@ -246,28 +246,36 @@ void UIAbstractScroll::CalculateDragDistance(Point currentPos,
     if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dragDistanceY = currentPos.y - lastPos.y;
         if (isRotating_) {
-            dragDistanceY *= ROTATE_DISTANCE_COEFFICIENT;
+            // 255 : uint8 max value
+            uint8_t coeff = (rotateAccCoefficient_ >= 255 - ROTATE_DISTANCE_COEFFICIENT) ?
+                            255 : (ROTATE_DISTANCE_COEFFICIENT + rotateAccCoefficient_); // 255 : uint8 max value
+            dragDistanceY *= coeff;
         } else {
             dragDistanceY *= DRAG_DISTANCE_COEFFICIENT;
-        }
-        if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
-            dragDistanceY += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
-        } else if (dragDistanceY < 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP)) {
-            dragDistanceY -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
+                dragDistanceY += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            } else if (dragDistanceY < 0 ||
+                       (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP)) {
+                dragDistanceY -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            }
         }
     }
 
     if ((direction_ == HORIZONTAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dragDistanceX = currentPos.x - lastPos.x;
         if (isRotating_) {
-            dragDistanceX *= ROTATE_DISTANCE_COEFFICIENT;
+            // 255 : uint8 max value
+            uint8_t coeff = (rotateAccCoefficient_ >= 255 - ROTATE_DISTANCE_COEFFICIENT) ?
+                            255 : (ROTATE_DISTANCE_COEFFICIENT + rotateAccCoefficient_); // 255 : uint8 max value
+            dragDistanceX *= coeff;
         } else {
             dragDistanceX *= DRAG_DISTANCE_COEFFICIENT;
-        }
-        if (dragDistanceX > 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
-            dragDistanceX += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
-        } else if (dragDistanceX < 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
-            dragDistanceX -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            if (dragDistanceX > 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
+                dragDistanceX += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            } else if (dragDistanceX < 0 ||
+                       (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
+                dragDistanceX -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            }
         }
     }
 
