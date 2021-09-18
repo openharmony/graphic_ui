@@ -224,6 +224,30 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
+     * @brief Sets coefficient for rotation dragthrow animation. The view will roll farther with larger coeffcient.
+     *
+     * @param value Indicates the coefficient to set. The default value is <b>0</b>.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetRotateACCLevel(uint16_t value)
+    {
+        rotateAccCoefficient_ = value;
+    }
+
+    /**
+     * @brief Obtains the coefficient for rotation drag throw animation.
+     *
+     * @return Returns the coefficient for rotation drag throw animation.
+     * @since 1.0
+     * @version 1.0
+     */
+    uint8_t GetRotateACCLevel() const
+    {
+        return rotateAccCoefficient_;
+    }
+
+    /**
      * @brief Obtains the rotation factor.
      *
      * @return Returns the rotation factor.
@@ -252,10 +276,10 @@ public:
     }
 
     /**
-     * @brief 设置触发惯性滑动的组件大小比例阈值.
+     * @brief Sets threshold for rotation drag throw animation. The view will roll easier with larger threshold.
      *
-     * @param threshold 设置触发惯性滑动的比例阈值.
-     *                  旋转表冠结束，如果最后一次旋转位移数值大于组件的宽或高除以threshold，则触发惯性滑动.
+     * @param threshold Indicates the rotation factor to set.
+     *
      * @since 6
      */
     void SetRotateThrowThreshold(uint8_t threshold)
@@ -434,6 +458,7 @@ protected:
     ListAnimatorCallback animatorCallback_;
     Animator scrollAnimator_;
 #if ENABLE_ROTATE_INPUT
+    uint8_t rotateAccCoefficient_ = 0;
     float rotateFactor_;
     int16_t rotateThrowthreshold_;
     int16_t lastRotateLen_;
