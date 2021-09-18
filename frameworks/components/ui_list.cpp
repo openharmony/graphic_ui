@@ -168,9 +168,6 @@ UIList::UIList(uint8_t direction)
     rotateFactor_ = DEFAULT_LIST_ROTATE_FACTOR;
     lastRotateLen_ = 0;
 #endif
-#if ENABLE_VIBRATOR
-    vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
-#endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
 #endif
@@ -870,11 +867,4 @@ void UIList::FixVerDistance(int16_t& distanceY)
         targetView = targetView->GetNextSibling();
     }
 }
-
-#if ENABLE_VIBRATOR
-void UIList::SetMotorType(VibratorType vibratorType)
-{
-    vibratorType_ = vibratorType;
-}
-#endif
 } // namespace OHOS
