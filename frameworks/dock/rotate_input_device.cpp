@@ -75,7 +75,7 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
     view->OnRotateEvent(data.rotate);
     rotateStart_ = true;
     GRAPHIC_LOGI("RotateInputDevice dispatched rotate event, targetView Type is %d\n!",
-        reinpreter_cast<uint8_t>(view->GetViewType()));
+        static_cast<uint8_t>(view->GetViewType()));
 }
 } // namespace OHOS
 #endif
