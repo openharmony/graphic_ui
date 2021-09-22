@@ -342,7 +342,8 @@ public:
     }
 
     /**
-     * @brief 设置自动对齐动画时长，单位为毫秒，默认为100毫秒。该功能依赖EnableAutoAlign()方法，自动对齐设置为true情况下才生效。
+     * @brief
+     * 设置自动对齐动画时长，单位为毫秒，默认为100毫秒。该功能依赖EnableAutoAlign()方法，自动对齐设置为true情况下才生效。
      *
      * @param value 自动对齐动画时长,0表示无动画。
      * @since 3.0
@@ -361,7 +362,7 @@ public:
      *        position partly (but not all of it).
      *        false means list item will move front when its position crosses the line of select
      *        position (no matter how many it crosses).
-     * 
+     *
      * @since 3.0
      * @version 3.0
      */
@@ -391,6 +392,7 @@ public:
     static constexpr int8_t NULL_SELECT_INDEX = -1;
 
     UIView* onSelectedView_;
+
 protected:
     static constexpr int16_t RECALCULATE_DRAG_DISTANCE = 10;
     static constexpr int16_t RECALCULATE_DRAG_TIMES = 10;
@@ -437,6 +439,7 @@ private:
         Rect GetAdapterItemsReletiveRect();
         void MoveAdapterItemsRelativeRect(int16_t x, int16_t y);
         void MesureAdapterRelativeRect();
+
     private:
         friend class UIList;
         void FillActiveView();
@@ -453,8 +456,8 @@ private:
     void PushFront(UIView* view);
     void SetHead(UIView* view);
     bool MoveChildStep(int16_t distance);
-    bool
-        MoveChildStepInner(int16_t distance, int16_t (UIView::*getXOrY)() const, int16_t (UIView::*getWidthOrHeight)());
+    bool MoveChildStepVertical(int16_t distance);
+    bool MoveChildStepHorizontal(int16_t distance);
     uint16_t GetIndexInc(uint16_t index);
     uint16_t GetIndexDec(uint16_t index);
 
