@@ -168,6 +168,10 @@ void UITimePicker::TimeSelectedCallback()
     GetValueByIndex(selectedHour_, BUF_SIZE, hourSelect, TIME_START, HOUR_END);
     GetValueByIndex(selectedMinute_, BUF_SIZE, minSelect, TIME_START, MIN_END);
 
+    if (memset_s(selectedValue_, SELECTED_VALUE_SIZE, 0, SELECTED_VALUE_SIZE) != EOK) {
+        return;
+    }
+
     if (secVisible_) {
         uint16_t secSelect = secondPicker_->GetSelected();
         GetValueByIndex(selectedSecond_, BUF_SIZE, secSelect, TIME_START, SEC_END);
@@ -197,6 +201,14 @@ void UITimePicker::GetValueByIndex(char* value, uint8_t len, uint16_t index, int
 
 bool UITimePicker::SetSelected(const char* value)
 {
+    if (value == nullptr) {
+        return false;
+    }
+
+    if (memset_s(selectedValue_, SELECTED_VALUE_SIZE, 0, SELECTED_VALUE_SIZE) != EOK) {
+        return false;
+    }
+
     if (strcpy_s(selectedValue_, SELECTED_VALUE_SIZE, value) != EOK) {
         return false;
     }
@@ -206,12 +218,12 @@ bool UITimePicker::SetSelected(const char* value)
             return false;
         }
     } else {
-        if (sscanf_s(value, "[^:]%*c%[^\n]", selectedHour_, BUF_SIZE,
+        if (sscanf_s(value, "%[^:]%*c%[^\n]", selectedHour_, BUF_SIZE,
                      selectedMinute_, BUF_SIZE) < 2) { // 2: two variables
             return false;
         }
     }
-    return RefreshSelected(value);
+    return RefreshSelected(selectedValue_);
 }
 
 bool UITimePicker::RefreshSelected(const char* value)
