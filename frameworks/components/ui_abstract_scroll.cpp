@@ -369,9 +369,9 @@ bool UIAbstractScroll::OnRotateEndEvent(const RotateEvent& event)
         } else {
             current = {0, lastRotateLen_};
         }
-        DragThrowAnimator(current, {0, 0}, dir);
+        DragThrowAnimator(current, {0, 0}, dir, dragBack_);
     } else {
-        DragThrowAnimator({0, 0}, {0, 0}, dir);
+        DragThrowAnimator({0, 0}, {0, 0}, dir, dragBack_);
     }
     lastRotateLen_ = 0;
     return UIView::OnRotateEndEvent(event);

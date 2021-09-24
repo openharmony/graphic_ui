@@ -480,7 +480,6 @@ private:
     int16_t onSelectedIndex_;
     Recycle recycle_;
     ListScrollListener* scrollListener_;
-    bool dragBack_ = true;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_LIST_H
