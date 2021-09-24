@@ -471,6 +471,7 @@ protected:
     uint8_t scrollBarSide_;
     Point scrollBarCenter_;
     bool scrollBarCenterSetFlag_;
+    bool dragBack_ = true;
 #if DEFAULT_ANIMATION
     friend class BarEaseInOutAnimator;
     BarEaseInOutAnimator* barEaseInOutAnimator_ = nullptr;
