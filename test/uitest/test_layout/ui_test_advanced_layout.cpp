@@ -40,6 +40,7 @@ void UITestAdvancedLayout::SetUp()
     verfRBtn_ = new UILabelButton();
     wrapBtn_ = new UILabelButton();
     addElefBtn_ = new UILabelButton();
+    addTextElefBtn_ = new UILabelButton();
     majorStartBtn_ = new UILabelButton();
     majorEndBtn_ = new UILabelButton();
     majorCenterBtn_ = new UILabelButton();
@@ -126,6 +127,7 @@ void UITestAdvancedLayout::UIKit_Layout_Test_FlexLayout_001()
         SetUpButton(flexController_, verfRBtn_, "ver_r");
         SetUpButton(flexController_, wrapBtn_, "wrap");
         SetUpButton(flexController_, addElefBtn_, "add");
+        SetUpButton(flexController_, addTextElefBtn_, "addLabel");
         SetUpButton(flexController_, majorStartBtn_, "M_start");
         SetUpButton(flexController_, majorEndBtn_, "M_end");
         SetUpButton(flexController_, majorCenterBtn_, "M_center");
@@ -258,6 +260,8 @@ bool UITestAdvancedLayout::OnClick(UIView& view, const ClickEvent& event)
         fTarget_->SetFlexWrap(true);
     } else if (&view == addElefBtn_) {
         AddElement(fTarget_);
+    } else if (&view == addTextElefBtn_) {
+        AddTextElement(fTarget_);
     } else if (&view == majorStartBtn_) {
         fTarget_->SetMajorAxisAlign(ALIGN_START);
     } else if (&view == majorEndBtn_) {
@@ -273,9 +277,9 @@ bool UITestAdvancedLayout::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == secStartBtn_) {
         fTarget_->SetSecondaryAxisAlign(ALIGN_START);
     } else if (&view == secEndBtn_) {
-        fTarget_->SetSecondaryAxisAlign(ALIGN_CENTER);
+        fTarget_->SetSecondaryAxisAlign(ALIGN_END);
     } else if (&view == secCenterBtn_) {
-        fTarget_->SetMajorAxisAlign(ALIGN_END);
+        fTarget_->SetSecondaryAxisAlign(ALIGN_CENTER);
     } else {
         OnClickButton(view);
     }
