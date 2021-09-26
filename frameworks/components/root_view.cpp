@@ -505,7 +505,6 @@ void RootView::BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Re
     Rect invalidRect = curViewRect;
     transMap.SetTransMapRect(curViewRect);
     invalidRect.Join(invalidRect, transMap.GetBoxRect());
-
     if (invalidRect.Intersect(invalidRect, invalidatedArea)) {
         uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode);
         ImageInfo imageInfo;
@@ -704,6 +703,14 @@ UIView* RootView::GetTopUIView(const Rect& rect)
         }
         if (--stackCount >= 0) {
             currentView = (g_viewStack[stackCount])->GetNextSibling();
+        }
+    }
+    UIView* parentView = topView;
+    while (parentView->GetParent() != nullptr) {
+        UIView* tempView = parentView;
+        parentView = parentView->GetParent();
+        if (!tempView->IsTransInvalid()) {
+            topView = parentView;
         }
     }
     return topView;

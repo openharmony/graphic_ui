@@ -290,7 +290,6 @@ protected:
     uint8_t algorithm_ : 1;
     uint8_t reserve_ : 1;
     Image image_;
-
 private:
     void ReMeasure() override;
 #ifndef VERSION_LITE
