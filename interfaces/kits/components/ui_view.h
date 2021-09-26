@@ -1516,7 +1516,7 @@ public:
     }
 
     /**
-     * @brief Rotates the view.
+     * @brief Rotates the view in 2d.
      * @param angle Indicates the rotation angle.
      * @param pivot Indicates the coordinates of the rotation pivot.
      * @since 5.0
@@ -1525,7 +1525,17 @@ public:
     void Rotate(int16_t angle, const Vector2<float>& pivot);
 
     /**
-     * @brief Scales the view.
+     * @brief Rotates the view in 3d.
+     * @param angle Indicates the rotation angle.
+     * @param pivotStart Indicates the coordinates of the rotation start pivot.
+     * @param pivotEnd Indicates the coordinates of the rotation end pivot.
+     * @since 5.0
+     * @version 3.0
+     */
+    void Rotate(int16_t angle, const Vector3<float>& pivotStart, const Vector3<float>& pivotEnd);
+
+    /**
+     * @brief Scales the view in 2d.
      *
      * @param scale Indicates the scale factor on x- and y- axes.
      * @param pivot Indicates the scaling pivot.
@@ -1534,9 +1544,39 @@ public:
      */
     void Scale(const Vector2<float>& scale, const Vector2<float>& pivot);
 
+    /**
+     * @brief Scales the view in 3d.
+     *
+     * @param scale Indicates the scale factor on x- and y- axes.
+     * @param pivot Indicates the scaling pivot.
+     * @since 5.0
+     * @version 3.0
+     */
+    void Scale(const Vector3<float>& scale, const Vector3<float>& pivot);
+
+    /**
+     * @brief Shears the view in 3d.
+     *
+     * @param shearX Indicates the shear parameters around x- axes,
+     *               which means many it shears in y and z direction(current invalid).
+     * @param shearY Indicates the shear parameters around y- axes,
+     *               which means many it shears in x and z direction(current invalid).
+     * @param shaerZ Indicates the shear parameters around z- axes,
+     *               which means many it shears in x and y.
+     * @since 5.0
+     * @version 3.0
+     */
+    void Shear(const Vector2<float>& shearX, const Vector2<float>& shearY, const Vector2<float>& shearZ);
+
     void Translate(const Vector2<int16_t>& trans);
 
+    void Translate(const Vector3<int16_t>& trans);
+
     bool IsTransInvalid();
+
+    void SetCameraDistance(int16_t distance);
+
+    void SetCameraPosition(const Vector2<float>& position);
 
     void ResetTransParameter();
 

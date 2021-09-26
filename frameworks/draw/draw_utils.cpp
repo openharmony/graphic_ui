@@ -1132,10 +1132,10 @@ static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& 
 #endif
 
             Color32 result;
-            result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
-            result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
-            result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
-            result.alpha = static_cast<uint8_t>(outA >> 15); // 15: shift 15 bit right to convert fixed to int
+            result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+            result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+            result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
+            result.alpha = static_cast<uint8_t>(outA >> FIXED_Q_NUM);
             if ((in.opaScale == OPA_OPAQUE) && (result.alpha == OPA_OPAQUE)) {
                 COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
             } else {
@@ -1281,6 +1281,144 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
     }
 }
 #endif
+
+void DrawUtils::Draw3DTriangleTrueColorBilinear8888(const TriangleScanInfo& in, const ColorMode bufferMode)
+{
+    int16_t maskLeft = in.mask.GetLeft();
+    int16_t maskRight = in.mask.GetRight();
+    int16_t xMinErr = 0;
+    int16_t xMaxErr = 0;
+    GetXAxisErrForJunctionLine(in.ignoreJunctionPoint, in.isRightPart, xMinErr, xMaxErr);
+#if ENABLE_FIXED_POINT
+    int64_t invMatrix00 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[0]);
+    int64_t invMatrix01 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[1]);
+    int64_t invMatrix02 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[2]);
+    int64_t invMatrix20 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[3]);
+    int64_t invMatrix21 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[4]);
+    int64_t invMatrix22 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[5]);
+    int64_t invMatrix30 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[6]);
+    int64_t invMatrix31 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[7]);
+    int64_t invMatrix32 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[8]);
+#else // ENABLE_FIXED_POINT
+    float invMatrix00 = in.matrix.GetData()[0];
+    float invMatrix01 = in.matrix.GetData()[1];
+    float invMatrix02 = in.matrix.GetData()[2];
+    float invMatrix20 = in.matrix.GetData()[3];
+    float invMatrix21 = in.matrix.GetData()[4];
+    float invMatrix22 = in.matrix.GetData()[5];
+    float invMatrix30 = in.matrix.GetData()[6];
+    float invMatrix31 = in.matrix.GetData()[7];
+    float invMatrix32 = in.matrix.GetData()[8];
+#endif // ENABLE_FIXED_POINT
+    for (int16_t y = in.yMin; y <= in.yMax; ++y) {
+#if ENABLE_FIXED_POINT
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX) + xMinErr;
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX) + xMaxErr;
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+#else // ENABLE_FIXED_POINT
+        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX + xMinErr), maskLeft);
+        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX + xMaxErr), maskRight);
+#endif // ENABLE_FIXED_POINT
+        // move to current position
+        uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
+        for (int16_t x = xMin; x <= xMax; x++) {
+#if ENABLE_FIXED_POINT
+            int64_t w = invMatrix02 * x + invMatrix22 * y + invMatrix32;
+            int64_t u = FO_DIV((invMatrix00 * x + invMatrix20 * y + invMatrix30), w);
+            int64_t v = FO_DIV((invMatrix01 * x + invMatrix21 * y + invMatrix31), w);
+            int16_t intU = FO_TO_INTEGER(u);
+            int16_t intV = FO_TO_INTEGER(v);
+#else // ENABLE_FIXED_POINT
+            float w = invMatrix02 * x + invMatrix22 * y + invMatrix32;
+            float u = (invMatrix00 * x + invMatrix20 * y + invMatrix30) / w;
+            float v = (invMatrix01 * x + invMatrix21 * y + invMatrix31) / w;
+            int16_t intU = static_cast<int16_t>(u);
+            int16_t intV = static_cast<int16_t>(v);
+#endif // ENABLE_FIXED_POINT
+            if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
+#if ENABLE_ARM_MATH
+                uint32_t val1 = __SMUAD(intV, in.srcLineWidth);
+                uint32_t val2 = __SMUAD(intU, in.pixelSize);
+                uint32_t px1 = val1 + val2;
+#else // ENABLE_ARM_MATH
+                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
+#endif // ENABLE_ARM_MATH
+                uint8_t* imgHead = const_cast<uint8_t*>(in.info.data);
+                const ColorType p1 = *(reinterpret_cast<ColorType*>(&imgHead[px1]));
+                const ColorType p2 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.pixelSize]));
+                const ColorType p3 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.srcLineWidth]));
+                const ColorType p4 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.srcLineWidth + in.pixelSize]));
+#if ENABLE_FIXED_POINT
+                int64_t decU = FO_DECIMAL(u);
+                int64_t decV = FO_DECIMAL(v);
+                int64_t decUMinus1 = FIXED_NUM_1 - decU;
+                int64_t decVMinus1 = FIXED_NUM_1 - decV;
+                int64_t w1 = FO_MUL(decUMinus1, decVMinus1);
+                int64_t w2 = FO_MUL(decU, decVMinus1);
+                int64_t w3 = FO_MUL(decUMinus1, decV);
+                int64_t w4 = FO_MUL(decU, decV);
+#if ENABLE_ARM_MATH
+                const int64_t outR =
+                    __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
+                const int64_t outG =
+                    __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
+                const int64_t outB =
+                    __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
+                const int64_t outA =
+                    __SMUAD(p1.alpha, w1) + __SMUAD(p2.alpha, w2) + __SMUAD(p3.alpha, w3) + __SMUAD(p4.alpha, w4);
+#else
+                const int64_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+                const int64_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+                const int64_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
+                const int64_t outA = p1.alpha * w1 + p2.alpha * w2 + p3.alpha * w3 + p4.alpha * w4;
+#endif
+                Color32 result;
+                result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+                result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+                result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
+                result.alpha = static_cast<uint8_t>(outA >> FIXED_Q_NUM);
+#else // ENABLE_FIXED_POINT
+                const float decU = u - intU;
+                const float decV = v - intV;
+                const float decUMinus1 = 1 - decU;
+                const float decVMinus1 = 1 - decV;
+                const int32_t w1 = static_cast<int32_t>(decUMinus1 * decVMinus1 * 256.0f); // 256:shift 8 bit left
+                const int32_t w2 = static_cast<int32_t>(decU * decVMinus1 * 256.0f);       // 256:shift 8 bit left
+                const int32_t w3 = static_cast<int32_t>(decUMinus1 * decV * 256.0f);       // 256:shift 8 bit left
+                const int32_t w4 = static_cast<int32_t>(decU * decV * 256.0f);
+#if ENABLE_ARM_MATH
+                const int32_t outR =
+                    __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
+                const int32_t outG =
+                    __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
+                const int32_t outB =
+                    __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
+                const int32_t outA =
+                    __SMUAD(p1.alpha, w1) + __SMUAD(p2.alpha, w2) + __SMUAD(p3.alpha, w3) + __SMUAD(p4.alpha, w4);
+#else // ENABLE_ARM_MATH
+                const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+                const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+                const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
+                const int32_t outA = p1.alpha * w1 + p2.alpha * w2 + p3.alpha * w3 + p4.alpha * w4;
+#endif // ENABLE_ARM_MATH
+                Color32 result;
+                result.red = static_cast<uint8_t>(outR >> 8);   // 8:shift 8 bit right
+                result.green = static_cast<uint8_t>(outG >> 8); // 8:shift 8 bit right
+                result.blue = static_cast<uint8_t>(outB >> 8);  // 8:shift 8 bit right
+                result.alpha = static_cast<uint8_t>(outA >> 8); // 8:shift 8 bit right
+#endif // ENABLE_FIXED_POINT
+                if ((in.opaScale == OPA_OPAQUE) && (result.alpha == OPA_OPAQUE)) {
+                    COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
+                } else {
+                    COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, in.opaScale);
+                }
+            }
+            screenBuffer += in.bufferPxSize;
+        }
+        StepToNextLine(in.edge1, in.edge2);
+    }
+}
 
 void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
@@ -1490,7 +1628,11 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
         if (part.info.algorithm == TransformAlgorithm::NEAREST_NEIGHBOR) {
             fuc = DrawTriangleTrueColorNearest;
         } else if (part.info.header.colorMode == ARGB8888) {
-            fuc = DrawTriangleTrueColorBilinear8888;
+            if (part.transMap.Is3DTransform()) {
+                fuc = Draw3DTriangleTrueColorBilinear8888;
+            } else {
+                fuc = DrawTriangleTrueColorBilinear8888;
+            }
         } else if (part.info.header.colorMode == RGB888) {
             fuc = DrawTriangleTrueColorBilinear888;
         } else {
@@ -1516,7 +1658,8 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
                            part.info,
                            part.mask,
                            part.isRightPart,
-                           part.ignoreJunctionPoint};
+                           part.ignoreJunctionPoint,
+                           part.transMap.invMatrix_};
     fuc(input, gfxDstBuffer.mode);
 }
 
@@ -1644,36 +1787,39 @@ void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
 void DrawUtils::UpdateTransMap(int16_t width, int16_t height, TransformMap& transMap)
 {
     Rect rect = transMap.GetTransMapRect();
-    Matrix3<float> matrix = transMap.GetTransformMatrix();
-    matrix = matrix * (Matrix3<float>::Translate(Vector2<float>(-rect.GetX(), -rect.GetY())));
+    Matrix4<float> matrix = transMap.GetTransformMatrix();
+    matrix = matrix * (Matrix4<float>::Translate(Vector3<float>(-rect.GetX(), -rect.GetY(), 0)));
     int16_t offsetX = (width - rect.GetWidth()) / 2;  //  2 : half;
     int16_t offsetY = (height - rect.GetHeight()) / 2;  //  2 : half;
     rect.SetPosition(rect.GetX() - offsetX, rect.GetY() - offsetY);
     rect.Resize(width, height);
     Polygon polygon = Polygon(rect);
     uint8_t vertexNum = transMap.GetPolygon().GetVertexNum();
-    Vector3<float> imgPoint3;
+    Vector4<float> imgPoint4;
     for (uint8_t i = 0; i < vertexNum; i++) {
-        Vector3<float> point(polygon[i].x_, polygon[i].y_, 1);
-        imgPoint3 = matrix * point;
-        if (imgPoint3.x_ < COORD_MIN) {
+        Vector4<float> point(polygon[i].x_, polygon[i].y_, 0, 1);
+        imgPoint4 = matrix * point;
+        if (imgPoint4.x_ < COORD_MIN) {
             polygon[i].x_ = COORD_MIN;
-        } else if (imgPoint3.x_ > COORD_MAX) {
+        } else if (imgPoint4.x_ > COORD_MAX) {
             polygon[i].x_ = COORD_MAX;
         } else {
-            polygon[i].x_ = MATH_ROUND(imgPoint3.x_);
+            polygon[i].x_ = MATH_ROUND(imgPoint4.x_);
         }
 
-        if (imgPoint3.y_ < COORD_MIN) {
+        if (imgPoint4.y_ < COORD_MIN) {
             polygon[i].y_ = COORD_MIN;
-        } else if (imgPoint3.y_ > COORD_MAX) {
+        } else if (imgPoint4.y_ > COORD_MAX) {
             polygon[i].y_ = COORD_MAX;
         } else {
-            polygon[i].y_ = MATH_ROUND(imgPoint3.y_);
+            polygon[i].y_ = MATH_ROUND(imgPoint4.y_);
         }
     }
     transMap.SetPolygon(polygon);
-    transMap.invMatrix_ = (matrix * (Matrix3<float>::Translate(Vector2<float>(rect.GetX(), rect.GetY())))).Inverse();
+    Matrix3<float> matrix3(matrix[0][0], matrix[0][1], matrix[0][3],
+                           matrix[1][0], matrix[1][1], matrix[1][3],
+                           matrix[3][0], matrix[3][1], matrix[3][3]);
+    transMap.invMatrix_ = (matrix3 * (Matrix3<float>::Translate(Vector2<float>(rect.GetX(), rect.GetY())))).Inverse();
 }
 
 void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
