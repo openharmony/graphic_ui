@@ -26,18 +26,14 @@ namespace OHOS {
  * @since 5.0
  * @version 3.0
  */
-enum class VibratorType {
-    VIBRATOR_TYPE_ONE,
-    VIBRATOR_TYPE_TWO,
-    VIBRATOR_TYPE_THREE
-};
+enum class VibratorType { VIBRATOR_TYPE_ONE, VIBRATOR_TYPE_TWO, VIBRATOR_TYPE_THREE };
 
 /**
  * @brief vibrator function.
  *
  * @param vibratorType vibrator type.
  */
-typedef void(*VibratorFunc)(VibratorType vibratorType);
+typedef void (*VibratorFunc)(VibratorType vibratorType);
 
 class VibratorManager {
 public:
@@ -52,6 +48,7 @@ public:
 
     void RegisterVibratorFunc(VibratorFunc vibratorFunc)
     {
+        GRAPHIC_LOGI("VibratorManager::RegisterVibratorFunc");
         vibratorFunc_ = vibratorFunc;
     }
 

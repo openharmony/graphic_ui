@@ -582,11 +582,11 @@ void UISwipeView::Vibrator()
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && isRotating_) {
         if (!loop_ && (curIndex_ == 0 || curIndex_ == childrenNum_ - 1)) {
-            vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
             GRAPHIC_LOGI("UISwipeView::Vibrator calls TYPE_THREE vibrator");
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
         } else {
-            vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
             GRAPHIC_LOGI("UISwipeView::Vibrator calls TYPE_ONE vibrator");
+            vibratorFunc(VibratorType::VIBRATOR_TYPE_ONE);
         }
     }
 }
