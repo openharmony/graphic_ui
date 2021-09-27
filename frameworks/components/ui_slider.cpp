@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_slider.h"
+
 #include "common/image.h"
 #include "dock/focus_manager.h"
 #include "dock/vibrator_manager.h"
@@ -24,8 +25,7 @@
 #include "themes/theme_manager.h"
 
 namespace OHOS {
-UISlider::UISlider()
-    : knobWidth_(0), knobStyleAllocFlag_(false), knobImage_(nullptr), listener_(nullptr)
+UISlider::UISlider() : knobWidth_(0), knobStyleAllocFlag_(false), knobImage_(nullptr), listener_(nullptr)
 {
     touchable_ = true;
     draggable_ = true;
@@ -121,25 +121,25 @@ void UISlider::DrawKnob(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, c
         case Direction::DIR_LEFT_TO_RIGHT: {
             offset = (knobWidth_ - progressHeight_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetRight() - halfKnobWidth, foregroundRect.GetTop() - offset,
-                foregroundRect.GetRight() + halfKnobWidth, foregroundRect.GetBottom() + offset);
+                            foregroundRect.GetRight() + halfKnobWidth, foregroundRect.GetBottom() + offset);
             break;
         }
         case Direction::DIR_RIGHT_TO_LEFT: {
             offset = (knobWidth_ - progressHeight_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetLeft() - halfKnobWidth, foregroundRect.GetTop() - offset,
-                foregroundRect.GetLeft() + halfKnobWidth, foregroundRect.GetBottom() + offset);
+                            foregroundRect.GetLeft() + halfKnobWidth, foregroundRect.GetBottom() + offset);
             break;
         }
         case Direction::DIR_BOTTOM_TO_TOP: {
             offset = (knobWidth_ - progressWidth_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetTop() - halfKnobWidth,
-                foregroundRect.GetRight() + offset, foregroundRect.GetTop() + halfKnobWidth);
+                            foregroundRect.GetRight() + offset, foregroundRect.GetTop() + halfKnobWidth);
             break;
         }
         case Direction::DIR_TOP_TO_BOTTOM: {
             offset = (knobWidth_ - progressWidth_) / 2; // 2: half
             knobBar.SetRect(foregroundRect.GetLeft() - offset, foregroundRect.GetBottom() - halfKnobWidth,
-                foregroundRect.GetRight() + offset, foregroundRect.GetBottom() + halfKnobWidth);
+                            foregroundRect.GetRight() + offset, foregroundRect.GetBottom() + halfKnobWidth);
             break;
         }
         default: {
@@ -201,7 +201,7 @@ void UISlider::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedA
         case Direction::DIR_LEFT_TO_RIGHT: {
             length = GetCurrentPos(progressWidth_ + 1);
             foregroundRect.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
-                startPoint.y + progressHeight_ - 1);
+                                   startPoint.y + progressHeight_ - 1);
 
             left = startPoint.x - radius - 1;
             right = left + length;
@@ -211,7 +211,7 @@ void UISlider::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedA
         case Direction::DIR_RIGHT_TO_LEFT: {
             length = GetCurrentPos(progressWidth_ + 1);
             foregroundRect.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth - 1,
-                startPoint.y + progressHeight_ - 1);
+                                   startPoint.y + progressHeight_ - 1);
 
             right = startPoint.x + progressWidth + radius + 1;
             left = right - length;
@@ -221,7 +221,7 @@ void UISlider::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedA
         case Direction::DIR_TOP_TO_BOTTOM: {
             length = GetCurrentPos(progressHeight_ + 1);
             foregroundRect.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
-                startPoint.y + progressHeight - 1);
+                                   startPoint.y + progressHeight - 1);
 
             top = startPoint.y - radius - 1;
             bottom = top + length;
@@ -231,7 +231,7 @@ void UISlider::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedA
         case Direction::DIR_BOTTOM_TO_TOP: {
             length = GetCurrentPos(progressHeight_ + 1);
             foregroundRect.SetRect(startPoint.x, startPoint.y, startPoint.x + progressWidth_ - 1,
-                startPoint.y + progressHeight - 1);
+                                   startPoint.y + progressHeight - 1);
 
             bottom = startPoint.y + progressHeight + radius + 1;
             top = bottom - length;
