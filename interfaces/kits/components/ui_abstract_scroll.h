@@ -428,6 +428,16 @@ protected:
         deltaIndex_++;
     }
 
+    void InitDelta();
+
+    void RefreshRotate(int16_t distance)
+    {
+        lastRotate_[rotateIndex_ % MAX_DELTA_SIZE] = distance;
+        rotateIndex_++;
+    }
+
+    void InitRotate();
+
     virtual void CalculateDragDistance(Point currentPos,
                                        Point lastPos,
                                        uint8_t dragDirection,
@@ -440,6 +450,8 @@ protected:
 
     int16_t GetMaxDelta() const;
 
+    int16_t GetMaxRotate() const;
+
     void RefreshAnimator();
 
     virtual void FixDistance(int16_t& distanceX, int16_t& distanceY) {}
@@ -448,11 +460,13 @@ protected:
     uint16_t reboundSize_ = 0;
     uint16_t maxScrollDistance_ = 0;
     int16_t lastDelta_[MAX_DELTA_SIZE] = {0};
+    int16_t lastRotate_[MAX_DELTA_SIZE] = {0};
     uint8_t dragAccCoefficient_ = DRAG_ACC_FACTOR;
     uint8_t swipeAccCoefficient_ = 0;
     uint8_t direction_ : 2;
     uint8_t deltaIndex_ : 2;
-    uint8_t reserve_ : 4;
+    uint8_t rotateIndex_ : 2;
+    uint8_t reserve_ : 2;
     bool throwDrag_ = false;
     EasingFunc easingFunc_;
     ListAnimatorCallback animatorCallback_;
@@ -461,7 +475,6 @@ protected:
     uint8_t rotateAccCoefficient_ = 0;
     float rotateFactor_;
     int16_t rotateThrowthreshold_;
-    int16_t lastRotateLen_;
     bool isRotating_;
 #endif
     bool yScrollBarVisible_ = false;

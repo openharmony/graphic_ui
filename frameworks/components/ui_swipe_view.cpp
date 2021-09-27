@@ -24,7 +24,6 @@ UISwipeView::UISwipeView(uint8_t direction)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SWIPE_VIEW_ROTATE_FACTOR;
-    lastRotateLen_ = 0;
 #endif
     direction_ = direction;
     tickTime_ = ANIMATOR_TIME;
@@ -193,22 +192,16 @@ bool UISwipeView::OnDragEndEvent(const DragEvent& event)
 }
 
 #if ENABLE_ROTATE_INPUT
-bool UISwipeView::OnRotateStartEvent(const RotateEvent& event)
-{
-    if (scrollAnimator_.GetState() != Animator::STOP) {
-        UIAbstractScroll::StopAnimator();
-    }
-    return UIAbstractScroll::OnRotateStartEvent(event);
-}
 
 bool UISwipeView::OnRotateEvent(const RotateEvent& event)
 {
-    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    int16_t rotateLen = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    RefreshRotate(rotateLen);
     if (direction_ == HORIZONTAL) {
-        DragXInner(lastRotateLen_);
+        DragXInner(rotateLen);
         RefreshCurrentViewByPosition(&UIView::GetX, &UIView::GetWidthWithMargin);
     } else {
-        DragYInner(lastRotateLen_);
+        DragYInner(rotateLen);
         RefreshCurrentViewByPosition(&UIView::GetY, &UIView::GetHeightWithMargin);
     }
 
@@ -218,21 +211,21 @@ bool UISwipeView::OnRotateEvent(const RotateEvent& event)
 bool UISwipeView::OnRotateEndEvent(const RotateEvent& event)
 {
     uint8_t dir;
+    int16_t lastRotateLen = GetMaxRotate();
     if (direction_ == HORIZONTAL) {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
+        dir = (lastRotateLen >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
     } else {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
+        dir = (lastRotateLen >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
     }
     if (direction_ == HORIZONTAL) {
-        RefreshCurrentViewByThrow(lastRotateLen_, dir, &UIView::GetX, &UIView::GetWidthWithMargin);
+        RefreshCurrentViewByThrow(lastRotateLen, dir, &UIView::GetX, &UIView::GetWidthWithMargin);
     } else {
-        RefreshCurrentViewByThrow(lastRotateLen_, dir, &UIView::GetY, &UIView::GetHeightWithMargin);
+        RefreshCurrentViewByThrow(lastRotateLen, dir, &UIView::GetY, &UIView::GetHeightWithMargin);
     }
     if (curView_ == nullptr) {
         return UIView::OnRotateEndEvent(event);
     }
     SwitchToPage(curIndex_);
-    lastRotateLen_ = 0;
     isRotating_ = false;
     return UIView::OnRotateEndEvent(event);
 }
