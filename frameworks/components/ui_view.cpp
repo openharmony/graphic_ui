@@ -982,16 +982,8 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     nextSibling_ = nullptr;
     parent_ = nullptr;
 
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
-    if (bufferInfo == nullptr) {
-        return false;
-    }
-    int16_t screenWidth = bufferInfo->rect.GetWidth();
-    int16_t screenHeight = bufferInfo->rect.GetHeight();
-    Rect screenRect(0, 0, screenWidth, screenHeight);
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();
-    mask.Intersect(mask, screenRect);
     uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
     uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
     bitmap.header.colorMode = ARGB8888;
@@ -1000,16 +992,24 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     bitmap.header.height = bufferHeight;
     bitmap.header.reserved = 0;
 
-    uint8_t* viewBitmapBuffer = reinterpret_cast<uint8_t*>(ImageCacheMalloc(bitmap));
+    void* viewBitmapBuffer = ImageCacheMalloc(bitmap);
     if (viewBitmapBuffer == nullptr) {
+        GRAPHIC_LOGE("GetBitmap buffer alloc failed.");
         nextSibling_ = tempSibling;
         parent_ = tempParent;
         rect_.SetPosition(tempX, tempY);
         return false;
     }
+    bitmap.data = reinterpret_cast<uint8_t*>(viewBitmapBuffer);
+    if (memset_s(viewBitmapBuffer, bitmap.dataSize, 0, bitmap.dataSize) != EOK) {
+        GRAPHIC_LOGE("GetBitmap buffer memset failed.");
+        ImageCacheFree(bitmap);
+        bitmap.data = nullptr;
+        return false;
+    }
 
     BufferInfo newBufferInfo;
-    newBufferInfo.virAddr = static_cast<void*>(viewBitmapBuffer);
+    newBufferInfo.virAddr = viewBitmapBuffer;
     newBufferInfo.phyAddr = newBufferInfo.virAddr;
     newBufferInfo.rect = mask;
     newBufferInfo.width = bufferWidth;
@@ -1021,7 +1021,6 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
     RootView::GetInstance()->Measure();
     RootView::GetInstance()->DrawTop(this, mask);
-    bitmap.data = viewBitmapBuffer;
     RootView::GetInstance()->RestoreDrawContext();
     nextSibling_ = tempSibling;
     parent_ = tempParent;
