@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_analog_clock.h"
+
 #include "components/ui_image_view.h"
 #include "draw/draw_image.h"
 #include "engines/gfx/gfx_engine_manager.h"
@@ -30,7 +31,7 @@ UIAnalogClock::UIAnalogClock()
 
 void UIAnalogClock::SetHandImage(HandType type, const UIImageView& img, Point position, Point center)
 {
-    Hand *hand = nullptr;
+    Hand* hand = nullptr;
     if (type == HandType::HOUR_HAND) {
         hand = &hourHand_;
     } else if (type == HandType::MINUTE_HAND) {
@@ -58,8 +59,13 @@ void UIAnalogClock::SetHandImage(HandType type, const UIImageView& img, Point po
     }
 }
 
-void UIAnalogClock::SetHandLine(HandType type, Point position, Point center, ColorType color,
-    uint16_t width, uint16_t height, OpacityType opacity)
+void UIAnalogClock::SetHandLine(HandType type,
+                                Point position,
+                                Point center,
+                                ColorType color,
+                                uint16_t width,
+                                uint16_t height,
+                                OpacityType opacity)
 {
     Hand* hand = nullptr;
     if (type == HandType::HOUR_HAND) {
@@ -132,13 +138,12 @@ void UIAnalogClock::SetInitTime24Hour(uint8_t hour, uint8_t minute, uint8_t seco
     currentMinute_ = minute % ONE_HOUR_IN_MINUTE;
     currentSecond_ = second % ONE_MINUTE_IN_SECOND;
 
-    hourHand_.initAngle_ = ConvertHandValueToAngle(currentHour_,
-        HALF_DAY_IN_HOUR, currentMinute_, ONE_HOUR_IN_MINUTE);
+    hourHand_.initAngle_ = ConvertHandValueToAngle(currentHour_, HALF_DAY_IN_HOUR, currentMinute_, ONE_HOUR_IN_MINUTE);
     hourHand_.preAngle_ = hourHand_.initAngle_;
     hourHand_.nextAngle_ = hourHand_.initAngle_;
 
-    minuteHand_.initAngle_ = ConvertHandValueToAngle(currentMinute_,
-        ONE_HOUR_IN_MINUTE, currentSecond_, ONE_MINUTE_IN_SECOND);
+    minuteHand_.initAngle_ =
+        ConvertHandValueToAngle(currentMinute_, ONE_HOUR_IN_MINUTE, currentSecond_, ONE_MINUTE_IN_SECOND);
     minuteHand_.preAngle_ = minuteHand_.initAngle_;
     minuteHand_.nextAngle_ = minuteHand_.initAngle_;
 
@@ -147,6 +152,7 @@ void UIAnalogClock::SetInitTime24Hour(uint8_t hour, uint8_t minute, uint8_t seco
     secondHand_.nextAngle_ = secondHand_.initAngle_;
 
     UpdateClock(true);
+    Invalidate();
 }
 
 void UIAnalogClock::SetInitTime12Hour(uint8_t hour, uint8_t minute, uint8_t second, bool am)
@@ -154,8 +160,10 @@ void UIAnalogClock::SetInitTime12Hour(uint8_t hour, uint8_t minute, uint8_t seco
     SetInitTime24Hour((hour % HALF_DAY_IN_HOUR) + (am ? 0 : HALF_DAY_IN_HOUR), minute, second);
 }
 
-uint16_t UIAnalogClock::ConvertHandValueToAngle(uint8_t handValue, uint8_t range,
-    uint8_t secondHandValue, uint8_t ratio) const
+uint16_t UIAnalogClock::ConvertHandValueToAngle(uint8_t handValue,
+                                                uint8_t range,
+                                                uint8_t secondHandValue,
+                                                uint8_t ratio) const
 {
     if ((range == 0) || (ratio == 0)) {
         GRAPHIC_LOGW("UIAnalogClock::ConvertHandValueToAngle Invalid range or ratio\n");
@@ -188,13 +196,9 @@ uint16_t UIAnalogClock::ConvertHandValueToAngle(uint8_t handValue, uint8_t range
 
 void UIAnalogClock::UpdateClock(bool clockInit)
 {
-    Invalidate();
-    hourHand_.nextAngle_ = ConvertHandValueToAngle(currentHour_,
-        HALF_DAY_IN_HOUR, currentMinute_, ONE_HOUR_IN_MINUTE);
-
-    minuteHand_.nextAngle_ = ConvertHandValueToAngle(currentMinute_,
-        ONE_HOUR_IN_MINUTE, currentSecond_, ONE_MINUTE_IN_SECOND);
-
+    hourHand_.nextAngle_ = ConvertHandValueToAngle(currentHour_, HALF_DAY_IN_HOUR, currentMinute_, ONE_HOUR_IN_MINUTE);
+    minuteHand_.nextAngle_ =
+        ConvertHandValueToAngle(currentMinute_, ONE_HOUR_IN_MINUTE, currentSecond_, ONE_MINUTE_IN_SECOND);
     secondHand_.nextAngle_ = ConvertHandValueToAngle(currentSecond_, ONE_MINUTE_IN_SECOND);
 
     Rect rect = GetRect();
@@ -269,12 +273,10 @@ void UIAnalogClock::DrawHandImage(BufferInfo& gfxDstBuffer,
                                   Hand& hand)
 {
     uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(hand.imageInfo_.header.colorMode);
-    TransformDataInfo imageTranDataInfo = {
-        hand.imageInfo_.header, hand.imageInfo_.data, pxSize,
-        BlurLevel::LEVEL0, TransformAlgorithm::BILINEAR
-    };
-    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, { 0, 0 },
-        Color::Black(), opaScale_, hand.trans_, imageTranDataInfo);
+    TransformDataInfo imageTranDataInfo = {hand.imageInfo_.header, hand.imageInfo_.data, pxSize, BlurLevel::LEVEL0,
+                                           TransformAlgorithm::BILINEAR};
+    BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, {0, 0}, Color::Black(), opaScale_,
+                                                hand.trans_, imageTranDataInfo);
 }
 
 void UIAnalogClock::DrawHandLine(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, Hand& hand)
@@ -308,8 +310,8 @@ void UIAnalogClock::DrawHandLine(BufferInfo& gfxDstBuffer, const Rect& invalidat
     end.x = xlength + curCenter.x;
     end.y = ylength + curCenter.y;
 
-    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
-                                           hand.width_, hand.color_, hand.opacity_);
+    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea, hand.width_, hand.color_,
+                                           hand.opacity_);
 }
 
 void UIAnalogClock::SetWorkMode(WorkMode newMode)
