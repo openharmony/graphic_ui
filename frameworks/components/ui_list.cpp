@@ -166,7 +166,6 @@ UIList::UIList(uint8_t direction)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_LIST_ROTATE_FACTOR;
-    lastRotateLen_ = 0;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -233,9 +232,6 @@ bool UIList::OnPressEvent(const PressEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UIList::OnRotateStartEvent(const RotateEvent& event)
 {
-    if (scrollAnimator_.GetState() != Animator::STOP) {
-        UIAbstractScroll::StopAnimator();
-    }
     isReCalculateDragEnd_ = true;
     return UIAbstractScroll::OnRotateStartEvent(event);
 }
