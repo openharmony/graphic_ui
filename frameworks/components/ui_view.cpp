@@ -273,7 +273,7 @@ void UIView::Rotate(int16_t angle, const Vector3<float>& pivotStart, const Vecto
 void UIView::Scale(const Vector2<float>& scale, const Vector2<float>& pivot)
 {
     Vector3<float> scale3D = Vector3<float>(scale.x_, scale.y_, 1.0f);
-    Vector3<float> pivot3D = Vector3<float>(scale.x_, scale.y_, 0);
+    Vector3<float> pivot3D = Vector3<float>(pivot.x_, pivot.y_, 0);
     Scale(scale3D, pivot3D);
 }
 
