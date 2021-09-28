@@ -14,6 +14,7 @@
  */
 
 #include "ui_test_rotate_input.h"
+
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "cstdio"
@@ -215,6 +216,8 @@ void UITestRotateInput::UIKit_Rotate_Event_List_001()
     list_->SetThrowDrag(true);
     list_->SetRotateFactor(10); // 10 : rotate factor
     list_->SetReboundSize(50);  // 50 : rebound size
+    list_->SetIntercept(true);
+    list_->SetLoopState(true);
     container_->Add(list_);
     SetLastPos(list_);
 }
@@ -243,6 +246,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Scroll_View_002()
     scroll_->SetThrowDrag(true);
     scroll_->SetOnTouchListener(this);
     scroll_->SetReboundSize(50); // 50 : rebound size
+    scroll_->SetIntercept(true);
     container_->Add(scroll_);
     SetTestLabelButton(label, scroll_);
     SetLastPos(scroll_);
@@ -292,6 +296,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Swipe_View_003()
     swipe_->Add(btn7);
     swipe_->SetOnTouchListener(this);
     swipe_->SetRotateFactor(30); // 30 : rotate factor
+    swipe_->SetIntercept(true);
     container_->Add(swipe_);
     SetTestLabelButton(label, swipe_);
     SetLastPos(swipe_);
@@ -332,6 +337,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Time_Picker_005()
     timePicker_->EnableSecond(true);
     timePicker_->SetPosition(0, label->GetY() + g_blank, g_listW, g_listH);
     timePicker_->SetItemHeight(50); // 50 height
+    timePicker_->SetIntercept(true);
 
     UIView* hour = timePicker_->GetChildById("hour");
     if (hour == nullptr) {
@@ -436,24 +442,24 @@ void UITestRotateInput::SetTestLabelButton(UILabel* label, UIView* view)
     }
     CreateLabelButton(g_swipeW + g_blank, label->GetY() + g_blank, listener1_, "factor: 0");
     if (listener2_ == nullptr) {
-        listener2_ = static_cast<UIView::OnClickListener*>(
-            new TestSetRotateFactorListener(view, 15)); // 15: rotate factor
+        listener2_ =
+            static_cast<UIView::OnClickListener*>(new TestSetRotateFactorListener(view, 15)); // 15: rotate factor
     }
     CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener2_, "factor: 15");
     if (listener3_ == nullptr) {
-        listener3_ = static_cast<UIView::OnClickListener*>(
-            new TestSetRotateFactorListener(view, -15)); // -15: rotate factor
+        listener3_ =
+            static_cast<UIView::OnClickListener*>(new TestSetRotateFactorListener(view, -15)); // -15: rotate factor
     }
     CreateLabelButton(g_swipeW + g_blank, lastY_ + g_blank, listener3_, "factor: -15");
     if (listener4_ == nullptr) {
-        listener4_ = static_cast<UIView::OnClickListener*>(
-            new TestSetRotateFactorListener(view, 30)); // 30: rotate factor
+        listener4_ =
+            static_cast<UIView::OnClickListener*>(new TestSetRotateFactorListener(view, 30)); // 30: rotate factor
     }
     int16_t x = lastX_ + g_testButtonW + g_blank;
     CreateLabelButton(x, label->GetY() + g_blank, listener4_, "factor: 30");
     if (listener5_ == nullptr) {
-        listener5_ = static_cast<UIView::OnClickListener*>(
-            new TestSetRotateFactorListener(view, -30)); // -30: rotate factor
+        listener5_ =
+            static_cast<UIView::OnClickListener*>(new TestSetRotateFactorListener(view, -30)); // -30: rotate factor
     }
     CreateLabelButton(x, lastY_ + g_blank, listener5_, "factor: -30");
 }
