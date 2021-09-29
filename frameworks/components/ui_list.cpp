@@ -493,12 +493,8 @@ bool UIList::MoveChildStep(int16_t distance)
 
 void UIList::SetAdapter(AbstractAdapter* adapter)
 {
-    if (recycle_.adapter_ == nullptr) {
-        recycle_.SetAdapter(adapter);
-        recycle_.InitRecycle();
-    } else {
-        GRAPHIC_LOGE("UIList::SetAdapter adapter can only set once");
-    }
+    recycle_.SetAdapter(adapter);
+    recycle_.InitRecycle();
 }
 
 UIView* UIList::GetSelectView()
