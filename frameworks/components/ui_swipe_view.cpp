@@ -547,14 +547,13 @@ void UISwipeView::CalculateInvalidate()
 
 void UISwipeView::CurrentIndexInc()
 {
-    if (curIndex_ >= childrenNum_ - 1) {
+    curIndex_++;
+    if (curIndex_ > childrenNum_ - 1) {
         if (IsNeedLoop()) {
             curIndex_ = curIndex_ % childrenNum_;
         } else {
             curIndex_ = childrenNum_ - 1;
         }
-    } else {
-        curIndex_++;
     }
 }
 
