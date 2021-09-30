@@ -680,12 +680,12 @@ void UIView::SetTransformMap(const TransformMap& transMap)
     if (transMap_ == nullptr) {
         transMap_ = new TransformMap();
     }
-
+    Rect preRect = GetRect();
     *transMap_ = transMap;
     transMap_->SetTransMapRect(GetOrigRect());
 
     Rect joinRect;
-    joinRect.Join(GetRect(), transMap_->GetBoxRect());
+    joinRect.Join(preRect, transMap_->GetBoxRect());
     InvalidateRect(joinRect);
 }
 
