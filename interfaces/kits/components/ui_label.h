@@ -407,6 +407,12 @@ public:
 
     void ReMeasure() override;
 
+    void SetSupportBaseLine(bool baseLine)
+    {
+        InitLabelText();
+        labelText_->SetSupportBaseLine(baseLine);
+    }
+
 protected:
     Text* labelText_;
     void RefreshLabel();

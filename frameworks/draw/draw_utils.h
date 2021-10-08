@@ -70,6 +70,7 @@ struct LabelLineInfo {
     uint8_t txtFlag;
     UITextLanguageDirect direct;
     uint32_t* codePoints;
+    bool baseLine;
 };
 
 struct LabelLetterInfo {
@@ -85,6 +86,7 @@ struct LabelLetterInfo {
     uint8_t fontId;
     uint8_t shapingId;
     uint8_t fontSize;
+    bool baseLine;
 };
 
 struct TransformInitState {
