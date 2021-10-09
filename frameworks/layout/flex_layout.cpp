@@ -109,6 +109,7 @@ void FlexLayout::CalValidLength(uint16_t& totalValidLength, uint16_t& allChildNu
     /* calculate valid length of all children views */
     while (child != nullptr) {
         if (child->IsVisible()) {
+            child->ReMeasure();
             if ((direction_ == LAYOUT_HOR) || (direction_ == LAYOUT_HOR_R)) {
                 left = child->GetStyle(STYLE_MARGIN_LEFT);
                 right = child->GetStyle(STYLE_MARGIN_RIGHT);
@@ -134,6 +135,7 @@ void FlexLayout::CalRowCount()
     rowCount_ = 1;
     while (child != nullptr) {
         if (child->IsVisible()) {
+            child->ReMeasure();
             left = child->GetStyle(STYLE_MARGIN_LEFT);
             right = child->GetStyle(STYLE_MARGIN_RIGHT);
             pos += left;
@@ -285,7 +287,6 @@ void FlexLayout::LayoutHorizontal()
 
     while (child != nullptr) {
         if (child->IsVisible()) {
-            child->ReMeasure();
             int16_t left = child->GetStyle(STYLE_MARGIN_LEFT);
             int16_t right = child->GetStyle(STYLE_MARGIN_RIGHT);
             posX += left;
@@ -324,6 +325,7 @@ void FlexLayout::CalColumnCount()
     columnCount_ = 1;
     while (child != nullptr) {
         if (child->IsVisible()) {
+            child->ReMeasure();
             top = child->GetStyle(STYLE_MARGIN_TOP);
             bottom = child->GetStyle(STYLE_MARGIN_BOTTOM);
             pos += top;
@@ -473,7 +475,6 @@ void FlexLayout::LayoutVertical()
 
     while (child != nullptr) {
         if (child->IsVisible()) {
-            child->ReMeasure();
             int16_t top = child->GetStyle(STYLE_MARGIN_TOP);
             int16_t bottom = child->GetStyle(STYLE_MARGIN_BOTTOM);
             posY += top;
