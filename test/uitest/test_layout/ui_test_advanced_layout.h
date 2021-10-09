@@ -57,6 +57,7 @@ private:
     UILabelButton* verfRBtn_ = nullptr;
     UILabelButton* wrapBtn_ = nullptr;
     UILabelButton* addElefBtn_ = nullptr;
+    UILabelButton* addTextElefBtn_ = nullptr;
     UILabelButton* majorStartBtn_ = nullptr;
     UILabelButton* majorEndBtn_ = nullptr;
     UILabelButton* majorCenterBtn_ = nullptr;
@@ -102,6 +103,7 @@ private:
         btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
         btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
     }
+
     void AddElement(Layout* layout)
     {
         UIView* view = new UIView();
@@ -115,6 +117,16 @@ private:
         }
         layout->Add(view);
     }
+
+    void AddTextElement(Layout* layout)
+    {
+        UILabel* label = new UILabel();
+        label->Resize(80, 30);
+        label->SetLineBreakMode(0);
+        label->SetText("Hello, OHOS!");
+        layout->Add(label);
+    }
+
     void Clear(Layout* layout) const
     {
         if (layout == nullptr) {
