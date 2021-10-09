@@ -112,6 +112,7 @@ void UITestUIPicker::UIKit_Picker_Test_Base_001()
     picker1_->SetTextColor(Color::Gray(), Color::Red());
     picker1_->SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
     picker1_->SetValues(g_pickerRange, sizeof(g_pickerRange) / sizeof(g_pickerRange[0]));
+    picker1_->SetSelected(3); // 3 : default selected value
     picker1_->RegisterSelectedListener(this);
 
     positionX_ = picker1_->GetWidth();
