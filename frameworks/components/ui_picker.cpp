@@ -92,7 +92,6 @@ UIPicker::UIPicker()
       isHeightSet_(false),
       textAdapter_(nullptr),
       maxCount_(0),
-      setSelectedIndex_(0),
       isScrollBlankSizeSet_(false),
       scrollBlankSize_(0),
       backgroundFontSize_(0),
@@ -199,14 +198,17 @@ void UIPicker::Refresh()
 
 bool UIPicker::RefreshValues(int16_t start, int16_t end)
 {
-    if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_ || ((start == 0) && (end == 0))) {
+    if ((start == 0) && (end == 0)) {
+        return false;
+    }
+    maxCount_ = end - start + 1;
+    if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
         return false;
     }
     uint16_t userSelectIndex = listListener_->GetSelectIndex();
     ClearList();
     InitTextAdapter();
     textAdapter_->SetData(start, end);
-    maxCount_ = end - start + 1;
     RefreshList();
     RefreshSelected(userSelectIndex);
     return true;
@@ -214,7 +216,11 @@ bool UIPicker::RefreshValues(int16_t start, int16_t end)
 
 bool UIPicker::RefreshValues(const char* value[], uint16_t count)
 {
-    if (value == nullptr || !isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
+    if (value == nullptr) {
+        return false;
+    }
+    maxCount_ = count;
+    if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
         return false;
     }
     uint16_t userSelectIndex = listListener_->GetSelectIndex();
@@ -224,7 +230,6 @@ bool UIPicker::RefreshValues(const char* value[], uint16_t count)
     }
     InitTextAdapter();
     textAdapter_->SetData(&dataList_);
-    maxCount_ = count;
     RefreshList();
     RefreshSelected(userSelectIndex);
 
@@ -267,13 +272,12 @@ void UIPicker::ClearValues()
 {
     rangeValue_ = nullptr;
     rangeValueCount_ = 0;
-    setSelectedIndex_ = 0;
+    maxCount_ = 0;
     ClearList();
 }
 
 void UIPicker::ClearList()
 {
-    maxCount_ = 0;
     itemsWidth_ = 0;
     if (listListener_) {
         listListener_->SetSelectView(nullptr);
@@ -285,7 +289,6 @@ void UIPicker::ClearList()
 
 bool UIPicker::SetSelected(uint16_t index)
 {
-    setSelectedIndex_ = index;
     return RefreshSelected(index);
 }
 
@@ -295,7 +298,6 @@ bool UIPicker::RefreshSelected(uint16_t index)
         GRAPHIC_LOGW("Failed to refresh selected since index is beyond range!");
         return false;
     }
-    listListener_->SetSelectIndex(index);
     if (itemsHeight_ && (list_.GetChildrenHead() != nullptr) && isWidthSet_ && isHeightSet_) {
         listListener_->SetInitStatus(false);
         // 2: half
@@ -331,9 +333,11 @@ bool UIPicker::RefreshSelected(uint16_t index)
             }
             childView = childView->GetNextSibling();
         }
+        listListener_->SetSelectIndex(index);
         list_.Invalidate();
         return true;
     }
+    listListener_->SetSelectIndex(index);
     return false;
 }
 
