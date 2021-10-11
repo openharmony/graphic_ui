@@ -138,7 +138,8 @@ UIAbstractScroll::UIAbstractScroll()
 #endif
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
-    rotateThrowthreshold_ = DEFAULT_ROTATE_THROW_THRESHOLD;
+    rotateThrowthreshold_ = ABSTRACT_ROTATE_THROW_THRESHOLD;
+    rotateAccCoefficient_ = ABSTRACT_ROTATE_DISTANCE_COEFF;
     isRotating_ = false;
 #endif
     isViewGroup_ = true;
@@ -269,11 +270,7 @@ void UIAbstractScroll::CalculateDragDistance(Point currentPos,
     if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dragDistanceY = currentPos.y - lastPos.y;
         if (isRotating_) {
-            // 255 : uint8 max value
-            uint8_t coeff = (rotateAccCoefficient_ >= 255 - ROTATE_DISTANCE_COEFFICIENT) ?
-                                255 : // 255 : uint8 max value
-                                (ROTATE_DISTANCE_COEFFICIENT + rotateAccCoefficient_);
-            dragDistanceY *= coeff;
+            dragDistanceY *= rotateAccCoefficient_;
         } else {
             dragDistanceY *= DRAG_DISTANCE_COEFFICIENT;
             if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
@@ -288,11 +285,7 @@ void UIAbstractScroll::CalculateDragDistance(Point currentPos,
     if ((direction_ == HORIZONTAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
         dragDistanceX = currentPos.x - lastPos.x;
         if (isRotating_) {
-            // 255 : uint8 max value
-            uint8_t coeff = (rotateAccCoefficient_ >= 255 - ROTATE_DISTANCE_COEFFICIENT) ?
-                                255 : // 255 : uint8 max value
-                                (ROTATE_DISTANCE_COEFFICIENT + rotateAccCoefficient_);
-            dragDistanceX *= coeff;
+            dragDistanceX *= rotateAccCoefficient_;
         } else {
             dragDistanceX *= DRAG_DISTANCE_COEFFICIENT;
             if (dragDistanceX > 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
