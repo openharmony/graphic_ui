@@ -462,6 +462,7 @@ void UISwipeView::RefreshCurrentViewByThrow(int16_t distance,
             }
         }
     }
+    curView_ = GetViewByIndex(curIndex_);
 #if ENABLE_VIBRATOR
     if (lastIndex != curIndex_) {
         Vibrator();
