@@ -1019,7 +1019,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
 
     RootView::GetInstance()->SaveDrawContext();
     RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
-    RootView::GetInstance()->Measure();
+    RootView::GetInstance()->MeasureView(this);
     RootView::GetInstance()->DrawTop(this, mask);
     RootView::GetInstance()->RestoreDrawContext();
     nextSibling_ = tempSibling;
