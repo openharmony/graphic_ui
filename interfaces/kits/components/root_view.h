@@ -265,6 +265,8 @@ public:
      */
     void Measure();
 
+    void MeasureView(UIView* view);
+
     /**
      * @brief update momory info based on FB buffer info.
      *
@@ -304,7 +306,6 @@ private:
     inline Rect GetScreenRect();
     void AddInvalidateRectWithLock(Rect& rect, UIView *view);
     void AddInvalidateRect(Rect& rect, UIView* view);
-    void MeasureView(UIView* view);
     void Render();
     UIView* GetTopUIView(const Rect& rect);
     void InitDrawContext();
