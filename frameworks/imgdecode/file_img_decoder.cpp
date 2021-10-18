@@ -114,6 +114,7 @@ RetCode FileImgDecoder::ReadToCache(ImgResDsc& dsc)
         uint32_t pxCount = info.st_size - readCount;
         if (dsc.imgInfo.data != nullptr) {
             ImageCacheFree(dsc.imgInfo);
+            dsc.imgInfo.data = nullptr;
         }
 
         bool readSuccess = false;
@@ -130,6 +131,7 @@ RetCode FileImgDecoder::ReadToCache(ImgResDsc& dsc)
         }
         if (!readSuccess) {
             ImageCacheFree(dsc.imgInfo);
+            dsc.imgInfo.data = nullptr;
             dsc.imgInfo.dataSize = 0;
             close(dsc.fd);
             dsc.fd = -1;
