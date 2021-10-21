@@ -70,17 +70,18 @@ public:
      */
     void ResetTaskHandlerMutex();
 
-protected:
+private:
+    TaskManager() : canTaskRun_(false), isHandlerRunning_(false) {}
+    ~TaskManager() {}
+
+    TaskManager(const TaskManager&) = delete;
+    TaskManager& operator=(const TaskManager&) = delete;
+    TaskManager(TaskManager&&) = delete;
+    TaskManager& operator=(TaskManager&&) = delete;
+
     List<Task*> list_; /* the task list */
     bool canTaskRun_;
     bool isHandlerRunning_;
-    uint8_t idleLast_;
-
-private:
-    TaskManager() : canTaskRun_(false), isHandlerRunning_(false), idleLast_(0) {}
-    ~TaskManager() {}
-
-    static const uint16_t IDLE_MEAS_PERIOD = 500;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_TASK_MANAGER_H
