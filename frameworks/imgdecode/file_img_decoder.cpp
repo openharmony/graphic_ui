@@ -74,7 +74,6 @@ RetCode FileImgDecoder::GetHeader(ImgResDsc& dsc)
         return RetCode::FAIL;
     }
 
-    dsc.fd = fd;
     readCount = read(fd, &dsc.imgInfo.header, sizeof(ImageHeader));
     close(fd);
     dsc.fd = -1;
