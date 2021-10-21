@@ -41,7 +41,6 @@ RetCode FileImgDecoder::Open(ImgResDsc& dsc)
     dsc.inCache_ = false;
     uint8_t colorMode = dsc.imgInfo.header.colorMode;
     if (IsImgValidMode(colorMode)) {
-        dsc.imgInfo.data = nullptr;
         return RetCode::OK;
     } else {
         return RetCode::FAIL;
