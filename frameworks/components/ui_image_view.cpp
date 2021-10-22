@@ -254,19 +254,57 @@ UIImageView::~UIImageView()
 
 void UIImageView::SetResizeMode(ImageResizeMode mode)
 {
-    if (autoEnable_ || (imageResizeMode_ == mode)) {
-        return;
+    // when automatic adaptation is enabled only save the mode, no need to update the DrawtransMap
+    if (autoEnable_) {
+        imageResizeMode_ = mode;
+    } else if (imageResizeMode_ != mode) {
+        needRefresh_ = true;
+        ReMeasure();
+        // must update the mode, before calling UpdateDrawTransMap
+        imageResizeMode_ = mode;
+        UpdateDrawTransMap(true);
     }
-    needRefresh_ = true;
-    ReMeasure();
-    imageResizeMode_ = mode;
-    UpdateDrawTransMap(true);
+}
+
+void UIImageView::AdjustScaleAndTranslate(Vector3<float>& scale, Vector3<int16_t>& translate,
+    int16_t widgetWidth, int16_t widgetHeight) const
+{
+    // adjust scale
+    float ratio = 1.0f;
+    switch (imageResizeMode_) {
+        case ImageResizeMode::COVER:
+            ratio = MATH_MAX(scale.x_, scale.y_);
+            break;
+        case ImageResizeMode::CONTAIN:
+            ratio = MATH_MIN(scale.x_, scale.y_);
+            break;
+        case ImageResizeMode::CENTER: // ratio is 1.0f
+            break;
+        case ImageResizeMode::SCALE_DOWN:
+            ratio = MATH_MIN(scale.x_, scale.y_);
+            ratio = MATH_MIN(ratio, 1.0f);
+            break;
+        case ImageResizeMode::FILL: // do nothing
+            return;
+        default:
+            break;
+    }
+    if (scale.x_ != ratio) {
+        scale.x_ = ratio;
+        // 0.5: adjust the x-coordinate of the content to the center of widget
+        translate.x_ += (static_cast<float>(widgetWidth) - static_cast<float>(imageWidth_) * ratio) * 0.5f;
+    }
+    if (scale.y_ != ratio) {
+        scale.y_ = ratio;
+        // 0.5: adjust the y-coordinate of the content to the center of widget
+        translate.y_ += (static_cast<float>(widgetHeight) - static_cast<float>(imageHeight_) * ratio) * 0.5f;
+    }
 }
 
 void UIImageView::UpdateContentMatrix()
 {
     Rect viewRect = GetOrigRect();
-    if ((imageResizeMode_ == ImageResizeMode::NONE) ||
+    if (autoEnable_ || (imageResizeMode_ == ImageResizeMode::NONE) ||
         (imageWidth_ == viewRect.GetWidth() && imageHeight_ == viewRect.GetHeight()) ||
         imageWidth_ == 0 || imageHeight_ == 0) {
         if (contentMatrix_ != nullptr) {
@@ -275,6 +313,13 @@ void UIImageView::UpdateContentMatrix()
         }
         return;
     }
+    if (contentMatrix_ == nullptr) {
+        contentMatrix_ = new Matrix4<float>();
+        if (contentMatrix_ == nullptr) {
+            GRAPHIC_LOGE("can not new contentMatrix");
+            return;
+        }
+    }
     int16_t widgetWidth = viewRect.GetWidth() - style_->paddingLeft_ - style_->paddingRight_ -
         style_->borderWidth_ * 2; // 2: excludes the border-left and border-right
     int16_t widgetHeight = viewRect.GetHeight() - style_->paddingTop_ - style_->paddingBottom_ -
@@ -282,30 +327,13 @@ void UIImageView::UpdateContentMatrix()
 
     float scaleX = static_cast<float>(widgetWidth) / static_cast<float>(imageWidth_);
     float scaleY = static_cast<float>(widgetHeight) / static_cast<float>(imageHeight_);
+    Vector3<float> scale(scaleX, scaleY, 1.0f);
+    Vector3<int16_t> translate(style_->paddingLeft_ + style_->borderWidth_,
+        style_->paddingTop_ + style_->borderWidth_, 0);
+    AdjustScaleAndTranslate(scale, translate, widgetWidth, widgetHeight);
 
-    if (contentMatrix_ == nullptr) {
-        contentMatrix_ = new Matrix3<float>();
-        if (contentMatrix_ == nullptr) {
-            GRAPHIC_LOGE("can not new contentMatrix");
-            return;
-        }
-    }
-    Vector2<int16_t> translate(style_->paddingLeft_ + style_->borderWidth_,
-        style_->paddingTop_ + style_->borderWidth_);
-    if (imageResizeMode_ == ImageResizeMode::CONTAIN) {
-        if (scaleX <= scaleY) {
-            scaleY = scaleX;
-            // 0.5: adjust the y-coordinate of the content to the center of widget
-            translate.y_ += (static_cast<float>(widgetHeight) - static_cast<float>(imageHeight_) * scaleX) * 0.5f;
-        } else {
-            scaleX = scaleY;
-            // 0.5: adjust the x-coordinate of the content to the center of widget
-            translate.x_ += (static_cast<float>(widgetWidth) - static_cast<float>(imageWidth_) * scaleY) * 0.5f;
-        }
-    }
-    auto scaleMatrix = Matrix3<float>::Scale(Vector2<float>(scaleX, scaleY),
-        Vector2<float>(viewRect.GetX(), viewRect.GetY()));
-    auto translateMatrix = Matrix3<float>::Translate(Vector2<float>(translate.x_, translate.y_));
+    auto scaleMatrix = Matrix4<float>::Scale(scale, Vector3<float>(viewRect.GetX(), viewRect.GetY(), 0));
+    auto translateMatrix = Matrix4<float>::Translate(Vector3<float>(translate.x_, translate.y_, 0));
     *contentMatrix_ = translateMatrix * scaleMatrix;
 }
 
@@ -354,7 +382,7 @@ void UIImageView::UpdateDrawTransMap(bool updateContentMatrix)
     }
     // merge the transMap and content matrix
     auto rect = transMap_->GetTransMapRect();
-    auto translate = Matrix3<float>::Translate(Vector2<float>(-rect.GetX(), -rect.GetY()));
+    auto translate = Matrix4<float>::Translate(Vector3<float>(-rect.GetX(), -rect.GetY(), 0));
     auto matrix = transMap_->GetTransformMatrix() * translate;
     matrix = matrix * (*contentMatrix_);
     drawTransMap_->SetMatrix(matrix);
@@ -438,7 +466,7 @@ void UIImageView::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
                                                        static_cast<BlurLevel>(blurLevel_),
                                                        static_cast<TransformAlgorithm>(algorithm_)};
                 OpacityType opaScale = DrawUtils::GetMixOpacity(opa, style_->imageOpa_);
-                BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, {0, 0}, Color::Black(),
+                BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, trunc, {0, 0}, Color::Black(),
                                                             opaScale, *drawTransMap_, imageTranDataInfo);
             }
         }

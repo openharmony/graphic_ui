@@ -41,7 +41,6 @@ RetCode FileImgDecoder::Open(ImgResDsc& dsc)
     dsc.inCache_ = false;
     uint8_t colorMode = dsc.imgInfo.header.colorMode;
     if (IsImgValidMode(colorMode)) {
-        dsc.imgInfo.data = nullptr;
         return RetCode::OK;
     } else {
         return RetCode::FAIL;
@@ -75,7 +74,6 @@ RetCode FileImgDecoder::GetHeader(ImgResDsc& dsc)
         return RetCode::FAIL;
     }
 
-    dsc.fd = fd;
     readCount = read(fd, &dsc.imgInfo.header, sizeof(ImageHeader));
     close(fd);
     dsc.fd = -1;
@@ -114,6 +112,7 @@ RetCode FileImgDecoder::ReadToCache(ImgResDsc& dsc)
         uint32_t pxCount = info.st_size - readCount;
         if (dsc.imgInfo.data != nullptr) {
             ImageCacheFree(dsc.imgInfo);
+            dsc.imgInfo.data = nullptr;
         }
 
         bool readSuccess = false;
@@ -130,6 +129,7 @@ RetCode FileImgDecoder::ReadToCache(ImgResDsc& dsc)
         }
         if (!readSuccess) {
             ImageCacheFree(dsc.imgInfo);
+            dsc.imgInfo.data = nullptr;
             dsc.imgInfo.dataSize = 0;
             close(dsc.fd);
             dsc.fd = -1;

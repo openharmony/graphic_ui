@@ -47,6 +47,7 @@ void UITestUIPicker::TearDown()
     container_->Remove(setSelectBtn_);
     container_->Remove(setLeftToRightBtn_);
     container_->Remove(setRightToLeftBtn_);
+    container_->Remove(setMarginBtn_);
     container_->Remove(selectIndex_);
     container_->Remove(selectTime_);
     container_->Remove(picker1_);
@@ -58,6 +59,7 @@ void UITestUIPicker::TearDown()
     setSelectBtn_ = nullptr;
     setLeftToRightBtn_ = nullptr;
     setRightToLeftBtn_ = nullptr;
+    setMarginBtn_ = nullptr;
     selectIndex_ = nullptr;
     selectTime_ = nullptr;
     container_ = nullptr;
@@ -110,6 +112,7 @@ void UITestUIPicker::UIKit_Picker_Test_Base_001()
     picker1_->SetTextColor(Color::Gray(), Color::Red());
     picker1_->SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
     picker1_->SetValues(g_pickerRange, sizeof(g_pickerRange) / sizeof(g_pickerRange[0]));
+    picker1_->SetSelected(3); // 3 : default selected value
     picker1_->RegisterSelectedListener(this);
 
     positionX_ = picker1_->GetWidth();
@@ -148,6 +151,9 @@ void UITestUIPicker::CreatButtons()
     if (setRightToLeftBtn_ == nullptr) {
         setRightToLeftBtn_ = new UILabelButton();
     }
+    if (setMarginBtn_ == nullptr) {
+        setMarginBtn_ = new UILabelButton();
+    }
 }
 
 void UITestUIPicker::UIKit_Picker_Test_Base_002()
@@ -184,13 +190,21 @@ void UITestUIPicker::UIKit_Picker_Test_Time_Picker_001()
     container_->Add(label);
     label->SetPosition(672, 0); // 672: x-coordinate
     label->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
+
+    container_->Add(setMarginBtn_);
+    setMarginBtn_->SetPosition(672, 30, 120, 30); // 672: x-coordinate, 30 : y-coordinate, 120 : width, 30 : height
+    setMarginBtn_->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
+    setMarginBtn_->SetOnClickListener(this);
+    setMarginBtn_->SetText("增加margin");
+
     if (picker2_ == nullptr) {
         picker2_ = new UITimePicker();
     }
     picker2_->EnableSecond(true);
-    picker2_->SetPosition(652, label->GetY() + g_blank, g_ListW, g_ListH); // 652: x-coordinate
+    picker2_->SetPosition(652, setMarginBtn_->GetY() + 40, g_ListW, g_ListH); // 652: x-coordinate, 40: offset
     picker2_->SetItemHeight(50);                                           // 50 height
     picker2_->RegisterSelectedListener(this);
+    picker2_->SetSelected("12:20:30");
     positionX_ = picker2_->GetWidth();
     positionY_ = picker2_->GetY();
 
@@ -217,6 +231,14 @@ bool UITestUIPicker::OnClick(UIView& view, const ClickEvent& event)
         picker1_->SetDirect(UITextLanguageDirect::TEXT_DIRECT_LTR);
     } else if (&view == setRightToLeftBtn_) {
         picker1_->SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
+    } else if (&view == setMarginBtn_) {
+        picker2_->Invalidate();
+        picker2_->SetStyle(STYLE_MARGIN_LEFT, ++margin_);
+        picker2_->SetStyle(STYLE_MARGIN_RIGHT, margin_);
+        picker2_->SetStyle(STYLE_MARGIN_TOP, margin_);
+        picker2_->SetStyle(STYLE_MARGIN_BOTTOM, margin_);
+        picker2_->SetWidth(++g_ListW);
+        picker2_->Invalidate();
     }
     return true;
 }

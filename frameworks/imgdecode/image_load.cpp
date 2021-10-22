@@ -114,6 +114,7 @@ bool ImageLoad::UnzipImage(uint8_t* imageBuffer, uint32_t size, ImageInfo& image
         return true;
     }
     ImageCacheFree(imageInfo);
+    imageInfo.data = nullptr;
     return false;
 }
 
@@ -170,6 +171,7 @@ bool ImageLoad::Unzip24Image(uint8_t* imageBuffer, uint32_t size, ImageInfo& ima
         return true;
     }
     ImageCacheFree(imageInfo);
+    imageInfo.data = nullptr;
     return false;
 }
 

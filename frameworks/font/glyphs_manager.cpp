@@ -92,15 +92,15 @@ int8_t GlyphsManager::GlyphNodeCacheInit()
     return RET_VALUE_OK;
 }
 
-GlyphNode* GlyphsManager::GetNodeFromCache(uint32_t unicode)
+GlyphNode* GlyphsManager::GetNodeFromCache(uint32_t unicode, uint8_t fontId)
 {
     GlyphNode* node = nullptr;
 
-    uint8_t font = fontId_ & FONT_HASH_MASK;
+    uint8_t font = fontId & FONT_HASH_MASK;
     uint8_t uc = unicode & UNICODE_HASH_MASK;
     for (uint8_t i = 0; i < NODE_HASH_NR; i++) {
         GlyphNode* p = &((*nodeCache_)[font][uc][i]);
-        if ((p->unicode == unicode) && (p->reserve == fontId_)) {
+        if ((p->unicode == unicode) && (p->reserve == fontId)) {
             node = p;
             break;
         }
@@ -108,12 +108,12 @@ GlyphNode* GlyphsManager::GetNodeFromCache(uint32_t unicode)
     return node;
 }
 
-GlyphNode* GlyphsManager::GetNodeCacheSpace(uint32_t unicode)
+GlyphNode* GlyphsManager::GetNodeCacheSpace(uint32_t unicode, uint8_t fontId)
 {
     uint8_t font, uc, i;
     GlyphNode* node = nullptr;
 
-    font = fontId_ & FONT_HASH_MASK;
+    font = fontId & FONT_HASH_MASK;
     uc = unicode & UNICODE_HASH_MASK;
     i = (*cacheStatus_)[font][uc];
     node = &((*nodeCache_)[font][uc][i]);
@@ -127,30 +127,39 @@ GlyphNode* GlyphsManager::GetNodeCacheSpace(uint32_t unicode)
     return node;
 }
 
-GlyphNode* GlyphsManager::GetNodeFromFile(uint32_t unicode)
+GlyphNode* GlyphsManager::GetNodeFromFile(uint32_t unicode, uint8_t fontId)
 {
     uint16_t idx = 0;
     uint8_t key;
     uint32_t offset;
-
+    uint8_t* tmpIndexCache = curIndexCache_;
+    uint32_t tmpGlyphNodeSectionStart = curGlyphNodeSectionStart_;
+    while (fontId_ != fontId) {
+        SetCurrentFontId(fontId);
+        if (!isFontIdSet_) {
+            return nullptr;
+        }
+        tmpIndexCache = curIndexCache_;
+        tmpGlyphNodeSectionStart = curGlyphNodeSectionStart_;
+    }
     for (int32_t i = RADIX_SHIFT_START; i >= 0; i -= RADIX_TREE_BITS) {
         offset = idx * sizeof(IndexNode);
         key = static_cast<uint8_t>((unicode >> static_cast<uint8_t>(i)) & RADIX_TREE_MASK);
         offset += key * sizeof(uint16_t);
-        idx = *(reinterpret_cast<uint16_t*>(curIndexCache_ + offset));
+        idx = *(reinterpret_cast<uint16_t*>(tmpIndexCache + offset));
         if (idx == 0) {
             GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile unicode not found");
             return nullptr;
         }
     }
 
-    offset = curGlyphNodeSectionStart_ + (idx - 1) * sizeof(GlyphNode);
+    offset = tmpGlyphNodeSectionStart + (idx - 1) * sizeof(GlyphNode);
     int32_t ret = lseek(fp_, offset, SEEK_SET);
     if (ret != static_cast<int32_t>(offset)) {
         GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile lseek failed");
         return nullptr;
     }
-    GlyphNode* node = GetNodeCacheSpace(unicode);
+    GlyphNode* node = GetNodeCacheSpace(unicode, fontId);
     ret = read(fp_, node, sizeof(GlyphNode));
     if (ret < 0) {
         GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile read failed");
@@ -325,20 +334,19 @@ const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode)
     if (!isFontIdSet_) {
         return nullptr;
     }
-
+    uint8_t fontId = fontId_;
     if (curGlyphNode_ != nullptr) {
-        if ((curGlyphNode_->unicode == unicode) && (curGlyphNode_->reserve == fontId_)) {
+        if ((curGlyphNode_->unicode == unicode) && (curGlyphNode_->reserve == fontId)) {
             return curGlyphNode_;
         }
     }
-    GlyphNode* node = GetNodeFromCache(unicode);
+    GlyphNode* node = GetNodeFromCache(unicode, fontId);
     if (node == nullptr) {
-        node = GetNodeFromFile(unicode);
+        node = GetNodeFromFile(unicode, fontId);
         if (node != nullptr) {
-            node->reserve = fontId_;
+            node->reserve = fontId;
         }
     }
-
     curGlyphNode_ = node;
     return node;
 }
@@ -374,7 +382,7 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode)
     return node->advance;
 }
 
-int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap)
+int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
 {
     if (bitmap == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap invalid parameter");
@@ -384,14 +392,18 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap)
         GRAPHIC_LOGE("GlyphsManager::GetBitmap fontId not set");
         return INVALID_RET_VALUE;
     }
-
     const GlyphNode* node = GetGlyphNode(unicode);
+    uint32_t tmpBitMapSectionStart = curBitMapSectionStart_;
+    while ((fontId != 0) && (node != nullptr) && (node->reserve != fontId)) {
+        SetCurrentFontId(fontId);
+        node = GetGlyphNode(unicode);
+        tmpBitMapSectionStart = curBitMapSectionStart_;
+    }
     if (node == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap node not found");
         return INVALID_RET_VALUE;
     }
-
-    uint32_t offset = curBitMapSectionStart_ + node->dataOff;
+    uint32_t offset = tmpBitMapSectionStart + node->dataOff;
     uint32_t size = node->kernOff - node->dataOff;
     int32_t ret = lseek(fp_, offset, SEEK_SET);
     if (ret != static_cast<int32_t>(offset)) {

@@ -39,6 +39,52 @@
 #include "components/ui_list.h"
 
 namespace OHOS {
+class UIPicker;
+
+class PickerListScrollListener : public ListScrollListener {
+public:
+    PickerListScrollListener(UIPicker* picker, UIList* list);
+    virtual ~PickerListScrollListener() {}
+
+    void OnItemSelected(int16_t index, UIView* view) override;
+
+    void OnScrollEnd(int16_t index, UIView* view) override;
+
+    void SetSelectView(UIView* view)
+    {
+        selectView_ = view;
+        lastSelectView_ = view;
+    }
+
+    const UIView* GetSelectView() const
+    {
+        return selectView_;
+    }
+
+    void SetSelectIndex(uint16_t index)
+    {
+        selectIndex_ = index;
+    }
+
+    uint16_t GetSelectIndex() const
+    {
+        return selectIndex_;
+    }
+
+    void SetInitStatus(bool status)
+    {
+        isInitted_ = status;
+    }
+
+private:
+    UIList* listView_;
+    UIPicker* pickerView_;
+    UIView* selectView_;
+    UIView* lastSelectView_;
+    uint16_t selectIndex_;
+    bool isInitted_;
+};
+
 /**
  * @brief Defines a picker. Multiple texts or numbers can be put into a sliding list for selection.
  *        The selected text or numbers are highlighted.
@@ -455,6 +501,18 @@ public:
     {
         return list_.GetRotateFactor();
     }
+
+    /**
+     * @brief 设置触发惯性滑动的组件大小比例阈值.
+     *
+     * @param threshold 设置触发惯性滑动的比例阈值.
+     *                  旋转表冠结束，如果最后一次旋转位移数值大于组件的宽或高除以threshold，则触发惯性滑动.
+     * @since 6
+     */
+    void SetRotateThrowThreshold(uint8_t threshold)
+    {
+        list_.SetRotateThrowThreshold(threshold);
+    }
 #endif
 
 protected:
@@ -477,8 +535,7 @@ protected:
     bool isHeightSet_ : 1;
     TextAdapter* textAdapter_;
     uint16_t maxCount_;
-    uint16_t setSelectedIndex_;
-
+    PickerListScrollListener* listListener_;
 private:
     friend class PickerListScrollListener;
     bool RefreshValues(const char* value[], uint16_t count);
@@ -505,7 +562,7 @@ private:
     List<const char*> dataList_;
     bool isSetAdaptered_ : 1;
     UIList list_;
-    void* listListener_;
+
     SelectedListener* pickerListener_;
     UITextLanguageDirect direct_;
 };

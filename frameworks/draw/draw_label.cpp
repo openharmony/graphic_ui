@@ -25,6 +25,9 @@
 namespace OHOS {
 void DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine)
 {
+    if (labelLine.text == nullptr) {
+        return;
+    }
     UIFont* fontEngine = UIFont::GetInstance();
     if (labelLine.direct == TEXT_DIRECT_RTL) {
         labelLine.pos.x -= labelLine.offset.x;

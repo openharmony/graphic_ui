@@ -130,7 +130,7 @@ void Text::SetFont(const char* name, uint8_t size, char*& destName, uint8_t& des
 
 void Text::SetFontId(uint8_t fontId)
 {
-    if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontId_ == fontId)) {
+    if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || ((fontId_ == fontId) && (fontSize_ != 0))) {
         GRAPHIC_LOGE("Text::SetFontId invalid fontId(%d)", fontId);
         return;
     }
@@ -183,6 +183,16 @@ void Text::ReMeasureTextWidthInEllipsisMode(const Rect& textRect, const Style& s
         }
     }
 }
+
+void Text::DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine)
+{
+    labelLine.offset.x = 0;
+    labelLine.text = TEXT_ELLIPSIS;
+    labelLine.lineLength = TEXT_ELLIPSIS_DOT_NUM;
+    labelLine.length = TEXT_ELLIPSIS_DOT_NUM;
+    DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
+}
+
 void Text::OnDraw(BufferInfo& gfxDstBuffer,
                   const Rect& invalidatedArea,
                   const Rect& viewOrigRect,
@@ -240,11 +250,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
                                     nullptr, baseLine_};
             DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
             if ((i == (lineCount - 1)) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
-                labelLine.offset.x = 0;
-                labelLine.text = TEXT_ELLIPSIS;
-                labelLine.lineLength = TEXT_ELLIPSIS_DOT_NUM;
-                labelLine.length = TEXT_ELLIPSIS_DOT_NUM;
-                DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
+                DrawEllipsis(gfxDstBuffer, labelLine);
             }
         }
         lineBegin += textLine_[i].lineBytes;

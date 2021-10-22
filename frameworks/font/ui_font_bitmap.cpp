@@ -215,9 +215,9 @@ uint32_t UIFontBitmap::GetRamUsedLen(uint32_t textManagerRamUsed, uint32_t langF
     return dynamicFontRamUsed_ + textManagerRamUsed + bitmapRamUsed_ + langFontRamUsed;
 }
 
-int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap)
+int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
 {
-    return dynamicFont_.GetBitmap(unicode, bitmap);
+    return dynamicFont_.GetBitmap(unicode, bitmap, fontId);
 }
 
 uint8_t* UIFontBitmap::GetCacheBitmap(uint8_t fontId, uint32_t unicode)
@@ -262,6 +262,9 @@ int16_t UIFontBitmap::GetDynamicFontWidth(uint32_t unicode, uint8_t fontId)
 
 uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
+    if (bitmapCache_ == nullptr) {
+        return nullptr;
+    }
     if (!UIFontAdaptor::IsSameTTFId(fontId, unicode)) {
         GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
         return nullptr;
@@ -269,26 +272,24 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
     if (fontId != GetBaseFontId()) {
         SetCurrentFontId(fontId);
     }
-    if (bitmapCache_ == nullptr) {
-        return nullptr;
-    }
-    uint8_t* bitmap = bitmapCache_->GetBitmap(GetBaseFontId(), unicode);
-    if (bitmap != nullptr) {
-        GetGlyphNode(unicode, glyphNode);
-        return bitmap;
-    }
-
     int8_t ret = GetGlyphNode(unicode, glyphNode);
+    while ((ret == RET_VALUE_OK) && (glyphNode.reserve != fontId)) {
+        SetCurrentFontId(fontId);
+        ret = GetGlyphNode(unicode, glyphNode);
+    }
     if (ret != RET_VALUE_OK) {
         return nullptr;
     }
-
+    uint8_t* bitmap = bitmapCache_->GetBitmap(fontId, unicode);
+    if (bitmap != nullptr) {
+        return bitmap;
+    }
     if (glyphNode.kernOff <= glyphNode.dataOff) {
         return nullptr;
     }
     uint32_t bitmapSize = glyphNode.kernOff - glyphNode.dataOff;
-    bitmap = bitmapCache_->GetSpace(GetBaseFontId(), unicode, bitmapSize);
-    ret = dynamicFont_.GetBitmap(unicode, bitmap);
+    bitmap = bitmapCache_->GetSpace(fontId, unicode, bitmapSize);
+    ret = dynamicFont_.GetBitmap(unicode, bitmap, fontId);
     if (ret == RET_VALUE_OK) {
         return bitmap;
     }

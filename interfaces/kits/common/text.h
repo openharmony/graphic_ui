@@ -69,6 +69,8 @@ enum UITextLanguageDirect : uint8_t {
     TEXT_DIRECT_MIXED,
 };
 
+struct LabelLineInfo;
+
 /**
  * @brief Represents the base class of <b>Text</b>, providing the text attribute setting and text drawing
  *        capabilities for components that require font display.
@@ -359,6 +361,7 @@ protected:
     uint16_t GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisIndex, uint32_t& maxLineBytes);
     int16_t TextPositionY(const Rect& textRect, int16_t textHeight);
     int16_t LineStartPos(const Rect& textRect, uint16_t lineWidth);
+    void DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine);
 
     char* text_;
     uint8_t fontId_;

@@ -29,7 +29,6 @@ UITimePicker::UITimePicker()
       selectedSecond_{0},
       secVisible_(false),
       loopState_{false},
-      setSelectedTime_(nullptr),
       pickerWidth_(0),
       itemsHeight_(0),
       xPos_(0),
@@ -104,12 +103,7 @@ void UITimePicker::InitTimePicker()
         minutePicker_->SetLoopState(loopState_[PICKER_MIN]);
     }
 
-    if (setSelectedTime_ == nullptr) {
-        const char* curTime = secVisible_ ? "00:00:00" : "00:00";
-        RefreshSelected(curTime);
-    } else {
-        RefreshSelected(setSelectedTime_);
-    }
+    RefreshSelected(selectedValue_);
 }
 
 void UITimePicker::DeInitTimePicker()
@@ -149,15 +143,11 @@ void UITimePicker::InitPicker(UIPicker*& picker, int16_t start, int16_t end)
 #if ENABLE_ROTATE_INPUT
     if (end == HOUR_END) {
         picker->GetChildrenHead()->SetViewId(HOUR_LIST_NAME);
-        return;
-    } else if (end == MIN_END) {
-        if (minutePicker_->GetChildById(MIN_LIST_NAME) == nullptr) {
-            picker->GetChildrenHead()->SetViewId(MIN_LIST_NAME);
-            return;
-        }
+    } else if (end == MIN_END && secondPicker_ == nullptr) {
+        picker->GetChildrenHead()->SetViewId(MIN_LIST_NAME);
+    } else if (end == SEC_END) {
+        picker->GetChildrenHead()->SetViewId(SEC_LIST_NAME);
     }
-    picker->GetChildrenHead()->SetViewId(SEC_LIST_NAME);
-    return;
 #endif
 }
 
@@ -177,6 +167,10 @@ void UITimePicker::TimeSelectedCallback()
     uint16_t minSelect = minutePicker_->GetSelected();
     GetValueByIndex(selectedHour_, BUF_SIZE, hourSelect, TIME_START, HOUR_END);
     GetValueByIndex(selectedMinute_, BUF_SIZE, minSelect, TIME_START, MIN_END);
+
+    if (memset_s(selectedValue_, SELECTED_VALUE_SIZE, 0, SELECTED_VALUE_SIZE) != EOK) {
+        return;
+    }
 
     if (secVisible_) {
         uint16_t secSelect = secondPicker_->GetSelected();
@@ -207,8 +201,29 @@ void UITimePicker::GetValueByIndex(char* value, uint8_t len, uint16_t index, int
 
 bool UITimePicker::SetSelected(const char* value)
 {
-    setSelectedTime_ = value;
-    return RefreshSelected(value);
+    if (value == nullptr) {
+        return false;
+    }
+
+    if (memset_s(selectedValue_, SELECTED_VALUE_SIZE, 0, SELECTED_VALUE_SIZE) != EOK) {
+        return false;
+    }
+
+    if (strcpy_s(selectedValue_, SELECTED_VALUE_SIZE, value) != EOK) {
+        return false;
+    }
+    if (secVisible_) {
+        if (sscanf_s(value, "%[^:]%*c%[^:]%*c%[^\n]", selectedHour_, BUF_SIZE,
+                     selectedMinute_, BUF_SIZE, selectedSecond_, BUF_SIZE) < 3) { // 3: three variables
+            return false;
+        }
+    } else {
+        if (sscanf_s(value, "%[^:]%*c%[^\n]", selectedHour_, BUF_SIZE,
+                     selectedMinute_, BUF_SIZE) < 2) { // 2: two variables
+            return false;
+        }
+    }
+    return RefreshSelected(selectedValue_);
 }
 
 bool UITimePicker::RefreshSelected(const char* value)

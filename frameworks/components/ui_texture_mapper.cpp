@@ -54,6 +54,9 @@ void UITextureMapper::Start()
 {
     rotateStart_ = rotateCur_;
     scaleStart_ = scaleCur_;
+    float scale = static_cast<float>(scaleStart_) / SCALE_CONVERTION;
+    Scale(Vector2<float>(scale, scale), pivot_);
+    Rotate(rotateStart_, pivot_);
     animator_.Start();
 }
 

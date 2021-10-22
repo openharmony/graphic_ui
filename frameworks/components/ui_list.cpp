@@ -166,11 +166,8 @@ UIList::UIList(uint8_t direction)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_LIST_ROTATE_FACTOR;
-    lastRotateLen_ = 0;
-#endif
-#if ENABLE_VIBRATOR
-    needVibration_ = false;
-    vibratorType_ = VibratorType::VIBRATOR_TYPE_ONE;
+    rotateThrowthreshold_ = LIST_ROTATE_THROW_THRESHOLD;
+    rotateAccCoefficient_ = LIST_ROTATE_DISTANCE_COEFF;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
@@ -237,19 +234,12 @@ bool UIList::OnPressEvent(const PressEvent& event)
 #if ENABLE_ROTATE_INPUT
 bool UIList::OnRotateStartEvent(const RotateEvent& event)
 {
-    if (scrollAnimator_.GetState() != Animator::STOP) {
-        UIAbstractScroll::StopAnimator();
-    }
-#if ENABLE_VIBRATOR
-    needVibration_ = true;
-#endif
     isReCalculateDragEnd_ = true;
-    return UIView::OnRotateStartEvent(event);
+    return UIAbstractScroll::OnRotateStartEvent(event);
 }
 
 bool UIList::OnRotateEndEvent(const RotateEvent& event)
 {
-    needVibration_ = false;
     isReCalculateDragEnd_ = false;
     return UIAbstractScroll::OnRotateEndEvent(event);
 }
@@ -290,20 +280,18 @@ bool UIList::DragXInner(int16_t distance)
         return MoveOffset(distance, 0);
     }
     if (distance > 0) {
-        if (childrenHead_ && ((childrenHead_->GetX() + distance) >
-            (scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_LEFT)))) {
-            distance =
-                scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_LEFT) - childrenHead_->GetX();
+        if (childrenHead_ && ((childrenHead_->GetX() + distance) > (scrollBlankSize_ + reboundSize))) {
+            distance = scrollBlankSize_ + reboundSize - childrenHead_->GetX();
         }
     } else {
         if (childrenTail_) {
-            if (childrenTail_->GetRelativeRect().GetRight() <=
-                (listWidth - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_RIGHT))) {
+            if (childrenTail_->GetRelativeRect().GetRight() + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) <
+                listWidth - scrollBlankSize_ - reboundSize) {
                 distance = 0;
-            } else if ((listWidth - childrenTail_->GetX() - childrenTail_->GetRelativeRect().GetWidth() - distance) >
-                       (scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT))) {
-                distance = listWidth - scrollBlankSize_ - reboundSize - childrenTail_->GetX() -
-                           childrenTail_->GetRelativeRect().GetWidth() - childrenTail_->GetStyle(STYLE_MARGIN_RIGHT);
+            } else if ((childrenTail_->GetRelativeRect().GetRight() + childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) +
+                        distance) <= (listWidth - scrollBlankSize_ - reboundSize)) {
+                distance = listWidth - scrollBlankSize_ - reboundSize - childrenTail_->GetRelativeRect().GetRight() -
+                           childrenTail_->GetStyle(STYLE_MARGIN_RIGHT) - 1;
             }
         }
     }
@@ -332,20 +320,18 @@ bool UIList::DragYInner(int16_t distance)
         return MoveOffset(0, distance);
     }
     if (distance > 0) {
-        if (childrenHead_ && ((childrenHead_->GetY() + distance) >
-            (scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP)))) {
-            distance =
-                scrollBlankSize_ + reboundSize + childrenHead_->GetStyle(STYLE_MARGIN_TOP) - childrenHead_->GetY();
+        if (childrenHead_ && ((childrenHead_->GetY() + distance) > (scrollBlankSize_ + reboundSize))) {
+            distance = scrollBlankSize_ + reboundSize - childrenHead_->GetY();
         }
     } else {
         if (childrenTail_) {
-            if (childrenTail_->GetRelativeRect().GetBottom() <=
-                (listHeight - scrollBlankSize_ - reboundSize - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
+            if (childrenTail_->GetRelativeRect().GetBottom() + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) <
+                listHeight - scrollBlankSize_ - reboundSize) {
                 distance = 0;
-            } else if ((listHeight - childrenTail_->GetY() - childrenTail_->GetRelativeRect().GetHeight() - distance) >
-                (scrollBlankSize_ + reboundSize + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM))) {
-                distance = listHeight - scrollBlankSize_ - reboundSize - childrenTail_->GetY() -
-                           childrenTail_->GetRelativeRect().GetHeight() - childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM);
+            } else if ((childrenTail_->GetRelativeRect().GetBottom() + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) +
+                        distance) <= (listHeight - scrollBlankSize_ - reboundSize)) {
+                distance = listHeight - scrollBlankSize_ - reboundSize - childrenTail_->GetRelativeRect().GetBottom() -
+                           childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) - 1;
             }
         }
     }
@@ -422,14 +408,12 @@ bool UIList::ReCalculateDragEnd()
     return true;
 }
 
-bool UIList::MoveChildStepInner(int16_t distance,
-                                int16_t (UIView::*getXOrY)() const,
-                                int16_t (UIView::*getWidthOrHeight)())
+bool UIList::MoveChildStepVertical(int16_t distance)
 {
     bool popRet = false;
     bool pushRet = false;
     if (distance > 0) {
-        if ((childrenHead_ == nullptr) || ((childrenHead_->*getXOrY)() + distance > 0)) {
+        if ((childrenHead_ == nullptr) || (childrenHead_->GetRelativeRect().GetTop() + distance > 0)) {
             uint16_t index = GetIndexDec(topIndex_);
             if (index == topIndex_) {
                 return false;
@@ -441,14 +425,12 @@ bool UIList::MoveChildStepInner(int16_t distance,
             PushFront(newView);
             pushRet = true;
         }
-        if (childrenTail_ != nullptr && ((childrenTail_->*getXOrY)() + distance > (this->*getWidthOrHeight)())) {
+        if (childrenTail_ != nullptr && (childrenTail_->GetRelativeRect().GetTop() + distance > GetHeight())) {
             PopItem(childrenTail_);
             popRet = true;
         }
     } else {
-        if ((childrenTail_ == nullptr) ||
-            ((childrenTail_->*getXOrY)() + (childrenTail_->*getWidthOrHeight)() + distance <
-            (this->*getWidthOrHeight)())) {
+        if (childrenTail_ == nullptr || (childrenTail_->GetRelativeRect().GetBottom() + distance < GetHeight())) {
             UIView* newView = recycle_.GetView(GetIndexInc(bottomIndex_));
             if (newView == nullptr) {
                 return false;
@@ -456,7 +438,45 @@ bool UIList::MoveChildStepInner(int16_t distance,
             PushBack(newView);
             pushRet = true;
         }
-        if (childrenHead_ && (childrenHead_->*getXOrY)() + distance + (childrenHead_->*getWidthOrHeight)() < 0) {
+        if (childrenHead_ && (childrenHead_->GetRelativeRect().GetBottom() + distance < 0)) {
+            PopItem(childrenHead_);
+            popRet = true;
+        }
+    }
+    return (popRet || pushRet);
+}
+
+bool UIList::MoveChildStepHorizontal(int16_t distance)
+{
+    bool popRet = false;
+    bool pushRet = false;
+    if (distance > 0) {
+        if ((childrenHead_ == nullptr) || (childrenHead_->GetRelativeRect().GetLeft() + distance > 0)) {
+            uint16_t index = GetIndexDec(topIndex_);
+            if (index == topIndex_) {
+                return false;
+            }
+            UIView* newView = recycle_.GetView(index);
+            if (newView == nullptr) {
+                return false;
+            }
+            PushFront(newView);
+            pushRet = true;
+        }
+        if (childrenTail_ != nullptr && (childrenTail_->GetRelativeRect().GetLeft() + distance > GetWidth())) {
+            PopItem(childrenTail_);
+            popRet = true;
+        }
+    } else {
+        if (childrenTail_ == nullptr || (childrenTail_->GetRelativeRect().GetRight() + distance < GetWidth())) {
+            UIView* newView = recycle_.GetView(GetIndexInc(bottomIndex_));
+            if (newView == nullptr) {
+                return false;
+            }
+            PushBack(newView);
+            pushRet = true;
+        }
+        if (childrenHead_ && (childrenHead_->GetRelativeRect().GetRight() + distance < 0)) {
             PopItem(childrenHead_);
             popRet = true;
         }
@@ -467,9 +487,9 @@ bool UIList::MoveChildStepInner(int16_t distance,
 bool UIList::MoveChildStep(int16_t distance)
 {
     if (direction_ == VERTICAL) {
-        return MoveChildStepInner(distance, &UIView::GetY, &UIView::GetHeightWithMargin);
+        return MoveChildStepVertical(distance);
     } else {
-        return MoveChildStepInner(distance, &UIView::GetX, &UIView::GetWidthWithMargin);
+        return MoveChildStepHorizontal(distance);
     }
 }
 
@@ -591,7 +611,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
             height = view->GetRelativeRect().GetHeight();
             if ((view->GetY() + yOffset > selectPosition_) ||
                 (childrenTail_->GetY() + height + childrenTail_->GetStyle(STYLE_MARGIN_BOTTOM) + yOffset <
-                selectPosition_)) {
+                 selectPosition_)) {
                 onSelectedIndex_ = NULL_SELECT_INDEX;
                 onSelectedView_ = nullptr;
                 if (scrollListener_ != nullptr) {
@@ -645,7 +665,7 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
             }
 #if ENABLE_VIBRATOR
             VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
-            if (isSelectViewFind && needVibration_ && vibratorFunc != nullptr) {
+            if (isSelectViewFind && isRotating_ && vibratorFunc != nullptr) {
                 if (!isLoopList_ && (onSelectedIndex_ == 0 || onSelectedIndex_ == recycle_.adapter_->GetCount() - 1)) {
                     vibratorFunc(VibratorType::VIBRATOR_TYPE_THREE);
                     GRAPHIC_LOGI("UIList::MoveChildByOffset calls TYPE_THREE vibrator");
@@ -875,11 +895,4 @@ void UIList::FixVerDistance(int16_t& distanceY)
         targetView = targetView->GetNextSibling();
     }
 }
-
-#if ENABLE_VIBRATOR
-void UIList::SetMotorType(VibratorType vibratorType)
-{
-    vibratorType_ = vibratorType;
-}
-#endif
 } // namespace OHOS

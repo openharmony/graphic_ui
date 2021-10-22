@@ -22,12 +22,12 @@
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
-UIScrollView::UIScrollView()
-    : scrollListener_(nullptr)
+UIScrollView::UIScrollView() : scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
-    lastRotateLen_ = 0;
+    rotateThrowthreshold_ = SCROLLVIEW_ROTATE_THROW_THRESHOLD;
+    rotateAccCoefficient_ = SCROLLVIEW_ROTATE_DISTANCE_COEFF;
 #endif
 #if ENABLE_VIBRATOR
     totalRotateLen_ = 0;
@@ -87,20 +87,12 @@ bool UIScrollView::OnPressEvent(const PressEvent& event)
 }
 
 #if ENABLE_ROTATE_INPUT
-bool UIScrollView::OnRotateStartEvent(const RotateEvent& event)
-{
-    if (scrollAnimator_.GetState() != Animator::STOP) {
-        UIAbstractScroll::StopAnimator();
-    }
-    return UIView::OnRotateStartEvent(event);
-}
-
 bool UIScrollView::OnRotateEvent(const RotateEvent& event)
 {
     if (direction_ == HORIZONTAL_NOR_VERTICAL) {
         return UIView::OnRotateEvent(event);
     }
-    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    int16_t rotateLen = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
 #if ENABLE_VIBRATOR
     bool lastIsEdge = false;
     Rect childRect = GetAllChildRelativeRect();
@@ -114,13 +106,14 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
         }
     }
 #endif
+    RefreshRotate(rotateLen);
     if (direction_ == HORIZONTAL) {
-        DragXInner(lastRotateLen_);
+        DragXInner(rotateLen);
     } else {
-        DragYInner(lastRotateLen_);
+        DragYInner(rotateLen);
     }
 #if ENABLE_VIBRATOR
-    totalRotateLen_ += lastRotateLen_;
+    totalRotateLen_ += rotateLen;
     childRect = GetAllChildRelativeRect();
     bool isEdge = false;
     if (direction_ == HORIZONTAL) {
@@ -230,9 +223,9 @@ bool UIScrollView::DragYInner(int16_t distance)
         int16_t childBottom = childRect.GetBottom();
         int16_t scrollHeight = GetHeight();
         if (childBottom < scrollHeight - (scrollBlankSize_ + reboundSize)) {
-                distance = 0;
+            distance = 0;
         } else if (childBottom + distance < scrollHeight - (scrollBlankSize_ + reboundSize)) {
-                distance = scrollHeight - (scrollBlankSize_ + reboundSize) - childBottom - 1;
+            distance = scrollHeight - (scrollBlankSize_ + reboundSize) - childBottom - 1;
         }
     }
 
@@ -266,8 +259,7 @@ void UIScrollView::RefreshScrollBar()
     if (yScrollBarVisible_) {
         yScrollBar_->SetForegroundProportion(static_cast<float>(len) / totalLen);
         /* calculate scrolling progress */
-        yScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetTop()) /
-            (totalLen - len));
+        yScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetTop()) / (totalLen - len));
     }
     if (xScrollBarVisible_) {
         /* so do x-bar */
@@ -275,7 +267,7 @@ void UIScrollView::RefreshScrollBar()
         len = GetWidth();
         xScrollBar_->SetForegroundProportion(static_cast<float>(len) / totalLen);
         xScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - childrenRect.GetLeft()) /
-            (totalLen - len));
+                                       (totalLen - len));
     }
     RefreshAnimator();
 }

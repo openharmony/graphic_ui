@@ -14,6 +14,7 @@
  */
 
 #include "draw/draw_utils.h"
+
 #include "draw/draw_triangle.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
@@ -35,16 +36,16 @@
 
 namespace OHOS {
 // Preprocess operation for draw
-#define DRAW_UTILS_PREPROCESS(gfxBufferInfo, opa)                                                   \
-    if ((opa) == OPA_TRANSPARENT) {                                                  \
-        return;                                                                      \
-    }                                                                                \
-    uint8_t* screenBuffer = static_cast<uint8_t*>(gfxBufferInfo.virAddr);           \
-    if (screenBuffer == nullptr) {                                                   \
-        return;                                                                      \
-    }                                                                                \
-    ColorMode bufferMode = gfxBufferInfo.mode;                                      \
-    uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);                       \
+#define DRAW_UTILS_PREPROCESS(gfxBufferInfo, opa)                         \
+    if ((opa) == OPA_TRANSPARENT) {                                       \
+        return;                                                           \
+    }                                                                     \
+    uint8_t* screenBuffer = static_cast<uint8_t*>(gfxBufferInfo.virAddr); \
+    if (screenBuffer == nullptr) {                                        \
+        return;                                                           \
+    }                                                                     \
+    ColorMode bufferMode = gfxBufferInfo.mode;                            \
+    uint8_t bufferPxSize = GetByteSizeByColorMode(bufferMode);            \
     uint16_t screenBufferWidth = gfxBufferInfo.width;
 
 /* cover mode, src alpha is 255 */
@@ -84,14 +85,14 @@ namespace OHOS {
         ASSERT(0);                                            \
     }
 
-#define COLOR_BLEND_RGBA(r1, g1, b1, a1, r2, g2, b2, a2)  \
-    const float A1 = static_cast<float>(a1) / OPA_OPAQUE; \
-    const float A2 = static_cast<float>(a2) / OPA_OPAQUE; \
-    const float a = 1 - (1 - A1) * (1 - A2);              \
-    (r1) = (A2 * (r2) + (1 - A2) * A1 * (r1)) / a;        \
-    (g1) = (A2 * (g2) + (1 - A2) * A1 * (g1)) / a;        \
-    (b1) = (A2 * (b2) + (1 - A2) * A1 * (b1)) / a;        \
-    (a1) = a * OPA_OPAQUE;
+#define COLOR_BLEND_RGBA(r1, g1, b1, a1, r2, g2, b2, a2)            \
+    const float Alpha1 = static_cast<float>(a1) / OPA_OPAQUE;       \
+    const float Alpha2 = static_cast<float>(a2) / OPA_OPAQUE;       \
+    const float Alpha3 = 1 - (1 - Alpha1) * (1 - Alpha2);           \
+    (r1) = (Alpha2 * (r2) + (1 - Alpha2) * Alpha1 * (r1)) / Alpha3; \
+    (g1) = (Alpha2 * (g2) + (1 - Alpha2) * Alpha1 * (g1)) / Alpha3; \
+    (b1) = (Alpha2 * (b2) + (1 - Alpha2) * Alpha1 * (b1)) / Alpha3; \
+    (a1) = Alpha3 * OPA_OPAQUE;
 
 #define COLOR_BLEND_RGB(r1, g1, b1, r2, g2, b2, a2)                                    \
     (r1) = (((r2) * (a2)) / OPA_OPAQUE) + (((r1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
@@ -435,12 +436,8 @@ void DrawUtils::DrawImage(BufferInfo& gfxDstBuffer,
     }
 
     BufferInfo src;
-    src.rect = {
-        imageX,
-        imageY,
-        static_cast<int16_t>(imageX + maskedArea.GetWidth() - 1),
-        static_cast<int16_t>(imageY + maskedArea.GetHeight() - 1)
-    };
+    src.rect = {imageX, imageY, static_cast<int16_t>(imageX + maskedArea.GetWidth() - 1),
+                static_cast<int16_t>(imageY + maskedArea.GetHeight() - 1)};
 
     src.virAddr = static_cast<void*>(const_cast<uint8_t*>(image));
     src.stride = imageWidthInByte;
@@ -862,7 +859,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in, con
 
                 Color16 result;
 #if ENABLE_FIXED_POINT
-                result.red = static_cast<uint8_t>(outR >>15); // 15: shift 15 bit right to convert fixed to int
+                result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
                 result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
                 result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
 #else
@@ -982,7 +979,7 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, con
 
                 Color24 result;
 #if ENABLE_FIXED_POINT
-                result.red = static_cast<uint8_t>(outR >> 15); // 15: shift 15 bit right to convert fixed to int
+                result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
                 result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
                 result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
 #else
@@ -1082,11 +1079,11 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
 #endif
 
 static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
-                                                   uint8_t* screenBuffer,
-                                                   int16_t len,
-                                                   const ColorMode bufferMode,
-                                                   int64_t u,
-                                                   int64_t v)
+                                                        uint8_t* screenBuffer,
+                                                        int16_t len,
+                                                        const ColorMode bufferMode,
+                                                        int64_t u,
+                                                        int64_t v)
 {
     for (int16_t x = 0; x < len; ++x) {
         int16_t intU = FO_TO_INTEGER(u);
@@ -1132,10 +1129,10 @@ static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& 
 #endif
 
             Color32 result;
-            result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
-            result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
-            result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
-            result.alpha = static_cast<uint8_t>(outA >> 15); // 15: shift 15 bit right to convert fixed to int
+            result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+            result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+            result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
+            result.alpha = static_cast<uint8_t>(outA >> FIXED_Q_NUM);
             if ((in.opaScale == OPA_OPAQUE) && (result.alpha == OPA_OPAQUE)) {
                 COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
             } else {
@@ -1182,10 +1179,10 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
 #endif
         }
         // Monotonically increasing or decreasing, so only judge the beginning and end.
-        if ((arrayU[0] >= 0) && (arrayU[0] < in.info.header.width - 1) &&
-            (arrayV[0] >= 0) && (arrayV[0] < in.info.header.height - 1) &&
-            (arrayU[NEON_STEP_8 - 1] >= 0) && (arrayU[NEON_STEP_8 - 1] < in.info.header.width - 1) &&
-            (arrayV[NEON_STEP_8 - 1] >= 0) && (arrayV[NEON_STEP_8 - 1] < in.info.header.height - 1)) {
+        if ((arrayU[0] >= 0) && (arrayU[0] < in.info.header.width - 1) && (arrayV[0] >= 0) &&
+            (arrayV[0] < in.info.header.height - 1) && (arrayU[NEON_STEP_8 - 1] >= 0) &&
+            (arrayU[NEON_STEP_8 - 1] < in.info.header.width - 1) && (arrayV[NEON_STEP_8 - 1] >= 0) &&
+            (arrayV[NEON_STEP_8 - 1] < in.info.header.height - 1)) {
             // Process the lower half of arrayU and arrayV
             float32x4_t vU = vld1q_f32(arrayU);
             float32x4_t vV = vld1q_f32(arrayV);
@@ -1282,6 +1279,144 @@ static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& i
 }
 #endif
 
+void DrawUtils::Draw3DTriangleTrueColorBilinear8888(const TriangleScanInfo& in, const ColorMode bufferMode)
+{
+    int16_t maskLeft = in.mask.GetLeft();
+    int16_t maskRight = in.mask.GetRight();
+    int16_t xMinErr = 0;
+    int16_t xMaxErr = 0;
+    GetXAxisErrForJunctionLine(in.ignoreJunctionPoint, in.isRightPart, xMinErr, xMaxErr);
+#if ENABLE_FIXED_POINT
+    int64_t invMatrix00 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[0]);
+    int64_t invMatrix01 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[1]);
+    int64_t invMatrix02 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[2]);
+    int64_t invMatrix20 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[3]);
+    int64_t invMatrix21 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[4]);
+    int64_t invMatrix22 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[5]);
+    int64_t invMatrix30 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[6]);
+    int64_t invMatrix31 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[7]);
+    int64_t invMatrix32 = FO_TRANS_FLOAT_TO_FIXED(in.matrix.GetData()[8]);
+#else  // ENABLE_FIXED_POINT
+    float invMatrix00 = in.matrix.GetData()[0];
+    float invMatrix01 = in.matrix.GetData()[1];
+    float invMatrix02 = in.matrix.GetData()[2];
+    float invMatrix20 = in.matrix.GetData()[3];
+    float invMatrix21 = in.matrix.GetData()[4];
+    float invMatrix22 = in.matrix.GetData()[5];
+    float invMatrix30 = in.matrix.GetData()[6];
+    float invMatrix31 = in.matrix.GetData()[7];
+    float invMatrix32 = in.matrix.GetData()[8];
+#endif // ENABLE_FIXED_POINT
+    for (int16_t y = in.yMin; y <= in.yMax; ++y) {
+#if ENABLE_FIXED_POINT
+        int16_t tempV = FO_TO_INTEGER(in.edge1.curX) + xMinErr;
+        int16_t xMin = MATH_MAX(tempV, maskLeft);
+        tempV = FO_TO_INTEGER(in.edge2.curX) + xMaxErr;
+        int16_t xMax = MATH_MIN(tempV, maskRight);
+#else  // ENABLE_FIXED_POINT
+        int16_t xMin = MATH_MAX(static_cast<int16_t>(in.edge1.curX + xMinErr), maskLeft);
+        int16_t xMax = MATH_MIN(static_cast<int16_t>(in.edge2.curX + xMaxErr), maskRight);
+#endif // ENABLE_FIXED_POINT
+        uint8_t* screenBuffer = in.screenBuffer + (y * in.screenBufferWidth + xMin) * in.bufferPxSize;
+        // move to current position
+        for (int16_t x = xMin; x <= xMax; x++) {
+#if ENABLE_FIXED_POINT
+            int64_t w = invMatrix02 * x + invMatrix22 * y + invMatrix32;
+            int64_t u = FO_DIV((invMatrix00 * x + invMatrix20 * y + invMatrix30), w);
+            int64_t v = FO_DIV((invMatrix01 * x + invMatrix21 * y + invMatrix31), w);
+            int16_t intU = FO_TO_INTEGER(u);
+            int16_t intV = FO_TO_INTEGER(v);
+#else  // ENABLE_FIXED_POINT
+            float w = invMatrix02 * x + invMatrix22 * y + invMatrix32;
+            float u = (invMatrix00 * x + invMatrix20 * y + invMatrix30) / w;
+            float v = (invMatrix01 * x + invMatrix21 * y + invMatrix31) / w;
+            int16_t intU = static_cast<int16_t>(u);
+            int16_t intV = static_cast<int16_t>(v);
+#endif // ENABLE_FIXED_POINT
+            if ((u >= 0) && (intU < in.info.header.width - 1) && (v >= 0) && (intV < in.info.header.height - 1)) {
+#if ENABLE_ARM_MATH
+                uint32_t val1 = __SMUAD(intV, in.srcLineWidth);
+                uint32_t val2 = __SMUAD(intU, in.pixelSize);
+                uint32_t px1 = val1 + val2;
+#else  // ENABLE_ARM_MATH
+                uint32_t px1 = intV * in.srcLineWidth + intU * in.pixelSize;
+#endif // ENABLE_ARM_MATH
+                uint8_t* imgHead = const_cast<uint8_t*>(in.info.data);
+                const ColorType p1 = *(reinterpret_cast<ColorType*>(&imgHead[px1]));
+                const ColorType p2 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.pixelSize]));
+                const ColorType p3 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.srcLineWidth]));
+                const ColorType p4 = *(reinterpret_cast<ColorType*>(&imgHead[px1 + in.srcLineWidth + in.pixelSize]));
+#if ENABLE_FIXED_POINT
+                int64_t decU = FO_DECIMAL(u);
+                int64_t decV = FO_DECIMAL(v);
+                int64_t decUMinus1 = FIXED_NUM_1 - decU;
+                int64_t decVMinus1 = FIXED_NUM_1 - decV;
+                int64_t w1 = FO_MUL(decUMinus1, decVMinus1);
+                int64_t w2 = FO_MUL(decU, decVMinus1);
+                int64_t w3 = FO_MUL(decUMinus1, decV);
+                int64_t w4 = FO_MUL(decU, decV);
+#if ENABLE_ARM_MATH
+                const int64_t outR =
+                    __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
+                const int64_t outG =
+                    __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
+                const int64_t outB =
+                    __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
+                const int64_t outA =
+                    __SMUAD(p1.alpha, w1) + __SMUAD(p2.alpha, w2) + __SMUAD(p3.alpha, w3) + __SMUAD(p4.alpha, w4);
+#else
+                const int64_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+                const int64_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+                const int64_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
+                const int64_t outA = p1.alpha * w1 + p2.alpha * w2 + p3.alpha * w3 + p4.alpha * w4;
+#endif
+                Color32 result;
+                result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+                result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+                result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
+                result.alpha = static_cast<uint8_t>(outA >> FIXED_Q_NUM);
+#else // ENABLE_FIXED_POINT
+                const float decU = u - intU;
+                const float decV = v - intV;
+                const float decUMinus1 = 1 - decU;
+                const float decVMinus1 = 1 - decV;
+                const int32_t w1 = static_cast<int32_t>(decUMinus1 * decVMinus1 * 256.0f); // 256:shift 8 bit left
+                const int32_t w2 = static_cast<int32_t>(decU * decVMinus1 * 256.0f);       // 256:shift 8 bit left
+                const int32_t w3 = static_cast<int32_t>(decUMinus1 * decV * 256.0f);       // 256:shift 8 bit left
+                const int32_t w4 = static_cast<int32_t>(decU * decV * 256.0f);
+#if ENABLE_ARM_MATH
+                const int32_t outR =
+                    __SMUAD(p1.red, w1) + __SMUAD(p2.red, w2) + __SMUAD(p3.red, w3) + __SMUAD(p4.red, w4);
+                const int32_t outG =
+                    __SMUAD(p1.green, w1) + __SMUAD(p2.green, w2) + __SMUAD(p3.green, w3) + __SMUAD(p4.green, w4);
+                const int32_t outB =
+                    __SMUAD(p1.blue, w1) + __SMUAD(p2.blue, w2) + __SMUAD(p3.blue, w3) + __SMUAD(p4.blue, w4);
+                const int32_t outA =
+                    __SMUAD(p1.alpha, w1) + __SMUAD(p2.alpha, w2) + __SMUAD(p3.alpha, w3) + __SMUAD(p4.alpha, w4);
+#else  // ENABLE_ARM_MATH
+                const int32_t outR = p1.red * w1 + p2.red * w2 + p3.red * w3 + p4.red * w4;
+                const int32_t outG = p1.green * w1 + p2.green * w2 + p3.green * w3 + p4.green * w4;
+                const int32_t outB = p1.blue * w1 + p2.blue * w2 + p3.blue * w3 + p4.blue * w4;
+                const int32_t outA = p1.alpha * w1 + p2.alpha * w2 + p3.alpha * w3 + p4.alpha * w4;
+#endif // ENABLE_ARM_MATH
+                Color32 result;
+                result.red = static_cast<uint8_t>(outR >> 8);   // 8:shift 8 bit right
+                result.green = static_cast<uint8_t>(outG >> 8); // 8:shift 8 bit right
+                result.blue = static_cast<uint8_t>(outB >> 8);  // 8:shift 8 bit right
+                result.alpha = static_cast<uint8_t>(outA >> 8); // 8:shift 8 bit right
+#endif // ENABLE_FIXED_POINT
+                if ((in.opaScale == OPA_OPAQUE) && (result.alpha == OPA_OPAQUE)) {
+                    COLOR_FILL_COVER(screenBuffer, bufferMode, result.red, result.green, result.blue, ARGB8888);
+                } else {
+                    COLOR_FILL_BLEND(screenBuffer, bufferMode, &result, ARGB8888, in.opaScale);
+                }
+            }
+            screenBuffer += in.bufferPxSize;
+        }
+        StepToNextLine(in.edge1, in.edge2);
+    }
+}
+
 void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in, const ColorMode bufferMode)
 {
     int16_t maskLeft = in.mask.GetLeft();
@@ -1336,9 +1471,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear8888(const TriangleScanInfo& in, co
         in.init.verticalU += in.init.duVertical;
         in.init.verticalV += in.init.dvVertical;
 #if ENABLE_FIXED_POINT
-            int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
+        int16_t deltaX = FO_TO_INTEGER(in.edge1.curX) - xMin;
 #else
-            int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
+        int16_t deltaX = static_cast<int16_t>(in.edge1.curX) - xMin;
 #endif
         in.init.verticalU += in.init.duHorizon * deltaX;
         in.init.verticalV += in.init.dvHorizon * deltaX;
@@ -1448,11 +1583,11 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in, const C
 void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const TrianglePartInfo& part)
 {
 #if ENABLE_FIXED_POINT
-// parameters below are Q15 fixed-point number
+    // parameters below are Q15 fixed-point number
     int64_t yMin = FO_TRANS_INTEGER_TO_FIXED(part.yMin);
-    part.edge1.curX += (static_cast<int64_t>(part.edge1.du) *  (yMin - part.edge1.curY) / part.edge1.dv);
+    part.edge1.curX += (static_cast<int64_t>(part.edge1.du) * (yMin - part.edge1.curY) / part.edge1.dv);
     part.edge1.curY = yMin;
-    part.edge2.curX += (static_cast<int64_t>(part.edge2.du) *  (yMin - part.edge2.curY) / part.edge2.dv);
+    part.edge2.curX += (static_cast<int64_t>(part.edge2.du) * (yMin - part.edge2.curY) / part.edge2.dv);
     part.edge2.curY = yMin;
     Rect line;
     line.SetLeft(FO_TO_INTEGER(part.edge1.curX));
@@ -1490,7 +1625,11 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
         if (part.info.algorithm == TransformAlgorithm::NEAREST_NEIGHBOR) {
             fuc = DrawTriangleTrueColorNearest;
         } else if (part.info.header.colorMode == ARGB8888) {
-            fuc = DrawTriangleTrueColorBilinear8888;
+            if (part.transMap.Is3DTransform()) {
+                fuc = Draw3DTriangleTrueColorBilinear8888;
+            } else {
+                fuc = DrawTriangleTrueColorBilinear8888;
+            }
         } else if (part.info.header.colorMode == RGB888) {
             fuc = DrawTriangleTrueColorBilinear888;
         } else {
@@ -1516,7 +1655,8 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
                            part.info,
                            part.mask,
                            part.isRightPart,
-                           part.ignoreJunctionPoint};
+                           part.ignoreJunctionPoint,
+                           part.transMap.invMatrix_};
     fuc(input, gfxDstBuffer.mode);
 }
 
@@ -1596,7 +1736,7 @@ BottomHalf:
 
 void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
 {
-    int16_t border = 1; // 1 : border width
+    int16_t border = 1;          // 1 : border width
     int16_t offset = border * 2; // 2 : offset
     uint16_t width = newDataInfo.header.width;
     uint16_t height = newDataInfo.header.height;
@@ -1644,36 +1784,38 @@ void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
 void DrawUtils::UpdateTransMap(int16_t width, int16_t height, TransformMap& transMap)
 {
     Rect rect = transMap.GetTransMapRect();
-    Matrix3<float> matrix = transMap.GetTransformMatrix();
-    matrix = matrix * (Matrix3<float>::Translate(Vector2<float>(-rect.GetX(), -rect.GetY())));
-    int16_t offsetX = (width - rect.GetWidth()) / 2;  //  2 : half;
-    int16_t offsetY = (height - rect.GetHeight()) / 2;  //  2 : half;
+    Matrix4<float> matrix = transMap.GetTransformMatrix();
+    matrix = matrix * (Matrix4<float>::Translate(Vector3<float>(-rect.GetX(), -rect.GetY(), 0)));
+    int16_t offsetX = (width - rect.GetWidth()) / 2;   //  2 : half;
+    int16_t offsetY = (height - rect.GetHeight()) / 2; //  2 : half;
     rect.SetPosition(rect.GetX() - offsetX, rect.GetY() - offsetY);
     rect.Resize(width, height);
     Polygon polygon = Polygon(rect);
     uint8_t vertexNum = transMap.GetPolygon().GetVertexNum();
-    Vector3<float> imgPoint3;
+    Vector4<float> imgPoint4;
     for (uint8_t i = 0; i < vertexNum; i++) {
-        Vector3<float> point(polygon[i].x_, polygon[i].y_, 1);
-        imgPoint3 = matrix * point;
-        if (imgPoint3.x_ < COORD_MIN) {
+        Vector4<float> point(polygon[i].x_, polygon[i].y_, 0, 1);
+        imgPoint4 = matrix * point;
+        if (imgPoint4.x_ < COORD_MIN) {
             polygon[i].x_ = COORD_MIN;
-        } else if (imgPoint3.x_ > COORD_MAX) {
+        } else if (imgPoint4.x_ > COORD_MAX) {
             polygon[i].x_ = COORD_MAX;
         } else {
-            polygon[i].x_ = MATH_ROUND(imgPoint3.x_);
+            polygon[i].x_ = MATH_ROUND(imgPoint4.x_);
         }
 
-        if (imgPoint3.y_ < COORD_MIN) {
+        if (imgPoint4.y_ < COORD_MIN) {
             polygon[i].y_ = COORD_MIN;
-        } else if (imgPoint3.y_ > COORD_MAX) {
+        } else if (imgPoint4.y_ > COORD_MAX) {
             polygon[i].y_ = COORD_MAX;
         } else {
-            polygon[i].y_ = MATH_ROUND(imgPoint3.y_);
+            polygon[i].y_ = MATH_ROUND(imgPoint4.y_);
         }
     }
     transMap.SetPolygon(polygon);
-    transMap.invMatrix_ = (matrix * (Matrix3<float>::Translate(Vector2<float>(rect.GetX(), rect.GetY())))).Inverse();
+    Matrix3<float> matrix3(matrix[0][0], matrix[0][1], matrix[0][3], matrix[1][0], matrix[1][1], matrix[1][3],
+                           matrix[3][0], matrix[3][1], matrix[3][3]);
+    transMap.invMatrix_ = (matrix3 * (Matrix3<float>::Translate(Vector2<float>(rect.GetX(), rect.GetY())))).Inverse();
 }
 
 void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
@@ -1801,8 +1943,7 @@ void DrawUtils::DrawTranspantArea(BufferInfo& gfxDstBuffer, const Rect& rect, co
     FillArea(gfxDstBuffer, rect, mask, true, nullptr);
 }
 
-void DrawUtils::DrawWithBuffer(BufferInfo& gfxDstBuffer, const Rect& rect,
-                               const Rect& mask, const ColorType* colorBuf)
+void DrawUtils::DrawWithBuffer(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& mask, const ColorType* colorBuf)
 {
     FillArea(gfxDstBuffer, rect, mask, false, colorBuf);
 }

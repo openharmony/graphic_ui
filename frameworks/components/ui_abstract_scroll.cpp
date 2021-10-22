@@ -26,12 +26,6 @@
 #include "graphic_timer.h"
 #endif
 
-namespace {
-#if ENABLE_ROTATE_INPUT
-constexpr uint8_t DEFAULT_ROTATE_THRESHOLD = 4;
-#endif
-}
-
 namespace OHOS {
 #if DEFAULT_ANIMATION
 class BarEaseInOutAnimator final : public AnimatorCallback {
@@ -45,7 +39,9 @@ public:
     BarEaseInOutAnimator(UIAbstractScroll& scrollView)
         : scrollView_(scrollView),
           timer_(APPEAR_PERIOD, TimerCb, this),
-          animator_(this, nullptr, ANIMATOR_DURATION, false) {}
+          animator_(this, nullptr, ANIMATOR_DURATION, false)
+    {
+    }
 
     ~BarEaseInOutAnimator()
     {
@@ -94,8 +90,7 @@ private:
             if (scrollView_.yScrollBarVisible_) {
                 scrollView_.yScrollBar_->SetOpacity(OPA_OPAQUE);
             }
-            if (Screen::GetInstance().GetScreenShape() == ScreenShape::RECTANGLE &&
-                scrollView_.xScrollBarVisible_) {
+            if (Screen::GetInstance().GetScreenShape() == ScreenShape::RECTANGLE && scrollView_.xScrollBarVisible_) {
                 scrollView_.xScrollBar_->SetOpacity(OPA_OPAQUE);
             }
             timer_.Start(); // The timer is triggered when animation stops.
@@ -130,6 +125,7 @@ private:
 UIAbstractScroll::UIAbstractScroll()
     : direction_(VERTICAL),
       deltaIndex_(0),
+      rotateIndex_(0),
       reserve_(0),
       easingFunc_(EasingEquation::CubicEaseOut),
       scrollAnimator_(&animatorCallback_, this, 0, true),
@@ -142,8 +138,9 @@ UIAbstractScroll::UIAbstractScroll()
 #endif
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
-    threshold_ = DEFAULT_ROTATE_THRESHOLD;
-    lastRotateLen_ = 0;
+    rotateThrowthreshold_ = ABSTRACT_ROTATE_THROW_THRESHOLD;
+    rotateAccCoefficient_ = ABSTRACT_ROTATE_DISTANCE_COEFF;
+    isRotating_ = false;
 #endif
     isViewGroup_ = true;
     touchable_ = true;
@@ -197,6 +194,31 @@ int16_t UIAbstractScroll::GetMaxDelta() const
     return result;
 }
 
+int16_t UIAbstractScroll::GetMaxRotate() const
+{
+    int16_t result = 0;
+    for (int16_t i = 0; i < MAX_DELTA_SIZE; i++) {
+        if (MATH_ABS(result) < MATH_ABS(lastRotate_[i])) {
+            result = lastRotate_[i];
+        }
+    }
+    return result;
+}
+
+void UIAbstractScroll::InitDelta()
+{
+    if (memset_s(lastDelta_, sizeof(lastDelta_), 0, sizeof(lastDelta_)) != EOK) {
+        GRAPHIC_LOGE("memset_s error");
+    }
+}
+
+void UIAbstractScroll::InitRotate()
+{
+    if (memset_s(lastRotate_, sizeof(lastRotate_), 0, sizeof(lastRotate_)) != EOK) {
+        GRAPHIC_LOGE("memset_s error");
+    }
+}
+
 void UIAbstractScroll::StopAnimator()
 {
     scrollAnimator_.Stop();
@@ -204,10 +226,7 @@ void UIAbstractScroll::StopAnimator()
     isDragging_ = false;
 }
 
-bool UIAbstractScroll::DragThrowAnimator(Point currentPos,
-                                         Point lastPos,
-                                         uint8_t dragDirection,
-                                         bool dragBack)
+bool UIAbstractScroll::DragThrowAnimator(Point currentPos, Point lastPos, uint8_t dragDirection, bool dragBack)
 {
     if (!throwDrag_ && (reboundSize_ == 0)) {
         return false;
@@ -249,20 +268,32 @@ void UIAbstractScroll::CalculateDragDistance(Point currentPos,
                                              int16_t& dragDistanceY)
 {
     if ((direction_ == VERTICAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-        dragDistanceY = (currentPos.y - lastPos.y) * DRAG_DISTANCE_COEFFICIENT;
-        if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
-            dragDistanceY += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
-        } else if (dragDistanceY < 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP)) {
-            dragDistanceY -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+        dragDistanceY = currentPos.y - lastPos.y;
+        if (isRotating_) {
+            dragDistanceY *= rotateAccCoefficient_;
+        } else {
+            dragDistanceY *= DRAG_DISTANCE_COEFFICIENT;
+            if (dragDistanceY > 0 || (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_TOP_TO_BOTTOM)) {
+                dragDistanceY += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            } else if (dragDistanceY < 0 ||
+                       (dragDistanceY == 0 && dragDirection == DragEvent::DIRECTION_BOTTOM_TO_TOP)) {
+                dragDistanceY -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            }
         }
     }
 
     if ((direction_ == HORIZONTAL) || (direction_ == HORIZONTAL_AND_VERTICAL)) {
-        dragDistanceX = (currentPos.x - lastPos.x) * DRAG_DISTANCE_COEFFICIENT;
-        if (dragDistanceX > 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
-            dragDistanceX += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
-        } else if (dragDistanceX < 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
-            dragDistanceX -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+        dragDistanceX = currentPos.x - lastPos.x;
+        if (isRotating_) {
+            dragDistanceX *= rotateAccCoefficient_;
+        } else {
+            dragDistanceX *= DRAG_DISTANCE_COEFFICIENT;
+            if (dragDistanceX > 0 || (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_LEFT_TO_RIGHT)) {
+                dragDistanceX += GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            } else if (dragDistanceX < 0 ||
+                       (dragDistanceX == 0 && dragDirection == DragEvent::DIRECTION_RIGHT_TO_LEFT)) {
+                dragDistanceX -= GetMaxDelta() * GetSwipeACCLevel() / DRAG_ACC_FACTOR;
+            }
         }
     }
 
@@ -317,43 +348,52 @@ void UIAbstractScroll::ListAnimatorCallback::Callback(UIView* view)
 }
 
 #if ENABLE_ROTATE_INPUT
+bool UIAbstractScroll::OnRotateStartEvent(const RotateEvent& event)
+{
+    isRotating_ = true;
+    if (scrollAnimator_.GetState() != Animator::STOP) {
+        UIAbstractScroll::StopAnimator();
+    }
+    return UIView::OnRotateStartEvent(event);
+}
+
 bool UIAbstractScroll::OnRotateEvent(const RotateEvent& event)
 {
-    lastRotateLen_ = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    int16_t rotateLen = static_cast<int16_t>(event.GetRotate() * rotateFactor_);
+    RefreshRotate(rotateLen);
     if (direction_ == HORIZONTAL) {
-        DragXInner(lastRotateLen_);
+        DragXInner(rotateLen);
     } else {
-        DragYInner(lastRotateLen_);
+        DragYInner(rotateLen);
     }
     return UIView::OnRotateEvent(event);
 }
 
 bool UIAbstractScroll::OnRotateEndEvent(const RotateEvent& event)
 {
-    if (memset_s(lastDelta_, MAX_DELTA_SIZE, 0, MAX_DELTA_SIZE) != EOK) {
-        return UIView::OnRotateEndEvent(event);
-    }
+    InitDelta();
 
     uint8_t dir;
+    int16_t lastRotateLen = GetMaxRotate();
     if (direction_ == HORIZONTAL) {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
+        dir = (lastRotateLen >= 0) ? DragEvent::DIRECTION_LEFT_TO_RIGHT : DragEvent::DIRECTION_RIGHT_TO_LEFT;
     } else {
-        dir = (lastRotateLen_ >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
+        dir = (lastRotateLen >= 0) ? DragEvent::DIRECTION_TOP_TO_BOTTOM : DragEvent::DIRECTION_BOTTOM_TO_TOP;
     }
-    bool triggerAnimator = (MATH_ABS(lastRotateLen_) >= (GetWidth() / threshold_)) ||
-        (MATH_ABS(lastRotateLen_) >= (GetHeight() / threshold_));
+    bool triggerAnimator = (MATH_ABS(lastRotateLen) >= rotateThrowthreshold_);
     if (throwDrag_ && triggerAnimator) {
         Point current;
         if (direction_ == HORIZONTAL) {
-            current = {lastRotateLen_, 0};
+            current = {lastRotateLen, 0};
         } else {
-            current = {0, lastRotateLen_};
+            current = {0, lastRotateLen};
         }
-        DragThrowAnimator(current, {0, 0}, dir);
+        DragThrowAnimator(current, {0, 0}, dir, dragBack_);
     } else {
-        DragThrowAnimator({0, 0}, {0, 0}, dir);
+        DragThrowAnimator({0, 0}, {0, 0}, dir, dragBack_);
     }
-    lastRotateLen_ = 0;
+    isRotating_ = false;
+    InitRotate();
     return UIView::OnRotateEndEvent(event);
 }
 #endif
@@ -400,8 +440,8 @@ void UIAbstractScroll::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalida
                 yScrollBar_->SetPosition(scrollRect.GetRight() - SCROLL_BAR_WIDTH + 1, scrollRect.GetTop(),
                                          SCROLL_BAR_WIDTH, scrollRect.GetHeight());
             } else {
-                yScrollBar_->SetPosition(scrollRect.GetLeft(), scrollRect.GetTop(),
-                                         SCROLL_BAR_WIDTH, scrollRect.GetHeight());
+                yScrollBar_->SetPosition(scrollRect.GetLeft(), scrollRect.GetTop(), SCROLL_BAR_WIDTH,
+                                         scrollRect.GetHeight());
             }
             yScrollBar_->OnDraw(gfxDstBuffer, invalidatedArea, opa);
         }
@@ -425,7 +465,7 @@ void UIAbstractScroll::OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalida
                 x = scrollRect.GetX() + scrollBarCenter_.x;
                 y = scrollRect.GetY() + scrollBarCenter_.y;
             } else {
-                x = scrollRect.GetX() + (GetWidth() / 2); // 2: half
+                x = scrollRect.GetX() + (GetWidth() / 2);  // 2: half
                 y = scrollRect.GetY() + (GetHeight() / 2); // 2: half
             }
             yScrollBar_->SetPosition(x, y, SCROLL_BAR_WIDTH, GetWidth() / 2); // 2: half

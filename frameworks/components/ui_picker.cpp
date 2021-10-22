@@ -20,120 +20,78 @@
 #include "themes/theme_manager.h"
 
 namespace OHOS {
-class PickerListScrollListener : public ListScrollListener {
-public:
-    PickerListScrollListener(UIPicker* picker, UIList* list)
-        : listView_(list),
-          pickerView_(picker),
-          selectView_(nullptr),
-          lastSelectView_(nullptr),
-          selectIndex_(0),
-          isInitted_(false)
-    {
+PickerListScrollListener::PickerListScrollListener(UIPicker* picker, UIList* list)
+    : listView_(list),
+      pickerView_(picker),
+      selectView_(nullptr),
+      lastSelectView_(nullptr),
+      selectIndex_(0),
+      isInitted_(false) {}
+
+void PickerListScrollListener::OnItemSelected(int16_t index, UIView* view)
+{
+    if (!isInitted_) {
+        return;
     }
 
-    virtual ~PickerListScrollListener() {}
-
-    void OnItemSelected(int16_t index, UIView* view) override
-    {
-        if (!isInitted_) {
-            return;
+    if ((lastSelectView_ != nullptr) && (listView_ != nullptr) && (pickerView_ != nullptr) && (view != nullptr)) {
+        lastSelectView_->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetBackgroundTextColor().full);
+        if (pickerView_->backgroundFontName_ == nullptr) {
+            static_cast<UILabel*>(lastSelectView_)->SetFontId(pickerView_->backgroundFontId_);
+        } else {
+            static_cast<UILabel*>(lastSelectView_)
+                ->SetFont(pickerView_->backgroundFontName_, pickerView_->backgroundFontSize_);
         }
-
-        if ((lastSelectView_ != nullptr) && (listView_ != nullptr) && (pickerView_ != nullptr) && (view != nullptr)) {
-            lastSelectView_->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetBackgroundTextColor().full);
-            if (pickerView_->backgroundFontName_ == nullptr) {
-                static_cast<UILabel*>(lastSelectView_)->SetFontId(pickerView_->backgroundFontId_);
-            } else {
-                static_cast<UILabel*>(lastSelectView_)
-                    ->SetFont(pickerView_->backgroundFontName_, pickerView_->backgroundFontSize_);
-            }
-            view->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetHighlightTextColor().full);
-            if (pickerView_->highlightFontName_ == nullptr) {
-                static_cast<UILabel*>(view)->SetFontId(pickerView_->highlightFontId_);
-            } else {
-                static_cast<UILabel*>(view)->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
-            }
-            lastSelectView_ = view;
-            selectIndex_ = index;
-            listView_->Invalidate();
-        }
-    }
-
-    void OnScrollEnd(int16_t index, UIView* view) override
-    {
-        if ((view == nullptr) || (listView_ == nullptr) || (pickerView_ == nullptr)) {
-            return;
-        }
-
-        if (lastSelectView_ != nullptr) {
-            lastSelectView_->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetBackgroundTextColor().full);
-            if (pickerView_->backgroundFontName_ == nullptr) {
-                static_cast<UILabel*>(lastSelectView_)->SetFontId(pickerView_->backgroundFontId_);
-            } else {
-                static_cast<UILabel*>(lastSelectView_)
-                    ->SetFont(pickerView_->backgroundFontName_, pickerView_->backgroundFontSize_);
-            }
-            lastSelectView_ = view;
-        }
-
         view->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetHighlightTextColor().full);
         if (pickerView_->highlightFontName_ == nullptr) {
             static_cast<UILabel*>(view)->SetFontId(pickerView_->highlightFontId_);
         } else {
             static_cast<UILabel*>(view)->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
         }
-
-        listView_->Invalidate();
-        selectView_ = view;
+        lastSelectView_ = view;
         selectIndex_ = index;
+        listView_->Invalidate();
+    }
+}
 
-        if (pickerView_->pickerListener_) {
-            pickerView_->pickerListener_->OnPickerStoped(*pickerView_);
-        }
+void PickerListScrollListener::OnScrollEnd(int16_t index, UIView* view)
+{
+    if ((view == nullptr) || (listView_ == nullptr) || (pickerView_ == nullptr)) {
+        return;
     }
 
-    void SetSelectView(UIView* view)
-    {
-        selectView_ = view;
+    if (lastSelectView_ != nullptr) {
+        lastSelectView_->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetBackgroundTextColor().full);
+        if (pickerView_->backgroundFontName_ == nullptr) {
+            static_cast<UILabel*>(lastSelectView_)->SetFontId(pickerView_->backgroundFontId_);
+        } else {
+            static_cast<UILabel*>(lastSelectView_)
+                ->SetFont(pickerView_->backgroundFontName_, pickerView_->backgroundFontSize_);
+        }
         lastSelectView_ = view;
     }
 
-    const UIView* GetSelectView() const
-    {
-        return selectView_;
+    view->SetStyle(STYLE_TEXT_COLOR, pickerView_->GetHighlightTextColor().full);
+    if (pickerView_->highlightFontName_ == nullptr) {
+        static_cast<UILabel*>(view)->SetFontId(pickerView_->highlightFontId_);
+    } else {
+        static_cast<UILabel*>(view)->SetFont(pickerView_->highlightFontName_, pickerView_->highlightFontSize_);
     }
 
-    void SetSelectIndex(uint16_t index)
-    {
-        selectIndex_ = index;
-    }
+    listView_->Invalidate();
+    selectView_ = view;
+    selectIndex_ = index;
 
-    uint16_t GetSelectIndex() const
-    {
-        return selectIndex_;
+    if (pickerView_->pickerListener_) {
+        pickerView_->pickerListener_->OnPickerStoped(*pickerView_);
     }
-
-    void SetInitStatus(bool status)
-    {
-        isInitted_ = status;
-    }
-
-private:
-    UIList* listView_;
-    UIPicker* pickerView_;
-    UIView* selectView_;
-    UIView* lastSelectView_;
-    uint16_t selectIndex_;
-    bool isInitted_;
-};
+}
 
 UIPicker::UIPicker()
     : isWidthSet_(false),
       isHeightSet_(false),
       textAdapter_(nullptr),
       maxCount_(0),
-      setSelectedIndex_(0),
       isScrollBlankSizeSet_(false),
       scrollBlankSize_(0),
       backgroundFontSize_(0),
@@ -171,18 +129,16 @@ UIPicker::UIPicker()
     list_.SetStyle(StyleDefault::GetBackgroundTransparentStyle());
 #if ENABLE_ROTATE_INPUT
     list_.rotateFactor_ = DEFAULT_PICKER_ROTATE_FACTOR;
-#endif
-#if ENABLE_VIBRATOR
-    list_.SetMotorType(VibratorType::VIBRATOR_TYPE_TWO);
+    list_.rotateThrowthreshold_ = PICKERVIEW_ROTATE_THROW_THRESHOLD;
+    list_.rotateAccCoefficient_ = PICKERVIEW_ROTATE_DISTANCE_COEFF;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
 #endif
     list_.SetLoopState(false);
     list_.EnableAutoAlign(true);
-    PickerListScrollListener* listener = new PickerListScrollListener(this, &list_);
-    list_.SetScrollStateListener(listener);
-    listListener_ = static_cast<void*>(listener);
+    listListener_ = new PickerListScrollListener(this, &list_);
+    list_.SetScrollStateListener(listListener_);
     Add(&list_);
 }
 
@@ -191,7 +147,7 @@ UIPicker::~UIPicker()
     ClearValues();
     Remove(&list_);
     if (listListener_ != nullptr) {
-        delete static_cast<PickerListScrollListener*>(listListener_);
+        delete listListener_;
         listListener_ = nullptr;
     }
 
@@ -244,42 +200,40 @@ void UIPicker::Refresh()
 
 bool UIPicker::RefreshValues(int16_t start, int16_t end)
 {
-    if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_ || ((start == 0) && (end == 0))) {
+    if ((start == 0) && (end == 0)) {
         return false;
     }
-    uint16_t userSelectInndex = static_cast<PickerListScrollListener*>(listListener_)->GetSelectIndex();
+    maxCount_ = end - start + 1;
+    if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
+        return false;
+    }
+    uint16_t userSelectIndex = listListener_->GetSelectIndex();
     ClearList();
     InitTextAdapter();
     textAdapter_->SetData(start, end);
-    maxCount_ = end - start + 1;
     RefreshList();
-    if (userSelectInndex) {
-        RefreshSelected(userSelectInndex);
-    } else if (setSelectedIndex_) {
-        RefreshSelected(setSelectedIndex_);
-    }
+    RefreshSelected(userSelectIndex);
     return true;
 }
 
 bool UIPicker::RefreshValues(const char* value[], uint16_t count)
 {
-    if (value == nullptr || !isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
+    if (value == nullptr) {
         return false;
     }
-    uint16_t userSelectInndex = static_cast<PickerListScrollListener*>(listListener_)->GetSelectIndex();
+    maxCount_ = count;
+    if (!isWidthSet_ || !isHeightSet_ || !itemsHeight_) {
+        return false;
+    }
+    uint16_t userSelectIndex = listListener_->GetSelectIndex();
     ClearList();
     for (uint16_t i = 0; i < count; i++) {
         dataList_.PushBack(value[i]);
     }
     InitTextAdapter();
     textAdapter_->SetData(&dataList_);
-    maxCount_ = count;
     RefreshList();
-    if (userSelectInndex != 0) {
-        RefreshSelected(userSelectInndex);
-    } else if (setSelectedIndex_ != 0) {
-        RefreshSelected(setSelectedIndex_);
-    }
+    RefreshSelected(userSelectIndex);
 
     return true;
 }
@@ -320,43 +274,43 @@ void UIPicker::ClearValues()
 {
     rangeValue_ = nullptr;
     rangeValueCount_ = 0;
-    setSelectedIndex_ = 0;
+    maxCount_ = 0;
     ClearList();
 }
 
 void UIPicker::ClearList()
 {
-    maxCount_ = 0;
     itemsWidth_ = 0;
     if (listListener_) {
-        PickerListScrollListener* listListener = static_cast<PickerListScrollListener*>(listListener_);
-        listListener->SetSelectView(nullptr);
-        listListener->SetSelectIndex(0);
-        listListener->SetInitStatus(false);
+        listListener_->SetSelectView(nullptr);
+        listListener_->SetSelectIndex(0);
+        listListener_->SetInitStatus(false);
     }
     dataList_.Clear();
 }
 
 bool UIPicker::SetSelected(uint16_t index)
 {
-    setSelectedIndex_ = index;
     return RefreshSelected(index);
 }
 
 bool UIPicker::RefreshSelected(uint16_t index)
 {
-    if (itemsHeight_ && (maxCount_ > index) && (list_.GetChildrenHead() != nullptr) && isWidthSet_ && isHeightSet_) {
-        PickerListScrollListener* listListener = static_cast<PickerListScrollListener*>(listListener_);
-        listListener->SetInitStatus(false);
+    if (maxCount_ <= index) {
+        GRAPHIC_LOGW("Failed to refresh selected since index is beyond range!");
+        return false;
+    }
+    if (itemsHeight_ && (list_.GetChildrenHead() != nullptr) && isWidthSet_ && isHeightSet_) {
+        listListener_->SetInitStatus(false);
         // 2: half
         int16_t yOffset = (list_.GetHeight() - itemsHeight_) / 2 -
                           itemsHeight_ * (index - list_.GetChildrenHead()->GetViewIndex());
         list_.SetScrollStateListener(nullptr);
         list_.ScrollBy(yOffset - list_.GetChildrenHead()->GetY());
-        list_.SetScrollStateListener(listListener);
-        listListener->SetScrollState(ListScrollListener::SCROLL_STATE_STOP);
+        list_.SetScrollStateListener(listListener_);
+        listListener_->SetScrollState(ListScrollListener::SCROLL_STATE_STOP);
         UIView* childView = static_cast<UIView*>(list_.GetChildrenHead());
-        uint16_t lastSelectIndex = listListener->GetSelectIndex();
+        uint16_t lastSelectIndex = listListener_->GetSelectIndex();
 
         int16_t viewIndex;
         while (childView != nullptr) {
@@ -376,22 +330,22 @@ bool UIPicker::RefreshSelected(uint16_t index)
                 } else {
                     static_cast<UILabel*>(childView)->SetFont(highlightFontName_, highlightFontSize_);
                 }
-                listListener->SetSelectView(childView);
-                listListener->SetSelectIndex(index);
-                listListener->SetInitStatus(true);
+                listListener_->SetSelectView(childView);
+                listListener_->SetInitStatus(true);
             }
             childView = childView->GetNextSibling();
         }
+        listListener_->SetSelectIndex(index);
         list_.Invalidate();
         return true;
     }
+    listListener_->SetSelectIndex(index);
     return false;
 }
 
 uint16_t UIPicker::GetSelected() const
 {
-    PickerListScrollListener* listListener = static_cast<PickerListScrollListener*>(listListener_);
-    return listListener->GetSelectIndex();
+    return listListener_->GetSelectIndex();
 }
 
 void UIPicker::SetFontId(uint8_t backgroundFontId, uint8_t highlightFontId)

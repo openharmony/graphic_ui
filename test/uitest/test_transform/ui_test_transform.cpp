@@ -20,6 +20,7 @@
 namespace OHOS {
 void UITestTransform::SetUp()
 {
+    constexpr int16_t IMAGE_PADDING = 10;
     if (container_ == nullptr) {
         container_ = new UIScrollView();
         container_->Resize(Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
@@ -44,7 +45,15 @@ void UITestTransform::SetUp()
 
         imageView_ = new UIImageView();
         imageView_->SetPosition(150, 50, 200, 200); // 150:poistion x 50:position y 200:width 200:height
-        imageView_->SetSrc(BLUE_IMAGE_PATH);
+        imageView_->SetSrc(IMAGE_RESIZEMODE_PATH);
+        imageView_->SetStyle(STYLE_BORDER_COLOR, Color::Blue().full);
+        imageView_->SetStyle(STYLE_BORDER_WIDTH, 1);
+        imageView_->SetStyle(STYLE_PADDING_LEFT, IMAGE_PADDING);
+        imageView_->SetStyle(STYLE_PADDING_RIGHT, IMAGE_PADDING);
+        imageView_->SetStyle(STYLE_PADDING_TOP, IMAGE_PADDING);
+        imageView_->SetStyle(STYLE_PADDING_BOTTOM, IMAGE_PADDING);
+        imageView_->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
+
         uiViewGroupFrame_->Add(imageView_);
         imageView_->LayoutCenterOfParent();
     }
@@ -58,19 +67,54 @@ void UITestTransform::SetUp()
         layout_->SetRows(3); // 3:two rows
         layout_->SetCols(1); // 1:three cols
     }
-    AddLable(layout_->GetOrigRect().GetRight() + 34, 50, "Auto"); // 34 : increase x-coordinate; 50: position y
-    AddLable(layout_->GetOrigRect().GetRight() + 34, 100, "Fill"); // 34 : increase x-coordinate; 100: position y
-    AddLable(layout_->GetOrigRect().GetRight() + 34, 150, "Contain"); // 34 : increase x-coordinate; 150: position y
-    AddLable(layout_->GetOrigRect().GetRight() + 34, 200, "Tiling"); // 34 : increase x-coordinate; 200: position y
-    AddRadioButton(GetRect(560, 40, 50, 50), // 560:position x 40:position y 50:width and height
+    AddRadioGroup();
+}
+
+void UITestTransform::AddRadioGroup()
+{
+    if (layout_ == nullptr) {
+        return;
+    }
+    constexpr int16_t STEP = 50;
+    constexpr int16_t RADIO_OFFSET = -10;
+    constexpr int16_t RADIO_X = 560;
+    constexpr int16_t RADIO_SIZE = 50; // 50: the width and height of radio button
+    const int16_t lableX = layout_->GetOrigRect().GetRight() + 34; // 34 : increase x-coordinate;
+    int16_t y = 50;
+    AddLable(lableX, y, "Auto");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
         "RB", new StateChangeListener(ImageScaleMode::AUTO, this))->SetState(
         UICheckBox::UICheckBoxState::SELECTED);
-    AddRadioButton(GetRect(560, 90, 50, 50), // 560:position x 90:position y 50:width and height
-        "RB", new StateChangeListener(ImageScaleMode::FILL, this));
-    AddRadioButton(GetRect(560, 140, 50, 50), // 560:position x 140:position y 50:width and height
-        "RB", new StateChangeListener(ImageScaleMode::CONTAIN, this));
-    AddRadioButton(GetRect(560, 190, 50, 50), // 560:position x 190:position y 50:width and height
+
+    y += STEP;
+    AddLable(lableX, y, "Tiling");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
         "RB", new StateChangeListener(ImageScaleMode::TILING, this));
+
+    y += STEP;
+    AddLable(lableX, y, "Cover");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
+        "RB", new StateChangeListener(ImageScaleMode::COVER, this));
+
+    y += STEP;
+    AddLable(lableX, y, "Contain");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
+        "RB", new StateChangeListener(ImageScaleMode::CONTAIN, this));
+
+    y += STEP;
+    AddLable(lableX, y, "Fill");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
+        "RB", new StateChangeListener(ImageScaleMode::FILL, this));
+
+    y += STEP;
+    AddLable(lableX, y, "Center");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
+        "RB", new StateChangeListener(ImageScaleMode::CENTER, this));
+
+    y += STEP;
+    AddLable(lableX, y, "Scale Down");
+    AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
+        "RB", new StateChangeListener(ImageScaleMode::SCALE_DOWN, this));
 }
 
 void UITestTransform::TearDown()
@@ -152,6 +196,14 @@ void UITestTransform::SetScaleMode(ImageScaleMode mode)
             imageView_->SetAutoEnable(true);
             imageView_->SetResizeMode(UIImageView::ImageResizeMode::NONE);
             break;
+        case ImageScaleMode::TILING:
+            imageView_->SetAutoEnable(false);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::NONE);
+            break;
+        case ImageScaleMode::COVER:
+            imageView_->SetAutoEnable(false);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::COVER);
+            break;
         case ImageScaleMode::CONTAIN:
             imageView_->SetAutoEnable(false);
             imageView_->SetResizeMode(UIImageView::ImageResizeMode::CONTAIN);
@@ -160,9 +212,13 @@ void UITestTransform::SetScaleMode(ImageScaleMode mode)
             imageView_->SetAutoEnable(false);
             imageView_->SetResizeMode(UIImageView::ImageResizeMode::FILL);
             break;
-        case ImageScaleMode::TILING:
+        case ImageScaleMode::CENTER:
             imageView_->SetAutoEnable(false);
-            imageView_->SetResizeMode(UIImageView::ImageResizeMode::NONE);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::CENTER);
+            break;
+        case ImageScaleMode::SCALE_DOWN:
+            imageView_->SetAutoEnable(false);
+            imageView_->SetResizeMode(UIImageView::ImageResizeMode::SCALE_DOWN);
             break;
         default:
             break;
@@ -244,7 +300,7 @@ UITestRadioButton::~UITestRadioButton()
 
 void UITestRadioButton::SetListener(UICheckBox::OnChangeListener* listener)
 {
-    UIRadioButton::SetOnChangeListener(listener);
+    SetOnChangeListener(listener);
     if (listener_ != nullptr) {
         delete listener_;
     }

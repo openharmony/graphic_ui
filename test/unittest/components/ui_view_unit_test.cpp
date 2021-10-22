@@ -1041,8 +1041,8 @@ HWTEST_F(UIViewTest, Graphic_UIView_Test_Scale_002, TestSize.Level1)
     Polygon polygon = view_->GetTransformMap().GetPolygon();
     EXPECT_EQ(0, polygon[0].x_);
     EXPECT_EQ(0, polygon[0].y_);
-    EXPECT_EQ((DEFAULE_WIDTH - 1) >> 1, polygon[2].x_); // 2: polygon num
-    EXPECT_EQ((DEFAULE_WIDTH - 1) >> 1, polygon[2].x_); // 2: polygon num
+    EXPECT_EQ(DEFAULE_WIDTH >> 1, polygon[2].x_); // 2: polygon num
+    EXPECT_EQ(DEFAULE_HEIGHT >> 1, polygon[2].y_); // 2: polygon num
 }
 
 /**

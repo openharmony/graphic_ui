@@ -157,11 +157,9 @@ public:
     void SetAutoEnable(bool enable)
     {
         if (autoEnable_ != enable) {
-            if (enable) {
-                SetResizeMode(ImageResizeMode::NONE);
-            }
             needRefresh_ = autoEnable_ ? needRefresh_ : true;
             autoEnable_ = enable;
+            UpdateDrawTransMap(true);
         }
     }
 
@@ -264,10 +262,12 @@ public:
 
     enum ImageResizeMode : uint8_t {
         NONE,
-        FILL,
+        COVER,
         CONTAIN,
+        FILL,
+        CENTER,
+        SCALE_DOWN,
     };
-
     void SetResizeMode(ImageResizeMode mode);
     void SetWidth(int16_t width) override;
     void SetHeight(int16_t height) override;
@@ -305,7 +305,7 @@ protected:
     Image image_;
     ImageResizeMode imageResizeMode_ = ImageResizeMode::NONE;
     TransformMap* drawTransMap_ = nullptr;
-    Matrix3<float>* contentMatrix_ = nullptr;
+    Matrix4<float>* contentMatrix_ = nullptr;
     bool transMapInvalid_ = true;
 private:
     void ReMeasure() override;
@@ -318,6 +318,8 @@ private:
 #endif
     void UpdateContentMatrix();
     void UpdateDrawTransMap(bool updateContentMatrix = false);
+    void AdjustScaleAndTranslate(Vector3<float>& scale, Vector3<int16_t>& translate,
+        int16_t widgetWidth, int16_t widgetHeight) const;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_IMAGE_VIEW_H

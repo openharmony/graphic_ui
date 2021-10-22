@@ -224,6 +224,30 @@ public:
 
 #if ENABLE_ROTATE_INPUT
     /**
+     * @brief Sets coefficient for rotation dragthrow animation. The view will roll farther with larger coeffcient.
+     *
+     * @param value Indicates the coefficient to set. The default value is <b>0</b>.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetRotateACCLevel(uint8_t value)
+    {
+        rotateAccCoefficient_ = value;
+    }
+
+    /**
+     * @brief Obtains the coefficient for rotation drag throw animation.
+     *
+     * @return Returns the coefficient for rotation drag throw animation.
+     * @since 1.0
+     * @version 1.0
+     */
+    uint8_t GetRotateACCLevel() const
+    {
+        return rotateAccCoefficient_;
+    }
+
+    /**
      * @brief Obtains the rotation factor.
      *
      * @return Returns the rotation factor.
@@ -252,18 +276,21 @@ public:
     }
 
     /**
-     * @brief 设置触发惯性滑动的组件大小比例阈值.
+     * @brief Sets threshold for rotation drag throw animation. The view will roll easier with larger threshold.
      *
-     * @param threshold 设置触发惯性滑动的比例阈值.
+     * @param threshold Indicates the rotation factor to set.
+     *
      * @since 6
      */
-    void SetRotateThreshold(uint8_t threshold)
+    void SetRotateThrowThreshold(uint8_t threshold)
     {
         if (threshold == 0) {
             return;
         }
-        threshold_ = threshold;
+        rotateThrowthreshold_ = threshold;
     }
+
+    bool OnRotateStartEvent(const RotateEvent& event) override;
 
     bool OnRotateEvent(const RotateEvent& event) override;
 
@@ -387,10 +414,7 @@ protected:
         int16_t previousValueY_;
     };
 
-    bool DragThrowAnimator(Point currentPos,
-                           Point lastPos,
-                           uint8_t dragDirection,
-                           bool dragBack = true);
+    bool DragThrowAnimator(Point currentPos, Point lastPos, uint8_t dragDirection, bool dragBack = true);
 
     virtual void StopAnimator();
 
@@ -404,17 +428,29 @@ protected:
         deltaIndex_++;
     }
 
-    void CalculateDragDistance(Point currentPos,
-                               Point lastPos,
-                               uint8_t dragDirection,
-                               int16_t& dragDistanceX,
-                               int16_t& dragDistanceY);
+    void InitDelta();
+
+    void RefreshRotate(int16_t distance)
+    {
+        lastRotate_[rotateIndex_ % MAX_DELTA_SIZE] = distance;
+        rotateIndex_++;
+    }
+
+    void InitRotate();
+
+    virtual void CalculateDragDistance(Point currentPos,
+                                       Point lastPos,
+                                       uint8_t dragDirection,
+                                       int16_t& dragDistanceX,
+                                       int16_t& dragDistanceY);
 
     void StartAnimator(int16_t dragDistanceX, int16_t dragDistanceY);
 
-    virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) {};
+    virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY){};
 
     int16_t GetMaxDelta() const;
+
+    int16_t GetMaxRotate() const;
 
     void RefreshAnimator();
 
@@ -424,19 +460,22 @@ protected:
     uint16_t reboundSize_ = 0;
     uint16_t maxScrollDistance_ = 0;
     int16_t lastDelta_[MAX_DELTA_SIZE] = {0};
+    int16_t lastRotate_[MAX_DELTA_SIZE] = {0};
     uint8_t dragAccCoefficient_ = DRAG_ACC_FACTOR;
     uint8_t swipeAccCoefficient_ = 0;
     uint8_t direction_ : 2;
     uint8_t deltaIndex_ : 2;
-    uint8_t reserve_ : 4;
+    uint8_t rotateIndex_ : 2;
+    uint8_t reserve_ : 2;
     bool throwDrag_ = false;
     EasingFunc easingFunc_;
     ListAnimatorCallback animatorCallback_;
     Animator scrollAnimator_;
 #if ENABLE_ROTATE_INPUT
+    uint8_t rotateAccCoefficient_ = 0;
     float rotateFactor_;
-    int16_t threshold_;
-    int16_t lastRotateLen_;
+    uint8_t rotateThrowthreshold_;
+    bool isRotating_;
 #endif
     bool yScrollBarVisible_ = false;
     UIAbstractScrollBar* yScrollBar_ = nullptr;
@@ -445,6 +484,7 @@ protected:
     uint8_t scrollBarSide_;
     Point scrollBarCenter_;
     bool scrollBarCenterSetFlag_;
+    bool dragBack_ = true;
 #if DEFAULT_ANIMATION
     friend class BarEaseInOutAnimator;
     BarEaseInOutAnimator* barEaseInOutAnimator_ = nullptr;

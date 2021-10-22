@@ -41,7 +41,7 @@ public:
 
     const GlyphNode* GetGlyphNode(uint32_t unicode);
 
-    int8_t GetBitmap(uint32_t unicode, uint8_t* bitmap);
+    int8_t GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId = 0);
 
     void SetRamBuffer(uintptr_t ramAddr);
 
@@ -72,9 +72,9 @@ private:
     };
 
     int8_t GlyphNodeCacheInit();
-    GlyphNode* GetNodeFromCache(uint32_t unicode);
-    GlyphNode* GetNodeCacheSpace(uint32_t unicode);
-    GlyphNode* GetNodeFromFile(uint32_t unicode);
+    GlyphNode* GetNodeFromCache(uint32_t unicode, uint8_t fontId);
+    GlyphNode* GetNodeCacheSpace(uint32_t unicode, uint8_t fontId);
+    GlyphNode* GetNodeFromFile(uint32_t unicode, uint8_t fontId);
     uint32_t AlignUp(uint32_t addr, uint32_t align)
     {
         return (((addr + (1 << align)) >> align) << align);

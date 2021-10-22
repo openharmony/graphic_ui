@@ -246,31 +246,42 @@ void UIView::UpdateRectInfo(uint8_t key, const Rect& rect)
 
 void UIView::Rotate(int16_t angle, const Vector2<float>& pivot)
 {
+    Vector3<float> pivotStart3D = Vector3<float>(pivot.x_, pivot.y_, 0);
+    Vector3<float> pivotEnd3D = Vector3<float>(pivot.x_, pivot.y_, 1.0f);
+    Rotate(angle, pivotStart3D, pivotEnd3D);
+}
+
+void UIView::Rotate(int16_t angle, const Vector3<float>& pivotStart, const Vector3<float>& pivotEnd)
+{
     if (transMap_ == nullptr) {
         ReMeasure();
         transMap_ = new TransformMap();
-        if (transMap_ == nullptr) {
-            GRAPHIC_LOGE("new TransformMap fail");
-            return;
-        }
     }
+    bool firstTrans = transMap_->IsInvalid();
     Rect joinRect = transMap_->GetBoxRect();
     transMap_->SetTransMapRect(GetOrigRect());
-    transMap_->Rotate(angle, pivot);
-    joinRect.Join(joinRect, transMap_->GetBoxRect());
+    transMap_->Rotate(angle, pivotStart, pivotEnd);
+    if (firstTrans) {
+        joinRect = transMap_->GetBoxRect();
+    } else {
+        joinRect.Join(joinRect, transMap_->GetBoxRect());
+    }
     joinRect.Join(joinRect, GetOrigRect());
     InvalidateRect(joinRect);
 }
 
 void UIView::Scale(const Vector2<float>& scale, const Vector2<float>& pivot)
 {
+    Vector3<float> scale3D = Vector3<float>(scale.x_, scale.y_, 1.0f);
+    Vector3<float> pivot3D = Vector3<float>(pivot.x_, pivot.y_, 0);
+    Scale(scale3D, pivot3D);
+}
+
+void UIView::Scale(const Vector3<float>& scale, const Vector3<float>& pivot)
+{
     if (transMap_ == nullptr) {
         ReMeasure();
         transMap_ = new TransformMap();
-        if (transMap_ == nullptr) {
-            GRAPHIC_LOGE("new TransformMap fail");
-            return;
-        }
     }
     bool firstTrans = transMap_->IsInvalid();
     Rect joinRect = transMap_->GetBoxRect();
@@ -285,23 +296,47 @@ void UIView::Scale(const Vector2<float>& scale, const Vector2<float>& pivot)
     InvalidateRect(joinRect);
 }
 
-void UIView::Translate(const Vector2<int16_t>& trans)
+void UIView::Shear(const Vector2<float>& shearX, const Vector2<float>& shearY, const Vector2<float>& shearZ)
 {
     if (transMap_ == nullptr) {
         ReMeasure();
-        transMap_ = new TransformMap(GetOrigRect());
-        if (transMap_ == nullptr) {
-            GRAPHIC_LOGE("new TransformMap fail");
-            return;
-        }
+        transMap_ = new TransformMap();
     }
+    bool firstTrans = transMap_->IsInvalid();
+    Rect joinRect = transMap_->GetBoxRect();
+    transMap_->SetTransMapRect(GetOrigRect());
+    transMap_->Shear(shearX, shearY, shearZ);
+    if (firstTrans) {
+        joinRect = transMap_->GetBoxRect();
+    } else {
+        joinRect.Join(joinRect, transMap_->GetBoxRect());
+    }
+    joinRect.Join(joinRect, GetOrigRect());
+    InvalidateRect(joinRect);
+}
+
+void UIView::Translate(const Vector2<int16_t>& trans)
+{
+    Vector3<int16_t> trans3D = Vector3<int16_t>(trans.x_, trans.y_, 0);
+    Translate(trans3D);
+}
+
+void UIView::Translate(const Vector3<int16_t>& trans)
+{
+    if (transMap_ == nullptr) {
+        ReMeasure();
+        transMap_ = new TransformMap();
+    }
+    bool firstTrans = transMap_->IsInvalid();
+    Rect joinRect = transMap_->GetBoxRect();
+    transMap_->SetTransMapRect(GetOrigRect());
     transMap_->Translate(trans);
-
-    Rect prevRect = GetRect();
-    Rect mapRect = transMap_->GetBoxRect();
-
-    Rect joinRect;
-    joinRect.Join(prevRect, mapRect);
+    if (firstTrans) {
+        joinRect = transMap_->GetBoxRect();
+    } else {
+        joinRect.Join(joinRect, transMap_->GetBoxRect());
+    }
+    joinRect.Join(joinRect, GetOrigRect());
     InvalidateRect(joinRect);
 }
 
@@ -311,6 +346,34 @@ bool UIView::IsTransInvalid()
         return true;
     }
     return transMap_->IsInvalid();
+}
+
+void UIView::SetCameraDistance(int16_t distance)
+{
+    if (transMap_ == nullptr) {
+        ReMeasure();
+        transMap_ = new TransformMap();
+    }
+    Rect joinRect = transMap_->GetBoxRect();
+    transMap_->SetTransMapRect(GetOrigRect());
+    transMap_->SetCameraDistance(distance);
+    joinRect.Join(joinRect, transMap_->GetBoxRect());
+    joinRect.Join(joinRect, GetOrigRect());
+    InvalidateRect(joinRect);
+}
+
+void UIView::SetCameraPosition(const Vector2<float>& position)
+{
+    if (transMap_ == nullptr) {
+        ReMeasure();
+        transMap_ = new TransformMap();
+    }
+    Rect joinRect = transMap_->GetBoxRect();
+    transMap_->SetTransMapRect(GetOrigRect());
+    transMap_->SetCameraPosition(position);
+    joinRect.Join(joinRect, transMap_->GetBoxRect());
+    joinRect.Join(joinRect, GetOrigRect());
+    InvalidateRect(joinRect);
 }
 
 void UIView::ResetTransParameter()
@@ -614,19 +677,16 @@ void UIView::SetTransformMap(const TransformMap& transMap)
         return;
     }
 
-    Rect prevRect = GetRect();
-    Rect mapRect = transMap.GetBoxRect();
-
-    Rect joinRect;
-    joinRect.Join(prevRect, mapRect);
-
-    InvalidateRect(joinRect);
-
     if (transMap_ == nullptr) {
         transMap_ = new TransformMap();
     }
-
+    Rect preRect = GetRect();
     *transMap_ = transMap;
+    transMap_->SetTransMapRect(GetOrigRect());
+
+    Rect joinRect;
+    joinRect.Join(preRect, transMap_->GetBoxRect());
+    InvalidateRect(joinRect);
 }
 
 void UIView::SetWidthPercent(float widthPercent)
@@ -731,6 +791,7 @@ void UIView::LayoutCenterOfParent(int16_t xOffset, int16_t yOffset)
     int16_t bottomMargin = style_->marginBottom_;
     // 2: half
     int16_t posX = parent_->GetWidth() / 2 - (rect_.GetWidth() - leftMargin + rightMargin) / 2 + xOffset;
+    // 2: half
     int16_t posY = parent_->GetHeight() / 2 - (rect_.GetHeight() - topMargin + bottomMargin) / 2 + yOffset;
     SetPosition(posX, posY);
 }
@@ -921,16 +982,8 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     nextSibling_ = nullptr;
     parent_ = nullptr;
 
-    BufferInfo* bufferInfo = BaseGfxEngine::GetInstance()->GetFBBufferInfo();
-    if (bufferInfo == nullptr) {
-        return false;
-    }
-    int16_t screenWidth = bufferInfo->rect.GetWidth();
-    int16_t screenHeight = bufferInfo->rect.GetHeight();
-    Rect screenRect(0, 0, screenWidth, screenHeight);
     rect_.SetPosition(0, 0);
     Rect mask = GetRect();
-    mask.Intersect(mask, screenRect);
     uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
     uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
     bitmap.header.colorMode = ARGB8888;
@@ -939,16 +992,24 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     bitmap.header.height = bufferHeight;
     bitmap.header.reserved = 0;
 
-    uint8_t* viewBitmapBuffer = reinterpret_cast<uint8_t*>(ImageCacheMalloc(bitmap));
+    void* viewBitmapBuffer = ImageCacheMalloc(bitmap);
     if (viewBitmapBuffer == nullptr) {
+        GRAPHIC_LOGE("GetBitmap buffer alloc failed.");
         nextSibling_ = tempSibling;
         parent_ = tempParent;
         rect_.SetPosition(tempX, tempY);
         return false;
     }
+    bitmap.data = reinterpret_cast<uint8_t*>(viewBitmapBuffer);
+    if (memset_s(viewBitmapBuffer, bitmap.dataSize, 0, bitmap.dataSize) != EOK) {
+        GRAPHIC_LOGE("GetBitmap buffer memset failed.");
+        ImageCacheFree(bitmap);
+        bitmap.data = nullptr;
+        return false;
+    }
 
     BufferInfo newBufferInfo;
-    newBufferInfo.virAddr = static_cast<void*>(viewBitmapBuffer);
+    newBufferInfo.virAddr = viewBitmapBuffer;
     newBufferInfo.phyAddr = newBufferInfo.virAddr;
     newBufferInfo.rect = mask;
     newBufferInfo.width = bufferWidth;
@@ -958,9 +1019,8 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
 
     RootView::GetInstance()->SaveDrawContext();
     RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
-    RootView::GetInstance()->Measure();
+    RootView::GetInstance()->MeasureView(this);
     RootView::GetInstance()->DrawTop(this, mask);
-    bitmap.data = viewBitmapBuffer;
     RootView::GetInstance()->RestoreDrawContext();
     nextSibling_ = tempSibling;
     parent_ = tempParent;
