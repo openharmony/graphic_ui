@@ -43,12 +43,13 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
     }
 
     if (!cachedToRotate && !rotateStart_) {
+        GRAPHIC_LOGW("RotateInputDevice failed to dispatch event without rotate cached and started!\n");
         return;
     }
 
     UIView* view = FocusManager::GetInstance()->GetFocusedView();
     if (view == nullptr) {
-        GRAPHIC_LOGE("Failed to dispatch rotate event without focused view!\n");
+        GRAPHIC_LOGE("RotateInputDevice Failed to dispatch event without focused view!\n");
         return;
     }
 
@@ -60,13 +61,14 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
         par = par->GetParent();
     }
     if (par->GetViewType() != UI_ROOT_VIEW) {
-        GRAPHIC_LOGW("Focused view is not attached on view tree!\n");
+        GRAPHIC_LOGW("RotateInputDevice failed to dispatch event without target view attached!\n");
         return;
     }
 
     if (data.rotate == 0 && rotateStart_) {
         view->OnRotateEndEvent(0);
         rotateStart_ = false;
+        GRAPHIC_LOGW("RotateInputDevice dispatched 0-value event!\n");
         return;
     }
     if (!rotateStart_) {
@@ -74,8 +76,8 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
     }
     view->OnRotateEvent(data.rotate);
     rotateStart_ = true;
-    GRAPHIC_LOGI("RotateInputDevice dispatched rotate event, targetView Type is %d\n!",
-        static_cast<uint8_t>(view->GetViewType()));
+    GRAPHIC_LOGI("RotateInputDevice dispatched rotate event, targetView Type = %d, rotate value = %d\n!",
+        static_cast<uint8_t>(view->GetViewType()), data.rotate);
 }
 } // namespace OHOS
 #endif
