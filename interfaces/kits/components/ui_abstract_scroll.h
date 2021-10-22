@@ -230,7 +230,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetRotateACCLevel(uint16_t value)
+    void SetRotateACCLevel(uint8_t value)
     {
         rotateAccCoefficient_ = value;
     }
@@ -474,7 +474,7 @@ protected:
 #if ENABLE_ROTATE_INPUT
     uint8_t rotateAccCoefficient_ = 0;
     float rotateFactor_;
-    int16_t rotateThrowthreshold_;
+    uint8_t rotateThrowthreshold_;
     bool isRotating_;
 #endif
     bool yScrollBarVisible_ = false;
