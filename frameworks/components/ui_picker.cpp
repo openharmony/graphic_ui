@@ -129,6 +129,8 @@ UIPicker::UIPicker()
     list_.SetStyle(StyleDefault::GetBackgroundTransparentStyle());
 #if ENABLE_ROTATE_INPUT
     list_.rotateFactor_ = DEFAULT_PICKER_ROTATE_FACTOR;
+    list_.rotateThrowthreshold_ = PICKERVIEW_ROTATE_THROW_THRESHOLD;
+    list_.rotateAccCoefficient_ = PICKERVIEW_ROTATE_DISTANCE_COEFF;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;

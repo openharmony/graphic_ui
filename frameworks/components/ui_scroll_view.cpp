@@ -26,6 +26,8 @@ UIScrollView::UIScrollView() : scrollListener_(nullptr)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
+    rotateThrowthreshold_ = SCROLLVIEW_ROTATE_THROW_THRESHOLD;
+    rotateAccCoefficient_ = SCROLLVIEW_ROTATE_DISTANCE_COEFF;
 #endif
 #if ENABLE_VIBRATOR
     totalRotateLen_ = 0;

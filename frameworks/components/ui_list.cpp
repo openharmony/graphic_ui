@@ -166,6 +166,8 @@ UIList::UIList(uint8_t direction)
 {
 #if ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_LIST_ROTATE_FACTOR;
+    rotateThrowthreshold_ = LIST_ROTATE_THROW_THRESHOLD;
+    rotateAccCoefficient_ = LIST_ROTATE_DISTANCE_COEFF;
 #endif
 #if ENABLE_FOCUS_MANAGER
     focusable_ = true;
