@@ -217,6 +217,10 @@ uint32_t UIFontBitmap::GetRamUsedLen(uint32_t textManagerRamUsed, uint32_t langF
 
 int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
 {
+    int16_t ret = dynamicFont_.SetCurrentFontId(fontId);
+    if (ret == INVALID_RET_VALUE) {
+        return ret;
+    }
     return dynamicFont_.GetBitmap(unicode, bitmap, fontId);
 }
 
@@ -273,7 +277,7 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
         SetCurrentFontId(fontId);
     }
     int8_t ret = GetGlyphNode(unicode, glyphNode);
-    while ((ret == RET_VALUE_OK) && (glyphNode.reserve != fontId)) {
+    while ((ret == RET_VALUE_OK) && ((glyphNode.reserve != fontId) || (glyphNode.unicode != unicode))) {
         SetCurrentFontId(fontId);
         ret = GetGlyphNode(unicode, glyphNode);
     }
