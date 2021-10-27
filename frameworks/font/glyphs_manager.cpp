@@ -394,7 +394,7 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontI
     }
     const GlyphNode* node = GetGlyphNode(unicode);
     uint32_t tmpBitMapSectionStart = curBitMapSectionStart_;
-    while ((fontId != 0) && (node != nullptr) && (node->reserve != fontId)) {
+    while ((node != nullptr) && (node->reserve != fontId)) {
         SetCurrentFontId(fontId);
         node = GetGlyphNode(unicode);
         tmpBitMapSectionStart = curBitMapSectionStart_;
