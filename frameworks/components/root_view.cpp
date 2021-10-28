@@ -31,6 +31,7 @@ const constexpr uint8_t MAX_SPLIT_NUM = 32; // split at most 32 parts
 const constexpr uint8_t VIEW_STACK_DEPTH = COMPONENT_NESTING_DEPTH * 2;
 #else
 const constexpr uint8_t VIEW_STACK_DEPTH = COMPONENT_NESTING_DEPTH;
+const constexpr uint8_t MAX_INVALIDATE_SIZE = 24;
 #endif
 static Rect g_maskStack[COMPONENT_NESTING_DEPTH];
 static UIView* g_viewStack[VIEW_STACK_DEPTH];
@@ -353,6 +354,7 @@ void RootView::OptimizeInvalidMap()
         }
 
         curview = g_viewStack[--stackCount];
+        Rect rect;
         if (!curview->IsVisible() || !rect.Intersect(curview->GetRect(), GetScreenRect())) {
             curview = nullptr;
             continue;
@@ -396,6 +398,52 @@ void RootView::DrawInvalidMap(const Rect& buffRect)
         }
     }
 }
+#else
+void RootView::OptimizeAddRect(Rect& rect)
+{
+    Rect joinRect;
+    for (ListNode<Rect>* iter = invalidateRects_.Begin(); iter != invalidateRects_.End(); iter = iter->next_) {
+        if (iter->data_.IsContains(rect)) {
+            return;
+        }
+
+        if (iter->data_.IsIntersect(rect)) {
+            joinRect.Join(iter->data_, rect);
+            if (joinRect.GetSize() < iter->data_.GetSize() + rect.GetSize()) {
+                iter->data_ = joinRect;
+                return;
+            }
+        }
+    }
+
+    if (invalidateRects_.Size() < MAX_INVALIDATE_SIZE) {
+        invalidateRects_.PushBack(rect);
+    } else {
+        invalidateRects_.Clear();
+        invalidateRects_.PushBack(GetScreenRect());
+    }
+}
+
+void RootView::OptimizeInvalidateRects()
+{
+    Rect joinRect;
+    for (ListNode<Rect>* iter1 = invalidateRects_.Begin(); iter1 != invalidateRects_.End(); iter1 = iter1->next_) {
+        for (ListNode<Rect>* iter2 = invalidateRects_.Begin(); iter2 != invalidateRects_.End(); iter2 = iter2->next_) {
+            if (iter1 == iter2) {
+                continue;
+            }
+
+            if (iter2->data_.IsIntersect(iter1->data_)) {
+                joinRect.Join(iter1->data_, iter2->data_);
+                if (joinRect.GetSize() < (iter1->data_.GetSize() + iter2->data_.GetSize())) {
+                    iter2->data_ = joinRect;
+                    iter1 = invalidateRects_.Remove(iter1)->prev_;
+                    break;
+                }
+            }
+        }
+    }
+}
 #endif
 
 void RootView::AddInvalidateRect(Rect& rect, UIView* view)
@@ -410,12 +458,7 @@ void RootView::AddInvalidateRect(Rect& rect, UIView* view)
             invalidRects[0].Join(invalidRects[0], commonRect);
         }
 #else
-        if (!renderFlag_) {
-            invalidRect_ = commonRect;
-            renderFlag_ = true;
-        } else {
-            invalidRect_.Join(invalidRect_, commonRect);
-        }
+        OptimizeAddRect(commonRect);
 #endif
     }
 }
@@ -440,7 +483,7 @@ void RootView::Measure()
         MeasureView(childrenHead_);
     }
 #else
-    if (renderFlag_) {
+    if (invalidateRects_.Size() > 0) {
         MeasureView(childrenHead_);
     }
 #endif
@@ -473,10 +516,9 @@ void RootView::Render()
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_lock(&lock_);
 #endif
-    Rect invalidRectTmp = invalidRect_;
-    invalidRect_ = {0, 0, 0, 0};
-    bool renderFlagTmp = renderFlag_;
-    renderFlag_ = false;
+#if !LOCAL_RENDER
+   OptimizeInvalidateRects();
+#endif
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_unlock(&lock_);
 #endif
@@ -486,8 +528,11 @@ void RootView::Render()
         RenderManager::RenderRect(GetRect(), this);
         invalidateMap_.clear();
 #else
-    if (renderFlagTmp) {
-        RenderManager::RenderRect(invalidRectTmp, this);
+    if ( invalidateRects_.Size() > 0) {
+        for (ListNode<Rect>* iter = invalidateRects_.Begin(); iter != invalidateRects_.End(); iter = iter->next_) {
+            RenderManager::RenderRect(iter->data_, this);
+        }
+        invalidateRects_.Clear();
 #endif
 
 #if ENABLE_WINDOW
