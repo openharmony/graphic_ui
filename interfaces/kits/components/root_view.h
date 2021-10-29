@@ -324,9 +324,11 @@ private:
 
     std::map<UIView*, Graphic::Vector<Rect>> invalidateMap_;
 #else
-    bool renderFlag_ = false;
-    Rect invalidRect_;
+    void OptimizeAddRect(Rect& rect);
+    void OptimizeInvalidateRects();
+    List<Rect> invalidateRects_;
 #endif
+
     OnKeyActListener* onKeyActListener_ {nullptr};
     OnVirtualDeviceEventListener* onVirtualEventListener_ {nullptr};
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
