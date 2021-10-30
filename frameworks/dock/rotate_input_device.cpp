@@ -43,7 +43,6 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
     }
 
     if (!cachedToRotate && !rotateStart_) {
-        GRAPHIC_LOGW("RotateInputDevice failed to dispatch event without rotate cached and started!\n");
         return;
     }
 
