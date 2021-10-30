@@ -148,7 +148,6 @@ GlyphNode* GlyphsManager::GetNodeFromFile(uint32_t unicode, uint8_t fontId)
         offset += key * sizeof(uint16_t);
         idx = *(reinterpret_cast<uint16_t*>(tmpIndexCache + offset));
         if (idx == 0) {
-            GRAPHIC_LOGE("GlyphsManager::GetNodeFromFile unicode not found");
             return nullptr;
         }
     }
@@ -376,7 +375,6 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode)
     }
     node = GetGlyphNode(unicode);
     if (node == nullptr) {
-        GRAPHIC_LOGE("GlyphsManager::GetFontWidth node not found");
         return INVALID_RET_VALUE;
     }
     return node->advance;
