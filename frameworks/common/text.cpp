@@ -306,8 +306,31 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
     if ((lineNum != 0) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
         uint16_t ellipsisWidth = UIFont::GetInstance()->GetWidth('.', 0) + letterSpace;
         textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
+        if (textLine_[lineNum - 1].linePixelWidth > width) {
+            int16_t newWidth = width - ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
+            maxLineBytes = CalculateLineWithEllipsis(begin, textLen, newWidth, letterSpace, lineNum);
+            textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
+        }
     }
     return lineNum;
+}
+
+uint32_t Text::CalculateLineWithEllipsis(uint32_t begin, uint32_t textLen, int16_t width,
+                                         uint8_t letterSpace, uint16_t& lineNum)
+{
+    begin -= textLine_[lineNum - 1].lineBytes;
+    lineNum--;
+    while ((begin < textLen) && (text_[begin] != '\0') && (lineNum < MAX_LINE_COUNT)) {
+        begin += GetTextLine(begin, textLen, width, lineNum, letterSpace);
+        lineNum++;
+    }
+    uint32_t maxLineBytes = 0;
+    for (uint16_t i = 0; i < lineNum; i++) {
+        if (maxLineBytes < textLine_[i].lineBytes) {
+            maxLineBytes = textLine_[i].lineBytes;
+        }
+    }
+    return maxLineBytes;
 }
 
 uint32_t Text::GetTextStrLen()

@@ -362,6 +362,8 @@ protected:
     int16_t TextPositionY(const Rect& textRect, int16_t textHeight);
     int16_t LineStartPos(const Rect& textRect, uint16_t lineWidth);
     void DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine);
+    uint32_t CalculateLineWithEllipsis(uint32_t begin, uint32_t textLen, int16_t width,
+                                       uint8_t letterSpace, uint16_t& lineNum);
 
     char* text_;
     uint8_t fontId_;
