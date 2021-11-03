@@ -237,15 +237,21 @@ void UIViewGroup::GetTargetView(const Point& point, UIView** current, UIView** t
 
 Rect UIViewGroup::GetAllChildRelativeRect() const
 {
-    Rect rect;
+    Rect rect = {0, 0, 0, 0};
     UIView* view = childrenHead_;
-    if (view != nullptr) {
-        rect = view->GetRelativeRect();
-        view = view->GetNextSibling();
-    }
+    bool isRectValid = false;
     while (view != nullptr) {
+        if (!view->IsVisible()) {
+            view = view->GetNextSibling();
+            continue;
+        }
         Rect rectChild = view->GetRelativeRect();
-        rect.Join(rect, rectChild);
+        if (!isRectValid) {
+            rect = rectChild;
+            isRectValid = true;
+        } else {
+            rect.Join(rect, rectChild);
+        }
         view = view->GetNextSibling();
     }
     return rect;
