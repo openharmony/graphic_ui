@@ -1708,6 +1708,8 @@ public:
      */
     bool GetBitmap(ImageInfo& bitmap);
 
+    bool IsOnViewTree();
+
 protected:
     bool touchable_ : 1;
     bool visible_ : 1;
