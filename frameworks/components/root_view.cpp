@@ -717,9 +717,9 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
         stackCount = 0;
         curView = par->GetNextSibling();
         if (enableAnimator) {
-            par->OnPostDraw(*dc_.mapBufferInfo, curViewRect);
+            par->OnPostDraw(*dc_.mapBufferInfo, rect);
         } else {
-            par->OnPostDraw(*dc_.bufferInfo, curViewRect);
+            par->OnPostDraw(*dc_.bufferInfo, rect);
         }
         par = par->GetParent();
     }
