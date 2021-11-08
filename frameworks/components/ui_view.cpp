@@ -67,7 +67,7 @@ UIView::~UIView()
 {
     if (IsOnViewTree()) {
         GRAPHIC_LOGW("View still on tree, might cause wild ptr! ViewType : %{public}d, View addr : %{public}p.\r\n",
-            static_cast<uint8_t>(view->GetViewType()), this);
+            static_cast<uint8_t>(GetViewType()), this);
     }
     if (transMap_ != nullptr) {
         delete transMap_;
