@@ -242,6 +242,9 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
             return;
         }
         int16_t nextLine = pos.y + lineHeight;
+        if (lineHeight != style.lineHeight_) {
+            nextLine -= style.lineSpace_;
+        }
         if (nextLine >= mask.GetTop()) {
             pos.x = LineStartPos(coords, textLine_[i].linePixelWidth);
             LabelLineInfo labelLine{pos, offset, mask, lineHeight, textLine_[i].lineBytes,
@@ -254,7 +257,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
             }
         }
         lineBegin += textLine_[i].lineBytes;
-        pos.y = nextLine;
+        pos.y += lineHeight;
     }
 }
 
