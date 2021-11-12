@@ -135,8 +135,7 @@ GlyphNode* GlyphsManager::GetNodeFromFile(uint32_t unicode, uint8_t fontId)
     uint8_t* tmpIndexCache = curIndexCache_;
     uint32_t tmpGlyphNodeSectionStart = curGlyphNodeSectionStart_;
     while (fontId_ != fontId) {
-        SetCurrentFontId(fontId);
-        if (!isFontIdSet_) {
+        if (SetCurrentFontId(fontId) == INVALID_RET_VALUE) {
             return nullptr;
         }
         tmpIndexCache = curIndexCache_;
