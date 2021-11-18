@@ -62,7 +62,7 @@ private:
         uint8_t* fontIds = nullptr;
         int8_t size = 0;
     };
-    static constexpr uint8_t MAX_LIST_NUM = 20;
+    static constexpr uint8_t MAX_LIST_NUM = 26;
     static constexpr uint8_t DEFAULT_SHAPING_ID = 1;
     static constexpr const char *ARABIC_LANG = "Arabic";
     static constexpr const char *THAI_LANG = "Thai";
