@@ -24,6 +24,7 @@ test_sources = [
   "../uitest/test_animator/ui_test_animator.cpp",
   "../uitest/test_anti_aliasing/ui_test_anti_aliasing.cpp",
   "../uitest/test_arc_label/ui_test_arc_label.cpp",
+  "../uitest/test_border_margin_padding/ui_test_border_margin_padding.cpp",
   "../uitest/test_button/ui_test_button.cpp",
   "../uitest/test_canvas/ui_test_canvas.cpp",
   "../uitest/test_chart/ui_test_chart_pillar.cpp",
@@ -66,7 +67,6 @@ test_sources = [
   "../uitest/test_view_group/ui_test_view_group.cpp",
   "../uitest/test_view_percent/ui_test_view_percent.cpp",
   "../uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp",
-  "../uitest/test_border_margin_padding/ui_test_border_margin_padding.cpp",
   "common/ui_text_language.cpp",
   "src/test_ability.cpp",
   "src/test_case_list_adapter.cpp",
@@ -75,9 +75,7 @@ test_sources = [
 ]
 
 if (enable_video_component) {
-  test_sources += [
-    "../uitest/test_video/ui_test_video.cpp",
-  ]
+  test_sources += [ "../uitest/test_video/ui_test_video.cpp" ]
 }
 
 auto_test_sources = [
