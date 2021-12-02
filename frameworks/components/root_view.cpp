@@ -529,9 +529,18 @@ void RootView::Render()
         invalidateMap_.clear();
 #else
     if ( invalidateRects_.Size() > 0) {
+#if (FULLY_RENDER != 1)
+        // only draw invalid rects. in this case, buffers (if there are two buffers or more to display) should keep
+        // same with each others, because only delta changes write to the buffer between each frames, so it fits one
+        // buffer to display.
         for (ListNode<Rect>* iter = invalidateRects_.Begin(); iter != invalidateRects_.End(); iter = iter->next_) {
             RenderManager::RenderRect(iter->data_, this);
         }
+#else
+        // fully draw whole reacts. in this case, buffers (if there are two buffers or more to display) could be
+        // independent on each others, so it fits two buffers or more to display.
+        RenderManager::RenderRect(GetScreenRect(), this);
+#endif
         invalidateRects_.Clear();
 #endif
 
