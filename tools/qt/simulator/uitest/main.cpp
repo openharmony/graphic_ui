@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     OHOS::Monitor::GetInstance()->InitImageDecodeAbility();
     RunApp();
     OHOS::MainWidget mainWidget;
-    mainWidget.resize(OHOS::HORIZONTAL_RESOLUTION, OHOS::VERTICAL_RESOLUTION);
+    mainWidget.resize(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
     mainWidget.show();
     return uitest.exec();
 }
