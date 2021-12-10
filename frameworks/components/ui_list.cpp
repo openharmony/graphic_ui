@@ -36,7 +36,7 @@ UIList::Recycle::~Recycle()
     scrapView_.Clear();
 }
 
-void UIList::Recycle::MeasureAdapterRelativeRect()
+void UIList::Recycle::MesureAdapterRelativeRect()
 {
     uint16_t i = 0;
     if (listView_ == nullptr) {
@@ -79,7 +79,7 @@ void UIList::Recycle::InitRecycle()
     listView_->Invalidate();
     hasInitialiszed_ = true;
     if (listView_->xScrollBarVisible_ || listView_->yScrollBarVisible_) {
-        MeasureAdapterRelativeRect();
+        MesureAdapterRelativeRect();
     }
 }
 
@@ -137,14 +137,14 @@ void UIList::Recycle::FillActiveView()
     }
 }
 
-Rect32 UIList::Recycle::GetAdapterItemsReletiveRect()
+Rect UIList::Recycle::GetAdapterItemsReletiveRect()
 {
     return adapterRelativeRect_;
 }
 
 void UIList::Recycle::MoveAdapterItemsRelativeRect(int16_t x, int16_t y)
 {
-    auto& rect = adapterRelativeRect_;
+    Rect& rect = adapterRelativeRect_;
     rect.SetPosition(rect.GetX() + x, rect.GetY() + y);
 }
 
@@ -359,7 +359,7 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
 
 void UIList::UpdateScrollBar()
 {
-    auto allItemsRect = recycle_.GetAdapterItemsReletiveRect();
+    Rect allItemsRect = recycle_.GetAdapterItemsReletiveRect();
     int16_t totalHeight = allItemsRect.GetHeight() + 2 * scrollBlankSize_; // 2: two blank spaces on both sides
     int16_t height = GetHeight();
     yScrollBar_->SetForegroundProportion(static_cast<float>(height) / totalHeight);
@@ -779,7 +779,7 @@ void UIList::SetXScrollBarVisible(bool visible)
     UIAbstractScroll::SetXScrollBarVisible(visible);
     if (!lastVisible && xScrollBarVisible_) {
         if (recycle_.HasInitialiszed()) {
-            recycle_.MeasureAdapterRelativeRect();
+            recycle_.MesureAdapterRelativeRect();
         } else {
             recycle_.InitRecycle();
         }
@@ -792,7 +792,7 @@ void UIList::SetYScrollBarVisible(bool visible)
     UIAbstractScroll::SetYScrollBarVisible(visible);
     if (!lastVisible && yScrollBarVisible_) {
         if (recycle_.HasInitialiszed()) {
-            recycle_.MeasureAdapterRelativeRect();
+            recycle_.MesureAdapterRelativeRect();
         } else {
             recycle_.InitRecycle();
         }
