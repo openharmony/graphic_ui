@@ -436,9 +436,9 @@ private:
             scrapView_.Clear();
         }
 
-        Rect32 GetAdapterItemsReletiveRect();
+        Rect GetAdapterItemsReletiveRect();
         void MoveAdapterItemsRelativeRect(int16_t x, int16_t y);
-        void MeasureAdapterRelativeRect();
+        void MesureAdapterRelativeRect();
 
     private:
         friend class UIList;
@@ -447,7 +447,7 @@ private:
         List<UIView*> scrapView_;
         AbstractAdapter* adapter_;
         UIList* listView_;
-        Rect32 adapterRelativeRect_;
+        Rect adapterRelativeRect_;
         bool hasInitialiszed_;
     };
 
