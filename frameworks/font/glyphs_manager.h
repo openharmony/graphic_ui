@@ -17,6 +17,7 @@
 #define GLYPHS_MANAGER_FONT_H
 
 #include "font/ui_font_header.h"
+#include "graphic_locker.h"
 
 namespace OHOS {
 class GlyphsManager {
@@ -100,6 +101,7 @@ private:
     CacheType* nodeCache_;
     CacheState* cacheStatus_;
 
+    GraphicMutex lock_;
     int32_t fp_;
     uint8_t fontId_;
     FontHeader* curFontHeader_;

@@ -236,12 +236,13 @@ int8_t GlyphsManager::SetFile(int32_t fp, uint32_t start)
 int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
 {
     uint16_t fontIdx = 0;
-    if (!isFileSet_) {
-        GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId file not set");
-        return INVALID_RET_VALUE;
-    }
     if (fontId > UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
         GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId fontId need less than max fontId");
+        return INVALID_RET_VALUE;
+    }
+    GraphicLockGuard guard(lock_);
+    if (!isFileSet_) {
+        GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId file not set");
         return INVALID_RET_VALUE;
     }
     if (fontId_ == fontId) {
@@ -385,6 +386,8 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontI
         GRAPHIC_LOGE("GlyphsManager::GetBitmap invalid parameter");
         return INVALID_RET_VALUE;
     }
+    
+    GraphicLockGuard guard(lock_);
     if (!isFontIdSet_) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap fontId not set");
         return INVALID_RET_VALUE;
@@ -396,6 +399,7 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontI
         node = GetGlyphNode(unicode);
         tmpBitMapSectionStart = curBitMapSectionStart_;
     }
+    guard.Unlock();
     if (node == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap node not found");
         return INVALID_RET_VALUE;
