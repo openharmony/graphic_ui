@@ -60,6 +60,9 @@ void UISwipeView::Remove(UIView* view)
         return;
     }
     UIViewGroup::Remove(view);
+    if (curView_ == view) {
+        curView_ = nullptr;
+    }
     SortChild();
     Invalidate();
 }
@@ -267,6 +270,7 @@ void UISwipeView::SwitchToPage(int16_t dst, bool needAnimator)
         return;
     }
     curIndex_ = dst;
+    curView_ = dstView;
     int16_t xOffset = 0;
     int16_t yOffset = 0;
 
