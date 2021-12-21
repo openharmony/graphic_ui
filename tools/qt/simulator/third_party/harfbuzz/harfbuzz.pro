@@ -48,7 +48,6 @@ SOURCES += \
     ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-indic.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-khmer.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-myanmar.cc \
-    ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-syllabic.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-thai.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-use.cc \
     ../../../../../../../../third_party/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc \
