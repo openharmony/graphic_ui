@@ -18,7 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DESTDIR = ../../libs
 
 SOURCES += \
-    ../../../../../../../../third_party/qrcodegen/cpp/QrCode.cpp
+    ../../../../../../../../third_party/qrcodegen/cpp/qrcodegen.cpp
 
 INCLUDEPATH += \
     ../../../../../../../../third_party/qrcodegen/cpp
