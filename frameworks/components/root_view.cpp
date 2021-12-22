@@ -19,6 +19,9 @@
 #include "core/render_manager.h"
 #include "draw/draw_utils.h"
 #include "gfx_utils/graphic_log.h"
+#ifdef _LITEOS
+#include "los_task.h"
+#endif
 #if ENABLE_WINDOW
 #include "window/window_impl.h"
 #endif
@@ -446,6 +449,45 @@ void RootView::OptimizeInvalidateRects()
 }
 #endif
 
+#ifdef _LITEOS
+extern "C" void RestoreSystemWrapper(const char* crashMessage);
+void RootView::CheckRunningInUITask()
+{
+    uint32_t curTask = LOS_CurTaskIDGet();
+    for (uint32_t i = 0; i < tasks_.Size(); i++) {
+        if (tasks_[i] == curTask) {
+            return;
+        }
+    }
+    RestoreSystemWrapper("Catch setting font id not in ui-thread.");
+}
+
+void RootView::AddUITask()
+{
+    uint32_t curTask = LOS_CurTaskIDGet();
+    for (uint32_t i = 0; i < tasks_.Size(); i++) {
+        if (tasks_[i] == curTask) {
+            return;
+        }
+    }
+    tasks_.PushBack(curTask);
+}
+
+void RootView::RemoveUITask()
+{
+    uint32_t curTask = LOS_CurTaskIDGet();
+    for (uint32_t i = 0; i < tasks_.Size(); i++) {
+        if (tasks_[i] == curTask) {
+            tasks_.Erase(i);
+        }
+    }
+}
+#else
+void RootView::CheckRunningInUITask() {}
+void RootView::AddUITask() {}
+void RootView::RemoveUITask() {}
+#endif
+
 void RootView::AddInvalidateRect(Rect& rect, UIView* view)
 {
     Rect commonRect;
@@ -517,7 +559,7 @@ void RootView::Render()
     pthread_mutex_lock(&lock_);
 #endif
 #if !LOCAL_RENDER
-   OptimizeInvalidateRects();
+    OptimizeInvalidateRects();
 #endif
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_unlock(&lock_);
@@ -528,7 +570,7 @@ void RootView::Render()
         RenderManager::RenderRect(GetRect(), this);
         invalidateMap_.clear();
 #else
-    if ( invalidateRects_.Size() > 0) {
+    if (invalidateRects_.Size() > 0) {
         for (ListNode<Rect>* iter = invalidateRects_.Begin(); iter != invalidateRects_.End(); iter = iter->next_) {
             RenderManager::RenderRect(iter->data_, this);
         }
@@ -582,16 +624,16 @@ void RootView::UpdateMapBufferInfo(Rect& invalidatedArea)
     invalidatedArea.SetHeight(width);
     dc_.mapBufferInfo->width = height;
     dc_.mapBufferInfo->height = width;
-    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
-                                (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
+    dc_.mapBufferInfo->stride =
+        dc_.mapBufferInfo->width * (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
 }
 
 void RootView::RestoreMapBufferInfo()
 {
     dc_.mapBufferInfo->width = dc_.bufferInfo->width;
     dc_.mapBufferInfo->height = dc_.bufferInfo->height;
-    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
-                                (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
+    dc_.mapBufferInfo->stride =
+        dc_.mapBufferInfo->width * (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
 }
 
 void RootView::DrawTop(UIView* view, const Rect& rect)
@@ -805,8 +847,8 @@ void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
         return;
     }
     dc_.mapBufferInfo->mode = ARGB8888;
-    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
-        (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift right 3 bits
+    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width * (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >>
+                                                            3); // 3: Shift right 3 bits
     uint32_t bufferSize = dc_.mapBufferInfo->stride * dc_.mapBufferInfo->height;
     dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr =
         BaseGfxEngine::GetInstance()->AllocBuffer(bufferSize, BUFFER_MAP_SURFACE);
