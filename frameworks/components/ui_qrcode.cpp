@@ -14,7 +14,7 @@
  */
 
 #include "components/ui_qrcode.h"
-#include "QrCode.hpp"
+#include "qrcodegen.hpp"
 #include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
