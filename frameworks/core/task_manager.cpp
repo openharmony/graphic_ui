@@ -15,6 +15,7 @@
 
 #include "common/task_manager.h"
 
+#include "components/root_view.h"
 #include "gfx_utils/graphic_log.h"
 #include "hal_tick.h"
 
@@ -30,7 +31,6 @@ void TaskManager::Add(Task* task)
     if (task == nullptr) {
         return;
     }
-
     ListNode<Task*>* pos = list_.Begin();
     while (pos != list_.End()) {
         if (pos->data_ == task) {
@@ -69,8 +69,8 @@ void TaskManager::TaskHandler()
     }
     isHandlerRunning_ = true;
 
+    RootView::GetInstance()->AddUITask();
     ListNode<Task*>* node = list_.Begin();
-
     while (node != list_.End()) {
         Task* currentTask = node->data_;
         currentTask->TaskExecute();

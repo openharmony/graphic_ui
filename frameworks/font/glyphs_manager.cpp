@@ -18,6 +18,7 @@
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "securec.h"
+#include "components/root_view.h"
 
 namespace OHOS {
 GlyphsManager::GlyphsManager()
@@ -241,6 +242,7 @@ int8_t GlyphsManager::SetCurrentFontId(uint8_t fontId)
         return INVALID_RET_VALUE;
     }
     GraphicLockGuard guard(lock_);
+    RootView::GetInstance()->CheckRunningInUITask();
     if (!isFileSet_) {
         GRAPHIC_LOGE("GlyphsManager::SetCurrentFontId file not set");
         return INVALID_RET_VALUE;

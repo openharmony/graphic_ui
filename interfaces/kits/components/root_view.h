@@ -46,10 +46,10 @@
 #include "events/key_event.h"
 #include "events/virtual_device_event.h"
 #include "gfx_utils/list.h"
+#include "gfx_utils/vector.h"
 
 #if LOCAL_RENDER
 #include <map>
-#include "gfx_utils/vector.h"
 #endif
 
 namespace OHOS {
@@ -291,6 +291,12 @@ public:
      * @version 6.0
      */
     void RestoreDrawContext();
+
+    // debug only
+    void CheckRunningInUITask();
+    void AddUITask();
+    void RemoveUITask();
+    Graphic::Vector<uint32_t> tasks_;
 private:
     friend class RenderManager;
     friend class UIViewGroup;
