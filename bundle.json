@@ -1,0 +1,60 @@
+{
+    "name": "@ohos/graphic_ui",
+    "version": "",
+    "description": "UI组件库，包括按钮、图片、文字、动画、布局等基础功能，用于轻设备开发native应用，C++实现",
+    "homePage": "https://gitee.com/openharmony",
+    "license": "Apache V2",
+    "repository": "https://gitee.com/openharmony/graphic_ui",
+    "domain": "os",
+    "language": "",
+    "publishAs": "code-segment",
+    "private": false,
+    "scripts": {},
+    "tags": [
+        "foundation"
+    ],
+    "keywords": [
+        "graphic",
+        "ui"
+    ],
+    "envs": [],
+    "dirs": [],
+    "author": {
+        "name": "",
+        "email": "",
+        "url": ""
+    },
+    "contributors": [
+        {
+            "name": "",
+            "email": "",
+            "url": ""
+        }
+    ],
+    "segment": {
+        "destPath": "foundation/graphic/ui"
+    },
+    "component": {
+        "name": "ui",
+        "subsystem": "graphic",
+        "syscap": [
+            "SystemCapability.Graphic.UI"
+        ],
+        "features": [],
+        "adapted_system_type": [
+            "mini",
+            "small"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}
