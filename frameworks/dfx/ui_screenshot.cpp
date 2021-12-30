@@ -41,7 +41,7 @@ public:
                          ImagePixelFormat format, uint32_t stride) override
     {
         if ((virAddr == nullptr) || ((format != IMAGE_PIXEL_FORMAT_ARGB1555) &&
-            (format != IMAGE_PIXEL_FORMAT_ARGB8888))) {
+            (format != IMAGE_PIXEL_FORMAT_ARGB8888)) || (width == 0) || (height == 0)) {
             return;
         }
 
