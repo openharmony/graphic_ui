@@ -355,14 +355,15 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
     }
 
     if (direction_ == VERTICAL && !isLoopList_) {
-        if (childrenHead_ && (childrenHead_->GetViewIndex() == startIndex_) && 
-        (childrenHead_->GetRelativeRect().GetTop()  == (GetStyle(STYLE_PADDING_TOP) + GetStyle(STYLE_BORDER_WIDTH)))) {
+        if (childrenHead_ && (childrenHead_->GetViewIndex() == startIndex_) &&
+        	(childrenHead_->GetRelativeRect().GetTop()  == (GetStyle(STYLE_PADDING_TOP) + GetStyle(STYLE_BORDER_WIDTH)))) {
             if (scrollListener_) {
                 scrollListener_->OnScrollTop(childrenHead_->GetViewIndex(), childrenHead_);
             }
         }
-        if (childrenTail_ && (recycle_.GetView(childrenTail_->GetViewIndex() + 1) == nullptr) && 
-        (childrenTail_->GetRelativeRect().GetBottom() + 1  == (GetRect().GetHeight() - GetStyle(STYLE_PADDING_BOTTOM) - GetStyle(STYLE_BORDER_WIDTH)))) {
+        if (childrenTail_ && (recycle_.GetView(childrenTail_->GetViewIndex() + 1) == nullptr) &&
+        	(childrenTail_->GetRelativeRect().GetBottom() + 1  ==
+            (GetRect().GetHeight() - GetStyle(STYLE_PADDING_BOTTOM) - GetStyle(STYLE_BORDER_WIDTH)))) {
             if ((scrollListener_)) {
                 scrollListener_->OnScrollBottom(childrenTail_->GetViewIndex(), childrenTail_);
             }
