@@ -106,7 +106,6 @@ public:
      */
     virtual void OnScrollTop(int16_t index, UIView* view) {}
 
-
     /**
      * @brief Called when move to the bottom of scroll.
      *
@@ -119,7 +118,6 @@ public:
      *
      */
     virtual void OnScrollBottom(int16_t index, UIView* view) {}
-
 
     /**
      * @brief Called when a new child view is selected at the preset position as this list scrolls. For details about
