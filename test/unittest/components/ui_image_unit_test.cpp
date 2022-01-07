@@ -98,7 +98,7 @@ HWTEST_F(UIImageViewTest, UIImageViewSetPosition_001, TestSize.Level0)
     EXPECT_EQ(imageView_->GetHeight(), 0);
 }
 
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
 /**
  * @tc.name: UIImageViewSetSrc_001
  * @tc.desc: Verify SetSrc function, correct gif path, equal.

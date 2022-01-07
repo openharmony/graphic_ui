@@ -27,7 +27,7 @@
 #endif
 
 namespace OHOS {
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
 class UITestImage : public UITest, public OHOS::UIView::OnClickListener {
 #else
 class UITestImage : public UITest {
@@ -51,7 +51,7 @@ public:
     void UIKit_UIImage_Test_SetImage_012();
     void UIKit_UIImage_Test_SetImage_013();
     void UIKit_UIImage_Test_SetImage_014();
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
     void UIKit_UIImage_Test_SetImage_015();
     void UIKit_UIImage_Test_SetImage_016();
 #endif
@@ -59,12 +59,12 @@ public:
     void UIKit_UIImage_Test_Resize_001();
 private:
     const char* GetCharByImageSrcType(ImageSrcType srcType) const;
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
     bool OnClick(UIView &view, const ClickEvent& event) override;
     void SetUpButton(UILabelButton* btn, const char* title);
 #endif
     UIScrollView* container_ = nullptr;
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
     UIImageView* gifImageView_ = nullptr;
     UILabelButton* gifToGif_ = nullptr;
     UILabelButton* gifToJpeg_ = nullptr;
