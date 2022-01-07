@@ -100,8 +100,8 @@ public:
      *              be set to {@link NULL_SELECT_INDEX} if no child view is selected or no position is preset.
      * @param view Indicates the child view being selected at the preset position. This parameter should be set to
      *             <b>NULL</b> if no child view is selected or no position is preset.
-     * @since 1.0
-     * @version 1.0
+     * @since 8
+     * @version 8
      *
      */
     virtual void OnScrollTop(int16_t index, UIView* view) {}
@@ -113,8 +113,8 @@ public:
      *              be set to {@link NULL_SELECT_INDEX} if no child view is selected or no position is preset.
      * @param view Indicates the child view being selected at the preset position. This parameter should be set to
      *             <b>NULL</b> if no child view is selected or no position is preset.
-     * @since 1.0
-     * @version 1.0
+     * @since 8
+     * @version 8
      *
      */
     virtual void OnScrollBottom(int16_t index, UIView* view) {}
