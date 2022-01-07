@@ -366,8 +366,7 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
                 (childrenTail_->GetRelativeRect().GetBottom() - y > GetContentRect().GetHeight() - 1)) {
                     scrollListener_->OnScrollBottom(childrenTail_->GetViewIndex(), childrenTail_);
             }
-        }
-        else {
+        } else {
             if (childrenHead_ && (childrenHead_->GetViewIndex() == startIndex_) &&
                 childrenHead_->GetRelativeRect().GetLeft() >= 0 &&
                 childrenHead_->GetRelativeRect().GetLeft() - x < 0) {
