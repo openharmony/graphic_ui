@@ -17,7 +17,7 @@
 #include "common/screen.h"
 #include "components/ui_label.h"
 #include "default_resource/check_box_res.h"
-#ifdef VERSION_LITE
+#if (ENABLE_GIF == 1)
 #include "components/ui_image_view.h"
 #include "test_resource_config.h"
 #endif
@@ -42,7 +42,7 @@ void UITestImage::TearDown()
 {
     DeleteChildren(container_);
     container_ = nullptr;
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
     gifImageView_ = nullptr;
     gifToGif_ = nullptr;
     gifToJpeg_ = nullptr;
@@ -69,7 +69,7 @@ const UIView* UITestImage::GetTestView()
     UIKit_UIImage_Test_SetImage_012();
     UIKit_UIImage_Test_SetImage_013();
     UIKit_UIImage_Test_SetImage_014();
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
     UIKit_UIImage_Test_SetImage_015();
     UIKit_UIImage_Test_SetImage_016();
 #endif
@@ -382,7 +382,7 @@ void UITestImage::UIKit_UIImage_Test_SetImage_014()
     }
 }
 
-#ifndef VERSION_LITE
+#if (ENABLE_GIF == 1)
 void UITestImage::UIKit_UIImage_Test_SetImage_015()
 {
     if (container_ != nullptr) {
