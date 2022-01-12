@@ -94,6 +94,32 @@ public:
     virtual void OnScrollEnd(int16_t index, UIView* view) {}
 
     /**
+     * @brief Called when move to the top of scroll.
+     *
+     * @param index Indicates the index of the child view being selected at the preset position. This parameter should
+     *              be set to {@link NULL_SELECT_INDEX} if no child view is selected or no position is preset.
+     * @param view Indicates the child view being selected at the preset position. This parameter should be set to
+     *             <b>NULL</b> if no child view is selected or no position is preset.
+     * @since 8
+     * @version 8
+     *
+     */
+    virtual void OnScrollTop(int16_t index, UIView* view) {}
+
+    /**
+     * @brief Called when move to the bottom of scroll.
+     *
+     * @param index Indicates the index of the child view being selected at the preset position. This parameter should
+     *              be set to {@link NULL_SELECT_INDEX} if no child view is selected or no position is preset.
+     * @param view Indicates the child view being selected at the preset position. This parameter should be set to
+     *             <b>NULL</b> if no child view is selected or no position is preset.
+     * @since 8
+     * @version 8
+     *
+     */
+    virtual void OnScrollBottom(int16_t index, UIView* view) {}
+
+    /**
      * @brief Called when a new child view is selected at the preset position as this list scrolls. For details about
      * how to set the position, see {@link SetSelectPosition}.
      *
