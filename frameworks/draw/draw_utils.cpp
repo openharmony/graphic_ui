@@ -85,14 +85,14 @@ namespace OHOS {
         ASSERT(0);                                            \
     }
 
-#define COLOR_BLEND_RGBA(r1, g1, b1, a1, r2, g2, b2, a2)            \
-    const float Alpha1 = static_cast<float>(a1) / OPA_OPAQUE;       \
-    const float Alpha2 = static_cast<float>(a2) / OPA_OPAQUE;       \
-    const float Alpha3 = 1 - (1 - Alpha1) * (1 - Alpha2);           \
-    (r1) = (Alpha2 * (r2) + (1 - Alpha2) * Alpha1 * (r1)) / Alpha3; \
-    (g1) = (Alpha2 * (g2) + (1 - Alpha2) * Alpha1 * (g1)) / Alpha3; \
-    (b1) = (Alpha2 * (b2) + (1 - Alpha2) * Alpha1 * (b1)) / Alpha3; \
-    (a1) = Alpha3 * OPA_OPAQUE;
+#define COLOR_BLEND_RGBA(r1, g1, b1, a1, r2, g2, b2, a2)                                  \
+    const float Alpha1 = static_cast<float>(a1) / OPA_OPAQUE;                             \
+    const float Alpha2 = static_cast<float>(a2) / OPA_OPAQUE;                             \
+    const float Alpha3 = 1 - (1 - Alpha1) * (1 - Alpha2);                                 \
+    (r1) = static_cast<uint8_t>((Alpha2 * (r2) + (1 - Alpha2) * Alpha1 * (r1)) / Alpha3); \
+    (g1) = static_cast<uint8_t>((Alpha2 * (g2) + (1 - Alpha2) * Alpha1 * (g1)) / Alpha3); \
+    (b1) = static_cast<uint8_t>((Alpha2 * (b2) + (1 - Alpha2) * Alpha1 * (b1)) / Alpha3); \
+    (a1) = static_cast<uint8_t>(Alpha3 * OPA_OPAQUE);
 
 #define COLOR_BLEND_RGB(r1, g1, b1, r2, g2, b2, a2)                                    \
     (r1) = (((r2) * (a2)) / OPA_OPAQUE) + (((r1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
@@ -336,27 +336,22 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer,
     Color32 fillColor;
     fillColor.full = Color::ColorTo32(color);
     uint8_t opacityMask;
-    uint8_t colorMode = 0;
     uint8_t opacityStep = 1;
     switch (fontWeight) {
         case FONT_WEIGHT_1:
             opacityStep = OPACITY_STEP_A1;
             opacityMask = 0x01;
-            colorMode = A1;
             break;
         case FONT_WEIGHT_2:
             opacityStep = OPACITY_STEP_A2;
             opacityMask = 0x03;
-            colorMode = A2;
             break;
         case FONT_WEIGHT_4:
             opacityStep = OPACITY_STEP_A4;
             opacityMask = 0x0F;
-            colorMode = A4;
             break;
         case FONT_WEIGHT_8:
             opacityMask = 0xFF;
-            colorMode = A8;
             break;
         default:
             return;
@@ -1078,6 +1073,7 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
 }
 #endif
 
+#if ENABLE_FIXED_POINT
 static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                         uint8_t* screenBuffer,
                                                         int16_t len,
@@ -1144,6 +1140,7 @@ static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& 
         screenBuffer += in.bufferPxSize;
     }
 }
+#endif
 
 #ifdef ARM_NEON_OPT
 static void DrawTriangleTrueColorBilinear8888InnerNeon(const TriangleScanInfo& in,

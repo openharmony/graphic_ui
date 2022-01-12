@@ -136,7 +136,7 @@ void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, Opacity
     InitArcLabelText();
     UIFont::GetInstance()->SetCurrentFontId(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
     DrawLabel::DrawArcText(gfxDstBuffer, mask, arcLabelText_->GetText(), center, arcLabelText_->GetFontId(),
-        arcTextInfo_, orientation_, *style_, opaScale);
+                           arcTextInfo_, orientation_, *style_, opaScale);
 }
 
 void UIArcLabel::RefreshArcLabel()
@@ -186,27 +186,28 @@ void UIArcLabel::MeasureArcTextInfo()
     uint16_t arcAngle;
     if (startAngle_ < endAngle_) {
         arcAngle = endAngle_ - startAngle_;
-        arcTextInfo_.direct = TEXT_DIRECT_LTR;  // Clockwise
+        arcTextInfo_.direct = TEXT_DIRECT_LTR; // Clockwise
         arcLabelText_->SetDirect(TEXT_DIRECT_LTR);
     } else {
         arcAngle = startAngle_ - endAngle_;
-        arcTextInfo_.direct = TEXT_DIRECT_RTL;  // Counterclockwise
+        arcTextInfo_.direct = TEXT_DIRECT_RTL; // Counterclockwise
         arcLabelText_->SetDirect(TEXT_DIRECT_RTL);
     }
     // calculate max arc length
     float maxLength = static_cast<float>((UI_PI * radius_ * arcAngle) / SEMICIRCLE_IN_DEGREE);
     arcTextInfo_.lineStart = 0;
-    arcTextInfo_.lineEnd = TypedText::GetNextLine(&text[arcTextInfo_.lineStart], style_->letterSpace_, maxLength);
+    arcTextInfo_.lineEnd =
+        TypedText::GetNextLine(&text[arcTextInfo_.lineStart], style_->letterSpace_, static_cast<int16_t>(maxLength));
     arcTextInfo_.startAngle = startAngle_ % CIRCLE_IN_DEGREE;
     int16_t actLength = TypedText::GetTextWidth(&text[arcTextInfo_.lineStart],
-        arcTextInfo_.lineEnd - arcTextInfo_.lineStart, style_->letterSpace_);
+                                                arcTextInfo_.lineEnd - arcTextInfo_.lineStart, style_->letterSpace_);
     if ((arcLabelText_->GetHorAlign() != TEXT_ALIGNMENT_LEFT) && (actLength < maxLength)) {
         float gapLength = maxLength - actLength;
         if (arcLabelText_->GetHorAlign() == TEXT_ALIGNMENT_CENTER) {
             gapLength = gapLength / 2; // 2: half
         }
         arcTextInfo_.startAngle += TypedText::GetAngleForArcLen(gapLength, letterHeight, arcTextInfo_.radius,
-            arcTextInfo_.direct, orientation_);
+                                                                arcTextInfo_.direct, orientation_);
     }
 }
 } // namespace OHOS

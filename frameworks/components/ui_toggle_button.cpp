@@ -66,7 +66,7 @@ void UIToggleButton::CalculateSize()
 
     Rect contentRect = GetContentRect();
     int16_t dx = (width_ - rectWidth_) / 2; // 2: half
-    int16_t dy = (height_ / 2) - corner_; // 2: half
+    int16_t dy = (height_ / 2) - corner_;   // 2: half
     int16_t x = contentRect.GetX() + dx;
     int16_t y = contentRect.GetY() + dy;
     leftCenter_ = {static_cast<int16_t>(x + corner_), static_cast<int16_t>(y + corner_)};
@@ -118,14 +118,17 @@ void UIToggleButton::Callback(UIView* view)
     float coefficient = Interpolation::GetBezierY(x, BEZIER_CONTROL_POINT_X_1, 0, BEZIER_CONTROL_POINT_X_2, 1);
     if (state_ == SELECTED) {
         currentCenter_.y = rightCenter_.y;
-        currentCenter_.x = (rightCenter_.x - leftCenter_.x) * coefficient + leftCenter_.x;
-        backgroundOpacity_ = TOGGLE_BTN_UNSELECTED_OPA + (OPA_OPAQUE - TOGGLE_BTN_UNSELECTED_OPA) * coefficient;
-        bgColor_ = Color::GetMixColor(selectedStateColor_, Color::White(), OPA_OPAQUE * coefficient);
+        currentCenter_.x = static_cast<int16_t>((rightCenter_.x - leftCenter_.x) * coefficient) + leftCenter_.x;
+        backgroundOpacity_ =
+            static_cast<uint8_t>(TOGGLE_BTN_UNSELECTED_OPA + (OPA_OPAQUE - TOGGLE_BTN_UNSELECTED_OPA) * coefficient);
+        bgColor_ =
+            Color::GetMixColor(selectedStateColor_, Color::White(), static_cast<uint8_t>(OPA_OPAQUE * coefficient));
     } else {
         currentCenter_.y = leftCenter_.y;
-        currentCenter_.x = rightCenter_.x - (rightCenter_.x - leftCenter_.x) * coefficient;
-        backgroundOpacity_ = OPA_OPAQUE - (OPA_OPAQUE - TOGGLE_BTN_UNSELECTED_OPA) * coefficient;
-        bgColor_ = Color::GetMixColor(selectedStateColor_, Color::White(), OPA_OPAQUE * (1 - coefficient));
+        currentCenter_.x = rightCenter_.x - static_cast<uint16_t>((rightCenter_.x - leftCenter_.x) * coefficient);
+        backgroundOpacity_ = static_cast<uint8_t>(OPA_OPAQUE - (OPA_OPAQUE - TOGGLE_BTN_UNSELECTED_OPA) * coefficient);
+        bgColor_ = Color::GetMixColor(selectedStateColor_, Color::White(),
+                                      static_cast<uint8_t>(OPA_OPAQUE * (1 - coefficient)));
     }
     Invalidate();
 }
