@@ -34,7 +34,9 @@ UIArcScrollBar::UIArcScrollBar()
       startAngle_(RIGHT_SIDE_START_ANGLE_IN_DEGREE),
       endAngle_(RIGHT_SIDE_END_ANGLE_IN_DEGREE),
       center_({0, 0}),
-      side_(SCROLL_BAR_RIGHT_SIDE) {}
+      side_(SCROLL_BAR_RIGHT_SIDE)
+{
+}
 
 void UIArcScrollBar::SetPosition(int16_t x, int16_t y, int16_t width, int16_t radius)
 {
@@ -49,10 +51,10 @@ void UIArcScrollBar::SetPosition(int16_t x, int16_t y, int16_t width, int16_t ra
 void UIArcScrollBar::SetScrollBarSide(uint8_t side)
 {
     if (side == SCROLL_BAR_RIGHT_SIDE) {
-        startAngle_ =  RIGHT_SIDE_START_ANGLE_IN_DEGREE;
+        startAngle_ = RIGHT_SIDE_START_ANGLE_IN_DEGREE;
         endAngle_ = RIGHT_SIDE_END_ANGLE_IN_DEGREE;
     } else {
-        startAngle_ =  LEFT_SIDE_START_ANGLE_IN_DEGREE;
+        startAngle_ = LEFT_SIDE_START_ANGLE_IN_DEGREE;
         endAngle_ = LEFT_SIDE_END_ANGLE_IN_DEGREE;
     }
     side_ = side;
@@ -68,7 +70,7 @@ void UIArcScrollBar::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
 
 void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa)
 {
-    uint16_t foregoundAngleRange = foregroundProportion_ * (endAngle_ - startAngle_);
+    uint16_t foregoundAngleRange = static_cast<uint16_t>(foregroundProportion_ * (endAngle_ - startAngle_));
     if (foregoundAngleRange < SCROLL_BAR_MIN_ARC) {
         foregoundAngleRange = SCROLL_BAR_MIN_ARC;
     }
@@ -79,12 +81,12 @@ void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invali
     if (side_ == SCROLL_BAR_RIGHT_SIDE) {
         minAngle = startAngle_;
         maxAngle = endAngle_ - foregoundAngleRange;
-        startAngle = minAngle + scrollProgress_ * (maxAngle - minAngle);
+        startAngle = minAngle + static_cast<int16_t>(scrollProgress_ * (maxAngle - minAngle));
         endAngle = startAngle + foregoundAngleRange;
     } else {
         maxAngle = endAngle_;
         minAngle = startAngle_ + foregoundAngleRange;
-        endAngle = maxAngle - scrollProgress_ * (maxAngle - minAngle);
+        endAngle = maxAngle - static_cast<int16_t>(scrollProgress_ * (maxAngle - minAngle));
         startAngle = endAngle - foregoundAngleRange;
     }
     if ((startAngle > endAngle_) || (endAngle < startAngle_)) {

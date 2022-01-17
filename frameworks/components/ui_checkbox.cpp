@@ -137,12 +137,12 @@ void UICheckBox::SelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
     styleSelect.bgColor_ = selectedStateColor_;
     styleSelect.bgOpa_ = backgroundOpacity_;
     BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, rect, trunc, styleSelect, opaScale_);
-    int16_t dx = borderWidth_ * DEFAULT_COEFFICIENT_START_DX;
-    int16_t dy = borderWidth_ * DEFAULT_COEFFICIENT_START_DY;
+    int16_t dx = static_cast<int16_t>(borderWidth_ * DEFAULT_COEFFICIENT_START_DX);
+    int16_t dy = static_cast<int16_t>(borderWidth_ * DEFAULT_COEFFICIENT_START_DY);
     Point start = {static_cast<int16_t>(rect.GetX() + dx), static_cast<int16_t>(rect.GetY() + dy)};
-    dx = borderWidth_ * DEFAULT_COEFFICIENT_MID_DX;
+    dx = static_cast<int16_t>(borderWidth_ * DEFAULT_COEFFICIENT_MID_DX);
     Point mid = {static_cast<int16_t>(start.x + dx), static_cast<int16_t>(start.y + dx)};
-    dx = borderWidth_ * DEFAULT_COEFFICIENT_MID_DY;
+    dx = static_cast<int16_t>(borderWidth_ * DEFAULT_COEFFICIENT_MID_DY);
     Point end = {static_cast<int16_t>(mid.x + dx), static_cast<int16_t>(mid.y - dx)};
     const int16_t half = 2; // 2 ：half
     ArcInfo arcInfoLeft = {start,
