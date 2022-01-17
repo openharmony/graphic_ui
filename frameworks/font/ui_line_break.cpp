@@ -58,7 +58,7 @@ uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)
         reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
     UTrie2* trie2 = reinterpret_cast<UTrie2*>(lineBreakTrie_);
     for (uint16_t index = 0; index < record.GetStrLen(); ++index) {
-        uint16_t category = UTRIE2_GET16(trie2, str[index]);
+        uint16_t category = UTRIE2_GET16(trie2, static_cast<uint32_t>(str[index]));
         // 0x4000: remove the dictionary flag bit
         if ((category & 0x4000) != 0) {
             // 0x4000: remove the dictionary flag bit
@@ -107,7 +107,10 @@ void UILineBreakEngine::LoadRule()
     initSuccess_ = true;
 }
 
-uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text, int16_t space, bool allBreak, int16_t& maxWidth,
+uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
+                                                int16_t space,
+                                                bool allBreak,
+                                                int16_t& maxWidth,
                                                 uint16_t len)
 {
     if (text == nullptr) {
@@ -166,7 +169,7 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, int32_t& state)
         utf16 = (unicode & TypedText::MAX_UINT16_LOW_SCOPE);
     } else if (unicode <= TypedText::MAX_UINT16_HIGH_SCOPE) {
         utf16 = static_cast<uint16_t>(TypedText::UTF16_LOW_PARAM + (unicode & TypedText::UTF16_LOW_MASK)); // low
-        uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), utf16);
+        uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), static_cast<uint32_t>(utf16));
         // 0x4000: remove the dictionary flag bit
         if ((category & 0x4000) != 0) {
             // 0x4000: remove the dictionary flag bit
@@ -174,10 +177,10 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, int32_t& state)
         }
         state = row->fNextState[category];
         row = reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
-        utf16 = static_cast<uint16_t>(TypedText::UTF16_HIGH_PARAM1 +
-            (unicode >> TypedText::UTF16_HIGH_SHIFT) - TypedText::UTF16_HIGH_PARAM2); // high
+        utf16 = static_cast<uint16_t>(TypedText::UTF16_HIGH_PARAM1 + (unicode >> TypedText::UTF16_HIGH_SHIFT) -
+                                      TypedText::UTF16_HIGH_PARAM2); // high
     }
-    uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), utf16);
+    uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), static_cast<uint32_t>(utf16));
     // 0x4000: remove the dictionary flag bit
     if ((category & 0x4000) != 0) {
         // 0x4000: remove the dictionary flag bit
