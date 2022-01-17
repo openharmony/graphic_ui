@@ -21,14 +21,18 @@
 
 namespace OHOS {
 namespace {
-    static int16_t g_buttonH = 80;
-    static int16_t g_buttonW = 200;
-    static int16_t g_blank = 20;
-    static int16_t g_listW = 200;
-    static int16_t g_listH = 400;
-    static int16_t g_selectPos = 150;
-    static int16_t g_blankSize = 250;
-}
+static int16_t g_buttonH = 80;
+static int16_t g_buttonW = 200;
+static int16_t g_blank = 20;
+static int16_t g_listW = 200;
+static int16_t g_listH = 400;
+static int16_t g_selectPos = 150;
+static int16_t g_blankSize = 250;
+static int16_t g_padding = 10;
+static int16_t g_border = 10;
+static int16_t g_reboundSize = 50;
+static int16_t g_itemHeight = 100;
+} // namespace
 
 void UITestUIList::SetUp()
 {
@@ -98,6 +102,9 @@ void UITestUIList::TearDown()
     setRefreshBtn_ = nullptr;
     setLoopBtn_ = nullptr;
     setLoopOffBtn_ = nullptr;
+    setListPaddingBtn_ = nullptr;
+    setListBorderBtn_ = nullptr;
+    setRebondSizeBtn_ = nullptr;
     setSelectBtn_ = nullptr;
     setSelectOffBtn_ = nullptr;
     setAutoAlignBtn_ = nullptr;
@@ -108,6 +115,10 @@ void UITestUIList::TearDown()
     setAutoAlignACCDncBtn_ = nullptr;
     setYScrollBarVisableBtn_ = nullptr;
     setYScrollBarInvisableBtn_ = nullptr;
+    setItemHeightMinBtn_ = nullptr;
+    setItemHeightMaxBtn_ = nullptr;
+    setAdapterEmptyBtn_ = nullptr;
+    setSwitchDirectionBtn_ = nullptr;
     lastX_ = 0;
     lastY_ = 0;
 }
@@ -139,7 +150,7 @@ void UITestUIList::UIKit_List_Init_Test_Full_Screen_001()
     list->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
     list->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, VIEW_DISTANCE_TO_TOP_SIDE, g_listW,
                       g_listH - 200); // 200: mean list reduce height
-    list->SetStartIndex(5); // 5: list start index
+    list->SetStartIndex(5);           // 5: list start index
     list->GetStartIndex();
     list->SetAdapter(adapter1_);
     list->SetYScrollBarVisible(true);
@@ -195,6 +206,15 @@ void UITestUIList::SetControlButton()
     if (setLoopOffBtn_ == nullptr) {
         setLoopOffBtn_ = new UILabelButton();
     }
+    if (setListPaddingBtn_ == nullptr) {
+        setListPaddingBtn_ = new UILabelButton();
+    }
+    if (setListBorderBtn_ == nullptr) {
+        setListBorderBtn_ = new UILabelButton();
+    }
+    if (setRebondSizeBtn_ == nullptr) {
+        setRebondSizeBtn_ = new UILabelButton();
+    }
     if (setSelectBtn_ == nullptr) {
         setSelectBtn_ = new UILabelButton();
     }
@@ -225,6 +245,18 @@ void UITestUIList::SetControlButton()
     if (setYScrollBarInvisableBtn_ == nullptr) {
         setYScrollBarInvisableBtn_ = new UILabelButton();
     }
+    if (setItemHeightMinBtn_ == nullptr) {
+        setItemHeightMinBtn_ = new UILabelButton();
+    }
+    if (setItemHeightMaxBtn_ == nullptr) {
+        setItemHeightMaxBtn_ = new UILabelButton();
+    }
+    if (setAdapterEmptyBtn_ == nullptr) {
+        setAdapterEmptyBtn_ = new UILabelButton();
+    }
+    if (setSwitchDirectionBtn_ == nullptr) {
+        setSwitchDirectionBtn_ = new UILabelButton();
+    }
     positionX_ += 5; // 5: increase y-coordinate
     SetUpButton(setBlankBtn_, "开启blank");
     SetUpButton(setBlankOffBtn_, "关闭blank");
@@ -233,6 +265,9 @@ void UITestUIList::SetControlButton()
     SetUpButton(setRefreshBtn_, "刷新list");
     SetUpButton(setLoopBtn_, "开启loop模式");
     SetUpButton(setLoopOffBtn_, "关闭loop模式");
+    SetUpButton(setListPaddingBtn_, "设置Padding");
+    SetUpButton(setListBorderBtn_, "设置Border");
+    SetUpButton(setRebondSizeBtn_, "设置回弹值");
     positionX_ = setBlankBtn_->GetX() + setBlankBtn_->GetWidth() + g_blank - VIEW_DISTANCE_TO_LEFT_SIDE;
     positionY_ = setBlankBtn_->GetY();
     SetUpButton(setSelectBtn_, "select 150");
@@ -245,6 +280,13 @@ void UITestUIList::SetControlButton()
     SetUpButton(setAutoAlignACCDncBtn_, "减少自动对齐时间 ");
     SetUpButton(setYScrollBarVisableBtn_, "显示纵向滚动条");
     SetUpButton(setYScrollBarInvisableBtn_, "不显示纵向滚动条");
+    positionX_ = setBlankBtn_->GetX() + setBlankBtn_->GetWidth() + setBlankBtn_->GetWidth() + g_blank + g_blank -
+                 VIEW_DISTANCE_TO_LEFT_SIDE;
+    positionY_ = setBlankBtn_->GetY();
+    SetUpButton(setItemHeightMinBtn_, "设置Item高度为1");
+    SetUpButton(setItemHeightMaxBtn_, "设置Item高度为100");
+    SetUpButton(setAdapterEmptyBtn_, "清空List的元素");
+    SetUpButton(setSwitchDirectionBtn_, "切换List方向");
 }
 
 void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
@@ -261,8 +303,8 @@ void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
     }
     adapter4_->SetLineBreakMode(UILabel::LINE_BREAK_CLIP);
     adapter4_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-    adapter4_->SetHeight(100);   // 100: mean adapter height
-    adapter4_->SetWidth(100);   // 100: mean adapter width
+    adapter4_->SetHeight(100); // 100: mean adapter height
+    adapter4_->SetWidth(100);  // 100: mean adapter width
     adapter4_->SetData(adapterData2_);
 
     UIList* list = new UIList(UIList::VERTICAL);
@@ -329,6 +371,17 @@ bool UITestUIList::OnClick(UIView& view, const ClickEvent& event)
         currentList_->SetLoopState(true);
     } else if (&view == setLoopOffBtn_) {
         currentList_->SetLoopState(false);
+    } else if (&view == setListPaddingBtn_) {
+        currentList_->SetStyle(STYLE_PADDING_LEFT, g_padding);
+        currentList_->SetStyle(STYLE_PADDING_RIGHT, g_padding);
+        currentList_->SetStyle(STYLE_PADDING_TOP, g_padding);
+        currentList_->SetStyle(STYLE_PADDING_BOTTOM, g_padding);
+        currentList_->Invalidate();
+    } else if (&view == setListBorderBtn_) {
+        currentList_->SetStyle(STYLE_BORDER_WIDTH, g_border);
+        currentList_->Invalidate();
+    } else if (&view == setRebondSizeBtn_) {
+        currentList_->SetReboundSize(g_reboundSize);
     } else if (&view == setSelectBtn_) {
         currentList_->SetSelectPosition(g_selectPos);
     } else if (&view == setSelectOffBtn_) {
@@ -351,6 +404,19 @@ bool UITestUIList::OnClick(UIView& view, const ClickEvent& event)
         currentList_->SetYScrollBarVisible(true);
     } else if (&view == setYScrollBarInvisableBtn_) {
         currentList_->SetYScrollBarVisible(false);
+    } else if (&view == setItemHeightMinBtn_) {
+        adapter4_->SetHeight(1);
+        currentList_->RefreshList();
+    } else if (&view == setItemHeightMaxBtn_) {
+        adapter4_->SetHeight(g_itemHeight);
+        currentList_->RefreshList();
+    } else if (&view == setAdapterEmptyBtn_) {
+        adapterData2_->Clear();
+        adapter4_->SetData(adapterData2_);
+        currentList_->RefreshList();
+    } else if (&view == setSwitchDirectionBtn_) {
+        currentList_->SetDirection((currentList_->GetDirection() == UIList::HORIZONTAL) ? 1 : 0);
+        currentList_->RefreshList();
     }
     return true;
 }
@@ -375,6 +441,19 @@ void UITestUIList::OnScrollEnd(int16_t index, UIView* view)
     }
     scrollStateLabel_->Invalidate();
 }
+
+void UITestUIList::OnScrollTop(int16_t index, UIView* view)
+{
+    scrollStateLabel_->SetText("OnTop");
+    scrollStateLabel_->Invalidate();
+}
+
+void UITestUIList::OnScrollBottom(int16_t index, UIView* view)
+{
+    scrollStateLabel_->SetText("OnBottom");
+    scrollStateLabel_->Invalidate();
+}
+
 void UITestUIList::OnItemSelected(int16_t index, UIView* view)
 {
     if (view != nullptr) {
@@ -392,7 +471,7 @@ void UITestUIList::SetUpButton(UILabelButton* btn, const char* title)
     }
     container_->Add(btn);
     btn->SetPosition(positionX_ + VIEW_DISTANCE_TO_LEFT_SIDE, positionY_, BUTTON_WIDHT3, BUTTON_HEIGHT3);
-    positionY_ += btn->GetHeight() + 10;    // 10: button interval
+    positionY_ += btn->GetHeight() + 10; // 10: button interval
     btn->SetText(title);
     btn->SetFont(DEFAULT_VECTOR_FONT_FILENAME, BUTTON_LABEL_SIZE);
     btn->SetOnClickListener(this);
