@@ -35,6 +35,8 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnScrollStart(int16_t index, UIView* view) override;
     void OnScrollEnd(int16_t index, UIView* view) override;
+    void OnScrollTop(int16_t index, UIView* view) override;
+    void OnScrollBottom(int16_t index, UIView* view) override;
     void OnItemSelected(int16_t index, UIView* view) override;
     void UIKit_List_Init_Test_Full_Screen_001();
     void UIKit_List_Init_Test_halh_Screen_001();
@@ -52,6 +54,9 @@ private:
     UILabelButton* setRefreshBtn_ = nullptr;
     UILabelButton* setLoopBtn_ = nullptr;
     UILabelButton* setLoopOffBtn_ = nullptr;
+    UILabelButton* setListPaddingBtn_ = nullptr;
+    UILabelButton* setListBorderBtn_ = nullptr;
+    UILabelButton* setRebondSizeBtn_ = nullptr;
     UILabelButton* setSelectBtn_ = nullptr;
     UILabelButton* setSelectOffBtn_ = nullptr;
     UILabelButton* setAutoAlignBtn_ = nullptr;
@@ -62,6 +67,10 @@ private:
     UILabelButton* setAutoAlignACCDncBtn_ = nullptr;
     UILabelButton* setYScrollBarVisableBtn_ = nullptr;
     UILabelButton* setYScrollBarInvisableBtn_ = nullptr;
+    UILabelButton* setItemHeightMinBtn_ = nullptr;
+    UILabelButton* setItemHeightMaxBtn_ = nullptr;
+    UILabelButton* setAdapterEmptyBtn_ = nullptr;
+    UILabelButton* setSwitchDirectionBtn_ = nullptr;
     UILabel* scrollStateLabel_ = nullptr;
     UILabel* scrollSelectLabel_ = nullptr;
     UIScrollView* container_ = nullptr;
