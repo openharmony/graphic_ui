@@ -41,15 +41,6 @@ void ScreenDeviceProxy::OnRenderFinish(const Rect& mask)
 
 void ScreenDeviceProxy::DrawAnimatorBuffer(const Rect& invalidatedArea)
 {
-    Rect invalidRect = curViewRect_;
-    transMap_.SetTransMapRect(curViewRect_);
-    invalidRect.Join(invalidRect, transMap_.GetBoxRect());
-
-    if (invalidRect.Intersect(invalidRect, invalidatedArea)) {
-        uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(animatorImageInfo_.header.colorMode);
-        TransformDataInfo imageTranDataInfo = {animatorImageInfo_.header, animatorImageInfo_.data, pxSize, LEVEL0,
-                                               BILINEAR};
-    }
 }
 
 void ScreenDeviceProxy::SetAnimatorRect(const Rect& rect)

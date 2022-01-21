@@ -92,7 +92,7 @@ void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invali
     if ((startAngle > endAngle_) || (endAngle < startAngle_)) {
         return;
     }
-    ArcInfo arcInfo = {0};
+    ArcInfo arcInfo = {{0, 0}, {0, 0}, 0, 0, 0, nullptr};
     arcInfo.radius = (radius_ > 0) ? (radius_ - 1) : 0;
     arcInfo.center = center_;
     arcInfo.startAngle = MATH_MAX(startAngle, startAngle_);
@@ -103,7 +103,7 @@ void UIArcScrollBar::DrawForeground(BufferInfo& gfxDstBuffer, const Rect& invali
 
 void UIArcScrollBar::DrawBackground(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea, uint8_t backgroundOpa)
 {
-    ArcInfo arcInfo = {0};
+    ArcInfo arcInfo = {{0, 0}, {0, 0}, 0, 0, 0, nullptr};
     arcInfo.radius = radius_;
     arcInfo.center = center_;
     arcInfo.startAngle = startAngle_;
