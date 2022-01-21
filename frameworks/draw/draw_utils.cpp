@@ -146,10 +146,6 @@ namespace OHOS {
         ASSERT(0);                                                                                                  \
     }
 
-#ifdef VERSION_STANDARD
-const int16_t HARDWARE_ACC_SIZE_LIMIT = 50 * 50;
-#endif
-
 namespace {
 static constexpr uint8_t OPACITY_STEP_A1 = 255;
 static constexpr uint8_t OPACITY_STEP_A2 = 85;
