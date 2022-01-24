@@ -20,7 +20,7 @@
 
 namespace OHOS {
 class UIFontAllocator {
-    static constexpr uint8_t MEM_ALIGNMENT = 4;
+    static constexpr uint8_t UI_FONT_MEM_ALIGNMENT = 4;
 
     struct Chunk {
         uint32_t next;
@@ -52,7 +52,7 @@ public:
 private:
     uint32_t AlignSize(uint32_t size)
     {
-        return (size + MEM_ALIGNMENT - 1U) & ~(MEM_ALIGNMENT - 1U);
+        return (size + UI_FONT_MEM_ALIGNMENT - 1U) & ~(UI_FONT_MEM_ALIGNMENT - 1U);
     }
     void CombineFree(Chunk* cache);
 
