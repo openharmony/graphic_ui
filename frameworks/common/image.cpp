@@ -33,16 +33,9 @@ Image::~Image()
     if (srcType_ == IMG_SRC_FILE) {
         CacheManager::GetInstance().Close(path_);
     }
-    if (imageInfo_ != nullptr) {
-        if (mallocFlag_) {
-            if (imageInfo_->data != nullptr) {
-                UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(imageInfo_->data)));
-            }
-            mallocFlag_ = false;
-        }
-        UIFree(reinterpret_cast<void*>(const_cast<ImageInfo*>(imageInfo_)));
-        imageInfo_ = nullptr;
-    }
+
+    ReInitImageInfo(nullptr, false);
+
     if (path_ != nullptr) {
         UIFree(reinterpret_cast<void*>(const_cast<char*>(path_)));
         path_ = nullptr;
@@ -92,9 +85,10 @@ bool Image::SetStandardSrc(const char* src)
     if (src == nullptr) {
         return false;
     }
+    srcType_ = IMG_SRC_UNKNOWN;
+
     const char* ptr = strrchr(src, '.');
     if (ptr == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
 
@@ -110,14 +104,12 @@ bool Image::SetStandardSrc(const char* src)
     size_t strLen = strlen(src) + 1;
     char* imagePath = static_cast<char*>(UIMalloc(static_cast<uint32_t>(strLen)));
     if (imagePath == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
 
     if (strcpy_s(imagePath, strLen, src) != EOK) {
         UIFree(reinterpret_cast<void*>(imagePath));
         imagePath = nullptr;
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     path_ = imagePath;
@@ -130,16 +122,16 @@ bool Image::SetLiteSrc(const char* src)
     if (src == nullptr) {
         return false;
     }
+    srcType_ = IMG_SRC_UNKNOWN;
+
     const char* ptr = strrchr(src, '.');
     if (ptr == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
 
     size_t strLen = strlen(src) + 1;
     char* imagePath = static_cast<char*>(UIMalloc(static_cast<uint32_t>(strLen)));
     if (imagePath == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     if (IsImgValid(ptr)) {
@@ -147,21 +139,18 @@ bool Image::SetLiteSrc(const char* src)
         if (memcpy_s(imagePath, strLen, src, strLen) != EOK) {
             UIFree(reinterpret_cast<void*>(imagePath));
             imagePath = nullptr;
-            srcType_ = IMG_SRC_UNKNOWN;
             return false;
         }
         (ptr - src + imagePath)[1] = '\0'; // remove suffix
         if (strcat_s(imagePath, strLen, suffixName) != EOK) {
             UIFree(reinterpret_cast<void*>(imagePath));
             imagePath = nullptr;
-            srcType_ = IMG_SRC_UNKNOWN;
             return false;
         }
     } else {
         if (memcpy_s(imagePath, strLen, src, strLen) != EOK) {
             UIFree(reinterpret_cast<void*>(imagePath));
             imagePath = nullptr;
-            srcType_ = IMG_SRC_UNKNOWN;
             return false;
         }
     }
@@ -184,43 +173,30 @@ bool Image::SetSrc(const char* src)
             return SetStandardSrc(src);
         }
         return SetLiteSrc(src);
-    } else {
-        path_ = src;
-        srcType_ = IMG_SRC_UNKNOWN;
     }
+    srcType_ = IMG_SRC_UNKNOWN;
     return true;
 }
 
 bool Image::SetSrc(const ImageInfo* src)
 {
-    if (imageInfo_ != nullptr) {
-        if (mallocFlag_) {
-            if (imageInfo_->data != nullptr) {
-                UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(imageInfo_->data)));
-            }
-            mallocFlag_ = false;
-        }
-        UIFree(reinterpret_cast<void*>(const_cast<ImageInfo*>(imageInfo_)));
-        imageInfo_ = nullptr;
-    }
+    ReInitImageInfo(nullptr, false);
+    srcType_ = IMG_SRC_UNKNOWN;
+    imageInfo_ = nullptr;
 
     if (src != nullptr) {
         imageInfo_ = static_cast<ImageInfo*>(UIMalloc(static_cast<uint32_t>(sizeof(ImageInfo))));
         if (imageInfo_ == nullptr) {
-            srcType_ = IMG_SRC_UNKNOWN;
             return false;
         }
 
         if (memcpy_s(const_cast<ImageInfo*>(imageInfo_), sizeof(ImageInfo), src, sizeof(ImageInfo)) != EOK) {
-            srcType_ = IMG_SRC_UNKNOWN;
             return false;
         }
 
         srcType_ = IMG_SRC_VARIABLE;
-    } else {
-        imageInfo_ = src;
-        srcType_ = IMG_SRC_UNKNOWN;
     }
+
     return true;
 }
 
@@ -240,24 +216,50 @@ void Image::DrawImage(BufferInfo& gfxDstBuffer,
 }
 
 #if ENABLE_JPEG_AND_PNG
+
+static inline void FreePngBytep(png_bytep** rowPointer, uint16_t size)
+{
+    png_bytep* tmpRowPointer = *rowPointer;
+    for (uint16_t i = 0; i < size; i++) {
+        UIFree(tmpRowPointer[i]);
+        tmpRowPointer[i] = nullptr;
+    }
+    UIFree(*rowPointer);
+    *rowPointer = nullptr;
+}
+
+static inline png_bytep* MallocPngBytep(uint16_t height, uint32_t rowBytes)
+{
+    png_bytep* rowPointer = static_cast<png_bytep*>(UIMalloc(sizeof(png_bytep) * height));
+    if (rowPointer == nullptr) {
+        return nullptr;
+    }
+    for (uint16_t y = 0; y < height; y++) {
+        rowPointer[y] = static_cast<png_byte*>(UIMalloc(rowBytes));
+        if (rowPointer[y] == nullptr) {
+            FreePngBytep(&rowPointer, y);
+            return nullptr;
+        }
+    }
+    return rowPointer;
+}
+
 bool Image::SetPNGSrc(const char* src)
 {
+    srcType_ = IMG_SRC_UNKNOWN;
     FILE* infile = nullptr;
     png_bytep* rowPointer = nullptr;
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (png == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     png_infop info = png_create_info_struct(png);
     if (info == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         png_destroy_read_struct(&png, &info, nullptr);
         return false;
     }
     if ((infile = fopen(src, "rb")) == nullptr) {
         GRAPHIC_LOGE("can't open %s\n", src);
-        srcType_ = IMG_SRC_UNKNOWN;
         png_destroy_read_struct(&png, &info, nullptr);
         return false;
     }
@@ -292,49 +294,26 @@ bool Image::SetPNGSrc(const char* src)
     png_set_interlace_handling(png);
     png_read_update_info(png, info);
 
-    rowPointer = static_cast<png_bytep*>(UIMalloc(sizeof(png_bytep) * height));
+    rowPointer = MallocPngBytep(height, png_get_rowbytes(png, info));
     if (rowPointer == nullptr) {
-        srcType_ = IMG_SRC_UNKNOWN;
         fclose(infile);
         png_destroy_read_struct(&png, &info, nullptr);
         return false;
     }
-    for (uint16_t y = 0; y < height; y++) {
-        rowPointer[y] = static_cast<png_byte*>(UIMalloc(png_get_rowbytes(png, info)));
-        if (rowPointer[y] == nullptr) {
-            for (uint16_t i = 0; i < y; i++) {
-                UIFree(rowPointer[i]);
-                rowPointer[i] = nullptr;
-            }
-            fclose(infile);
-            UIFree(rowPointer);
-            srcType_ = IMG_SRC_UNKNOWN;
-            png_destroy_read_struct(&png, &info, nullptr);
-            return false;
-        }
-    }
+
     png_read_image(png, rowPointer);
     fclose(infile);
     png_destroy_read_struct(&png, &info, nullptr);
+
     ImageInfo* imgInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
     if (imgInfo == nullptr) {
-        for (uint16_t i = 0; i < height; i++) {
-            UIFree(rowPointer[i]);
-            rowPointer[i] = nullptr;
-        }
-        UIFree(rowPointer);
-        srcType_ = IMG_SRC_UNKNOWN;
+        FreePngBytep(&rowPointer, height);
         return false;
     }
     uint8_t* srcData = static_cast<uint8_t*>(UIMalloc(dataSize));
     if (srcData == nullptr) {
-        for (uint16_t i = 0; i < height; i++) {
-            UIFree(rowPointer[i]);
-            rowPointer[i] = nullptr;
-        }
-        UIFree(rowPointer);
+        FreePngBytep(&rowPointer, height);
         UIFree(imgInfo);
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     uint32_t n = 0;
@@ -346,10 +325,8 @@ bool Image::SetPNGSrc(const char* src)
             srcData[n++] = row[x + 0]; // 0: R channel
             srcData[n++] = row[x + 3]; // 3: Alpha channel
         }
-        UIFree(row);
-        row = nullptr;
     }
-    UIFree(rowPointer);
+    FreePngBytep(&rowPointer, height);
 
     imgInfo->header.width = width;
     imgInfo->header.height = height;
@@ -357,18 +334,7 @@ bool Image::SetPNGSrc(const char* src)
     imgInfo->dataSize = dataSize;
     imgInfo->data = srcData;
 
-    if (imageInfo_ != nullptr) {
-        if (mallocFlag_) {
-            if (imageInfo_->data != nullptr) {
-            UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(imageInfo_->data)));
-            }
-            mallocFlag_ = false;
-        }
-        UIFree(reinterpret_cast<void*>(const_cast<ImageInfo*>(imageInfo_)));
-        imageInfo_ = nullptr;
-    }
-    imageInfo_ = imgInfo;
-    mallocFlag_ = true;
+    ReInitImageInfo(imgInfo, true);
     srcType_ = IMG_SRC_VARIABLE;
     return true;
 }
@@ -378,10 +344,10 @@ bool Image::SetJPEGSrc(const char* src)
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
     FILE* infile = nullptr;
+    srcType_ = IMG_SRC_UNKNOWN;
 
     if ((infile = fopen(src, "rb")) == nullptr) {
         GRAPHIC_LOGE("can't open %s\n", src);
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     cinfo.err = jpeg_std_error(&jerr);
@@ -402,7 +368,6 @@ bool Image::SetJPEGSrc(const char* src)
         jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
         fclose(infile);
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     uint8_t* srcData = static_cast<uint8_t*>(UIMalloc(dataSize));
@@ -411,7 +376,6 @@ bool Image::SetJPEGSrc(const char* src)
         jpeg_destroy_decompress(&cinfo);
         fclose(infile);
         UIFree(imgInfo);
-        srcType_ = IMG_SRC_UNKNOWN;
         return false;
     }
     uint32_t n = 0;
@@ -434,20 +398,22 @@ bool Image::SetJPEGSrc(const char* src)
     imgInfo->dataSize = dataSize;
     imgInfo->data = srcData;
 
-    if (imageInfo_ != nullptr) {
-        if (mallocFlag_) {
-            if (imageInfo_->data != nullptr) {
-                UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(imageInfo_->data)));
-            }
-            mallocFlag_ = false;
-        }
-        UIFree(reinterpret_cast<void*>(const_cast<ImageInfo*>(imageInfo_)));
-        imageInfo_ = nullptr;
-    }
-    imageInfo_ = imgInfo;
-    mallocFlag_ = true;
+    ReInitImageInfo(imgInfo, true);
     srcType_ = IMG_SRC_VARIABLE;
     return true;
 }
 #endif
+
+void Image::ReInitImageInfo(ImageInfo* imgInfo, bool mallocFlag)
+{
+    if (mallocFlag_) {
+        if (imageInfo_->data != nullptr) {
+            UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(imageInfo_->data)));
+        }
+    }
+    UIFree(reinterpret_cast<void*>(const_cast<ImageInfo*>(imageInfo_)));
+
+    imageInfo_ = imgInfo;
+    mallocFlag_ = mallocFlag;
+}
 } // namespace OHOS
