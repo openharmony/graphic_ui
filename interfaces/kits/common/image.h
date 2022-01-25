@@ -169,6 +169,7 @@ private:
             !strcmp(suffix, ".JPG") || !strcmp(suffix, ".jpeg") || !strcmp(suffix, ".JPEG") ||
             !strcmp(suffix, ".BMP") || !strcmp(suffix, ".bmp"));
     }
+    void ReInitImageInfo(ImageInfo* imgInfo, bool mallocFlag);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_IMAGE_H
