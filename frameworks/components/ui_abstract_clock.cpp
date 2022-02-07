@@ -40,6 +40,7 @@ void UIAbstractClock::IncOneSecond()
     currentHour_ = currentHour_ % ONE_DAY_IN_HOUR;
 
     UpdateClock(false);
+    Invalidate();
 }
 
 void UIAbstractClock::SetWorkMode(WorkMode newMode)
