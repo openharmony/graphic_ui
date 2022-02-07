@@ -459,7 +459,7 @@ void RootView::CheckRunningInUITask()
             return;
         }
     }
-    RestoreSystemWrapper("Catch setting font id not in ui-thread.");
+    GRAPHIC_LOGE("Catch setting font id not in ui-thread.");
 }
 
 void RootView::AddUITask()
