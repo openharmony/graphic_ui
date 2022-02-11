@@ -35,7 +35,7 @@ UIFontBitmap::UIFontBitmap() : offset_(0), dynamicFont_(), dynamicFontRamUsed_(0
     bitmapRamUsed_ = FONT_BITMAP_CACHE_SIZE;
 }
 
-UIFontBitmap:: ~UIFontBitmap()
+UIFontBitmap::~UIFontBitmap()
 {
     if (dynamicFontFd_ >= 0) {
         close(dynamicFontFd_);
@@ -83,7 +83,7 @@ int8_t UIFontBitmap::SetFontPath(const char* dpath, const char* spath)
     }
 #ifdef _WIN32
     dynamicFontFd_ = open(dpath, O_RDONLY | O_BINARY);
-#else 
+#else
     dynamicFontFd_ = open(dpath, O_RDONLY);
 #endif
     if (dynamicFontFd_ < 0) {
@@ -277,22 +277,27 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
         SetCurrentFontId(fontId);
     }
     int8_t ret = GetGlyphNode(unicode, glyphNode);
-    while ((ret == RET_VALUE_OK) && ((glyphNode.reserve != fontId) || (glyphNode.unicode != unicode))) {
-        SetCurrentFontId(fontId);
-        ret = GetGlyphNode(unicode, glyphNode);
-    }
     if (ret != RET_VALUE_OK) {
         return nullptr;
     }
     uint8_t* bitmap = bitmapCache_->GetBitmap(fontId, unicode);
     if (bitmap != nullptr) {
-        return bitmap;
+        GetGlyphNode(unicode, glyphNode);
+        const GlyphNode* node = nullptr;
+        node = dynamicFont_.GetGlyphNode(unicode);
+        if (node != nullptr && node->dataFlag == node->fontId && fontId == node->fontId) {
+            return bitmap;
+        } else {
+            GRAPHIC_LOGE("DataFlag of bitmap node not equal to fontId.");
+        }
     }
     if (glyphNode.kernOff <= glyphNode.dataOff) {
         return nullptr;
     }
     uint32_t bitmapSize = glyphNode.kernOff - glyphNode.dataOff;
-    bitmap = bitmapCache_->GetSpace(fontId, unicode, bitmapSize);
+    if (bitmap == nullptr) {
+        bitmap = bitmapCache_->GetSpace(fontId, unicode, bitmapSize);
+    }
     ret = dynamicFont_.GetBitmap(unicode, bitmap, fontId);
     if (ret == RET_VALUE_OK) {
         return bitmap;
@@ -317,4 +322,4 @@ void UIFontBitmap::SetFontFileOffset(uint32_t offset)
 {
     offset_ = offset;
 }
-} // namespace
+} // namespace OHOS
