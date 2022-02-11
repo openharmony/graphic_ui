@@ -101,7 +101,7 @@ GlyphNode* GlyphsManager::GetNodeFromCache(uint32_t unicode, uint8_t fontId)
     uint8_t uc = unicode & UNICODE_HASH_MASK;
     for (uint8_t i = 0; i < NODE_HASH_NR; i++) {
         GlyphNode* p = &((*nodeCache_)[font][uc][i]);
-        if ((p->unicode == unicode) && (p->reserve == fontId)) {
+        if ((p->unicode == unicode) && (p->fontId == fontId)) {
             node = p;
             break;
         }
@@ -337,7 +337,7 @@ const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode)
     }
     uint8_t fontId = fontId_;
     if (curGlyphNode_ != nullptr) {
-        if ((curGlyphNode_->unicode == unicode) && (curGlyphNode_->reserve == fontId)) {
+        if ((curGlyphNode_->unicode == unicode) && (curGlyphNode_->fontId == fontId)) {
             return curGlyphNode_;
         }
     }
@@ -345,7 +345,7 @@ const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode)
     if (node == nullptr) {
         node = GetNodeFromFile(unicode, fontId);
         if (node != nullptr) {
-            node->reserve = fontId;
+            node->fontId = fontId;
         }
     }
     curGlyphNode_ = node;
@@ -388,19 +388,14 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontI
         GRAPHIC_LOGE("GlyphsManager::GetBitmap invalid parameter");
         return INVALID_RET_VALUE;
     }
-    
+
     GraphicLockGuard guard(lock_);
     if (!isFontIdSet_) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap fontId not set");
         return INVALID_RET_VALUE;
     }
-    const GlyphNode* node = GetGlyphNode(unicode);
+    GlyphNode* node = const_cast<GlyphNode*>(GetGlyphNode(unicode));
     uint32_t tmpBitMapSectionStart = curBitMapSectionStart_;
-    while ((node != nullptr) && ((node->reserve != fontId) || (node->unicode != unicode))) {
-        SetCurrentFontId(fontId);
-        node = GetGlyphNode(unicode);
-        tmpBitMapSectionStart = curBitMapSectionStart_;
-    }
     guard.Unlock();
     if (node == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap node not found");
@@ -420,6 +415,7 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontI
         return INVALID_RET_VALUE;
     }
 
+    node->dataFlag = fontId;
     return RET_VALUE_OK;
 }
 } // namespace OHOS

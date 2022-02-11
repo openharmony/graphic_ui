@@ -277,7 +277,8 @@ struct GlyphNode {
     uint32_t dataOff;  // GLYPH_DATA_OFF_OFFSET
     uint32_t kernOff;  // GLYPH_KERN_OFF_OFFSET
     uint16_t kernSize; // GLYPH_KERN_SIZE_OFFSET
-    uint16_t reserve;  // GLYPH_HEAD_RES_OFFSET
+    uint8_t fontId;    // GLYPH_FONT_ID
+    uint8_t dataFlag;  // GLYPH_DATA_HEAD_FLAG
 };
 
 /**
