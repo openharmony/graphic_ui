@@ -885,6 +885,9 @@ void UIList::FixHorDistance(int16_t& distanceX)
     while (targetView != nullptr) {
         int16_t pos = targetView->GetX();
         int16_t width = targetView->GetRelativeRect().GetWidth();
+        if (width == 0) {
+            return;
+        }
         if (pos <= selectPosition_ && pos + width >= selectPosition_) {
             int16_t offset = selectPosition_ - (pos + width / 2); // 2 : half of width
             if ((distanceX < 0) && (offset > 0)) {
@@ -905,6 +908,9 @@ void UIList::FixVerDistance(int16_t& distanceY)
     while (targetView != nullptr) {
         int16_t pos = targetView->GetY();
         int16_t height = targetView->GetRelativeRect().GetHeight();
+        if (height == 0) {
+            return;
+        }
         if (pos <= selectPosition_ && pos + height >= selectPosition_) {
             int16_t offset = selectPosition_ - (pos + height / 2); // 2 : half of height
             if ((distanceY < 0) && (offset > 0)) {
