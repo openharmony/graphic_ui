@@ -44,6 +44,10 @@ config("graphic_define_config") {
   } else {
     defines += [ "RESOURCE_DIR=\"/user/data/\"" ]
   }
+  
+  if (enable_graphic_gif) {
+    defines += [ "ENABLE_GIF=1" ]
+  }
 }
 
 if (enable_graphic_font) {
@@ -170,7 +174,6 @@ shared_library("ui") {
     "//foundation/graphic/wms:lite_wms",
     "//third_party/bounds_checking_function:libsec_shared",
     "//third_party/freetype:freetype",
-    "//third_party/giflib:libgif",
     "//third_party/icu/icu4c/source/common:icu_font",
     "//third_party/libjpeg:libjpeg",
     "//third_party/libpng:libpng",
@@ -188,6 +191,9 @@ shared_library("ui") {
     ]
   }
 
+  if (enable_graphic_gif) {
+      deps += [ "//third_party/giflib:libgif", ]
+  }
   public_deps = [ "//foundation/graphic/utils:lite_graphic_utils" ]
   public_configs = [ ":graphic_define_config" ]
   cflags = [
