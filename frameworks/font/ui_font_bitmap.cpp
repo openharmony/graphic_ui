@@ -282,10 +282,7 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
     }
     uint8_t* bitmap = bitmapCache_->GetBitmap(fontId, unicode);
     if (bitmap != nullptr) {
-        GetGlyphNode(unicode, glyphNode);
-        const GlyphNode* node = nullptr;
-        node = dynamicFont_.GetGlyphNode(unicode);
-        if (node != nullptr && node->dataFlag == node->fontId && fontId == node->fontId) {
+        if (glyphNode.dataFlag == glyphNode.fontId && fontId == glyphNode.fontId) {
             return bitmap;
         } else {
             GRAPHIC_LOGE("DataFlag of bitmap node not equal to fontId.");
