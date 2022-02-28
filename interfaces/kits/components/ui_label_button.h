@@ -117,7 +117,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetLablePosition(int16_t x, int16_t y)
+    void SetLabelPosition(int16_t x, int16_t y)
     {
         offset_.x = x;
         offset_.y = y;

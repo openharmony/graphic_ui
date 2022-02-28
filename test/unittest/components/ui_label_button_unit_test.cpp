@@ -83,7 +83,7 @@ HWTEST_F(UILabelButtonTest, UILabelButtonSetText_001, TestSize.Level1)
 }
 /**
  * @tc.name: UILabelButtonSetLablePosition_001
- * @tc.desc: Verify SetLablePosition function.
+ * @tc.desc: Verify SetLabelPosition function.
  * @tc.type: FUNC
  * @tc.require: AR000EEMQ5
  */
@@ -96,7 +96,7 @@ HWTEST_F(UILabelButtonTest, UILabelButtonSetLablePosition_001, TestSize.Level1)
     const int16_t posX = 10;
     const int16_t posY = 20;
 
-    labelBtn_->SetLablePosition(posX, posY);
+    labelBtn_->SetLabelPosition(posX, posY);
     EXPECT_EQ(labelBtn_->GetLabelPosition().x, posX);
     EXPECT_EQ(labelBtn_->GetLabelPosition().y, posY);
 }

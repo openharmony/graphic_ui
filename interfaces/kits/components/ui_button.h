@@ -267,7 +267,7 @@ public:
     }
 
     /**
-     * @brief Obtains the height of this image.
+     * @brief Obtains the height of this button.
      *
      * @return Returns the image height.
      * @since 1.0
@@ -281,7 +281,7 @@ public:
     }
 
     /**
-     * @brief Sets the width for this image.
+     * @brief Sets the width for this button.
      *
      * @param width Indicates the width to set.
      * @since 1.0
