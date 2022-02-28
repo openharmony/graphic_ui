@@ -144,7 +144,7 @@ void UITestApp::InitBackBtn()
         backBtn_->Resize(163, 64); // 163: button width; 64: button height
         backBtn_->SetText("Back");
         backBtn_->SetViewId(UI_TEST_BACK_BUTTON_ID);
-        backBtn_->SetLablePosition(72, 0);                   // 72: button label x-coordinate
+        backBtn_->SetLabelPosition(72, 0);                   // 72: button label x-coordinate
         backBtn_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: means font size
         backBtn_->SetImageSrc(TEST_BACK_LEFT_ARROW, TEST_BACK_LEFT_ARROW);
         // 27: button Image x-coordinate; 18: half px of image height
