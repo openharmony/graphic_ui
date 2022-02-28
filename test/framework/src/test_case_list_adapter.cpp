@@ -175,7 +175,7 @@ UIView* TestCaseListAdapter::GetView(UIView* inView, int16_t index)
     item->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: means font size
     item->SetViewIndex(index);
     item->SetAlign(TEXT_ALIGNMENT_LEFT);
-    item->SetLablePosition(24, 0); // 24: lable x-coordinate
+    item->SetLabelPosition(24, 0); // 24: lable x-coordinate
     item->SetImageSrc(TEST_RIGHT_ARROW, TEST_RIGHT_ARROW);
     // 2: half of button height; 18: half px of image height
     item->SetImagePosition(item->GetWidth() - TEXT_DISTANCE_TO_LEFT_SIDE, TESTCASE_BUTTON_HEIGHT / 2 - 18);
