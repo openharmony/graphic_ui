@@ -211,7 +211,7 @@ void UITestUIPicker::UIKit_Picker_Test_Time_Picker_001()
     if (selectTime_ == nullptr) {
         selectTime_ = new UILabel();
     }
-    selectTime_ = GetTitleLabel("NULL");
+    selectTime_ = GetTitleLabel(picker2_->GetSelectValue());
     picker2_->RegisterSelectedListener(this);
     selectTime_->SetPosition(662 + picker2_->GetWidth(), label->GetY() + g_blank); // 662: increase x-coordinate
     container_->Add(selectTime_);
