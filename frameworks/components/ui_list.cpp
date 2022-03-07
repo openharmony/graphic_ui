@@ -356,7 +356,7 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
 
     if (!isLoopList_ && scrollListener_) {
         if (direction_ == VERTICAL) {
-            if (childrenHead_ && (childrenHead_->GetViewIndex() == startIndex_) &&
+            if (childrenHead_ && (childrenHead_->GetViewIndex() == 0) &&
                 childrenHead_->GetRelativeRect().GetTop() >= 0 &&
                 childrenHead_->GetRelativeRect().GetTop() - y < 0) {
                 scrollListener_->OnScrollTop(childrenHead_->GetViewIndex(), childrenHead_);
@@ -367,7 +367,7 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
                     scrollListener_->OnScrollBottom(childrenTail_->GetViewIndex(), childrenTail_);
             }
         } else {
-            if (childrenHead_ && (childrenHead_->GetViewIndex() == startIndex_) &&
+            if (childrenHead_ && (childrenHead_->GetViewIndex() == 0) &&
                 childrenHead_->GetRelativeRect().GetLeft() >= 0 &&
                 childrenHead_->GetRelativeRect().GetLeft() - x < 0) {
                 scrollListener_->OnScrollTop(childrenHead_->GetViewIndex(), childrenHead_);
