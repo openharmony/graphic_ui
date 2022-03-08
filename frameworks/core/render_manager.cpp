@@ -114,7 +114,7 @@ void RenderManager::UpdateFPSByAverageSamplingMethod()
         return;
     }
     uint32_t curTime = HALTick::GetInstance().GetTime();
-    int deltaTime = curTime - lastTime;
+    int32_t deltaTime = curTime - lastTime;
     lastTime = curTime;
 
     if (firstFrame) {
@@ -128,9 +128,9 @@ void RenderManager::UpdateFPSByAverageSamplingMethod()
 
 void RenderManager::UpdateFPSByPreciseSamplingMethod()
 {
-    static int deltaTimeQueue[SAMPLE_NUMBER] = {0};
-    static int frameCount = 0;
-    static int sumDuration = 0;
+    static int32_t deltaTimeQueue[SAMPLE_NUMBER] = {0};
+    static int32_t frameCount = 0;
+    static int32_t sumDuration = 0;
     static bool isQueueFull = false;
     static uint32_t lastTime = HALTick::GetInstance().GetTime();
     if (needResetFPS_) {
@@ -146,7 +146,7 @@ void RenderManager::UpdateFPSByPreciseSamplingMethod()
         return;
     }
     uint32_t curTime = HALTick::GetInstance().GetTime();
-    int deltaTime = curTime - lastTime;
+    int32_t deltaTime = curTime - lastTime;
     lastTime = curTime;
 
     if (!isQueueFull && (frameCount == SAMPLE_NUMBER)) {

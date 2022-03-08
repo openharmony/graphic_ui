@@ -155,7 +155,7 @@ void UITestQrcode::UIKitUIQrcodeTestDisplay005()
         qrcode->SetPosition(20, 30, 250, 250); // 20 x 30 y 250 width 250 height
         const int16_t length = 2050; // 2050 length
         char text[length];
-        for (int i = 0; i < length - 1; i++) {
+        for (int16_t i = 0; i < length - 1; i++) {
             text[i] = 'd';
         }
         text[length - 1] = '\0';

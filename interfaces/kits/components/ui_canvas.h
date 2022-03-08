@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -36,11 +36,27 @@
 #ifndef GRAPHIC_LITE_UI_CANVAS_H
 #define GRAPHIC_LITE_UI_CANVAS_H
 
+#include <stack>
+#include <string>
 #include "common/image.h"
 #include "components/ui_label.h"
+#include "gfx_utils/diagram/depiction/depict_curve.h"
+#include "gfx_utils/diagram/depiction/depict_dash.h"
+#include "gfx_utils/diagram/depiction/depict_stroke.h"
+#include "gfx_utils/diagram/imageaccessor/image_accessors.h"
+#include "gfx_utils/diagram/imagefilter/filter_blur.h"
+#include "gfx_utils/diagram/rasterizer/rasterizer_scanline_antialias.h"
+#include "gfx_utils/diagram/scanline/geometry_scanline.h"
+#include "gfx_utils/diagram/spancolorfill/fill_base.h"
+#include "gfx_utils/diagram/spancolorfill/fill_gradient.h"
+#include "gfx_utils/diagram/spancolorfill/fill_gradient_lut.h"
+#include "gfx_utils/diagram/spancolorfill/fill_interpolator.h"
+#include "gfx_utils/diagram/spancolorfill/fill_pattern_rgba.h"
+#include "gfx_utils/diagram/vertexprimitive/geometry_path_storage.h"
+#include "gfx_utils/file.h"
 #include "gfx_utils/list.h"
-
 namespace OHOS {
+const uint16_t DEFAULT_STROKE_WIDTH = 2;
 /**
  * @brief Defines the basic styles of graphs drawn on canvases.
  *
@@ -56,8 +72,56 @@ public:
      * @version 1.0
      */
     Paint()
-        : style_(PaintStyle::STROKE_FILL_STYLE), fillColor_(Color::Black()),
-          strokeColor_(Color::White()), opacity_(OPA_OPAQUE), strokeWidth_(2) {}
+        : style_(PaintStyle::STROKE_FILL_STYLE),
+          fillColor_(Color::Black()),
+          strokeColor_(Color::White()),
+          opacity_(OPA_OPAQUE),
+          strokeWidth_(DEFAULT_STROKE_WIDTH),
+          changeFlag_(false),
+          globalAlpha_(1.0),
+          rotateAngle_(0),
+          scaleRadioX_(1.0f),
+          scaleRadioY_(1.0f),
+          translationX_(0),
+          translationY_(0) {}
+
+    Paint(const Paint& paint)
+    {
+        Init(paint);
+    }
+
+    /*
+     * Initialize data members.
+     * style_:        paint style.
+     * fillColor_:    Sets the fill color of the pen.
+     * strokeColor_:  Sets the line color of the pen.
+     * strokeWidth_:  Set lineweight.
+     * opacity_:      Set transparency.
+     * changeFlag_:   Set changeFlag.
+     * scaleRadioX_:  Set scale Radio X
+     * scaleRadioY_:  Set scale Radio Y
+     * translationX_: Set translation X
+     * translationY_: Set translation Y
+     * globalAlpha_:  Set element Global alpha.
+     * rotateAngle_:  Set rotate Angle.
+     * transfrom_:    Set transfrom.
+     */
+    void Init(const Paint& paint)
+    {
+        style_ = paint.style_;
+        fillColor_ = paint.fillColor_;
+        strokeColor_ = paint.strokeColor_;
+        strokeWidth_ = paint.strokeWidth_;
+        opacity_ = paint.opacity_;
+        changeFlag_ = paint.changeFlag_;
+        scaleRadioX_= paint.scaleRadioX_;
+        scaleRadioY_= paint.scaleRadioY_;
+        translationX_= paint.translationX_;
+        translationY_= paint.translationY_;
+        globalAlpha_ = paint.globalAlpha_;
+        rotateAngle_ = paint.rotateAngle_;
+        transfrom_ = paint.transfrom_;
+    }
 
     /**
      * @brief A destructor used to delete the <b>Paint</b> instance.
@@ -67,6 +131,11 @@ public:
      */
     virtual ~Paint() {}
 
+    const Paint& operator=(const Paint& paint)
+    {
+        Init(paint);
+        return *this;
+    }
     /**
      * @brief Enumerates paint styles of a closed graph. The styles are invalid for non-closed graphs.
      */
@@ -77,12 +146,28 @@ public:
         FILL_STYLE,
         /** Stroke and fill */
         STROKE_FILL_STYLE,
+        /** Gradual change */
+        GRADIENT,
+        /** Image mode */
+        PATTERN
+    };
+
+    struct LinearGradientPoint {
+        /**  Start point coordinate x  */
+        double x0;
+        /**  Start point coordinate y  */
+        double y0;
+        /**  End point coordinate x  */
+        double x1;
+        /**  End point coordinate y  */
+        double y1;
     };
 
     /**
      * @brief Sets the paint style of a closed graph.
      *
-     * @param style Indicates the paint style. Stroke and fill are set by default. For details, see {@link PaintStyle}.
+     * @param style Indicates the paint style. Stroke and fill are set by default.
+     * For details, see {@link PaintStyle}.
      * @see GetStyle
      * @since 1.0
      * @version 1.0
@@ -90,6 +175,56 @@ public:
     void SetStyle(PaintStyle style)
     {
         style_ = style;
+    }
+
+    /**
+     * @brief Sets the paint style.
+     *
+     * @param color value.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetStrokeStyle(ColorType color)
+    {
+        SetStyle(Paint::STROKE_STYLE);
+        SetStrokeColor(color);
+    }
+
+    /**
+     * @brief Sets fill style.
+     *
+     * @param color value.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetFillStyle(ColorType color)
+    {
+        SetStyle(Paint::FILL_STYLE);
+        SetFillColor(color);
+    }
+
+    /**
+     * @brief Sets the paint stroke style of a closed graph.
+     *
+     * @param style Indicates the paint style. Stroke and fill are set by default.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetStrokeStyle(PaintStyle style)
+    {
+        SetStyle(style);
+    }
+
+    /**
+     * @brief Sets the paint fill style of a closed graph.
+     *
+     * @param style Indicates the paint style. Stroke and fill are set by default.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetFillStyle(PaintStyle style)
+    {
+        SetStyle(style);
     }
 
     /**
@@ -143,6 +278,7 @@ public:
     void SetStrokeColor(ColorType color)
     {
         strokeColor_ = color;
+        changeFlag_ = true;
     }
 
     /**
@@ -171,6 +307,7 @@ public:
     void SetFillColor(ColorType color)
     {
         fillColor_ = color;
+        changeFlag_ = true;
     }
 
     /**
@@ -214,12 +351,233 @@ public:
         return opacity_;
     }
 
+    /**
+     * @brief get change flag.
+     * @return Returns the changeFlag_ value.
+     * @since 1.0
+     * @version 1.0
+     */
+    bool GetChangeFlag() const
+    {
+        return changeFlag_;
+    }
+
+    /**
+     * @brief Sets the alpha of the current drawing.
+     * @param alphaPercentage alpha Percentage value. The value range is [0.0, 1.0].
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetGlobalAlpha(float alphaPercentage)
+    {
+        if (alphaPercentage > 1) {
+            globalAlpha_ = 1.0;
+            return;
+        }
+        if (alphaPercentage < 0) {
+            globalAlpha_ = 0.0;
+            return;
+        }
+        globalAlpha_ = alphaPercentage;
+        changeFlag_ = true;
+    }
+
+    /**
+     * @brief get the alpha of the current drawing
+     * @return Returns the alpha of the current drawing
+     * @since 1.0
+     * @version 1.0
+     */
+    float GetGlobalAlpha() const
+    {
+        return globalAlpha_;
+    }
+
+    /**
+     * @brief Zooms the current drawing to a larger or smaller size
+     * @param scaleX x coordinate scale value.
+     * @param scaleY y coordinate scale value.
+     * @since 1.0
+     * @version 1.0
+     */
+    void Scale(float scaleX, float scaleY)
+    {
+        this->scaleRadioX_ *= scaleX;
+        this->scaleRadioY_ *= scaleX;
+        if (rotateAngle_ > 0.0 || rotateAngle_ < 0) {
+            transfrom_.Rotate(-rotateAngle_ * PI / BOXER);
+            transfrom_.Scale(scaleX, scaleY);
+            transfrom_.Rotate(rotateAngle_ * PI / BOXER);
+        } else {
+            transfrom_.Scale(scaleX, scaleY);
+        }
+        changeFlag_ = true;
+    }
+
+    /**
+     * @brief get the x coordinate scale value
+     * @since 1.0
+     * @version 1.0
+     */
+    double GetScaleX() const
+    {
+        return this->scaleRadioX_;
+    }
+
+    /**
+     * @brief get the y coordinate scale value
+     * @since 1.0
+     * @version 1.0
+     */
+    double GetScaleY() const
+    {
+        return this->scaleRadioY_;
+    }
+
+    /**
+     * @brief Rotate current drawing
+     * @param angle rotate angle value.
+     * @since 1.0
+     * @version 1.0
+     */
+    void Rotate(float angle)
+    {
+        changeFlag_ = true;
+        transfrom_.Rotate(angle * PI / BOXER);
+        rotateAngle_ += angle;
+    }
+
+    /**
+     * @brief Rotate current drawing
+     * @param angle rotate angle value.
+     * @param x translate x coordinate.
+     * @param y translate y coordinate.
+     * @since 1.0
+     * @version 1.0
+     */
+    void Rotate(float angle, int16_t x, int16_t y)
+    {
+        transfrom_.Translate(-x, -y);
+        transfrom_.Rotate(angle * PI / BOXER);
+        rotateAngle_ += angle;
+        transfrom_.Translate(x, y);
+        changeFlag_ = true;
+    }
+
+    /**
+     * @brief Remap the (x, y) position on the canvas
+     * @param x translate x coordinate.
+     * @param y translate y coordinate.
+     * @since 1.0
+     * @version 1.0
+     */
+    void Translate(int16_t x, int16_t y)
+    {
+        changeFlag_ = true;
+        transfrom_.Translate(x, y);
+        this->translationX_ += x;
+        this->translationY_ += y;
+    }
+
+    /**
+     * @brief Gets the x position on the remapping canvas
+     * @since 1.0
+     * @version 1.0
+     */
+    int16_t GetTranslateX() const
+    {
+        return this->translationX_;
+    }
+
+    /**
+     * @brief Gets the Y position on the remapping canvas
+     * @since 1.0
+     * @version 1.0
+     */
+    int16_t GetTranslateY() const
+    {
+        return this->translationY_;
+    }
+
+    /**
+     * @brief Resets the current conversion to the identity matrix. Then run transform ()
+     * @param scaleX scale x value.
+     * @param shearX shear x value.
+     * @param shearY shear y value.
+     * @param scaleY scale y value
+     * @param transLateX translate x coordinate.
+     * @param transLateY translate y coordinate.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetTransform(float scaleX, float shearX, float shearY, float scaleY,
+                      int16_t transLateX, int16_t transLateY)
+    {
+        transfrom_.Reset();
+        rotateAngle_ = 0;
+        Transform(scaleX, shearX, shearY, scaleY, transLateX, transLateY);
+        changeFlag_ = true;
+    }
+
+    /**
+     * @brief Resets the current conversion to the identity matrix. Then run transform ()
+     * @param scaleX scale x value.
+     * @param shearX shear x value.
+     * @param shearY shear y value.
+     * @param scaleY scale y value
+     * @param transLateX translate x coordinate.
+     * @param transLateY translate y coordinate.
+     * @since 1.0
+     * @version 1.0
+     */
+    void Transform(float scaleX, float shearX, float shearY, float scaleY, int16_t transLateX, int16_t transLateY)
+    {
+        changeFlag_ = true;
+        this->translationX_ += transLateX;
+        this->translationY_ += transLateY;
+        transLateX += transfrom_.GetData()[2];
+        transLateY += transfrom_.GetData()[5];
+        transfrom_.Translate(-transfrom_.GetData()[2], -transfrom_.GetData()[5]);
+        Scale(scaleX, scaleY);
+        transfrom_.Translate(transLateX, transLateY);
+        transfrom_.SetData(1, transfrom_.GetData()[1] + shearX);
+        transfrom_.SetData(3, transfrom_.GetData()[3] + shearY);
+    }
+
+    /**
+     * @brief Gets the Trans Affine
+     * @since 1.0
+     * @version 1.0
+     */
+    TransAffine GetTransAffine() const
+    {
+        return transfrom_;
+    }
+
+    /**
+     * @brief Gets the Rotate Angle
+     * @since 1.0
+     * @version 1.0
+     */
+    float GetRotateAngle() const
+    {
+        return rotateAngle_;
+    }
+
 private:
     PaintStyle style_;
     ColorType fillColor_;
     ColorType strokeColor_;
     uint8_t opacity_;
     uint16_t strokeWidth_;
+    bool changeFlag_;
+    float globalAlpha_;                                 // The transparency of the current drawing is 0-1 percent
+    float rotateAngle_;                                 // Rotation angle in degrees
+    float scaleRadioX_;
+    float scaleRadioY_;
+    int32_t translationX_;
+    int32_t translationY_;
+    TransAffine transfrom_;                             // matrix.
 };
 
 /**
@@ -230,13 +588,19 @@ private:
  */
 class UICanvas : public UIView {
 public:
+    using Rgba8Color = Rgba8;
+    // Color array RGBA, index position of blue:0,green:1,red:2,alpha:3,
+    using ComponentOrder = OrderBgra;
+
+    using Scanline = GeometryScanline;
+    using SpanAllocator = FillBase<Rgba8Color> ;
     /**
      * @brief A constructor used to create a <b>UICanvas</b> instance.
      *
      * @since 1.0
      * @version 1.0
      */
-    UICanvas() : startPoint_({ 0, 0 }), path_(nullptr) {}
+    UICanvas() : startPoint_({0, 0}), vertices_(nullptr) {}
 
     /**
      * @brief A destructor used to delete the <b>UICanvas</b> instance.
@@ -347,7 +711,7 @@ public:
      * @version 1.0
      */
     void DrawCurve(const Point& startPoint, const Point& control1, const Point& control2,
-        const Point& endPoint, const Paint& paint);
+                   const Point& endPoint, const Paint& paint);
 
     /**
      * @brief Draws a rectangle.
@@ -360,6 +724,15 @@ public:
      * @version 1.0
      */
     void DrawRect(const Point& startPoint, int16_t height, int16_t width, const Paint& paint);
+
+    /**
+     * @brief Draws a rectangular path with no fill.
+     * @param startPoint starting point
+     * @param height
+     * @param width
+     * @param paint paint brush
+     */
+    void StrokeRect(const Point& startPoint, int16_t height, int16_t width, const Paint& paint);
 
     /**
      * @brief Draws a circle.
@@ -436,6 +809,16 @@ public:
         const char* fontName;
     };
 
+    struct ImageParam : public HeapBase {
+        Point start;
+        uint16_t height;
+        uint16_t width;
+        int16_t newWidth;
+        int16_t newHeight;
+        Image* image = nullptr;
+        std::string path;
+    };
+
     /**
      * @brief Draws text.
      *
@@ -452,7 +835,7 @@ public:
      * @version 1.0
      */
     void DrawLabel(const Point& startPoint, const char* text, uint16_t maxWidth, const FontStyle& fontStyle,
-        const Paint& paint);
+                   const Paint& paint);
 
     /**
      * @brief Creates a path.
@@ -488,9 +871,11 @@ public:
      *
      * @param center     Indicates the coordinates of the arc's center point.
      * @param radius     Indicates the radius of the arc.
-     * @param startAngle Indicates the start angle of the arc. The value <b>0</b> indicates the 12-o'clock direction,
+     * @param startAngle Indicates the start angle of the arc.
+     *                   The value <b>0</b> indicates the 12-o'clock direction,
      *                   and <b>90</b> indicates the 3-o'clock direction.
-     * @param endAngle   Indicates the end angle of the arc. The value <b>0</b> indicates the 12-o'clock direction,
+     * @param endAngle   Indicates the end angle of the arc.
+     *                   The value <b>0</b> indicates the 12-o'clock direction,
      *                   and <b>90</b> indicates the 3-o'clock direction.
      * @since 3.0
      * @version 5.0
@@ -525,8 +910,61 @@ public:
      */
     void DrawPath(const Paint& paint);
 
+    /**
+     * @brief Fill polygon path
+     * @param paint fill paint
+     * @since 3.0
+     * @version 5.0
+     */
+    void FillPath(const Paint& paint);
+
+    /**
+     * @brief Save history status
+     *
+     * @param paint  will save paint.
+     * @since 3.0
+     * @version 5.0
+     */
+    void Save(Paint& paint)
+    {
+        paintStack_.push(paint);
+    }
+
+    /**
+     * @brief Restore to last historical state
+     * @return Returns the last paint value.
+     * @since 3.0
+     * @version 5.0
+     */
+    Paint Restore()
+    {
+        Paint paint;
+        if (paintStack_.empty()) {
+            return paint;
+        }
+        paint = paintStack_.top();
+        paintStack_.pop();
+        return paint;
+    }
+
     void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
+    static void RenderBlendSolid(const Paint& paint,
+                                 Rgba8Color& color,
+                                 const bool& isStroke)
+    {
+        if (isStroke) {
+            if (paint.GetStyle() == Paint::STROKE_STYLE ||
+                paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
+                ChangeColor(color, paint.GetStrokeColor(), paint.GetStrokeColor().alpha * paint.GetGlobalAlpha());
+            }
+        } else {
+            if (paint.GetStyle() == Paint::FILL_STYLE ||
+                paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
+                ChangeColor(color, paint.GetFillColor(), paint.GetFillColor().alpha * paint.GetGlobalAlpha());
+            }
+        }
+    }
 protected:
     constexpr static uint8_t MAX_CURVE_WIDTH = 3;
 
@@ -560,47 +998,24 @@ protected:
         int16_t endAngle;
     };
 
-    struct ImageParam : public HeapBase {
-        Point start;
-        uint16_t height;
-        uint16_t width;
-        Image* image;
-    };
-
-    enum PathCmd {
-        CMD_MOVE_TO,
-        CMD_LINE_TO,
-        CMD_ARC,
-        CMD_CLOSE,
-    };
-
-    class UICanvasPath : public HeapBase {
-    public:
-        UICanvasPath() : startPos_({ 0, 0 }), strokeCount_(0) {};
-        ~UICanvasPath();
-        List<Point> points_;
-        List<PathCmd> cmd_;
-        List<ArcParam> arcParam_;
-        Point startPos_;
-        uint16_t strokeCount_;
-    };
-
     struct PathParam : public HeapBase {
-        UICanvasPath* path;
-        uint16_t count;
+        UICanvasVertices* vertices;
+        ImageParam* imageParam = nullptr;
+        bool isStroke;
     };
 
     struct DrawCmd : public HeapBase {
         Paint paint;
         void* param;
-        void(*DrawGraphics)(BufferInfo&, void*, const Paint&, const Rect&, const Rect&, const Style&);
-        void(*DeleteParam)(void *);
+        void (*DrawGraphics)(BufferInfo&, void*, const Paint&, const Rect&, const Rect&, const Style&);
+        void (*DeleteParam)(void*);
     };
 
     Point startPoint_;
-    UICanvasPath* path_;
+    UICanvasVertices* vertices_;
     List<DrawCmd> drawCmdList_;
-
+    // Save historical modification information of paint
+    std::stack<Paint> paintStack_;
     static void DeleteLineParam(void* param)
     {
         LineParam* lineParam = static_cast<LineParam*>(param);
@@ -636,6 +1051,7 @@ protected:
         ImageParam* imageParam = static_cast<ImageParam*>(param);
         if (imageParam->image != nullptr) {
             delete imageParam->image;
+            imageParam->image = nullptr;
         }
         delete imageParam;
     }
@@ -649,11 +1065,15 @@ protected:
     static void DeletePathParam(void* param)
     {
         PathParam* pathParam = static_cast<PathParam*>(param);
-        pathParam->path->strokeCount_--;
-        if (pathParam->path->strokeCount_ == 0) {
-            delete pathParam->path;
+        if (pathParam->vertices != nullptr) {
+            pathParam->vertices->FreeAll();
+            pathParam->vertices = nullptr;
+        }
+        if (pathParam->imageParam != nullptr) {
+            DeleteImageParam(pathParam->imageParam);
         }
         delete pathParam;
+        pathParam = nullptr;
     }
 
     static void DoDrawLine(BufferInfo& gfxDstBuffer,
@@ -715,6 +1135,57 @@ protected:
                                const Point& center,
                                const Rect& invalidatedArea,
                                const Paint& paint);
+
+    static void DoFillPath(BufferInfo& gfxDstBuffer,
+                           void* param,
+                           const Paint& paint,
+                           const Rect& rect,
+                           const Rect& invalidatedArea,
+                           const Style& style);
+
+    static void SetRasterizer(UICanvasVertices& vertices,
+                              const Paint& paint,
+                              RasterizerScanlineAntialias<>& rasterizer,
+                              TransAffine& transform,
+                              const bool& isStroke);
+
+    static void DoRender(BufferInfo& gfxDstBuffer,
+                         void* param,
+                         const Paint& paint,
+                         const Rect& rect,
+                         const Rect& invalidatedArea,
+                         const Style& style,
+                         const bool& isStroke);
+    /**
+     * Assembly parameter setting lineweight，LineCap，LineJoin
+     */
+    template <class LineStyle>
+    static void LineStyleCalc(DepictStroke<LineStyle>& strokeLineStyle, const Paint& paint)
+    {
+        strokeLineStyle.SetWidth(paint.GetStrokeWidth()); // Line style related
+    };
+
+    static bool IsSoild(const Paint& paint)
+    {
+        if (paint.GetStyle() == Paint::STROKE_STYLE ||
+           paint.GetStyle() == Paint::FILL_STYLE ||
+           paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
+            return true;
+        }
+        return false;
+    }
+
+    template <class Color>
+    static void ChangeColor(Color& color, ColorType colorType, uint8_t alpha)
+    {
+        color.redValue = colorType.red;
+        color.greenValue = colorType.green;
+        color.blueValue = colorType.blue;
+        color.alphaValue = alpha;
+    }
+
+    void DrawRectSetCmd(const Point& startPoint, int16_t height, int16_t width, const Paint& paint,
+                        Paint::PaintStyle paintStyle);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_UI_CANVAS_H

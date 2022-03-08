@@ -54,8 +54,8 @@ void UIFontAllocator::SetMinChunkSize(uint32_t size)
 
 void* UIFontAllocator::Allocate(uint32_t size)
 {
-    uint32_t free, left;
-    uint32_t ptr, ptr2;
+    uint32_t free;
+    uint32_t left;
     struct Chunk* chunk = nullptr;
     struct Chunk* chunk2 = nullptr;
     struct Chunk* chunk3 = nullptr;
@@ -65,7 +65,7 @@ void* UIFontAllocator::Allocate(uint32_t size)
         size = minSize_;
     }
 
-    for (ptr = reinterpret_cast<uint8_t*>(free_) - ram_; ptr < ramSize_;
+    for (uint32_t ptr = reinterpret_cast<uint8_t*>(free_) - ram_; ptr < ramSize_;
          ptr = reinterpret_cast<struct Chunk*>(ram_ + ptr)->next) {
         chunk = reinterpret_cast<struct Chunk*>(ram_ + ptr);
         if (chunk->used) {
@@ -77,7 +77,7 @@ void* UIFontAllocator::Allocate(uint32_t size)
         }
         left = free - sizeof(struct Chunk) - size;
         if (left >= sizeof(struct Chunk) + minSize_) {
-            ptr2 = ptr + sizeof(struct Chunk) + size;
+            uint32_t ptr2 = ptr + sizeof(struct Chunk) + size;
             chunk2 = reinterpret_cast<struct Chunk*>(ram_ + ptr2);
             chunk2->used = false;
             chunk2->next = chunk->next;

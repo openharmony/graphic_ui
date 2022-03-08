@@ -237,7 +237,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         pos.y = TextPositionY(coords, (lineCount * lineHeight - style.lineSpace_));
     }
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.textOpa_);
-    for (int i = 0; i < lineCount; i++) {
+    for (uint16_t i = 0; i < lineCount; i++) {
         if (pos.y > mask.GetBottom()) {
             return;
         }
