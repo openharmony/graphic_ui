@@ -69,8 +69,7 @@ void DrawImage::DrawCommon(BufferInfo& gfxDstBuffer, const Rect& coords, const R
         Point start;
         start.x = valid.GetLeft() - coords.GetLeft();
         start.y = valid.GetTop() - coords.GetTop();
-        int16_t row;
-        for (row = valid.GetTop(); row <= valid.GetBottom(); row++) {
+        for (int16_t row = valid.GetTop(); row <= valid.GetBottom(); row++) {
             if (entry.ReadLine(start, width, buf) != RetCode::OK) {
                 CacheManager::GetInstance().Close(path);
                 UIFree(buf);

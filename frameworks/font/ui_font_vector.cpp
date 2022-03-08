@@ -85,7 +85,7 @@ uint8_t UIFontVector::RegisterFontInfo(const UITextLanguageFontParam* fontsTable
         return FONT_INVALID_TTF_ID;
     }
     uint8_t count = 0;
-    for (int i = 0; i < num; i++) {
+    for (uint8_t i = 0; i < num; i++) {
         uint8_t result = RegisterFontInfo(fontsTable[i].ttfName, fontsTable[i].shaping);
         if (result == FONT_INVALID_TTF_ID) {
             continue;
@@ -101,7 +101,7 @@ uint8_t UIFontVector::UnregisterFontInfo(const UITextLanguageFontParam* fontsTab
         return 0;
     }
     uint8_t count = 0;
-    for (int i = 0; i < num; i++) {
+    for (uint8_t i = 0; i < num; i++) {
         uint8_t result = UnregisterFontInfo(fontsTable[i].ttfName);
         if (result == FONT_INVALID_TTF_ID) {
             return FONT_INVALID_TTF_ID;
@@ -200,7 +200,7 @@ int8_t UIFontVector::SetCurrentFontId(uint8_t fontId, uint8_t size)
     }
 
     // Set the size
-    int error = FT_Set_Char_Size(ftFaces_[fontId], size * FONT_PIXEL_IN_POINT, 0, 0, 0);
+    int32_t error = FT_Set_Char_Size(ftFaces_[fontId], size * FONT_PIXEL_IN_POINT, 0, 0, 0);
     if (error != 0) {
         return INVALID_RET_VALUE;
     }

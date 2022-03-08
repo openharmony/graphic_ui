@@ -52,8 +52,8 @@ public:
     void UIKit_View_Scale_Rotate_Test_UIDigitalClock_006();
     void UIKit_View_Scale_Rotate_Test_Group_007();
 private:
-    const int GROUP_WIDHT = 454;
-    const int GROUP_HEIGHT = 300;
+    const int16_t GROUP_WIDHT = 454;
+    const int16_t GROUP_HEIGHT = 300;
     const Vector2<float> VIEW_CENTER = {75, 75};
     const Vector2<float> GROUP_CENTER = {200, 200};
 

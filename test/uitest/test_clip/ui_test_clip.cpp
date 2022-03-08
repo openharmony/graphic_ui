@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -158,9 +158,8 @@ void UITestClip::SetUpButton(UILabelButton* btn, const char* title, int16_t x, i
 void UITestClip::ClipImage(UIImageView* imageView, ClipPath& path)
 {
     const ImageInfo* info = imageView->GetImageInfo();
-    ClipImageBlitter blitter(info);
     ClipUtils clip;
-    clip.PerformScan(path, blitter);
+    clip.PerformScan(path, info);
 }
 
 void UITestClip::UIKitClipTest001()
