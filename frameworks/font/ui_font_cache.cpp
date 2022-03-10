@@ -90,9 +90,8 @@ void UIFontCache::PutSpace(uint8_t* addr)
 uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode)
 {
     Bitmap* bitmap = nullptr;
-    ListHead* node = nullptr;
     ListHead* head = hashTable_ + fontId % FONT_CACHE_HASH_NR;
-    for (node = head->next; node != head; node = node->next) {
+    for (ListHead* node = head->next; node != head; node = node->next) {
         bitmap = reinterpret_cast<struct Bitmap*>(reinterpret_cast<uint8_t*>(node) -
                                                   offsetof(struct Bitmap, hashHead));
         if ((bitmap->fontId == fontId) && (bitmap->unicode == unicode)) {

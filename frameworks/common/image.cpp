@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -53,7 +53,7 @@ void Image::GetHeader(ImageHeader& header) const
 }
 
 #if ENABLE_JPEG_AND_PNG
-Image::ImageType Image::CheckImgType(const char* src)
+OHOS::Image::ImageType Image::CheckImgType(const char* src)
 {
     char buf[IMG_BYTES_TO_CHECK] = {0};
 #ifdef _WIN32
@@ -75,6 +75,9 @@ Image::ImageType Image::CheckImgType(const char* src)
     // 0xFF 0xD8: JPEG file's header
     } else if ((static_cast<uint8_t>(buf[0]) == 0xFF) && (static_cast<uint8_t>(buf[1]) == 0xD8)) {
         return IMG_JPEG;
+    } else if ((static_cast<uint8_t>(buf[0]) == 0x47) && (static_cast<uint8_t>(buf[1]) == 0x49) &&
+          (static_cast<uint8_t>(buf[2]) == 0x46)) { // 2: array index of GIF file's header
+        return IMG_GIF;
     }
     return IMG_UNKNOWN;
 }
@@ -200,6 +203,41 @@ bool Image::SetSrc(const ImageInfo* src)
     return true;
 }
 
+bool Image::PreParse(const char *src)
+{
+    if (src == nullptr) {
+        return false;
+    }
+    const char* ptr = strrchr(src, '.');
+    if (ptr == nullptr) {
+        srcType_ = IMG_SRC_UNKNOWN;
+        return false;
+    }
+    if (path_ != nullptr) {
+        UIFree((void*)path_);
+    }
+    size_t strLen = strlen(src) + 1;
+    char* path = (char*)UIMalloc(strLen);
+    if (strcpy_s(path, strLen, src) != EOK) {
+        UIFree(reinterpret_cast<void*>(path));
+        return false;
+    }
+    path_ = path;
+    bool isSucess = false;
+    ImageType imageType = CheckImgType(src);
+    if (imageType == IMG_PNG) {
+        isSucess = SetPNGSrc(src);
+    } else if (imageType == IMG_JPEG) {
+        isSucess = SetJPEGSrc(src);
+    } else if (imageType == IMG_GIF) {
+        isSucess = true;
+    } else {
+        srcType_ = IMG_SRC_UNKNOWN;
+        return false;
+    }
+    return isSucess;
+}
+
 void Image::DrawImage(BufferInfo& gfxDstBuffer,
                       const Rect& coords,
                       const Rect& mask,
@@ -247,7 +285,6 @@ static inline png_bytep* MallocPngBytep(uint16_t height, uint32_t rowBytes)
 bool Image::SetPNGSrc(const char* src)
 {
     srcType_ = IMG_SRC_UNKNOWN;
-    FILE* infile = nullptr;
     png_bytep* rowPointer = nullptr;
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (png == nullptr) {
@@ -258,7 +295,8 @@ bool Image::SetPNGSrc(const char* src)
         png_destroy_read_struct(&png, &info, nullptr);
         return false;
     }
-    if ((infile = fopen(src, "rb")) == nullptr) {
+    FILE* infile = fopen(src, "rb");
+    if (infile == nullptr) {
         GRAPHIC_LOGE("can't open %s\n", src);
         png_destroy_read_struct(&png, &info, nullptr);
         return false;
@@ -343,10 +381,10 @@ bool Image::SetJPEGSrc(const char* src)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
-    FILE* infile = nullptr;
     srcType_ = IMG_SRC_UNKNOWN;
 
-    if ((infile = fopen(src, "rb")) == nullptr) {
+    FILE* infile = fopen(src, "rb");
+    if (infile == nullptr) {
         GRAPHIC_LOGE("can't open %s\n", src);
         return false;
     }

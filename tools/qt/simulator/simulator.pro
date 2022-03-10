@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += \
+    third_party/giflib \
     third_party/freetype \
     third_party/harfbuzz \
     third_party/icu \
@@ -13,3 +14,6 @@ SUBDIRS += \
     libui \
     test \
     uitest/UITest.pro
+
+HEADERS += \
+    ../../../test/framework/common/ui_test_canvas_common.h

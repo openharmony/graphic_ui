@@ -532,11 +532,11 @@ void UITestInputEvent::InnerBubbleDragTest(const char* title,
                                            bool hasListener,
                                            bool isBubble)
 {
-    int itemH1 = ITEM_H * 2; // 2 times of ITEM_H
-    int itemH2 = itemH1 + ITEM_H;
-    int itemH3 = itemH2 + ITEM_H;
-    int halfScreenWith = Screen::GetInstance().GetWidth() / 2; // 2: half screen width
-    int offset = 30;                                           // 40 pixel offset
+    int32_t itemH1 = ITEM_H * 2; // 2 times of ITEM_H
+    int32_t itemH2 = itemH1 + ITEM_H;
+    int32_t itemH3 = itemH2 + ITEM_H;
+    int32_t halfScreenWith = Screen::GetInstance().GetWidth() / 2; // 2: half screen width
+    int32_t offset = 30;                                           // 40 pixel offset
 
     if (container_ != nullptr) {
         UILabel* label = new UILabel();

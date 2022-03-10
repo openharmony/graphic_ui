@@ -16,6 +16,19 @@ DEFINES += QT_DEPRECATED_WARNINGS \
     "ENABLE_BITMAP_FONT=0" \
     "ENABLE_MULTI_FONT=0" \
     "ENABLE_STATIC_FONT=0" \
+    "GRAPHIC_ENABLE_LINECAP_FLAG=1" \
+    "GRAPHIC_ENABLE_LINEJOIN_FLAG=1" \
+    "GRAPHIC_ENABLE_ELLIPSE_FLAG=1" \
+    "GRAPHIC_ENABLE_BEZIER_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ROUNDEDRECT_FLAG=1" \
+    "GRAPHIC_ENABLE_DASH_GENERATE_FLAG=1" \
+    "GRAPHIC_ENABLE_BLUR_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_GRADIENT_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1" \
     "DEFAULT_ANIMATION=1"
 
 
@@ -30,6 +43,12 @@ DESTDIR = ../libs
 
 SOURCES += \
     ../../../../../utils/frameworks/graphic_timer.cpp \
+    ../../../../../utils/frameworks/trans_affine.cpp \
+    ../../../../../utils/frameworks/diagram/vertexgenerate/vertex_generate_dash.cpp \
+    ../../../../../utils/frameworks/diagram/vertexgenerate/vertex_generate_stroke.cpp \
+    ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_arc.cpp \
+    ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_bezier_arc.cpp \
+    ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_curves.cpp \
     ../../../../frameworks/animator/animator.cpp \
     ../../../../frameworks/animator/animator_manager.cpp \
     ../../../../frameworks/animator/easing_equation.cpp \
@@ -137,10 +156,51 @@ SOURCES += \
     ../../../../../utils/frameworks/transform.cpp \
     ../../../../../utils/frameworks/version.cpp \
     ../../../../../../../third_party/bounds_checking_function/src/memset_s.c \
-    ../../../../../../../third_party/cJSON/cJSON.c
+    ../../../../../../../third_party/cJSON/cJSON.c \
 
 HEADERS += \
+    ../../../../../utils/interfaces/innerkits/graphic_neon_pipeline.h \
+    ../../../../../utils/interfaces/innerkits/graphic_neon_utils.h \
     ../../../../../utils/interfaces/innerkits/graphic_timer.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/color.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_basics.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_clip_operate.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_gamma_functions.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_gamma_lut.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_math.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_adaptor_vertex_generate.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_curve.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_dash.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_stroke.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_transform.h \
+   ../../../../../utils/interfaces/kits/gfx_utils/diagram/imagefilter/filter_blur.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/rasterizer/rasterizer_cells_antialias.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/rasterizer/rasterizer_scanline_antialias.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/rasterizer/rasterizer_scanline_clip.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/scanline/geometry_scanline.h \
+     ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_base.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_gradient.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_gradient_lut.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_image_rgba.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_interpolator.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_pattern_rgba.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/imageaccessor/image_accessors.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertex_generate/vertex_generate_dash.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertex_generate/vertex_generate_stroke.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_arc.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_array.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_bezier_arc.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_curves.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_dda_line.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_ellipse.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_math_stroke.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_path_storage.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_plaindata_array.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_plaindata_blockvector.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_plaindata_vector.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_range_adapter.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_shorten_path.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_vertex_sequence.h \
     ../../../../frameworks/common/typed_text.h \
     ../../../../frameworks/core/render_manager.h \
     ../../../../frameworks/default_resource/check_box_res.h \
@@ -164,6 +224,13 @@ HEADERS += \
     ../../../../frameworks/imgdecode/cache_manager.h \
     ../../../../frameworks/imgdecode/file_img_decoder.h \
     ../../../../frameworks/imgdecode/image_load.h \
+    ../../../../frameworks/render/render_base.h \
+    ../../../../frameworks/render/render_buffer.h \
+    ../../../../frameworks/render/render_pixfmt_base.h \
+    ../../../../frameworks/render/render_pixfmt_rgba_blend.h \
+    ../../../../frameworks/render/render_pixfmt_rgba_gamma.h \
+    ../../../../frameworks/render/render_pixfmt_transposer.h \
+    ../../../../frameworks/render/render_scanline.h \
     ../../../../interfaces/innerkits/common/graphic_startup.h \
     ../../../../interfaces/innerkits/common/image_decode_ability.h \
     ../../../../interfaces/innerkits/common/input_device_manager.h \
@@ -267,8 +334,10 @@ HEADERS += \
     ../../../../../../../third_party/cJSON/cJSON_Utils.h \
     ../../../../../../../tools/developer_tools_lite/graphic_tool/iar_project/config/gpu_2d/graphic_config.h
 
+
 INCLUDEPATH += \
     ../../../../frameworks \
+    ../../../../frameworks/diagram/include \
     ../../../../../utils/frameworks/windows \
     ../../../../../utils/interfaces/innerkits \
     ../../../../../utils/interfaces/kits \
@@ -281,7 +350,8 @@ INCLUDEPATH += \
     ../../../../../../../third_party/cJSON \
     ../../../../../../../third_party/libjpeg \
     ../../../../../../../third_party/libpng \
-    ../../../../../../../third_party/qrcodegen/cpp
+    ../../../../../../../third_party/qrcodegen/cpp \
+    ../../../../../../../third_party/giflib
 
 LIBS += $$OUT_PWD/../libs/libpng.dll
 LIBS += $$OUT_PWD/../libs/libjpeg.dll
@@ -289,3 +359,4 @@ LIBS += $$OUT_PWD/../libs/qrcodegen.dll
 LIBS += $$OUT_PWD/../libs/freetype.dll
 LIBS += $$OUT_PWD/../libs/libharfbuzz.a
 LIBS += $$OUT_PWD/../libs/icu.dll
+LIBS += $$OUT_PWD/../libs/giflib.dll

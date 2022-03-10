@@ -147,7 +147,6 @@ void DrawArc::DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer,
     yStart = MATH_MAX(yStart, -outRadius_) - 1;
     yEnd = MATH_MIN(yEnd, -1);
 
-    int16_t xi;
     int16_t xLineStart = -outRadius_;
     int16_t xLineStart2 = xLineStart - 1;
     int16_t xLineStart3 = COORD_MIN;
@@ -155,7 +154,7 @@ void DrawArc::DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer,
     for (y_ = yEnd; y_ > yStart; y_--) {
         ySqr_ = static_cast<int32_t>(y_) * y_;
         bool isSetStartPot = false;
-        for (xi = xLineStart2; xi < 0; xi++) {
+        for (int16_t xi = xLineStart2; xi < 0; xi++) {
             uint32_t currentSqr = static_cast<int32_t>(xi) * xi + ySqr_;
             if (currentSqr > outRadiusSqr_) {
                 continue;

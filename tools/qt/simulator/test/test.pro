@@ -13,6 +13,19 @@ DEFINES += QT_DEPRECATED_WARNINGS \
     "ENABLE_VECTOR_FONT=1" \
     "ENABLE_BITMAP_FONT=0" \
     "ENABEL_UI_AUTO_TEST=0" \
+    "GRAPHIC_ENABLE_LINECAP_FLAG=1" \
+    "GRAPHIC_ENABLE_LINEJOIN_FLAG=1" \
+    "GRAPHIC_ENABLE_ELLIPSE_FLAG=1" \
+    "GRAPHIC_ENABLE_BEZIER_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ROUNDEDRECT_FLAG=1" \
+    "GRAPHIC_ENABLE_DASH_GENERATE_FLAG=1" \
+    "GRAPHIC_ENABLE_BLUR_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_GRADIENT_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1" \
     "DEFAULT_ANIMATION=1" \
     AUTO_TEST_RESOURCE_PATH=../../simulator/config/auto_test/ \
 
@@ -87,6 +100,7 @@ SOURCES += \
 
 HEADERS += \
     ../../../../test/framework/common/ui_text_language.h \
+    ../../../../test/framework/common/ui_test_canvas_common.h \
     ../../../../test/framework/include/test_case_list_adapter.h \
     ../../../../test/framework/include/ui_test_app.h \
     ../../../../test/framework/include/test_resource_config.h \
@@ -161,6 +175,7 @@ INCLUDEPATH += \
     ../../../../../../../third_party/freetype/include \
     ../../../../../../../third_party/cJSON \
     ../../../../../../../third_party/libjpeg \
-    ../../../../../../../third_party/libpng
-
+    ../../../../../../../third_party/libpng \
+    ../../../../../../../third_party/giflib
 LIBS += $$OUT_PWD/../libs/libui.dll
+

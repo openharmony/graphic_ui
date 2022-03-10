@@ -20,8 +20,8 @@
 namespace OHOS {
 namespace {
 static int16_t g_blank = 20;
-static int g_curSerialCount = 0;
-static int g_curArrayCount = 0;
+static int32_t g_curSerialCount = 0;
+static int32_t g_curArrayCount = 0;
 static bool g_secondScreenFlag = false;
 static bool g_addPointsFlag = false;
 static bool g_hidePointsFlag = false;
