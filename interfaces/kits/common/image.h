@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -133,6 +133,16 @@ public:
      */
     bool SetSrc(const ImageInfo* src);
 
+    /**
+     * @brief Parse file path
+     *
+     * @param src Indicates the pointer to the image information.
+     * @return Returns <b>true</b> if the operation is successful; returns <b>false</b> if the operation fails.
+     * @since 1.0
+     * @version 1.0
+     */
+    bool PreParse(const char* src);
+
     void DrawImage(BufferInfo& gfxDstBuffer,
                    const Rect& coords,
                    const Rect& mask,
@@ -148,12 +158,11 @@ private:
     enum ImageType {
         IMG_PNG,
         IMG_JPEG,
+        IMG_GIF,
         IMG_UNKNOWN,
     };
-
     const static uint8_t IMG_BYTES_TO_CHECK = 4; // 4: check 4 bytes of image file
 #endif
-
     uint8_t srcType_;
     bool mallocFlag_;
     bool SetLiteSrc(const char* src);
@@ -167,7 +176,7 @@ private:
     {
         return (!strcmp(suffix, ".png") || !strcmp(suffix, ".PNG") || !strcmp(suffix, ".jpg") ||
             !strcmp(suffix, ".JPG") || !strcmp(suffix, ".jpeg") || !strcmp(suffix, ".JPEG") ||
-            !strcmp(suffix, ".BMP") || !strcmp(suffix, ".bmp"));
+            !strcmp(suffix, ".BMP") || !strcmp(suffix, ".bmp") || !strcmp(suffix, ".GIF") || !strcmp(suffix, ".gif"));
     }
     void ReInitImageInfo(ImageInfo* imgInfo, bool mallocFlag);
 };

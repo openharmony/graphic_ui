@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -531,6 +531,71 @@ void DrawUtils::FillAreaWithSoftWare(BufferInfo& gfxDstBuffer,
 #endif
     }
 }
+
+#ifdef ARM_NEON_OPT
+void DrawUtils::BlendLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                             uint8_t alpha, uint8_t cover)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(color, red, green, blue, alpha, cover);
+}
+
+void DrawUtils::BlendLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(color, red, green, blue, alpha);
+}
+
+void DrawUtils::BlendLerpPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t srcCover)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(dstColors, srcColors, srcCover);
+}
+
+void DrawUtils::BlendLerpPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t* srcCovers)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(dstColors, srcColors, srcCovers);
+}
+
+void DrawUtils::BlendLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                             uint8_t alpha, uint8_t* covers)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(color, red, green, blue, alpha, covers);
+}
+
+void DrawUtils::BlendPreLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                                uint8_t alpha, uint8_t cover)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonPrelerpARGB8888(color, red, green, blue, alpha, cover);
+}
+
+void DrawUtils::BlendPreLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonPrelerpARGB8888(color, red, green, blue, alpha);
+}
+void DrawUtils::BlendPreLerpPix(uint8_t *dstColors, uint8_t *srcColors, uint8_t srcCover)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(dstColors, srcColors, srcCover);
+}
+
+void DrawUtils::BlendPreLerpPix(uint8_t *dstColors, uint8_t *srcColors, uint8_t *srcCovers)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonLerpARGB8888(dstColors, srcColors, srcCovers);
+}
+
+void DrawUtils::BlendPreLerpPix(uint8_t *color, uint8_t red, uint8_t green, uint8_t blue,
+                                uint8_t alpha, uint8_t *covers)
+{
+    NeonBlendPipeLine mNeonBlendPipeLine;
+    mNeonBlendPipeLine.NeonPreLerpARGB8888(color, red, green, blue, alpha, covers);
+}
+#endif
 
 void DrawUtils::BlendWithSoftWare(const uint8_t* src1,
                                   const Rect& srcRect,

@@ -16,8 +16,8 @@
 #ifndef GRAPHIC_LITE_DRAW_UTILS_H
 #define GRAPHIC_LITE_DRAW_UTILS_H
 
-#include "gfx_utils/color.h"
 #include "common/text.h"
+#include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_types.h"
@@ -292,6 +292,23 @@ public:
                               const Rect& fillArea,
                               const ColorType& color,
                               const OpacityType& opa) const;
+#ifdef ARM_NEON_OPT
+
+    void BlendLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                      uint8_t alpha, uint8_t cover);
+    void BlendLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                      uint8_t alpha);
+    void BlendLerpPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t srcCover);
+    void BlendLerpPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t* srcCovers);
+    void BlendLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha, uint8_t* covers);
+    void BlendPreLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                         uint8_t alpha, uint8_t cover);
+    void BlendPreLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue,
+                         uint8_t alpha);
+    void BlendPreLerpPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t srcCover);
+    void BlendPreLerpPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t* srcCovers);
+    void BlendPreLerpPix(uint8_t* color, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha, uint8_t* covers);
+#endif
 private:
     using DrawTriangleTransformFuc = void (*)(const TriangleScanInfo& triangle, const ColorMode bufferMode);
 
