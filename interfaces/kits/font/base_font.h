@@ -51,7 +51,7 @@ public:
      * @brief Get font id
      *
      * @param ttfName
-     * @param size   0: invaild size
+     * @param size   0: invalid size
      * @return uint8_t
      */
     virtual uint8_t GetFontId(const char* ttfName, uint8_t size) const = 0;

@@ -65,16 +65,16 @@ void UICheckBox::SetState(UICheckBoxState state, bool needAnimater)
     }
     state_ = state;
     if ((image_[SELECTED].GetSrcType() == IMG_SRC_UNKNOWN) || (image_[UNSELECTED].GetSrcType() == IMG_SRC_UNKNOWN)) {
-        if (needAnimater) {
 #if DEFAULT_ANIMATION
+        if (needAnimater) {
             checkBoxAnimator_.Start();
             ResetCallback();
-#else
-            backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : 0;
-#endif
         } else {
             backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : 0;
         }
+#else
+        backgroundOpacity_ = (state_ == SELECTED) ? OPA_OPAQUE : 0;
+#endif
     }
     if (onStateChangeListener_ != nullptr) {
         onStateChangeListener_->OnChange(state);

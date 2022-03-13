@@ -80,7 +80,7 @@ RetCode FileImgDecoder::GetHeader(ImgResDsc& dsc)
     if (readCount != sizeof(ImageHeader)) {
         dsc.imgInfo.header.width = 0;
         dsc.imgInfo.header.height = 0;
-        dsc.imgInfo.header.colorMode = UNKNOW;
+        dsc.imgInfo.header.colorMode = UNKNOWN;
         return RetCode::FAIL;
     }
 

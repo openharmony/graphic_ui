@@ -26,7 +26,7 @@ class ViewBitmapListener : public UIView::OnClickListener {
 public:
     ViewBitmapListener(UIViewGroup* container, UIImageView* img) : container_(container), img_(img)
     {
-        memset_s(&info_, sizeof(ImageInfo), 0, sizeof(ImageInfo));
+        (void)memset_s(&info_, sizeof(ImageInfo), 0, sizeof(ImageInfo));
         if ((img != nullptr) && (container != nullptr)) {
             container->Add(img);
             img->SetVisible(false);

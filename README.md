@@ -51,7 +51,7 @@ The graphics UI directly calls the HAL API or uses the client provided by the Wi
 ├── interfaces                  # APIs
 │   ├── innerkits               # APIs between modules
 │   │   └── xxx                 # Sub-module APIs
-│   └── kits                    # Externel APIs
+│   └── kits                    # External APIs
 │   │   └── xxx                 # Sub-module APIs
 ├── test                        # Test code
 │   ├── framework

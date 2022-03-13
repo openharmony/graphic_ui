@@ -42,7 +42,7 @@ bool WindowImpl::Create(const WindowConfig& config)
     return true;
 }
 
-void WindowImpl::Destory()
+void WindowImpl::Destroy()
 {
     Flush();
     if (iWindow_ != nullptr) {

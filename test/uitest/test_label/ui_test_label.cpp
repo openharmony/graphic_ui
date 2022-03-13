@@ -98,7 +98,7 @@ void UITestLabel::UIKit_UILabel_Test_Display_001()
         uiViewGroupFrame->SetStyle(STYLE_BORDER_RADIUS, VIEW_STYLE_BORDER_RADIUS);
         uiViewGroupFrame->SetStyle(STYLE_BACKGROUND_OPA, 0);
         uiLabel = new UILabel();
-        uiLabel->SetText("HarmonyOS Lite 图形子系统");
+        uiLabel->SetText("Test of 图形子系统");
         uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 26); // 26: font size
         uiLabel->SetPosition(0, 141, 280, 336);             // 141: y-coordinate; 280: width; 336: height
         uiViewGroupFrame->Add(uiLabel);
@@ -234,14 +234,14 @@ bool UITestLabel::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == labelBeyondBtn1_) {
         uiLabel->Resize(288, 35); // 288: width; 35: height
         uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
-        uiLabel->SetText("HarmonyOS Lite 图形子系统，HarmonyOS Lite 图形子系统 ");
+        uiLabel->SetText("Test of 图形子系统，Test of 图形子系统 ");
         uiLabel->SetLineBreakMode(UILabel::LINE_BREAK_CLIP);
     } else if (&view == labelBeyondBtn2_) {
         uiLabel->Resize(288, 35); // 288: width; 35: height
-        uiLabel->SetText("HarmonyOS Lite 图形子系统，HarmonyOS Lite 图形子系统 ");
+        uiLabel->SetText("Test of 图形子系统，Test of 图形子系统 ");
         uiLabel->SetLineBreakMode(UILabel::LINE_BREAK_ELLIPSIS);
     } else if (&view == labelBeyondBtn3_) {
-        uiLabel->SetText("HarmonyOS Lite 图形子系统，HarmonyOS Lite 图形子系统 ");
+        uiLabel->SetText("Test of 图形子系统，Test of 图形子系统 ");
         uiLabel->SetLineBreakMode(UILabel::LINE_BREAK_MARQUEE);
     } else {
         ExpandClick(view, event);
@@ -270,10 +270,10 @@ void UITestLabel::ExpandClick(UIView& view, const ClickEvent& event) const
     } else if (&view == labelDirectionBtn2_) {
         uiLabel->SetDirect(TEXT_DIRECT_RTL);
     } else if (&view == labelSizeBtn1_) {
-        uiLabel->SetText("HarmonyOS Lite 图形子系统，HarmonyOS Lite 图形子系统 ");
+        uiLabel->SetText("Test of 图形子系统，Test of 图形子系统 ");
         uiLabel->SetLineBreakMode(UILabel::LINE_BREAK_ADAPT);
     } else if (&view == labelSizeBtn2_) {
-        uiLabel->SetText("HarmonyOS Lite 图形子系统，HarmonyOS Lite 图形子系统 ");
+        uiLabel->SetText("Test of 图形子系统，Test of 图形子系统 ");
         uiLabel->SetLineBreakMode(UILabel::LINE_BREAK_WRAP);
     }
 }

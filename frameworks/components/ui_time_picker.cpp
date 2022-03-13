@@ -193,7 +193,7 @@ void UITimePicker::TimeSelectedCallback()
 void UITimePicker::GetValueByIndex(char* value, uint8_t len, uint16_t index, int16_t start, int16_t end)
 {
     if ((value != nullptr) && (index < end - start + 1)) {
-        if (sprintf_s(value, len, "%02d", index) < 0) {
+        if (sprintf_s(value, len, "%02u", index) < 0) {
             return;
         }
     }

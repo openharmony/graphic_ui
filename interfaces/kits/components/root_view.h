@@ -319,7 +319,7 @@ private:
 #if LOCAL_RENDER
     void RemoveViewFromInvalidMap(UIView *view);
     void DrawInvalidMap(const Rect &buffRect);
-    void OptimizeInvalidView(UIView* curview, UIView* backgroud, List<Rect> &renderedRects);
+    void OptimizeInvalidView(UIView* curview, UIView* background, List<Rect> &renderedRects);
     void OptimizeInvalidMap();
 
     std::map<UIView*, Graphic::Vector<Rect>> invalidateMap_;
