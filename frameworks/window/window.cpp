@@ -37,7 +37,7 @@ void Window::DestoryWindow(Window* window)
         WindowImpl* windowImpl = reinterpret_cast<WindowImpl*>(window);
         windowImpl->RemoveFromDisplay();
         windowImpl->UnbindRootView();
-        windowImpl->Destory();
+        windowImpl->Destroy();
         delete windowImpl;
     }
 }

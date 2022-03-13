@@ -314,7 +314,7 @@ void UIDumpDomTree::OutputDomTree(UIView* view, cJSON* usr)
             GRAPHIC_LOGE("UIDumpDomTree::OutputDomTree cJSON create object failed Err!\n");
             return;
         }
-        /* usr must be a array. */
+        /* usr must be an array. */
         cJSON_AddItemToArray(usr, dumpUsr);
     }
 

@@ -75,7 +75,7 @@ void UITestQrcode::UIKitUIQrcodeTestDisplay001()
 
         UIQrcode* qrcode = new UIQrcode();
         qrcode->SetPosition(20, 30, 60, 60); // 20 x 30 y 150 width 60 height
-        const char* str = "Hello\n HarmonyOS Lite GUI";
+        const char* str = "Hello\n Test of GUI";
         qrcode->SetQrcodeInfo(str);
         group->Add(qrcode);
         container_->Add(group);
@@ -90,7 +90,7 @@ void UITestQrcode::UIKitUIQrcodeTestDisplay002()
 
         UIQrcode* qrcode = new UIQrcode();
         qrcode->SetPosition(20, 30); // 20 x 30 y
-        const char* str = "Hello\n HarmonyOS Lite GUI";
+        const char* str = "Hello\n Test of GUI";
         qrcode->SetQrcodeInfo(str);
         qrcode->SetWidth(120);  // 120 width
         qrcode->SetHeight(250); // 250 height

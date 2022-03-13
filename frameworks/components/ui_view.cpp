@@ -83,7 +83,7 @@ UIView::~UIView()
 bool UIView::OnPreDraw(Rect& invalidatedArea) const
 {
     Rect rect(GetRect());
-    int16_t r = style_->borderRadius_;
+    uint16_t r = style_->borderRadius_; // radius must be positive
     if (r == COORD_MAX) {
         return true;
     }
@@ -298,6 +298,9 @@ void UIView::Shear(const Vector2<float>& shearX, const Vector2<float>& shearY, c
     if (transMap_ == nullptr) {
         ReMeasure();
         transMap_ = new TransformMap();
+        if (transMap_ == nullptr) {
+            return;
+        }
     }
     bool firstTrans = transMap_->IsInvalid();
     Rect joinRect = transMap_->GetBoxRect();

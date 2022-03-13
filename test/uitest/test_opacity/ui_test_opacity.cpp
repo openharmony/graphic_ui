@@ -231,9 +231,6 @@ void UITestOpacity::UIKitOpacityTestUIArcLabel001()
         UIArcLabel* label = CreateTestCaseUIArcLabel("01234567", 200); // 200: opacity
         group->Add(label);
         UIArcLabel* label2 = CreateTestCaseUIArcLabel("01234567", 100); // 100: opacity
-        if (label2 == nullptr) {
-            return;
-        }
         label2->SetArcTextCenter(CENTER_X + 200, CENTER_Y + 20);        // 200: width 20 : height
         group->Add(label2);
         container_->Add(group);
