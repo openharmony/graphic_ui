@@ -21,7 +21,7 @@ namespace OHOS {
 /* B(t) = P0*(1-t)^3 + 3*P1*t*(1-t)^2 + 3*P2*t^2*(1-t) + P3*t^3 */
 int16_t Interpolation::GetBezierInterpolation(int16_t t, int16_t u0, int16_t u1, int16_t u2, int16_t u3)
 {
-    int64_t invT = 1024 - t; // Intergerlize the standard equation, 1.0f is devided into 1024 parts
+    int64_t invT = 1024 - t; // Intergerlize the standard equation, 1.0f is divided into 1024 parts
     int64_t invT2 = invT * invT;
     int64_t invT3 = invT2 * invT;
     int64_t t2 = t * t;
@@ -31,8 +31,10 @@ int16_t Interpolation::GetBezierInterpolation(int16_t t, int16_t u0, int16_t u1,
     ret += BEZIER_COEFFICIENT * invT2 * t * u1;
     ret += BEZIER_COEFFICIENT * invT * t2 * u2;
     ret += t3 * u3;
-    ret = ret >> 30; // 30: cubic shift
-    return static_cast<int16_t>(ret);
+
+    uint64_t uret = (ret < 0) ? (-ret) : ret;
+    int16_t value = static_cast<int16_t>(uret >> 30); // 30: cubic shift
+    return (ret < 0) ? (-value) : value;
 }
 
 /* B(t) = P0*(1-t)^3 + 3*P1*t*(1-t)^2 + 3*P2*t^2*(1-t) + P3*t^3 */
@@ -76,7 +78,7 @@ float Interpolation::GetBezierY(float x, float x1, float y1, float x2, float y2)
     /* Attention: precision must be carefully selected
      * too small may lead to misconvergence and a decrease of performance
      * too large may cause the curve rugged even make some points outlier */
-    constexpr float PRECISION = 0.05f; // 0.05f make serveral outliers near inflection point
+    constexpr float PRECISION = 0.05f; // 0.05f make several outliers near inflection point
 
     /* Newton Method to solve t from x */
     while (MATH_ABS(xt - x) > PRECISION) {

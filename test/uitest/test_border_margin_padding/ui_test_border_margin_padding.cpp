@@ -609,7 +609,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPadding_Test_015()
     UIQrcode* qrcode = new UIQrcode();
     qrcode->SetStyle(style_);
     qrcode->Resize(60, 60); // 60: height
-    qrcode->SetQrcodeInfo("Hello\n HarmonyOS Lite GUI");
+    qrcode->SetQrcodeInfo("Hello\n Test of GUI");
     listScroll_->Add(qrcode);
 }
 

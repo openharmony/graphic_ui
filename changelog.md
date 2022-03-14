@@ -83,7 +83,7 @@
 
     (1) ColorMode新增TSC6枚举 类型。
 
-    (2) UIImageView成员变量colorFromat由4位修改为8位。
+    (2) UIImageView成员变量colorFormat由4位修改为8位。
 
     (3) 合入时间2021.6.17
 

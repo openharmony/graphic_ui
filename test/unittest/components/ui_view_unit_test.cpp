@@ -38,8 +38,8 @@ namespace {
     const float POS_Y_PERCENT = 0.2;
     const float DEFAULT_WIDTH_PERCENT = 0.3;
     const float DEFAULT_HEIGHT_PERCENT = 0.4;
-    const float INVAILD_PERCENT_ZERO = 0.0f;
-    const float INVAILD_PERCENT_ONE = 1.0f;
+    const float INVALID_PERCENT_ZERO = 0.0f;
+    const float INVALID_PERCENT_ONE = 1.0f;
     const int16_t DEFAULE_ANGLE = 45;
     const Vector2<float> VIEW_CENTER = {50, 50};
     const Vector2<float> SCALE_VALUE = {0.5f, 0.5f};
@@ -442,10 +442,10 @@ HWTEST_F(UIViewTest, UIViewSetWidthPercent_001, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, SetWidthPercent failed
-    view_->SetWidthPercent(INVAILD_PERCENT_ZERO);
+    // Input invalid percent, SetWidthPercent failed
+    view_->SetWidthPercent(INVALID_PERCENT_ZERO);
     EXPECT_EQ(view_->GetWidth(), DEFAULE_WIDTH);
-    view_->SetWidthPercent(INVAILD_PERCENT_ONE);
+    view_->SetWidthPercent(INVALID_PERCENT_ONE);
     EXPECT_EQ(view_->GetWidth(), DEFAULE_WIDTH);
 
     view_->SetWidthPercent(POS_X_PERCENT);
@@ -485,10 +485,10 @@ HWTEST_F(UIViewTest, UIViewSetHeightPercent_001, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, SetHeightPercent failed
-    view_->SetHeightPercent(INVAILD_PERCENT_ZERO);
+    // Input invalid percent, SetHeightPercent failed
+    view_->SetHeightPercent(INVALID_PERCENT_ZERO);
     EXPECT_EQ(view_->GetHeight(), DEFAULE_HEIGHT);
-    view_->SetHeightPercent(INVAILD_PERCENT_ONE);
+    view_->SetHeightPercent(INVALID_PERCENT_ONE);
     EXPECT_EQ(view_->GetHeight(), DEFAULE_HEIGHT);
 
     view_->SetHeightPercent(POS_Y_PERCENT);
@@ -530,11 +530,11 @@ HWTEST_F(UIViewTest, UIViewResizePercent_001, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, ResizePercent failed
-    view_->ResizePercent(INVAILD_PERCENT_ZERO, POS_Y_PERCENT);
+    // Input invalid percent, ResizePercent failed
+    view_->ResizePercent(INVALID_PERCENT_ZERO, POS_Y_PERCENT);
     EXPECT_EQ(view_->GetHeight(), DEFAULE_HEIGHT);
     EXPECT_EQ(view_->GetWidth(), DEFAULE_WIDTH);
-    view_->ResizePercent(POS_X_PERCENT, INVAILD_PERCENT_ONE);
+    view_->ResizePercent(POS_X_PERCENT, INVALID_PERCENT_ONE);
     EXPECT_EQ(view_->GetHeight(), DEFAULE_HEIGHT);
     EXPECT_EQ(view_->GetWidth(), DEFAULE_WIDTH);
 
@@ -576,10 +576,10 @@ HWTEST_F(UIViewTest, UIViewSetXPercent_001, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, SetXPercent failed
-    view_->SetXPercent(INVAILD_PERCENT_ZERO);
+    // Input invalid percent, SetXPercent failed
+    view_->SetXPercent(INVALID_PERCENT_ZERO);
     EXPECT_EQ(view_->GetX(), POS_X);
-    view_->SetXPercent(INVAILD_PERCENT_ONE);
+    view_->SetXPercent(INVALID_PERCENT_ONE);
     EXPECT_EQ(view_->GetX(), POS_X);
 
     view_->SetXPercent(POS_X_PERCENT);
@@ -619,10 +619,10 @@ HWTEST_F(UIViewTest, UIViewSetYPercent_001, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, SetYPercent failed
-    view_->SetYPercent(INVAILD_PERCENT_ZERO);
+    // Input invalid percent, SetYPercent failed
+    view_->SetYPercent(INVALID_PERCENT_ZERO);
     EXPECT_EQ(view_->GetY(), POS_Y);
-    view_->SetYPercent(INVAILD_PERCENT_ONE);
+    view_->SetYPercent(INVALID_PERCENT_ONE);
     EXPECT_EQ(view_->GetY(), POS_Y);
 
     view_->SetYPercent(POS_Y_PERCENT);
@@ -664,8 +664,8 @@ HWTEST_F(UIViewTest, UIViewSetPositionPercent_001, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, SetPositionPercent failed
-    view_->SetPositionPercent(INVAILD_PERCENT_ZERO, INVAILD_PERCENT_ONE);
+    // Input invalid percent, SetPositionPercent failed
+    view_->SetPositionPercent(INVALID_PERCENT_ZERO, INVALID_PERCENT_ONE);
     EXPECT_EQ(view_->GetX(), POS_X);
     EXPECT_EQ(view_->GetY(), POS_Y);
 
@@ -713,8 +713,8 @@ HWTEST_F(UIViewTest, UIViewSetPositionPercent_002, TestSize.Level0)
     viewGroup->SetWidth(DEFAULE_WIDTH);
     viewGroup->SetHeight(DEFAULE_HEIGHT);
 
-    // Input invaild percent, SetPositionPercent failed
-    view_->SetPositionPercent(INVAILD_PERCENT_ZERO, INVAILD_PERCENT_ONE, DEFAULT_WIDTH_PERCENT, DEFAULT_HEIGHT_PERCENT);
+    // Input invalid percent, SetPositionPercent failed
+    view_->SetPositionPercent(INVALID_PERCENT_ZERO, INVALID_PERCENT_ONE, DEFAULT_WIDTH_PERCENT, DEFAULT_HEIGHT_PERCENT);
     EXPECT_EQ(view_->GetHeight(), DEFAULE_HEIGHT);
     EXPECT_EQ(view_->GetWidth(), DEFAULE_WIDTH);
     EXPECT_EQ(view_->GetX(), POS_X);

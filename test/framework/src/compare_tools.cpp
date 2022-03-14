@@ -152,7 +152,7 @@ bool CompareTools::SaveByBit(uint32_t fd)
     struct BitmapInfoHeader bitmapInfo = {0};
     bitmapInfo.bfSize = imageBit.dataSize + BITMAP_HEADER_SIZE;
     bitmapInfo.bfOffBits = BITMAP_HEADER_SIZE;
-    bitmapInfo.biSize = 40; // 40: bitmap infomation header size
+    bitmapInfo.biSize = 40; // 40: bitmap information header size
     bitmapInfo.biWidth = imageBit.header.width;
     bitmapInfo.biHeight = -imageBit.header.height;
     bitmapInfo.biPlanes = 1;

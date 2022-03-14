@@ -53,7 +53,7 @@ void UITestTextureMapper::SetUp()
         uiViewGroupFrame->SetStyle(STYLE_BORDER_RADIUS, VIEW_STYLE_BORDER_RADIUS);
         uiViewGroupFrame->SetStyle(STYLE_BACKGROUND_OPA, 0);
         textureMapper_ = new UITextureMapper();
-        textureMapper_->SetPosition(200, 50, 200, 200); // 200:position x; 50: positon y; 200: width; 200: height
+        textureMapper_->SetPosition(200, 50, 200, 200); // 200:position x; 50: position y; 200: width; 200: height
         textureMapper_->SetSrc(RED_IMAGE_PATH);
         textureMapper_->SetRotateStart(0);
         textureMapper_->SetRotateEnd(360);     // 360: the end angle of rotation
