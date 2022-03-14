@@ -460,7 +460,7 @@ bool UITestCircleProgress::OnClick(UIView& view, const ClickEvent& event)
         imgPos.x++;
         circleProgress_->SetBackgroundImagePosition(imgPos.x, imgPos.y);
         circleProgress_->SetProgressImagePosition(imgPos.x, imgPos.y);
-    } else if (&view == imgPosXBtn_) {
+    } else if (&view == imgPosYBtn_) {
         imgPos.y++;
         circleProgress_->SetBackgroundImagePosition(imgPos.x, imgPos.y);
         circleProgress_->SetProgressImagePosition(imgPos.x, imgPos.y);

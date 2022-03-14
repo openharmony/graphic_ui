@@ -225,7 +225,7 @@ UIImageView::UIImageView()
       imageHeight_(0),
       autoEnable_(true),
       needRefresh_(false),
-      colorFormat_(UNKNOW),
+      colorFormat_(UNKNOWN),
       blurLevel_(BlurLevel::LEVEL0),
       algorithm_(TransformAlgorithm::BILINEAR),
       reserve_(0)

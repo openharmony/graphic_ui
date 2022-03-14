@@ -45,7 +45,7 @@ public:
     void Update();
     void Flush();
     bool Create(const WindowConfig& config);
-    void Destory();
+    void Destroy();
     void AddToDisplay();
     void RemoveFromDisplay();
 
