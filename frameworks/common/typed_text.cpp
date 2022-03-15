@@ -342,7 +342,7 @@ uint32_t TypedText::GetUTF8CharacterSize(const char* text, uint32_t byteIndex)
         GRAPHIC_LOGE("TypedText::GetUTF8CharacterSize text invalid parameter\n");
         return 0;
     }
-    while ((text[i] != '\0') && (i < byteIndex)) {
+    while ((i < byteIndex) && (text[i] != '\0')) {
         GetUTF8Next(text, i, i);
         size++;
     }

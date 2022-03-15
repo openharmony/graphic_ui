@@ -238,12 +238,12 @@ bool UITimePicker::RefreshSelected(const char* value)
     if (secVisible_) {
         uint32_t secSelect;
         // 3: three variables
-        if (sscanf_s(value, "%d:%d:%d", &hourSelect, &minSelect, &secSelect) < 3) {
+        if (sscanf_s(value, "%u:%u:%u", &hourSelect, &minSelect, &secSelect) < 3) {
             return false;
         }
         secondPicker_->SetSelected(secSelect);
     } else {
-        if (sscanf_s(value, "%d:%d", &hourSelect, &minSelect) < 2) { // 2: two variables
+        if (sscanf_s(value, "%u:%u", &hourSelect, &minSelect) < 2) { // 2: two variables
             return false;
         }
     }
