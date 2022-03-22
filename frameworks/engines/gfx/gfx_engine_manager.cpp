@@ -1,19 +1,22 @@
 /*
-* Copyright (c) 2020-2022 Huawei Device Co., Ltd.
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "engines/gfx/gfx_engine_manager.h"
+
+#include <cstdlib>
+
 #include "draw/clip_utils.h"
 #include "draw/draw_arc.h"
 #include "draw/draw_curve.h"
@@ -85,7 +88,7 @@ void BaseGfxEngine::DrawTransform(BufferInfo& dst,
                                   const TransformDataInfo& dataInfo)
 {
     DrawUtils::GetInstance()->DrawTransform(dst, mask, position, color,
-                                            opacity, transMap, dataInfo);
+        opacity, transMap, dataInfo);
 }
 
 void BaseGfxEngine::ClipCircle(const ImageInfo* info, float x, float y, float radius)
@@ -103,9 +106,8 @@ void BaseGfxEngine::Blit(BufferInfo& dst,
                          const BlendOption& blendOption)
 {
     DrawUtils::GetInstance()->BlendWithSoftWare(static_cast<uint8_t*>(src.virAddr), src.rect, src.stride,
-                                                src.rect.GetHeight(), src.mode, src.color, blendOption.opacity,
-                                                static_cast<uint8_t*>(dst.virAddr),
-                                                dst.stride, dst.mode, subRect.GetX(), subRect.GetY());
+        src.rect.GetHeight(), src.mode, src.color, blendOption.opacity, static_cast<uint8_t*>(dst.virAddr),
+        dst.stride, dst.mode, subRect.GetX(), subRect.GetY());
 }
 
 void BaseGfxEngine::Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color, const OpacityType opacity)
@@ -115,11 +117,11 @@ void BaseGfxEngine::Fill(BufferInfo& dst, const Rect& fillArea, const ColorType 
 
 uint8_t* BaseGfxEngine::AllocBuffer(uint32_t size, uint32_t usage)
 {
-    return static_cast<uint8_t*>(malloc(size));
+    return static_cast<uint8_t *>(malloc(size));
 }
 
 void BaseGfxEngine::FreeBuffer(uint8_t* buffer)
 {
     free(buffer);
 }
-} // namespace OHOS
+}
