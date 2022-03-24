@@ -383,10 +383,10 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
 void UIList::UpdateScrollBar()
 {
     auto allItemsRect = recycle_.GetAdapterItemsReletiveRect();
-    int16_t totalHeight = allItemsRect.GetHeight() + 2 * scrollBlankSize_; // 2: two blank spaces on both sides
+    float totalHeight = allItemsRect.GetHeight() + 2.0f * scrollBlankSize_; // 2: two blank spaces on both sides
     int16_t height = GetHeight();
-    yScrollBar_->SetForegroundProportion(static_cast<float>(height) / totalHeight);
-    yScrollBar_->SetScrollProgress(static_cast<float>(scrollBlankSize_ - allItemsRect.GetTop()) /
+    yScrollBar_->SetForegroundProportion(height / totalHeight);
+    yScrollBar_->SetScrollProgress((scrollBlankSize_ - allItemsRect.GetTop()) /
                                    (totalHeight - height));
     RefreshAnimator();
 }
