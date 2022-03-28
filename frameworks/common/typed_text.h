@@ -39,20 +39,28 @@ public:
     static constexpr uint8_t UTF8_TO_UNICODE_SHIFT3 = 18;
 
     static Point GetTextSize(const char* text,
+                             uint8_t fontId,
+                             uint8_t fontSize,
                              int16_t letterSpace,
                              int16_t lineHeight,
                              int16_t maxWidth,
-                             int8_t lineSpace = 0);
+                             int8_t lineSpace);
 
     static uint32_t GetNextLine(const char* text,
+                                uint8_t fontId,
+                                uint8_t fontSize,
                                 int16_t letterSpace,
                                 int16_t maxWidth);
 
     static int16_t GetTextWidth(const char* text,
+                                uint8_t fontId,
+                                uint8_t fontSize,
                                 uint16_t length,
                                 int16_t letterSpace);
 
     static Rect GetArcTextRect(const char* text,
+                                uint8_t fontId,
+                                uint8_t fontSize,
                                const Point& arcCenter,
                                int16_t letterSpace,
                                UIArcLabel::TextOrientation orientation,

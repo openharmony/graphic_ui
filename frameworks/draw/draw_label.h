@@ -27,13 +27,14 @@ class DrawLabel : public HeapBase {
 public:
     static void DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine);
 
-    static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text,
-                            const Point& arcCenter, uint8_t fontId, const UIArcLabel::ArcTextInfo arcTextInfo,
+    static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text, const Point& arcCenter,
+                            uint8_t fontId, uint8_t fontSize, const UIArcLabel::ArcTextInfo arcTextInfo,
                             UIArcLabel::TextOrientation orientation, const Style& style, uint8_t opaScale);
 
     static void DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
                                      uint8_t fontId,
+                                     uint8_t fontSize,
                                      uint32_t letter,
                                      const Point& pos,
                                      int16_t rotateAngle,
