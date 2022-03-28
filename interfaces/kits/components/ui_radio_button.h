@@ -62,7 +62,7 @@ public:
      *
      * @brief   Default constructor
      */
-    UIRadioButton(const char* name);
+    explicit UIRadioButton(const char* name);
 
     /**
      * @brief A destructor used to delete the <b>UIRadioButton</b> instance.

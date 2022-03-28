@@ -76,7 +76,7 @@ private:
 
 class TestUIDialogOnCancelListener : public UIView::OnClickListener {
 public:
-    TestUIDialogOnCancelListener(UILabel* label)
+    explicit TestUIDialogOnCancelListener(UILabel* label)
     {
         dialog_ = nullptr;
         label_ = label;

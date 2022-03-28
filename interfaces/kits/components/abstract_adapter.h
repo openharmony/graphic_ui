@@ -87,7 +87,7 @@ public:
      * @version 1.0
      */
     virtual UIView* GetView(UIView* inView, int16_t index) = 0;
-    
+
     virtual void DeleteView(UIView*& view)
     {
         delete view;

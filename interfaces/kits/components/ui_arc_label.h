@@ -119,7 +119,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetStyle(Style& style) override
+    void SetStyle(Style& style) override
     {
         UIView::SetStyle(style);
     }
@@ -344,7 +344,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Stores the attribute information about this arc text to draw.
@@ -374,7 +374,7 @@ protected:
     void RefreshArcLabel();
 
 private:
-    virtual void ReMeasure() override;
+    void ReMeasure() override;
     void MeasureArcTextInfo();
     void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, OpacityType opaScale);
 

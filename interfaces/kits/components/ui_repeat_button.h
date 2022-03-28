@@ -111,7 +111,7 @@ public:
      * @param [in]  event   click event.
      * @return Returns <b>true</b> if the event is consumed; returns <b>false</b> otherwise.
      */
-    virtual bool OnClickEvent(const ClickEvent& event) override;
+    bool OnClickEvent(const ClickEvent& event) override;
 
     /**
      * @fn  void UIRepeatButton::OnReleaseEvent(const ReleaseEvent& event)
@@ -120,7 +120,7 @@ public:
      *
      * @param [in]  event   release event.
      */
-    virtual bool OnReleaseEvent(const ReleaseEvent& event) override;
+    bool OnReleaseEvent(const ReleaseEvent& event) override;
 
     /**
      * @fn  void UIRepeatButton::OnLongPressEvent(const ReleaseEvent& event)
@@ -129,7 +129,7 @@ public:
      *
      * @param [in]  event   long press event.
      */
-    virtual bool OnLongPressEvent(const LongPressEvent& event) override;
+    bool OnLongPressEvent(const LongPressEvent& event) override;
 
     /**
      * @fn  void UIRepeatButton::HandleTickEvent()
@@ -145,7 +145,7 @@ private:
     static UIRepeatButton* repeatButton_;
     uint32_t timerRepeatID_;
 
-    virtual void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
+    void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
     inline void SetEvent(const ClickEvent& event);
 };
 } // namespace OHOS

@@ -67,7 +67,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIButton(const char* id) : UIButton()
+    explicit UIButton(const char* id) : UIButton()
     {
         id_ = id;
     }
@@ -313,7 +313,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual Rect GetContentRect() override
+    Rect GetContentRect() override
     {
         Rect contentRect;
         Style* style = buttonStyles_[state_];
@@ -340,7 +340,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetStyle(Style& style) override
+    void SetStyle(Style& style) override
     {
         UIView::SetStyle(style);
     }
@@ -412,6 +412,7 @@ public:
         enableAnimation_ = enable;
     }
 #endif
+
 protected:
     Image* defaultImgSrc_;
     Image* triggeredImgSrc_;

@@ -110,7 +110,8 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void LayoutChildren(bool needInvalidate = false) override;
+    void LayoutChildren(bool needInvalidate = false) override;
+
 private:
     void LayoutHorizontal();
     void LayoutVertical();

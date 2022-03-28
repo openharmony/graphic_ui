@@ -53,6 +53,7 @@ public:
     void UIKit_Transform_Test_Translate_003();
 
     void SetScaleMode(ImageScaleMode mode);
+
 private:
     void AddRadioGroup();
     UILabel* AddLable(int16_t x, int16_t y, const char* data);

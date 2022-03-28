@@ -26,7 +26,7 @@ namespace OHOS {
 class ClockAnimatorCallback : public AnimatorCallback {
 public:
     explicit ClockAnimatorCallback(UIAnalogClock* clock) : clock_(clock) {}
-    ~ClockAnimatorCallback() {};
+    ~ClockAnimatorCallback() {}
     virtual void Callback(UIView* view)
     {
         count_++;

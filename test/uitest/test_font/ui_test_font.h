@@ -110,6 +110,7 @@ public:
      */
     void UIKitFontMultiLanguage002();
 #endif // ENABLE_MULTI_FONT
+
 private:
     UIScrollView* container_ = nullptr;
     void InnerTestTitle(const char* title);

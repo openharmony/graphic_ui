@@ -95,7 +95,7 @@ void UIToggleButton::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
         Rect contentRect = GetContentRect();
         Rect trunc = invalidatedArea;
         bool isIntersect = trunc.Intersect(trunc, contentRect);
-        if (isIntersect == false) {
+        if (!isIntersect) {
             return;
         }
         Style styleUnSelect = StyleDefault::GetBackgroundTransparentStyle();

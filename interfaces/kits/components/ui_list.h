@@ -187,7 +187,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIList(uint8_t direction);
+    explicit UIList(uint8_t direction);
 
     /**
      * @brief A destructor used to delete the <b>UIList</b> instance.
@@ -236,7 +236,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void MoveChildByOffset(int16_t x, int16_t y) override;
+    void MoveChildByOffset(int16_t x, int16_t y) override;
 
     /**
      * @brief Scrolls to change the index of the first row or column of the current view.

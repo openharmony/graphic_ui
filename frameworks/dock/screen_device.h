@@ -131,7 +131,7 @@ public:
      * @param srcLineNumber Indicates the number of source memory rows
      * @param srcColorMode Indicates the source memory color format
      * @param color 32-bit XRGB8888 value
-     *              (valid when the source memory is in a format with only alph information such as A1)
+     *              (valid when the source memory is in a format with only alpha information such as A1)
      * @param opa Indicates the transparency
      * @param dst Indicates the start address of destination memory
      * @param dstStride Indicates the number of bytes in a single row of destination memory
@@ -166,7 +166,7 @@ public:
      * @param transformMatrix  Indicates the transformation matrix
      * @param opa Indicates the transparency
      * @param color 32-bit XRGB8888 value
-     *              (valid when the source memory is in a format with only alph information such as A1)
+     *              (valid when the source memory is in a format with only alpha information such as A1)
      * @param mask Indicates the masking rectangle, and the content beyond the rectangle is not drawn
      * @param dst Indicates the start address of destination memory
      * @param dstStride Indicates the number of bytes in a single row of destination memory

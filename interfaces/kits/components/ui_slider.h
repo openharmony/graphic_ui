@@ -336,7 +336,7 @@ protected:
 
 private:
     static constexpr uint8_t MAX_ROTATE_FACTOR = 128;
-    
+
     int16_t knobWidth_;
     bool knobStyleAllocFlag_;
     Style* knobStyle_;
