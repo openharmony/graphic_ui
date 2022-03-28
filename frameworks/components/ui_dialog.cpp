@@ -28,7 +28,7 @@
 namespace OHOS {
 class UIDialogLabelButton : public UILabelButton {
 public:
-    UIDialogLabelButton(UIDialog* dialog)
+    explicit UIDialogLabelButton(UIDialog* dialog)
     {
         dialog_ = dialog;
     }
@@ -51,7 +51,7 @@ private:
 
 class UIDialogClickListener : public UIView::OnClickListener {
 public:
-    UIDialogClickListener(UIDialog* dialog)
+    explicit UIDialogClickListener(UIDialog* dialog)
     {
         dialog_ = dialog;
     }

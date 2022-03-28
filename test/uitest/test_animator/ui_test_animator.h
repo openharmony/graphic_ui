@@ -72,7 +72,7 @@ protected:
 class UITestAnimator : public UITest, public UIView::OnClickListener, public SysInfo::OnFPSChangedListener {
 public:
     UITestAnimator() {}
-    ~UITestAnimator(){};
+    ~UITestAnimator(){}
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;

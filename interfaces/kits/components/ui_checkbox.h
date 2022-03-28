@@ -54,6 +54,7 @@ class UICheckBox : public UIView, public AnimatorCallback {
 #else
 class UICheckBox : public UIView {
 #endif
+
 public:
     /**
      * @brief Enumerates the states of a check box.
@@ -84,7 +85,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual ~UICheckBox() {};
+    virtual ~UICheckBox() {}
 
     /**
      * @brief Represents a listener for changes of a check box.

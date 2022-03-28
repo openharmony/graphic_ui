@@ -62,6 +62,7 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnClickButton(UIView& view);
     void InitSetUpButton();
+
 private:
     UIScrollView* container_ = nullptr;
     GridLayout* layout_ = nullptr;

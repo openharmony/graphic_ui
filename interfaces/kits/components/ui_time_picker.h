@@ -298,14 +298,14 @@ public:
 private:
     class UIPickerListener : public UIPicker::SelectedListener {
     public:
-        UIPickerListener(UITimePicker* timePicker)
+        explicit UIPickerListener(UITimePicker* timePicker)
         {
             timePicker_ = timePicker;
         }
 
         ~UIPickerListener() {}
 
-        virtual void OnPickerStoped(UIPicker& picker) override
+        void OnPickerStoped(UIPicker& picker) override
         {
             if (timePicker_ != nullptr) {
                 timePicker_->TimeSelectedCallback();

@@ -52,7 +52,7 @@ const UIView* UITestScreenshot::GetTestView()
 
 class TestScreenshotOnClickListener : public UIView::OnClickListener {
 public:
-    TestScreenshotOnClickListener(UIView* uiView) : uiView_(uiView) {}
+    explicit TestScreenshotOnClickListener(UIView* uiView) : uiView_(uiView) {}
     ~TestScreenshotOnClickListener() {}
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
@@ -67,7 +67,7 @@ private:
 
 class TestSetScreenshotOnClickListener : public UIView::OnClickListener {
 public:
-    TestSetScreenshotOnClickListener(UIView* uiView) : uiView_(uiView) {}
+    explicit TestSetScreenshotOnClickListener(UIView* uiView) : uiView_(uiView) {}
     ~TestSetScreenshotOnClickListener() {}
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
@@ -100,7 +100,7 @@ void UITestScreenshot::UIKit_SCREENSHOT_TEST_001()
     labelButton->SetFont(DEFAULT_VECTOR_FONT_FILENAME, BUTTON_LABEL_SIZE);
     if (clickLeftListener_ == nullptr) {
         clickLeftListener_ = static_cast<UIView::OnClickListener*>(
-            new TestScreenshotOnClickListener((UIView*)labelButton));
+            new TestScreenshotOnClickListener(reinterpret_cast<UIView*>(labelButton)));
     }
     labelButton->SetOnClickListener(clickLeftListener_);
     UILabel* label2 = GetTitleLabel("显示截屏图片 ");

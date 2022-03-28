@@ -53,6 +53,7 @@ public:
         label_.SetVisible(true);
         label_.Invalidate();
     }
+
 private:
     UILabel label_;
     UIViewGroup* viewGroup_ = nullptr;
@@ -61,7 +62,7 @@ private:
 class UITestTextureMapper : public UITest, public UIView::OnClickListener {
 public:
     UITestTextureMapper() {}
-    ~UITestTextureMapper() {};
+    ~UITestTextureMapper() {}
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;

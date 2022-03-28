@@ -25,7 +25,7 @@ namespace OHOS {
 class GUIThread : public QThread {
     Q_OBJECT
 public:
-    GUIThread(QObject* parent);
+    explicit GUIThread(QObject* parent);
     virtual ~GUIThread();
     void run() override;
     void Quit();

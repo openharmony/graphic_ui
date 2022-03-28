@@ -26,8 +26,8 @@ namespace OHOS {
 /** @brief Class for drawing rectangle. */
 class DrawRect : public HeapBase {
 public:
-    DrawRect() {};
-    ~DrawRect() {};
+    DrawRect() {}
+    ~DrawRect() {}
 
     static void Draw(BufferInfo& gfxDstBuffer, const Rect& rect, const Rect& dirtyRect,
                      const Style& style, OpacityType opaScale);

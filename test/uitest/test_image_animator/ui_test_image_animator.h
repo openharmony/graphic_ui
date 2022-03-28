@@ -50,6 +50,7 @@ public:
         label_->SetVisible(true);
         label_->Invalidate();
     }
+
 private:
     UILabel* label_ = nullptr;
     UIViewGroup* viewGroup_ = nullptr;

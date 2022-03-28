@@ -123,7 +123,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void GetTargetView(const Point& point, UIView** last) override;
+    void GetTargetView(const Point& point, UIView** last) override;
 
     /**
      * @brief Obtains the current view and target view based on specified coordinates. The obtained current view
@@ -138,7 +138,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    virtual void GetTargetView(const Point& point, UIView** current, UIView** target) override;
+    void GetTargetView(const Point& point, UIView** current, UIView** target) override;
 
     /**
      * @brief Moves all child views.

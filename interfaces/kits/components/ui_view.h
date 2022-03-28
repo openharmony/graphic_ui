@@ -426,7 +426,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIView(const char* id) : UIView()
+    explicit UIView(const char* id) : UIView()
     {
         id_ = id;
     }
