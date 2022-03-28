@@ -477,18 +477,24 @@ uint16_t UIDialog::MeasureButtonWidth()
 
     if (button1_ != nullptr) {
         const char* text1 = button1_->GetText();
-        buttonTextWidth = MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text1,
-            button1_->GetStyleConst().letterSpace_, button1_->GetStyleConst().lineHeight_, widthMax_).x);
+        buttonTextWidth =
+            MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text1, button1_->GetFontId(), BUTTON_FONT_SIZE,
+                                                             button1_->GetStyleConst().letterSpace_,
+                                                             button1_->GetStyleConst().lineHeight_, widthMax_, 0).x);
     }
     if (button2_ != nullptr) {
         const char* text2 = button2_->GetText();
-        buttonTextWidth = MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text2,
-            button2_->GetStyleConst().letterSpace_, button2_->GetStyleConst().lineHeight_, widthMax_).x);
+        buttonTextWidth =
+            MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text2, button2_->GetFontId(), BUTTON_FONT_SIZE,
+                                                             button2_->GetStyleConst().letterSpace_,
+                                                             button2_->GetStyleConst().lineHeight_, widthMax_, 0).x);
     }
     if (button3_ != nullptr) {
         const char* text3 = button3_->GetText();
-        buttonTextWidth = MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text3,
-            button3_->GetStyleConst().letterSpace_, button3_->GetStyleConst().lineHeight_, widthMax_).x);
+        buttonTextWidth =
+            MATH_MAX(buttonTextWidth, TypedText::GetTextSize(text3, button3_->GetFontId(), BUTTON_FONT_SIZE,
+                                                             button3_->GetStyleConst().letterSpace_,
+                                                             button3_->GetStyleConst().lineHeight_, widthMax_, 0).x);
     }
     return (buttonTextWidth + BUTTON_HEIGHT) > buttonMaxWidth ? buttonMaxWidth : (buttonTextWidth + BUTTON_HEIGHT);
 }
