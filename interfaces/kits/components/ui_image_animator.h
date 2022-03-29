@@ -436,7 +436,7 @@ protected:
 
         virtual ~ImageAnimatorCallback() {}
 
-        virtual void Callback(UIView* view) override;
+        void Callback(UIView* view) override;
 
         void Reset()
         {

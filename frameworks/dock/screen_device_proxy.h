@@ -194,6 +194,7 @@ public:
 
     bool GetScreenBitmapBuffer(uint8_t* dest, uint32_t size);
 ;
+
 private:
     ScreenDeviceProxy() {}
     virtual ~ScreenDeviceProxy() {}

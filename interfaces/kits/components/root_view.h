@@ -291,6 +291,7 @@ public:
      * @version 6.0
      */
     void RestoreDrawContext();
+
 private:
     friend class RenderManager;
     friend class UIViewGroup;

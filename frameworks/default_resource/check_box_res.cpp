@@ -1351,7 +1351,7 @@ ImageInfo* GetCheckBoxOnInfo()
 {
     /* 56 : check box width */
     g_checkBoxOn.header.width = 56;
-    /* 56 : check box heigh */
+    /* 56 : check box height */
     g_checkBoxOn.header.height = 56;
     /* 5 : check box cf format */
     g_checkBoxOn.header.colorMode = ARGB8888;
@@ -1367,7 +1367,7 @@ ImageInfo* GetCheckBoxOffInfo()
 {
     /* 56 : check box width */
     g_checkBoxOff.header.width = 56;
-    /* 56 : check box heigh */
+    /* 56 : check box height */
     g_checkBoxOff.header.height = 56;
     /* 5 : check box cf format */
     g_checkBoxOff.header.colorMode = ARGB8888;

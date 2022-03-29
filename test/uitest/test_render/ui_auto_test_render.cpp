@@ -38,7 +38,7 @@ void UIAutoTestRender::UIKitRenderTestRender001() const
 
 void UIAutoTestRender::UIKitRenderTestRenderMeasure001() const
 {
-    ClickViewById(UI_TEST_RENDER_UPDATA_BUTTON_ID_01);    
+    ClickViewById(UI_TEST_RENDER_UPDATA_BUTTON_ID_01);
     const char* fileName = "ui_test_render_measure_001.bmp";
     CompareByBinary(fileName);
 }

@@ -43,6 +43,7 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnClickButton(const UIView& view);
+
 private:
     UIScrollView* container_ = nullptr;
     GridLayout* flexController_ = nullptr;

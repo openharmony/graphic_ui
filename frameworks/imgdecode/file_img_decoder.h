@@ -56,8 +56,8 @@ public:
     RetCode ReadToCache(ImgResDsc& dsc);
 
 private:
-    FileImgDecoder() {};
-    ~FileImgDecoder() {};
+    FileImgDecoder() {}
+    ~FileImgDecoder() {}
 
     bool IsImgValidMode(uint8_t colorMode)
     {

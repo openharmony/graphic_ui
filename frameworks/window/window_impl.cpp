@@ -213,7 +213,8 @@ void WindowImpl::UpdateHalDisplayBuffer()
         if (surface == nullptr) {
             return;
         }
-        surface->Lock((void**)&gfxAlloc_.virAddr, (void**)&gfxAlloc_.phyAddr, &gfxAlloc_.stride);
+        surface->Lock(reinterpret_cast<void**>(&gfxAlloc_.virAddr),
+            reinterpret_cast<void**>(&gfxAlloc_.phyAddr), &gfxAlloc_.stride);
     }
 }
 

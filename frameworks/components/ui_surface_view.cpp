@@ -131,7 +131,7 @@ Surface* UISurfaceView::GetSurface() const
 
 bool UISurfaceView::OnPreDraw(Rect& invalidatedArea) const
 {
-    // need fill transpant color
+    // need fill transparent color
     return false;
 }
 
@@ -150,7 +150,7 @@ void UISurfaceView::Draw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
                                                  reinterpret_cast<const ColorType*>(acquireBuffer->GetVirAddr()));
         surface_->ReleaseBuffer(acquireBuffer);
     } else {
-        // fill with transpant color
+        // fill with transparent color
         DrawUtils::GetInstance()->DrawTranspantArea(gfxDstBuffer, GetRect(), invalidatedArea);
     }
 }

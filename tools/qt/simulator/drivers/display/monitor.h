@@ -24,6 +24,7 @@
 namespace OHOS {
 class Monitor : public QObject, public BaseGfxEngine {
     Q_OBJECT
+
 public:
     Monitor() : defaultColor_ (0x44) {}
     virtual ~Monitor() {}

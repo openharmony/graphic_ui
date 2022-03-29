@@ -177,7 +177,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual uint16_t GetCount() override;
+    uint16_t GetCount() override;
 
     /**
      * @brief Sets the width of UILabel constructed by the adapter.
@@ -253,6 +253,7 @@ public:
     {
         formatter_ = formatter;
     }
+
 protected:
     virtual UILabel* GetTextView(UIView* inView, int16_t index);
     virtual UILabel* CreateUILabel(UIView* inView);
