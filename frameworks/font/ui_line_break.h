@@ -106,8 +106,13 @@ public:
     }
 
     // 0xFFFF: unlimit the length until the end null.
-    uint32_t
-        GetNextLineAndWidth(const char* text, int16_t space, bool allBreak, int16_t& maxWidth, uint16_t len = 0xFFFF);
+    uint32_t GetNextLineAndWidth(const char* text,
+                                 uint8_t fontId,
+                                 uint8_t fontSize,
+                                 int16_t space,
+                                 bool allBreak,
+                                 int16_t& maxWidth,
+                                 uint16_t len = 0xFFFF);
     bool IsBreakPos(uint32_t unicode, int32_t& state);
 
 private:

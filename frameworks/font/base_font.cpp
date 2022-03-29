@@ -15,15 +15,6 @@
 
 #include "font/base_font.h"
 namespace OHOS {
-uint8_t BaseFont::GetBaseFontId()
-{
-    return fontId_;
-}
-void BaseFont::SetBaseFontId(uint8_t fontId)
-{
-    fontId_ = fontId;
-}
-
 uintptr_t BaseFont::GetRamAddr()
 {
     return ramAddr_;

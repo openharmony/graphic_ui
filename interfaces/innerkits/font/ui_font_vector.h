@@ -32,13 +32,12 @@ public:
     UIFontVector& operator=(const UIFontVector&) noexcept = delete;
     bool IsVectorFont() const override;
     int8_t SetFontPath(const char* dpath, const char* spath) override;
-    int8_t SetCurrentFontId(uint8_t fontId, uint8_t size = 0) override;
-    uint16_t GetHeight() override;
-    uint8_t GetFontId(const char* ttfName, uint8_t size = 0) const override;
-    int16_t GetWidth(uint32_t unicode, uint8_t fontId) override;
-    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId) override;
-    int8_t GetCurrentFontHeader(FontHeader& fontHeader) override;
-    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode) override;
+    uint16_t GetHeight(uint8_t fontId, uint8_t fontSize) override;
+    uint8_t GetFontId(const char* ttfName, uint8_t fontSize = 0) const override;
+    int16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize) override;
+    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize) override;
+    int8_t GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize) override;
+    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize) override;
     uint8_t GetFontWeight(uint8_t fontId) override;
     uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
         uint8_t fontId, uint8_t size)  const override;
@@ -59,8 +58,11 @@ private:
     FT_Library ftLibrary_;
     FT_Face ftFaces_[FONT_ID_MAX] = {0};
     bool freeTypeInited_;
-    uint32_t key_ = 0;
     UIFontCache* bitmapCache_;
+    struct FaceInfo {
+        FT_Face face;
+        uint32_t key;
+    };
     struct Metric {
         int left;
         int top;
@@ -69,12 +71,12 @@ private:
         int advance;
         uint8_t buf[0];
     };
-    void SetFace(FT_Face ftface, uint32_t unicode) const;
+    void SetFace(FaceInfo& faceInfo, uint32_t unicode) const;
     uint8_t GetFontId(uint32_t unicode) const;
     uint32_t GetKey(uint8_t fontId, uint32_t size);
-    int8_t LoadGlyphIntoFace(uint8_t fontId, uint32_t unicode);
+    int8_t LoadGlyphIntoFace(uint8_t fontId, uint32_t unicode, FT_Face face);
     uint8_t IsGlyphFont(uint32_t unicode);
+    int8_t GetFaceInfo(uint8_t fontId, uint8_t fontSize, FaceInfo& faceInfo);
 };
 } // namespace OHOS
 #endif
-

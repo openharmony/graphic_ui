@@ -278,7 +278,8 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
     UIFont* fontEngine = UIFont::GetInstance();
 
     GlyphNode node;
-    const uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.shapingId);
+    const uint8_t* fontMap =
+        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
@@ -291,7 +292,7 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
         posY = letterInfo.pos.y + letterInfo.fontSize - node.top - letterInfo.offsetY;
     } else {
         FontHeader head;
-        if (fontEngine->GetCurrentFontHeader(head) != 0) {
+        if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
             return;
         }
         posY = letterInfo.pos.y + head.ascender - node.top - letterInfo.offsetY;
