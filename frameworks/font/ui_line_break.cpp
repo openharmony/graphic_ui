@@ -107,8 +107,8 @@ void UILineBreakEngine::LoadRule()
     initSuccess_ = true;
 }
 
-uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text, int16_t space, bool allBreak, int16_t& maxWidth,
-                                                uint16_t len)
+uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text, uint8_t fontId, uint8_t fontSize, int16_t space, 
+                                                bool allBreak, int16_t& maxWidth, uint16_t len)
 {
     if (text == nullptr) {
         return 0;
@@ -134,7 +134,7 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text, int16_t space,
             lastIndex = preIndex;
             lastWidth = curWidth;
         }
-        width = UIFont::GetInstance()->GetWidth(unicode, 0);
+        width = UIFont::GetInstance()->GetWidth(unicode, fontId, fontSize, 0);
         int16_t nextWidth = (curWidth > 0 && width > 0) ? (curWidth + space + width) : (curWidth + width);
         if (nextWidth > maxWidth) {
             if (lastIndex == 0) {

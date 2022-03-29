@@ -158,13 +158,13 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     if (fontSize_ == 0) {
         return;
     }
-    UIFont::GetInstance()->SetCurrentFontId(fontId_, fontSize_);
     int16_t maxWidth = (expandWidth_ ? COORD_MAX : textRect.GetWidth());
     if (maxWidth > 0) {
-        textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineHeight_, maxWidth, style.lineSpace_);
+        textSize_ = TypedText::GetTextSize(text_, fontId_, fontSize_, style.letterSpace_, style.lineHeight_, maxWidth,
+                                           style.lineSpace_);
         if (baseLine_) {
             FontHeader head;
-            if (UIFont::GetInstance()->GetCurrentFontHeader(head) != 0) {
+            if (UIFont::GetInstance()->GetFontHeader(head, fontId_, fontSize_) != 0) {
                 return;
             }
             textSize_.y += fontSize_ - head.ascender;
@@ -205,7 +205,6 @@ void Text::OnDraw(BufferInfo& gfxDstBuffer,
     if ((text_ == nullptr) || (strlen(text_) == 0) || (fontSize_ == 0)) {
         return;
     }
-    UIFont::GetInstance()->SetCurrentFontId(fontId_, fontSize_);
     Rect mask = invalidatedArea;
 
     if (mask.Intersect(mask, textRect)) {
@@ -225,7 +224,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
     int16_t lineMaxWidth = expandWidth_ ? textSize_.x : coords.GetWidth();
     int16_t lineHeight = style.lineHeight_;
     if (lineHeight == 0) {
-        lineHeight = UIFont::GetInstance()->GetHeight() + style.lineSpace_;
+        lineHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_) + style.lineSpace_;
     }
     uint16_t lineBegin = 0;
     uint32_t maxLineBytes = 0;
@@ -307,7 +306,7 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
         lineNum++;
     }
     if ((lineNum != 0) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
-        uint16_t ellipsisWidth = UIFont::GetInstance()->GetWidth('.', 0) + letterSpace;
+        uint16_t ellipsisWidth = UIFont::GetInstance()->GetWidth('.', fontId_, fontSize_, 0) + letterSpace;
         textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
         if (textLine_[lineNum - 1].linePixelWidth > width) {
             int16_t newWidth = width - ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
@@ -344,8 +343,8 @@ uint32_t Text::GetTextStrLen()
 uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace)
 {
     int16_t lineWidth = width;
-    uint16_t nextLineBytes = UIFontAdaptor::GetNextLineAndWidth(&text_[begin], letterSpace, lineWidth, false,
-                                                                textLen - begin);
+    uint16_t nextLineBytes = UIFontAdaptor::GetNextLineAndWidth(&text_[begin], fontId_, fontSize_, letterSpace,
+                                                                lineWidth, false, textLen - begin);
     if (nextLineBytes + begin > textLen) {
         nextLineBytes = textLen - begin;
     }
@@ -360,14 +359,13 @@ uint16_t Text::GetEllipsisIndex(const Rect& textRect, const Style& style)
         return TEXT_ELLIPSIS_END_INV;
     }
     UIFont* fontEngine = UIFont::GetInstance();
-    fontEngine->SetCurrentFontId(fontId_, fontSize_);
-    int16_t letterWidth = fontEngine->GetWidth('.', 0) + style.letterSpace_;
+    int16_t letterWidth = fontEngine->GetWidth('.', fontId_, fontSize_, 0) + style.letterSpace_;
     Point p;
     p.x = textRect.GetWidth() - letterWidth * TEXT_ELLIPSIS_DOT_NUM;
     p.y = textRect.GetHeight();
     int16_t height = style.lineHeight_;
     if (height == 0) {
-        height = fontEngine->GetHeight() + style.lineSpace_;
+        height = fontEngine->GetHeight(fontId_, fontSize_) + style.lineSpace_;
     }
     if (height) {
         p.y -= p.y % height;
@@ -386,7 +384,7 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     uint32_t lineStart = 0;
     uint32_t nextLineStart = 0;
     uint16_t lineHeight = style.lineHeight_;
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_);
     if (lineHeight == 0) {
         lineHeight = letterHeight + style.lineSpace_;
     }
@@ -401,7 +399,8 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     int16_t width = 0;
     while ((lineStart < textLen) && (text_[lineStart] != '\0')) {
         width = textRect.GetWidth();
-        nextLineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width);
+        nextLineStart +=
+            UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width);
         if (nextLineStart == 0) {
             break;
         }
@@ -416,7 +415,8 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     }
     /* Calculate the x coordinate */
     width = pos.x;
-    lineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width, true);
+    lineStart +=
+        UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width, true);
     return (lineStart < textLen) ? lineStart : TEXT_ELLIPSIS_END_INV;
 }
 } // namespace OHOS

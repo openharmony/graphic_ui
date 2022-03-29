@@ -54,7 +54,7 @@ void DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& l
                                    labelLine.fontSize,
                                    labelLine.baseLine};
         DrawUtils::GetInstance()->DrawLetter(gfxDstBuffer, letterInfo);
-        letterWidth = fontEngine->GetWidth(letter, 0);
+        letterWidth = fontEngine->GetWidth(letter, labelLine.fontId, labelLine.fontSize, 0);
         if (labelLine.direct == TEXT_DIRECT_RTL) {
             labelLine.pos.x -= (letterWidth + labelLine.style.letterSpace_);
         } else {
@@ -68,6 +68,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                             const char* text,
                             const Point& arcCenter,
                             uint8_t fontId,
+                            uint8_t fontSize,
                             const UIArcLabel::ArcTextInfo arcTextInfo,
                             UIArcLabel::TextOrientation orientation,
                             const Style& style,
@@ -82,7 +83,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         return;
     }
     uint16_t letterWidth;
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId, fontSize);
     uint32_t i = arcTextInfo.lineStart;
     float angle = arcTextInfo.startAngle;
     float posX;
@@ -102,7 +103,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         if ((letter == '\r') || (letter == '\n')) {
             break;
         }
-        letterWidth = UIFont::GetInstance()->GetWidth(letter, 0);
+        letterWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
         if ((tmp == arcTextInfo.lineStart) && xorFlag) {
             angle += TypedText::GetAngleForArcLen(static_cast<float>(letterWidth), letterHeight, arcTextInfo.radius,
                                                   arcTextInfo.direct, orientation);
@@ -122,7 +123,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         TypedText::GetArcLetterPos(arcCenter, arcTextInfo.radius, angle, posX, posY);
         angle += incrementAngle;
 
-        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, letter, Point { MATH_ROUND(posX), MATH_ROUND(posY) },
+        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, fontSize, letter, Point { MATH_ROUND(posX), MATH_ROUND(posY) },
                              static_cast<int16_t>(rotateAngle), style.textColor_, opaScale);
     }
 }
@@ -130,6 +131,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
 void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
                                      uint8_t fontId,
+                                     uint8_t fontSize,
                                      uint32_t letter,
                                      const Point& pos,
                                      int16_t rotateAngle,
@@ -139,11 +141,11 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     UIFont* fontEngine = UIFont::GetInstance();
     FontHeader head;
     GlyphNode node;
-    if (fontEngine->GetCurrentFontHeader(head) != 0) {
+    if (fontEngine->GetFontHeader(head, fontId, fontSize) != 0) {
         return;
     }
 
-    const uint8_t* fontMap = fontEngine->GetBitmap(letter, node, 0);
+    const uint8_t* fontMap = fontEngine->GetBitmap(letter, node, fontId, fontSize, 0);
     if (fontMap == nullptr) {
         return;
     }

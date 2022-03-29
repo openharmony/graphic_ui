@@ -23,14 +23,20 @@
 #include "font/ui_text_shaping.h"
 #endif
 namespace OHOS {
-uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt, int16_t letterSpace, int16_t& maxWidth, bool allBreak,
+uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt,
+                                            uint8_t fontId,
+                                            uint8_t fontSize,
+                                            int16_t letterSpace,
+                                            int16_t& maxWidth,
+                                            bool allBreak,
                                             uint16_t len)
 {
 #if ENABLE_ICU
-    return UILineBreakEngine::GetInstance().GetNextLineAndWidth(txt, letterSpace, allBreak, maxWidth, len);
+    return UILineBreakEngine::GetInstance().GetNextLineAndWidth(txt, fontId, fontSize, letterSpace, allBreak, maxWidth,
+                                                                len);
 #else
-    uint32_t index = TypedText::GetNextLine(txt, letterSpace, maxWidth);
-    maxWidth = TypedText::GetTextWidth(txt, index, letterSpace);
+    uint32_t index = TypedText::GetNextLine(txt, fontId, fontSize, letterSpace, maxWidth);
+    maxWidth = TypedText::GetTextWidth(txt, fontId, fontSize, index, letterSpace);
     return index;
 #endif
 }
@@ -44,4 +50,3 @@ bool UIFontAdaptor::IsSameTTFId(uint8_t fontId, uint32_t unicode)
 #endif
 }
 } // namespace OHOS
-
