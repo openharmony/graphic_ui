@@ -50,6 +50,7 @@ public:
     void RemoveFromDisplay();
 
     BufferInfo* GetBufferInfo();
+
 private:
     void UpdateHalDisplayBuffer();
 

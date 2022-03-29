@@ -25,7 +25,7 @@ class UIAbstractScrollBar : public HeapBase {
 public:
     UIAbstractScrollBar();
 
-    virtual ~UIAbstractScrollBar() {};
+    virtual ~UIAbstractScrollBar() {}
 
     virtual void SetPosition(int16_t x, int16_t y, int16_t width, int16_t height) {}
 
@@ -55,6 +55,7 @@ public:
     {
         return opacity_;
     }
+
 protected:
     uint8_t opacity_ = OPA_TRANSPARENT;
     float scrollProgress_ = 0;

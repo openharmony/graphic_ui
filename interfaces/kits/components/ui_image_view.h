@@ -307,6 +307,7 @@ protected:
     TransformMap* drawTransMap_ = nullptr;
     Matrix4<float>* contentMatrix_ = nullptr;
     bool transMapInvalid_ = true;
+
 private:
     void ReMeasure() override;
 #if (ENABLE_GIF == 1)

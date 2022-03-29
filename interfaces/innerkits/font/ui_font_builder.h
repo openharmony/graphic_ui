@@ -44,6 +44,7 @@ public:
 
     UITextLanguageFontParam* uiTextLangFontsTable_;
     LangTextParam* langTextDefaultParamTable_;
+
 private:
     UIFontBuilder();
     ~UIFontBuilder() {}

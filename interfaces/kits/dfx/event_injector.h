@@ -170,6 +170,7 @@ public:
      */
     void SetWindowId(uint8_t windowId);
 #endif
+
 private:
     EventInjector() : pointEventInjector_(nullptr), keyEventInjector_(nullptr) {}
     virtual ~EventInjector();

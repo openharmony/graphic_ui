@@ -863,7 +863,7 @@ void UIList::CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDista
     }
 }
 
-/* this is a temporary impementation just used for list and will be replaced later,
+/* this is a temporary implementation just used for list and will be replaced later,
    we assume size of all items in scroll are equal for now. */
 void UIList::FixDistance(int16_t& distanceX, int16_t& distanceY)
 {

@@ -402,7 +402,7 @@ protected:
             endValueY_ = 0;
         }
 
-        virtual void Callback(UIView* view) override;
+        void Callback(UIView* view) override;
 
         uint16_t curtTime_;
         uint16_t dragTimes_;
@@ -446,7 +446,7 @@ protected:
 
     void StartAnimator(int16_t dragDistanceX, int16_t dragDistanceY);
 
-    virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY){};
+    virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY){}
 
     int16_t GetMaxDelta() const;
 

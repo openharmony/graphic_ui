@@ -149,7 +149,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void Remove(UIView* view) override;
+    void Remove(UIView* view) override;
 
     /**
      * @brief Sets the index for the current tab.

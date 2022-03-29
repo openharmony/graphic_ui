@@ -73,6 +73,7 @@ public:
      */
     void Font_FontEngine_MultiLanguage_Test_RO_Lang_001();
 #endif
+
 private:
     UIScrollView* container_ = nullptr;
     void InnerTestTitle(const char* title);

@@ -242,7 +242,7 @@ public:
          * @since 5.0
          * @version 3.0
          */
-        virtual ~VideoPlayerListener() {};
+        virtual ~VideoPlayerListener() {}
 
         /**
          * @brief Called when the playback is complete.

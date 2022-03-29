@@ -108,7 +108,7 @@ public:
 protected:
     void CalculateSize() override;
 #if DEFAULT_ANIMATION
-    virtual void Callback(UIView* view) override;
+    void Callback(UIView* view) override;
     void OnStop(UIView& view) override;
 #endif
 

@@ -315,7 +315,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
+    void OnPostDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
     /**
      * @brief Sets the working mode for this analog clock.

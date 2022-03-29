@@ -536,6 +536,7 @@ protected:
     TextAdapter* textAdapter_;
     uint16_t maxCount_;
     PickerListScrollListener* listListener_;
+
 private:
     friend class PickerListScrollListener;
     bool RefreshValues(const char* value[], uint16_t count);

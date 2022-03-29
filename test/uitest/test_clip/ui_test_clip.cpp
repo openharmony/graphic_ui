@@ -106,7 +106,7 @@ bool UITestClip::OnClick(UIView& view, const ClickEvent& event)
         ClipImage(imageView2_, path);
         imageView2_->Invalidate();
     }
-    
+
     return true;
 }
 

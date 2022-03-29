@@ -32,6 +32,7 @@ class UITestImage : public UITest, public OHOS::UIView::OnClickListener {
 #else
 class UITestImage : public UITest {
 #endif
+
 public:
     UITestImage() {}
     ~UITestImage() {}
@@ -57,6 +58,7 @@ public:
 #endif
     void UIKit_UIImage_Test_Uncompress_001();
     void UIKit_UIImage_Test_Resize_001();
+
 private:
     const char* GetCharByImageSrcType(ImageSrcType srcType) const;
 #if (ENABLE_GIF == 1)
@@ -74,6 +76,7 @@ private:
     UILabelButton* gifToBin03_ = nullptr;
     UILabelButton* gifToBin04_ = nullptr;
 #endif
+
 private:
     UILabel* AddLable(int16_t x, int16_t y, const char* data);
     UIImageView* AddImageView(const Rect rect, const char* src, bool autoEnable, UIImageView::ImageResizeMode mode);

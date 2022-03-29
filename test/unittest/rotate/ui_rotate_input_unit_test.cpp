@@ -30,8 +30,8 @@ public:
     UIRotateInputTest() {}
     virtual ~UIRotateInputTest() {}
 
-    static void SetUpTestCase(){};
-    static void TearDownTestCase(){};
+    static void SetUpTestCase(){}
+    static void TearDownTestCase(){}
 };
 
 /**

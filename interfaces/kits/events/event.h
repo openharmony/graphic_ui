@@ -104,6 +104,7 @@ public:
     {
         timeStamp_ = timeStamp;
     }
+
 protected:
     TimeType timeStamp_;
     Point curPos_;
