@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,6 +19,7 @@
 #include "graphic_config.h"
 #ifndef _FONT_TOOL
 #include "components/ui_arc_label.h"
+#include "draw/draw_utils.h"
 #include "font/ui_font_header.h"
 #include "gfx_utils/geometry2d.h"
 #endif
@@ -42,6 +43,7 @@ public:
                              int16_t letterSpace,
                              int16_t lineHeight,
                              int16_t maxWidth,
+                             SizeSpan* sizeSpans = nullptr,
                              int8_t lineSpace = 0);
 
     static uint32_t GetNextLine(const char* text,
@@ -76,6 +78,12 @@ public:
     static uint32_t GetUTF8CharacterSize(const char* text, uint32_t byteIndex = UINT32_MAX);
     static void Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t len);
     static uint32_t GetUtf16Cnt(const char* utf8Str);
+#if ENABLE_VECTOR_FONT
+    static bool IsEmoji(uint32_t codePoint);
+    static bool IsEmojiModifier(uint32_t codePoint);
+    static bool IsEmojiBase(uint32_t codePoint);
+#endif
+    static bool IsColourWord(uint32_t codePoint);
 
 private:
     static bool GetWrapPoint(const char* text, uint32_t& breakPoint);

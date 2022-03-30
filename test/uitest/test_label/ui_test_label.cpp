@@ -18,7 +18,9 @@
 #include "components/ui_checkbox.h"
 #include "components/ui_label.h"
 #include "font/ui_font.h"
-
+#if ENABLE_VECTOR_FONT
+#include "common/spannable_string.h"
+#endif
 namespace OHOS {
 namespace {
 const int16_t GAP = 5;
@@ -98,7 +100,7 @@ void UITestLabel::UIKit_UILabel_Test_Display_001()
         uiViewGroupFrame->SetStyle(STYLE_BORDER_RADIUS, VIEW_STYLE_BORDER_RADIUS);
         uiViewGroupFrame->SetStyle(STYLE_BACKGROUND_OPA, 0);
         uiLabel = new UILabel();
-        uiLabel->SetText("Test of 图形子系统");
+        uiLabel->SetText("图形子系统图形子系统图形子系统图形子系统图形子系统图形子系统图形子系统图形子系统图形子系统");
         uiLabel->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 26); // 26: font size
         uiLabel->SetPosition(0, 141, 280, 336);             // 141: y-coordinate; 280: width; 336: height
         uiViewGroupFrame->Add(uiLabel);

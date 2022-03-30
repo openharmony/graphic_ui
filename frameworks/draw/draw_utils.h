@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,10 +17,12 @@
 #define GRAPHIC_LITE_DRAW_UTILS_H
 
 #include "common/text.h"
+#include "font/ui_font_header.h"
 #include "gfx_utils/color.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_types.h"
+#include "gfx_utils/list.h"
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
 
@@ -72,6 +74,14 @@ struct LabelLineInfo {
     UITextLanguageDirect direct;
     uint32_t* codePoints;
     bool baseLine;
+#if ENABLE_VECTOR_FONT
+    TextStyle* textStyles;
+#endif
+    List<BackgroundColor>*  backgroundColor;
+    List<ForegroundColor>*  foregroundColor;
+    List<LineBackgroundColor>*  linebackgroundColor;
+    SizeSpan* sizeSpans;
+    uint16_t ellipsisOssetY;
 };
 
 struct LabelLetterInfo {
@@ -87,7 +97,14 @@ struct LabelLetterInfo {
     uint8_t fontId;
     uint8_t shapingId;
     uint8_t fontSize;
+#if ENABLE_VECTOR_FONT
+    TextStyle textStyle;
+#endif
     bool baseLine;
+    int16_t letterSpace_;
+    int16_t lineSpace_;
+    bool havebackgroundColor;
+    ColorType backgroundColor;
 };
 
 struct TransformInitState {
@@ -192,7 +209,9 @@ public:
     void DrawPixel(BufferInfo& gfxDstBuffer, int16_t x, int16_t y, const Rect& mask,
                    const ColorType& color, OpacityType opa) const;
 
-    void DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const;
+    void DrawColorLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const;
+    void DrawNormalLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo,
+                          uint8_t maxLetterSize, bool isSpanLetter) const;
 
     void DrawLetter(BufferInfo& gfxDstBuffer,
                     const uint8_t* fontMap,

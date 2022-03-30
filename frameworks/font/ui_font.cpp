@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -104,6 +104,16 @@ uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t shapi
     return nullptr;
 }
 
+uint8_t* UIFont::GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size)
+{
+    uint8_t* bitmap = nullptr;
+    bitmap = instance_->GetBitmapSpannable(unicode, glyphNode, fontId, size);
+    if (bitmap != nullptr) {
+        return bitmap;
+    }
+    return nullptr;
+}
+
 uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t shapingId)
 {
     int16_t result;
@@ -141,5 +151,26 @@ uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t shapingId)
     SetCurrentFontId(currentFontId);
 #endif
     return 0;
+}
+
+uint16_t UIFont::GetHeightSpannable(uint8_t fontId, uint8_t size)
+{
+    return instance_->GetHeightByFontId(fontId, size);
+}
+
+uint16_t UIFont::GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size)
+{
+    int16_t result = instance_->GetWidthSpannable(unicode, fontId, size);
+    if (result >= 0) {
+        return result;
+    } else {
+        return 0;
+    }
+}
+
+uint16_t UIFont::GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+                                  uint16_t letterIndex, SizeSpan* sizeSpans)
+{
+    return instance_->GetLineMaxHeight(text, lineLength, fontId, letterIndex, sizeSpans);
 }
 } // namespace OHOS

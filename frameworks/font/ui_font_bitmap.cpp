@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +15,7 @@
 
 #include "font/ui_font_bitmap.h"
 
+#include "draw/draw_utils.h"
 #include "font/ui_font_adaptor.h"
 #include "font/ui_font_builder.h"
 #include "gfx_utils/file.h"
@@ -113,9 +114,14 @@ int8_t UIFontBitmap::SetCurrentFontId(uint8_t fontId, uint8_t size)
 
 uint16_t UIFontBitmap::GetHeight()
 {
-    int16_t ret = dynamicFont_.SetCurrentFontId(GetBaseFontId());
+    return GetHeightByFontId(GetBaseFontId());
+}
+
+uint16_t UIFontBitmap::GetHeightByFontId(uint8_t fontId, uint8_t size)
+{
+    int16_t ret = dynamicFont_.SetCurrentFontId(fontId);
     if (ret == INVALID_RET_VALUE) {
-        return ret;
+        return 0;
     }
     return dynamicFont_.GetFontHeight();
 }
@@ -139,12 +145,51 @@ uint8_t UIFontBitmap::GetFontId(const char* ttfName, uint8_t size) const
 
 int16_t UIFontBitmap::GetWidth(uint32_t unicode, uint8_t fontId)
 {
+#if ENABLE_MULTI_FONT
+    if (TypedText::IsColourWord(unicode)) {
+        uint8_t* searchLists = nullptr;
+        uint8_t baseId = GetBaseFontId();
+        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(baseId, &searchLists);
+        int8_t currentIndex = 0;
+        int16_t ret;
+        if ((searchLists == nullptr) || (listSize == 0)) {
+            return false;
+        }
+        do {
+            ret = GetWidthSpannable(unicode, searchLists[currentIndex]);
+            if (ret != INVALID_RET_VALUE) {
+                return ret;
+            }
+            // switch to next search List
+            currentIndex++;
+        } while ((currentIndex < listSize) && (searchLists != nullptr));
+    }
+#endif
     return GetWidthInFontId(unicode, fontId);
+}
+
+int16_t UIFontBitmap::GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size)
+{
+    if (!UIFontAdaptor::IsSameTTFId(fontId, unicode)) {
+        GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
+        return INVALID_RET_VALUE;
+    }
+    return GetDynamicFontWidth(unicode, fontId);
 }
 
 uint8_t* UIFontBitmap::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
     return SearchInFont(unicode, glyphNode, fontId);
+}
+
+uint8_t* UIFontBitmap::GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size)
+{
+    return SearchInFont(unicode, glyphNode, fontId, true);
+}
+
+bool UIFontBitmap::IsEmojiFont(uint8_t fontId)
+{
+    return false;
 }
 
 int8_t UIFontBitmap::GetCurrentFontHeader(FontHeader& fontHeader)
@@ -161,9 +206,42 @@ int8_t UIFontBitmap::GetCurrentFontHeader(FontHeader& fontHeader)
     return INVALID_RET_VALUE;
 }
 
+#if ENABLE_MULTI_FONT
+int8_t UIFontBitmap::GetMultiGlyphNode( uint32_t unicode, GlyphNode& glyphNode)
+{
+    if (TypedText::IsColourWord(unicode)) {
+        int8_t ret;
+        uint8_t* searchLists = nullptr;
+        uint8_t baseId = GetBaseFontId();
+        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(baseId, &searchLists);
+        int8_t currentIndex = 0;
+        if ((searchLists == nullptr) || (listSize == 0)) {
+            return INVALID_RET_VALUE;
+        }
+        do {
+            ret = GetGlyphNode(unicode, glyphNode, searchLists[currentIndex]);
+            if (ret != INVALID_RET_VALUE) {
+                return ret;
+            }
+            // switch to next search List
+            currentIndex++;
+        } while ((currentIndex < listSize) && (searchLists != nullptr));
+        return INVALID_RET_VALUE;
+    } else {
+        return GetGlyphNode(unicode, glyphNode, GetBaseFontId());
+    }
+
+}
+#endif
+
 int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode)
 {
-    int8_t ret = dynamicFont_.SetCurrentFontId(GetBaseFontId());
+    return GetGlyphNode(unicode, glyphNode, GetBaseFontId());
+}
+
+int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
+{
+    int8_t ret = dynamicFont_.SetCurrentFontId(fontId);
     if (ret == INVALID_RET_VALUE) {
         return ret;
     }
@@ -264,7 +342,7 @@ int16_t UIFontBitmap::GetDynamicFontWidth(uint32_t unicode, uint8_t fontId)
     return dynamicFont_.GetFontWidth(unicode);
 }
 
-uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
+uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, bool isSpanLetter)
 {
     if (bitmapCache_ == nullptr) {
         return nullptr;
@@ -273,10 +351,15 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
         GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
         return nullptr;
     }
-    if (fontId != GetBaseFontId()) {
-        SetCurrentFontId(fontId);
+    int8_t ret = INVALID_RET_VALUE;
+    if (isSpanLetter) {
+        ret = GetGlyphNode(unicode, glyphNode, fontId);
+    } else {
+        if (fontId != GetBaseFontId()) {
+            SetCurrentFontId(fontId);
+        }
+        ret = GetGlyphNode(unicode, glyphNode);
     }
-    int8_t ret = GetGlyphNode(unicode, glyphNode);
     if (ret != RET_VALUE_OK) {
         return nullptr;
     }
@@ -319,4 +402,99 @@ void UIFontBitmap::SetFontFileOffset(uint32_t offset)
 {
     offset_ = offset;
 }
-} // namespace OHOS
+
+uint16_t UIFontBitmap::GetHeight(uint32_t unicode, uint8_t fontId)
+{
+    return GetHeight();
+}
+
+uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength, bool& isEmoijLarge, uint8_t fontSize)
+{
+    uint32_t i = 0;
+    uint32_t unicode;
+    uint16_t textNum = 0;
+    uint16_t emojiNum = 0;
+
+    uint16_t loopNum = 0;
+    GlyphNode glyphNode;
+    GlyphNode emoijMaxNode;
+    uint8_t maxFontSie = fontSize;
+    while (i < lineLength) {
+        unicode = TypedText::GetUTF8Next(text, i, i);
+#if ENABLE_MULTI_FONT
+        uint8_t ret = GetMultiGlyphNode(unicode, glyphNode);
+#else
+        uint8_t ret = GetGlyphNode(unicode, glyphNode);
+#endif
+        if (ret == RET_VALUE_OK) {
+            if (TypedText::IsColourWord(unicode)) {
+                emoijMaxNode = glyphNode.rows > emoijMaxNode.rows ? glyphNode : emoijMaxNode;
+                emojiNum++;
+            } else {
+                textNum++;
+            }
+            loopNum++;
+        }
+    }
+    // The number of emoji is the same as the number of cycles, indicating that this line is all emoji
+    // The number of words is the same as the number of cycles, which means that this line is all words
+    if ((emojiNum == loopNum) || (textNum == loopNum)) {
+        isEmoijLarge = true;
+        return 0;
+    }
+    isEmoijLarge = emoijMaxNode.rows > maxFontSie;
+    uint16_t offset = 0;
+    if (isEmoijLarge) {
+        // If the emoji is higher than the text
+        if (emoijMaxNode.top >= maxFontSie) {
+            offset = emoijMaxNode.top - maxFontSie;
+        }
+    } else {
+        // If text are higher than emoji
+        if (maxFontSie >= emoijMaxNode.rows) {
+            // should top - ros.
+            offset = maxFontSie - emoijMaxNode.rows;
+        }
+    }
+    return offset;
+}
+
+uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, uint8_t fontId,
+                                        uint16_t& letterIndex, SizeSpan* sizeSpans)
+{
+    uint32_t i = 0;
+    uint32_t unicode;
+    uint16_t maxHeight = GetHeight();
+    GlyphNode glyphNode;
+    while (i < lineLength) {
+        unicode = TypedText::GetUTF8Next(text, i, i);
+        if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
+            uint16_t spannableHeight = 0;
+            if (sizeSpans[letterIndex].height == 0) {
+                spannableHeight = GetHeightByFontId(sizeSpans[letterIndex].fontId,
+                                                    sizeSpans[letterIndex].size);
+                sizeSpans[letterIndex].height = spannableHeight;
+            } else {
+                spannableHeight = sizeSpans[letterIndex].height;
+            }
+            maxHeight = spannableHeight > maxHeight ? spannableHeight : maxHeight;
+        } else {
+#if ENABLE_MULTI_FONT
+            uint8_t ret = GetMultiGlyphNode(unicode, glyphNode);
+#else
+            uint8_t ret = GetGlyphNode(unicode, glyphNode);
+#endif
+            if (ret == RET_VALUE_OK) {
+                maxHeight  = glyphNode.rows > maxHeight ? glyphNode.rows : maxHeight;
+            }
+        }
+
+        letterIndex++;
+        if (i > 0 && ((text[i - 1] == '\r') || (text[i - 1] == '\n'))) {
+            break;
+        }
+    }
+
+    return maxHeight;
+}
+} // namespace

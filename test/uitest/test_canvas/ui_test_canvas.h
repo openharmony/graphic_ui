@@ -43,6 +43,7 @@ public:
     void UIKitCanvasTestDrawCircle003();
     void UIKitCanvasTestDrawArc001();
     void UIKitCanvasTestDrawImage001();
+    void UIKitCanvasTestDrawImage002();
     void UIKitCanvasTestDrawLabel001();
     void UIKitCanvasTestDrawSector001();
     void UIKitCanvasTestClear001();
