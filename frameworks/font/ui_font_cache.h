@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,6 +17,7 @@
 #define UI_FONT_CACHE_H
 
 #include "ui_font_allocator.h"
+#include "font/ui_font_header.h"
 
 namespace OHOS {
 class UIFontCache {
@@ -32,6 +33,9 @@ public:
         ListHead lruHead;
         uint8_t fontId;
         uint32_t unicode;
+#if ENABLE_VECTOR_FONT
+        TextStyle textStyle;
+#endif
         uint8_t data[];
     };
 
@@ -39,12 +43,11 @@ public:
 
     ~UIFontCache();
 
-    uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size);
+//    uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size);
 
+    uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle = TEXT_STYLE_NORMAL);
     void PutSpace(uint8_t* addr);
-
-    uint8_t* GetBitmap(uint8_t fontId, uint32_t unicode);
-
+    uint8_t* GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle textStyle = TEXT_STYLE_NORMAL);
 private:
     void UpdateLru(Bitmap* bitmap);
     void ListInit(ListHead* head)

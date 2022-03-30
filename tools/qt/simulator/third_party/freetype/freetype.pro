@@ -11,6 +11,7 @@ DEFINES += QT_DEPRECATED_WARNINGS \
     FT2_BUILD_LIBRARY \
     FT_DEBUG_LEVEL_ERROR \
     FT_DEBUG_LEVEL_TRACE \
+    FT_CONFIG_OPTION_USE_PNG \
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -61,4 +62,7 @@ SOURCES += \
     ../../../../../../../../third_party/freetype/builds/windows/ftdebug.c
 
 INCLUDEPATH += \
-    ../../../../../../../../third_party/freetype/include
+    ../../../../../../../../third_party/freetype/include \
+    ../../../../../../../../third_party/libpng
+
+LIBS += $$OUT_PWD/../../libs/libpng.dll

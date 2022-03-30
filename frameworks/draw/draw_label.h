@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,7 +25,8 @@
 namespace OHOS {
 class DrawLabel : public HeapBase {
 public:
-    static void DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine);
+    static uint16_t DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine,
+                                    uint16_t& letterIndex);
 
     static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text,
                             const Point& arcCenter, uint8_t fontId, const UIArcLabel::ArcTextInfo arcTextInfo,
@@ -39,6 +40,16 @@ public:
                                      int16_t rotateAngle,
                                      const ColorType& color,
                                      OpacityType opaScale);
+private:
+    static uint8_t GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontSize,
+                                        uint16_t letterIndex, SizeSpan* sizeSpans);
+    static void GetLineBackgroundColor(uint16_t letterIndex, List<LineBackgroundColor>* linebackgroundColor,
+                                       bool& havelinebackground, ColorType& linebgColor);
+    static void GetBackgroundColor(uint16_t letterIndex, List<BackgroundColor>* backgroundColor,
+                                   bool& havebackground, ColorType& bgColor);
+    static void GetForegroundColor(uint16_t letterIndex, List<ForegroundColor>* foregroundColor, ColorType& fgColor);
+    static void DrawLineBackgroundColor(BufferInfo& gfxDstBuffer, uint16_t letterIndex,
+                                        const LabelLineInfo& labelLine);
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_DRAW_LABEL_H
