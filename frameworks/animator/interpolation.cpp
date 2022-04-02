@@ -79,9 +79,10 @@ float Interpolation::GetBezierY(float x, float x1, float y1, float x2, float y2)
      * too small may lead to misconvergence and a decrease of performance
      * too large may cause the curve rugged even make some points outlier */
     constexpr float PRECISION = 0.05f; // 0.05f make several outliers near inflection point
+    int8_t iterationCnt = 10;          // iterate at most 10 times
 
     /* Newton Method to solve t from x */
-    while (MATH_ABS(xt - x) > PRECISION) {
+    while ((MATH_ABS(xt - x) > PRECISION) && (iterationCnt-- > 0)) {
         t = t + (x - xt) / GetBezierDerivative(t, 0, x1, x2, 1);
         xt = GetBezierInterpolation(t, 0, x1, x2, 1);
     }
