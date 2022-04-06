@@ -276,6 +276,7 @@ void UIPicker::ClearValues()
     rangeValueCount_ = 0;
     maxCount_ = 0;
     ClearList();
+    ClearTextAdapter();
 }
 
 void UIPicker::ClearList()
@@ -287,6 +288,16 @@ void UIPicker::ClearList()
         listListener_->SetInitStatus(false);
     }
     dataList_.Clear();
+}
+
+void UIPicker::ClearTextAdapter()
+{
+    if (textAdapter_ != nullptr) {
+        delete textAdapter_;
+        textAdapter_ = nullptr;
+    }
+    list_.SetAdapter(textAdapter_);
+    list_.RefreshList();
 }
 
 bool UIPicker::SetSelected(uint16_t index)
