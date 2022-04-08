@@ -15,8 +15,6 @@
 
 #include "ui_test_vector_font.h"
 #if ENABLE_VECTOR_FONT
-#include <iostream>
-
 #include "common/screen.h"
 #include "components/ui_label.h"
 #if ENABLE_MULTI_FONT
