@@ -23,7 +23,6 @@
 #ifndef GRAPHIC_LITE_RENDER_BASE_H
 #define GRAPHIC_LITE_RENDER_BASE_H
 
-#include <iostream>
 #include "gfx_utils/diagram/common/common_basics.h"
 #include "render/render_buffer.h"
 
@@ -216,7 +215,9 @@ public:
     void BlendHLine(int32_t x1, int32_t y, int32_t x2, const ColorType& color, uint8_t cover)
     {
         if (x1 > x2) {
-            std::swap(x1, x2);
+            int32_t swapTemp = x1;
+            x1 = x2;
+            x2 = swapTemp;
         }
         if (y > GetYMax() || y < GetYMin() || x1 > GetXMax() || x2 < GetXMin()) {
             return;
