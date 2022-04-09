@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +15,7 @@
 
 #ifndef BASE_FONT
 #define BASE_FONT
+#include "common/text.h"
 #include "font/ui_font_header.h"
 #include "font/ui_font_builder.h"
 #include "graphic_config.h"
@@ -199,6 +200,13 @@ public:
     uint32_t GetRamLen();
     void SetRamLen(uint32_t ramLen);
     void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen);
+
+
+    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLarge,
+                                   uint8_t fontId, uint8_t fontSize) = 0;
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+                                      uint16_t& letterIndex, SizeSpan* sizeSpans) = 0;
+    virtual bool IsEmojiFont(uint8_t fontId) = 0;
 
 private:
     uintptr_t ramAddr_;

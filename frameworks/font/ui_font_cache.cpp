@@ -45,6 +45,9 @@ void UIFontCache::UpdateLru(Bitmap* bitmap)
 
 uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size)
 {
+#if ENABLE_VECTOR_FONT
+    return GetSpace(fontId, unicode, size, TEXT_STYLE_NORMAL);
+#else
     Bitmap* bitmap = nullptr;
 
     uint32_t allocSize = sizeof(Bitmap) + size;
@@ -72,8 +75,39 @@ uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size)
     bitmap->unicode = unicode;
 
     return reinterpret_cast<uint8_t*>(bitmap->data);
+#endif
 }
+#if ENABLE_VECTOR_FONT
+uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle)
+{
+    Bitmap* bitmap = nullptr;
+    uint32_t allocSize = sizeof(Bitmap) + size;
+    while (bitmap == nullptr) {
+        bitmap = reinterpret_cast<Bitmap*>(allocator_.Allocate(allocSize));
+        if (bitmap == nullptr) {
+            // nothing to free, return null
+            if ((lruList_.prev == &lruList_) && (lruList_.next == &lruList_)) {
+                return nullptr;
+            }
+            Bitmap* toFree = reinterpret_cast<struct Bitmap *>(reinterpret_cast<uint8_t *>(lruList_.prev) -
+                offsetof(struct Bitmap, lruHead));
+            ListDel(&toFree->hashHead);
+            ListDel(&toFree->lruHead);
+            allocator_.Free(toFree);
+        }
+    }
 
+    ListInit(&bitmap->hashHead);
+    ListInit(&bitmap->lruHead);
+    ListAdd(&bitmap->hashHead, hashTable_ + fontId % FONT_CACHE_HASH_NR);
+    ListAdd(&bitmap->lruHead, &lruList_);
+
+    bitmap->fontId = fontId;
+    bitmap->unicode = unicode;
+    bitmap->textStyle = textStyle;
+    return reinterpret_cast<uint8_t*>(bitmap->data);
+}
+#endif
 void UIFontCache::PutSpace(uint8_t* addr)
 {
     if (addr == nullptr) {
@@ -89,6 +123,9 @@ void UIFontCache::PutSpace(uint8_t* addr)
 
 uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode)
 {
+#if ENABLE_VECTOR_FONT
+   return GetBitmap(fontId, unicode, TEXT_STYLE_NORMAL);
+#else
     Bitmap* bitmap = nullptr;
     ListHead* node = nullptr;
     ListHead* head = hashTable_ + fontId % FONT_CACHE_HASH_NR;
@@ -102,5 +139,24 @@ uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode)
     }
 
     return nullptr;
+#endif
 }
+#if ENABLE_VECTOR_FONT
+uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle textStyle)
+{
+    Bitmap* bitmap = nullptr;
+    ListHead* node = nullptr;
+    ListHead* head = hashTable_ + fontId % FONT_CACHE_HASH_NR;
+    for (node = head->next; node != head; node = node->next) {
+        bitmap = reinterpret_cast<struct Bitmap*>(reinterpret_cast<uint8_t*>(node) -
+                                                  offsetof(struct Bitmap, hashHead));
+        if ((bitmap->fontId == fontId) && (bitmap->unicode == unicode) && bitmap->textStyle == textStyle) {
+            UpdateLru(bitmap);
+            return reinterpret_cast<uint8_t*>(bitmap->data);
+        }
+    }
+
+    return nullptr;
+}
+#endif
 } // namespace OHOS

@@ -17,7 +17,7 @@
 #define GRAPHIC_LITE_UI_FONT_HEADER_H
 
 #include <string>
-#include "common/text.h"
+#include "graphic_config.h"
 namespace OHOS {
 #pragma pack(1)
 
@@ -263,6 +263,12 @@ struct GlyphHeader {
     uint32_t glyphLen;    // GLYPH_G_LEN_OFFSET
 };
 
+enum TextStyle : uint8_t {
+    TEXT_STYLE_NORMAL = 0,  // default value
+    TEXT_STYLE_ITALIC,       // text style italic
+    TEXT_STYLE_BOLD,        // text style bold
+    TEXT_STYLE_BOLD_ITALIC   // text style bold and italic
+};
 /**
  * @brief struct GlyphNode for font
  * refer to ui_font.h
@@ -279,6 +285,9 @@ struct GlyphNode {
     uint16_t kernSize; // GLYPH_KERN_SIZE_OFFSET
     uint8_t fontId;    // GLYPH_FONT_ID
     uint8_t dataFlag;  // GLYPH_DATA_HEAD_FLAG
+#if ENABLE_VECTOR_FONT
+    TextStyle textStyle = TEXT_STYLE_NORMAL; // GLYPH_TEXT_STYLE
+#endif
 };
 
 /**

@@ -73,6 +73,9 @@ public:
      */
     void Font_FontEngine_MultiLanguage_Test_RO_Lang_001();
 #endif
+#if ENABLE_VECTOR_FONT
+    void TestDrawText_ITALY_BOLD();
+#endif
 private:
     UIScrollView* container_ = nullptr;
     void InnerTestTitle(const char* title);

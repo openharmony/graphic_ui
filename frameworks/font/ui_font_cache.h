@@ -17,6 +17,7 @@
 #define UI_FONT_CACHE_H
 
 #include "ui_font_allocator.h"
+#include "font/ui_font_header.h"
 
 namespace OHOS {
 class UIFontCache {
@@ -32,6 +33,9 @@ public:
         ListHead lruHead;
         uint8_t fontId;
         uint32_t unicode;
+#if ENABLE_VECTOR_FONT
+        TextStyle textStyle;
+#endif
         uint8_t data[];
     };
 
@@ -40,11 +44,15 @@ public:
     ~UIFontCache();
 
     uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size);
-
+#if ENABLE_VECTOR_FONT
+    uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle);
+#endif
     void PutSpace(uint8_t* addr);
 
     uint8_t* GetBitmap(uint8_t fontId, uint32_t unicode);
-
+#if ENABLE_VECTOR_FONT
+    uint8_t* GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle textStyle);
+#endif
 private:
     void UpdateLru(Bitmap* bitmap);
     void ListInit(ListHead* head)

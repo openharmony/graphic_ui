@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,6 +19,7 @@
 #include "graphic_config.h"
 #include "ft2build.h"
 #include "freetype/freetype.h"
+#include "freetype/tttables.h"
 #include "font/ui_font_cache.h"
 #include <memory>
 
@@ -47,7 +48,13 @@ public:
     uint8_t UnregisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num) override;
     const UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const override;
     int32_t OpenVectorFont(uint8_t ttfId) override;
+    bool IsColorEmojiFont(FT_Face &face);
+    uint16_t GetOffsetPosY(const char* text, uint16_t lineLength,
+                           bool& isEmojiLarge, uint8_t fontId, uint8_t fontSize) override;
+    uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+                              uint16_t& letterIndex, SizeSpan* sizeSpans)  override;
 
+    bool IsEmojiFont(uint8_t fontId) override;
 private:
     static constexpr uint8_t FONT_ID_MAX = 0xFF;
     static constexpr uint8_t FONT_INVALID_TTF_ID = 0xFF;
@@ -57,6 +64,7 @@ private:
     std::string ttfDir_;
     FT_Library ftLibrary_;
     FT_Face ftFaces_[FONT_ID_MAX] = {0};
+    uint8_t currentFontInfoNum_ = 0;
     bool freeTypeInited_;
     UIFontCache* bitmapCache_;
     struct FaceInfo {
@@ -72,11 +80,22 @@ private:
         uint8_t buf[0];
     };
     void SetFace(FaceInfo& faceInfo, uint32_t unicode) const;
+#if ENABLE_VECTOR_FONT
+    void SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const;
+#endif
     uint8_t GetFontId(uint32_t unicode) const;
     uint32_t GetKey(uint8_t fontId, uint32_t size);
-    int8_t LoadGlyphIntoFace(uint8_t fontId, uint32_t unicode, FT_Face face);
+    int8_t LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Face face);
+#if ENABLE_VECTOR_FONT
+    int8_t LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle);
+#endif
     uint8_t IsGlyphFont(uint32_t unicode);
+#if ENABLE_VECTOR_FONT
+    void SetItaly(FT_GlyphSlot slot);
+    void SetBold(uint8_t fontId);
+#endif
     int8_t GetFaceInfo(uint8_t fontId, uint8_t fontSize, FaceInfo& faceInfo);
+    uint16_t GetMaxSubLineHeight(uint16_t textNum, uint16_t loopNum, uint16_t maxHeight, uint16_t emojiNum);
 };
 } // namespace OHOS
 #endif
