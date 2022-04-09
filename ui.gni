@@ -26,6 +26,7 @@ graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/common/image.cpp",
   "$GRAPHIC_UI_PATH/frameworks/common/input_device_manager.cpp",
   "$GRAPHIC_UI_PATH/frameworks/common/screen.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/common/spannable_string.cpp",
   "$GRAPHIC_UI_PATH/frameworks/common/task.cpp",
   "$GRAPHIC_UI_PATH/frameworks/common/text.cpp",
   "$GRAPHIC_UI_PATH/frameworks/common/typed_text.cpp",

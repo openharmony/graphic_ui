@@ -26,6 +26,11 @@ namespace {
 const int16_t GAP = 5;
 const int16_t TITLE_HEIGHT = 29;
 const uint16_t LABEL_WIDTH = 200;
+const uint16_t TWO = 2;
+const uint16_t NINE = 9;
+const uint16_t ELEVEN = 11;
+const uint16_t THIRTEEN = 13;
+const uint16_t SIXTEEN = 16;
 const uint16_t LABEL_HEIGHT = 50;
 const uint16_t BUF_SIZE = 200;
 const uint16_t LANGUAGE_FILE_ID_MAX = 9;
@@ -72,6 +77,9 @@ void UITestVectorFont::InnerTestTitle(const char* title)
 
 const UIView* UITestVectorFont::GetTestView()
 {
+#if ENABLE_VECTOR_FONT
+    TestDrawText_ITALY_BOLD();
+#endif
     Font_FontEngine_Vector_Test_CH_Lang_001();
     Font_FontEngine_Vector_Test_CH_Lang_002();
     Font_FontEngine_Vector_Test_JA_Lang_001();
@@ -329,6 +337,28 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_RO_Lang_001()
         label->SetLineBreakMode(UILabel::LINE_BREAK_MARQUEE);
         label->SetFont(NOTOSANSCJKJP_REGULAR, 24); // 24 : size
         label->SetText("罗马尼亚Română");
+        container_->Add(label);
+        positionY_ += LABEL_HEIGHT + GAP;
+    }
+}
+#endif
+#if ENABLE_VECTOR_FONT
+void UITestVectorFont::TestDrawText_ITALY_BOLD()
+{
+    if (container_ != nullptr) {
+        InnerTestTitle("Display bold italic bold_italic");
+        UILabel* label = new UILabel();
+        UIFont::GetInstance()->RegisterFontInfo(HYQIHEI_65S);
+        UIFont::GetInstance()->RegisterFontInfo(DEFAULT_VECTOR_FONT_FILENAME);
+        label->SetPosition(positionX_, positionY_);
+        label->Resize(LABEL_WIDTH * TWO, LABEL_HEIGHT);
+        label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
+        label->SetText("图形子系统展示正常粗体斜体粗斜体");
+        SpannableString spannableString(label->GetText());
+        spannableString.SetTextStyle(TextStyle::TEXT_STYLE_ITALIC, ELEVEN, THIRTEEN);
+        spannableString.SetTextStyle(TEXT_STYLE_BOLD, NINE, ELEVEN);
+        spannableString.SetTextStyle(TEXT_STYLE_BOLD_ITALIC, THIRTEEN, SIXTEEN);
+        label->SetText(&spannableString);
         container_->Add(label);
         positionY_ += LABEL_HEIGHT + GAP;
     }

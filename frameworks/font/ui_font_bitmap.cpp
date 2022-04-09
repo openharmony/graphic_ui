@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -133,6 +133,11 @@ uint8_t* UIFontBitmap::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t
     return SearchInFont(unicode, glyphNode, fontId);
 }
 
+bool UIFontBitmap::IsEmojiFont(uint8_t fontId)
+{
+    return false;
+}
+
 int8_t UIFontBitmap::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize)
 {
     const FontHeader* header = dynamicFont_.GetFontHeader(fontId);
@@ -143,6 +148,33 @@ int8_t UIFontBitmap::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8
     return INVALID_RET_VALUE;
 }
 
+#if ENABLE_MULTI_FONT
+int8_t UIFontBitmap::GetMultiGlyphNode( uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
+{
+    if (TypedText::IsColourWord(unicode)) {
+        int8_t ret;
+        uint8_t* searchLists = nullptr;
+        //uint8_t baseId = GetBaseFontId();
+        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
+        int8_t currentIndex = 0;
+        if ((searchLists == nullptr) || (listSize == 0)) {
+            return INVALID_RET_VALUE;
+        }
+        do {
+            ret = GetGlyphNode(unicode, glyphNode, searchLists[currentIndex]);
+            if (ret != INVALID_RET_VALUE) {
+                return ret;
+            }
+            // switch to next search List
+            currentIndex++;
+        } while ((currentIndex < listSize) && (searchLists != nullptr));
+        return INVALID_RET_VALUE;
+    } else {
+        return GetGlyphNode(unicode, glyphNode, fontId);
+    }
+
+}
+#endif
 int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
 {
     const GlyphNode* node = dynamicFont_.GetGlyphNode(unicode, fontId);
@@ -278,5 +310,94 @@ int16_t UIFontBitmap::GetWidthInFontId(uint32_t unicode, uint8_t fontId)
 void UIFontBitmap::SetFontFileOffset(uint32_t offset)
 {
     offset_ = offset;
+}
+
+uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
+                                     bool& isEmoijLarge, uint8_t fontId, uint8_t fontSize)
+{
+    uint32_t i = 0;
+    uint32_t unicode;
+    uint16_t textNum = 0;
+    uint16_t emojiNum = 0;
+
+    uint16_t loopNum = 0;
+    GlyphNode glyphNode;
+    GlyphNode emoijMaxNode;
+    uint8_t maxFontSie = fontSize;
+    while (i < lineLength) {
+        unicode = TypedText::GetUTF8Next(text, i, i);
+#if ENABLE_MULTI_FONT
+        uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
+#else
+        uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
+#endif
+        if (ret == RET_VALUE_OK) {
+            if (TypedText::IsColourWord(unicode)) {
+                emoijMaxNode = glyphNode.rows > emoijMaxNode.rows ? glyphNode : emoijMaxNode;
+                emojiNum++;
+            } else {
+                textNum++;
+            }
+            loopNum++;
+        }
+    }
+    // The number of emoji is the same as the number of cycles, indicating that this line is all emoji
+    // The number of words is the same as the number of cycles, which means that this line is all words
+    if ((emojiNum == loopNum) || (textNum == loopNum)) {
+        isEmoijLarge = true;
+        return 0;
+    }
+    isEmoijLarge = emoijMaxNode.rows > maxFontSie;
+    uint16_t offset = 0;
+    if (isEmoijLarge) {
+        // If the emoji is higher than the text
+        if (emoijMaxNode.top >= maxFontSie) {
+            offset = emoijMaxNode.top - maxFontSie;
+        }
+    } else {
+        // If text are higher than emoji
+        if (maxFontSie >= emoijMaxNode.rows) {
+            // should top - ros.
+            offset = maxFontSie - emoijMaxNode.rows;
+        }
+    }
+    return offset;
+}
+uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+                                        uint16_t& letterIndex, SizeSpan* sizeSpans)
+{
+    uint32_t i = 0;
+    uint32_t unicode;
+    uint16_t maxHeight = GetHeight(fontId, fontSize);
+    GlyphNode glyphNode;
+    while (i < lineLength) {
+        unicode = TypedText::GetUTF8Next(text, i, i);
+        if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
+            uint16_t spannableHeight = 0;
+            if (sizeSpans[letterIndex].height == 0) {
+                spannableHeight = GetHeight(sizeSpans[letterIndex].fontId, sizeSpans[letterIndex].size);
+                sizeSpans[letterIndex].height = spannableHeight;
+            } else {
+                spannableHeight = sizeSpans[letterIndex].height;
+            }
+            maxHeight = spannableHeight > maxHeight ? spannableHeight : maxHeight;
+        } else {
+#if ENABLE_MULTI_FONT
+            uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
+#else
+            uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
+#endif
+            if (ret == RET_VALUE_OK) {
+                maxHeight  = glyphNode.rows > maxHeight ? glyphNode.rows : maxHeight;
+            }
+        }
+
+        letterIndex++;
+        if (i > 0 && ((text[i - 1] == '\r') || (text[i - 1] == '\n'))) {
+            break;
+        }
+    }
+
+    return maxHeight;
 }
 } // namespace OHOS

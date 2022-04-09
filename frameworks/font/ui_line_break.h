@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,11 +18,13 @@
 
 #include "graphic_config.h"
 #if ENABLE_ICU
-#include "font/ui_font_header.h"
-#include "gfx_utils/file.h"
-#include "gfx_utils/mem_api.h"
 #include <cstdint>
 #include <string>
+#include "font/ui_font_header.h"
+#include "gfx_utils/file.h"
+#include "gfx_utils/heap_base.h"
+#include "gfx_utils/mem_api.h"
+#include "common/text.h"
 namespace OHOS {
 class UILineBreakProxy;
 /**
@@ -112,6 +114,9 @@ public:
                                  int16_t space,
                                  bool allBreak,
                                  int16_t& maxWidth,
+                                 int16_t& maxHeight,
+                                 uint16_t& letterIndex,
+                                 SizeSpan* sizeSpans,
                                  uint16_t len = 0xFFFF);
     bool IsBreakPos(uint32_t unicode, int32_t& state);
 
@@ -123,6 +128,8 @@ private:
     ~UILineBreakEngine() {}
 
     void LoadRule();
+    int16_t GetLetterWidth(uint32_t unicode, uint16_t& letterIndex, int16_t& maxHeight,
+                           uint8_t fontId, uint8_t fontSize, SizeSpan* sizeSpans);
     static constexpr const int32_t LINE_BREAK_STATE_START = 1;
     static constexpr const int32_t LINE_BREAK_STATE_STOP = 0;
     bool initSuccess_;

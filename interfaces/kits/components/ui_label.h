@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,7 +38,9 @@
 #include "animator/animator.h"
 #include "common/text.h"
 #include "components/ui_view.h"
-
+#if ENABLE_VECTOR_FONT
+#include "common/spannable_string.h"
+#endif
 namespace OHOS {
 /**
  * @brief Defines the functions for presenting a label in a specified area, setting the style and background color
@@ -185,6 +187,15 @@ public:
      */
     void SetText(const char* text);
 
+#if ENABLE_VECTOR_FONT
+    /**
+     * @brief Sets the SpannableString content for this label.
+     *
+     * @param text Indicates the pointer to the text content.
+     */
+    void SetText(const SpannableString* text);
+
+#endif
     /**
      * @brief Obtains the text of this label.
      *
@@ -412,6 +423,24 @@ public:
         InitLabelText();
         labelText_->SetSupportBaseLine(baseLine);
     }
+
+    void SetBackgroundColorSpan(ColorType backgroundColor, int16_t start, int16_t end)
+    {
+        labelText_->SetBackgroundColorSpan(backgroundColor, start, end);
+    }
+
+    void SetForegroundColorSpan(ColorType fontColor, int16_t start, int16_t end)
+    {
+        labelText_->SetForegroundColorSpan(fontColor, start, end);
+    }
+
+    void SetLineBackgroundSpan(ColorType lineBackgroundColor, int16_t start, int16_t end)
+    {
+        labelText_->SetLineBackgroundSpan(lineBackgroundColor, start, end);
+    }
+
+    void SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size);
+    void SetRelativeSizeSpan(int16_t start, int16_t end, float size);
 
 protected:
     Text* labelText_;
