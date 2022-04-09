@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,7 +17,17 @@
 
 #include <climits>
 #include <gtest/gtest.h>
-
+#include <locale>
+#include <string>
+#include "common/text.h"
+#if ENABLE_VECTOR_FONT
+#include "common/spannable_string.h"
+#else
+#include "common/ui_text_language.h"
+#endif
+#include "gfx_utils/color.h"
+#include "gfx_utils/list.h"
+#include "gfx_utils/vector.h"
 using namespace testing::ext;
 namespace OHOS {
 class TextTest : public testing::Test {
@@ -119,4 +129,68 @@ HWTEST_F(TextTest, TextSetExpand_001, TestSize.Level1)
     text_->SetExpandHeight(true);
     EXPECT_EQ(text_->IsExpandHeight(), true);
 }
+
+HWTEST_F(TextTest, TextSetBackgroundColorSpan_001, TestSize.Level1)
+{
+    if (text_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(text_->GetBackgroundColorSpan().Size(), 0);
+    text_->SetBackgroundColorSpan(Color::Red(), 0, 2);
+    EXPECT_EQ(text_->GetBackgroundColorSpan().Size(), 1);
+}
+
+HWTEST_F(TextTest, TextSetForegroundColorSpan_001, TestSize.Level1)
+{
+    if (text_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(text_->GetForegroundColorSpan().Size(), 0);
+    text_->SetForegroundColorSpan(Color::Blue(), 1, 3);
+    EXPECT_EQ(text_->GetForegroundColorSpan().Size(), 1);
+}
+
+HWTEST_F(TextTest, TextSetLineBackgroundSpan_001, TestSize.Level1)
+{
+    if (text_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(text_->GetLineBackgroundSpan().Size(), 0);
+    text_->SetLineBackgroundSpan(Color::Blue(), 1, 3);
+    EXPECT_EQ(text_->GetLineBackgroundSpan().Size(), 1);
+}
+HWTEST_F(TextTest, TextSetAbsoluteSizeSpan_001, TestSize.Level1)
+{
+    Text* text = new Text();
+#if ENABLE_VECTOR_FONT
+#else
+    text->SetFontId(16);
+#endif
+    text->SetAbsoluteSizeSpan(1, 2, 38);
+    EXPECT_EQ(text->GetSizeSpan(), 0);
+    delete text;
+    text = nullptr;
+}
+
+HWTEST_F(TextTest, TextSetRelativeSpan_001, TestSize.Level1)
+{
+    Text* text = new Text();
+    text->SetRelativeSizeSpan(1, 2, 1.9f);
+    EXPECT_EQ(text->GetSizeSpan(), 0);
+    delete text;
+    text = nullptr;
+}
+#if ENABLE_VECTOR_FONT
+HWTEST_F(TextTest, TextSetStyleSpan_001, TestSize.Level1)
+{
+    SpannableString spannableString("图形子系统测试正常粗体斜体粗斜体");
+    spannableString.SetTextStyle(TEXT_STYLE_ITALIC, 11, 13);
+    spannableString.SetTextStyle(TEXT_STYLE_BOLD, 9, 11);
+    spannableString.SetTextStyle(TEXT_STYLE_BOLD_ITALIC, 13, 16);
+    EXPECT_EQ(spannableString.spanList_.Size(), 3);
+}
+#endif
 } // namespace OHOS

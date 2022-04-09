@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,6 +27,9 @@ public:
                                         uint8_t fontSize,
                                         int16_t letterSpace,
                                         int16_t& maxWidth,
+                                        int16_t& maxHeight,
+                                        uint16_t& letterIndex,
+                                        SizeSpan* sizeSpans,
                                         bool allBreak = false,
                                         uint16_t len = 0xFFFF);
 

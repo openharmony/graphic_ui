@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,17 +14,15 @@
  */
 
 #include "draw/draw_utils.h"
-
 #include "draw/draw_triangle.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font.h"
-#include "font/ui_font_header.h"
 #include "gfx_utils/color.h"
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/graphic_math.h"
 #include "graphic_performance.h"
 #include "securec.h"
-
+#include "common/typed_text.h"
 #ifdef ARM_NEON_OPT
 #include "graphic_neon_pipeline.h"
 #include "graphic_neon_utils.h"
@@ -273,11 +271,62 @@ void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
     COLOR_FILL_BLEND(screenBuffer, bufferMode, &fillColor, ARGB8888, opa);
 }
 
-void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const
+void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo &letterInfo) const
+{
+    UIFont* fontEngine = UIFont::GetInstance();
+    GlyphNode node;
+#if ENABLE_VECTOR_FONT
+    node.textStyle = letterInfo.textStyle;
+#endif
+    const uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, node,
+                                                   letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
+    if (fontMap == nullptr) {
+        return;
+    }
+    uint16_t letterW = node.cols;
+    uint16_t letterH = node.rows;
+    int16_t posX;
+    int16_t posY;
+    if (letterInfo.baseLine) {
+        posY = letterInfo.pos.y + letterInfo.offsetY;
+    } else {
+        FontHeader head;
+        if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
+            return;
+        }
+        posY = letterInfo.pos.y + head.ascender - letterInfo.offsetY;
+    }
+    if (letterInfo.direct == TEXT_DIRECT_RTL) {
+        /* RTL */
+        posX = letterInfo.pos.x- node.advance + letterInfo.offsetX;
+    } else {
+        /* LTR */
+        posX = letterInfo.pos.x;
+    }
+
+    uint16_t rowStart = (posY >= letterInfo.mask.GetTop()) ? 0 : (letterInfo.mask.GetTop() - posY);
+    uint16_t rowEnd =
+        (posY + letterH <= letterInfo.mask.GetBottom()) ? letterH : (letterInfo.mask.GetBottom() - posY + 1);
+    uint16_t colStart = (posX >= letterInfo.mask.GetLeft()) ? 0 : (letterInfo.mask.GetLeft() - posX);
+    uint16_t colEnd =
+        (posX + letterW <= letterInfo.mask.GetRight()) ? letterW : (letterInfo.mask.GetRight() - posX + 1);
+
+    Rect srcRect(posX, posY, posX + letterW - 1, posY + letterH - 1);
+    Rect subRect(posX + colStart, posY + rowStart, colEnd - 1 + posX, rowEnd - 1 + posY);
+
+    uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(gfxDstBuffer.mode);
+    DrawImage(gfxDstBuffer, srcRect, letterInfo.mask, fontMap, letterInfo.opa, pxSize, ARGB8888);
+}
+
+void DrawUtils::DrawNormalLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo &letterInfo,
+                                 uint8_t maxLetterSize) const
 {
     UIFont* fontEngine = UIFont::GetInstance();
 
     GlyphNode node;
+#if ENABLE_VECTOR_FONT
+    node.textStyle = letterInfo.textStyle;
+#endif
     const uint8_t* fontMap =
         fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
@@ -289,7 +338,7 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
     int16_t posX;
     int16_t posY;
     if (letterInfo.baseLine) {
-        posY = letterInfo.pos.y + letterInfo.fontSize - node.top - letterInfo.offsetY;
+        posY = letterInfo.pos.y + maxLetterSize - node.top + letterInfo.offsetY;
     } else {
         FontHeader head;
         if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
@@ -304,7 +353,6 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
         /* LTR */
         posX = letterInfo.pos.x + node.left + letterInfo.offsetX;
     }
-
     if ((posX + letterW < letterInfo.mask.GetLeft()) || (posX > letterInfo.mask.GetRight()) ||
         (posY + letterH < letterInfo.mask.GetTop()) || (posY > letterInfo.mask.GetBottom())) {
         return;
@@ -319,11 +367,17 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& lett
 
     Rect srcRect(posX, posY, posX + letterW - 1, posY + letterH - 1);
     Rect subRect(posX + colStart, posY + rowStart, colEnd - 1 + posX, rowEnd - 1 + posY);
-
+    if (letterInfo.havebackgroundColor) {
+        Rect backgroundRect(posX, letterInfo.mask.GetTop(),
+                            posX + letterW + letterInfo.letterSpace_ - 1, letterInfo.mask.GetBottom());
+        Style style;
+        style.bgColor_ = letterInfo.backgroundColor;
+        BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, backgroundRect,
+                                               backgroundRect, style, style.bgColor_.alpha);
+    }
     uint8_t fontWeight = fontEngine->GetFontWeight(letterInfo.fontId);
-    BaseGfxEngine::GetInstance()->DrawLetter(gfxDstBuffer, fontMap, srcRect, subRect, fontWeight, letterInfo.color,
-                                             letterInfo.opa);
-    return;
+    BaseGfxEngine::GetInstance()->DrawLetter(gfxDstBuffer, fontMap, srcRect, subRect,
+                                             fontWeight, letterInfo.color, letterInfo.opa);
 }
 
 void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer,
@@ -358,6 +412,9 @@ void DrawUtils::DrawLetter(BufferInfo& gfxDstBuffer,
         case FONT_WEIGHT_8:
             opacityMask = 0xFF;
             colorMode = A8;
+            break;
+        case FONT_WEIGHT_32:
+            opacityMask = 0xFF;
             break;
         default:
             return;
