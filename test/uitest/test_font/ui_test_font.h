@@ -110,6 +110,31 @@ public:
      */
     void UIKitFontMultiLanguage002();
 #endif // ENABLE_MULTI_FONT
+
+    void UIKitFontTestbackgroundColor();
+
+    void UIKitFontTestForegroundColor();
+
+    void UIKitFontTestLineBackgroundSpan();
+
+    void UIKitFontTestAbsoluteSizeSpan();
+
+    void UIKitFontTestRelativeSizeSpan();
+
+    /**
+     * @brief Test line Emoji display
+     */
+    void UIKitFontTestDispalyEmoji001();
+
+    /**
+     * @brief Test Emoji and Text display
+     */
+    void UIKitFontTestDispalyEmoji002();
+
+    /**
+     * @brief Test Emoji and Text line break display
+     */
+    void UIKitFontTestDispalyEmoji003();
 private:
     UIScrollView* container_ = nullptr;
     void InnerTestTitle(const char* title);

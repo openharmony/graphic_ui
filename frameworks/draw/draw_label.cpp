@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,10 +23,11 @@
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
-void DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine)
+uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine,
+                                    uint16_t& letterIndex)
 {
     if (labelLine.text == nullptr) {
-        return;
+        return 0;
     }
     UIFont* fontEngine = UIFont::GetInstance();
     if (labelLine.direct == TEXT_DIRECT_RTL) {
@@ -38,29 +39,97 @@ void DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& l
     uint32_t i = 0;
     uint32_t letter;
     uint16_t letterWidth;
+    uint16_t retOffsetY = 0; // ret value elipse offsetY
+    bool isEmoijLerge = true;
+    uint16_t offsetPosY = 0;
+    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId, labelLine.fontSize);
+    uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontSize,
+                                                 letterIndex, labelLine.sizeSpans);
+    DrawLineBackgroundColor(gfxDstBuffer, letterIndex, labelLine);
     while (i < labelLine.lineLength) {
         letter = TypedText::GetUTF8Next(labelLine.text, i, i);
+        uint8_t fontId = labelLine.fontId;
+        uint8_t fontSize = labelLine.fontSize;
+        if (labelLine.sizeSpans != nullptr && labelLine.sizeSpans[letterIndex].isSizeSpan) {
+            fontId = labelLine.sizeSpans[letterIndex].fontId;
+            fontSize = labelLine.sizeSpans[letterIndex].size;
+        }
+        bool havebackgroundColor = false;
+        ColorType backgroundColor;
+        GetBackgroundColor(letterIndex, labelLine.backgroundColor, havebackgroundColor, backgroundColor);
 
+        ColorType foregroundColor = labelLine.style.textColor_;
+        GetForegroundColor(letterIndex, labelLine.foregroundColor, foregroundColor);
+#if ENABLE_VECTOR_FONT
+        TextStyle textStyle = TEXT_STYLE_NORMAL;
+        if (labelLine.textStyles) {
+            textStyle = labelLine.textStyles[letterIndex];
+        }
+#endif
         LabelLetterInfo letterInfo{labelLine.pos,
                                    labelLine.mask,
-                                   labelLine.style.textColor_,
+                                   foregroundColor,
                                    labelLine.opaScale,
                                    0,
                                    0,
                                    letter,
                                    labelLine.direct,
-                                   labelLine.fontId,
+                                   fontId,
                                    0,
-                                   labelLine.fontSize,
-                                   labelLine.baseLine};
-        DrawUtils::GetInstance()->DrawLetter(gfxDstBuffer, letterInfo);
-        letterWidth = fontEngine->GetWidth(letter, labelLine.fontId, labelLine.fontSize, 0);
+                                   fontSize,
+#if ENABLE_VECTOR_FONT
+                                   textStyle,
+#endif
+                                   labelLine.baseLine,
+                                   labelLine.style.letterSpace_,
+                                   labelLine.style.lineSpace_,
+                                   havebackgroundColor,
+                                   backgroundColor};
+        if (TypedText::IsColourWord(letterInfo.letter)) {
+            if (!isEmoijLerge) {
+                letterInfo.offsetY = offsetPosY;
+            }
+            DrawUtils::GetInstance()->DrawColorLetter(gfxDstBuffer, letterInfo);
+        } else {
+            if (isEmoijLerge) {
+                letterInfo.offsetY = labelLine.ellipsisOssetY == 0 ? offsetPosY : labelLine.ellipsisOssetY;
+                retOffsetY = offsetPosY;
+            }
+            DrawUtils::GetInstance()->DrawNormalLetter(gfxDstBuffer, letterInfo, maxLetterSize);
+        }
+        letterWidth = fontEngine->GetWidth(letter, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
         if (labelLine.direct == TEXT_DIRECT_RTL) {
             labelLine.pos.x -= (letterWidth + labelLine.style.letterSpace_);
         } else {
             labelLine.pos.x += (letterWidth + labelLine.style.letterSpace_);
         }
+
+        letterIndex++;
     }
+    return retOffsetY;
+}
+
+uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontSize,
+                                        uint16_t letterIndex, SizeSpan* sizeSpans)
+{
+    uint32_t i = 0;
+    uint32_t unicode;
+    uint8_t maxLetterSize = fontSize;
+    while (i < lineLength) {
+        unicode = TypedText::GetUTF8Next(text, i, i);
+        if (TypedText::IsColourWord(unicode)) {
+            letterIndex++;
+            continue;
+        }
+        if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
+            uint8_t tempSize = sizeSpans[letterIndex].size;
+            if (tempSize > maxLetterSize) {
+                maxLetterSize = tempSize;
+            }
+        }
+        letterIndex++;
+    }
+    return maxLetterSize;
 }
 
 void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
@@ -141,6 +210,9 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     UIFont* fontEngine = UIFont::GetInstance();
     FontHeader head;
     GlyphNode node;
+#if ENABLE_VECTOR_FONT
+    node.textStyle = TEXT_STYLE_NORMAL;
+#endif
     if (fontEngine->GetFontHeader(head, fontId, fontSize) != 0) {
         return;
     }
@@ -177,4 +249,71 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point { 0, 0 }, color, opaScale, transMap,
                                                 letterTranDataInfo);
 }
+
+void DrawLabel::GetLineBackgroundColor(uint16_t letterIndex, List<LineBackgroundColor>* linebackgroundColor,
+                                       bool& havelinebackground, ColorType& linebgColor)
+{
+    if (linebackgroundColor->Size() > 0) {
+        ListNode<LineBackgroundColor>* lbColor = linebackgroundColor->Begin();
+        for (; lbColor != linebackgroundColor->End(); lbColor = lbColor->next_) {
+            uint32_t start = lbColor->data_.start;
+            uint32_t end = lbColor->data_.end;
+            if (letterIndex >= start && letterIndex < end) {
+                havelinebackground = true;
+                linebgColor = lbColor->data_.linebackgroundColor ;
+            }
+        }
+    }
+};
+
+void DrawLabel::GetBackgroundColor(uint16_t letterIndex, List<BackgroundColor>* backgroundColor,
+                                   bool& havebackground, ColorType& bgColor)
+{
+    if (backgroundColor->Size() > 0) {
+        ListNode<BackgroundColor>* bColor = backgroundColor->Begin();
+        for (; bColor != backgroundColor->End(); bColor = bColor->next_) {
+            uint16_t start = bColor->data_.start;
+            uint16_t end = bColor->data_.end;
+            if (letterIndex >= start && letterIndex < end) {
+                havebackground = true;
+                bgColor = bColor->data_.backgroundColor ;
+            }
+        }
+    }
+};
+
+void DrawLabel::GetForegroundColor(uint16_t letterIndex, List<ForegroundColor>* foregroundColor, ColorType& fgColor)
+{
+    if (foregroundColor->Size() > 0) {
+        ListNode<ForegroundColor>* fColor = foregroundColor->Begin();
+        for (; fColor != foregroundColor->End(); fColor = fColor->next_) {
+            uint32_t start = fColor->data_.start;
+            uint32_t end = fColor->data_.end;
+            if (letterIndex >= start && letterIndex < end) {
+                fgColor = fColor->data_.fontColor;
+            }
+        }
+    }
+};
+
+void DrawLabel::DrawLineBackgroundColor(BufferInfo& gfxDstBuffer, uint16_t letterIndex, const LabelLineInfo& labelLine)
+{
+    uint32_t i = 0;
+    uint32_t letter;
+    while (i < labelLine.lineLength) {
+        letter = TypedText::GetUTF8Next(labelLine.text, i, i);
+        bool havelinebackground = false;
+        ColorType linebackgroundColor;
+        GetLineBackgroundColor(letterIndex, labelLine.linebackgroundColor, havelinebackground, linebackgroundColor);
+        if (havelinebackground) {
+                Style style;
+                style.bgColor_ = linebackgroundColor;
+                Rect linebackground(labelLine.mask.GetLeft(), labelLine.pos.y,
+                                    labelLine.mask.GetRight(), labelLine.pos.y + labelLine.lineHeight);
+                BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, labelLine.mask,
+                                                       linebackground, style, linebackgroundColor.alpha);
+        }
+        letterIndex++;
+    }
+};
 } // namespace OHOS

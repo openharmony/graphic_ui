@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -211,6 +211,18 @@ public:
         instance_->SetFontFileOffset(offset);
     }
 
+    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint8_t fontId, uint8_t fontSize)
+    {
+        return instance_->GetOffsetPosY(text, lineLength, isAllEmoji, fontId, fontSize);
+    }
+
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+                                      uint16_t letterIndex, SizeSpan* sizeSpans);
+
+    bool IsEmojiFont(uint8_t fontid)
+    {
+        return instance_->IsEmojiFont(fontid);
+    }
 private:
     UIFont();
     /**

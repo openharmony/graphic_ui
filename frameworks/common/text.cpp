@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,6 +27,8 @@ Text::TextLine Text::textLine_[MAX_LINE_COUNT] = {{0}};
 
 Text::Text()
     : text_(nullptr),
+      sizeSpans_(nullptr),
+      characterSize_(0),
       fontId_(0),
       fontSize_(0),
       textSize_({0, 0}),
@@ -38,6 +40,9 @@ Text::Text()
       horizontalAlign_(TEXT_ALIGNMENT_LEFT),
       verticalAlign_(TEXT_ALIGNMENT_TOP)
 {
+#if ENABLE_VECTOR_FONT
+    textStyles_ = nullptr;
+#endif
     SetFont(DEFAULT_VECTOR_FONT_FILENAME, DEFAULT_VECTOR_FONT_SIZE);
 }
 
@@ -47,8 +52,55 @@ Text::~Text()
         UIFree(text_);
         text_ = nullptr;
     }
+#if ENABLE_VECTOR_FONT
+    if (textStyles_ != nullptr) {
+        UIFree(textStyles_);
+        textStyles_ = nullptr;
+    }
+#endif
+    if (backgroundColor_.Size() > 0) {
+        backgroundColor_.Clear();
+    }
+    if (linebackgroundColor_.Size() > 0) {
+        linebackgroundColor_.Clear();
+    }
+    if (foregroundColor_.Size() > 0) {
+        foregroundColor_.Clear();
+    }
+    if (sizeSpans_ != nullptr) {
+        UIFree(sizeSpans_);
+        sizeSpans_ = nullptr;
+    }
 }
 
+#if ENABLE_VECTOR_FONT
+void Text::SetSpannableString(const SpannableString* spannableString)
+{
+    SetText(spannableString->text_);
+    if (textStyles_ != nullptr) {
+        UIFree(textStyles_);
+        textStyles_ = nullptr;
+    }
+    if (spannableString->spanList_.IsEmpty()) {
+        return;
+    }
+    uint32_t textLen = TypedText::GetUTF8CharacterSize(text_, GetTextStrLen());
+    if (textLen == 0 || textLen > MAX_TEXT_LENGTH) {
+        return;
+    }
+    textStyles_ = static_cast<TextStyle*>(UIMalloc(textLen));
+    ListNode<StyleSpan*>* node = spannableString->spanList_.Begin();
+    while (node != spannableString->spanList_.End()) {
+        for (uint32_t i = node->data_->start_; i < node->data_->end_; i++) {
+            if (textLen > i) {
+                textStyles_[i] = node->data_->textStyle_;
+            }
+        }
+        node = node->next_;
+    }
+    needRefresh_ = true;
+}
+#endif
 void Text::SetText(const char* text)
 {
     if (text == nullptr) {
@@ -74,7 +126,17 @@ void Text::SetText(const char* text)
         text_ = nullptr;
         return;
     }
+#if ENABLE_VECTOR_FONT
+    if (textStyles_ != nullptr) {
+        UIFree(textStyles_);
+        textStyles_ = nullptr;
+    }
+#endif
     needRefresh_ = true;
+    if (sizeSpans_ != nullptr) {
+        UIFree(sizeSpans_);
+        sizeSpans_ = nullptr;
+    }
 }
 
 void Text::SetFont(const char* name, uint8_t size)
@@ -161,7 +223,7 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     int16_t maxWidth = (expandWidth_ ? COORD_MAX : textRect.GetWidth());
     if (maxWidth > 0) {
         textSize_ = TypedText::GetTextSize(text_, fontId_, fontSize_, style.letterSpace_, style.lineHeight_, maxWidth,
-                                           style.lineSpace_);
+                                           style.lineSpace_, sizeSpans_);
         if (baseLine_) {
             FontHeader head;
             if (UIFont::GetInstance()->GetFontHeader(head, fontId_, fontSize_) != 0) {
@@ -184,13 +246,13 @@ void Text::ReMeasureTextWidthInEllipsisMode(const Rect& textRect, const Style& s
     }
 }
 
-void Text::DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine)
+void Text::DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine, uint16_t& letterIndex)
 {
     labelLine.offset.x = 0;
     labelLine.text = TEXT_ELLIPSIS;
     labelLine.lineLength = TEXT_ELLIPSIS_DOT_NUM;
     labelLine.length = TEXT_ELLIPSIS_DOT_NUM;
-    DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
+    DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine, letterIndex);
 }
 
 void Text::OnDraw(BufferInfo& gfxDstBuffer,
@@ -222,13 +284,16 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
 {
     Point offset = {offsetX, 0};
     int16_t lineMaxWidth = expandWidth_ ? textSize_.x : coords.GetWidth();
-    int16_t lineHeight = style.lineHeight_;
-    if (lineHeight == 0) {
-        lineHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_) + style.lineSpace_;
-    }
     uint16_t lineBegin = 0;
     uint32_t maxLineBytes = 0;
     uint16_t lineCount = GetLine(lineMaxWidth, style.letterSpace_, ellipsisIndex, maxLineBytes);
+    int16_t lineHeight = style.lineHeight_;
+    if (lineHeight == 0) {
+        uint16_t letterIndex = 0;
+        int16_t lineMaxHeight = UIFont::GetInstance()->GetLineMaxHeight(text_, textLine_[0].lineBytes, fontId_,
+                                                                        fontSize_, letterIndex, sizeSpans_);
+        lineHeight = lineMaxHeight + style.lineSpace_;
+    }
     Point pos;
     if (lineHeight == style.lineHeight_) {
         pos.y = TextPositionY(coords, (lineCount * lineHeight));
@@ -236,7 +301,8 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         pos.y = TextPositionY(coords, (lineCount * lineHeight - style.lineSpace_));
     }
     OpacityType opa = DrawUtils::GetMixOpacity(opaScale, style.textOpa_);
-    for (int i = 0; i < lineCount; i++) {
+    uint16_t letterIndex = 0;
+    for (uint16_t i = 0; i < lineCount; i++) {
         if (pos.y > mask.GetBottom()) {
             return;
         }
@@ -244,19 +310,29 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         if (lineHeight != style.lineHeight_) {
             nextLine -= style.lineSpace_;
         }
-        if (nextLine >= mask.GetTop()) {
+        int16_t tempLetterIndex = letterIndex;
+        if (nextLine >= mask.GetTop() || nextLine <= mask.GetBottom()) {
             pos.x = LineStartPos(coords, textLine_[i].linePixelWidth);
             LabelLineInfo labelLine{pos, offset, mask, lineHeight, textLine_[i].lineBytes,
                                     0, opa, style, &text_[lineBegin], textLine_[i].lineBytes,
                                     lineBegin, fontId_, fontSize_, 0, static_cast<UITextLanguageDirect>(direct_),
-                                    nullptr, baseLine_};
-            DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine);
+                                    nullptr, baseLine_,
+#if ENABLE_VECTOR_FONT
+                                    textStyles_,
+#endif
+                                    &backgroundColor_, &foregroundColor_, &linebackgroundColor_, sizeSpans_};
+            uint16_t ellipsisOssetY = DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine, letterIndex);
             if ((i == (lineCount - 1)) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
-                DrawEllipsis(gfxDstBuffer, labelLine);
+                labelLine.ellipsisOssetY = ellipsisOssetY;
+                DrawEllipsis(gfxDstBuffer, labelLine, letterIndex);
             }
+        } else {
+            letterIndex = TypedText::GetUTF8CharacterSize(text_, lineBegin + textLine_[i].lineBytes);
         }
+        lineHeight = UIFont::GetInstance()->GetLineMaxHeight(&text_[lineBegin], textLine_[i].lineBytes, fontId_,
+                                                             fontSize_, tempLetterIndex, sizeSpans_);
         lineBegin += textLine_[i].lineBytes;
-        pos.y += lineHeight;
+        pos.y += lineHeight + style.lineSpace_;
     }
 }
 
@@ -298,8 +374,9 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
         textLen = ellipsisIndex;
     }
     uint32_t begin = 0;
+    uint16_t letterIndex = 0;
     while ((begin < textLen) && (text_[begin] != '\0') && (lineNum < MAX_LINE_COUNT)) {
-        begin += GetTextLine(begin, textLen, width, lineNum, letterSpace);
+        begin += GetTextLine(begin, textLen, width, lineNum, letterSpace, letterIndex, sizeSpans_);
         if (maxLineBytes < textLine_[lineNum].lineBytes) {
             maxLineBytes = textLine_[lineNum].lineBytes;
         }
@@ -310,7 +387,8 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
         textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
         if (textLine_[lineNum - 1].linePixelWidth > width) {
             int16_t newWidth = width - ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
-            maxLineBytes = CalculateLineWithEllipsis(begin, textLen, newWidth, letterSpace, lineNum);
+            maxLineBytes = CalculateLineWithEllipsis(begin, textLen, newWidth, letterSpace, lineNum, letterIndex,
+                                                     sizeSpans_);
             textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
         }
     }
@@ -318,12 +396,14 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
 }
 
 uint32_t Text::CalculateLineWithEllipsis(uint32_t begin, uint32_t textLen, int16_t width,
-                                         uint8_t letterSpace, uint16_t& lineNum)
+                                         uint8_t letterSpace, uint16_t& lineNum,
+                                         uint16_t& letterIndex,
+                                         SizeSpan* sizeSpans)
 {
     begin -= textLine_[lineNum - 1].lineBytes;
     lineNum--;
     while ((begin < textLen) && (text_[begin] != '\0') && (lineNum < MAX_LINE_COUNT)) {
-        begin += GetTextLine(begin, textLen, width, lineNum, letterSpace);
+        begin += GetTextLine(begin, textLen, width, lineNum, letterSpace, letterIndex, sizeSpans);
         lineNum++;
     }
     uint32_t maxLineBytes = 0;
@@ -340,11 +420,14 @@ uint32_t Text::GetTextStrLen()
     return strlen(text_);
 }
 
-uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace)
+uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace,
+                           uint16_t& letterIndex, SizeSpan* sizeSpans)
 {
     int16_t lineWidth = width;
+    int16_t lineHeight = 0;
     uint16_t nextLineBytes = UIFontAdaptor::GetNextLineAndWidth(&text_[begin], fontId_, fontSize_, letterSpace,
-                                                                lineWidth, false, textLen - begin);
+                                                                lineWidth, lineHeight, letterIndex, sizeSpans, false,
+                                                                textLen - begin);
     if (nextLineBytes + begin > textLen) {
         nextLineBytes = textLen - begin;
     }
@@ -383,7 +466,7 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     }
     uint32_t lineStart = 0;
     uint32_t nextLineStart = 0;
-    uint16_t lineHeight = style.lineHeight_;
+    int16_t lineHeight = style.lineHeight_;
     uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_);
     if (lineHeight == 0) {
         lineHeight = letterHeight + style.lineSpace_;
@@ -397,10 +480,12 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     int16_t y = 0;
     uint32_t textLen = static_cast<uint32_t>(strlen(text_));
     int16_t width = 0;
+    uint16_t letterIndex = 0;
     while ((lineStart < textLen) && (text_[lineStart] != '\0')) {
         width = textRect.GetWidth();
         nextLineStart +=
-            UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width);
+            UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width, lineHeight,
+                                               letterIndex, sizeSpans_);
         if (nextLineStart == 0) {
             break;
         }
@@ -416,7 +501,90 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     /* Calculate the x coordinate */
     width = pos.x;
     lineStart +=
-        UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width, true);
+        UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width, lineHeight,
+                                           letterIndex, sizeSpans_, true);
     return (lineStart < textLen) ? lineStart : TEXT_ELLIPSIS_END_INV;
+}
+
+void Text::SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size)
+{
+#if ENABLE_VECTOR_FONT
+    if (fontId_ == FONT_ID_MAX) {
+        return;
+    }
+#else
+    if (fontId_ == UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
+        return;
+    }
+#endif
+    uint8_t fontId = GetSpanFontIdBySize(size);
+#if !ENABLE_VECTOR_FONT
+    if (fontId == fontId_) {
+        return;
+    }
+#endif
+    if (text_ != nullptr && sizeSpans_ == nullptr) {
+        characterSize_ = TypedText::GetUTF8CharacterSize(text_, GetTextStrLen());
+        sizeSpans_ = static_cast<SizeSpan*>(UIMalloc(characterSize_ * sizeof(SizeSpan)));
+        if (sizeSpans_ == nullptr) {
+            GRAPHIC_LOGE("Text::SetAbsoluteSizeSpan invalid parameter");
+            return;
+        }
+        initSizeSpans();
+    }
+
+    if (sizeSpans_ != nullptr && start <= characterSize_) {
+        for (int32_t i = start; i < end && i < characterSize_; i++) {
+            sizeSpans_[i].fontId = fontId;
+            sizeSpans_[i].size = size;
+            sizeSpans_[i].isSizeSpan = true;
+        }
+    }
+}
+
+void Text::SetRelativeSizeSpan(int16_t start, int16_t end, float size)
+{
+    uint8_t absoluteSize = 0;
+#if ENABLE_VECTOR_FONT
+    absoluteSize = static_cast<uint8_t>(size * fontSize_);
+#else
+    UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId_);
+    absoluteSize = static_cast<uint8_t>(size * fontParam->size);
+#endif
+    SetAbsoluteSizeSpan(start, end, absoluteSize);
+}
+
+uint8_t Text::GetSpanFontIdBySize(uint8_t size)
+{
+#if ENABLE_VECTOR_FONT
+    return fontId_;
+#else
+    UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId_);
+    if (fontParam == nullptr) {
+        return fontId_;
+    }
+
+    uint8_t ttfId = fontParam->ttfId;
+    for (uint8_t fontId = 0; fontId < UIFontBuilder::GetInstance()->GetTotalFontId(); fontId++) {
+        UITextLanguageFontParam* tempFontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
+        if (tempFontParam == nullptr) {
+            continue;
+        }
+        if (ttfId == tempFontParam->ttfId && size == tempFontParam->size) {
+            return fontId;
+        }
+    }
+    return fontId_;
+#endif
+}
+
+void Text::initSizeSpans()
+{
+    if (sizeSpans_ != nullptr) {
+        for (uint32_t i = 0 ; i < TypedText::GetUTF8CharacterSize(text_, GetTextStrLen()); i++) {
+            sizeSpans_[i].isSizeSpan = false;
+            sizeSpans_[i].height = 0;
+        }
+    }
 }
 } // namespace OHOS

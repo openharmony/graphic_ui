@@ -67,6 +67,7 @@ shared_library("ui") {
     "frameworks/common/image.cpp",
     "frameworks/common/input_device_manager.cpp",
     "frameworks/common/screen.cpp",
+    "frameworks/common/spannable_string.cpp",
     "frameworks/common/task.cpp",
     "frameworks/common/text.cpp",
     "frameworks/common/typed_text.cpp",
