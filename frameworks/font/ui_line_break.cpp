@@ -180,7 +180,7 @@ int16_t UILineBreakEngine::GetLetterWidth(uint32_t unicode, uint16_t& letterInde
         }
         return width;
     } else {
-        height = UIFont::GetInstance()->GetHeight(unicode, 0);
+        height = UIFont::GetInstance()->GetHeight(fontId, fontSize);
         return UIFont::GetInstance()->GetWidth(unicode, fontId, fontSize, 0);
     }
 }
