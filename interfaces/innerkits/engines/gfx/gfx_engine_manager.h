@@ -173,7 +173,6 @@ public:
         }
         baseEngine_ = gfxEngine;
     }
-
 protected:
     static BaseGfxEngine* baseEngine_;
     uint16_t width_ = HORIZONTAL_RESOLUTION;

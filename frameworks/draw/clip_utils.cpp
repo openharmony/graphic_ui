@@ -16,7 +16,6 @@
 #include "clip_utils.h"
 #include "draw_utils.h"
 #include "gfx_utils/diagram/depiction/depict_curve.h"
-#include "gfx_utils/diagram/imageaccessor/image_accessors.h"
 #include "gfx_utils/diagram/rasterizer/rasterizer_scanline_antialias.h"
 #include "gfx_utils/diagram/scanline/geometry_scanline.h"
 #include "gfx_utils/diagram/spancolorfill/fill_base.h"
@@ -26,7 +25,7 @@
 #include "render/render_pixfmt_rgba_blend.h"
 
 namespace OHOS {
-using UICanvasPath = DepictCurve<UICanvasVertices>;
+using UICanvasPath = DepictCurve;
 using PathTransform = DepictTransform<UICanvasPath>;
 
 ClipPath& ClipPath::MoveTo(const PointF& point)
@@ -102,7 +101,7 @@ UICanvasVertices& ClipUtils::CloseVertices(const ClipPath& path)
 
 void ClipUtils::PerformScan(const ClipPath& path, const ImageInfo* imageInfo)
 {
-    RasterizerScanlineAntialias<> rasterizer;
+    RasterizerScanlineAntialias rasterizer;
     GeometryScanline scanline;
     TransAffine transform;
     UICanvasVertices& vertices = CloseVertices(path);
