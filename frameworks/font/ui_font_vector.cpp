@@ -338,7 +338,7 @@ uint8_t UIFontVector::GetFontId(uint32_t unicode) const
 
 int16_t UIFontVector::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize)
 {
-    FaceInfo faceInfo;
+    FaceInfo faceInfo = {};
     int8_t ret = INVALID_RET_VALUE;
 
     if (TypedText::IsColourWord(unicode)) {
@@ -689,7 +689,7 @@ uint16_t UIFontVector::GetOffsetPosY(const char *text, uint16_t lineLength, bool
     uint16_t emojiNum = 0;
     uint16_t loopNum = 0;
     GlyphNode glyphNode;
-    GlyphNode emojiMaxNode;
+    GlyphNode emojiMaxNode = {};
     uint8_t maxFontSize = fontSize;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
