@@ -39,11 +39,35 @@ void UITestCanvas::TearDown()
 
 const UIView* UITestCanvas::GetTestView()
 {
+    UIKitCanvasTestDrawImage002();
     RM008UIKitCanvasTest001();
+    RM008UIKitCanvasTest002();
+    RM008UIKitCanvasTest003();
+    RM008UIKitCanvasTest004();
+    RM008UIKitCanvasTest005();
+    RM008UIKitCanvasTest006();
+    RM008UIKitCanvasTest007();
+    RM008UIKitCanvasShadowTest008();
+    RM009LineCapDrawPath();
+    RM009LineJoinDrawPath();
+    RM009LineDashDrawPath();
+    RM009StrokeAndClearRectDrawPath();
+    RM011StrokeText001();
     RM011CanvasScale001();
     RM011CanvasRotate001();
     RM012globalAlpha001();
     RM012SaveOrRestore002();
+    RM012GlobalCompositeOperationSourceOver();
+    RM012GlobalCompositeOperationSourceAtop();
+    RM012GlobalCompositeOperationSourceIn();
+    RM012GlobalCompositeOperationSourceOut();
+    RM012GlobalCompositeOperationDestinationOver();
+    RM012GlobalCompositeOperationDestinationAtop();
+    RM012GlobalCompositeOperationDestinationIn();
+    RM012GlobalCompositeOperationDestinationOut();
+    RM012GlobalCompositeOperationLIGHTER();
+    RM012GlobalCompositeOperationCopy();
+    RM012GlobalCompositeOperationXOR();
     UIKitCanvasTestDrawLine001();
     UIKitCanvasTestDrawLine002();
     UIKitCanvasTestDrawCurve001();
@@ -298,12 +322,51 @@ void UITestCanvas::UIKitCanvasTestDrawImage001()
         return;
     }
     CreateTitleLabel("绘制图片");
+    // {200, 50}: start point coordinates
+#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
     UICanvas* canvas = CreateCanvas();
 
     Paint paint;
-    paint.SetOpacity(127); // 127: opacity
+    paint.SetOpacity(OPARCITY_127); // 127: opacity
+
+    canvas->DrawImage({0, IMAGE_START60}, RED_IMAGE_PATH, paint);
+    paint.SetOpacity(OPA_OPAQUE);
+    paint.Rotate(ROTATE_20);
+    canvas->DrawImage({IMAGE_START100, IMAGE_START20}, JPEG_IMAGE_PATH, paint);
+    canvas->DrawImage({0, 0}, JPEG_IMAGE_PATH, paint, IMAGE_WIDTH100, IMAGE_HEIGHT100);
+#endif
+}
+void UITestCanvas::UIKitCanvasTestDrawImage002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("绘制图片");
     // {200, 50}: start point coordinates
+#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+    UICanvas* canvas = CreateCanvas();
+    const float scale = 1.5f;
+    const int16_t trx = 50;
+    Paint paint;
+    paint.Rotate(ROTATE20);
+    paint.Scale(scale, scale);
+    paint.Translate(trx, 0);
+    paint.SetOpacity(OPARCITY_127); // 127: opacity
     canvas->DrawImage({ 200, 50 }, GREEN_IMAGE_PATH, paint);
+#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+    UICanvas::FontStyle fontStyle;
+    fontStyle.align = TEXT_ALIGNMENT_CENTER;
+    fontStyle.direct = TEXT_DIRECT_LTR;
+    fontStyle.fontName = DEFAULT_VECTOR_FONT_FILENAME;
+    fontStyle.fontSize = FONT_SIZE15;
+    fontStyle.letterSpace = FONT_LETTERSPACE2;
+    paint.SetFillColor(Color::Green());
+    canvas->StrokeText("CANVAS绘制图片", {0, 0}, fontStyle, paint);
+#endif
+    paint.Translate(trx, 0);
+    canvas->DrawImage({0, 0}, GIF_IMAGE_PATH, paint);
+    canvas->DrawImage({0, 0}, GIF_IMAGE_PATH, paint, DRAWIMAGE_WIDTH, DRAWIMAGE_HEIGHT);
+#endif
 }
 
 void UITestCanvas::UIKitCanvasTestDrawLabel001()
@@ -939,6 +1002,172 @@ void UITestCanvas::UIKitCanvasTestDrawPath034()
     canvas->DrawPath(paint);
 }
 
+void UITestCanvas::RM009LineCapDrawPath()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+
+    CreateTitleLabel("RM009LineCap_平直的边缘_正方形_圆形线帽");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStrokeWidth(STROKE_WIDTH12);
+    paint.SetStrokeColor(Color::Green());
+#if GRAPHIC_ENABLE_LINECAP_FLAG
+    paint.SetLineCap(LineCap::BUTT_CAP);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y}); /* 竖线 */
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->DrawPath(paint);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE1_Y}); /* 横线 */
+    canvas->LineTo({LINE17_X, LINE1_Y});
+    canvas->DrawPath(paint);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE26_Y, LINE25_Y}); /* 斜线 */
+    canvas->LineTo({LINE18_X, LINE1_Y});
+    canvas->DrawPath(paint);
+    paint.SetStrokeColor(Color::Red());
+#if GRAPHIC_ENABLE_LINECAP_FLAG
+    paint.SetLineCap(LineCap::SQUARE_CAP);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_X, LINE13_Y}); /* 竖线 */
+    canvas->LineTo({LINE19_X, LINE11_Y});
+    canvas->DrawPath(paint);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE26_X}); /* 横线 */
+    canvas->LineTo({LINE17_X, LINE2_Y});
+    canvas->DrawPath(paint);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE28_X, LINE25_Y}); /* 斜线 */
+    canvas->LineTo({LINE21_X, LINE1_Y});
+    canvas->DrawPath(paint);
+    paint.SetStrokeColor(Color::Blue());
+#if GRAPHIC_ENABLE_LINECAP_FLAG
+    paint.SetLineCap(LineCap::ROUND_CAP);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE22_X, LINE13_Y}); /* 竖线 */
+    canvas->LineTo({LINE22_X, LINE11_Y});
+    canvas->DrawPath(paint);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE23_Y}); /* 横线 */
+    canvas->LineTo({LINE17_X, LINE23_Y});
+    canvas->DrawPath(paint);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE18_X, LINE25_Y}); /* 斜线 */
+    canvas->LineTo({LINE24_X, LINE1_Y});
+    canvas->DrawPath(paint);
+}
+void UITestCanvas::RM009LineJoinDrawPath()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM009LineJoin_圆角_斜角_尖角_限制尖角长度");
+    UICanvas* canvas = CreateCanvas();
+
+    Paint paint;
+    paint.SetStrokeWidth(STROKE_WIDTH10);
+    paint.SetStrokeColor(Color::Green());
+#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+    paint.SetLineJoin(LineJoin::ROUND_JOIN);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE25_X, LINE25_X});
+    canvas->LineTo({LINE22_X, LINE11_Y});
+    canvas->DrawPath(paint);
+#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+    paint.SetLineJoin(LineJoin::BEVEL_JOIN);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE13_Y});
+    canvas->LineTo({LINE2_X, LINE11_Y});
+    canvas->LineTo({LINE26_X, LINE25_Y});
+    canvas->LineTo({LINE27_X, LINE11_Y});
+    canvas->DrawPath(paint);
+#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+    paint.SetLineJoin(LineJoin::MITER_JOIN);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE14_X, LINE13_Y});
+    canvas->LineTo({LINE14_X, LINE11_Y});
+    canvas->LineTo({LINE28_X, LINE25_Y});
+    canvas->LineTo({LINE29_X, LINE11_Y});
+    canvas->DrawPath(paint);
+#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+    // 当斜接角度超过MiterLimit时应该转化为平角
+    paint.SetLineJoin(LineJoin::MITER_JOIN);
+    paint.SetMiterLimit(MITERLIMIT4);
+#endif
+
+    canvas->BeginPath();
+    canvas->MoveTo({LINE21_X, LINE13_Y});
+    canvas->LineTo({LINE21_X, LINE11_Y});
+    canvas->LineTo({LINE30_X, LINE25_Y});
+    canvas->LineTo({LINE31_X, LINE25_Y});
+    canvas->DrawPath(paint);
+}
+void UITestCanvas::RM009LineDashDrawPath()
+{
+#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM009LineDash_虚实线(10,5,5,2)_更改虚实线起点的偏移量(5)");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStrokeWidth(DASH_LINE_WIDTH2);
+    paint.SetStrokeColor(Color::Green());
+    float ds2[] = {DASH10, DASH5, DASH5, DASH2};
+    paint.SetLineDash(ds2, DASH_COUNT);
+    canvas->BeginPath();
+    canvas->MoveTo({MOVETO20, MOVETO20});
+    canvas->LineTo({LINET0200, MOVETO20});
+    canvas->LineTo({LINET0200, LINET080});
+    canvas->LineTo({LINET020, LINET080});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+
+    paint.SetLineDashOffset(LINE_DASH_OFFSET5);
+    canvas->BeginPath();
+    canvas->MoveTo({MOVETO20, LINET0120});
+    canvas->LineTo({LINET0200, LINET0120});
+    canvas->LineTo({LINET0200, LINET0180});
+    canvas->LineTo({LINET020, LINET0180});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+#endif
+}
+
+void UITestCanvas::RM009StrokeAndClearRectDrawPath()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM009_StrokeRect_ClearRect");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStrokeWidth(STROKEWIDTH2);
+    paint.SetStrokeColor(Color::Orange());
+    canvas->StrokeRect({START1_X, START1_Y}, RECT40, RECT50, paint);
+
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({MOVETO30, MOVETO60});
+    canvas->LineTo({LINET0200, MOVETO60});
+    canvas->LineTo({LINET0200, LINET0200});
+    canvas->LineTo({MOVETO30, LINET0200});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+
+    canvas->ClearRect({RECT50, RECT80}, RECT100, RECT70);
+}
+
 void UITestCanvas::RM008UIKitCanvasTest001()
 {
     if (container_ == nullptr) {
@@ -965,6 +1194,338 @@ void UITestCanvas::RM008UIKitCanvasTest001()
     canvas->ClosePath();
     canvas->FillPath(paint);
     canvas->DrawPath(paint);
+}
+
+void UITestCanvas::RM008UIKitCanvasTest002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_FillStyle_RM_013_Gradient_渐变填充多边形");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStyle(Paint::GRADIENT);
+    // 线性渐变
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    paint.createLinearGradient(LINEARGRADIENT50, LINEARGRADIENT50, LINEARGRADIENT150, LINEARGRADIENT150);
+    paint.addColorStop(0, Color::Yellow());
+    paint.addColorStop(COLOR_STOP3, Color::White());
+    paint.addColorStop(COLOR_STOP6, Color::Green());
+    paint.addColorStop(1, Color::Blue());
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE22_X, LINE11_Y});
+    canvas->LineTo({LINE26_X, LINE13_Y});
+    canvas->ArcTo({LINE26_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE26_X, LINE26_Y});
+    canvas->LineTo({LINE4_X, LINE2_Y});
+    canvas->LineTo({LINE11_X, LINE27_Y});
+    canvas->LineTo({LINE3_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    // 放射渐变
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    paint.createRadialGradient(RADIAL_GRADIENT300, RADIAL_GRADIENT140, RADIAL_GRADIENT5,
+                               RADIAL_GRADIENT270, RADIAL_GRADIENT100, RADIAL_GRADIENT80);
+#endif
+    canvas->BeginPath();
+
+    canvas->MoveTo({LINE9_X, LINE13_Y});
+    canvas->LineTo({LINE32_X, LINE11_Y});
+    canvas->LineTo({LINE31_X, LINE13_Y});
+    canvas->ArcTo({LINE31_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE31_X, LINE26_Y});
+    canvas->LineTo({LINE21_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE27_Y});
+    canvas->LineTo({LINE33_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM008UIKitCanvasTest003()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_StrokeStyle_RM_013_Gradient_渐变绘制多边形路径");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStyle(Paint::GRADIENT);
+    paint.SetStrokeWidth(STROKE_WIDTH8);
+    // 线性渐变
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    paint.createLinearGradient(LINEARGRADIENT50, LINEARGRADIENT50, LINEARGRADIENT150, LINEARGRADIENT150);
+    paint.addColorStop(0, Color::Yellow());
+    paint.addColorStop(COLOR_STOP3, Color::White());
+    paint.addColorStop(COLOR_STOP6, Color::Green());
+    paint.addColorStop(1, Color::Blue());
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE22_X, LINE11_Y});
+    canvas->LineTo({LINE26_X, LINE13_Y});
+    canvas->ArcTo({LINE26_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE26_X, LINE26_Y});
+    canvas->LineTo({LINE4_X, LINE2_Y});
+    canvas->LineTo({LINE11_X, LINE27_Y});
+    canvas->LineTo({LINE3_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+    // 放射渐变
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    paint.createRadialGradient(LINEARGRADIENT300, LINEARGRADIENT140, LINEARGRADIENT5,
+                               LINEARGRADIENT270, LINEARGRADIENT100, LINEARGRADIENT80);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE9_X, LINE13_Y});
+    canvas->LineTo({LINE32_X, LINE11_Y});
+    canvas->LineTo({LINE31_X, LINE13_Y});
+    canvas->ArcTo({LINE31_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE31_X, LINE26_Y});
+    canvas->LineTo({LINE21_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE27_Y});
+    canvas->LineTo({LINE33_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+}
+
+void UITestCanvas::RM008UIKitCanvasTest004()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_Pattern_模式REPEAT(图像)绘制多边形路径和填充");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStyle(Paint::PATTERN);
+    paint.SetStrokeWidth(STROKEWIDTH8);
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    paint.CreatePattern(RED_IMAGE_PATH, REPEAT);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE22_X, LINE11_Y});
+    canvas->LineTo({LINE26_X, LINE13_Y});
+    canvas->ArcTo({LINE26_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE26_X, LINE26_Y});
+    canvas->LineTo({LINE4_X, LINE2_Y});
+    canvas->LineTo({LINE11_X, LINE27_Y});
+    canvas->LineTo({LINE3_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+
+    canvas->BeginPath();
+    canvas->MoveTo({LINE9_X, LINE13_Y});
+    canvas->LineTo({LINE32_X, LINE11_Y});
+    canvas->LineTo({LINE31_X, LINE13_Y});
+    canvas->ArcTo({LINE31_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE31_X, LINE26_Y});
+    canvas->LineTo({LINE21_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE27_Y});
+    canvas->LineTo({LINE33_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+void UITestCanvas::RM008UIKitCanvasTest005()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_Pattern_模式REPEAT_X(图像)绘制多边形路径和填充");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStyle(Paint::PATTERN);
+    paint.SetStrokeWidth(STROKEWIDTH8);
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    paint.CreatePattern(RED_IMAGE_PATH, REPEAT_X);
+#endif
+    canvas->BeginPath();
+
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE22_X, LINE11_Y});
+    canvas->LineTo({LINE26_X, LINE13_Y});
+    canvas->ArcTo({LINE26_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE26_X, LINE26_Y});
+    canvas->LineTo({LINE4_X, LINE2_Y});
+    canvas->LineTo({LINE11_X, LINE27_Y});
+    canvas->LineTo({LINE3_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+
+    canvas->BeginPath();
+    canvas->MoveTo({LINE9_X, LINE13_Y});
+    canvas->LineTo({LINE32_X, LINE11_Y});
+    canvas->LineTo({LINE31_X, LINE13_Y});
+    canvas->ArcTo({LINE31_X, LINE1_Y}, ARC_RADIUS, START1_ANGLE, END1_ANGLE);
+    canvas->LineTo({LINE31_X, LINE26_Y});
+    canvas->LineTo({LINE21_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE27_Y});
+    canvas->LineTo({LINE33_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+void UITestCanvas::RM008UIKitCanvasTest006()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_Pattern_模式REPEAT_Y(图像)绘制多边形路径和填充");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStyle(Paint::PATTERN);
+    paint.SetStrokeWidth(STROKEWIDTH8);
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    paint.CreatePattern(RED_IMAGE_PATH, REPEAT_Y);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE10_Y});
+    canvas->LineTo({LINE28_X, LINE10_Y});
+    canvas->LineTo({LINE28_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE11_X, LINE26_Y});
+    canvas->LineTo({LINE28_X, LINE26_Y});
+    canvas->LineTo({LINE28_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+void UITestCanvas::RM008UIKitCanvasTest007()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_Pattern_模式NO_REPEAT(图像)绘制多边形路径和填充");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetStyle(Paint::PATTERN);
+    paint.SetStrokeWidth(STROKEWIDTH8);
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    paint.CreatePattern(RED_IMAGE_PATH, NO_REPEAT);
+#endif
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE10_Y});
+    canvas->LineTo({LINE28_X, LINE10_Y});
+    canvas->LineTo({LINE28_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE11_X, LINE26_Y});
+    canvas->LineTo({LINE28_X, LINE26_Y});
+    canvas->LineTo({LINE28_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM008UIKitCanvasShadowTest008()
+{
+#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM008_阴影不偏移_偏移_改变模糊级别_改变模糊颜色");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillStyle(Color::Orange());
+    paint.SetStrokeWidth(STROKEWIDTH8);
+    paint.SetShadowBlur(LINEARGRADIENT5);
+    paint.SetShadowColor(Color::Black());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetShadowOffsetX(OFFSETX20);
+    paint.SetShadowOffsetY(OFFSETX10);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE26_X, LINE13_Y});
+    canvas->LineTo({LINE26_X, LINE10_Y});
+    canvas->LineTo({LINE28_X, LINE10_Y});
+    canvas->LineTo({LINE28_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetStrokeStyle(Color::Orange());
+    paint.SetShadowOffsetX(0);
+    paint.SetShadowOffsetY(0);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE11_X, LINE2_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE2_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+    paint.SetShadowOffsetX(OFFSETX20);
+    paint.SetShadowOffsetY(OFFSETX10);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE26_X, LINE11_Y});
+    canvas->LineTo({LINE26_X, LINE2_Y});
+    canvas->LineTo({LINE28_X, LINE2_Y});
+    canvas->LineTo({LINE28_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+    paint.SetFillStyle(Color::Orange());
+    paint.SetShadowBlur(SHADOWBLUR15);
+    paint.SetShadowOffsetX(OFFSETX20);
+    paint.SetShadowOffsetY(OFFSETX10);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE34_X, LINE13_Y});
+    canvas->LineTo({LINE34_X, LINE10_Y});
+    canvas->LineTo({LINE31_X, LINE10_Y});
+    canvas->LineTo({LINE31_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetStrokeStyle(Color::Orange());
+    paint.SetShadowBlur(SHADOWBLUR5);
+    paint.SetShadowColor(Color::Blue());
+    paint.SetShadowOffsetX(OFFSETX20);
+    paint.SetShadowOffsetY(OFFSETX10);
+    canvas->BeginPath();
+    canvas->MoveTo({LINE34_X, LINE11_Y});
+    canvas->LineTo({LINE34_X, LINE26_X});
+    canvas->LineTo({LINE31_X, LINE26_X});
+    canvas->LineTo({LINE31_X, LINE11_Y});
+    canvas->ClosePath();
+    canvas->DrawPath(paint);
+#endif
+}
+
+void UITestCanvas::RM011StrokeText001()
+{
+    CreateTitleLabel("RM011_StrokeText_多国文字加旋转放大");
+
+#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+    UICanvas* canvas = CreateCanvas();
+    UICanvas::FontStyle fontStyle;
+    fontStyle.align = TEXT_ALIGNMENT_CENTER;
+    fontStyle.direct = TEXT_DIRECT_LTR;
+    fontStyle.fontName = DEFAULT_VECTOR_FONT_FILENAME;
+    fontStyle.fontSize = FONT_SIZE15;
+    fontStyle.letterSpace = FONT_LETTERSPACE2;
+    Paint paint;
+    paint.SetFillColor(Color::Blue());
+    canvas->StrokeText("葡萄牙语：Hongmeng, teste", {0, HEIGHT_Y20}, fontStyle, paint);
+    canvas->StrokeText("西班牙语：Hong Meng, test", {0, HEIGHT_Y40}, fontStyle, paint);
+    canvas->StrokeText("法语：HongMeng, test", {0, HEIGHT_Y60}, fontStyle, paint);
+    canvas->StrokeText("瓜拉尼语：mitapoañda, pens", {0, HEIGHT_Y80}, fontStyle, paint);
+    canvas->StrokeText("荷兰语：Hongmeng, kom op.", {0, HEIGHT_Y100}, fontStyle, paint);
+    canvas->StrokeText("樊瓦什语：Кайалла", {0, HEIGHT_Y120}, fontStyle, paint);
+    canvas->StrokeText("白俄罗斯语：Прывітанне", {0, HEIGHT_Y140}, fontStyle, paint);
+    canvas->StrokeText("希腊语：Γεια.", {0, HEIGHT_Y160}, fontStyle, paint);
+    canvas->StrokeText("瑞典语:Hej, Hongmeng.", {0, HEIGHT_Y180}, fontStyle, paint);
+    canvas->StrokeText("俄语: Привет, hongmon ", {0, HEIGHT_Y200}, fontStyle, paint);
+    paint.Scale(SCALE1_X, SCALE1_Y);
+    paint.Rotate(ROTATE45);
+    canvas->StrokeText("中国 你好，鸿蒙。。", {HEIGHT_Y20, 0}, fontStyle, paint);
+#endif
 }
 
 void UITestCanvas::RM011CanvasScale001()
@@ -1094,6 +1655,300 @@ void UITestCanvas::RM012globalAlpha001()
     canvas->LineTo({LINE14_X, LINE14_Y});
     canvas->LineTo({LINE15_X, LINE14_Y});
     canvas->LineTo({LINE15_X, LINE1_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationSourceOver()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_SOURCE_OVER_第二个图源在第一个图源之上");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(SOURCE_OVER);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationSourceAtop()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_SOURCE_ATOP_第一个图源和与第二个图源相交部分");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(SOURCE_ATOP);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+void UITestCanvas::RM012GlobalCompositeOperationSourceIn()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_SOURCE_IN_只显示两个相交部分显示第二个图源颜色");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(SOURCE_IN);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+void UITestCanvas::RM012GlobalCompositeOperationSourceOut()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_SOURCE_OUT_只显示第二个图源的第一个不相交部分");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(SOURCE_OUT);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+void UITestCanvas::RM012GlobalCompositeOperationDestinationOver()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_DESTINATION_OVER_源图像在目标图像之上");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(DESTINATION_OVER);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationDestinationAtop()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_DESTINATION_ATOP_在源图像上显示目标图像");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(DESTINATION_ATOP);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationDestinationIn()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_DESTINATION_IN_在源图像上显示目标图像");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(DESTINATION_IN);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationDestinationOut()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_DESTINATION_OUT_在源图像上显示目标图像");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(DESTINATION_OUT);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationLIGHTER()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_LIGHTER_显示源图像 + 目标图像相交部分混合");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(LIGHTER);
+    paint.SetFillColor(Color::Blue());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationCopy()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_COPY_只显示第二个图源绿色");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(COPY);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+}
+
+void UITestCanvas::RM012GlobalCompositeOperationXOR()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    CreateTitleLabel("RM012_设置混合_XOR_相交部分不显示");
+    UICanvas* canvas = CreateCanvas();
+    Paint paint;
+    paint.SetFillColor(Color::Red());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE11_X, LINE13_Y});
+    canvas->LineTo({LINE11_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE11_Y});
+    canvas->LineTo({LINE12_X, LINE13_Y});
+    canvas->ClosePath();
+    canvas->FillPath(paint);
+    paint.SetGlobalCompositeOperation(XOR);
+    paint.SetFillColor(Color::Green());
+    canvas->BeginPath();
+    canvas->MoveTo({LINE1_Y, LINE10_Y});
+    canvas->LineTo({LINE2_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE2_Y});
+    canvas->LineTo({LINE9_X, LINE10_Y});
     canvas->ClosePath();
     canvas->FillPath(paint);
 }

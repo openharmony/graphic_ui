@@ -43,6 +43,7 @@ public:
     void UIKitCanvasTestDrawCircle003();
     void UIKitCanvasTestDrawArc001();
     void UIKitCanvasTestDrawImage001();
+    void UIKitCanvasTestDrawImage002();
     void UIKitCanvasTestDrawLabel001();
     void UIKitCanvasTestDrawSector001();
     void UIKitCanvasTestClear001();
@@ -83,9 +84,30 @@ public:
     void RM008UIKitCanvasTest001();
     void RM008UIKitCanvasTest002();
     void RM008UIKitCanvasTest003();
+    void RM008UIKitCanvasTest004();
+    void RM008UIKitCanvasTest005();
+    void RM008UIKitCanvasTest006();
+    void RM008UIKitCanvasTest007();
+    void RM008UIKitCanvasShadowTest008();
+    void RM009LineCapDrawPath();
+    void RM009LineJoinDrawPath();
+    void RM009LineDashDrawPath();
+    void RM009StrokeAndClearRectDrawPath();
+    void RM011StrokeText001();
     void RM011CanvasScale001();
     void RM011CanvasRotate001();
     void RM012globalAlpha001();
+    void RM012GlobalCompositeOperationSourceOver();
+    void RM012GlobalCompositeOperationSourceAtop();
+    void RM012GlobalCompositeOperationSourceIn();
+    void RM012GlobalCompositeOperationSourceOut();
+    void RM012GlobalCompositeOperationDestinationOver();
+    void RM012GlobalCompositeOperationDestinationAtop();
+    void RM012GlobalCompositeOperationDestinationIn();
+    void RM012GlobalCompositeOperationDestinationOut();
+    void RM012GlobalCompositeOperationLIGHTER();
+    void RM012GlobalCompositeOperationCopy();
+    void RM012GlobalCompositeOperationXOR();
     void RM012SaveOrRestore002();
 private:
     void CreateTitleLabel(const char* title);
@@ -259,6 +281,8 @@ private:
     const int16_t RADIAL_GRADIENT270 = 270;
     const int16_t RADIAL_GRADIENT100 = 100;
     const int16_t RADIAL_GRADIENT80 = 80;
+    const int16_t DRAWIMAGE_WIDTH = 50;
+    const int16_t DRAWIMAGE_HEIGHT = 50;
     const float SCALE_X = 0.5f;
     const float SCALE_Y = 0.5f;
     const float ROTATE_ANGLE = 20;

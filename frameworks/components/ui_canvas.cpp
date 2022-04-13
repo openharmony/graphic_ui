@@ -19,22 +19,22 @@
 #include "draw/draw_arc.h"
 #include "draw/draw_image.h"
 #include "draw/draw_utils.h"
-#include "gfx_utils/diagram/spancolorfill/fill_image_rgba.h"
 #include "gfx_utils/graphic_log.h"
 #include "render/render_buffer.h"
 #include "render/render_pixfmt_rgba_blend.h"
 #include "render/render_scanline.h"
+
 namespace OHOS {
 void InitRenderAndTransform(BufferInfo& gfxDstBuffer,
-                            RenderingBuffer& renderBuffer,
+                            RenderBuffer& renderBuffer,
                             const Rect& rect,
                             TransAffine& transform,
                             const Style& style,
                             const Paint& paint);
-template <class Pixfmt>
+
 void RenderSolid(const Paint& paint,
-                 RasterizerScanlineAntialias<>& rasterizer,
-                 RenderBase<Pixfmt>& renBase,
+                 RasterizerScanlineAntialias& rasterizer,
+                 RenderBase& renBase,
                  const bool& isStroke);
 
 void UICanvas::BeginPath()
@@ -139,6 +139,7 @@ UICanvas::~UICanvas()
         delete vertices_;
         vertices_ = nullptr;
     }
+    DestroyMapBufferInfo();
 }
 
 void UICanvas::Clear()
@@ -296,6 +297,20 @@ void UICanvas::StrokeRect(const Point& startPoint, int16_t height, int16_t width
     SetStartPosition(startPoint);
 }
 
+void UICanvas::ClearRect(const Point& startPoint, int16_t height, int16_t width)
+{
+    Paint paint;
+    paint.SetFillColor(this->style_->bgColor_);
+    paint.SetStyle(Paint::FILL_STYLE);
+    BeginPath();
+    MoveTo(startPoint);
+    LineTo({static_cast<int16_t>(startPoint.x + width), startPoint.y});
+    LineTo({static_cast<int16_t>(startPoint.x + width), static_cast<int16_t>(startPoint.y + height)});
+    LineTo({startPoint.x, static_cast<int16_t>(startPoint.y + height)});
+    ClosePath();
+    FillPath(paint);
+}
+
 void UICanvas::DrawCircle(const Point& center, uint16_t radius, const Paint& paint)
 {
     if (paint.GetChangeFlag()) {
@@ -429,41 +444,73 @@ void UICanvas::DrawLabel(const Point& startPoint,
         Invalidate();
     }
 }
-
-void UICanvas::DrawImage(const Point& startPoint, const char* image, const Paint& paint)
+#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+void UICanvas::DrawImage(const Point &startPoint, const char* image, const Paint& paint)
 {
     if (image == nullptr) {
         return;
     }
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
+        UIExtendImageView* imageView = new UIExtendImageView();
+        if (imageView == nullptr) {
+            GRAPHIC_LOGE("new UIImageView fail");
+            return;
+        }
+        imageView->SetCanvas(this);
+        imageView->SetPosition(startPoint.x, startPoint.y);
+        imageView->SetSrc(image);
 
-    ImageParam* imageParam = new ImageParam;
-    if (imageParam == nullptr) {
-        GRAPHIC_LOGE("new ImageParam fail");
+        DrawCmd cmd;
+        cmd.paint = paint;
+        cmd.param = imageView;
+        cmd.DeleteParam = DeleteImageView;
+        cmd.DrawGraphics = DoDrawImage;
+        drawCmdList_.PushBack(cmd);
+
+        Invalidate();
+        SetStartPosition(startPoint);
+    }
+}
+
+void UICanvas::DrawImage(const Point& startPoint, const char* image,
+                         const Paint& paint, int16_t width, int16_t height)
+{
+    if (image == nullptr) {
         return;
     }
-    imageParam->image = new Image();
-    if (imageParam->image == nullptr) {
-        delete imageParam;
-        imageParam = nullptr;
-        return;
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
+        UIExtendImageView* imageView = new UIExtendImageView();
+        if (imageView == nullptr) {
+            GRAPHIC_LOGE("new UIImageView fail");
+            return;
+        }
+        imageView->SetCanvas(this);
+        imageView->SetPosition(startPoint.x, startPoint.y);
+        imageView->SetSrc(image);
+        float scaleX = 1.0;
+        float scaleY = 1.0;
+        if (width > 0 && imageView->GetWidth() > 0) {
+            scaleX = (float)width / (float)imageView->GetWidth();
+        }
+        if (height > 0 && imageView->GetHeight() > 0) {
+            scaleY = (float)height / (float)imageView->GetHeight();
+        }
+        DrawCmd cmd;
+        cmd.paint = paint;
+        cmd.paint.Scale(scaleX, scaleY);
+        cmd.param = imageView;
+        cmd.DeleteParam = DeleteImageView;
+        cmd.DrawGraphics = DoDrawImage;
+        drawCmdList_.PushBack(cmd);
+
+        Invalidate();
+        SetStartPosition(startPoint);
     }
-
-    imageParam->image->SetSrc(image);
-    ImageHeader header = {0};
-    imageParam->image->GetHeader(header);
-    imageParam->start = startPoint;
-    imageParam->height = header.height;
-    imageParam->width = header.width;
-
-    DrawCmd cmd;
-    cmd.paint = paint;
-    cmd.param = imageParam;
-    cmd.DeleteParam = DeleteImageParam;
-    cmd.DrawGraphics = DoDrawImage;
-    drawCmdList_.PushBack(cmd);
 
     Invalidate();
+    SetStartPosition(startPoint);
 }
+#endif
 
 void UICanvas::DrawPath(const Paint& paint)
 {
@@ -479,6 +526,29 @@ void UICanvas::DrawPath(const Paint& paint)
 
     pathParam->vertices = vertices_;
     pathParam->isStroke = true;
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    if (paint.GetStyle() == Paint::PATTERN) {
+        ImageParam* imageParam = new ImageParam;
+        if (imageParam == nullptr) {
+            GRAPHIC_LOGE("new ImageParam fail");
+            return;
+        }
+        imageParam->image = new Image();
+        if (imageParam->image == nullptr) {
+            delete imageParam;
+            imageParam = nullptr;
+            return;
+        }
+
+        imageParam->image->SetSrc(paint.GetPatternImage());
+        ImageHeader header = {0};
+        imageParam->image->GetHeader(header);
+        imageParam->start = {0, 0};
+        imageParam->height = header.height;
+        imageParam->width = header.width;
+        pathParam->imageParam = imageParam;
+    }
+#endif
     DrawCmd cmd;
     cmd.paint = paint;
     cmd.param = pathParam;
@@ -502,6 +572,29 @@ void UICanvas::FillPath(const Paint& paint)
 
     pathParam->vertices = vertices_;
     pathParam->isStroke = false;
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    if (paint.GetStyle() == Paint::PATTERN) {
+        ImageParam* imageParam = new ImageParam;
+        if (imageParam == nullptr) {
+            GRAPHIC_LOGE("new ImageParam fail");
+            return;
+        }
+        imageParam->image = new Image();
+        if (imageParam->image == nullptr) {
+            delete imageParam;
+            imageParam = nullptr;
+            return;
+        }
+
+        imageParam->image->SetSrc(paint.GetPatternImage());
+        ImageHeader header = {0};
+        imageParam->image->GetHeader(header);
+        imageParam->start = {0, 0};
+        imageParam->height = header.height;
+        imageParam->width = header.width;
+        pathParam->imageParam = imageParam;
+    }
+#endif
     DrawCmd cmd;
     cmd.paint = paint;
     cmd.param = pathParam;
@@ -520,12 +613,161 @@ void UICanvas::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     ListNode<DrawCmd>* curDraw = drawCmdList_.Begin();
     Rect coords = GetOrigRect();
     Rect trunc = invalidatedArea;
-    if (trunc.Intersect(trunc, coords)) {
+    if (!trunc.Intersect(trunc, coords)) {
+        return;
+    }
+    bool haveComposite = false;
+    for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
+        if (curDraw->data_.paint.HaveComposite()) {
+            haveComposite = true;
+            break;
+        }
+    }
+
+    if (haveComposite) {
+        OnBlendDraw(gfxDstBuffer, trunc);
+    } else {
+        curDraw = drawCmdList_.Begin();
         for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
             param = curDraw->data_.param;
+#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+            if (curDraw->data_.paint.HaveShadow()) {
+                curDraw->data_.paint.SetUICanvas(this);
+            }
+#endif
             curDraw->data_.DrawGraphics(gfxDstBuffer, param, curDraw->data_.paint, rect, trunc, *style_);
         }
     }
+}
+
+void UICanvas::OnBlendDraw(BufferInfo& gfxDstBuffer, const Rect& trunc)
+{
+    Rect rect = GetOrigRect();
+    RenderBuffer renderBuffer;
+    TransAffine transform;
+    ListNode<DrawCmd>* curDrawEnd = drawCmdList_.Begin();
+    RasterizerScanlineAntialias blendRasterizer;
+    DrawCmd drawCmd;
+    int count = 0;
+    for (; curDrawEnd != drawCmdList_.End(); curDrawEnd = curDrawEnd->next_) {
+        if (curDrawEnd->data_.paint.HaveComposite()) {
+            drawCmd = curDrawEnd->data_;
+            count++;
+        }
+    }
+    if (drawCmd.param == nullptr) {
+        return;
+    }
+    PathParam* pathParamBlend = static_cast<PathParam*>(drawCmd.param);
+    ListNode<DrawCmd>* curDraw = drawCmdList_.Begin();
+    InitRenderAndTransform(gfxDstBuffer, renderBuffer, rect, transform, *style_, curDraw->data_.paint);
+    SetRasterizer(*pathParamBlend->vertices, drawCmd.paint, blendRasterizer, transform, pathParamBlend->isStroke);
+    RasterizerScanlineAntialias scanline;
+    RenderPixfmtRgbaBlend pixFormat(renderBuffer);
+    RenderBase renBase(pixFormat);
+    renBase.ResetClipping(true);
+    renBase.ClipBox(trunc.GetLeft(), trunc.GetTop(), trunc.GetRight(), trunc.GetBottom());
+    for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
+        if (curDraw->data_.paint.HaveComposite()) {
+            drawCmd = curDraw->data_;
+            count--;
+        }
+        if (count <= 0) {
+            continue;
+        }
+        RasterizerScanlineAntialias rasterizer;
+        if (curDraw->data_.param == nullptr) {
+            continue;
+        }
+        PathParam* pathParam = static_cast<PathParam*>(curDraw->data_.param);
+#if GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
+        if (curDraw->data_.paint.HaveShadow()) {
+            curDraw->data_.paint.SetUICanvas(this);
+            DoDrawShadow(gfxDstBuffer, curDraw->data_.param, curDraw->data_.paint, rect,
+                         trunc, *style_, pathParam->isStroke);
+        }
+#endif
+        InitRenderAndTransform(gfxDstBuffer, renderBuffer, rect, transform, *style_, curDraw->data_.paint);
+        rasterizer.ClipBox(0, 0, gfxDstBuffer.width, gfxDstBuffer.height);
+        SetRasterizer(*pathParam->vertices, curDraw->data_.paint, rasterizer, transform, pathParam->isStroke);
+        if (IsSoild(curDraw->data_.paint)) {
+            Rgba8T color;
+            RenderBlendSolid(curDraw->data_.paint, color, pathParam->isStroke);
+            SpanSoildColor spanSoildColor(color);
+            BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase, transform,
+                        spanSoildColor, rect, pathParamBlend->isStroke);
+        }
+
+        OnBlendDrawGradient(curDraw, drawCmd, trunc, blendRasterizer,
+                            rasterizer, renBase, transform, pathParamBlend);
+
+        OnBlendDrawPattern(curDraw, drawCmd, rect, trunc, blendRasterizer,
+                           rasterizer, renBase, transform, pathParamBlend);
+    }
+}
+
+void UICanvas::OnBlendDrawGradient(ListNode<DrawCmd>* curDraw, DrawCmd& drawCmd,
+                                   const Rect& trunc,
+                                   RasterizerScanlineAntialias& blendRasterizer,
+                                   RasterizerScanlineAntialias& rasterizer,
+                                   RenderBase& renBase,
+                                   TransAffine& transform,
+                                   PathParam* pathParamBlend)
+{
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    if (curDraw->data_.paint.GetStyle() == Paint::GRADIENT) {
+        TransAffine gradientMatrix;
+        FillInterpolator interpolatorType(gradientMatrix);
+        FillGradientLut gradientColorMode;
+        BuildGradientColor(curDraw->data_.paint, gradientColorMode);
+        if (curDraw->data_.paint.GetGradient() == Paint::Linear) {
+            float distance = 0;
+            BuildLineGradientMatrix(drawCmd.paint, gradientMatrix, transform, distance);
+            GradientLinearCalculate gradientLinearCalculate;
+            FillGradient span(interpolatorType, gradientLinearCalculate, gradientColorMode, 0, distance);
+            BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase, transform,
+                        span, trunc, pathParamBlend->isStroke);
+        }
+        if (curDraw->data_.paint.GetGradient() == Paint::Radial) {
+            Paint::RadialGradientPoint radialPoint = drawCmd.paint.GetRadialGradientPoint();
+            float startRadius = 0;
+            float endRadius = 0;
+            BuildRadialGradientMatrix(drawCmd.paint, gradientMatrix, transform, startRadius, endRadius);
+            GradientRadialCalculate gradientRadialCalculate(endRadius, radialPoint.x0 - radialPoint.x1,
+                                                            radialPoint.y0 - radialPoint.y1);
+            FillGradient span(interpolatorType, gradientRadialCalculate, gradientColorMode,
+                                    startRadius, endRadius);
+            BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase, transform,
+                        span, trunc, pathParamBlend->isStroke);
+        }
+    }
+#endif
+}
+
+void UICanvas::OnBlendDrawPattern(ListNode<DrawCmd>* curDraw, DrawCmd& drawCmd,
+                                  Rect& rect, const Rect& trunc,
+                                  RasterizerScanlineAntialias& blendRasterizer,
+                                  RasterizerScanlineAntialias& rasterizer,
+                                  RenderBase& renBase,
+                                  TransAffine& transform,
+                                  PathParam* pathParamBlend)
+{
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    if (curDraw->data_.paint.GetStyle() == Paint::PATTERN) {
+        if (curDraw->data_.param == nullptr) {
+            return;
+        }
+        PathParam* pathParam = static_cast<PathParam*>(curDraw->data_.param);
+        ImageParam* imageParam = static_cast<ImageParam*>(pathParam->imageParam);
+        if (imageParam->image == nullptr) {
+            return;
+        }
+        FillPatternRgba spanPattern(imageParam->image->GetImageInfo(),
+            curDraw->data_.paint.GetPatternRepeatMode(), rect.GetLeft(), rect.GetTop());
+        BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase, transform,
+                    spanPattern, trunc, pathParamBlend->isStroke);
+    }
+#endif
 }
 
 void UICanvas::GetAbsolutePosition(const Point& prePoint, const Rect& rect, const Style& style, Point& point)
@@ -733,7 +975,7 @@ void UICanvas::DoDrawArc(BufferInfo& gfxDstBuffer,
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
                                           CapType::CAP_NONE);
 }
-
+#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
 void UICanvas::DoDrawImage(BufferInfo& gfxDstBuffer,
                            void* param,
                            const Paint& paint,
@@ -744,22 +986,22 @@ void UICanvas::DoDrawImage(BufferInfo& gfxDstBuffer,
     if (param == nullptr) {
         return;
     }
-    ImageParam* imageParam = static_cast<ImageParam*>(param);
-
-    if (imageParam->image == nullptr) {
-        return;
-    }
-
+    UIImageView* imageView = static_cast<UIImageView*>(param);
+    Point startPos = {imageView->GetX(), imageView->GetY()};
     Point start;
-    GetAbsolutePosition(imageParam->start, rect, style, start);
-
-    Rect cordsTmp;
-    cordsTmp.SetPosition(start.x, start.y);
-    cordsTmp.SetHeight(imageParam->height);
-    cordsTmp.SetWidth(imageParam->width);
-    DrawImage::DrawCommon(gfxDstBuffer, cordsTmp, invalidatedArea,
-                          imageParam->image->GetImageInfo(), style, paint.GetOpacity());
+    GetAbsolutePosition({startPos.x, startPos.y}, rect, style, start);
+    imageView->SetPosition(start.x, start.y);
+    if (!paint.GetTransAffine().IsIdentity()) {
+        float angle = paint.GetRotateAngle();
+        imageView->Rotate(MATH_ROUND(angle),Vector2<float>(0, 0));
+        imageView->Translate(Vector3<int16_t>(paint.GetTranslateX(), paint.GetTranslateY(), 1));
+        Vector2<float> scale(static_cast<float>(paint.GetScaleX()), static_cast<float>(paint.GetScaleY()));
+        imageView->Scale(scale, Vector2<float>(0, 0));
+    }
+    imageView->OnDraw(gfxDstBuffer, invalidatedArea);
+    imageView->SetPosition(startPos.x, startPos.y);
 }
+#endif
 
 void UICanvas::DoDrawLabel(BufferInfo& gfxDstBuffer,
                            void* param,
@@ -822,14 +1064,28 @@ void UICanvas::DoFillPath(BufferInfo& gfxDstBuffer,
 
 void UICanvas::SetRasterizer(UICanvasVertices& vertices,
                              const Paint& paint,
-                             RasterizerScanlineAntialias<>& rasterizer,
+                             RasterizerScanlineAntialias& rasterizer,
                              TransAffine& transform,
                              const bool& isStroke)
 {
-    using UICanvasPath = DepictCurve<UICanvasVertices>;
-    UICanvasPath canvasPath(vertices);
+    DepictCurve canvasPath(vertices);
     if (isStroke) {
-        using StrokeLineStyle = DepictStroke<UICanvasPath>;
+#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+        if (paint.IsLineDash()) {
+            using DashStyle = DepictDash;
+            using StrokeDashStyle = DepictStroke<DashStyle>;
+            using StrokeDashTransform = DepictTransform<StrokeDashStyle>;
+            DashStyle dashStyle(canvasPath);
+            LineDashStyleCalc(dashStyle, paint);
+            StrokeDashStyle strokeDashStyle(dashStyle);
+            LineStyleCalc(strokeDashStyle, paint);
+            StrokeDashTransform strokeDashTransform(strokeDashStyle, transform);
+            rasterizer.Reset();
+            rasterizer.AddPath(strokeDashTransform);
+            return;
+        }
+#endif
+        using StrokeLineStyle = DepictStroke<DepictCurve>;
         StrokeLineStyle strokeLineStyle(canvasPath);
         LineStyleCalc(strokeLineStyle, paint);
 
@@ -837,29 +1093,140 @@ void UICanvas::SetRasterizer(UICanvasVertices& vertices,
         rasterizer.Reset();
         rasterizer.AddPath(strokeTransform);
     } else {
-        DepictTransform<UICanvasPath> pathTransform(canvasPath, transform);
+        DepictTransform<DepictCurve> pathTransform(canvasPath, transform);
         rasterizer.Reset();
         rasterizer.AddPath(pathTransform);
     }
 }
 
+void UICanvas::DoRender(BufferInfo& gfxDstBuffer,
+                        void* param,
+                        const Paint& paint,
+                        const Rect& rect,
+                        const Rect& invalidatedArea,
+                        const Style& style,
+                        const bool& isStroke)
+{
+    if (param == nullptr) {
+        return;
+    }
+#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+    if (paint.HaveShadow()) {
+        DoDrawShadow(gfxDstBuffer, param, paint, rect, invalidatedArea, style, isStroke);
+    }
+#endif
+    TransAffine transform;
+    RenderBuffer renderBuffer;
+    InitRenderAndTransform(gfxDstBuffer, renderBuffer, rect, transform, style, paint);
+
+    RasterizerScanlineAntialias rasterizer;
+    GeometryScanline scanline;
+
+    PathParam* pathParam = static_cast<PathParam*>(param);
+    rasterizer.ClipBox(0, 0, gfxDstBuffer.width, gfxDstBuffer.height);
+    SetRasterizer(*pathParam->vertices, paint, rasterizer, transform, isStroke);
+
+    RenderPixfmtRgbaBlend pixFormat(renderBuffer);
+    RenderBase renBase(pixFormat);
+    FillBase allocator;
+
+    renBase.ResetClipping(true);
+    renBase.ClipBox(invalidatedArea.GetLeft(), invalidatedArea.GetTop(), invalidatedArea.GetRight(),
+                    invalidatedArea.GetBottom());
+
+    if (paint.GetStyle() == Paint::STROKE_STYLE || paint.GetStyle() == Paint::FILL_STYLE ||
+        paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
+        RenderSolid(paint, rasterizer, renBase, isStroke);
+    }
+
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    if (paint.GetStyle() == Paint::GRADIENT) {
+        RenderGradient(paint, rasterizer, transform, renBase, renderBuffer, allocator, invalidatedArea);
+    }
+#endif
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    if (paint.GetStyle() == Paint::PATTERN) {
+        RenderPattern(paint, pathParam->imageParam, rasterizer, renBase, allocator, rect);
+    }
+#endif
+}
+
+#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+void UICanvas::DoDrawShadow(BufferInfo& gfxDstBuffer,
+                            void* param,
+                            const Paint& paint,
+                            const Rect& rect,
+                            const Rect& invalidatedArea,
+                            const Style& style,
+                            const bool& isStroke)
+{
+    if (param == nullptr) {
+        return;
+    }
+
+#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+    TransAffine transform;
+    RenderBuffer renderBuffer;
+    InitRenderAndTransform(gfxDstBuffer, renderBuffer, rect, transform, style, paint);
+
+    transform.Translate(paint.GetShadowOffsetX(), paint.GetShadowOffsetY());
+
+    RasterizerScanlineAntialias rasterizer;
+    GeometryScanline scanline;
+    PathParam* pathParam = static_cast<PathParam*>(param);
+    rasterizer.ClipBox(0, 0, gfxDstBuffer.width, gfxDstBuffer.height);
+    SetRasterizer(*pathParam->vertices, paint, rasterizer, transform, isStroke);
+    Rect bbox(rasterizer.GetMinX(), rasterizer.GetMinY(), rasterizer.GetMaxX(), rasterizer.GetMaxY());
+
+    RenderPixfmtRgbaBlend pixFormat(renderBuffer);
+    RenderBase renBase(pixFormat);
+    FillBase allocator;
+
+    renBase.ResetClipping(true);
+    renBase.ClipBox(invalidatedArea.GetLeft(), invalidatedArea.GetTop(), invalidatedArea.GetRight(),
+                    invalidatedArea.GetBottom());
+
+    Rgba8T shadowColor;
+    ChangeColor(shadowColor, paint.GetShadowColor(), paint.GetShadowColor().alpha * paint.GetGlobalAlpha());
+
+    RenderScanlinesAntiAliasSolid(rasterizer, scanline, renBase, shadowColor);
+#if GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
+    bbox.SetLeft(bbox.GetLeft() - paint.GetShadowBlur());
+    bbox.SetTop(bbox.GetTop() - paint.GetShadowBlur());
+    bbox.SetRight(bbox.GetRight() + paint.GetShadowBlur());
+    bbox.SetBottom(bbox.GetBottom() + paint.GetShadowBlur());
+    RenderBuffer shadowBuffer;
+    RenderPixfmtRgbaBlend pixf2(shadowBuffer);
+    Rect shadowRect = {int16_t(bbox.GetLeft()), int16_t(bbox.GetTop()),
+                       int16_t(bbox.GetRight()), int16_t(bbox.GetBottom())};
+    shadowRect.Intersect(shadowRect, invalidatedArea);
+    pixf2.Attach(pixFormat, shadowRect.GetLeft(), shadowRect.GetTop(),
+                 shadowRect.GetRight(), shadowRect.GetBottom());
+    uint8_t pixelByteSize = DrawUtils::GetPxSizeByColorMode(gfxDstBuffer.mode) >> 3; // 3: Shift right 3 bits
+
+    paint.GetUICanvas()->GetDrawBoxBlur().BoxBlur(pixf2, MATH_UROUND(paint.GetShadowBlur()),
+                                                  pixelByteSize, gfxDstBuffer.stride);
+
+#endif
+#endif
+}
+#endif
 /**
  * Renders monochrome polygon paths and fills
  */
-template <class Pixfmt>
 void RenderSolid(const Paint& paint,
-                 RasterizerScanlineAntialias<>& rasterizer,
-                 RenderBase<Pixfmt>& renBase,
+                 RasterizerScanlineAntialias& rasterizer,
+                 RenderBase& renBase,
                  const bool& isStroke)
 {
-    UICanvas::Scanline scanline;
-    UICanvas::Rgba8Color color;
+    GeometryScanline scanline;
+    Rgba8T color;
     UICanvas::RenderBlendSolid(paint, color, isStroke);
     RenderScanlinesAntiAliasSolid(rasterizer, scanline, renBase, color);
 }
 
 void InitRenderAndTransform(BufferInfo& gfxDstBuffer,
-                            RenderingBuffer& renderBuffer,
+                            RenderBuffer& renderBuffer,
                             const Rect& rect,
                             TransAffine& transform,
                             const Style& style,
@@ -874,43 +1241,344 @@ void InitRenderAndTransform(BufferInfo& gfxDstBuffer,
                         gfxDstBuffer.stride);
 }
 
-void UICanvas::DoRender(BufferInfo& gfxDstBuffer,
-                        void* param,
-                        const Paint& paint,
-                        const Rect& rect,
-                        const Rect& invalidatedArea,
-                        const Style& style,
-                        const bool& isStroke)
+#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+void UICanvas::StrokeText(const char* text, const Point& point, const FontStyle& fontStyle, const Paint& paint)
+{
+    if (text == nullptr) {
+        return;
+    }
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
+        TextParam* textParam = new TextParam;
+        if (textParam == nullptr) {
+            GRAPHIC_LOGE("new TextParam fail");
+            return;
+        }
+        textParam->text = text;
+        textParam->fontStyle = fontStyle;
+        textParam->fontOpa = paint.GetOpacity();
+        textParam->fontColor = paint.GetFillColor();
+        textParam->position = point;
+        DrawCmd cmd;
+        cmd.param = textParam;
+        cmd.DeleteParam = DeleteTextParam;
+        cmd.DrawGraphics = DoDrawText;
+        cmd.paint = paint;
+        cmd.paint.SetUICanvas(this);
+        drawCmdList_.PushBack(cmd);
+        Invalidate();
+        SetStartPosition(point);
+    }
+}
+#endif
+
+Point UICanvas::MeasureText(const char* text, const FontStyle& fontStyle)
+{
+    Text* textCompent = new Text;
+    textCompent->SetText(text);
+    textCompent->SetFont(fontStyle.fontName, fontStyle.fontSize);
+    textCompent->SetDirect(static_cast<UITextLanguageDirect>(fontStyle.direct));
+    textCompent->SetAlign(static_cast<UITextLanguageAlignment>(fontStyle.align));
+    Style drawStyle;
+    drawStyle.SetStyle(STYLE_LETTER_SPACE, fontStyle.letterSpace);
+    textCompent->ReMeasureTextSize(this->GetRect(), drawStyle);
+    Point textSize = textCompent->GetTextSize();
+    delete textCompent;
+    return textSize;
+}
+
+void UICanvas::BlitMapBuffer(BufferInfo &gfxDstBuffer, BufferInfo& gfxMapBuffer, Rect& textRect,
+                             TransformMap& transMap, const Rect& invalidatedArea)
+{
+    Rect invalidRect = textRect;
+    transMap.SetTransMapRect(textRect);
+    if (invalidRect.Intersect(invalidRect, transMap.GetBoxRect())) {
+        uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(gfxDstBuffer.mode);
+        ImageInfo imageInfo;
+        imageInfo.header.colorMode = gfxDstBuffer.mode;
+        imageInfo.dataSize = gfxMapBuffer.width * gfxMapBuffer.height *
+                DrawUtils::GetByteSizeByColorMode(gfxDstBuffer.mode);
+        imageInfo.header.width = gfxMapBuffer.width;
+        imageInfo.header.height = gfxMapBuffer.height;
+        imageInfo.header.reserved = 0;
+        uint8_t* addr = reinterpret_cast<uint8_t*>(gfxMapBuffer.virAddr);
+        imageInfo.data = addr;
+        TransformDataInfo imageTranDataInfo = {imageInfo.header, imageInfo.data, pxSize,
+                                               BlurLevel::LEVEL0, TransformAlgorithm::BILINEAR};
+        BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, invalidatedArea, {0, 0}, Color::Black(),
+                                                    OPA_OPAQUE, transMap, imageTranDataInfo);
+    }
+}
+
+#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+void UICanvas::DoDrawText(BufferInfo& gfxDstBuffer,
+                          void* param,
+                          const Paint& paint,
+                          const Rect& rect,
+                          const Rect& invalidatedArea,
+                          const Style& style)
+{
+    TextParam* textParam = static_cast<TextParam*>(param);
+    if (textParam == nullptr) {
+        return;
+    }
+    if (textParam->fontStyle.fontSize <= 0) {
+        return;
+    }
+    Text* text = textParam->textComment;
+    text->SetText(textParam->text);
+    text->SetFont(textParam->fontStyle.fontName, textParam->fontStyle.fontSize);
+    text->SetDirect(static_cast<UITextLanguageDirect>(textParam->fontStyle.direct));
+    text->SetAlign(static_cast<UITextLanguageAlignment>(textParam->fontStyle.align));
+
+    Point start;
+    Rect textRect = invalidatedArea;
+    GetAbsolutePosition(textParam->position, rect, style, start);
+    textRect.SetPosition(start.x, start.y);
+    Style drawStyle = style;
+    drawStyle.textColor_ = textParam->fontColor;
+    drawStyle.lineColor_ = textParam->fontColor;
+    drawStyle.bgColor_ = textParam->fontColor;
+    drawStyle.SetStyle(STYLE_LETTER_SPACE, textParam->fontStyle.letterSpace);
+    text->ReMeasureTextSize(textRect, drawStyle);
+    if (text->GetTextSize().x == 0 || text->GetTextSize().y == 0) {
+        return;
+    }
+    textRect.SetWidth(text->GetTextSize().x + 1);
+    textRect.SetHeight(text->GetTextSize().y + 1);
+    OpacityType opa = DrawUtils::GetMixOpacity(textParam->fontOpa, style.bgOpa_);
+    if (!paint.GetTransAffine().IsIdentity()) {
+        Rect textImageRect(0, 0, textRect.GetWidth(), textRect.GetHeight());
+        if (paint.GetUICanvas() == nullptr) {
+            return;
+        }
+        BufferInfo* mapBufferInfo = paint.GetUICanvas()->UpdateMapBufferInfo(gfxDstBuffer, textImageRect);
+        text->OnDraw(*mapBufferInfo, textImageRect, textImageRect, textImageRect, 0, drawStyle,
+                     Text::TEXT_ELLIPSIS_END_INV, opa);
+        TransformMap trans;
+        trans.SetTransMapRect(textRect);
+        trans.Scale(Vector2<float>(static_cast<float>(paint.GetScaleX()), static_cast<float>(paint.GetScaleY())),
+                    Vector2<float>(0, 0));
+        float angle = paint.GetRotateAngle();
+        trans.Rotate(MATH_ROUND(angle),  Vector2<float>(0, 0));
+        trans.Translate(Vector2<int16_t>(paint.GetTranslateX(), paint.GetTranslateY()));
+        BlitMapBuffer(gfxDstBuffer, *mapBufferInfo, textRect, trans, invalidatedArea);
+    } else {
+        text->OnDraw(gfxDstBuffer, invalidatedArea, textRect, textRect, 0,
+                     drawStyle, Text::TEXT_ELLIPSIS_END_INV, opa);
+    }
+}
+#endif
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+void UICanvas::RenderGradient(const Paint &paint, RasterizerScanlineAntialias &rasterizer,
+                              TransAffine &transform, RenderBase &renBase,
+                              RenderBuffer &renderBuffer, FillBase &allocator,
+                              const Rect &invalidatedArea)
+{
+    GeometryScanline scanline;
+
+    RenderPixfmtRgbaBlend pixFormatComp(renderBuffer);
+    RenderBase m_renBaseComp(pixFormatComp);
+
+    m_renBaseComp.ResetClipping(true);
+    m_renBaseComp.ClipBox(invalidatedArea.GetLeft(), invalidatedArea.GetTop(),
+                          invalidatedArea.GetRight(), invalidatedArea.GetBottom());
+    TransAffine gradientMatrix;
+    FillInterpolator interpolatorType(gradientMatrix);
+    FillGradientLut gradientColorMode;
+    BuildGradientColor(paint, gradientColorMode);
+    if (paint.GetGradient() == Paint::Linear) {
+        float distance = 0;
+        BuildLineGradientMatrix(paint, gradientMatrix, transform, distance);
+        GradientLinearCalculate gradientLinearCalculate;
+        FillGradient span(interpolatorType, gradientLinearCalculate, gradientColorMode, 0, distance);
+        RenderScanlinesAntiAlias(rasterizer, scanline, renBase, allocator, span);
+    }
+
+    if (paint.GetGradient() == Paint::Radial) {
+        Paint::RadialGradientPoint radialPoint = paint.GetRadialGradientPoint();
+        float startRadius = 0;
+        float endRadius = 0;
+        BuildRadialGradientMatrix(paint, gradientMatrix, transform, startRadius, endRadius);
+        GradientRadialCalculate gradientRadialCalculate(radialPoint.r1, radialPoint.x0 - radialPoint.x1,
+                                                        radialPoint.y0 - radialPoint.y1);
+        FillGradient span(interpolatorType, gradientRadialCalculate, gradientColorMode,
+                                startRadius, endRadius);
+        RenderScanlinesAntiAlias(rasterizer, scanline, renBase, allocator, span);
+    }
+}
+
+void UICanvas::BuildGradientColor(const Paint &paint, FillGradientLut &gradientColorMode)
+{
+    gradientColorMode.RemoveAll();
+    ListNode<Paint::StopAndColor>* iter = paint.getStopAndColor().Begin();
+    uint16_t count = 0;
+    for (; count < paint.getStopAndColor().Size(); count++) {
+        ColorType stopColor = iter->data_.color;
+        Rgba8T sRgba8;
+        ChangeColor(sRgba8, stopColor, stopColor.alpha * paint.GetGlobalAlpha());
+        gradientColorMode.AddColor(iter->data_.stop, sRgba8);
+        iter = iter->next_;
+    }
+    gradientColorMode.BuildLut();
+}
+
+void UICanvas::BuildRadialGradientMatrix(const Paint &paint, TransAffine &gradientMatrix,
+                                         TransAffine &transform, float &startRadius,
+                                         float &endRadius)
+{
+    Paint::RadialGradientPoint radialPoint = paint.GetRadialGradientPoint();
+    gradientMatrix.Reset();
+    gradientMatrix *= TransAffine::TransAffineTranslation(radialPoint.x1, radialPoint.y1);
+    gradientMatrix *= transform;
+    gradientMatrix.Invert();
+    startRadius = radialPoint.r0;
+    endRadius = radialPoint.r1;
+}
+#endif
+
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+void UICanvas::RenderPattern(const Paint &paint, void *param,
+                             RasterizerScanlineAntialias &rasterizer,
+                             RenderBase &renBase, FillBase &allocator,
+                             const Rect &rect)
 {
     if (param == nullptr) {
         return;
     }
-    TransAffine transform;
-    RenderingBuffer renderBuffer;
-    InitRenderAndTransform(gfxDstBuffer, renderBuffer, rect, transform, style, paint);
-
-    RasterizerScanlineAntialias<> rasterizer;
-    GeometryScanline m_scanline;
-
-    PathParam* pathParam = static_cast<PathParam*>(param);
-    rasterizer.ClipBox(0, 0, gfxDstBuffer.width, gfxDstBuffer.height);
-    SetRasterizer(*pathParam->vertices, paint, rasterizer, transform, isStroke);
-
-    using Blender = RgbaBlender<Rgba8Color, ComponentOrder> ;
-    using PixFormat = RenderPixfmtRgbaBlend<Blender, RenderingBuffer>;
-    using RendererBase = RenderBase<PixFormat>;
-
-    PixFormat pixFormat(renderBuffer);
-    RendererBase renBase(pixFormat);
-    SpanAllocator allocator;
-
-    renBase.ResetClipping(true);
-    renBase.ClipBox(invalidatedArea.GetLeft(), invalidatedArea.GetTop(), invalidatedArea.GetRight(),
-                    invalidatedArea.GetBottom());
-
-    if (paint.GetStyle() == Paint::STROKE_STYLE || paint.GetStyle() == Paint::FILL_STYLE ||
-        paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
-        RenderSolid(paint, rasterizer, renBase, isStroke);
+    ImageParam* imageParam = static_cast<ImageParam*>(param);
+    if (imageParam->image == nullptr) {
+        return;
     }
+    GeometryScanline scanline;
+    FillPatternRgba spanPattern(imageParam->image->GetImageInfo(),
+        paint.GetPatternRepeatMode(), rect.GetLeft(), rect.GetTop());
+    RenderScanlinesAntiAlias(rasterizer, scanline, renBase, allocator, spanPattern);
+}
+#endif
+
+void UICanvas::InitGfxMapBuffer(const BufferInfo& srcBuff, const Rect& rect)
+{
+    gfxMapBuffer_ = new BufferInfo();
+    gfxMapBuffer_->rect = rect;
+    gfxMapBuffer_->mode = srcBuff.mode;
+    gfxMapBuffer_->color = srcBuff.color;
+    gfxMapBuffer_->width = static_cast<uint16_t>(rect.GetWidth());
+    gfxMapBuffer_->height = static_cast<uint16_t>(rect.GetHeight());
+    uint8_t destByteSize = DrawUtils::GetByteSizeByColorMode(srcBuff.mode);
+    gfxMapBuffer_->stride = static_cast<int32_t>(gfxMapBuffer_->width) * static_cast<int32_t>(destByteSize);
+    uint32_t buffSize = gfxMapBuffer_->height * gfxMapBuffer_->stride;
+    gfxMapBuffer_->virAddr = UIMalloc(buffSize);
+    gfxMapBuffer_->phyAddr = gfxMapBuffer_->virAddr;
+
+    errno_t err = memset_s(gfxMapBuffer_->virAddr, buffSize, 0, buffSize);
+    if (err != EOK) {
+        BaseGfxEngine::GetInstance()->FreeBuffer((uint8_t*)gfxMapBuffer_->virAddr);
+        GRAPHIC_LOGE("memset_s gfxMapBuffer_ fail");
+        return;
+    }
+}
+
+BufferInfo* UICanvas::UpdateMapBufferInfo(const BufferInfo& srcBuff, const Rect& rect)
+{
+    if (gfxMapBuffer_ == nullptr) {
+        InitGfxMapBuffer(srcBuff, rect);
+        return gfxMapBuffer_;
+    }
+
+    if (rect.GetWidth() != gfxMapBuffer_->width ||
+        rect.GetHeight() != gfxMapBuffer_->height ||
+        srcBuff.mode != gfxMapBuffer_->mode) {
+        DestroyMapBufferInfo();
+        InitGfxMapBuffer(srcBuff, rect);
+    } else {
+        uint32_t buffSize = gfxMapBuffer_->height * gfxMapBuffer_->stride;
+        errno_t err = memset_s(gfxMapBuffer_->virAddr, buffSize, 0, buffSize);
+        if (err != EOK) {
+            BaseGfxEngine::GetInstance()->FreeBuffer((uint8_t*)gfxMapBuffer_->virAddr);
+            GRAPHIC_LOGE("memset_s gfxMapBuffer_ fail");
+        }
+    }
+    return gfxMapBuffer_;
+}
+
+void UICanvas::DestroyMapBufferInfo()
+{
+    if (gfxMapBuffer_ != nullptr) {
+        BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t*>(gfxMapBuffer_->virAddr));
+        gfxMapBuffer_->virAddr = nullptr;
+        gfxMapBuffer_->phyAddr = nullptr;
+        delete gfxMapBuffer_;
+        gfxMapBuffer_ = nullptr;
+    }
+}
+
+void UICanvas::BlendRaster(const Paint& paint,
+                           void* param,
+                           RasterizerScanlineAntialias& blendRasterizer,
+                           RasterizerScanlineAntialias& rasterizer,
+                           RenderBase& renBase,
+                           TransAffine& transform,
+                           SpanBase& spanGen,
+                           const Rect& rect,
+                           bool isStroke)
+{
+    TransAffine gradientMatrixBlend;
+    GeometryScanline scanline1;
+    GeometryScanline scanline2;
+    FillBase allocator1;
+
+    if (IsSoild(paint)) {
+        Rgba8T blendColor;
+        RenderBlendSolid(paint, blendColor, isStroke);
+        SpanSoildColor spanBlendSoildColor(blendColor);
+        BlendScanLine(paint.GetGlobalCompositeOperation(), blendRasterizer, rasterizer,
+                      scanline1, scanline2, renBase, allocator1, spanBlendSoildColor, spanGen);
+    }
+#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+    FillInterpolator interpolatorTypeBlend(gradientMatrixBlend);
+    FillGradientLut gradientColorModeBlend;
+    if (paint.GetStyle() == Paint::GRADIENT) {
+        BuildGradientColor(paint, gradientColorModeBlend);
+        if (paint.GetGradient() == Paint::Linear) {
+            float distance = 0;
+            BuildLineGradientMatrix(paint, gradientMatrixBlend, transform, distance);
+            GradientLinearCalculate gradientLinearCalculate;
+            FillGradient span(interpolatorTypeBlend, gradientLinearCalculate,
+                                    gradientColorModeBlend, 0, distance);
+            BlendScanLine(paint.GetGlobalCompositeOperation(), blendRasterizer, rasterizer,
+                          scanline1, scanline2, renBase, allocator1, span, spanGen);
+        } else if (paint.GetGradient() == Paint::Radial) {
+            Paint::RadialGradientPoint radialPoint = paint.GetRadialGradientPoint();
+            float startRadius = 0;
+            float endRadius = 0;
+            BuildRadialGradientMatrix(paint, gradientMatrixBlend, transform, startRadius, endRadius);
+            GradientRadialCalculate gradientRadialCalculate(endRadius, radialPoint.x0 - radialPoint.x1,
+                                                            radialPoint.y0 - radialPoint.y1);
+            FillGradient span(interpolatorTypeBlend, gradientRadialCalculate, gradientColorModeBlend,
+                                    startRadius, endRadius);
+            BlendScanLine(paint.GetGlobalCompositeOperation(), blendRasterizer, rasterizer,
+                          scanline1, scanline2, renBase, allocator1, span, spanGen);
+        }
+    }
+#endif
+#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+    if (paint.GetStyle() == Paint::PATTERN) {
+        if (param == nullptr) {
+            return;
+        }
+
+        PathParam* pathParam = static_cast<PathParam*>(param);
+
+        ImageParam* imageParam = static_cast<ImageParam*>(pathParam->imageParam);
+
+        if (imageParam->image == nullptr) {
+            return;
+        }
+        FillPatternRgba spanPattern(imageParam->image->GetImageInfo(),
+            paint.GetPatternRepeatMode(), rect.GetLeft(), rect.GetTop());
+        BlendScanLine(paint.GetGlobalCompositeOperation(), blendRasterizer, rasterizer,
+                      scanline1, scanline2, renBase, allocator1, spanPattern, spanGen);
+    }
+#endif
 }
 } // namespace OHOS

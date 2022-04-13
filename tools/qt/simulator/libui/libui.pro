@@ -42,6 +42,10 @@ DEFINES += QT_COMPILER
 DESTDIR = ../libs
 
 SOURCES += \
+    ../../../../../utils/frameworks/diagram/depiction/depict_curve.cpp \
+    ../../../../../utils/frameworks/diagram/rasterizer/rasterizer_cells_antialias.cpp \
+    ../../../../../utils/frameworks/diagram/rasterizer/rasterizer_scanline_antialias.cpp \
+    ../../../../../utils/frameworks/diagram/rasterizer/rasterizer_scanline_clip.cpp \
     ../../../../../utils/frameworks/graphic_timer.cpp \
     ../../../../../utils/frameworks/trans_affine.cpp \
     ../../../../../utils/frameworks/diagram/vertexgenerate/vertex_generate_dash.cpp \
@@ -49,6 +53,7 @@ SOURCES += \
     ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_arc.cpp \
     ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_bezier_arc.cpp \
     ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_curves.cpp \
+    ../../../../../utils/frameworks/diagram/vertexprimitive/geometry_shorten_path.cpp \
     ../../../../frameworks/animator/animator.cpp \
     ../../../../frameworks/animator/animator_manager.cpp \
     ../../../../frameworks/animator/easing_equation.cpp \
@@ -97,6 +102,7 @@ SOURCES += \
     ../../../../frameworks/components/ui_toggle_button.cpp \
     ../../../../frameworks/components/ui_view.cpp \
     ../../../../frameworks/components/ui_view_group.cpp \
+    ../../../../frameworks/components/ui_extend_image_view.cpp \
     ../../../../frameworks/dock/focus_manager.cpp \
     ../../../../frameworks/core/render_manager.cpp \
     ../../../../frameworks/core/task_manager.cpp \
@@ -143,6 +149,8 @@ SOURCES += \
     ../../../../frameworks/layout/flex_layout.cpp \
     ../../../../frameworks/layout/grid_layout.cpp \
     ../../../../frameworks/layout/list_layout.cpp \
+    ../../../../frameworks/render/render_base.cpp \
+    ../../../../frameworks/render/render_pixfmt_rgba_blend.cpp \
     ../../../../frameworks/themes/theme.cpp \
     ../../../../frameworks/themes/theme_manager.cpp \
     ../../../../../utils/frameworks/color.cpp \
@@ -157,6 +165,7 @@ SOURCES += \
     ../../../../../utils/frameworks/version.cpp \
     ../../../../../../../third_party/bounds_checking_function/src/memset_s.c \
     ../../../../../../../third_party/cJSON/cJSON.c \
+    ../../../../frameworks/render/render_scanline.cpp \
 
 HEADERS += \
     ../../../../../utils/interfaces/innerkits/graphic_neon_pipeline.h \
@@ -165,8 +174,6 @@ HEADERS += \
     ../../../../../utils/interfaces/kits/gfx_utils/color.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_basics.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_clip_operate.h \
-    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_gamma_functions.h \
-    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_gamma_lut.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_math.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_adaptor_vertex_generate.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_curve.h \
@@ -181,10 +188,8 @@ HEADERS += \
      ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_base.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_gradient.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_gradient_lut.h \
-    ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_image_rgba.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_interpolator.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/spancolorfill/fill_pattern_rgba.h \
-    ../../../../../utils/interfaces/kits/gfx_utils/diagram/imageaccessor/image_accessors.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertex_generate/vertex_generate_dash.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertex_generate/vertex_generate_stroke.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_arc.h \
@@ -196,8 +201,6 @@ HEADERS += \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_math_stroke.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_path_storage.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_plaindata_array.h \
-    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_plaindata_blockvector.h \
-    ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_plaindata_vector.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_range_adapter.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_shorten_path.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/vertexprimitive/geometry_vertex_sequence.h \
@@ -226,10 +229,7 @@ HEADERS += \
     ../../../../frameworks/imgdecode/image_load.h \
     ../../../../frameworks/render/render_base.h \
     ../../../../frameworks/render/render_buffer.h \
-    ../../../../frameworks/render/render_pixfmt_base.h \
     ../../../../frameworks/render/render_pixfmt_rgba_blend.h \
-    ../../../../frameworks/render/render_pixfmt_rgba_gamma.h \
-    ../../../../frameworks/render/render_pixfmt_transposer.h \
     ../../../../frameworks/render/render_scanline.h \
     ../../../../interfaces/innerkits/common/graphic_startup.h \
     ../../../../interfaces/innerkits/common/image_decode_ability.h \
@@ -281,6 +281,7 @@ HEADERS += \
     ../../../../interfaces/kits/components/ui_toggle_button.h \
     ../../../../interfaces/kits/components/ui_view.h \
     ../../../../interfaces/kits/components/ui_view_group.h \
+    ../../../../interfaces/kits/components/ui_extend_image_view.h \
     ../../../../interfaces/kits/dfx/event_injector.h \
     ../../../../interfaces/kits/dfx/ui_dump_dom_tree.h \
     ../../../../interfaces/kits/events/aod_callback.h \
