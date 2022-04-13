@@ -322,7 +322,7 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
 
     uint16_t loopNum = 0;
     GlyphNode glyphNode;
-    GlyphNode emoijMaxNode;
+    GlyphNode emoijMaxNode = {};
     uint8_t maxFontSie = fontSize;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
