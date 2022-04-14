@@ -314,7 +314,7 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
     Rect srcRect(posX, posY, posX + letterW - 1, posY + letterH - 1);
     Rect subRect(posX + colStart, posY + rowStart, colEnd - 1 + posX, rowEnd - 1 + posY);
 
-    uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(gfxDstBuffer.mode);
+    uint8_t pxSize = DrawUtils::GetPxSizeByColorMode(ARGB8888);
     DrawImage(gfxDstBuffer, srcRect, letterInfo.mask, fontMap, letterInfo.opa, pxSize, ARGB8888);
 }
 
