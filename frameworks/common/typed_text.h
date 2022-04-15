@@ -85,11 +85,11 @@ public:
     static uint32_t GetUTF8CharacterSize(const char* text, uint32_t byteIndex = UINT32_MAX);
     static void Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t len);
     static uint32_t GetUtf16Cnt(const char* utf8Str);
-#if ENABLE_VECTOR_FONT
+
     static bool IsEmoji(uint32_t codePoint);
     static bool IsEmojiModifier(uint32_t codePoint);
     static bool IsEmojiBase(uint32_t codePoint);
-#endif
+
     static bool IsColourWord(uint32_t codePoint);
 
 private:
