@@ -410,7 +410,6 @@ uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
     return len;
 }
 
-#if ENABLE_VECTOR_FONT
 bool TypedText::IsEmoji(uint32_t codePoint)
 {
     // Miscellaneous symbols and symbol fonts
@@ -455,14 +454,9 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
         return false;
     }
 }
-#endif
 
 bool TypedText::IsColourWord(uint32_t codePoint)
 {
-#if ENABLE_VECTOR_FONT
-    return IsEmoji(codePoint) || IsEmojiModifier(codePoint) || IsEmojiBase(codePoint);
-#else
-    return codePoint >= 0xF000 && codePoint <= 0xF8FF;
-#endif
+    return (codePoint >= 0xF000) && (codePoint <= 0xF8FF) || IsEmoji(codePoint) || IsEmojiModifier(codePoint) || IsEmojiBase(codePoint);
 }
 } // namespace OHOS
