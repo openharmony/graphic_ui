@@ -64,9 +64,9 @@ int16_t EasingEquation::CircEaseIn(int16_t startPos, int16_t endPos, uint16_t cu
 {
     if (curTime < durationTime) {
         int32_t t = (curTime << INTERPOLATION_RANGE_OFFSET) / durationTime;
-        uint32_t x = INTERPOLATION_RANGE - Sqrt(INTERPOLATION_RANGE_SQUARE - t * t);
+        uint32_t x = INTERPOLATION_RANGE - static_cast<int32_t>(Sqrt(INTERPOLATION_RANGE_SQUARE - t * t));
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -79,7 +79,7 @@ int16_t EasingEquation::CircEaseOut(int16_t startPos, int16_t endPos, uint16_t c
         int32_t t = INTERPOLATION_RANGE - (curTime << INTERPOLATION_RANGE_OFFSET) / durationTime;
         uint32_t x = static_cast<uint32_t>(Sqrt(INTERPOLATION_RANGE_SQUARE - t * t));
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -102,7 +102,7 @@ int16_t EasingEquation::CubicEaseIn(int16_t startPos, int16_t endPos, uint16_t c
         int32_t t = (curTime << INTERPOLATION_RANGE_OFFSET) / durationTime;
         int16_t x = (t * t * t) >> (INTERPOLATION_RANGE_OFFSET << 1);
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -116,7 +116,7 @@ int16_t EasingEquation::CubicEaseOut(int16_t startPos, int16_t endPos, uint16_t 
         t = INTERPOLATION_RANGE - t;
         int16_t x = INTERPOLATION_RANGE - ((t * t * t) >> (INTERPOLATION_RANGE_OFFSET << 1));
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -137,7 +137,7 @@ int16_t EasingEquation::LinearEaseNone(int16_t startPos, int16_t endPos, uint16_
     if (curTime < durationTime) {
         int32_t t = (curTime << INTERPOLATION_RANGE_OFFSET) / durationTime;
         return static_cast<int16_t>(((t * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -150,7 +150,7 @@ int16_t EasingEquation::QuadEaseIn(int16_t startPos, int16_t endPos, uint16_t cu
         int32_t t = (curTime << INTERPOLATION_RANGE_OFFSET) / durationTime;
         int16_t x = (t * t) >> INTERPOLATION_RANGE_OFFSET;
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -163,7 +163,7 @@ int16_t EasingEquation::QuadEaseOut(int16_t startPos, int16_t endPos, uint16_t c
         int32_t t = INTERPOLATION_RANGE - (curTime << INTERPOLATION_RANGE_OFFSET) / durationTime;
         int16_t x = INTERPOLATION_RANGE - ((t * t) >> INTERPOLATION_RANGE_OFFSET);
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -188,7 +188,7 @@ int16_t EasingEquation::QuintEaseIn(int16_t startPos, int16_t endPos, uint16_t c
         /* 4: the fourth power of t */
         int16_t x = (t * t * t * t * t) >> (INTERPOLATION_RANGE_OFFSET * 4);
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -204,7 +204,7 @@ int16_t EasingEquation::QuintEaseOut(int16_t startPos, int16_t endPos, uint16_t 
         /* 4: the fourth power of t */
         int16_t x = INTERPOLATION_RANGE - ((t * t * t * t * t) >> (INTERPOLATION_RANGE_OFFSET * 4));
         return static_cast<int16_t>(((x * (static_cast<int32_t>(endPos) - startPos)) >> INTERPOLATION_RANGE_OFFSET) +
-            startPos);
+                                    startPos);
     }
 
     return endPos;
@@ -251,4 +251,4 @@ int16_t EasingEquation::SineEaseInOut(int16_t startPos, int16_t endPos, uint16_t
     }
     return SineEaseOut(halfStep, endPos, curTime - halfTime, halfTime);
 }
-}
+} // namespace OHOS
