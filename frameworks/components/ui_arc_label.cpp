@@ -197,7 +197,8 @@ void UIArcLabel::MeasureArcTextInfo()
     float maxLength = static_cast<float>((UI_PI * radius_ * arcAngle) / SEMICIRCLE_IN_DEGREE);
     arcTextInfo_.lineStart = 0;
     arcTextInfo_.lineEnd = TypedText::GetNextLine(&text[arcTextInfo_.lineStart], arcLabelText_->GetFontId(),
-                                                  arcLabelText_->GetFontSize(), style_->letterSpace_, maxLength);
+                                                  arcLabelText_->GetFontSize(), style_->letterSpace_,
+                                                  static_cast<int16_t>(maxLength));
     arcTextInfo_.startAngle = startAngle_ % CIRCLE_IN_DEGREE;
     int16_t actLength =
         TypedText::GetTextWidth(&text[arcTextInfo_.lineStart], arcLabelText_->GetFontId(), arcLabelText_->GetFontSize(),
