@@ -160,9 +160,9 @@ bool EventInjector::SetClickEvent(const Point& clickPoint)
     dataArray[1].point = clickPoint;
     dataArray[1].state = InputDevice::STATE_RELEASE;
     if (!SetInjectEvent(dataArray, clickArrayLen, EventDataType::POINT_TYPE)) {
-        setResult =  false;
+        setResult = false;
     }
-    delete [] dataArray;
+    delete[] dataArray;
     return setResult;
 }
 
@@ -184,9 +184,9 @@ bool EventInjector::SetLongPressEvent(const Point& longPressPoint)
     }
     dataArray[pointCount - 1].state = InputDevice::STATE_RELEASE;
     if (!SetInjectEvent(dataArray, pointCount, EventDataType::POINT_TYPE)) {
-        setResult =  false;
+        setResult = false;
     }
-    delete [] dataArray;
+    delete[] dataArray;
     return setResult;
 }
 
@@ -203,7 +203,7 @@ bool EventInjector::SetDragEvent(const Point& startPoint, const Point& endPoint,
         return false;
     }
     bool setResult = true;
-    int16_t negativeFlag = 1;         /* 1:represent the coordinate (x, y) of endPoint is larger than startPoint. */
+    int16_t negativeFlag = 1; /* 1:represent the coordinate (x, y) of endPoint is larger than startPoint. */
     DeviceData* dataArray = new DeviceData[pointCount];
     if (dataArray == nullptr) {
         return false;
@@ -211,32 +211,32 @@ bool EventInjector::SetDragEvent(const Point& startPoint, const Point& endPoint,
     if (startPoint.x == endPoint.x) {
         float pointStep = static_cast<float>(MATH_ABS(endPoint.y - startPoint.y)) / (pointCount - 1);
         if (endPoint.y < startPoint.y) {
-            negativeFlag = -1;  /* -1:represent the coordinate y of endPoint is smaller than startPoint. */
+            negativeFlag = -1; /* -1:represent the coordinate y of endPoint is smaller than startPoint. */
         }
         for (uint16_t i = 0; i < pointCount; i++) {
             dataArray[i].point.x = startPoint.x;
-            dataArray[i].point.y = startPoint.y + (i * negativeFlag * pointStep);
+            dataArray[i].point.y = startPoint.y + static_cast<int16_t>(i * negativeFlag * pointStep);
             dataArray[i].state = InputDevice::STATE_PRESS;
         }
     } else {
         float slope = static_cast<float>(endPoint.y - startPoint.y) / (endPoint.x - startPoint.x);
-        int16_t constPara = startPoint.y - (slope * startPoint.x);
+        int16_t constPara = startPoint.y - static_cast<int16_t>(slope * startPoint.x);
         float pointStep = static_cast<float>(MATH_ABS(endPoint.x - startPoint.x)) / (pointCount - 1);
         if (endPoint.x < startPoint.x) {
-            negativeFlag = -1;  /* -1:represent the coordinate x of endPoint is smaller than startPoint. */
+            negativeFlag = -1; /* -1:represent the coordinate x of endPoint is smaller than startPoint. */
         }
         for (uint16_t i = 0; i < pointCount; i++) {
-            dataArray[i].point.x = startPoint.x + (i * negativeFlag * pointStep);
-            dataArray[i].point.y = slope * (dataArray[i].point.x) + constPara;
+            dataArray[i].point.x = startPoint.x + static_cast<int16_t>(i * negativeFlag * pointStep);
+            dataArray[i].point.y = static_cast<int16_t>(slope * (dataArray[i].point.x)) + constPara;
             dataArray[i].state = InputDevice::STATE_PRESS;
         }
     }
     dataArray[pointCount - 1].point = endPoint;
     dataArray[pointCount - 1].state = InputDevice::STATE_RELEASE;
     if (!SetInjectEvent(dataArray, pointCount, EventDataType::POINT_TYPE)) {
-        setResult =  false;
+        setResult = false;
     }
-    delete [] dataArray;
+    delete[] dataArray;
     return setResult;
 }
 
@@ -257,9 +257,9 @@ bool EventInjector::SetKeyEvent(uint16_t keyId, uint16_t state)
         dataArray[i].state = state;
     }
     if (!SetInjectEvent(dataArray, kevArrayLen, EventDataType::KEY_TYPE)) {
-        setResult =  false;
+        setResult = false;
     }
-    delete [] dataArray;
+    delete[] dataArray;
     return setResult;
 }
 
@@ -271,5 +271,5 @@ void EventInjector::SetWindowId(uint8_t windowId)
     }
 }
 #endif
-}
+} // namespace OHOS
 #endif // ENABLE_DEBUG

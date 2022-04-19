@@ -357,22 +357,20 @@ bool UIList::MoveOffset(int16_t x, int16_t y)
     if (!isLoopList_ && scrollListener_) {
         if (direction_ == VERTICAL) {
             if (childrenHead_ && (childrenHead_->GetViewIndex() == 0) &&
-                childrenHead_->GetRelativeRect().GetTop() >= 0 &&
-                childrenHead_->GetRelativeRect().GetTop() - y < 0) {
+                childrenHead_->GetRelativeRect().GetTop() >= 0 && childrenHead_->GetRelativeRect().GetTop() - y < 0) {
                 scrollListener_->OnScrollTop(childrenHead_->GetViewIndex(), childrenHead_);
             }
-            if (childrenTail_ && (childrenTail_->GetViewIndex() == recycle_.GetAdapterItemCount()-1) &&
+            if (childrenTail_ && (childrenTail_->GetViewIndex() == recycle_.GetAdapterItemCount() - 1) &&
                 (childrenTail_->GetRelativeRect().GetBottom() <= GetContentRect().GetHeight() - 1) &&
                 (childrenTail_->GetRelativeRect().GetBottom() - y > GetContentRect().GetHeight() - 1)) {
-                    scrollListener_->OnScrollBottom(childrenTail_->GetViewIndex(), childrenTail_);
+                scrollListener_->OnScrollBottom(childrenTail_->GetViewIndex(), childrenTail_);
             }
         } else {
             if (childrenHead_ && (childrenHead_->GetViewIndex() == 0) &&
-                childrenHead_->GetRelativeRect().GetLeft() >= 0 &&
-                childrenHead_->GetRelativeRect().GetLeft() - x < 0) {
+                childrenHead_->GetRelativeRect().GetLeft() >= 0 && childrenHead_->GetRelativeRect().GetLeft() - x < 0) {
                 scrollListener_->OnScrollTop(childrenHead_->GetViewIndex(), childrenHead_);
             }
-            if (childrenTail_ && (childrenTail_->GetViewIndex() == recycle_.GetAdapterItemCount()-1) &&
+            if (childrenTail_ && (childrenTail_->GetViewIndex() == recycle_.GetAdapterItemCount() - 1) &&
                 (childrenTail_->GetRelativeRect().GetRight() <= GetContentRect().GetWidth() - 1) &&
                 (childrenTail_->GetRelativeRect().GetRight() - x > GetContentRect().GetWidth() - 1)) {
                 scrollListener_->OnScrollBottom(childrenTail_->GetViewIndex(), childrenTail_);
