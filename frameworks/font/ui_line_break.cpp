@@ -201,7 +201,7 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, int32_t& state)
         utf16 = (unicode & TypedText::MAX_UINT16_LOW_SCOPE);
     } else if (unicode <= TypedText::MAX_UINT16_HIGH_SCOPE) {
         utf16 = static_cast<uint16_t>(TypedText::UTF16_LOW_PARAM + (unicode & TypedText::UTF16_LOW_MASK)); // low
-        uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), utf16);
+        uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), static_cast<uint32_t>(utf16));
         // 0x4000: remove the dictionary flag bit
         if ((category & 0x4000) != 0) {
             // 0x4000: remove the dictionary flag bit
@@ -212,7 +212,7 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, int32_t& state)
         utf16 = static_cast<uint16_t>(TypedText::UTF16_HIGH_PARAM1 +
             (unicode >> TypedText::UTF16_HIGH_SHIFT) - TypedText::UTF16_HIGH_PARAM2); // high
     }
-    uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), utf16);
+    uint16_t category = UTRIE2_GET16(reinterpret_cast<UTrie2*>(lineBreakTrie_), static_cast<uint32_t>(utf16));
     // 0x4000: remove the dictionary flag bit
     if ((category & 0x4000) != 0) {
         // 0x4000: remove the dictionary flag bit

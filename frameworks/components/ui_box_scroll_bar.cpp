@@ -41,21 +41,21 @@ void UIBoxScrollBar::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
 
     /* Draw foreground */
     if (backgroundRect_.GetWidth() < backgroundRect_.GetHeight()) {
-        int16_t forgroundHeight = foregroundProportion_ * backgroundRect_.GetHeight();
+        int16_t forgroundHeight = static_cast<int16_t>(foregroundProportion_ * backgroundRect_.GetHeight());
         if (forgroundHeight < SCROLL_BAR_MIN_LEN) {
             forgroundHeight = SCROLL_BAR_MIN_LEN;
         }
-        int16_t forgroundTop =
-            backgroundRect_.GetTop() + scrollProgress_ * (backgroundRect_.GetHeight() - forgroundHeight);
+        int16_t forgroundTop = backgroundRect_.GetTop() +
+                               static_cast<int16_t>(scrollProgress_ * (backgroundRect_.GetHeight() - forgroundHeight));
         rect.SetRect(backgroundRect_.GetLeft(), forgroundTop, backgroundRect_.GetRight(),
                      forgroundTop + forgroundHeight - 1);
     } else {
-        int16_t forgroundWidth = foregroundProportion_ * backgroundRect_.GetWidth();
+        int16_t forgroundWidth = static_cast<int16_t>(foregroundProportion_ * backgroundRect_.GetWidth());
         if (forgroundWidth < SCROLL_BAR_MIN_LEN) {
             forgroundWidth = SCROLL_BAR_MIN_LEN;
         }
-        int16_t forgroundLeft =
-            backgroundRect_.GetLeft() + scrollProgress_ * (backgroundRect_.GetWidth() - forgroundWidth);
+        int16_t forgroundLeft = backgroundRect_.GetLeft() +
+                                static_cast<int16_t>(scrollProgress_ * (backgroundRect_.GetWidth() - forgroundWidth));
         rect.SetRect(forgroundLeft, backgroundRect_.GetTop(), forgroundLeft + forgroundWidth - 1,
                      backgroundRect_.GetBottom());
     }
