@@ -57,6 +57,7 @@ namespace OHOS {
 #define PNG_16_GRAY_IMAGE_PATH (IMAGE_DIR "png_16_gray.png")
 #define PNG_24_RGB_IMAGE_PATH (IMAGE_DIR "png_24_rgb.png")
 #define PNG_32_RGB_ALPHA_IMAGE_PATH (IMAGE_DIR "png_32_rgba.png")
+#define GIF_IMAGE_PATH (IMAGE_DIR "gifImage.gif")
 #if (ENABLE_GIF == 1)
 #define GIF_IMAGE_PATH1 (IMAGE_DIR "gif_image1.gif")
 #define GIF_IMAGE_PATH2 (IMAGE_DIR "gif_image2.gif")

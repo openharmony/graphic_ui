@@ -135,7 +135,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetSrc(const char* src);
+    virtual void SetSrc(const char* src);
 
     /**
      * @brief Sets the image information.
@@ -144,7 +144,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetSrc(const ImageInfo* src);
+    virtual void SetSrc(const ImageInfo* src);
 
     /**
      * @brief Sets whether the image view size needs to be adaptive to the image size.
@@ -271,7 +271,12 @@ public:
     void SetResizeMode(ImageResizeMode mode);
     void SetWidth(int16_t width) override;
     void SetHeight(int16_t height) override;
-
+#if (ENABLE_GIF == 1)
+    Animator* GetGifImageAnimator() const
+    {
+        return gifImageAnimator_;
+    }
+#endif
 protected:
     /**
      * @brief Represents the width of this image.
