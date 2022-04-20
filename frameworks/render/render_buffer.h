@@ -31,10 +31,8 @@ namespace OHOS {
 /**
  * Row accessor.
  */
-template <class T>
 class RenderBuffer {
 public:
-    using RowData = ConstRowInfo<T>;
     RenderBuffer() : renBuf_(0), start_(0), width_(0), height_(0), bufStride_(0) {}
 
     /**
@@ -44,7 +42,7 @@ public:
      * @param areaHeight The height of the pixel area in the buffer.
      * @param stride Buffer stride.
      */
-    RenderBuffer(T* renBuf, uint32_t areaWidth, uint32_t areaHeight, int32_t stride)
+    RenderBuffer(uint8_t* renBuf, uint32_t areaWidth, uint32_t areaHeight, int32_t stride)
         : renBuf_(0),
           start_(0),
           width_(0),
@@ -61,7 +59,7 @@ public:
      * @param areaHeightThe height of the pixel area in the buffer.
      * @param stride Buffer stride.
      */
-    void Attach(T* renBuf, uint32_t areaWidth, uint32_t areaHeight, int32_t stride)
+    void Attach(uint8_t* renBuf, uint32_t areaWidth, uint32_t areaHeight, int32_t stride)
     {
         renBuf_ = renBuf;
         start_ = renBuf;
@@ -76,7 +74,7 @@ public:
     /**
      * @brief GetBuf Gets a pointer to the render buffer.
      */
-    const T* GetBuf() const
+    const uint8_t* GetBuf() const
     {
         return renBuf_;
     }
@@ -105,7 +103,7 @@ public:
     /**
      * @brief GetRowPtr Returns a pointer to the beginning of line y.
      */
-    T* GetRowPtr(int32_t y)
+    uint8_t* GetRowPtr(int32_t y)
     {
         return start_ + y * bufStride_;
     }
@@ -113,7 +111,7 @@ public:
     /**
      * @brief GetRowPtr Returns a pointer to the beginning of line y。
      */
-    const T* GetRowPtr(int32_t y) const
+    const uint8_t* GetRowPtr(int32_t y) const
     {
         return start_ + y * bufStride_;
     }
@@ -127,12 +125,11 @@ public:
     }
 
 private:
-    T* renBuf_;       // Pointer to render buffer.
-    T* start_;        // Point to the first pixel according to the stride.
+    uint8_t* renBuf_;       // Pointer to render buffer.
+    uint8_t* start_;        // Point to the first pixel according to the stride.
     uint32_t width_;  // Area width.
     uint32_t height_; // Area height.
     int32_t bufStride_;   // Number of bytes per line.
 };
-using RenderingBuffer = RenderBuffer<uint8_t>;
 } // namespace OHOS
 #endif

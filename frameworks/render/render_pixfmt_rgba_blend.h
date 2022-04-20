@@ -16,16 +16,11 @@
 #ifndef GRAPHIC_LITE_RENDER_PIXFMT_RGBA_BLEND_H
 #define GRAPHIC_LITE_RENDER_PIXFMT_RGBA_BLEND_H
 
-#include <cmath>
-#include <cstring>
-
+#include "draw/draw_utils.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "gfx_utils/heap_base.h"
 #include "gfx_utils/graphic_log.h"
-#include "render_pixfmt_rgba_gamma.h"
 #include "render/render_buffer.h"
-#include "render/render_pixfmt_base.h"
-#include "draw/draw_utils.h"
 
 #ifdef ARM_NEON_OPT
 #include "graphic_neon_pipeline.h"
@@ -33,13 +28,8 @@
 namespace OHOS {
 const uint8_t NUM_COMPONENTS = 4;
 const uint8_t PIX_STEP = 4;
-const uint8_t PIX_WIDTH = sizeof(uint8_t) * PIX_STEP;
 
-template <class ColorT, class Order>
 struct RgbaBlender {
-    using ColorType = ColorT;
-    using OrderType = Order;
-
 #ifdef ARM_NEON_OPT
     /**
      * @brief Mix the pixels with the color component.
@@ -96,7 +86,7 @@ struct RgbaBlender {
     static inline void BlendPix(
         uint8_t* color, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha, uint8_t cover)
     {
-        BlendPix(color, red, green, blue, ColorType::MultCover(alpha, cover));
+        BlendPix(color, red, green, blue, Rgba8T::MultCover(alpha, cover));
     }
 
     /**
@@ -108,14 +98,13 @@ struct RgbaBlender {
     static inline void BlendPix(
         uint8_t* color, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     {
-        color[Order::RED] = ColorType::Lerp(color[Order::RED], red, alpha);
-        color[Order::GREEN] = ColorType::Lerp(color[Order::GREEN], green, alpha);
-        color[Order::BLUE] = ColorType::Lerp(color[Order::BLUE], blue, alpha);
-        color[Order::ALPHA] = ColorType::Prelerp(color[Order::ALPHA], alpha, alpha);
+        color[OrderBgra::RED] = Rgba8T::Lerp(color[OrderBgra::RED], red, alpha);
+        color[OrderBgra::GREEN] = Rgba8T::Lerp(color[OrderBgra::GREEN], green, alpha);
+        color[OrderBgra::BLUE] = Rgba8T::Lerp(color[OrderBgra::BLUE], blue, alpha);
+        color[OrderBgra::ALPHA] = Rgba8T::Prelerp(color[OrderBgra::ALPHA], alpha, alpha);
     }
 };
 
-template <class uint8_t, class OrderType, class ColorType>
 struct PixelColorType {
     uint8_t colors[NUM_COMPONENTS];
 
@@ -125,12 +114,12 @@ struct PixelColorType {
      * @since 1.0
      * @version 1.0
      */
-    void SetPixelColor(uint8_t redValue, uint8_t greenValue, uint8_t blueValue, uint8_t alphaValue)
+    void SetPixelColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     {
-        colors[OrderType::RED] = redValue;
-        colors[OrderType::GREEN] = greenValue;
-        colors[OrderType::BLUE] = blueValue;
-        colors[OrderType::ALPHA] = alphaValue;
+        colors[OrderBgra::RED] = red;
+        colors[OrderBgra::GREEN] = green;
+        colors[OrderBgra::BLUE] = blue;
+        colors[OrderBgra::ALPHA] = alpha;
     }
 
     /**
@@ -139,9 +128,9 @@ struct PixelColorType {
      * @since 1.0
      * @version 1.0
      */
-    void SetPixelColor(const ColorType& color)
+    void SetPixelColor(const Rgba8T& color)
     {
-        SetPixelColor(color.redValue, color.greenValue, color.blueValue, color.alphaValue);
+        SetPixelColor(color.red, color.green, color.blue, color.alpha);
     }
 
     /**
@@ -152,10 +141,10 @@ struct PixelColorType {
      */
     void GetPixelColor(uint8_t& red, uint8_t& green, uint8_t& blue, uint8_t& alpha) const
     {
-        red = colors[OrderType::RED];
-        green = colors[OrderType::GREEN];
-        blue = colors[OrderType::BLUE];
-        alpha = colors[OrderType::ALPHA];
+        red = colors[OrderBgra::RED];
+        green = colors[OrderBgra::GREEN];
+        blue = colors[OrderBgra::BLUE];
+        alpha = colors[OrderBgra::ALPHA];
     }
 
     /**
@@ -164,10 +153,10 @@ struct PixelColorType {
      * @since 1.0
      * @version 1.0
      */
-    ColorType GetPixelColor() const
+    Rgba8T GetPixelColor() const
     {
-        return ColorType(colors[OrderType::RED], colors[OrderType::GREEN],
-                         colors[OrderType::BLUE], colors[OrderType::ALPHA]);
+        return Rgba8T(colors[OrderBgra::RED], colors[OrderBgra::GREEN],
+                      colors[OrderBgra::BLUE], colors[OrderBgra::ALPHA]);
     }
 
     /**
@@ -189,7 +178,7 @@ struct PixelColorType {
     */
     const PixelColorType* Next() const
     {
-        return static_cast<const PixelColorType*>(colors + PIX_STEP);
+        return reinterpret_cast<const PixelColorType*>(colors + PIX_STEP);
     }
 
     /**
@@ -200,7 +189,7 @@ struct PixelColorType {
     */
     PixelColorType* Advance(int32_t pixelIndex)
     {
-        return static_cast<PixelColorType*>(colors + pixelIndex * PIX_STEP);
+        return reinterpret_cast<PixelColorType*>(colors + pixelIndex * PIX_STEP);
     }
 
     /**
@@ -211,22 +200,15 @@ struct PixelColorType {
     */
     const PixelColorType* Advance(int32_t pixelIndex) const
     {
-        return static_cast<const PixelColorType*>(colors + pixelIndex * PIX_STEP);
+        return reinterpret_cast<const PixelColorType*>(colors + pixelIndex * PIX_STEP);
     }
 };
 
-template <class Blender, class RenBuf>
 class RenderPixfmtRgbaBlend : public HeapBase {
 public:
-    using RbufType = RenBuf;
-    using RowData = typename RbufType::RowData;
-    using BlenderType = Blender;
-    using ColorType = typename BlenderType::ColorType;
-    using OrderType = typename BlenderType::OrderType;
-    using PixelType = PixelColorType<uint8_t, OrderType, ColorType>;
-
+    const uint8_t PIX_WIDTH = sizeof(uint8_t) * PIX_STEP;
     RenderPixfmtRgbaBlend() : rBuf_(0) {}
-    explicit RenderPixfmtRgbaBlend(RbufType& rBuf) :  rBuf_(&rBuf) {}
+    explicit RenderPixfmtRgbaBlend(RenderBuffer& rBuf) :  rBuf_(&rBuf) {}
 
     /**
     * @brief Attach pixels to the drawing area.
@@ -234,23 +216,12 @@ public:
     * @since 1.0
     * @version 1.0
     */
-    virtual void Attach(RbufType& rBuf)
+    virtual void Attach(RenderBuffer& rBuf)
     {
         rBuf_ = &rBuf;
     }
 
-    template <class PixFmt>
-    bool Attach(PixFmt& pixf, int32_t x1, int32_t y1, int32_t x2, int32_t y2)
-    {
-        RectI r(x1, y1, x2, y2);
-        if (r.Clip(RectI(0, 0, pixf.Width() - 1, pixf.Height() - 1))) {
-            int32_t stride = pixf.Stride();
-            rBuf_->Attach(pixf.PixPtr(r.x1, stride < 0 ? r.y2 : r.y1),
-                          (r.x2 - r.x1) + 1, (r.y2 - r.y1) + 1, stride);
-            return true;
-        }
-        return false;
-    }
+    bool Attach(RenderPixfmtRgbaBlend& pixf, int32_t x1, int32_t y1, int32_t x2, int32_t y2);
 
     /**
     * @brief Get the size of each screen (draw buffer).
@@ -274,7 +245,7 @@ public:
       * @since 1.0
       * @version 1.0
       */
-    virtual inline int32_t Stride() const
+    virtual inline int32_t GetStride() const
     {
         return rBuf_->GetStride();
     }
@@ -328,9 +299,9 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual inline PixelType* PixValuePtr(int32_t x, int32_t y)
+    virtual inline PixelColorType* PixValuePtr(int32_t x, int32_t y)
     {
-        return reinterpret_cast<PixelType*>(rBuf_->GetRowPtr(y) + sizeof(uint8_t) * (x * PIX_STEP));
+        return reinterpret_cast<PixelColorType*>(rBuf_->GetRowPtr(y) + sizeof(uint8_t) * (x * PIX_STEP));
     }
 
     /**
@@ -339,10 +310,10 @@ public:
      * @since 1.0
      * @version 1.0.
      */
-    virtual inline const PixelType* PixValuePtr(int32_t x, int32_t y) const
+    virtual inline const PixelColorType* PixValuePtr(int32_t x, int32_t y) const
     {
         uint8_t* pixelPtr = rBuf_->GetRowPtr(y);
-        return pixelPtr ? reinterpret_cast<PixelType*>(pixelPtr + sizeof(uint8_t) * (x * PIX_STEP)) : nullptr;
+        return pixelPtr ? reinterpret_cast<PixelColorType*>(pixelPtr + sizeof(uint8_t) * (x * PIX_STEP)) : nullptr;
     }
 
     /**
@@ -351,9 +322,9 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    inline static PixelType* PixValuePtr(void* pixelPtr)
+    inline static PixelColorType* PixValuePtr(void* pixelPtr)
     {
-        return static_cast<PixelType*>(pixelPtr);
+        return static_cast<PixelColorType*>(pixelPtr);
     }
 
     /**
@@ -362,9 +333,9 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    inline static const PixelType* PixValuePtr(const void* pixelPtr)
+    inline static const PixelColorType* PixValuePtr(const void* pixelPtr)
     {
-        return static_cast<const PixelType*>(pixelPtr);
+        return static_cast<const PixelColorType*>(pixelPtr);
     }
 
     /**
@@ -373,13 +344,13 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual inline ColorType Pixel(int32_t x, int32_t y) const
+    virtual inline Rgba8T Pixel(int32_t x, int32_t y) const
     {
-        const PixelType* pixelPtr = PixValuePtr(x, y);
+        const PixelColorType* pixelPtr = PixValuePtr(x, y);
         if (pixelPtr != nullptr) {
             return pixelPtr->GetPixelColor();
         }
-        return ColorType::NoColor();
+        return Rgba8T::NoColor();
     }
 
     /**
@@ -388,7 +359,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual inline void CopyPixel(int32_t x, int32_t y, const ColorType& color)
+    virtual inline void CopyPixel(int32_t x, int32_t y, const Rgba8T& color)
     {
         PixValuePtr(x, y)->SetPixelColor(color);
     }
@@ -399,7 +370,7 @@ public:
     * @since 1.0
     * @version 1.0
     */
-    virtual inline void BlendPixel(int32_t x, int32_t y, const ColorType& color, uint8_t cover)
+    virtual inline void BlendPixel(int32_t x, int32_t y, const Rgba8T& color, uint8_t cover)
     {
         CopyOrBlendPix(PixValuePtr(x, y), color, cover);
     }
@@ -412,26 +383,7 @@ public:
      */
     virtual void CopyHLine(int32_t x, int32_t y,
                            uint32_t len,
-                           const ColorType& color)
-    {
-        PixelType vPixelValue;
-        vPixelValue.SetPixelColor(color);
-        PixelType* pixelPtr = PixValuePtr(x, y);
-#ifdef NEON_ARM_OPT
-        int16_t step = NEON_STEP_8 * PIX_STEP;
-        while (len >= NEON_STEP_8) {
-            SetPixelColor_ARGB8888(pixelPtr->colors, color->redValue,
-                                   colors->greenValue, colors->blueValue,
-                                   colors->alphaValue);
-            pixelPtr = pixelPtr->colors + step;
-            len -= NEON_STEP_8;
-        };
-#endif
-        for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-            *pixelPtr = vPixelValue;
-            pixelPtr = pixelPtr->Next();
-        }
-    }
+                           const Rgba8T& color);
 
     /**
      * @brief Pixels of len length are mixed horizontally from (x, y).
@@ -441,41 +393,8 @@ public:
      */
     virtual void BlendHLine(int32_t x, int32_t y,
                             uint32_t len,
-                            const ColorType& color,
-                            uint8_t cover)
-    {
-        if (!color.IsTransparent()) {
-            PixelType* pPixel = PixValuePtr(x, y);
-#ifdef NEON_ARM_OPT
-            int16_t step = NEON_STEP_8 * PIX_STEP;
-            while (len >= NEON_STEP_8) {
-                NeonBlendPix(pixelPtr, color, cover);
-                pixelPtr = pixelPtr->colors + step;
-                len -= NEON_STEP_8;
-            };
-#endif
-            if (color.IsOpaque() && cover == COVER_MASK) {
-                for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-                    PixelType pixelValue;
-                    pixelValue.SetPixelColor(color);
-                    *pPixel = pixelValue;
-                    pPixel = pPixel->Next();
-                }
-            } else {
-                if (cover == COVER_MASK) {
-                    for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-                        BlendPix(pPixel, color);
-                        pPixel = pPixel->Next();
-                    }
-                } else {
-                    for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-                        BlendPix(pPixel, color, cover);
-                        pPixel = pPixel->Next();
-                    }
-                }
-            }
-        }
-    }
+                            const Rgba8T& color,
+                            uint8_t cover);
 
     /**
      * @brief Mix a series of colors of len length in horizontal order starting from (x, y).
@@ -485,33 +404,8 @@ public:
      */
     virtual void BlendSolidHSpan(int32_t x, int32_t y,
                                  uint32_t len,
-                                 const ColorType& color,
-                                 const uint8_t* covers)
-    {
-        if (!color.IsTransparent()) {
-            PixelType* pixelPtr = PixValuePtr(x, y);
-
-#ifdef NEON_ARM_OPT
-            int16_t step = NEON_STEP_8 * PIX_STEP;
-            while (len >= NEON_STEP_8) {
-                NeonBlendPix(pixelPtr->colors, color, covers);
-                pixelPtr = pixelPtr->colors + step;
-                covers += NEON_STEP_8;
-                len -= NEON_STEP_8;
-            };
-#endif
-
-            for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-                if (color.IsOpaque() && *covers == COVER_MASK) {
-                    pixelPtr->SetPixelColor(color);
-                } else {
-                    BlendPix(pixelPtr, color, *covers);
-                }
-                pixelPtr = pixelPtr->Next();
-                ++covers;
-            }
-        }
-    }
+                                 const Rgba8T& color,
+                                 const uint8_t* covers);
 
     /**
      * @brief Mix a series of colors of len length in vertical order starting from (x, y).
@@ -521,21 +415,8 @@ public:
      */
     virtual void BlendSolidVSpan(int32_t x, int32_t y,
                                  uint32_t len,
-                                 const ColorType& color,
-                                 const uint8_t* covers)
-    {
-        if (!color.IsTransparent()) {
-            do {
-                PixelType* pixelPtr = PixValuePtr(x, y++);
-                if (color.IsOpaque() && *covers == COVER_MASK) {
-                    pixelPtr->SetPixelColor(color);
-                } else {
-                    BlendPix(pixelPtr, color, *covers);
-                }
-                ++covers;
-            } while (--len);
-        }
-    }
+                                 const Rgba8T& color,
+                                 const uint8_t* covers);
 
     /**
      * @brief Set the color of len length in horizontal order starting from (x, y).
@@ -545,30 +426,7 @@ public:
      */
     virtual void CopyColorHSpan(int32_t x, int32_t y,
                                 uint32_t len,
-                                const ColorType* colors)
-    {
-        PixelType* pixelPtr = PixValuePtr(x, y);
-#ifdef NEON_ARM_OPT
-        int16_t step = NEON_STEP_8 * PIX_STEP;
-        const int16_t NEON_STEP_COMPONENTS = NEON_STEP_8 * NUM_COMPONENTS;
-        uint8_t mColors[NEON_STEP_COMPONENTS];
-        while (len >= NEON_STEP_8) {
-            if (memset_s(mColors, size_t(NEON_STEP_COMPONENTS), 0, size_t(NEON_STEP_COMPONENTS)) != EOK) {
-                return GRAPHIC_LOGE("CopyColorHSpan faile");
-            }
-            NeonMemcpy(mColors, NEON_STEP_COMPONENTS, colors, NEON_STEP_COMPONENTS);
-
-            SetPixelColor_ARGB8888(pixelPtr->colors, mColors);
-            pixelPtr = pixelPtr->colors + step;
-            colors += NEON_STEP_8;
-            len -= NEON_STEP_8;
-        };
-#endif
-        for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-            pixelPtr->SetPixelColor(*colors++);
-            pixelPtr = pixelPtr->Next();
-        }
-    }
+                                const Rgba8T* colors);
 
     /**
      * @brief Set the color of len length in vertical order starting from (x, y).
@@ -578,12 +436,7 @@ public:
      */
     virtual void CopyColorVSpan(int32_t x, int32_t y,
                                 uint32_t len,
-                                const ColorType* colors)
-    {
-        do {
-            PixValuePtr(x, y++)->SetPixelColor(*colors++);
-        } while (--len);
-    }
+                                const Rgba8T* colors);
 
     /**
      * @brief Mix a series of colors of len length in horizontal order starting from (x, y).
@@ -598,139 +451,22 @@ public:
      */
     void BlendColorHSpan(int32_t x, int32_t y,
                          uint32_t len,
-                         const ColorType* colors,
+                         const Rgba8T* colors,
                          const uint8_t* covers,
-                         uint8_t cover)
-    {
-        PixelType* pixelPtr = PixValuePtr(x, y, len);
-        if (covers) {
-#ifdef NEON_ARM_OPT
-            int16_t step = NEON_STEP_8 * PIX_STEP;
-            const int16_t NEON_STEP_COMPONENTS = NEON_STEP_8 * NUM_COMPONENTS;
-            uint8_t mColors[NEON_STEP_COMPONENTS];
-            while (len >= NEON_STEP_8) {
-                if (memset_s(mColors, size_t(NEON_STEP_COMPONENTS), 0, size_t(NEON_STEP_COMPONENTS)) != EOK) {
-                    GRAPHIC_LOGE("BlendColorHSpan fail");
-                    return;
-                }
-                NeonMemcpy(mColors, NEON_STEP_COMPONENTS, colors, NEON_STEP_COMPONENTS);
-
-                NeonBlendPix(pixelPtr->colors, mColors, covers);
-                pixelPtr = pixelPtr->colors + step;
-                colors += NEON_STEP_8;
-                covers += NEON_STEP_8;
-                len -= NEON_STEP_8;
-            };
-#endif
-            for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-                CopyOrBlendPix(pixelPtr, *colors++, *covers++);
-                pixelPtr = pixelPtr->Next();
-            }
-        } else {
-#ifdef NEON_ARM_OPT
-            int16_t step = NEON_STEP_8 * PIX_STEP;
-            const int16_t NEON_STEP_COMPONENTS = NEON_STEP_8 * NUM_COMPONENTS;
-            uint8_t mColors[NEON_STEP_COMPONENTS];
-            while (len >= NEON_STEP_8) {
-                if (memset_s(mColors, size_t(NEON_STEP_COMPONENTS), 0, size_t(NEON_STEP_COMPONENTS)) != EOK) {
-                    GRAPHIC_LOGE("BlendColorHSpan fail");
-                    return;
-                }
-                NeonMemcpy(mColors, NEON_STEP_COMPONENTS, colors, NEON_STEP_COMPONENTS);
-
-                NeonBlendPix(pixelPtr->colors, mColors, cover);
-                pixelPtr = pixelPtr->colors + step;
-                colors += NEON_STEP_8;
-                len -= NEON_STEP_8;
-            };
-#endif
-            if (cover == COVER_MASK) {
-                for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
-                    cover == COVER_MASK ? CopyOrBlendPix(pixelPtr, *colors++) :
-                                          CopyOrBlendPix(pixelPtr, *colors++, cover);
-                    pixelPtr = pixelPtr->Next();
-                }
-            }
-        }
-    }
-
-    /**
-     * @brief Mix source pixels and coverage into rBuf_.
-     * @param from Source pixel buffer.
-     * @param xdst,ydst Destination buffer start position.
-     * @param xsrc,ysrc Source buffer start position.
-     * @param len Length to blend.
-     * @param cover Coverage.
-     * @since 1.0
-     * @version 1.0
-     */
-    template <class SrcPixelFormatRenderer>
-    void BlendFrom(const SrcPixelFormatRenderer& from,
-                   int32_t xdst, int32_t ydst,
-                   int32_t xsrc, int32_t ysrc,
-                   uint32_t len,
-                   uint8_t cover)
-    {
-        using SrcPixelType = typename SrcPixelFormatRenderer::PixelType;
-        const SrcPixelType* psrc = from.PixValuePtr(xsrc, ysrc);
-        if (psrc != nullptr) {
-            PixelType* pdst = PixValuePtr(xdst, ydst, len);
-
-            int32_t srcInc = 1;
-            int32_t dstInc = 1;
-
-#ifdef NEON_ARM_OPT
-            dstInc = NEON_STEP_8;
-            srcInc = dstInc;
-            if (xdst > xsrc) {
-                psrc = psrc->Advance(len - NEON_STEP_8);
-                pdst = pdst->Advance(len - NEON_STEP_8);
-                srcInc = -NEON_STEP_8;
-                dstInc = -NEON_STEP_8;
-            }
-
-            while (len >= NEON_STEP_8) {
-                NeonBlendPix(pdst->colors, psrc->colors, cover);
-                psrc = psrc->Advance(srcInc);
-                pdst = pdst->Advance(dstInc);
-                len -= NEON_STEP_8;
-            };
-#endif
-
-            if (xdst > xsrc) {
-                psrc = psrc->Advance(len - 1);
-                pdst = pdst->Advance(len - 1);
-                srcInc = -1;
-                dstInc = -1;
-            }
-            if (cover == COVER_MASK) {
-                for (int16_t i = 0; i < static_cast<int32_t>(len); ++i) {
-                    CopyOrBlendPix(pdst, psrc->GetPixelColor());
-                    psrc = psrc->Advance(srcInc);
-                    pdst = pdst->Advance(dstInc);
-                }
-            } else {
-                for (int16_t i = 0; i < static_cast<int32_t>(len); ++i) {
-                    CopyOrBlendPix(pdst, psrc->GetPixelColor(), cover);
-                    psrc = psrc->Advance(srcInc);
-                    pdst = pdst->Advance(dstInc);
-                }
-            }
-        }
-    }
+                         uint8_t cover);
 
 protected:
 #ifdef ARM_NEON_OPT
-    virtual inline void NeonBlendPix(PixelType* pixelColors, const ColorType& color)
+    virtual inline void NeonBlendPix(PixelColorType* pixelColors, const Rgba8T& color)
     {
-        blender_.NeonBlendPix(pixelColors->colors, color.redValue, color.greenValue,
-                              color.blueValue, color.alphaValue);
+        blender_.NeonBlendPix(pixelColors->colors, color.red, color.green,
+                              color.blue, color.alpha);
     }
 
-    virtual inline void NeonBlendPix(PixelType* pixelColors, const ColorType& color, uint8_t cover)
+    virtual inline void NeonBlendPix(PixelColorType* pixelColors, const Rgba8T& color, uint8_t cover)
     {
-        blender_.NeonBlendPix(pixelColors->colors, color.redValue, color.greenValue,
-                              color.blueValue, color.alphaValue, cover);
+        blender_.NeonBlendPix(pixelColors->colors, color.red, color.green,
+                              color.blue, color.alpha, cover);
     }
 
     virtual inline void NeonBlendPix(uint8_t* dstColors, uint8_t* srcColors, uint8_t srcCover)
@@ -743,10 +479,10 @@ protected:
         blender_.NeonBlendPix(dstColors, srcColors, srcCovers);
     }
 
-    virtual inline void NeonBlendPix(uint8_t* dstColors, const ColorType& srcColors, uint8_t* srcCovers)
+    virtual inline void NeonBlendPix(uint8_t* dstColors, const Rgba8T& srcColors, uint8_t* srcCovers)
     {
-        blender_.NeonBlendPix(dstColors, srcColors.redValue, srcColors.greenValue, srcColors.blueValue,
-                              srcColors.alphaValue, srcCovers);
+        blender_.NeonBlendPix(dstColors, srcColors.red, srcColors.green, srcColors.blue,
+                              srcColors.alpha, srcCovers);
     }
 #endif
 
@@ -756,10 +492,9 @@ protected:
      * @since 1.0
      * @version 1.0
      */
-    virtual inline void BlendPix(PixelType* pixelPtr, const ColorType& color, uint32_t cover)
+    virtual inline void BlendPix(PixelColorType* pixelPtr, const Rgba8T& color, uint32_t cover)
     {
-        blender_.BlendPix(pixelPtr->colors, color.redValue, color.greenValue,
-                          color.blueValue, color.alphaValue, cover);
+        blender_.BlendPix(pixelPtr->colors, color.red, color.green, color.blue, color.alpha, cover);
     }
 
     /**
@@ -768,9 +503,9 @@ protected:
      * @since 1.0
      * @version 1.0
      */
-    virtual inline void BlendPix(PixelType* pixelPtr, const ColorType& color)
+    virtual inline void BlendPix(PixelColorType* pixelPtr, const Rgba8T& color)
     {
-        blender_.BlendPix(pixelPtr->colors, color.redValue, color.greenValue, color.blueValue, color.alphaValue);
+        blender_.BlendPix(pixelPtr->colors, color.red, color.green, color.blue, color.alpha);
     }
 
     /**
@@ -779,14 +514,14 @@ protected:
      * @since 1.0
      * @version 1.0
      */
-    virtual inline void CopyOrBlendPix(PixelType* pixelPtr, const ColorType& color, uint32_t cover)
+    virtual inline void CopyOrBlendPix(PixelColorType* pixelPtr, const Rgba8T& color, uint32_t cover)
     {
         if (!color.IsTransparent()) {
             if (color.IsOpaque() && cover == COVER_MASK) {
-                pixelPtr->SetPixelColor(color.redValue, color.greenValue, color.blueValue, color.alphaValue);
+                pixelPtr->SetPixelColor(color.red, color.green, color.blue, color.alpha);
             } else {
-                blender_.BlendPix(pixelPtr->colors, color.redValue, color.greenValue,
-                                  color.blueValue, color.alphaValue, cover);
+                blender_.BlendPix(pixelPtr->colors, color.red, color.green,
+                                  color.blue, color.alpha, cover);
             }
         }
     }
@@ -797,20 +532,20 @@ protected:
      * @since 1.0
      * @version 1.0.
      */
-    virtual inline void CopyOrBlendPix(PixelType* pixelPtr, const ColorType& color)
+    virtual inline void CopyOrBlendPix(PixelColorType* pixelPtr, const Rgba8T& color)
     {
         if (!color.IsTransparent()) {
             if (color.IsOpaque()) {
                 pixelPtr->SetPixelColor(color);
             } else {
-                blender_.BlendPix(pixelPtr->colors, color.redValue, color.greenValue,
-                                  color.blueValue, color.alphaValue);
+                blender_.BlendPix(pixelPtr->colors, color.red, color.green,
+                                  color.blue, color.alpha);
             }
         }
     }
 
-    RbufType* rBuf_;
-    Blender blender_;
+    RenderBuffer* rBuf_;
+    RgbaBlender blender_;
 };
 } // namespace OHOS
 #endif
