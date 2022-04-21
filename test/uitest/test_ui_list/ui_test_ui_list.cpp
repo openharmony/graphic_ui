@@ -384,8 +384,10 @@ bool UITestUIList::OnClick(UIView& view, const ClickEvent& event)
         currentList_->SetReboundSize(g_reboundSize);
     } else if (&view == setSelectBtn_) {
         currentList_->SetSelectPosition(g_selectPos);
+        currentList_->RefreshList();
     } else if (&view == setSelectOffBtn_) {
         currentList_->SetSelectPosition(0);
+        currentList_->RefreshList();
     } else if (&view == setAutoAlignBtn_) {
         currentList_->EnableAutoAlign(true);
     } else if (&view == setAutoAlignOffBtn_) {
