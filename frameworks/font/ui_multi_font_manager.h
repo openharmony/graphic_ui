@@ -19,6 +19,7 @@
 #include "graphic_config.h"
 #include "font/ui_font_header.h"
 #if ENABLE_MULTI_FONT
+#include "gfx_utils/heap_base.h"
 namespace OHOS {
 class UIMultiFontManager : public HeapBase {
 public:

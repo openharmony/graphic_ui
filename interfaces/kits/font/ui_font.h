@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -58,6 +58,8 @@ public:
      */
     uint16_t GetWidth(uint32_t unicode, uint8_t shapingId);
 
+    uint16_t GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size);
+
     /**
      * @brief Get height for specific font
      *
@@ -67,6 +69,8 @@ public:
     {
         return instance_->GetHeight();
     }
+
+    uint16_t GetHeightSpannable(uint8_t fontId, uint8_t size);
 
     /**
      * @brief Get the font weight
@@ -119,6 +123,8 @@ public:
      * @return uint8_t*
      */
     uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t shapingFont);
+
+    uint8_t* GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size);
 
     /**
      * @brief Indicates whether the current font library is a vector font library.
@@ -228,6 +234,22 @@ public:
         instance_->SetFontFileOffset(offset);
     }
 
+    uint16_t GetHeight(uint32_t unicode, uint8_t fontId)
+    {
+        return instance_->GetHeight(unicode, fontId);
+    }
+
+    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint8_t fontSize)
+    {
+        return instance_->GetOffsetPosY(text, lineLength, isAllEmoji, fontSize);
+    }
+
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+                                      uint16_t letterIndex, SizeSpan* sizeSpans);
+    bool IsEmojiFont(uint8_t fontid)
+    {
+        return instance_->IsEmojiFont(fontid);
+    }
 private:
     UIFont();
     /**

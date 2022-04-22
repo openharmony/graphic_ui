@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -173,6 +173,39 @@ void UILabel::SetText(const char* text)
 {
     InitLabelText();
     labelText_->SetText(text);
+    if (labelText_->IsNeedRefresh()) {
+        RefreshLabel();
+    }
+}
+
+#if ENABLE_VECTOR_FONT
+void UILabel::SetText(const SpannableString* text)
+{
+    InitLabelText();
+    labelText_->SetSpannableString(text);
+    if (labelText_->IsNeedRefresh()) {
+        RefreshLabel();
+    }
+}
+#endif
+
+void UILabel::SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size)
+{
+    if (labelText_ == nullptr) {
+        return;
+    }
+    labelText_->SetAbsoluteSizeSpan(start, end, size);
+    if (labelText_->IsNeedRefresh()) {
+        RefreshLabel();
+    }
+}
+
+void UILabel::SetRelativeSizeSpan(int16_t start, int16_t end, float size)
+{
+    if (labelText_ == nullptr) {
+        return;
+    }
+    labelText_->SetRelativeSizeSpan(start, end, size);
     if (labelText_->IsNeedRefresh()) {
         RefreshLabel();
     }

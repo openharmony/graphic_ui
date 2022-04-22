@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +15,7 @@
 
 #ifndef BASE_FONT
 #define BASE_FONT
+#include "common/text.h"
 #include "font/ui_font_header.h"
 #include "font/ui_font_builder.h"
 #include "graphic_config.h"
@@ -47,6 +48,8 @@ public:
      */
     virtual uint16_t GetHeight() = 0;
 
+    virtual uint16_t GetHeightByFontId(uint8_t fontId, uint8_t size) = 0;
+
     /**
      * @brief Get font id
      *
@@ -64,6 +67,8 @@ public:
      */
     virtual int16_t GetWidth(uint32_t unicode, uint8_t fontId) = 0;
 
+    virtual int16_t GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size) = 0;
+
     virtual int32_t OpenVectorFont(uint8_t ttfId)
     {
         return -1;
@@ -75,6 +80,8 @@ public:
      * @return uint8_t*
      */
     virtual uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId) = 0;
+
+    virtual uint8_t* GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size) = 0;
 
     /**
      * @brief Get font header
@@ -216,6 +223,19 @@ public:
     void SetRamLen(uint32_t ramLen);
     void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen);
 
+    /**
+     * @brief Get Height
+     *
+     * @param unicode
+     * @return int16_t
+     */
+    virtual uint16_t GetHeight(uint32_t unicode, uint8_t fontId) = 0;
+
+    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLarge, uint8_t fontSize) = 0;
+
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+                                      uint16_t& letterIndex, SizeSpan* sizeSpans) = 0;
+    virtual bool IsEmojiFont(uint8_t fontId) = 0;
 private:
     uint8_t fontId_;
     uintptr_t ramAddr_;

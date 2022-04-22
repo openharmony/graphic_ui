@@ -23,6 +23,7 @@ if (ohos_kernel_type != "liteos_m") {
     include_dirs = [
       "../framework/include",
       "//foundation/graphic/ui/frameworks",
+      "//foundation/graphic/ui/test/framework",
       "//foundation/graphic/surface/interfaces/kits",
       "//third_party/bounds_checking_function/include",
       "//third_party/freetype/include",

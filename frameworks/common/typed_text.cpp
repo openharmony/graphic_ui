@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,7 +23,7 @@
 namespace OHOS {
 #ifndef _FONT_TOOL
 Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t lineHeight, int16_t maxWidth,
-                             int8_t lineSpace)
+                             SizeSpan* sizeSpans, int8_t lineSpace)
 {
     Point size{0, 0};
 
@@ -40,9 +40,11 @@ Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t line
         lineHeight = letterHeight + lineSpace;
     }
 
+    uint16_t letterIndex = 0;
     while (text[lineBegin] != '\0') {
         int16_t lineWidth = maxWidth;
-        newLineBegin += UIFontAdaptor::GetNextLineAndWidth(&text[lineBegin], letterSpace, lineWidth);
+        newLineBegin += UIFontAdaptor::GetNextLineAndWidth(&text[lineBegin], letterSpace, lineWidth, lineHeight,
+                                                           letterIndex, sizeSpans);
         if (newLineBegin == lineBegin) {
             break;
         }
@@ -401,5 +403,61 @@ uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
         }
     }
     return len;
+}
+
+#if ENABLE_VECTOR_FONT
+bool TypedText::IsEmoji(uint32_t codePoint)
+{
+    // Miscellaneous symbols and symbol fonts
+    return (codePoint >= 0x2600 && codePoint <= 0x27BF) || codePoint == 0x303D || codePoint == 0x2049 ||
+            codePoint == 0x203C || (codePoint >= 0x2000 && codePoint <= 0x200F) ||
+            (codePoint >= 0x2028 && codePoint <= 0x202F) || codePoint == 0x205F ||
+            // Area occupied by punctuation, Alphabetic symbol
+            (codePoint >= 0x2065 && codePoint <= 0x206F) || (codePoint >= 0x2100 && codePoint <= 0x214F) ||
+            // Various technical symbols, Arrow A
+            (codePoint >= 0x2300 && codePoint <= 0x23FF) || (codePoint >= 0x2B00 && codePoint <= 0x2BFF) ||
+            // Arrow B,Chinese symbols
+            (codePoint >= 0x2900 && codePoint <= 0x297F) || (codePoint >= 0x3200 && codePoint <= 0x32FF) ||
+            // High and low substitution reserved area, Private reserved area
+            (codePoint >= 0xD800 && codePoint <= 0xDFFF) || (codePoint >= 0xE000 && codePoint <= 0xF8FF) ||
+            // Mutation selector, Plane above the second plane，char can't be saved, all can be transferred
+            (codePoint >= 0xFE00 && codePoint <= 0xFE0F) || codePoint >= 0x10000;
+}
+
+bool TypedText::IsEmojiModifier(uint32_t codePoint)
+{
+    return (codePoint >= 0x1F3FB && codePoint <= 0x1F3FF);
+}
+
+// Based on Emoji_Modifier_Base from
+bool TypedText::IsEmojiBase(uint32_t codePoint)
+{
+    if (codePoint >= 0x261D && codePoint <= 0x270D) {
+        return (codePoint == 0x261D || codePoint == 0x26F9 || (codePoint >= 0x270A && codePoint <= 0x270D));
+    } else if (codePoint >= 0x1F385 && codePoint <= 0x1F93E) {
+        return (codePoint == 0x1F385 || (codePoint >= 0x1F3C3 && codePoint <= 0x1F3C4) ||
+                (codePoint >= 0x1F3CA && codePoint <= 0x1F3CB) || (codePoint >= 0x1F442 && codePoint <= 0x1F443) ||
+                (codePoint >= 0x1F446 && codePoint <= 0x1F450) || (codePoint >= 0x1F466 && codePoint <= 0x1F469) ||
+                codePoint == 0x1F46E || (codePoint >= 0x1F470 && codePoint <= 0x1F478) || codePoint == 0x1F47C ||
+                (codePoint >= 0x1F481 && codePoint <= 0x1F483) || (codePoint >= 0x1F485 && codePoint <= 0x1F487) ||
+                codePoint == 0x1F4AA || codePoint == 0x1F575 || codePoint == 0x1F57A || codePoint == 0x1F590 ||
+                (codePoint >= 0x1F595 && codePoint <= 0x1F596) || (codePoint >= 0x1F645 && codePoint <= 0x1F647) ||
+                (codePoint >= 0x1F64B && codePoint <= 0x1F64F) || codePoint == 0x1F6A3 ||
+                (codePoint >= 0x1F6B4 && codePoint <= 0x1F6B6) || codePoint == 0x1F6C0 ||
+                (codePoint >= 0x1F918 && codePoint <= 0x1F91E) || codePoint == 0x1F926 || codePoint == 0x1F930 ||
+                (codePoint >= 0x1F933 && codePoint <= 0x1F939) || (codePoint >= 0x1F93B && codePoint <= 0x1F93E));
+    } else {
+        return false;
+    }
+}
+#endif
+
+bool TypedText::IsColourWord(uint32_t codePoint)
+{
+#if ENABLE_VECTOR_FONT
+    return IsEmoji(codePoint) || IsEmojiModifier(codePoint) || IsEmojiBase(codePoint);
+#else
+    return codePoint >= 0xF000 && codePoint <= 0xF8FF;
+#endif
 }
 } // namespace OHOS

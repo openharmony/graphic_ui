@@ -65,6 +65,7 @@ SOURCES += \
     ../../../../frameworks/common/screen.cpp \
     ../../../../frameworks/common/task.cpp \
     ../../../../frameworks/common/text.cpp \
+    ../../../../frameworks/common/spannable_string.cpp \
     ../../../../frameworks/common/typed_text.cpp \
     ../../../../frameworks/components/root_view.cpp \
     ../../../../frameworks/components/text_adapter.cpp \
@@ -247,6 +248,7 @@ HEADERS += \
     ../../../../interfaces/kits/common/screen.h \
     ../../../../interfaces/kits/common/task.h \
     ../../../../interfaces/kits/common/text.h \
+    ../../../../interfaces/kits/common/spannable_string.h \
     ../../../../interfaces/kits/components/abstract_adapter.h \
     ../../../../interfaces/kits/components/root_view.h \
     ../../../../interfaces/kits/components/text_adapter.h \
