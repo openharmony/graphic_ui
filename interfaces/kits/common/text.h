@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,8 +38,14 @@
 
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_types.h"
+#include "gfx_utils/list.h"
 #include "gfx_utils/style.h"
+#include "gfx_utils/vector.h"
 #include "engines/gfx/gfx_engine_manager.h"
+#include "font/ui_font_header.h"
+#if ENABLE_VECTOR_FONT
+#include "common/spannable_string.h"
+#endif
 
 namespace OHOS {
 /**
@@ -67,6 +73,31 @@ enum UITextLanguageDirect : uint8_t {
     /** Right-to-left */
     TEXT_DIRECT_RTL,
     TEXT_DIRECT_MIXED,
+};
+
+struct BackgroundColor : public HeapBase {
+    int16_t start;
+    int16_t end;
+    ColorType backgroundColor;
+};
+
+struct ForegroundColor : public HeapBase {
+    int16_t start;
+    int16_t end;
+    ColorType fontColor;
+};
+
+struct LineBackgroundColor : public HeapBase {
+    int16_t start;
+    int16_t end;
+    ColorType linebackgroundColor;
+};
+
+struct SizeSpan {
+    bool isSizeSpan;
+    uint8_t size;
+    uint8_t fontId;
+    int16_t height;
 };
 
 struct LabelLineInfo;
@@ -108,6 +139,16 @@ public:
      */
     virtual void SetText(const char* text);
 
+#if ENABLE_VECTOR_FONT
+    /**
+     * @brief Sets the SpannableString for this text.
+     *
+     * @param text Indicates the pointer to the text content.
+     * @since 1.0
+     * @version 1.0
+     */
+    void SetSpannableString(const SpannableString* spannableString);
+#endif
     /**
      * @brief Obtains the content of this text.
      *
@@ -330,6 +371,56 @@ public:
         baseLine_ = baseLine;
     }
 
+    void SetBackgroundColorSpan(ColorType backgroundColor, int16_t start, int16_t end)
+    {
+        BackgroundColor bgcolor;
+        bgcolor.start = start;
+        bgcolor.end = end;
+        bgcolor.backgroundColor= backgroundColor;
+        backgroundColor_.PushBack(bgcolor);
+    }
+
+    List<BackgroundColor> GetBackgroundColorSpan()
+    {
+        return backgroundColor_;
+    }
+
+    void SetForegroundColorSpan(ColorType fontColor, int16_t start, int16_t end)
+    {
+        ForegroundColor fColor;
+        fColor.start = start;
+        fColor.end = end;
+        fColor.fontColor= fontColor;
+        foregroundColor_.PushBack(fColor);
+    }
+
+    List<ForegroundColor> GetForegroundColorSpan()
+    {
+        return foregroundColor_;
+    }
+
+    void SetLineBackgroundSpan(ColorType linebackgroundColor, int16_t start, int16_t end)
+    {
+        LineBackgroundColor lineBackground;
+        lineBackground.start = start;
+        lineBackground.end = end;
+        lineBackground.linebackgroundColor= linebackgroundColor;
+        linebackgroundColor_.PushBack(lineBackground);
+    }
+
+    List<LineBackgroundColor> GetLineBackgroundSpan()
+    {
+        return linebackgroundColor_;
+    }
+
+    void SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size);
+    void SetRelativeSizeSpan(int16_t start, int16_t end, float size);
+
+    uint16_t GetSizeSpan()
+    {
+        return characterSize_;
+    }
+
 protected:
     struct TextLine {
         uint16_t lineBytes;
@@ -346,7 +437,8 @@ protected:
     virtual uint32_t GetTextStrLen();
 
     virtual uint32_t
-        GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace);
+        GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace,
+                    uint16_t& letterIndex, SizeSpan* sizeSpans);
 
     virtual uint16_t GetLetterIndexByPosition(const Rect& textRect, const Style& style, const Point& pos);
 
@@ -361,10 +453,15 @@ protected:
     uint16_t GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisIndex, uint32_t& maxLineBytes);
     int16_t TextPositionY(const Rect& textRect, int16_t textHeight);
     int16_t LineStartPos(const Rect& textRect, uint16_t lineWidth);
-    void DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine);
+    void DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine, uint16_t& letterIndex);
     uint32_t CalculateLineWithEllipsis(uint32_t begin, uint32_t textLen, int16_t width,
-                                       uint8_t letterSpace, uint16_t& lineNum);
+                                       uint8_t letterSpace, uint16_t& lineNum,
+                                       uint16_t& letterIndex,
+                                       SizeSpan* sizeSpans);
+    uint8_t GetSpanFontIdBySize(uint8_t size);
+    void InitSizeSpans();
 
+    TextStyle* textStyles_;
     char* text_;
     uint8_t fontId_;
     uint8_t fontSize_; // Only the vector font library has a valid value.
@@ -374,10 +471,17 @@ protected:
     bool expandHeight_ : 1;
     bool baseLine_ : 1;
     uint8_t direct_ : 4; // UITextLanguageDirect
+    List<BackgroundColor> backgroundColor_;
+    List<ForegroundColor> foregroundColor_;
+    List<LineBackgroundColor> linebackgroundColor_;
+    SizeSpan* sizeSpans_;
+    uint32_t characterSize_;
 
 private:
     uint8_t horizontalAlign_ : 4; // UITextLanguageAlignment
     uint8_t verticalAlign_ : 4;   // UITextLanguageAlignment
+
+    static constexpr uint8_t FONT_ID_MAX = 0xFF;
 };
 } // namespace OHOS
 #endif // GRAPHIC_LITE_TEXT_H

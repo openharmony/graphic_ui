@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,10 @@
 
 #include "font/ui_font_cache.h"
 #include <cstddef>
+#if ENABLE_VECTOR_FONT
+#include "gfx_utils/style.h"
 
+#endif
 namespace OHOS {
 UIFontCache::UIFontCache(uint8_t* ram, uint32_t size)
 {
@@ -43,7 +46,7 @@ void UIFontCache::UpdateLru(Bitmap* bitmap)
     ListAdd(&bitmap->lruHead, &lruList_);
 }
 
-uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size)
+uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle)
 {
     Bitmap* bitmap = nullptr;
 
@@ -70,6 +73,9 @@ uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size)
 
     bitmap->fontId = fontId;
     bitmap->unicode = unicode;
+#if ENABLE_VECTOR_FONT
+    bitmap->textStyle = textStyle;
+#endif
 
     return reinterpret_cast<uint8_t*>(bitmap->data);
 }
@@ -87,14 +93,18 @@ void UIFontCache::PutSpace(uint8_t* addr)
     allocator_.Free(bitmap);
 }
 
-uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode)
+uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle textStyle)
 {
     Bitmap* bitmap = nullptr;
     ListHead* head = hashTable_ + fontId % FONT_CACHE_HASH_NR;
     for (ListHead* node = head->next; node != head; node = node->next) {
         bitmap = reinterpret_cast<struct Bitmap*>(reinterpret_cast<uint8_t*>(node) -
                                                   offsetof(struct Bitmap, hashHead));
-        if ((bitmap->fontId == fontId) && (bitmap->unicode == unicode)) {
+        if ((bitmap->fontId == fontId) &&
+#if ENABLE_VECTOR_FONT
+            (bitmap->textStyle == textStyle) &&
+#endif
+            (bitmap->unicode == unicode)) {
             UpdateLru(bitmap);
             return reinterpret_cast<uint8_t*>(bitmap->data);
         }

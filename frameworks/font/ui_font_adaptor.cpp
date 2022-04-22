@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,11 +23,14 @@
 #include "font/ui_text_shaping.h"
 #endif
 namespace OHOS {
-uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt, int16_t letterSpace, int16_t& maxWidth, bool allBreak,
-                                            uint16_t len)
+uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt, int16_t letterSpace,
+                                            int16_t& maxWidth, int16_t& maxHeight,
+                                            uint16_t& letterIndex, SizeSpan* sizeSpans,
+                                            bool allBreak, uint16_t len)
 {
 #if ENABLE_ICU
-    return UILineBreakEngine::GetInstance().GetNextLineAndWidth(txt, letterSpace, allBreak, maxWidth, len);
+    return UILineBreakEngine::GetInstance().GetNextLineAndWidth(txt, letterSpace, allBreak, maxWidth, maxHeight,
+                                                                letterIndex, sizeSpans, len);
 #else
     uint32_t index = TypedText::GetNextLine(txt, letterSpace, maxWidth);
     maxWidth = TypedText::GetTextWidth(txt, index, letterSpace);

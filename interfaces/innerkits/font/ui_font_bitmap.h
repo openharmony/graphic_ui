@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -42,7 +42,14 @@ public:
     int8_t SetCurrentLangId(uint8_t langId) override;
     UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const override;
     void SetFontFileOffset(uint32_t offset) override;
-
+    uint16_t GetHeight(uint32_t unicode, uint8_t fontId) override;
+    uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLerge, uint8_t fontSize) override;
+    uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+                              uint16_t& letterIndex, SizeSpan* sizeSpans) override;
+    uint16_t GetHeightByFontId(uint8_t fontId, uint8_t size = 0) override;
+    int16_t GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size = 0) override;
+    uint8_t* GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size = 0) override;
+    bool IsEmojiFont(uint8_t fontId) override;
 protected:
     uint32_t GetBitmapRamUsed();
     uint32_t GetDynamicFontRamUsed();
@@ -56,9 +63,12 @@ protected:
     uint32_t offset_;
 
 private:
-    uint8_t* SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
+    uint8_t* SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, bool isSpanLetter = false);
     int16_t GetWidthInFontId(uint32_t unicode, uint8_t fontId);
-
+    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
+#if ENABLE_MULTI_FONT
+    int8_t GetMultiGlyphNode(uint32_t unicode, GlyphNode& glyphNode);
+#endif
     static constexpr uint32_t FONT_BITMAP_CACHE_SIZE = 0x64000;
     static constexpr uint8_t FONT_ID_MAX = 0xFF;
     static constexpr uint8_t TTF_NAME_LEN_MAX = 128;

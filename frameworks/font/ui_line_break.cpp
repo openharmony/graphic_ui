@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,9 +14,10 @@
  */
 
 #if ENABLE_ICU
-#include "font/ui_line_break.h"
 #include "common/typed_text.h"
+#include "draw/draw_utils.h"
 #include "font/ui_font.h"
+#include "font/ui_line_break.h"
 #include "rbbidata.h"
 #include "ucmndata.h"
 
@@ -111,6 +112,9 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
                                                 int16_t space,
                                                 bool allBreak,
                                                 int16_t& maxWidth,
+                                                int16_t& maxHeight,
+                                                uint16_t& letterIndex,
+                                                SizeSpan* sizeSpans,
                                                 uint16_t len)
 {
     if (text == nullptr) {
@@ -124,6 +128,7 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
     int16_t curWidth = 0;
     int32_t state = LINE_BREAK_STATE_START;
     int16_t width = 0;
+    int16_t height = 0;
     while ((text[byteIdx] != '\0') && (byteIdx < len)) {
         uint32_t unicode = TypedText::GetUTF8Next(text, preIndex, byteIdx);
         if (unicode == 0) {
@@ -131,15 +136,22 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
             continue;
         }
         if (isAllCanBreak || IsBreakPos(unicode, state)) {
-            state = LINE_BREAK_STATE_START;
+            if (!TypedText::IsColourWord(unicode)) {
+                state = LINE_BREAK_STATE_START;
+            }
             // Accumulates the status value from the current character.
             IsBreakPos(unicode, state);
             lastIndex = preIndex;
             lastWidth = curWidth;
         }
-        width = UIFont::GetInstance()->GetWidth(unicode, 0);
+        width = GetLetterWidth(unicode, letterIndex, height, sizeSpans);
+        letterIndex++;
+        if (height > maxHeight) {
+            maxHeight = height;
+        }
         int16_t nextWidth = (curWidth > 0 && width > 0) ? (curWidth + space + width) : (curWidth + width);
         if (nextWidth > maxWidth) {
+            letterIndex--;
             if (lastIndex == 0) {
                 break;
             }
@@ -156,8 +168,33 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
     return preIndex;
 }
 
+int16_t UILineBreakEngine::GetLetterWidth(uint32_t unicode, uint16_t& letterIndex, int16_t& height,
+                                          SizeSpan* sizeSpans)
+{
+    if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
+        int16_t width = UIFont::GetInstance()->GetWidthSpannable(unicode,
+                                                                 sizeSpans[letterIndex].fontId,
+                                                                 sizeSpans[letterIndex].size);
+
+        if (sizeSpans[letterIndex].height == 0) {
+            height = UIFont::GetInstance()->GetHeightSpannable(sizeSpans[letterIndex].fontId,
+                                                               sizeSpans[letterIndex].size);
+            sizeSpans[letterIndex].height = height;
+        } else {
+            height = sizeSpans[letterIndex].height;
+        }
+        return width;
+    } else {
+        height = UIFont::GetInstance()->GetHeight(unicode, 0);
+        return UIFont::GetInstance()->GetWidth(unicode, 0);
+    }
+}
+
 bool UILineBreakEngine::IsBreakPos(uint32_t unicode, int32_t& state)
 {
+    if (TypedText::IsColourWord(unicode)) {
+        return true;
+    }
     if ((unicode > TypedText::MAX_UINT16_HIGH_SCOPE) || (stateTbl_ == nullptr) || (lineBreakTrie_ == nullptr)) {
         return true;
     }

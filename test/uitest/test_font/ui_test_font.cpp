@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -34,6 +34,8 @@ const uint16_t LABEL_HEIGHT = 50;
 const uint16_t FONT_SIZE = 30;
 const char* SOURCE_HAN_SANS_SC_REGULAR = "SourceHanSansSC-Regular.otf";
 const char* ROBOTO_CONDENSED_REGULAR = "RobotoCondensed-Regular.ttf";
+const char* DEFAULT_EMOJI_FILENAME = "NotoColorEmojiCompat.ttf";
+const int16_t F_HWEMOJI_REGULAR_30_32 = 99;
 } // namespace
 
 void UITestFont::SetUp()
@@ -42,7 +44,7 @@ void UITestFont::SetUp()
         container_ = new UIScrollView();
         container_->SetThrowDrag(true);
         container_->SetHorizontalScrollState(false);
-        container_->Resize(Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight() - LABEL_HEIGHT);
+        container_->Resize(Screen::GetInstance().GetWidth(), Screen::GetInstance().GetHeight() - BACK_BUTTON_HEIGHT);
         positionX_ = 50; // 50: init position x
         positionY_ = 5;  // 5: init position y
     }
@@ -89,8 +91,17 @@ const UIView* UITestFont::GetTestView()
     UIKitFontMultiLanguage001();
     UIKitFontMultiLanguage002();
 #endif
+    UIKitFontTestBackgroundColor();
+    UIKitFontTestForegroundColor();
+    UIKitFontTestLineBackgroundSpan();
+    UIKitFontTestAbsoluteSizeSpan();
+    UIKitFontTestRelativeSizeSpan();
+    UIKitFontTestDispalyEmoji001();
+    UIKitFontTestDispalyEmoji002();
+    UIKitFontTestDispalyEmoji003();
     return container_;
 }
+
 void UITestFont::UIKitFontTestDispaly001()
 {
     if (container_ == nullptr) {
@@ -274,7 +285,7 @@ void UITestFont::UIKitFontTestDispaly009()
 #else
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
 #endif
-    label->Rotate(90, Vector2<float>{0, 0}); // 90 : angle
+    label->Rotate(90, Vector2<float> {0, 0}); // 90 : angle
     label->SetText("轻量级图形");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 4 + GAP; // 4 : coefficient
@@ -297,7 +308,7 @@ void UITestFont::UIKitFontTestDispaly010()
 #else
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
 #endif
-    label->Rotate(90, Vector2<float>{0, 0}); // 90 : angle
+    label->Rotate(90, Vector2<float> {0, 0}); // 90 : angle
     label->SetText("轻量级图形,轻量级图形,轻量级图形");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 4 + GAP; // 4 : coefficient
@@ -499,4 +510,207 @@ void UITestFont::UIKitFontMultiLanguage002()
     positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
 #endif // ENABLE_MULTI_FONT
+
+void UITestFont::UIKitFontTestBackgroundColor()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Display background color ");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetBackgroundColorSpan(Color::Red(), 0, 2); // 0 ： start index; 2 : end index
+    label->SetBackgroundColorSpan(Color::Yellow(), 5, 6); // 5 ： start index; 6 : end index
+    label->SetText("轻量图形子系统");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT + GAP;
+}
+
+void UITestFont::UIKitFontTestForegroundColor()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Change some font colors ");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetForegroundColorSpan(Color::Blue(), 1, 3); // 1 ： start index; 2 : end index
+    label->SetForegroundColorSpan(Color::Red(), 6, 9); // 6 ： start index; 9 : end index
+    label->SetText("轻量图形子\n系统轻量图形子系统轻量图形子系统轻量图形子系统轻量图形子系统轻量图形子系统");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+
+void UITestFont::UIKitFontTestLineBackgroundSpan()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle(" Display LineBackgroundSpan ");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetLineBackgroundSpan(Color::Blue(), 1, 3); // 1 ： start index; 3 : end index
+    label->SetLineBackgroundSpan(Color::Red(), 5, 5); // 5 ： start index; 5 : end index
+    label->SetText("轻量图\n形子系统");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+
+void UITestFont::UIKitFontTestAbsoluteSizeSpan()
+{
+    if (container_ == nullptr) {
+            return;
+        }
+    InnerTestTitle(" Display absolute size span");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("轻量图形子系统\n轻量图形子系统");
+    label->SetAbsoluteSizeSpan(1, 2, 38); // 1 ： start index; 2 : end index; 38 absolute font size
+    label->SetAbsoluteSizeSpan(2, 3, 18); // 2 ： start index; 3 : end index; 18 absolute font size
+    label->SetAbsoluteSizeSpan(3, 4, 24); // 3 ： start index; 4 : end index; 24 absolute font size
+    label->SetAbsoluteSizeSpan(10, 11, 14); // 10 ： start index; 11 : end index; 14 font size
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+
+void UITestFont::UIKitFontTestRelativeSizeSpan()
+{
+    if (container_ == nullptr) {
+            return;
+        }
+    InnerTestTitle(" Display Relative size span");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
+#if ENABLE_VECTOR_FONT
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+#else
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#endif
+    label->SetText("轻量图形子系统\n轻量图形子系统");
+    label->SetRelativeSizeSpan(1, 2, 0.8f); // 1 ： start index; 2 : end index; 0.8f relative font size
+    label->SetRelativeSizeSpan(10, 11, 0.6f); // 1 ： start index; 2 : end index; 0.6f relative font size
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
+}
+
+void UITestFont::UIKitFontTestDispalyEmoji001()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle("Emoij");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+
+#if ENABLE_VECTOR_FONT
+    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 3); // 2 : double; 3 : triple
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+    label->SetText("💋💋😂😂😂");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
+#else
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2);
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#if ENABLE_MULTI_FONT
+    uint8_t findPath[] = {F_HWEMOJI_REGULAR_30_32};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(F_SOURCEHANSANSSC_REGULAR_30_4, findPath, sizeof(findPath));
+#endif
+    label->SetText("\xEF\x80\x80\xEF\x80\x81\xEF\x80\x82\xEF\x80\x83\xEF\x80\x84\xEF\x80\x85\xEF\x80\x86\xEF\x80\x87"
+                   "\xEF\x80\x80\xEF\x80\x81\xEF\x80\x82\xEF\x80\x83\xEF\x80\x84\xEF\x80\x85\xEF\x80\x86\xEF\x80\x87");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double;
+#endif
+}
+
+void UITestFont::UIKitFontTestDispalyEmoji002()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle("Text and Emoij");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+
+#if ENABLE_VECTOR_FONT
+    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 3); // 2 : double; 3 : triple
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+    label->SetText("轻量图形子系统💋💋😂😂");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
+#else
+    label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 3); // 3 : triple
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#if ENABLE_MULTI_FONT
+    uint8_t findPath[] = {F_HWEMOJI_REGULAR_30_32};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(F_SOURCEHANSANSSC_REGULAR_30_4, findPath, sizeof(findPath));
+#endif
+    label->SetText("轻量图形子系统\xEF\x80\x80\xEF\x80\x81\xEF\x80\x82\xEF\x80\x83\xEF\x80\x84鴻蒙");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
+#endif
+}
+
+void UITestFont::UIKitFontTestDispalyEmoji003()
+{
+    if (container_ == nullptr) {
+        return;
+    }
+    InnerTestTitle("Text and Emoij line break");
+    UILabel* label = new UILabel();
+    label->SetPosition(positionX_, positionY_);
+
+#if ENABLE_VECTOR_FONT
+    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 6); // 2 : double; 6 : six times
+    UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
+    UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+    label->SetText("轻量图形子系统💋😂😂😂您好，轻量图形子系统，鴻蒙😂");
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 6 + GAP; // 6 : six times
+#else
+    label->Resize(380, LABEL_HEIGHT * 3); // 3 : triple
+    label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
+#if ENABLE_MULTI_FONT
+    uint8_t findPath[] = {F_HWEMOJI_REGULAR_30_32};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(F_SOURCEHANSANSSC_REGULAR_30_4, findPath, sizeof(findPath));
+#endif
+    label->SetText("轻量图形子系统鴻蒙操作系統\xEF\x80\x80\xEF\x80\x80"); // EF8080
+    container_->Add(label);
+    positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
+#endif
+}
 } // namespace OHOS
