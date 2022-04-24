@@ -42,7 +42,7 @@ public:
                                      const ColorType& color,
                                      OpacityType opaScale);
 
-    static uint8_t GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontSize,
+    static uint8_t GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans);
     static void GetLineBackgroundColor(uint16_t letterIndex, List<LineBackgroundColor>* linebackgroundColor,
                                        bool& havelinebackground, ColorType& linebgColor);

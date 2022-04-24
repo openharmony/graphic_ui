@@ -151,7 +151,7 @@ int8_t UIFontBitmap::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8
 #if ENABLE_MULTI_FONT
 int8_t UIFontBitmap::GetMultiGlyphNode( uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
-    if (TypedText::IsColourWord(unicode)) {
+    if (TypedText::IsColourWord(fontId)) {
         int8_t ret;
         uint8_t* searchLists = nullptr;
         //uint8_t baseId = GetBaseFontId();
@@ -332,7 +332,7 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
 #endif
         if (ret == RET_VALUE_OK) {
-            if (TypedText::IsColourWord(unicode)) {
+            if (TypedText::IsColourWord(fontId)) {
                 emoijMaxNode = glyphNode.rows > emoijMaxNode.rows ? glyphNode : emoijMaxNode;
                 emojiNum++;
             } else {
