@@ -42,9 +42,10 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     uint16_t retOffsetY = 0; // ret value elipse offsetY
     bool isEmoijLerge = true;
     uint16_t offsetPosY = 0;
-    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId, labelLine.fontSize);
-    uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontSize,
-                                                 letterIndex, labelLine.sizeSpans);
+    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId, 
+                                           labelLine.fontSize);
+    uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontId,
+                                                 labelLine.fontSize, letterIndex, labelLine.sizeSpans);
     DrawLineBackgroundColor(gfxDstBuffer, letterIndex, labelLine);
     while (i < labelLine.lineLength) {
         letter = TypedText::GetUTF8Next(labelLine.text, i, i);
@@ -85,7 +86,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    labelLine.style.lineSpace_,
                                    havebackgroundColor,
                                    backgroundColor};
-        if (TypedText::IsColourWord(letterInfo.letter)) {
+        if (TypedText::IsColourWord(letterInfo.fontId)) {
             if (!isEmoijLerge) {
                 letterInfo.offsetY = offsetPosY;
             }
@@ -109,7 +110,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     return retOffsetY;
 }
 
-uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontSize,
+uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans)
 {
     uint32_t i = 0;
@@ -117,7 +118,7 @@ uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, u
     uint8_t maxLetterSize = fontSize;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
-        if (TypedText::IsColourWord(unicode)) {
+        if (TypedText::IsColourWord(fontId)) {
             letterIndex++;
             continue;
         }

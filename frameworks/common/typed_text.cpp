@@ -455,8 +455,9 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
     }
 }
 
-bool TypedText::IsColourWord(uint32_t codePoint)
+bool TypedText::IsColourWord(uint32_t fontId)
 {
-    return (codePoint >= 0xF000) && (codePoint <= 0xF8FF) || IsEmoji(codePoint) || IsEmojiModifier(codePoint) || IsEmojiBase(codePoint);
+    uint8_t weight = UIFont::GetInstance()->GetFontWeight(fontId);
+    return (weight >= 16); // 16: rgb565->16 rgba8888->32 font with rgba
 }
 } // namespace OHOS
