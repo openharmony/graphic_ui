@@ -82,7 +82,7 @@ void SetupColorFont(FT_Face face)
             diff = ndiff;
         }
     }
-    FT_Error error_ = FT_Select_Size(face, best_match); // FT_Match_Size
+    FT_Select_Size(face, best_match); // FT_Match_Size
 }
 uint8_t UIFontVector::RegisterFontInfo(const char* ttfName, uint8_t shaping)
 {

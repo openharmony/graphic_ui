@@ -27,8 +27,6 @@ Text::TextLine Text::textLine_[MAX_LINE_COUNT] = {{0}};
 
 Text::Text()
     : text_(nullptr),
-      sizeSpans_(nullptr),
-      characterSize_(0),
       fontId_(0),
       fontSize_(0),
       textSize_({0, 0}),
@@ -37,6 +35,8 @@ Text::Text()
       expandHeight_(false),
       baseLine_(true),
       direct_(TEXT_DIRECT_LTR),
+      sizeSpans_(nullptr),
+      characterSize_(0),
       horizontalAlign_(TEXT_ALIGNMENT_LEFT),
       verticalAlign_(TEXT_ALIGNMENT_TOP)
 {
