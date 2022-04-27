@@ -341,7 +341,7 @@ int16_t UIFontVector::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSiz
     FaceInfo faceInfo = {};
     int8_t ret = INVALID_RET_VALUE;
 
-    if (TypedText::IsColourWord(fontId)) {
+    if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
 
         ret = LoadGlyphIntoFace(fontId, unicode, faceInfo.face);
 
@@ -695,7 +695,8 @@ uint16_t UIFontVector::GetOffsetPosY(const char *text, uint16_t lineLength, bool
         unicode = TypedText::GetUTF8Next(text, i, i);
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
         if (ret == RET_VALUE_OK) {
-            if (TypedText::IsColourWord(fontId)) {
+            uint8_t weight = GetFontWeight(glyphNode.fontId);
+            if (weight >= 16) { // 16: bit rgb565 rgba8888
                 emojiMaxNode = glyphNode.rows > emojiMaxNode.rows ? glyphNode : emojiMaxNode;
                 emojiNum++;
             } else {
@@ -740,7 +741,7 @@ uint16_t UIFontVector::GetLineMaxHeight(const char *text, uint16_t lineLength, u
     uint16_t maxHeight = GetHeight(fontId, fontSize);
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
-        TypedText::IsColourWord(fontId) ? emojiNum++ : textNum++;
+        TypedText::IsColourWord(unicode, fontId, fontSize) ? emojiNum++ : textNum++;
         loopNum++;
         if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
             uint16_t spannableHeight = 0;

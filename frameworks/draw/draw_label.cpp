@@ -42,7 +42,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     uint16_t retOffsetY = 0; // ret value elipse offsetY
     bool isEmoijLerge = true;
     uint16_t offsetPosY = 0;
-    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId, 
+    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId,
                                            labelLine.fontSize);
     uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontId,
                                                  labelLine.fontSize, letterIndex, labelLine.sizeSpans);
@@ -86,7 +86,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    labelLine.style.lineSpace_,
                                    havebackgroundColor,
                                    backgroundColor};
-        if (TypedText::IsColourWord(letterInfo.fontId)) {
+        if (TypedText::IsColourWord(letter, fontId, fontSize)) {
             if (!isEmoijLerge) {
                 letterInfo.offsetY = offsetPosY;
             }
@@ -118,7 +118,7 @@ uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, u
     uint8_t maxLetterSize = fontSize;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
-        if (TypedText::IsColourWord(fontId)) {
+        if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
             letterIndex++;
             continue;
         }
