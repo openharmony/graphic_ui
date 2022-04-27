@@ -455,9 +455,16 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
     }
 }
 
-bool TypedText::IsColourWord(uint32_t fontId)
+bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
 {
-    uint8_t weight = UIFont::GetInstance()->GetFontWeight(fontId);
+    GlyphNode glyphNode;
+    int8_t ret = UIFont::GetInstance()->GetGlyphNode(codePoint, glyphNode, fontId, fontSize);
+    if (ret != RET_VALUE_OK) {
+        GRAPHIC_LOGE("Failed to get glyphNode for color word");
+        return false;
+    }
+
+    uint8_t weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
     return (weight >= 16); // 16: rgb565->16 rgba8888->32 font with rgba
 }
 } // namespace OHOS

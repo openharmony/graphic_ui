@@ -151,30 +151,29 @@ int8_t UIFontBitmap::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8
 #if ENABLE_MULTI_FONT
 int8_t UIFontBitmap::GetMultiGlyphNode( uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
-    if (TypedText::IsColourWord(fontId)) {
-        int8_t ret;
-        uint8_t* searchLists = nullptr;
-        //uint8_t baseId = GetBaseFontId();
-        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
-        int8_t currentIndex = 0;
-        if ((searchLists == nullptr) || (listSize == 0)) {
-            return INVALID_RET_VALUE;
-        }
-        do {
-            ret = GetGlyphNode(unicode, glyphNode, searchLists[currentIndex]);
-            if (ret != INVALID_RET_VALUE) {
-                return ret;
-            }
-            // switch to next search List
-            currentIndex++;
-        } while ((currentIndex < listSize) && (searchLists != nullptr));
-        return INVALID_RET_VALUE;
-    } else {
-        return GetGlyphNode(unicode, glyphNode, fontId);
+    int8_t ret = GetGlyphNode(unicode, glyphNode, fontId);
+    if (ret == RET_VALUE_OK) {
+        return ret;
     }
 
+    uint8_t* searchLists = nullptr;
+    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
+    int8_t currentIndex = 0;
+    if ((searchLists == nullptr) || (listSize == 0)) {
+        return INVALID_RET_VALUE;
+    }
+    do {
+        ret = GetGlyphNode(unicode, glyphNode, searchLists[currentIndex]);
+        if (ret != INVALID_RET_VALUE) {
+            return ret;
+        }
+        // switch to next search List
+        currentIndex++;
+    } while ((currentIndex < listSize) && (searchLists != nullptr));
+    return INVALID_RET_VALUE;
 }
 #endif
+
 int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
 {
     const GlyphNode* node = dynamicFont_.GetGlyphNode(unicode, fontId);
@@ -332,7 +331,8 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
 #endif
         if (ret == RET_VALUE_OK) {
-            if (TypedText::IsColourWord(fontId)) {
+            uint8_t weight = GetFontWeight(glyphNode.fontId);
+            if (weight >= 16) { // 16: bit rgb565 rgba8888
                 emoijMaxNode = glyphNode.rows > emoijMaxNode.rows ? glyphNode : emoijMaxNode;
                 emojiNum++;
             } else {
