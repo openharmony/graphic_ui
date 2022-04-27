@@ -90,7 +90,7 @@ public:
     static bool IsEmojiModifier(uint32_t codePoint);
     static bool IsEmojiBase(uint32_t codePoint);
 
-    static bool IsColourWord(uint32_t fontId);
+    static bool IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize);
 
 private:
     static bool GetWrapPoint(const char* text, uint32_t& breakPoint);
