@@ -130,12 +130,12 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text, uint8_t fontId
             preIndex = byteIdx;
             continue;
         }
-        if (isAllCanBreak || IsBreakPos(unicode, fontId, state)) {
-            if (!TypedText::IsColourWord(fontId)) {
+        if (isAllCanBreak || IsBreakPos(unicode, fontId, fontSize, state)) {
+            if (!TypedText::IsColourWord(unicode, fontId, fontSize)) {
                 state = LINE_BREAK_STATE_START;
             }
             // Accumulates the status value from the current character.
-            IsBreakPos(unicode, fontId, state);
+            IsBreakPos(unicode, fontId, fontSize, state);
             lastIndex = preIndex;
             lastWidth = curWidth;
         }
@@ -185,9 +185,9 @@ int16_t UILineBreakEngine::GetLetterWidth(uint32_t unicode, uint16_t& letterInde
     }
 }
 
-bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint8_t fontId, int32_t& state)
+bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fontSize, int32_t& state)
 {
-    if (TypedText::IsColourWord(fontId)) {
+    if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
         return true;
     }
     if ((unicode > TypedText::MAX_UINT16_HIGH_SCOPE) || (stateTbl_ == nullptr) || (lineBreakTrie_ == nullptr)) {

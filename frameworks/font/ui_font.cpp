@@ -100,6 +100,31 @@ uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontI
     return nullptr;
 }
 
+int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
+{
+    int8_t result = instance_->GetGlyphNode(unicode, glyphNode, fontId, fontSize);
+    if (result == RET_VALUE_OK) {
+        return result;
+    }
+
+#if ENABLE_MULTI_FONT
+    uint8_t* searchLists = nullptr;
+    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
+    if ((searchLists == nullptr) || (listSize == 0)) {
+        return INVALID_RET_VALUE;
+    }
+    int8_t currentIndex = 0;
+    do {
+        result = instance_->GetGlyphNode(unicode, glyphNode, searchLists[currentIndex], fontSize);
+        if (result == RET_VALUE_OK) {
+            return result;
+        }
+        currentIndex++;
+    } while ((currentIndex < listSize) && (searchLists != nullptr));
+#endif
+    return INVALID_RET_VALUE;
+}
+
 uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize, uint8_t shapingId)
 {
     int16_t result;

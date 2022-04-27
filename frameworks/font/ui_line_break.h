@@ -118,7 +118,7 @@ public:
                                  uint16_t& letterIndex,
                                  SizeSpan* sizeSpans,
                                  uint16_t len = 0xFFFF);
-    bool IsBreakPos(uint32_t unicode, uint8_t fontId, int32_t& state);
+    bool IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fontSize, int32_t& state);
 
 private:
     UILineBreakEngine()
