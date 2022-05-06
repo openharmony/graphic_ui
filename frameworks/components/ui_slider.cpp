@@ -368,7 +368,9 @@ bool UISlider::OnRotateEvent(const RotateEvent& event)
         return UIView::OnRotateEvent(event);
     }
     cachedRotation_ = 0;
+#if ENABLE_VIBRATOR
     int32_t lastValue = curValue_;
+#endif
     SetValue(curValue_ + realRotation);
     if (listener_ != nullptr) {
         listener_->OnChange(curValue_);
