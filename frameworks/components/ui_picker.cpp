@@ -298,6 +298,7 @@ void UIPicker::ClearTextAdapter()
     }
     list_.SetAdapter(textAdapter_);
     list_.RefreshList();
+    isSetAdaptered_ = false;
 }
 
 bool UIPicker::SetSelected(uint16_t index)
