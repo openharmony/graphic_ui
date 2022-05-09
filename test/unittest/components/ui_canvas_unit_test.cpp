@@ -46,16 +46,11 @@ namespace {
     const float LINE_OFFSET1 = 10.0;
     const float LINE_OFFSET2 = 50.0;
     const float LINE_OFFSET3 = 150.0;
-    const int16_t LINE_WIDTH1 = 1;
-    const int16_t LINE_WIDTH2 = 5;
-    const int16_t LINE_WIDTH3 = 9;
     const float MITERLIMIT1 = 11.05;
     const float MITERLIMIT2 = 4.6;
     const float MITERLIMIT3 = -5.6;
     const int16_t IMAGE_X = 20;
     const int16_t IMAGE_Y = 10;
-    const int16_t IMAGE_WIDTH = 20;
-    const int16_t IMAGE_HEIGHT = 10;
     const uint8_t FONT_SIZE = 15;
     const int16_t LETTER_SPACE = 2;
     const float SCALE_X = 0.5;

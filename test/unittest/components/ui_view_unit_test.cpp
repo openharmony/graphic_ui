@@ -793,7 +793,6 @@ HWTEST_F(UIViewTest, UIViewSetOpaScale_001, TestSize.Level1)
         EXPECT_NE(0, 0);
         return;
     }
-    uint8_t opaScale = OPA_OPAQUE;
 
     view_->SetOpaScale(OPA_OPAQUE);
     EXPECT_EQ(view_->GetOpaScale(), OPA_OPAQUE);

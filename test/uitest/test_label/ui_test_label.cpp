@@ -22,13 +22,6 @@
 #include "common/spannable_string.h"
 #endif
 namespace OHOS {
-namespace {
-const int16_t GAP = 5;
-const int16_t TITLE_HEIGHT = 20;
-const uint16_t LABEL_WIDTH = 350;
-const uint16_t LABEL_HEIGHT = 50;
-} // namespace
-
 void UITestLabel::SetUp()
 {
     if (container_ == nullptr) {
