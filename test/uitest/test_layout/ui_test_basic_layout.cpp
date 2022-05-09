@@ -19,12 +19,6 @@
 namespace OHOS {
 namespace {
 const int16_t ITEM_H = 50;
-const int16_t TEXT_H = 20;
-const int16_t TEXT_W = 250;
-const int16_t TEST_VIEW_H = 40;
-const int16_t TEST_VIEW_W = 40;
-const int16_t GAP = 5;
-const int16_t TEST_VIEW_GAP = 80;
 } // namespace
 
 void UITestBasicLayout::SetUp()

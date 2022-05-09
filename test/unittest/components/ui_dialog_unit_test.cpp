@@ -23,13 +23,6 @@
 #if ENABLE_DEBUG
 using namespace testing::ext;
 namespace OHOS {
-namespace {
-    const int16_t POS_X = 50;
-    const int16_t POS_Y = 100;
-    const uint16_t WIDTH = 100;
-    const uint16_t HEIGHT = 100;
-}
-
 class UIDialogTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
