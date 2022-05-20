@@ -980,9 +980,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in, con
 
                 Color16 result;
 #if ENABLE_FIXED_POINT
-                result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
-                result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
-                result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
+                result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+                result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+                result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
 #else
                 result.red = static_cast<uint8_t>(outR >> 5);   // 5:shift 5 bit right
                 result.green = static_cast<uint8_t>(outG >> 6); // 6:shift 6 bit right
@@ -1100,9 +1100,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, con
 
                 Color24 result;
 #if ENABLE_FIXED_POINT
-                result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
-                result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
-                result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
+                result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+                result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+                result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
 #else
                 result.red = static_cast<uint8_t>(outR >> 8);   // 8:shift 8 bit right
                 result.green = static_cast<uint8_t>(outG >> 8); // 8:shift 8 bit right
