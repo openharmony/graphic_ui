@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_arc_label.h"
+
 #include "common/typed_text.h"
 #include "draw/draw_label.h"
 #include "engines/gfx/gfx_engine_manager.h"
@@ -134,9 +135,8 @@ void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, Opacity
     center.x = arcTextInfo_.arcCenter.x + GetRect().GetX();
     center.y = arcTextInfo_.arcCenter.y + GetRect().GetY();
     InitArcLabelText();
-    UIFont::GetInstance()->SetCurrentFontId(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
     DrawLabel::DrawArcText(gfxDstBuffer, mask, arcLabelText_->GetText(), center, arcLabelText_->GetFontId(),
-                           arcTextInfo_, orientation_, *style_, opaScale);
+                           arcLabelText_->GetFontSize(), arcTextInfo_, orientation_, *style_, opaScale);
 }
 
 void UIArcLabel::RefreshArcLabel()
@@ -154,11 +154,11 @@ void UIArcLabel::ReMeasure()
     }
     needRefresh_ = false;
     InitArcLabelText();
-    UIFont::GetInstance()->SetCurrentFontId(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
 
     MeasureArcTextInfo();
-    Rect textRect = TypedText::GetArcTextRect(arcLabelText_->GetText(), arcCenter_, style_->letterSpace_, orientation_,
-                                              arcTextInfo_);
+    Rect textRect =
+        TypedText::GetArcTextRect(arcLabelText_->GetText(), arcLabelText_->GetFontId(), arcLabelText_->GetFontSize(),
+                                  arcCenter_, style_->letterSpace_, orientation_, arcTextInfo_);
     int16_t arcTextWidth = textRect.GetWidth();
     int16_t arcTextHeight = textRect.GetHeight();
 
@@ -177,7 +177,7 @@ void UIArcLabel::MeasureArcTextInfo()
     if (text == nullptr) {
         return;
     }
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
     arcTextInfo_.radius = ((orientation_ == TextOrientation::INSIDE) ? radius_ : (radius_ - letterHeight));
     if (arcTextInfo_.radius == 0) {
         return;
@@ -196,11 +196,13 @@ void UIArcLabel::MeasureArcTextInfo()
     // calculate max arc length
     float maxLength = static_cast<float>((UI_PI * radius_ * arcAngle) / SEMICIRCLE_IN_DEGREE);
     arcTextInfo_.lineStart = 0;
-    arcTextInfo_.lineEnd =
-        TypedText::GetNextLine(&text[arcTextInfo_.lineStart], style_->letterSpace_, static_cast<int16_t>(maxLength));
+    arcTextInfo_.lineEnd = TypedText::GetNextLine(&text[arcTextInfo_.lineStart], arcLabelText_->GetFontId(),
+                                                  arcLabelText_->GetFontSize(), style_->letterSpace_,
+                                                  static_cast<int16_t>(maxLength));
     arcTextInfo_.startAngle = startAngle_ % CIRCLE_IN_DEGREE;
-    int16_t actLength = TypedText::GetTextWidth(&text[arcTextInfo_.lineStart],
-                                                arcTextInfo_.lineEnd - arcTextInfo_.lineStart, style_->letterSpace_);
+    int16_t actLength =
+        TypedText::GetTextWidth(&text[arcTextInfo_.lineStart], arcLabelText_->GetFontId(), arcLabelText_->GetFontSize(),
+                                arcTextInfo_.lineEnd - arcTextInfo_.lineStart, style_->letterSpace_);
     if ((arcLabelText_->GetHorAlign() != TEXT_ALIGNMENT_LEFT) && (actLength < maxLength)) {
         float gapLength = maxLength - actLength;
         if (arcLabelText_->GetHorAlign() == TEXT_ALIGNMENT_CENTER) {

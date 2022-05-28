@@ -275,7 +275,8 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
 #if ENABLE_VECTOR_FONT
     node.textStyle = letterInfo.textStyle;
 #endif
-    const uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.shapingId);
+    const uint8_t* fontMap =
+        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
@@ -287,7 +288,7 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
         posY = letterInfo.pos.y + letterInfo.offsetY;
     } else {
         FontHeader head;
-        if (fontEngine->GetCurrentFontHeader(head) != 0) {
+        if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
             return;
         }
         posY = letterInfo.pos.y + head.ascender - letterInfo.offsetY;
@@ -315,19 +316,15 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
 }
 
 void DrawUtils::DrawNormalLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo &letterInfo,
-                                 uint8_t maxLetterSize, bool isSpanLetter) const
+                                 uint8_t maxLetterSize) const
 {
     UIFont* fontEngine = UIFont::GetInstance();
     GlyphNode node;
 #if ENABLE_VECTOR_FONT
     node.textStyle = letterInfo.textStyle;
 #endif
-    const uint8_t* fontMap = nullptr;
-    if (isSpanLetter) {
-        fontMap = fontEngine->GetBitmapSpannable(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize);
-    } else {
-        fontMap = fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.shapingId);
-    }
+    const uint8_t* fontMap =
+        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
@@ -341,7 +338,7 @@ void DrawUtils::DrawNormalLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo
         posY = letterInfo.pos.y + maxLetterSize - node.top + letterInfo.offsetY;
     } else {
         FontHeader head;
-        if (fontEngine->GetCurrentFontHeader(head) != 0) {
+        if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
             return;
         }
         posY = letterInfo.pos.y + head.ascender - node.top - letterInfo.offsetY;
@@ -980,9 +977,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear565(const TriangleScanInfo& in, con
 
                 Color16 result;
 #if ENABLE_FIXED_POINT
-                result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
-                result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
-                result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
+                result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+                result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+                result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
 #else
                 result.red = static_cast<uint8_t>(outR >> 5);   // 5:shift 5 bit right
                 result.green = static_cast<uint8_t>(outG >> 6); // 6:shift 6 bit right
@@ -1100,9 +1097,9 @@ void DrawUtils::DrawTriangleTrueColorBilinear888(const TriangleScanInfo& in, con
 
                 Color24 result;
 #if ENABLE_FIXED_POINT
-                result.red = static_cast<uint8_t>(outR >> 15);   // 15: shift 15 bit right to convert fixed to int
-                result.green = static_cast<uint8_t>(outG >> 15); // 15: shift 15 bit right to convert fixed to int
-                result.blue = static_cast<uint8_t>(outB >> 15);  // 15: shift 15 bit right to convert fixed to int
+                result.red = static_cast<uint8_t>(outR >> FIXED_Q_NUM);
+                result.green = static_cast<uint8_t>(outG >> FIXED_Q_NUM);
+                result.blue = static_cast<uint8_t>(outB >> FIXED_Q_NUM);
 #else
                 result.red = static_cast<uint8_t>(outR >> 8);   // 8:shift 8 bit right
                 result.green = static_cast<uint8_t>(outG >> 8); // 8:shift 8 bit right
