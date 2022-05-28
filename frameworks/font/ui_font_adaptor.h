@@ -22,10 +22,16 @@
 namespace OHOS {
 class UIFontAdaptor : public HeapBase {
 public:
-    static uint32_t GetNextLineAndWidth(const char* txt, int16_t letterSpace,
-                                        int16_t& maxWidth, int16_t& maxHeight,
-                                        uint16_t& letterIndex, SizeSpan* sizeSpans,
-                                        bool allBreak = false, uint16_t len = 0xFFFF);
+    static uint32_t GetNextLineAndWidth(const char* txt,
+                                        uint8_t fontId,
+                                        uint8_t fontSize,
+                                        int16_t letterSpace,
+                                        int16_t& maxWidth,
+                                        int16_t& maxHeight,
+                                        uint16_t& letterIndex,
+                                        SizeSpan* sizeSpans,
+                                        bool allBreak = false,
+                                        uint16_t len = 0xFFFF);
 
     static bool IsSameTTFId(uint8_t fontId, uint32_t unicode);
 };

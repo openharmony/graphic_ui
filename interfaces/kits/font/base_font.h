@@ -23,7 +23,7 @@
 namespace OHOS {
 class BaseFont : public HeapBase {
 public:
-    BaseFont() : fontId_(0), ramAddr_(0), ramLen_(0) {}
+    BaseFont() : ramAddr_(0), ramLen_(0) {}
     virtual ~BaseFont() {}
 
     /**
@@ -33,22 +33,11 @@ public:
     virtual bool IsVectorFont() const = 0;
 
     /**
-     * @brief Set font by id
-     *
-     * @param fontid [in] the font id
-     * @param size [in] the font size
-     * @return int8_t: -1 failed, 0 success
-     */
-    virtual int8_t SetCurrentFontId(uint8_t fontId, uint8_t size) = 0;
-
-    /**
      * @brief Get height for specific font
      *
      * @return uint16_t
      */
-    virtual uint16_t GetHeight() = 0;
-
-    virtual uint16_t GetHeightByFontId(uint8_t fontId, uint8_t size) = 0;
+    virtual uint16_t GetHeight(uint8_t fontId, uint8_t fontSize) = 0;
 
     /**
      * @brief Get font id
@@ -57,7 +46,7 @@ public:
      * @param size   0: invalid size
      * @return uint8_t
      */
-    virtual uint8_t GetFontId(const char* ttfName, uint8_t size) const = 0;
+    virtual uint8_t GetFontId(const char* ttfName, uint8_t fontSize) const = 0;
 
     /**
      * @brief Get width
@@ -65,9 +54,7 @@ public:
      * @param unicode
      * @return int16_t
      */
-    virtual int16_t GetWidth(uint32_t unicode, uint8_t fontId) = 0;
-
-    virtual int16_t GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size) = 0;
+    virtual int16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize) = 0;
 
     virtual int32_t OpenVectorFont(uint8_t ttfId)
     {
@@ -79,9 +66,7 @@ public:
      * @param unicode
      * @return uint8_t*
      */
-    virtual uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId) = 0;
-
-    virtual uint8_t* GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size) = 0;
+    virtual uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize) = 0;
 
     /**
      * @brief Get font header
@@ -89,7 +74,7 @@ public:
      * @param fontHeader
      * @return int8_t
      */
-    virtual int8_t GetCurrentFontHeader(FontHeader& fontHeader) = 0;
+    virtual int8_t GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize) = 0;
 
     /**
      * @brief Get the glyph node
@@ -99,7 +84,7 @@ public:
      * @param isGlyph
      * @return int8_t
      */
-    virtual int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode) = 0;
+    virtual int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize) = 0;
     virtual uint8_t GetFontWeight(uint8_t fontId) = 0;
 
     virtual int8_t SetCurrentLangId(uint8_t langId)
@@ -210,34 +195,19 @@ public:
 
     virtual void SetFontFileOffset(uint32_t offset) {}
 
-    /**
-     * @brief Get current font id
-     *
-     * @return uint8_t
-     */
-    void SetBaseFontId(uint8_t fontId);
-    uint8_t GetBaseFontId();
     void SetRamAddr(uintptr_t ramAddr);
     uintptr_t GetRamAddr();
     uint32_t GetRamLen();
     void SetRamLen(uint32_t ramLen);
     void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen);
 
-    /**
-     * @brief Get Height
-     *
-     * @param unicode
-     * @return int16_t
-     */
-    virtual uint16_t GetHeight(uint32_t unicode, uint8_t fontId) = 0;
-
-    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLarge, uint8_t fontSize) = 0;
-
-    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLarge,
+                                   uint8_t fontId, uint8_t fontSize) = 0;
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                       uint16_t& letterIndex, SizeSpan* sizeSpans) = 0;
     virtual bool IsEmojiFont(uint8_t fontId) = 0;
+
 private:
-    uint8_t fontId_;
     uintptr_t ramAddr_;
     uint32_t ramLen_;
 };

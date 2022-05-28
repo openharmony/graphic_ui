@@ -210,8 +210,7 @@ public:
                    const ColorType& color, OpacityType opa) const;
 
     void DrawColorLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const;
-    void DrawNormalLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo,
-                          uint8_t maxLetterSize, bool isSpanLetter) const;
+    void DrawNormalLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo, uint8_t maxLetterSize) const;
 
     void DrawLetter(BufferInfo& gfxDstBuffer,
                     const uint8_t* fontMap,
