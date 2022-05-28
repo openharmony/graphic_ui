@@ -118,18 +118,6 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_SetFontPath_002, TestSize.Level1)
 }
 
 /**
- * @tc.name: Graphic_Font_Test_SetCurrentFontId_001
- * @tc.desc: Verify SetCurrentFontId function, abnormal value test.
- * @tc.type: FUNC
- * @tc.require: AR000FQNFR
- */
-HWTEST_F(UIFontTest, Graphic_Font_Test_SetCurrentFontId_001, TestSize.Level1)
-{
-    int8_t ret = UIFont::GetInstance()->SetCurrentFontId(0, 0);
-    EXPECT_EQ(ret, INVALID_RET);
-}
-
-/**
  * @tc.name: Graphic_Font_Test_GetFontId_001
  * @tc.desc: Verify GetFontId function, nullptr test.
  * @tc.type: FUNC
@@ -161,7 +149,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetFontId_002, TestSize.Level1)
  */
 HWTEST_F(UIFontTest, Graphic_Font_Test_GetHeight_001, TestSize.Level1)
 {
-    uint16_t height = UIFont::GetInstance()->GetHeight();
+    uint16_t height = UIFont::GetInstance()->GetHeight(FONT_ID, 0);
 #if ENABLE_VECTOR_FONT
     EXPECT_EQ(height, 0);
 #else
@@ -177,7 +165,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetHeight_001, TestSize.Level1)
  */
 HWTEST_F(UIFontTest, Graphic_Font_Test_GetWidth_001, TestSize.Level1)
 {
-    uint16_t width = UIFont::GetInstance()->GetWidth(0, 0);
+    uint16_t width = UIFont::GetInstance()->GetWidth(0, 0, 0, 0);
     EXPECT_EQ(width, 0);
 }
 
@@ -190,20 +178,20 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetWidth_001, TestSize.Level1)
 HWTEST_F(UIFontTest, Graphic_Font_Test_GetBitmap_001, TestSize.Level1)
 {
     GlyphNode node;
-    uint8_t* bitmap = UIFont::GetInstance()->GetBitmap(0, node, 0);
+    uint8_t* bitmap = UIFont::GetInstance()->GetBitmap(0, node, 0, 0, 0);
     EXPECT_EQ(bitmap, nullptr);
 }
 
 /**
- * @tc.name: Graphic_Font_Test_GetCurrentFontHeader_001
- * @tc.desc: Verify GetCurrentFontHeader function, abnormal value test.
+ * @tc.name: Graphic_Font_Test_GetFontHeader_001
+ * @tc.desc: Verify GetFontHeader function, abnormal value test.
  * @tc.type: FUNC
  * @tc.require: AR000FQNFR
  */
-HWTEST_F(UIFontTest, Graphic_Font_Test_GetCurrentFontHeader_001, TestSize.Level1)
+HWTEST_F(UIFontTest, Graphic_Font_Test_GetFontHeader_001, TestSize.Level1)
 {
     FontHeader header;
-    int8_t res = UIFont::GetInstance()->GetCurrentFontHeader(header);
+    int8_t res = UIFont::GetInstance()->GetFontHeader(header, FONT_ID, 0);
     EXPECT_EQ(res, INVALID_RET);
 }
 

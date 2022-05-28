@@ -43,11 +43,10 @@ public:
 
     ~UIFontCache();
 
-//    uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size);
-
     uint8_t* GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle = TEXT_STYLE_NORMAL);
     void PutSpace(uint8_t* addr);
     uint8_t* GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle textStyle = TEXT_STYLE_NORMAL);
+
 private:
     void UpdateLru(Bitmap* bitmap);
     void ListInit(ListHead* head)

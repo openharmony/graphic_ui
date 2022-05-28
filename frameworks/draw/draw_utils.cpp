@@ -275,7 +275,8 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
 #if ENABLE_VECTOR_FONT
     node.textStyle = letterInfo.textStyle;
 #endif
-    const uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.shapingId);
+    const uint8_t* fontMap =
+        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
@@ -287,7 +288,7 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
         posY = letterInfo.pos.y + letterInfo.offsetY;
     } else {
         FontHeader head;
-        if (fontEngine->GetCurrentFontHeader(head) != 0) {
+        if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
             return;
         }
         posY = letterInfo.pos.y + head.ascender - letterInfo.offsetY;
@@ -315,19 +316,15 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
 }
 
 void DrawUtils::DrawNormalLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo &letterInfo,
-                                 uint8_t maxLetterSize, bool isSpanLetter) const
+                                 uint8_t maxLetterSize) const
 {
     UIFont* fontEngine = UIFont::GetInstance();
     GlyphNode node;
 #if ENABLE_VECTOR_FONT
     node.textStyle = letterInfo.textStyle;
 #endif
-    const uint8_t* fontMap = nullptr;
-    if (isSpanLetter) {
-        fontMap = fontEngine->GetBitmapSpannable(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize);
-    } else {
-        fontMap = fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.shapingId);
-    }
+    const uint8_t* fontMap =
+        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
@@ -341,7 +338,7 @@ void DrawUtils::DrawNormalLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo
         posY = letterInfo.pos.y + maxLetterSize - node.top + letterInfo.offsetY;
     } else {
         FontHeader head;
-        if (fontEngine->GetCurrentFontHeader(head) != 0) {
+        if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
             return;
         }
         posY = letterInfo.pos.y + head.ascender - node.top - letterInfo.offsetY;
