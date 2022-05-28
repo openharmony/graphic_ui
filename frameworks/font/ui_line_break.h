@@ -18,12 +18,14 @@
 
 #include "graphic_config.h"
 #if ENABLE_ICU
+#include <cstdint>
+#include <string>
+
 #include "font/ui_font_header.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/heap_base.h"
 #include "gfx_utils/mem_api.h"
-#include <cstdint>
-#include <string>
+
 namespace OHOS {
 class UILineBreakProxy;
 /**
@@ -107,11 +109,17 @@ public:
     }
 
     // 0xFFFF: unlimit the length until the end null.
-    uint32_t GetNextLineAndWidth(const char* text, int16_t space, bool allBreak,
-                                 int16_t& maxWidth, int16_t& maxHeight,
-                                 uint16_t& letterIndex, SizeSpan* sizeSpans,
+    uint32_t GetNextLineAndWidth(const char* text,
+                                 uint8_t fontId,
+                                 uint8_t fontSize,
+                                 int16_t space,
+                                 bool allBreak,
+                                 int16_t& maxWidth,
+                                 int16_t& maxHeight,
+                                 uint16_t& letterIndex,
+                                 SizeSpan* sizeSpans,
                                  uint16_t len = 0xFFFF);
-    bool IsBreakPos(uint32_t unicode, int32_t& state);
+    bool IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fontSize, int32_t& state);
 
 private:
     UILineBreakEngine()
@@ -122,7 +130,7 @@ private:
 
     void LoadRule();
     int16_t GetLetterWidth(uint32_t unicode, uint16_t& letterIndex, int16_t& maxHeight,
-                           SizeSpan* sizeSpans);
+                           uint8_t fontId, uint8_t fontSize, SizeSpan* sizeSpans);
     static constexpr const int32_t LINE_BREAK_STATE_START = 1;
     static constexpr const int32_t LINE_BREAK_STATE_STOP = 0;
     bool initSuccess_;

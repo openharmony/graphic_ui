@@ -17,7 +17,6 @@
 #define GLYPHS_MANAGER_FONT_H
 
 #include "font/ui_font_header.h"
-#include "graphic_locker.h"
 
 namespace OHOS {
 class GlyphsManager {
@@ -34,21 +33,19 @@ public:
 
     int8_t GetFontVersion(char* version, uint8_t len) const;
 
-    int16_t GetFontHeight() const;
+    int16_t GetFontHeight(uint8_t fontId);
 
-    int16_t GetFontWidth(uint32_t unicode);
+    int16_t GetFontWidth(uint32_t unicode, uint8_t fontId);
 
-    const FontHeader* GetCurrentFontHeader() const;
+    const FontHeader* GetFontHeader(uint8_t fontId);
 
-    const GlyphNode* GetGlyphNode(uint32_t unicode);
+    const GlyphNode* GetGlyphNode(uint32_t unicode, uint8_t fontId);
 
     int8_t GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId);
 
     void SetRamBuffer(uintptr_t ramAddr);
 
     int8_t SetFile(int32_t fp, uint32_t start);
-
-    int8_t SetCurrentFontId(uint8_t fontId);
 
 private:
     static constexpr uint8_t RADIX_TREE_BITS = 4;
@@ -72,6 +69,15 @@ private:
         uint16_t stubs[RADIX_TREE_SLOT_NUM];
     };
 
+    struct GlyphInfo {
+        uint8_t fontId;
+        uint32_t glyphNodeSectionStart;
+        uint32_t bitMapSectionStart;
+        uint32_t fontIndexSectionStart;
+        uint8_t* indexCache;
+        FontHeader* fontHeader;
+    };
+
     int8_t GlyphNodeCacheInit();
     GlyphNode* GetNodeFromCache(uint32_t unicode, uint8_t fontId);
     GlyphNode* GetNodeCacheSpace(uint32_t unicode, uint8_t fontId);
@@ -80,36 +86,28 @@ private:
     {
         return (((addr + (1 << align)) >> align) << align);
     }
+    int8_t GetGlyphInfo(uint8_t fontId, GlyphInfo& glyphInfo);
 
     BinHeader binHeader_;
     uint8_t fontNum_;
     uint32_t start_;
     uint32_t fontHeaderSectionStart_;
     uint32_t fontIndexSectionStart_;
-    uint32_t curFontIndexSectionStart_;
     uint32_t glyphNodeSectionStart_;
-    uint32_t curGlyphNodeSectionStart_;
     uint32_t bitMapSectionStart_;
-    uint32_t curBitMapSectionStart_;
 
     uint8_t* ramAddr_;
     uint32_t ramUsedLen_;
     FontHeader* fontHeaderCache_;
     uint8_t* indexCache_;
-    uint8_t* curIndexCache_;
 
     CacheType* nodeCache_;
     CacheState* cacheStatus_;
 
-    GraphicMutex lock_;
     int32_t fp_;
-    uint8_t fontId_;
-    FontHeader* curFontHeader_;
-    GlyphNode* curGlyphNode_;
 
     bool isRamSet_;
     bool isFileSet_;
-    bool isFontIdSet_;
 };
 } // namespace OHOS
 #endif /* GLYPHS_MANAGER_FONT_H */

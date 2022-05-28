@@ -22,8 +22,8 @@
 
 namespace OHOS {
 #ifndef _FONT_TOOL
-Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t lineHeight, int16_t maxWidth,
-                             SizeSpan* sizeSpans, int8_t lineSpace)
+Point TypedText::GetTextSize(const char* text, uint8_t fontId, uint8_t fontSize, int16_t letterSpace,
+                             int16_t lineHeight, int16_t maxWidth, int8_t lineSpace, SizeSpan* sizeSpans)
 {
     Point size{0, 0};
 
@@ -34,7 +34,7 @@ Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t line
 
     uint32_t lineBegin = 0;
     uint32_t newLineBegin = 0;
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId, fontSize);
     uint16_t height = lineHeight;
     if (lineHeight == 0) {
         lineHeight = letterHeight + lineSpace;
@@ -43,8 +43,8 @@ Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t line
     uint16_t letterIndex = 0;
     while (text[lineBegin] != '\0') {
         int16_t lineWidth = maxWidth;
-        newLineBegin += UIFontAdaptor::GetNextLineAndWidth(&text[lineBegin], letterSpace, lineWidth, lineHeight,
-                                                           letterIndex, sizeSpans);
+        newLineBegin += UIFontAdaptor::GetNextLineAndWidth(&text[lineBegin], fontId, fontSize, letterSpace,
+                                                           lineWidth, lineHeight, letterIndex, sizeSpans);
         if (newLineBegin == lineBegin) {
             break;
         }
@@ -75,6 +75,8 @@ Point TypedText::GetTextSize(const char* text, int16_t letterSpace, int16_t line
 }
 
 Rect TypedText::GetArcTextRect(const char* text,
+                               uint8_t fontId,
+                               uint8_t fontSize,
                                const Point& arcCenter,
                                int16_t letterSpace,
                                UIArcLabel::TextOrientation orientation,
@@ -85,7 +87,7 @@ Rect TypedText::GetArcTextRect(const char* text,
         return Rect();
     }
 
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId, fontSize);
     bool xorFlag = (orientation == UIArcLabel::TextOrientation::INSIDE) ^ (arcTextInfo.direct == TEXT_DIRECT_LTR);
     float posX = 0;
     float posY = 0;
@@ -103,7 +105,7 @@ Rect TypedText::GetArcTextRect(const char* text,
         if ((letter == '\r') || (letter == '\n')) {
             break;
         }
-        uint16_t letterWidth = UIFont::GetInstance()->GetWidth(letter, 0);
+        uint16_t letterWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
         if (tmp == arcTextInfo.lineStart) {
             angle += xorFlag ? GetAngleForArcLen(static_cast<float>(letterWidth), letterHeight, arcTextInfo.radius,
                                                  arcTextInfo.direct, orientation)
@@ -157,18 +159,19 @@ void TypedText::GetArcLetterPos(const Point& arcCenter, uint16_t radius, float a
     posY = arcCenter.y - (static_cast<float>(radius) * Sin(angle + QUARTER_IN_DEGREE));
 }
 
-uint32_t TypedText::GetNextLine(const char* text, int16_t letterSpace, int16_t maxWidth)
+uint32_t TypedText::GetNextLine(const char* text, uint8_t fontId, uint8_t fontSize, int16_t letterSpace,
+                                int16_t maxWidth)
 {
     uint32_t index = 0;
     if ((text == nullptr) || (GetWrapPoint(text, index) &&
-        (TypedText::GetTextWidth(text, index, letterSpace) <= maxWidth))) {
+        (TypedText::GetTextWidth(text, fontId, fontSize, index, letterSpace) <= maxWidth))) {
         return index;
     }
     uint32_t lastBreakPos = 0;
     int16_t curW;
     uint32_t tmp = 0;
     while (true) {
-        curW = TypedText::GetTextWidth(text, index, letterSpace);
+        curW = TypedText::GetTextWidth(text, fontId, fontSize, index, letterSpace);
         if (curW > maxWidth) {
             index = lastBreakPos;
             if (lastBreakPos == 0) {
@@ -179,7 +182,7 @@ uint32_t TypedText::GetNextLine(const char* text, int16_t letterSpace, int16_t m
                 while (text[i] != '\0') {
                     tmp = i;
                     letter = TypedText::GetUTF8Next(text, tmp, i);
-                    letterWidth = UIFont::GetInstance()->GetWidth(letter, 0);
+                    letterWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
                     curW += letterWidth;
                     if (letterWidth > 0) {
                         curW += letterSpace;
@@ -200,7 +203,8 @@ uint32_t TypedText::GetNextLine(const char* text, int16_t letterSpace, int16_t m
         if (text[index] == '\0') {
             break;
         }
-        if (GetWrapPoint(text + index, tmp) && (TypedText::GetTextWidth(text, index + tmp, letterSpace) <= maxWidth)) {
+        if (GetWrapPoint(text + index, tmp) &&
+            (TypedText::GetTextWidth(text, fontId, fontSize, index + tmp, letterSpace) <= maxWidth)) {
             return index + tmp;
         }
         index += tmp;
@@ -238,7 +242,8 @@ bool TypedText::GetWrapPoint(const char* text, uint32_t& breakPoint)
     return false;
 }
 
-int16_t TypedText::GetTextWidth(const char* text, uint16_t length, int16_t letterSpace)
+int16_t TypedText::GetTextWidth(const char* text, uint8_t fontId, uint8_t fontSize, uint16_t length,
+                                int16_t letterSpace)
 {
     if ((text == nullptr) || (length == 0) || (length > strlen(text))) {
         GRAPHIC_LOGE("TypedText::GetTextWidth invalid parameter\n");
@@ -254,7 +259,7 @@ int16_t TypedText::GetTextWidth(const char* text, uint16_t length, int16_t lette
         if ((letter == 0) || (letter == '\n') || (letter == '\r')) {
             continue;
         }
-        uint16_t charWidth = UIFont::GetInstance()->GetWidth(letter, 0);
+        uint16_t charWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
         width += charWidth + letterSpace;
     }
     if (width > 0) {
@@ -405,7 +410,6 @@ uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
     return len;
 }
 
-#if ENABLE_VECTOR_FONT
 bool TypedText::IsEmoji(uint32_t codePoint)
 {
     // Miscellaneous symbols and symbol fonts
@@ -450,14 +454,17 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
         return false;
     }
 }
-#endif
 
-bool TypedText::IsColourWord(uint32_t codePoint)
+bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
 {
-#if ENABLE_VECTOR_FONT
-    return IsEmoji(codePoint) || IsEmojiModifier(codePoint) || IsEmojiBase(codePoint);
-#else
-    return codePoint >= 0xF000 && codePoint <= 0xF8FF;
-#endif
+    GlyphNode glyphNode;
+    int8_t ret = UIFont::GetInstance()->GetGlyphNode(codePoint, glyphNode, fontId, fontSize);
+    if (ret != RET_VALUE_OK) {
+        GRAPHIC_LOGE("Failed to get glyphNode for color word");
+        return false;
+    }
+
+    uint8_t weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
+    return (weight >= 16); // 16: rgb565->16 rgba8888->32 font with rgba
 }
 } // namespace OHOS

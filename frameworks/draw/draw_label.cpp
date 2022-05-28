@@ -42,19 +42,18 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     uint16_t retOffsetY = 0; // ret value elipse offsetY
     bool isEmoijLerge = true;
     uint16_t offsetPosY = 0;
-    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontSize);
-    uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontSize,
-                                                 letterIndex, labelLine.sizeSpans);
+    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId,
+                                           labelLine.fontSize);
+    uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontId,
+                                                 labelLine.fontSize, letterIndex, labelLine.sizeSpans);
     DrawLineBackgroundColor(gfxDstBuffer, letterIndex, labelLine);
     while (i < labelLine.lineLength) {
         letter = TypedText::GetUTF8Next(labelLine.text, i, i);
         uint8_t fontId = labelLine.fontId;
         uint8_t fontSize = labelLine.fontSize;
-        bool isSpanLetter = false;
         if (labelLine.sizeSpans != nullptr && labelLine.sizeSpans[letterIndex].isSizeSpan) {
             fontId = labelLine.sizeSpans[letterIndex].fontId;
             fontSize = labelLine.sizeSpans[letterIndex].size;
-            isSpanLetter = true;
         }
         bool havebackgroundColor = false;
         ColorType backgroundColor;
@@ -87,7 +86,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    labelLine.style.lineSpace_,
                                    havebackgroundColor,
                                    backgroundColor};
-        if (TypedText::IsColourWord(letterInfo.letter)) {
+        if (TypedText::IsColourWord(letter, fontId, fontSize)) {
             if (!isEmoijLerge) {
                 letterInfo.offsetY = offsetPosY;
             }
@@ -97,15 +96,9 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                 letterInfo.offsetY = labelLine.ellipsisOssetY == 0 ? offsetPosY : labelLine.ellipsisOssetY;
                 retOffsetY = offsetPosY;
             }
-            DrawUtils::GetInstance()->DrawNormalLetter(gfxDstBuffer, letterInfo, maxLetterSize, isSpanLetter);
+            DrawUtils::GetInstance()->DrawNormalLetter(gfxDstBuffer, letterInfo, maxLetterSize);
         }
-        if (isSpanLetter) {
-            letterWidth = fontEngine->GetWidthSpannable(letter,
-                                                        labelLine.sizeSpans[letterIndex].fontId,
-                                                        labelLine.sizeSpans[letterIndex].size);
-        } else {
-            letterWidth = fontEngine->GetWidth(letter, 0);
-        }
+        letterWidth = fontEngine->GetWidth(letter, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
         if (labelLine.direct == TEXT_DIRECT_RTL) {
             labelLine.pos.x -= (letterWidth + labelLine.style.letterSpace_);
         } else {
@@ -117,7 +110,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     return retOffsetY;
 }
 
-uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontSize,
+uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans)
 {
     uint32_t i = 0;
@@ -125,7 +118,7 @@ uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, u
     uint8_t maxLetterSize = fontSize;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
-        if (TypedText::IsColourWord(unicode)) {
+        if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
             letterIndex++;
             continue;
         }
@@ -145,6 +138,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                             const char* text,
                             const Point& arcCenter,
                             uint8_t fontId,
+                            uint8_t fontSize,
                             const UIArcLabel::ArcTextInfo arcTextInfo,
                             UIArcLabel::TextOrientation orientation,
                             const Style& style,
@@ -159,7 +153,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         return;
     }
     uint16_t letterWidth;
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId, fontSize);
     uint32_t i = arcTextInfo.lineStart;
     float angle = arcTextInfo.startAngle;
     float posX;
@@ -179,7 +173,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         if ((letter == '\r') || (letter == '\n')) {
             break;
         }
-        letterWidth = UIFont::GetInstance()->GetWidth(letter, 0);
+        letterWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
         if ((tmp == arcTextInfo.lineStart) && xorFlag) {
             angle += TypedText::GetAngleForArcLen(static_cast<float>(letterWidth), letterHeight, arcTextInfo.radius,
                                                   arcTextInfo.direct, orientation);
@@ -199,7 +193,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         TypedText::GetArcLetterPos(arcCenter, arcTextInfo.radius, angle, posX, posY);
         angle += incrementAngle;
 
-        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, letter, Point { MATH_ROUND(posX), MATH_ROUND(posY) },
+        DrawLetterWithRotate(gfxDstBuffer, mask, fontId, fontSize, letter, Point { MATH_ROUND(posX), MATH_ROUND(posY) },
                              static_cast<int16_t>(rotateAngle), style.textColor_, opaScale);
     }
 }
@@ -207,6 +201,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
 void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
                                      uint8_t fontId,
+                                     uint8_t fontSize,
                                      uint32_t letter,
                                      const Point& pos,
                                      int16_t rotateAngle,
@@ -219,11 +214,11 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
 #if ENABLE_VECTOR_FONT
     node.textStyle = TEXT_STYLE_NORMAL;
 #endif
-    if (fontEngine->GetCurrentFontHeader(head) != 0) {
+    if (fontEngine->GetFontHeader(head, fontId, fontSize) != 0) {
         return;
     }
 
-    const uint8_t* fontMap = fontEngine->GetBitmap(letter, node, 0);
+    const uint8_t* fontMap = fontEngine->GetBitmap(letter, node, fontId, fontSize, 0);
     if (fontMap == nullptr) {
         return;
     }
@@ -255,7 +250,6 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     BaseGfxEngine::GetInstance()->DrawTransform(gfxDstBuffer, mask, Point { 0, 0 }, color, opaScale, transMap,
                                                 letterTranDataInfo);
 }
-
 
 void DrawLabel::GetLineBackgroundColor(uint16_t letterIndex, List<LineBackgroundColor>* linebackgroundColor,
                                        bool& havelinebackground, ColorType& linebgColor)
