@@ -34,7 +34,8 @@ bool FocusManager::RequestFocus(UIView* view)
     lastFocusView_ = focusView_;
     focusView_ = view;
 
-    if (lastFocusView_ != nullptr) {
+    UIViewGroup* rootView = RootView::GetInstance();
+    if (RootView::FindSubView(*rootView, lastFocusView_)) {
         lastFocusView_->Blur();
     }
     focusView_->Focus();
