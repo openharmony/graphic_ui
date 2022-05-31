@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <string>
 
+#include "common/text.h"
 #include "font/ui_font_header.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/heap_base.h"
