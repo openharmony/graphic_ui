@@ -28,20 +28,21 @@ public:
     static uint16_t DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInfo& labelLine,
                                     uint16_t& letterIndex);
 
-    static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text,
-                            const Point& arcCenter, uint8_t fontId, const UIArcLabel::ArcTextInfo arcTextInfo,
+    static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text, const Point& arcCenter,
+                            uint8_t fontId, uint8_t fontSize, const UIArcLabel::ArcTextInfo arcTextInfo,
                             UIArcLabel::TextOrientation orientation, const Style& style, uint8_t opaScale);
 
     static void DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
                                      uint8_t fontId,
+                                     uint8_t fontSize,
                                      uint32_t letter,
                                      const Point& pos,
                                      int16_t rotateAngle,
                                      const ColorType& color,
                                      OpacityType opaScale);
-private:
-    static uint8_t GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontSize,
+
+    static uint8_t GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans);
     static void GetLineBackgroundColor(uint16_t letterIndex, List<LineBackgroundColor>* linebackgroundColor,
                                        bool& havelinebackground, ColorType& linebgColor);

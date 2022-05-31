@@ -38,39 +38,28 @@ public:
     }
 
     /**
-     * @brief Set font id
-     *
-     * @param fontId
-     * @param size
-     * @return int8_t
-     */
-    int8_t SetCurrentFontId(uint8_t fontId, uint8_t size = 0)
-    {
-        return instance_->SetCurrentFontId(fontId, size);
-    }
-
-    /**
      * @brief Get width of the letter
      *
      * @param unicode: [in] unicode or glyph index according to isGlyph param
-     * @param shapingId: [in]
+     * @param fontId: [in] font id
+     * @param fontSize: [in] font size
+     * @param shapingId: [in] font shaping id
      * @return uint16_t: the letter width
      */
-    uint16_t GetWidth(uint32_t unicode, uint8_t shapingId);
-
-    uint16_t GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size);
+    uint16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize, uint8_t shapingId);
 
     /**
      * @brief Get height for specific font
      *
+     * @param fontId: font id
+     * @param fontSize: font size
+     *
      * @return uint16_t
      */
-    uint16_t GetHeight()
+    uint16_t GetHeight(uint8_t fontId, uint8_t fontSize)
     {
-        return instance_->GetHeight();
+        return instance_->GetHeight(fontId, fontSize);
     }
-
-    uint16_t GetHeightSpannable(uint8_t fontId, uint8_t size);
 
     /**
      * @brief Get the font weight
@@ -88,9 +77,9 @@ public:
      * @param fontHeader
      * @return int8_t
      */
-    int8_t GetCurrentFontHeader(FontHeader& fontHeader)
+    int8_t GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize)
     {
-        return instance_->GetCurrentFontHeader(fontHeader);
+        return instance_->GetFontHeader(fontHeader, fontId, fontSize);
     }
 
     /**
@@ -122,9 +111,9 @@ public:
      * @param unicode
      * @return uint8_t*
      */
-    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t shapingFont);
+    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize, uint8_t shapingFont);
 
-    uint8_t* GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size);
+    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize);
 
     /**
      * @brief Indicates whether the current font library is a vector font library.
@@ -133,16 +122,6 @@ public:
     bool IsVectorFont()
     {
         return instance_->IsVectorFont();
-    }
-
-    /**
-     * @brief Get current font id
-     *
-     * @return uint8_t
-     */
-    uint8_t GetCurrentFontId()
-    {
-        return instance_->GetBaseFontId();
     }
 
     int8_t SetCurrentLangId(uint8_t langId)
@@ -234,18 +213,15 @@ public:
         instance_->SetFontFileOffset(offset);
     }
 
-    uint16_t GetHeight(uint32_t unicode, uint8_t fontId)
+    virtual uint16_t
+        GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint8_t fontId, uint8_t fontSize)
     {
-        return instance_->GetHeight(unicode, fontId);
+        return instance_->GetOffsetPosY(text, lineLength, isAllEmoji, fontId, fontSize);
     }
 
-    virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint8_t fontSize)
-    {
-        return instance_->GetOffsetPosY(text, lineLength, isAllEmoji, fontSize);
-    }
-
-    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                       uint16_t letterIndex, SizeSpan* sizeSpans);
+
     bool IsEmojiFont(uint8_t fontid)
     {
         return instance_->IsEmojiFont(fontid);

@@ -127,7 +127,7 @@ public:
     /**
      * @brief Sets the speed for this animator.
      *
-     * @param timeOfUpdate Indicates the interval for updating images, in milliseconds. The default value is <b>1</b>.
+     * @param timeOfUpdate Indicates the interval for updating images, in milliseconds.
      * @see GetTimeOfUpdate
      * @since 1.0
      * @version 1.0

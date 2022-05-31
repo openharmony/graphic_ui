@@ -64,113 +64,104 @@ void UIFont::SetFont(BaseFont* font)
     }
 }
 
-uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t shapingFont)
+uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize,
+                           uint8_t shapingFont)
 {
     uint8_t* bitmap = nullptr;
-    uint8_t currentFontId = GetCurrentFontId();
 #if ENABLE_MULTI_FONT
     // shaping font is in search list, search shaping font first
     if (shapingFont > 1) {
-        bitmap = instance_->GetBitmap(unicode, glyphNode, shapingFont);
-        SetCurrentFontId(currentFontId);
+        bitmap = instance_->GetBitmap(unicode, glyphNode, shapingFont, fontSize);
         if (bitmap != nullptr) {
             return bitmap;
         }
     }
 #endif
-    bitmap = instance_->GetBitmap(unicode, glyphNode, currentFontId);
+    bitmap = instance_->GetBitmap(unicode, glyphNode, fontId, fontSize);
     if (bitmap != nullptr) {
         return bitmap;
     }
 #if ENABLE_MULTI_FONT
     uint8_t* searchLists = nullptr;
-    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(currentFontId, &searchLists);
+    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
     int8_t currentIndex = 0;
     if ((searchLists == nullptr) || (listSize == 0)) {
         return nullptr;
     }
     do {
-        SetCurrentFontId(searchLists[currentIndex], 0);
-        bitmap = instance_->GetBitmap(unicode, glyphNode, GetCurrentFontId());
+        bitmap = instance_->GetBitmap(unicode, glyphNode, searchLists[currentIndex], fontSize);
         if (bitmap != nullptr) {
-            SetCurrentFontId(currentFontId, 0);
             return bitmap;
         }
         // switch to next search List
         currentIndex++;
     } while ((currentIndex < listSize) && (searchLists != nullptr));
-    SetCurrentFontId(currentFontId);
 #endif
     return nullptr;
 }
 
-uint8_t* UIFont::GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size)
+int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
 {
-    uint8_t* bitmap = nullptr;
-    bitmap = instance_->GetBitmapSpannable(unicode, glyphNode, fontId, size);
-    if (bitmap != nullptr) {
-        return bitmap;
+    int8_t result = instance_->GetGlyphNode(unicode, glyphNode, fontId, fontSize);
+    if (result == RET_VALUE_OK) {
+        return result;
     }
-    return nullptr;
+
+#if ENABLE_MULTI_FONT
+    uint8_t* searchLists = nullptr;
+    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
+    if ((searchLists == nullptr) || (listSize == 0)) {
+        return INVALID_RET_VALUE;
+    }
+    int8_t currentIndex = 0;
+    do {
+        result = instance_->GetGlyphNode(unicode, glyphNode, searchLists[currentIndex], fontSize);
+        if (result == RET_VALUE_OK) {
+            return result;
+        }
+        currentIndex++;
+    } while ((currentIndex < listSize) && (searchLists != nullptr));
+#endif
+    return INVALID_RET_VALUE;
 }
 
-uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t shapingId)
+uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize, uint8_t shapingId)
 {
     int16_t result;
-    uint8_t currentFontId = GetCurrentFontId();
 #if ENABLE_MULTI_FONT
     if (shapingId > 1) {
-        result = instance_->GetWidth(unicode, shapingId);
-        SetCurrentFontId(currentFontId);
+        result = instance_->GetWidth(unicode, shapingId, fontSize);
         if (result >= 0) {
             return result;
         }
     }
 #endif
-    result = instance_->GetWidth(unicode, currentFontId);
+    result = instance_->GetWidth(unicode, fontId, fontSize);
     if (result >= 0) {
         return result;
     }
 
 #if ENABLE_MULTI_FONT
     uint8_t* searchLists = nullptr;
-    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(currentFontId, &searchLists);
+    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
     if ((searchLists == nullptr) || (listSize == 0)) {
         return 0;
     }
     int8_t currentIndex = 0;
     do {
-        SetCurrentFontId(searchLists[currentIndex], 0);
-        result = instance_->GetWidth(unicode, GetCurrentFontId());
+        result = instance_->GetWidth(unicode, searchLists[currentIndex], fontSize);
         if (result >= 0) {
-            SetCurrentFontId(currentFontId, 0);
             return result;
         }
         currentIndex++;
     } while ((currentIndex < listSize) && (searchLists != nullptr));
-    SetCurrentFontId(currentFontId);
 #endif
     return 0;
 }
 
-uint16_t UIFont::GetHeightSpannable(uint8_t fontId, uint8_t size)
-{
-    return instance_->GetHeightByFontId(fontId, size);
-}
-
-uint16_t UIFont::GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size)
-{
-    int16_t result = instance_->GetWidthSpannable(unicode, fontId, size);
-    if (result >= 0) {
-        return result;
-    } else {
-        return 0;
-    }
-}
-
-uint16_t UIFont::GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId,
+uint16_t UIFont::GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                   uint16_t letterIndex, SizeSpan* sizeSpans)
 {
-    return instance_->GetLineMaxHeight(text, lineLength, fontId, letterIndex, sizeSpans);
+    return instance_->GetLineMaxHeight(text, lineLength, fontId, fontSize, letterIndex, sizeSpans);
 }
 } // namespace OHOS
