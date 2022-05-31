@@ -15,7 +15,6 @@
 
 #include "font/ui_font_bitmap.h"
 
-#include "draw/draw_utils.h"
 #include "font/ui_font_adaptor.h"
 #include "font/ui_font_builder.h"
 #include "gfx_utils/file.h"
@@ -31,7 +30,6 @@
 namespace OHOS {
 UIFontBitmap::UIFontBitmap() : offset_(0), dynamicFont_(), dynamicFontRamUsed_(0), dynamicFontFd_(-1)
 {
-    SetBaseFontId(UIFontBuilder::GetInstance()->GetBitmapFontIdMax());
     bitmapCache_ = nullptr;
     bitmapRamUsed_ = FONT_BITMAP_CACHE_SIZE;
 }
@@ -103,27 +101,9 @@ int8_t UIFontBitmap::SetFontPath(const char* dpath, const char* spath)
     return RET_VALUE_OK;
 }
 
-int8_t UIFontBitmap::SetCurrentFontId(uint8_t fontId, uint8_t size)
+uint16_t UIFontBitmap::GetHeight(uint8_t fontId, uint8_t fontSize)
 {
-    int8_t ret = SetDynamicFontId(fontId);
-    if (ret == RET_VALUE_OK) {
-        SetBaseFontId(fontId);
-    }
-    return ret;
-}
-
-uint16_t UIFontBitmap::GetHeight()
-{
-    return GetHeightByFontId(GetBaseFontId());
-}
-
-uint16_t UIFontBitmap::GetHeightByFontId(uint8_t fontId, uint8_t size)
-{
-    int16_t ret = dynamicFont_.SetCurrentFontId(fontId);
-    if (ret == INVALID_RET_VALUE) {
-        return 0;
-    }
-    return dynamicFont_.GetFontHeight();
+    return dynamicFont_.GetFontHeight(fontId);
 }
 
 uint8_t UIFontBitmap::GetFontId(const char* ttfName, uint8_t size) const
@@ -143,48 +123,14 @@ uint8_t UIFontBitmap::GetFontId(const char* ttfName, uint8_t size) const
     return id;
 }
 
-int16_t UIFontBitmap::GetWidth(uint32_t unicode, uint8_t fontId)
+int16_t UIFontBitmap::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize)
 {
-#if ENABLE_MULTI_FONT
-    if (TypedText::IsColourWord(unicode)) {
-        uint8_t* searchLists = nullptr;
-        uint8_t baseId = GetBaseFontId();
-        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(baseId, &searchLists);
-        int8_t currentIndex = 0;
-        int16_t ret;
-        if ((searchLists == nullptr) || (listSize == 0)) {
-            return false;
-        }
-        do {
-            ret = GetWidthSpannable(unicode, searchLists[currentIndex]);
-            if (ret != INVALID_RET_VALUE) {
-                return ret;
-            }
-            // switch to next search List
-            currentIndex++;
-        } while ((currentIndex < listSize) && (searchLists != nullptr));
-    }
-#endif
     return GetWidthInFontId(unicode, fontId);
 }
 
-int16_t UIFontBitmap::GetWidthSpannable(uint32_t unicode, uint8_t fontId, uint8_t size)
-{
-    if (!UIFontAdaptor::IsSameTTFId(fontId, unicode)) {
-        GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
-        return INVALID_RET_VALUE;
-    }
-    return GetDynamicFontWidth(unicode, fontId);
-}
-
-uint8_t* UIFontBitmap::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
+uint8_t* UIFontBitmap::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
 {
     return SearchInFont(unicode, glyphNode, fontId);
-}
-
-uint8_t* UIFontBitmap::GetBitmapSpannable(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t size)
-{
-    return SearchInFont(unicode, glyphNode, fontId, true);
 }
 
 bool UIFontBitmap::IsEmojiFont(uint8_t fontId)
@@ -192,13 +138,9 @@ bool UIFontBitmap::IsEmojiFont(uint8_t fontId)
     return false;
 }
 
-int8_t UIFontBitmap::GetCurrentFontHeader(FontHeader& fontHeader)
+int8_t UIFontBitmap::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize)
 {
-    int8_t ret = dynamicFont_.SetCurrentFontId(GetBaseFontId());
-    if (ret == INVALID_RET_VALUE) {
-        return ret;
-    }
-    const FontHeader* header = dynamicFont_.GetCurrentFontHeader();
+    const FontHeader* header = dynamicFont_.GetFontHeader(fontId);
     if (header != nullptr) {
         fontHeader = *header;
         return RET_VALUE_OK;
@@ -207,45 +149,34 @@ int8_t UIFontBitmap::GetCurrentFontHeader(FontHeader& fontHeader)
 }
 
 #if ENABLE_MULTI_FONT
-int8_t UIFontBitmap::GetMultiGlyphNode( uint32_t unicode, GlyphNode& glyphNode)
+int8_t UIFontBitmap::GetMultiGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
-    if (TypedText::IsColourWord(unicode)) {
-        int8_t ret;
-        uint8_t* searchLists = nullptr;
-        uint8_t baseId = GetBaseFontId();
-        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(baseId, &searchLists);
-        int8_t currentIndex = 0;
-        if ((searchLists == nullptr) || (listSize == 0)) {
-            return INVALID_RET_VALUE;
-        }
-        do {
-            ret = GetGlyphNode(unicode, glyphNode, searchLists[currentIndex]);
-            if (ret != INVALID_RET_VALUE) {
-                return ret;
-            }
-            // switch to next search List
-            currentIndex++;
-        } while ((currentIndex < listSize) && (searchLists != nullptr));
-        return INVALID_RET_VALUE;
-    } else {
-        return GetGlyphNode(unicode, glyphNode, GetBaseFontId());
+    int8_t ret = GetGlyphNode(unicode, glyphNode, fontId);
+    if (ret == RET_VALUE_OK) {
+        return ret;
     }
 
+    uint8_t* searchLists = nullptr;
+    int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
+    int8_t currentIndex = 0;
+    if ((searchLists == nullptr) || (listSize == 0)) {
+        return INVALID_RET_VALUE;
+    }
+    do {
+        ret = GetGlyphNode(unicode, glyphNode, searchLists[currentIndex]);
+        if (ret != INVALID_RET_VALUE) {
+            return ret;
+        }
+        // switch to next search List
+        currentIndex++;
+    } while ((currentIndex < listSize) && (searchLists != nullptr));
+    return INVALID_RET_VALUE;
 }
 #endif
 
-int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode)
+int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
 {
-    return GetGlyphNode(unicode, glyphNode, GetBaseFontId());
-}
-
-int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
-{
-    int8_t ret = dynamicFont_.SetCurrentFontId(fontId);
-    if (ret == INVALID_RET_VALUE) {
-        return ret;
-    }
-    const GlyphNode* node = dynamicFont_.GetGlyphNode(unicode);
+    const GlyphNode* node = dynamicFont_.GetGlyphNode(unicode, fontId);
     if (node != nullptr) {
         glyphNode = *node;
         return RET_VALUE_OK;
@@ -295,10 +226,6 @@ uint32_t UIFontBitmap::GetRamUsedLen(uint32_t textManagerRamUsed, uint32_t langF
 
 int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
 {
-    int16_t ret = dynamicFont_.SetCurrentFontId(fontId);
-    if (ret == INVALID_RET_VALUE) {
-        return ret;
-    }
     return dynamicFont_.GetBitmap(unicode, bitmap, fontId);
 }
 
@@ -328,38 +255,22 @@ void UIFontBitmap::PutCacheSpace(uint8_t* addr)
     GRAPHIC_LOGE("UIFontBitmap::PutCacheSpace invalid bitmapCache");
 }
 
-int8_t UIFontBitmap::SetDynamicFontId(uint8_t fontId)
-{
-    return dynamicFont_.SetCurrentFontId(fontId);
-}
-
 int16_t UIFontBitmap::GetDynamicFontWidth(uint32_t unicode, uint8_t fontId)
 {
-    int16_t ret = dynamicFont_.SetCurrentFontId(fontId);
-    if (ret == INVALID_RET_VALUE) {
-        return ret;
-    }
-    return dynamicFont_.GetFontWidth(unicode);
+    return dynamicFont_.GetFontWidth(unicode, fontId);
 }
 
-uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, bool isSpanLetter)
+uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId)
 {
+    GraphicLockGuard guard(lock_);
     if (bitmapCache_ == nullptr) {
         return nullptr;
     }
     if (!UIFontAdaptor::IsSameTTFId(fontId, unicode)) {
-        GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
+        GRAPHIC_LOGE("UIFontBitmap::SearchInFont fontId and unicode not match");
         return nullptr;
     }
-    int8_t ret = INVALID_RET_VALUE;
-    if (isSpanLetter) {
-        ret = GetGlyphNode(unicode, glyphNode, fontId);
-    } else {
-        if (fontId != GetBaseFontId()) {
-            SetCurrentFontId(fontId);
-        }
-        ret = GetGlyphNode(unicode, glyphNode);
-    }
+    int8_t ret = GetGlyphNode(unicode, glyphNode, fontId);
     if (ret != RET_VALUE_OK) {
         return nullptr;
     }
@@ -392,10 +303,7 @@ int16_t UIFontBitmap::GetWidthInFontId(uint32_t unicode, uint8_t fontId)
         GRAPHIC_LOGE("UIFontBitmap::GetWidthInFontId fontId and unicode not match");
         return INVALID_RET_VALUE;
     }
-    if (fontId != GetBaseFontId()) {
-        SetCurrentFontId(fontId);
-    }
-    return GetDynamicFontWidth(unicode, GetBaseFontId());
+    return GetDynamicFontWidth(unicode, fontId);
 }
 
 void UIFontBitmap::SetFontFileOffset(uint32_t offset)
@@ -403,12 +311,8 @@ void UIFontBitmap::SetFontFileOffset(uint32_t offset)
     offset_ = offset;
 }
 
-uint16_t UIFontBitmap::GetHeight(uint32_t unicode, uint8_t fontId)
-{
-    return GetHeight();
-}
-
-uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength, bool& isEmoijLarge, uint8_t fontSize)
+uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
+                                     bool& isEmoijLarge, uint8_t fontId, uint8_t fontSize)
 {
     uint32_t i = 0;
     uint32_t unicode;
@@ -417,17 +321,18 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength, bool
 
     uint16_t loopNum = 0;
     GlyphNode glyphNode;
-    GlyphNode emoijMaxNode;
+    GlyphNode emoijMaxNode = {};
     uint8_t maxFontSie = fontSize;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
 #if ENABLE_MULTI_FONT
-        uint8_t ret = GetMultiGlyphNode(unicode, glyphNode);
+        uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
 #else
-        uint8_t ret = GetGlyphNode(unicode, glyphNode);
+        uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
 #endif
         if (ret == RET_VALUE_OK) {
-            if (TypedText::IsColourWord(unicode)) {
+            uint8_t weight = GetFontWeight(glyphNode.fontId);
+            if (weight >= 16) { // 16: bit rgb565 rgba8888
                 emoijMaxNode = glyphNode.rows > emoijMaxNode.rows ? glyphNode : emoijMaxNode;
                 emojiNum++;
             } else {
@@ -459,20 +364,19 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength, bool
     return offset;
 }
 
-uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, uint8_t fontId,
+uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t& letterIndex, SizeSpan* sizeSpans)
 {
     uint32_t i = 0;
     uint32_t unicode;
-    uint16_t maxHeight = GetHeight();
+    uint16_t maxHeight = GetHeight(fontId, fontSize);
     GlyphNode glyphNode;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
         if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
             uint16_t spannableHeight = 0;
             if (sizeSpans[letterIndex].height == 0) {
-                spannableHeight = GetHeightByFontId(sizeSpans[letterIndex].fontId,
-                                                    sizeSpans[letterIndex].size);
+                spannableHeight = GetHeight(sizeSpans[letterIndex].fontId, sizeSpans[letterIndex].size);
                 sizeSpans[letterIndex].height = spannableHeight;
             } else {
                 spannableHeight = sizeSpans[letterIndex].height;
@@ -480,9 +384,9 @@ uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, u
             maxHeight = spannableHeight > maxHeight ? spannableHeight : maxHeight;
         } else {
 #if ENABLE_MULTI_FONT
-            uint8_t ret = GetMultiGlyphNode(unicode, glyphNode);
+            uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
 #else
-            uint8_t ret = GetGlyphNode(unicode, glyphNode);
+            uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
 #endif
             if (ret == RET_VALUE_OK) {
                 maxHeight  = glyphNode.rows > maxHeight ? glyphNode.rows : maxHeight;
@@ -497,4 +401,4 @@ uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, u
 
     return maxHeight;
 }
-} // namespace
+} // namespace OHOS

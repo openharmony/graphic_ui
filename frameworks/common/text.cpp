@@ -220,14 +220,13 @@ void Text::ReMeasureTextSize(const Rect& textRect, const Style& style)
     if (fontSize_ == 0) {
         return;
     }
-    UIFont::GetInstance()->SetCurrentFontId(fontId_, fontSize_);
     int16_t maxWidth = (expandWidth_ ? COORD_MAX : textRect.GetWidth());
     if (maxWidth > 0) {
-        textSize_ = TypedText::GetTextSize(text_, style.letterSpace_, style.lineHeight_, maxWidth,
-                                           sizeSpans_, style.lineSpace_);
+        textSize_ = TypedText::GetTextSize(text_, fontId_, fontSize_, style.letterSpace_, style.lineHeight_, maxWidth,
+                                           style.lineSpace_, sizeSpans_);
         if (baseLine_) {
             FontHeader head;
-            if (UIFont::GetInstance()->GetCurrentFontHeader(head) != 0) {
+            if (UIFont::GetInstance()->GetFontHeader(head, fontId_, fontSize_) != 0) {
                 return;
             }
             textSize_.y += fontSize_ - head.ascender;
@@ -268,7 +267,6 @@ void Text::OnDraw(BufferInfo& gfxDstBuffer,
     if ((text_ == nullptr) || (strlen(text_) == 0) || (fontSize_ == 0)) {
         return;
     }
-    UIFont::GetInstance()->SetCurrentFontId(fontId_, fontSize_);
     Rect mask = invalidatedArea;
 
     if (mask.Intersect(mask, textRect)) {
@@ -292,8 +290,8 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
     int16_t lineHeight = style.lineHeight_;
     if (lineHeight == 0) {
         uint16_t letterIndex = 0;
-        int16_t lineMaxHeight = UIFont::GetInstance()->GetLineMaxHeight(text_, textLine_[0].lineBytes, 0,
-                                                                        letterIndex, sizeSpans_);
+        int16_t lineMaxHeight = UIFont::GetInstance()->GetLineMaxHeight(text_, textLine_[0].lineBytes, fontId_,
+                                                                        fontSize_, letterIndex, sizeSpans_);
         lineHeight = lineMaxHeight + style.lineSpace_;
     }
     Point pos;
@@ -332,8 +330,8 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         } else {
             letterIndex = TypedText::GetUTF8CharacterSize(text_, lineBegin + textLine_[i].lineBytes);
         }
-        lineHeight = UIFont::GetInstance()->GetLineMaxHeight(&text_[lineBegin], textLine_[i].lineBytes, 0,
-                                                             tempLetterIndex, sizeSpans_);
+        lineHeight = UIFont::GetInstance()->GetLineMaxHeight(&text_[lineBegin], textLine_[i].lineBytes, fontId_,
+                                                             fontSize_, tempLetterIndex, sizeSpans_);
         lineBegin += textLine_[i].lineBytes;
         pos.y += lineHeight + style.lineSpace_;
     }
@@ -386,7 +384,7 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
         lineNum++;
     }
     if ((lineNum != 0) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
-        uint16_t ellipsisWidth = UIFont::GetInstance()->GetWidth('.', 0) + letterSpace;
+        uint16_t ellipsisWidth = UIFont::GetInstance()->GetWidth('.', fontId_, fontSize_, 0) + letterSpace;
         textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
         if (textLine_[lineNum - 1].linePixelWidth > width) {
             int16_t newWidth = width - ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
@@ -428,8 +426,9 @@ uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint
 {
     int16_t lineWidth = width;
     int16_t lineHeight = 0;
-    uint16_t nextLineBytes = UIFontAdaptor::GetNextLineAndWidth(&text_[begin], letterSpace, lineWidth, lineHeight,
-                                                                letterIndex, sizeSpans, false, textLen - begin);
+    uint16_t nextLineBytes = UIFontAdaptor::GetNextLineAndWidth(&text_[begin], fontId_, fontSize_, letterSpace,
+                                                                lineWidth, lineHeight, letterIndex, sizeSpans, false,
+                                                                textLen - begin);
     if (nextLineBytes + begin > textLen) {
         nextLineBytes = textLen - begin;
     }
@@ -444,14 +443,13 @@ uint16_t Text::GetEllipsisIndex(const Rect& textRect, const Style& style)
         return TEXT_ELLIPSIS_END_INV;
     }
     UIFont* fontEngine = UIFont::GetInstance();
-    fontEngine->SetCurrentFontId(fontId_, fontSize_);
-    int16_t letterWidth = fontEngine->GetWidth('.', 0) + style.letterSpace_;
+    int16_t letterWidth = fontEngine->GetWidth('.', fontId_, fontSize_, 0) + style.letterSpace_;
     Point p;
     p.x = textRect.GetWidth() - letterWidth * TEXT_ELLIPSIS_DOT_NUM;
     p.y = textRect.GetHeight();
     int16_t height = style.lineHeight_;
     if (height == 0) {
-        height = fontEngine->GetHeight() + style.lineSpace_;
+        height = fontEngine->GetHeight(fontId_, fontSize_) + style.lineSpace_;
     }
     if (height) {
         p.y -= p.y % height;
@@ -470,7 +468,7 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     uint32_t lineStart = 0;
     uint32_t nextLineStart = 0;
     int16_t lineHeight = style.lineHeight_;
-    uint16_t letterHeight = UIFont::GetInstance()->GetHeight();
+    uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_);
     if (lineHeight == 0) {
         lineHeight = letterHeight + style.lineSpace_;
     }
@@ -486,8 +484,8 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     uint16_t letterIndex = 0;
     while ((lineStart < textLen) && (text_[lineStart] != '\0')) {
         width = textRect.GetWidth();
-        nextLineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width, lineHeight,
-                                                            letterIndex, sizeSpans_);
+        nextLineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_,
+                                                            width, lineHeight, letterIndex, sizeSpans_);
         if (nextLineStart == 0) {
             break;
         }
@@ -502,8 +500,9 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     }
     /* Calculate the x coordinate */
     width = pos.x;
-    lineStart += UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], style.letterSpace_, width, lineHeight,
-                                                    letterIndex, sizeSpans_, true);
+    lineStart +=
+        UIFontAdaptor::GetNextLineAndWidth(&text_[lineStart], fontId_, fontSize_, style.letterSpace_, width, lineHeight,
+                                           letterIndex, sizeSpans_, true);
     return (lineStart < textLen) ? lineStart : TEXT_ELLIPSIS_END_INV;
 }
 
