@@ -38,15 +38,14 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
 
     uint32_t i = 0;
     uint32_t letter;
-    uint16_t letterWidth;
     uint16_t retOffsetY = 0; // ret value elipse offsetY
-    bool isEmoijLerge = true;
     uint16_t offsetPosY = 0;
-    offsetPosY = fontEngine->GetOffsetPosY(labelLine.text, labelLine.lineLength, isEmoijLerge, labelLine.fontId,
-                                           labelLine.fontSize);
     uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontId,
                                                  labelLine.fontSize, letterIndex, labelLine.sizeSpans);
     DrawLineBackgroundColor(gfxDstBuffer, letterIndex, labelLine);
+    GlyphNode glyphNode;
+    uint8_t* fontMap;
+    uint8_t weight;
     while (i < labelLine.lineLength) {
         letter = TypedText::GetUTF8Next(labelLine.text, i, i);
         uint8_t fontId = labelLine.fontId;
@@ -86,23 +85,26 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    labelLine.style.lineSpace_,
                                    havebackgroundColor,
                                    backgroundColor};
-        if (TypedText::IsColourWord(letter, fontId, fontSize)) {
-            if (!isEmoijLerge) {
-                letterInfo.offsetY = offsetPosY;
-            }
-            DrawUtils::GetInstance()->DrawColorLetter(gfxDstBuffer, letterInfo);
-        } else {
-            if (isEmoijLerge) {
+#if ENABLE_VECTOR_FONT
+        glyphNode.textStyle = letterInfo.textStyle;
+#endif
+        glyphNode.advance = 0;
+        fontMap = fontEngine->GetBitmap(letterInfo.letter, glyphNode, letterInfo.fontId, letterInfo.fontSize,
+                                        letterInfo.shapingId);
+        if (fontMap != nullptr) {
+            weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
+            if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
+                DrawUtils::GetInstance()->DrawColorLetter(gfxDstBuffer, letterInfo, fontMap, glyphNode);
+            } else {
                 letterInfo.offsetY = labelLine.ellipsisOssetY == 0 ? offsetPosY : labelLine.ellipsisOssetY;
                 retOffsetY = offsetPosY;
+                DrawUtils::GetInstance()->DrawNormalLetter(gfxDstBuffer, letterInfo, fontMap, glyphNode, maxLetterSize);
             }
-            DrawUtils::GetInstance()->DrawNormalLetter(gfxDstBuffer, letterInfo, maxLetterSize);
         }
-        letterWidth = fontEngine->GetWidth(letter, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
         if (labelLine.direct == TEXT_DIRECT_RTL) {
-            labelLine.pos.x -= (letterWidth + labelLine.style.letterSpace_);
+            labelLine.pos.x -= (glyphNode.advance + labelLine.style.letterSpace_);
         } else {
-            labelLine.pos.x += (letterWidth + labelLine.style.letterSpace_);
+            labelLine.pos.x += (glyphNode.advance + labelLine.style.letterSpace_);
         }
 
         letterIndex++;
@@ -113,6 +115,9 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
 uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans)
 {
+    if (sizeSpans == nullptr) {
+        return fontSize;
+    }
     uint32_t i = 0;
     uint32_t unicode;
     uint8_t maxLetterSize = fontSize;

@@ -367,9 +367,13 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
 uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                         uint16_t& letterIndex, SizeSpan* sizeSpans)
 {
+    uint16_t maxHeight = GetHeight(fontId, fontSize);
+    if (sizeSpans == nullptr) {
+        return maxHeight;
+    }
+
     uint32_t i = 0;
     uint32_t unicode;
-    uint16_t maxHeight = GetHeight(fontId, fontSize);
     GlyphNode glyphNode;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
@@ -382,15 +386,6 @@ uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, u
                 spannableHeight = sizeSpans[letterIndex].height;
             }
             maxHeight = spannableHeight > maxHeight ? spannableHeight : maxHeight;
-        } else {
-#if ENABLE_MULTI_FONT
-            uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
-#else
-            uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
-#endif
-            if (ret == RET_VALUE_OK) {
-                maxHeight  = glyphNode.rows > maxHeight ? glyphNode.rows : maxHeight;
-            }
         }
 
         letterIndex++;

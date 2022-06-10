@@ -209,8 +209,15 @@ public:
     void DrawPixel(BufferInfo& gfxDstBuffer, int16_t x, int16_t y, const Rect& mask,
                    const ColorType& color, OpacityType opa) const;
 
-    void DrawColorLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo) const;
-    void DrawNormalLetter(BufferInfo& gfxDstBuffer, const LabelLetterInfo& letterInfo, uint8_t maxLetterSize) const;
+    void DrawColorLetter(BufferInfo& gfxDstBuffer,
+                         const LabelLetterInfo& letterInfo,
+                         uint8_t* fontMap,
+                         GlyphNode node) const;
+    void DrawNormalLetter(BufferInfo& gfxDstBuffer,
+                          const LabelLetterInfo& letterInfo,
+                          uint8_t* fontMap,
+                          GlyphNode node,
+                          uint8_t maxLetterSize) const;
 
     void DrawLetter(BufferInfo& gfxDstBuffer,
                     const uint8_t* fontMap,
