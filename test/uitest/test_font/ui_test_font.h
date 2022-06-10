@@ -32,52 +32,52 @@ public:
     /**
      * @brief Test single line Chinese display
      */
-    void UIKitFontTestDispaly001();
+    void UIKitFontTestDisplay001();
 
     /**
      * @brief Test multiline Chinese display
      */
-    void UIKitFontTestDispaly002();
+    void UIKitFontTestDisplay002();
 
     /**
      * @brief Test single line English display
      */
-    void UIKitFontTestDispaly003();
+    void UIKitFontTestDisplay003();
 
     /**
      * @brief Test multiline English display
      */
-    void UIKitFontTestDispaly004();
+    void UIKitFontTestDisplay004();
 
     /**
      * @brief Test single line Chinese and English display
      */
-    void UIKitFontTestDispaly005();
+    void UIKitFontTestDisplay005();
 
     /**
      * @brief Test multiline Chinese and English display
      */
-    void UIKitFontTestDispaly006();
+    void UIKitFontTestDisplay006();
 
     /**
      * @brief Test single line text color display
      */
-    void UIKitFontTestDispaly007();
+    void UIKitFontTestDisplay007();
 
     /**
      * @brief Test multiline line text color display
      */
-    void UIKitFontTestDispaly008();
+    void UIKitFontTestDisplay008();
 
     /**
      * @brief Test text rotate
      */
-    void UIKitFontTestDispaly009();
+    void UIKitFontTestDisplay009();
 
     /**
      * @brief Test text rotate
      */
-    void UIKitFontTestDispaly010();
+    void UIKitFontTestDisplay010();
 
     /**
      * @brief Test font baseline alignment
@@ -139,17 +139,17 @@ public:
     /**
      * @brief Test line Emoji display
      */
-    void UIKitFontTestDispalyEmoji001();
+    void UIKitFontTestDisplayEmoji001();
 
     /**
      * @brief Test Emoji and Text display
      */
-    void UIKitFontTestDispalyEmoji002();
+    void UIKitFontTestDisplayEmoji002();
 
     /**
      * @brief Test Emoji and Text line break display
      */
-    void UIKitFontTestDispalyEmoji003();
+    void UIKitFontTestDisplayEmoji003();
 private:
     UIScrollView* container_ = nullptr;
     void InnerTestTitle(const char* title);
