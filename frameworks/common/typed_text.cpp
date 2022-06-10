@@ -19,6 +19,9 @@
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
 #include "gfx_utils/transform.h"
+#if ENABLE_MULTI_FONT
+#include "font/ui_multi_font_manager.h"
+#endif
 
 namespace OHOS {
 #ifndef _FONT_TOOL
@@ -457,6 +460,29 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
 
 bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
 {
+    bool hasColor = false;
+    uint8_t weight = UIFont::GetInstance()->GetFontWeight(fontId);
+    if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
+        hasColor = true;
+    } else {
+#if ENABLE_MULTI_FONT
+        uint8_t* searchLists = nullptr;
+        int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
+        int8_t currentIndex = 0;
+        if ((listSize > 0) && (searchLists != nullptr)) {
+            do {
+                weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
+                if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
+                    hasColor = true;
+                }
+                currentIndex++;
+            } while ((currentIndex < listSize) && (searchLists != nullptr));
+        }
+#endif
+    }
+    if (!hasColor) {
+        return false;
+    }
     GlyphNode glyphNode;
     int8_t ret = UIFont::GetInstance()->GetGlyphNode(codePoint, glyphNode, fontId, fontSize);
     if (ret != RET_VALUE_OK) {
@@ -464,7 +490,7 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSiz
         return false;
     }
 
-    uint8_t weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
+    weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
     return (weight >= 16); // 16: rgb565->16 rgba8888->32 font with rgba
 }
 } // namespace OHOS
