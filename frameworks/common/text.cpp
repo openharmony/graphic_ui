@@ -288,11 +288,18 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
     uint32_t maxLineBytes = 0;
     uint16_t lineCount = GetLine(lineMaxWidth, style.letterSpace_, ellipsisIndex, maxLineBytes);
     int16_t lineHeight = style.lineHeight_;
+    int16_t curLineHeight;
     if (lineHeight == 0) {
+        lineHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_);
+        lineHeight += style.lineSpace_;
+    }
+    if ((style.lineSpace_ == 0) && (sizeSpans_ != nullptr)) {
         uint16_t letterIndex = 0;
-        int16_t lineMaxHeight = UIFont::GetInstance()->GetLineMaxHeight(text_, textLine_[0].lineBytes, fontId_,
-                                                                        fontSize_, letterIndex, sizeSpans_);
-        lineHeight = lineMaxHeight + style.lineSpace_;
+        curLineHeight = UIFont::GetInstance()->GetLineMaxHeight(text_, textLine_[0].lineBytes, fontId_, fontSize_,
+                                                                letterIndex, sizeSpans_);
+        curLineHeight += style.lineSpace_;
+    } else {
+        curLineHeight = lineHeight;
     }
     Point pos;
     if (lineHeight == style.lineHeight_) {
@@ -306,14 +313,14 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         if (pos.y > mask.GetBottom()) {
             return;
         }
-        int16_t nextLine = pos.y + lineHeight;
+        int16_t nextLine = pos.y + curLineHeight;
         if (lineHeight != style.lineHeight_) {
             nextLine -= style.lineSpace_;
         }
         int16_t tempLetterIndex = letterIndex;
         if (nextLine >= mask.GetTop()) {
             pos.x = LineStartPos(coords, textLine_[i].linePixelWidth);
-            LabelLineInfo labelLine{pos, offset, mask, lineHeight, textLine_[i].lineBytes,
+            LabelLineInfo labelLine{pos, offset, mask, curLineHeight, textLine_[i].lineBytes,
                                     0, opa, style, &text_[lineBegin], textLine_[i].lineBytes,
                                     lineBegin, fontId_, fontSize_, 0, static_cast<UITextLanguageDirect>(direct_),
                                     nullptr, baseLine_,
@@ -330,10 +337,15 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
         } else {
             letterIndex = TypedText::GetUTF8CharacterSize(text_, lineBegin + textLine_[i].lineBytes);
         }
-        lineHeight = UIFont::GetInstance()->GetLineMaxHeight(&text_[lineBegin], textLine_[i].lineBytes, fontId_,
-                                                             fontSize_, tempLetterIndex, sizeSpans_);
+        if ((style.lineSpace_ == 0) && (sizeSpans_ != nullptr)) {
+            curLineHeight = UIFont::GetInstance()->GetLineMaxHeight(&text_[lineBegin], textLine_[i].lineBytes, fontId_,
+                                                                    fontSize_, tempLetterIndex, sizeSpans_);
+            curLineHeight += style.lineSpace_;
+        } else {
+            curLineHeight = lineHeight;
+        }
         lineBegin += textLine_[i].lineBytes;
-        pos.y += lineHeight + style.lineSpace_;
+        pos.y += curLineHeight;
     }
 }
 

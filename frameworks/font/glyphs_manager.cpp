@@ -308,11 +308,6 @@ const FontHeader* GlyphsManager::GetFontHeader(uint8_t fontId)
 
 const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint8_t fontId)
 {
-    GlyphInfo glyphInfo;
-    int8_t ret = GetGlyphInfo(fontId, glyphInfo);
-    if (ret != RET_VALUE_OK) {
-        return nullptr;
-    }
     GlyphNode* node = GetNodeFromCache(unicode, fontId);
     if (node == nullptr) {
         node = GetNodeFromFile(unicode, fontId);

@@ -268,18 +268,15 @@ void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
     COLOR_FILL_BLEND(screenBuffer, bufferMode, &fillColor, ARGB8888, opa);
 }
 
-void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo &letterInfo) const
+void DrawUtils::DrawColorLetter(BufferInfo& gfxDstBuffer,
+                                const LabelLetterInfo& letterInfo,
+                                uint8_t* fontMap,
+                                GlyphNode node) const
 {
-    UIFont* fontEngine = UIFont::GetInstance();
-    GlyphNode node;
-#if ENABLE_VECTOR_FONT
-    node.textStyle = letterInfo.textStyle;
-#endif
-    const uint8_t* fontMap =
-        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
+    UIFont* fontEngine = UIFont::GetInstance();
     uint16_t letterW = node.cols;
     uint16_t letterH = node.rows;
     int16_t posX;
@@ -315,20 +312,17 @@ void DrawUtils::DrawColorLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo 
     DrawImage(gfxDstBuffer, srcRect, letterInfo.mask, fontMap, letterInfo.opa, pxSize, ARGB8888);
 }
 
-void DrawUtils::DrawNormalLetter(BufferInfo &gfxDstBuffer, const LabelLetterInfo &letterInfo,
+void DrawUtils::DrawNormalLetter(BufferInfo& gfxDstBuffer,
+                                 const LabelLetterInfo& letterInfo,
+                                 uint8_t* fontMap,
+                                 GlyphNode node,
                                  uint8_t maxLetterSize) const
 {
-    UIFont* fontEngine = UIFont::GetInstance();
-    GlyphNode node;
-#if ENABLE_VECTOR_FONT
-    node.textStyle = letterInfo.textStyle;
-#endif
-    const uint8_t* fontMap =
-        fontEngine->GetBitmap(letterInfo.letter, node, letterInfo.fontId, letterInfo.fontSize, letterInfo.shapingId);
     if (fontMap == nullptr) {
         return;
     }
 
+    UIFont* fontEngine = UIFont::GetInstance();
     uint16_t letterW = node.cols;
     uint16_t letterH = node.rows;
     int16_t posX;
