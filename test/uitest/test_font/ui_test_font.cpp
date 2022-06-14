@@ -35,7 +35,9 @@ const uint16_t FONT_SIZE = 30;
 const char* SOURCE_HAN_SANS_SC_REGULAR = "SourceHanSansSC-Regular.otf";
 const char* ROBOTO_CONDENSED_REGULAR = "RobotoCondensed-Regular.ttf";
 const char* DEFAULT_EMOJI_FILENAME = "NotoColorEmojiCompat.ttf";
+#if ENABLE_MULTI_FONT
 const int16_t F_HWEMOJI_REGULAR_30_32 = 99;
+#endif
 } // namespace
 
 void UITestFont::SetUp()
@@ -73,16 +75,16 @@ void UITestFont::InnerTestTitle(const char* title)
 
 const UIView* UITestFont::GetTestView()
 {
-    UIKitFontTestDispaly001();
-    UIKitFontTestDispaly002();
-    UIKitFontTestDispaly003();
-    UIKitFontTestDispaly004();
-    UIKitFontTestDispaly005();
-    UIKitFontTestDispaly006();
-    UIKitFontTestDispaly007();
-    UIKitFontTestDispaly008();
-    UIKitFontTestDispaly009();
-    UIKitFontTestDispaly010();
+    UIKitFontTestDisplay001();
+    UIKitFontTestDisplay002();
+    UIKitFontTestDisplay003();
+    UIKitFontTestDisplay004();
+    UIKitFontTestDisplay005();
+    UIKitFontTestDisplay006();
+    UIKitFontTestDisplay007();
+    UIKitFontTestDisplay008();
+    UIKitFontTestDisplay009();
+    UIKitFontTestDisplay010();
     UIKitFontTestBaseline001();
     UIKitFontTestBaseline002();
     UIKitFontTestLineHeight001();
@@ -96,13 +98,13 @@ const UIView* UITestFont::GetTestView()
     UIKitFontTestLineBackgroundSpan();
     UIKitFontTestAbsoluteSizeSpan();
     UIKitFontTestRelativeSizeSpan();
-    UIKitFontTestDispalyEmoji001();
-    UIKitFontTestDispalyEmoji002();
-    UIKitFontTestDispalyEmoji003();
+    UIKitFontTestDisplayEmoji001();
+    UIKitFontTestDisplayEmoji002();
+    UIKitFontTestDisplayEmoji003();
     return container_;
 }
 
-void UITestFont::UIKitFontTestDispaly001()
+void UITestFont::UIKitFontTestDisplay001()
 {
     if (container_ == nullptr) {
         return;
@@ -122,7 +124,7 @@ void UITestFont::UIKitFontTestDispaly001()
     positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::UIKitFontTestDispaly002()
+void UITestFont::UIKitFontTestDisplay002()
 {
     if (container_ == nullptr) {
         return;
@@ -143,7 +145,7 @@ void UITestFont::UIKitFontTestDispaly002()
 }
 
 
-void UITestFont::UIKitFontTestDispaly003()
+void UITestFont::UIKitFontTestDisplay003()
 {
     if (container_ == nullptr) {
         return;
@@ -164,7 +166,7 @@ void UITestFont::UIKitFontTestDispaly003()
 }
 
 
-void UITestFont::UIKitFontTestDispaly004()
+void UITestFont::UIKitFontTestDisplay004()
 {
     if (container_ == nullptr) {
         return;
@@ -185,7 +187,7 @@ void UITestFont::UIKitFontTestDispaly004()
 }
 
 
-void UITestFont::UIKitFontTestDispaly005()
+void UITestFont::UIKitFontTestDisplay005()
 {
     if (container_ == nullptr) {
         return;
@@ -205,7 +207,7 @@ void UITestFont::UIKitFontTestDispaly005()
     positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::UIKitFontTestDispaly006()
+void UITestFont::UIKitFontTestDisplay006()
 {
     if (container_ == nullptr) {
         return;
@@ -226,7 +228,7 @@ void UITestFont::UIKitFontTestDispaly006()
 }
 
 
-void UITestFont::UIKitFontTestDispaly007()
+void UITestFont::UIKitFontTestDisplay007()
 {
     if (container_ == nullptr) {
         return;
@@ -247,7 +249,7 @@ void UITestFont::UIKitFontTestDispaly007()
     positionY_ += LABEL_HEIGHT + GAP;
 }
 
-void UITestFont::UIKitFontTestDispaly008()
+void UITestFont::UIKitFontTestDisplay008()
 {
     if (container_ == nullptr) {
         return;
@@ -269,7 +271,7 @@ void UITestFont::UIKitFontTestDispaly008()
 }
 
 
-void UITestFont::UIKitFontTestDispaly009()
+void UITestFont::UIKitFontTestDisplay009()
 {
     if (container_ == nullptr) {
         return;
@@ -292,7 +294,7 @@ void UITestFont::UIKitFontTestDispaly009()
 }
 
 
-void UITestFont::UIKitFontTestDispaly010()
+void UITestFont::UIKitFontTestDisplay010()
 {
     if (container_ == nullptr) {
         return;
@@ -623,7 +625,7 @@ void UITestFont::UIKitFontTestRelativeSizeSpan()
     positionY_ += LABEL_HEIGHT * 2 + GAP; // 2 : double
 }
 
-void UITestFont::UIKitFontTestDispalyEmoji001()
+void UITestFont::UIKitFontTestDisplayEmoji001()
 {
     if (container_ == nullptr) {
         return;
@@ -654,7 +656,7 @@ void UITestFont::UIKitFontTestDispalyEmoji001()
 #endif
 }
 
-void UITestFont::UIKitFontTestDispalyEmoji002()
+void UITestFont::UIKitFontTestDisplayEmoji002()
 {
     if (container_ == nullptr) {
         return;
@@ -684,7 +686,7 @@ void UITestFont::UIKitFontTestDispalyEmoji002()
 #endif
 }
 
-void UITestFont::UIKitFontTestDispalyEmoji003()
+void UITestFont::UIKitFontTestDisplayEmoji003()
 {
     if (container_ == nullptr) {
         return;
