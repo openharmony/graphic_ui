@@ -113,6 +113,7 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event)
     {
         viewGroup_->SetInterceptFocus(false);
+        return true;
     }
 private:
     UIViewGroup* viewGroup_ = nullptr;
