@@ -206,7 +206,6 @@ HWTEST_F(UISwipeViewTest, UISwipeViewSetCurrentPage_001, TestSize.Level0)
     swipeView_->Add(view);
     view2->SetPosition(initPosX, initPosY, initWidth, initHeight);
     swipeView_->Add(view2);
-    uint16_t index = 1;
     swipeView_->SetCurrentPage(1);
     EXPECT_EQ(swipeView_->GetCurrentPage(), 1);
 

@@ -22,8 +22,6 @@
 
 namespace OHOS {
 namespace {
-static int16_t g_ButtonH = 80;
-static int16_t g_ButtonW = 200;
 static int16_t g_blank = 38;
 static int16_t g_ListW = 200;
 static int16_t g_ListH = 300;
