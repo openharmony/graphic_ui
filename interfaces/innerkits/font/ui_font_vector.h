@@ -32,7 +32,7 @@ public:
     UIFontVector(const UIFontVector&) = delete;
     UIFontVector& operator=(const UIFontVector&) noexcept = delete;
     bool IsVectorFont() const override;
-    int8_t SetFontPath(const char* dpath, const char* spath) override;
+    int8_t SetFontPath(const char* path, FontType type) override;
     uint16_t GetHeight(uint8_t fontId, uint8_t fontSize) override;
     uint8_t GetFontId(const char* ttfName, uint8_t fontSize = 0) const override;
     int16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize) override;

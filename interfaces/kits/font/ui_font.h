@@ -159,14 +159,14 @@ public:
         return instance_->GetFontInfo(fontId);
     }
 
-    int8_t SetFontPath(const char* dpath, const char* spath)
+    int8_t SetFontPath(const char* path, BaseFont::FontType type)
     {
-        return instance_->SetFontPath(dpath, spath);
+        return instance_->SetFontPath(path, type);
     }
 
-    int8_t GetFontVersion(char* dVersion, uint8_t dLen, char* sVersion, uint8_t sLen) const
+    int8_t GetFontVersion(BaseFont::FontType type, const char* path, char* version, uint8_t len) const
     {
-        return instance_->GetFontVersion(dVersion, dLen, sVersion, sLen);
+        return instance_->GetFontVersion(type, path, version, len);
     }
 
     uint8_t RegisterFontInfo(const char* ttfName, uint8_t shaping = 0)

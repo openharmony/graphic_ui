@@ -472,7 +472,7 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSiz
         int8_t currentIndex = 0;
         if ((listSize > 0) && (searchLists != nullptr)) {
             do {
-                weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
+                weight = UIFont::GetInstance()->GetFontWeight(searchLists[currentIndex]);
                 if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
                     hasColor = true;
                 }
