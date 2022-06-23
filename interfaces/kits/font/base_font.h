@@ -23,6 +23,11 @@
 namespace OHOS {
 class BaseFont : public HeapBase {
 public:
+    enum FontType : uint8_t {
+        DYNAMIC_FONT = 0,
+        STATIC_FONT = 1,
+    };
+
     BaseFont() : ramAddr_(0), ramLen_(0) {}
     virtual ~BaseFont() {}
 
@@ -115,13 +120,13 @@ public:
     /**
      * @brief Set the Font Path
      *
-     * @param dpath
-     * @param spath
+     * @param path
+     * @param type
      * @return int8_t
      */
-    virtual int8_t SetFontPath(const char* dpath, const char* spath) = 0;
+    virtual int8_t SetFontPath(const char* path, FontType type) = 0;
 
-    virtual int8_t GetFontVersion(char* dVersion, uint8_t dLen, char* sVersion, uint8_t sLen) const
+    virtual int8_t GetFontVersion(FontType type, const char* path, char* version, uint8_t len)
     {
         return INVALID_RET_VALUE;
     }
@@ -199,7 +204,7 @@ public:
     uintptr_t GetRamAddr();
     uint32_t GetRamLen();
     void SetRamLen(uint32_t ramLen);
-    void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen);
+    virtual void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen);
 
     virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLarge,
                                    uint8_t fontId, uint8_t fontSize) = 0;

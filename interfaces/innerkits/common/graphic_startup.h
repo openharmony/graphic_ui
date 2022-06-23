@@ -26,7 +26,6 @@ public:
     static void Init();
 
     static void InitFontEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* dPath, const char* ttfName);
-
     static void InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* path,
                                     const char* fileName);
 };

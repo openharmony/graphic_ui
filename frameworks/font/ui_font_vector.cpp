@@ -217,12 +217,12 @@ uint8_t UIFontVector::GetFontWeight(uint8_t fontId)
     return FONT_BPP_8;
 }
 
-int8_t UIFontVector::SetFontPath(const char* dpath, const char* spath)
+int8_t UIFontVector::SetFontPath(const char* path, FontType type)
 {
-    if (dpath == nullptr) {
+    if (path == nullptr) {
         return INVALID_RET_VALUE;
     }
-    ttfDir_ = dpath;
+    ttfDir_ = path;
     return RET_VALUE_OK;
 }
 
