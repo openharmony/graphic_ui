@@ -97,7 +97,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_IsVectorFont_001, TestSize.Level1)
  */
 HWTEST_F(UIFontTest, Graphic_Font_Test_SetFontPath_001, TestSize.Level1)
 {
-    int8_t ret = UIFont::GetInstance()->SetFontPath(nullptr, nullptr);
+    int8_t ret = UIFont::GetInstance()->SetFontPath(nullptr, BaseFont::FontType::DYNAMIC_FONT);
     EXPECT_EQ(ret, INVALID_RET);
 }
 
@@ -109,7 +109,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_SetFontPath_001, TestSize.Level1)
  */
 HWTEST_F(UIFontTest, Graphic_Font_Test_SetFontPath_002, TestSize.Level1)
 {
-    int8_t ret = UIFont::GetInstance()->SetFontPath("", nullptr);
+    int8_t ret = UIFont::GetInstance()->SetFontPath("", BaseFont::FontType::DYNAMIC_FONT);
 #if ENABLE_VECTOR_FONT
     EXPECT_EQ(ret, 0);
 #else

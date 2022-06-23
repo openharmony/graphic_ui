@@ -20,6 +20,7 @@
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
+#include "font/font_ram_allocator.h"
 #if ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
@@ -28,20 +29,27 @@
 #endif
 
 namespace OHOS {
-UIFontBitmap::UIFontBitmap() : offset_(0), dynamicFont_(), dynamicFontRamUsed_(0), dynamicFontFd_(-1)
+UIFontBitmap::UIFontBitmap() : offset_(0), dynamicFont_()
 {
     bitmapCache_ = nullptr;
-    bitmapRamUsed_ = FONT_BITMAP_CACHE_SIZE;
 }
 
 UIFontBitmap::~UIFontBitmap()
 {
-    if (dynamicFontFd_ >= 0) {
-        close(dynamicFontFd_);
-    }
+    CloseFontFd();
     if (bitmapCache_ != nullptr) {
         delete bitmapCache_;
         bitmapCache_ = nullptr;
+    }
+}
+
+void UIFontBitmap::CloseFontFd()
+{
+    for (uint16_t i = 0; i < dynamicFontFd_.Size(); i++) {
+        if (dynamicFontFd_[i] >= 0) {
+            close(dynamicFontFd_[i]);
+            dynamicFontFd_[i] = -1;
+        }
     }
 }
 
@@ -74,30 +82,29 @@ uint8_t UIFontBitmap::GetFontWeight(uint8_t fontId)
     return fontParam->fontWeight;
 }
 
-int8_t UIFontBitmap::SetFontPath(const char* dpath, const char* spath)
+int8_t UIFontBitmap::SetFontPath(const char* path, FontType type)
 {
-    if (dpath == nullptr) {
+    if ((path == nullptr) || (type != DYNAMIC_FONT)) {
         GRAPHIC_LOGE("UIFontBitmap::SetFontPath invalid parameter");
         return INVALID_RET_VALUE;
     }
 #ifdef _WIN32
-    dynamicFontFd_ = open(dpath, O_RDONLY | O_BINARY);
+    int32_t fontFd = open(path, O_RDONLY | O_BINARY);
 #else
-    dynamicFontFd_ = open(dpath, O_RDONLY);
+    int32_t fontFd = open(path, O_RDONLY);
 #endif
-    if (dynamicFontFd_ < 0) {
+    if (fontFd < 0) {
         GRAPHIC_LOGE("UIFontBitmap::SetFontPath file Open failed");
         return INVALID_RET_VALUE;
     }
-    dynamicFont_.SetRamBuffer(GetRamAddr());
-    int32_t ret = dynamicFont_.SetFile(dynamicFontFd_, offset_);
+
+    int32_t ret = dynamicFont_.SetFile(path, fontFd, offset_);
     if (ret == INVALID_RET_VALUE) {
         GRAPHIC_LOGE("GlyphsManager::SetFile failed");
-        close(dynamicFontFd_);
-        dynamicFontFd_ = -1;
+        close(fontFd);
         return ret;
     }
-    dynamicFontRamUsed_ = dynamicFont_.GetRamUsedLen();
+    dynamicFontFd_.PushBack(fontFd);
     return RET_VALUE_OK;
 }
 
@@ -185,43 +192,37 @@ int8_t UIFontBitmap::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_
     return INVALID_RET_VALUE;
 }
 
-int8_t UIFontBitmap::GetFontVersion(char* dVersion, uint8_t dLen, char* sVersion, uint8_t sLen) const
+int8_t UIFontBitmap::GetFontVersion(FontType type, const char* path, char* version, uint8_t len)
 {
-    return dynamicFont_.GetFontVersion(dVersion, dLen);
+    if (type != DYNAMIC_FONT) {
+        return INVALID_RET_VALUE;
+    }
+    return dynamicFont_.GetFontVersion(path, version, len);
+}
+
+void UIFontBitmap::BitmapCacheInit()
+{
+    if (bitmapCache_ != nullptr) {
+        return;
+    }
+
+    uint8_t* bitmapCacheAddr =
+        reinterpret_cast<uint8_t*>(FontRamAllocator::GetInstance().Allocate(FONT_BITMAP_CACHE_SIZE));
+    if (bitmapCacheAddr == nullptr) {
+        GRAPHIC_LOGE("UIFontBitmap::BitmapCacheInit allocate failed");
+        return;
+    }
+    bitmapCache_ = new UIFontCache(bitmapCacheAddr, FONT_BITMAP_CACHE_SIZE);
 }
 
 int8_t UIFontBitmap::SetCurrentLangId(uint8_t langId)
 {
-    if (bitmapCache_ == nullptr) {
-        uint8_t* bitmapCacheAddr = reinterpret_cast<uint8_t*>(GetRamAddr() + dynamicFontRamUsed_);
-        bitmapCache_ = new UIFontCache(bitmapCacheAddr, bitmapRamUsed_);
-    }
-    uint32_t total = dynamicFontRamUsed_ + bitmapRamUsed_;
-    return (total <= GetRamLen()) ? RET_VALUE_OK : INVALID_RET_VALUE;
+    return RET_VALUE_OK;
 }
 
 UITextLanguageFontParam* UIFontBitmap::GetFontInfo(uint8_t fontId) const
 {
     return UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
-}
-
-uint32_t UIFontBitmap::GetBitmapRamUsed()
-{
-    return bitmapRamUsed_;
-}
-
-uint32_t UIFontBitmap::GetDynamicFontRamUsed()
-{
-    return dynamicFontRamUsed_;
-}
-
-uint32_t UIFontBitmap::GetRamUsedLen(uint32_t textManagerRamUsed, uint32_t langFontRamUsed)
-{
-    if (bitmapCache_ == nullptr) {
-        uint8_t* bitmapCacheAddr = reinterpret_cast<uint8_t*>(GetRamAddr() + dynamicFontRamUsed_ + textManagerRamUsed);
-        bitmapCache_ = new UIFontCache(bitmapCacheAddr, bitmapRamUsed_);
-    }
-    return dynamicFontRamUsed_ + textManagerRamUsed + bitmapRamUsed_ + langFontRamUsed;
 }
 
 int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
@@ -395,5 +396,12 @@ uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, u
     }
 
     return maxHeight;
+}
+
+void UIFontBitmap::SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen)
+{
+    BaseFont::SetPsramMemory(psramAddr, psramLen);
+    FontRamAllocator::GetInstance().SetRamAddr(psramAddr, psramLen);
+    BitmapCacheInit();
 }
 } // namespace OHOS

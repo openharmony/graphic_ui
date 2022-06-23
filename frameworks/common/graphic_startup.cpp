@@ -53,7 +53,7 @@ void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr,
         return;
     }
     uiFont->SetPsramMemory(cacheMemAddr, cacheMemLen);
-    int8_t ret = uiFont->SetFontPath(const_cast<char*>(dPath), nullptr);
+    int8_t ret = uiFont->SetFontPath(dPath, BaseFont::DYNAMIC_FONT);
     if (ret == INVALID_RET_VALUE) {
         GRAPHIC_LOGW("SetFontPath failed");
     }

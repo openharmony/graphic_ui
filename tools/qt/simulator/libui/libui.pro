@@ -133,6 +133,9 @@ SOURCES += \
     ../../../../frameworks/draw/draw_utils.cpp \
     ../../../../frameworks/events/event.cpp \
     ../../../../frameworks/font/base_font.cpp \
+    ../../../../frameworks/font/font_ram_allocator.cpp \
+    ../../../../frameworks/font/glyphs_cache.cpp \
+    ../../../../frameworks/font/glyphs_file.cpp \
     ../../../../frameworks/font/glyphs_manager.cpp \
     ../../../../frameworks/font/ui_font.cpp \
     ../../../../frameworks/font/ui_font_adaptor.cpp \
