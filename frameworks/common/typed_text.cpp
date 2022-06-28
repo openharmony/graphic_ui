@@ -461,6 +461,10 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
 
 bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
 {
+#if ENABLE_VECTOR_FONT
+    return (codePoint >= 0xF000) && (codePoint <= 0xF8FF) || IsEmoji(codePoint) || IsEmojiModifier(codePoint) ||
+            IsEmojiBase(codePoint);
+#else
     bool hasColor = false;
     uint8_t weight = UIFont::GetInstance()->GetFontWeight(fontId);
     if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
@@ -493,5 +497,6 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSiz
 
     weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
     return (weight >= 16); // 16: rgb565->16 rgba8888->32 font with rgba
+#endif
 }
 } // namespace OHOS
