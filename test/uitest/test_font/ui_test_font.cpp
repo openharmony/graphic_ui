@@ -32,6 +32,7 @@ const int16_t TITLE_HEIGHT = 20;
 const uint16_t LABEL_WIDTH = 400;
 const uint16_t LABEL_HEIGHT = 50;
 const uint16_t FONT_SIZE = 30;
+const uint16_t FONT_EMOJI_SIZE = 100;
 const char* SOURCE_HAN_SANS_SC_REGULAR = "SourceHanSansSC-Regular.otf";
 const char* ROBOTO_CONDENSED_REGULAR = "RobotoCondensed-Regular.ttf";
 const char* DEFAULT_EMOJI_FILENAME = "NotoColorEmojiCompat.ttf";
@@ -638,7 +639,7 @@ void UITestFont::UIKitFontTestDisplayEmoji001()
     label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 3); // 2 : double; 3 : triple
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
-    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_EMOJI_SIZE);
     label->SetText("💋💋😂😂😂");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
@@ -666,13 +667,13 @@ void UITestFont::UIKitFontTestDisplayEmoji002()
     label->SetPosition(positionX_, positionY_);
 
 #if ENABLE_VECTOR_FONT
-    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 3); // 2 : double; 3 : triple
+    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 6); // 2 : double; 6 : six times
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
-    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_EMOJI_SIZE);
     label->SetText("轻量图形子系统💋💋😂😂");
     container_->Add(label);
-    positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
+    positionY_ += LABEL_HEIGHT * 6 + GAP; // 6 : six times
 #else
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 3); // 3 : triple
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
@@ -696,10 +697,10 @@ void UITestFont::UIKitFontTestDisplayEmoji003()
     label->SetPosition(positionX_, positionY_);
 
 #if ENABLE_VECTOR_FONT
-    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 6); // 2 : double; 6 : six times
+    label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 12); // 2 : double; 12 : twelve times
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
-    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
+    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_EMOJI_SIZE);
     label->SetText("轻量图形子系统💋😂😂😂您好，轻量图形子系统，鴻蒙😂");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 6 + GAP; // 6 : six times

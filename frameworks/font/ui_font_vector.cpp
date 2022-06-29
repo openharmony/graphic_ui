@@ -697,8 +697,13 @@ uint16_t UIFontVector::GetOffsetPosY(const char* text,
         unicode = TypedText::GetUTF8Next(text, i, i);
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
         if (ret == RET_VALUE_OK) {
+#if ENABLE_VECTOR_FONT
+            if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
+#else
             uint8_t weight = GetFontWeight(glyphNode.fontId);
-            if (weight >= 16) { // 16: bit rgb565 rgba8888
+            // 16: bit rgb565 rgba8888
+            if (weight >= 16) {
+#endif
                 emojiMaxNode = glyphNode.rows > emojiMaxNode.rows ? glyphNode : emojiMaxNode;
                 emojiNum++;
             } else {
