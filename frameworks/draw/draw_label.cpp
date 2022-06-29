@@ -92,8 +92,13 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
         fontMap = fontEngine->GetBitmap(letterInfo.letter, glyphNode, letterInfo.fontId, letterInfo.fontSize,
                                         letterInfo.shapingId);
         if (fontMap != nullptr) {
+#if ENABLE_VECTOR_FONT
+            if (TypedText::IsColourWord(letterInfo.letter, fontId, fontSize)) {
+#else
             weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
-            if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
+            // 16: rgb565->16 rgba8888->32 font with rgba
+            if (weight >= 16) {
+#endif
                 DrawUtils::GetInstance()->DrawColorLetter(gfxDstBuffer, letterInfo, fontMap, glyphNode);
             } else {
                 letterInfo.offsetY = labelLine.ellipsisOssetY == 0 ? offsetPosY : labelLine.ellipsisOssetY;
