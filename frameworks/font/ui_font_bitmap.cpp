@@ -375,7 +375,6 @@ uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, u
 
     uint32_t i = 0;
     uint32_t unicode;
-    GlyphNode glyphNode;
     while (i < lineLength) {
         unicode = TypedText::GetUTF8Next(text, i, i);
         if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
