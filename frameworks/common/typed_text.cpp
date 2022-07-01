@@ -462,7 +462,7 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
 bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
 {
 #if ENABLE_VECTOR_FONT
-    return (codePoint >= 0xF000) && (codePoint <= 0xF8FF) || IsEmoji(codePoint) || IsEmojiModifier(codePoint) ||
+    return ((codePoint >= 0xF000) && (codePoint <= 0xF8FF)) || IsEmoji(codePoint) || IsEmojiModifier(codePoint) ||
             IsEmojiBase(codePoint);
 #else
     bool hasColor = false;
