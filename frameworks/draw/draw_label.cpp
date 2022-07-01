@@ -45,7 +45,6 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     DrawLineBackgroundColor(gfxDstBuffer, letterIndex, labelLine);
     GlyphNode glyphNode;
     uint8_t* fontMap;
-    uint8_t weight;
     while (i < labelLine.lineLength) {
         letter = TypedText::GetUTF8Next(labelLine.text, i, i);
         uint8_t fontId = labelLine.fontId;
@@ -95,7 +94,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
 #if ENABLE_VECTOR_FONT
             if (TypedText::IsColourWord(letterInfo.letter, fontId, fontSize)) {
 #else
-            weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
+            uint8_t weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
             // 16: rgb565->16 rgba8888->32 font with rgba
             if (weight >= 16) {
 #endif
