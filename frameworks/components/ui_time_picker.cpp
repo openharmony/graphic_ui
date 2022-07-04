@@ -253,6 +253,18 @@ bool UITimePicker::RefreshSelected(const char* value)
     return true;
 }
 
+bool UITimePicker::OnPressEvent(const PressEvent& event)
+{
+    if (event.GetCurrentPos().x < (GetX() + hourPicker_->GetX() + hourPicker_->GetWidth())) {
+        hourPicker_->RequestFocus();
+    } else if (event.GetCurrentPos().x < (GetX() + minutePicker_->GetX() + minutePicker_->GetWidth())) {
+        minutePicker_->RequestFocus();
+    } else if (event.GetCurrentPos().x < (GetX() + secondPicker_->GetX() + secondPicker_->GetWidth())) {
+        secondPicker_->RequestFocus();
+    }
+    return UIView::OnPressEvent(event);
+}
+
 void UITimePicker::SetItemHeight(int16_t height)
 {
     itemsHeight_ = height;
