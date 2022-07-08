@@ -519,9 +519,6 @@ void RootView::Render()
 #if !LOCAL_RENDER
    OptimizeInvalidateRects();
 #endif
-#if defined __linux__ || defined __LITEOS__ || defined __APPLE__
-    pthread_mutex_unlock(&lock_);
-#endif
 
 #if LOCAL_RENDER
     if (!invalidateMap_.empty()) {
@@ -552,6 +549,9 @@ void RootView::Render()
 #endif
         BaseGfxEngine::GetInstance()->Flush();
     }
+#if defined __linux__ || defined __LITEOS__ || defined __APPLE__
+    pthread_mutex_unlock(&lock_);
+#endif
 }
 
 void RootView::BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea)
