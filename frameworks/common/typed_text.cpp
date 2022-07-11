@@ -38,29 +38,37 @@ Point TypedText::GetTextSize(const char* text, uint8_t fontId, uint8_t fontSize,
     uint32_t lineBegin = 0;
     uint32_t newLineBegin = 0;
     uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId, fontSize);
-    uint16_t height = lineHeight;
-    if (lineHeight == 0) {
-        lineHeight = letterHeight + lineSpace;
-    }
-
+    bool hasLineHeight = (lineHeight != 0);
+    uint16_t curLineHeight;
     uint16_t letterIndex = 0;
+    int16_t curLetterHeight = 0;
     while (text[lineBegin] != '\0') {
         int16_t lineWidth = maxWidth;
-        newLineBegin += UIFontAdaptor::GetNextLineAndWidth(&text[lineBegin], fontId, fontSize, letterSpace,
-                                                           lineWidth, lineHeight, letterIndex, sizeSpans);
+        newLineBegin += UIFontAdaptor::GetNextLineAndWidth(&text[lineBegin], fontId, fontSize, letterSpace, lineWidth,
+                                                           curLetterHeight, letterIndex, sizeSpans);
+        if (!hasLineHeight) {
+            curLineHeight = curLetterHeight + lineSpace;
+        } else {
+            curLineHeight = lineHeight;
+        }
+
         if (newLineBegin == lineBegin) {
             break;
         }
-        size.y += lineHeight;
+        size.y += curLineHeight;
         size.x = MATH_MAX(lineWidth, size.x);
         lineBegin = newLineBegin;
     }
 
     if ((lineBegin != 0) && ((text[lineBegin - 1] == '\n') || (text[lineBegin - 1] == '\r'))) {
-        size.y += lineHeight;
+        if (!hasLineHeight) {
+            size.y += letterHeight + lineSpace;
+        } else {
+            size.y += lineHeight;
+        }
     }
 
-    if (height == 0) {
+    if (!hasLineHeight) {
         if (size.y == 0) {
             size.y = letterHeight;
         } else {
@@ -69,9 +77,6 @@ Point TypedText::GetTextSize(const char* text, uint8_t fontId, uint8_t fontSize,
     } else {
         if (size.y == 0) {
             size.y = lineHeight;
-        }
-        if (lineHeight < letterHeight) {
-            size.y += letterHeight - lineHeight;
         }
     }
     size.y += EXTRA_HEIGHT;
