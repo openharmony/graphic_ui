@@ -50,6 +50,7 @@ public:
     void UIKit_CircleProgress_Test_SetImagePosition_013();
     void UIKit_CircleProgress_Test_SetLineColor_014();
     void UIKit_CircleProgress_Test_SetAngle_015();
+    void UIKit_CircleProgress_Test_HideRoundCap_016();
 
 private:
     UIScrollView* container_ = nullptr;
@@ -87,6 +88,8 @@ private:
     UILabelButton* imgPosXBtn_ = nullptr;
     UILabelButton* imgPosYBtn_ = nullptr;
     UILabelButton* lineColorBtn_ = nullptr;
+    UILabelButton* showroundCap_ = nullptr;
+    UILabelButton* unshowroundCap_ = nullptr;
 };
 } // namespace OHOS
 #endif // UI_TEST_CIRCLE_PROGRESS_H

@@ -423,7 +423,7 @@ void DrawArc::Draw(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
         }
     }
 
-    if (!isCircle_ && (cap == CapType::CAP_ROUND)) {
+    if (!isCircle_ && (cap != CapType::CAP_NONE)) {
         int16_t lineWidth = style.lineWidth_;
         if (lineWidth > arcInfo.radius) {
             lineWidth = arcInfo.radius;
@@ -448,7 +448,6 @@ void DrawArc::Draw(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
         endArcInfo.center.x += startCapX;
         endArcInfo.center.y -= startCapY;
         SetArcInfo(endArcInfo, style);
-        DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
 
         temp = (outRadius - endArcInfo.radius + 1) * Sin(arcInfo.endAngle);
         int16_t endCapX = static_cast<int16_t>((temp > 0) ? (temp + 0.5f) : (temp - 0.5f));
@@ -456,11 +455,25 @@ void DrawArc::Draw(BufferInfo& gfxDstBuffer, ArcInfo& arcInfo, const Rect& mask,
         temp = (outRadius - endArcInfo.radius + 1) * Sin(QUARTER_IN_DEGREE - arcInfo.endAngle);
         int16_t endCapY = static_cast<int16_t>((temp > 0) ? (temp + 0.5f) : (temp - 0.5f));
 
+        if ((endCapX == startCapX) && (endCapY == startCapY)) {
+            if (cap != CapType::CAP_ROUND_UNSHOW) {
+                DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
+            }
+        } else {
+            DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
+        }
+
         endArcInfo.center = arcInfo.center;
         endArcInfo.center.x += endCapX;
         endArcInfo.center.y -= endCapY;
         SetArcInfo(endArcInfo, style);
-        DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
+        if (endCapX != 0) {
+            DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
+        } else {
+            if (cap != CapType::CAP_ROUND_UNSHOW) {
+                DrawCircleNoEndpoint(gfxDstBuffer, endArcInfo, mask, style, opa, true);
+            }
+        }
     }
 }
 

@@ -100,6 +100,7 @@ const UIView* UITestCircleProgress::GetTestView()
     UIKit_CircleProgress_Test_SetImagePosition_013();
     UIKit_CircleProgress_Test_SetLineColor_014();
     UIKit_CircleProgress_Test_SetAngle_015();
+    UIKit_CircleProgress_Test_HideRoundCap_016();
 
     return container_;
 }
@@ -329,6 +330,19 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetAngle_015()
     SetUpButton(swapAngleBtn_, "转换方向", positionX_, positionY_);
 }
 
+void UITestCircleProgress::UIKit_CircleProgress_Test_HideRoundCap_016()
+{
+    showroundCap_ = new UILabelButton();
+    unshowroundCap_ = new UILabelButton();
+    positionX_ = DELTA_X_COORDINATE_2;
+    positionY_ += BUTTON_HEIGHT + DELTA_Y_COORDINATE_2;
+    SetUpLabel("进度为0是否显示圆形端点", positionX_, positionY_);
+    positionY_ += LABEL_HEIGHT + DELTA_X_COORDINATE;
+    SetUpButton(showroundCap_, "显示", positionX_, positionY_);
+    positionX_ += BUTTON_WIDTH + DELTA_Y_COORDINATE;
+    SetUpButton(unshowroundCap_, "不显示", positionX_, positionY_);
+}
+
 bool UITestCircleProgress::OnClick(UIView& view, const ClickEvent& event)
 {
     static uint16_t progress = 20; // 20: progress
@@ -466,6 +480,10 @@ bool UITestCircleProgress::OnClick(UIView& view, const ClickEvent& event)
         circleProgress_->SetProgressImagePosition(imgPos.x, imgPos.y);
     } else if (&view == lineColorBtn_) {
         circleProgress_->SetLineColor(Color::Green());
+    } else if (&view == showroundCap_) {
+        circleProgress_->SetCapType(CapType::CAP_ROUND);
+    } else if (&view == unshowroundCap_) {
+        circleProgress_->SetCapType(CapType::CAP_ROUND_UNSHOW);
     }
     container_->Invalidate();
     return true;
