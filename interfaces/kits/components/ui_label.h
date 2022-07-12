@@ -440,7 +440,7 @@ public:
         labelText_->SetLineBackgroundSpan(lineBackgroundColor, start, end);
     }
 
-    void SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size);
+    void SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size);
     void SetRelativeSizeSpan(int16_t start, int16_t end, float size);
 
 protected:

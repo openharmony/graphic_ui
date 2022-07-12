@@ -45,7 +45,7 @@ void RenderPixfmtRgbaBlend::CopyHLine(int32_t x, int32_t y,
         len -= NEON_STEP_8;
     };
 #endif
-    for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+    for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
         *pixelPtr = vPixelValue;
         pixelPtr = pixelPtr->Next();
     }
@@ -67,7 +67,7 @@ void RenderPixfmtRgbaBlend::BlendHLine(int32_t x, int32_t y,
         };
 #endif
         if (color.IsOpaque() && cover == COVER_MASK) {
-            for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+            for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
                 PixelColorType pixelValue;
                 pixelValue.SetPixelColor(color);
                 *pPixel = pixelValue;
@@ -75,12 +75,12 @@ void RenderPixfmtRgbaBlend::BlendHLine(int32_t x, int32_t y,
             }
         } else {
             if (cover == COVER_MASK) {
-                for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+                for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
                     BlendPix(pPixel, color);
                     pPixel = pPixel->Next();
                 }
             } else {
-                for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+                for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
                     BlendPix(pPixel, color, cover);
                     pPixel = pPixel->Next();
                 }
@@ -107,7 +107,7 @@ void RenderPixfmtRgbaBlend::BlendSolidHSpan(int32_t x, int32_t y,
         };
 #endif
 
-        for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+        for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
             if (color.IsOpaque() && *covers == COVER_MASK) {
                 pixelPtr->SetPixelColor(color);
             } else {
@@ -158,7 +158,7 @@ void RenderPixfmtRgbaBlend::CopyColorHSpan(int32_t x, int32_t y,
         len -= NEON_STEP_8;
     };
 #endif
-    for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+    for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
         pixelPtr->SetPixelColor(*colors++);
         pixelPtr = pixelPtr->Next();
     }
@@ -199,7 +199,7 @@ void RenderPixfmtRgbaBlend::BlendColorHSpan(int32_t x, int32_t y,
             len -= NEON_STEP_8;
         };
 #endif
-        for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+        for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
             CopyOrBlendPix(pixelPtr, *colors++, *covers++);
             pixelPtr = pixelPtr->Next();
         }
@@ -222,7 +222,7 @@ void RenderPixfmtRgbaBlend::BlendColorHSpan(int32_t x, int32_t y,
         };
 #endif
         if (cover == COVER_MASK) {
-            for (int16_t iPixel = 0; iPixel < len; ++iPixel) {
+            for (uint32_t iPixel = 0; iPixel < len; ++iPixel) {
                 cover == COVER_MASK ? CopyOrBlendPix(pixelPtr, *colors++) :
                                       CopyOrBlendPix(pixelPtr, *colors++, cover);
                 pixelPtr = pixelPtr->Next();

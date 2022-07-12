@@ -518,7 +518,7 @@ uint16_t Text::GetLetterIndexByPosition(const Rect& textRect, const Style& style
     return (lineStart < textLen) ? lineStart : TEXT_ELLIPSIS_END_INV;
 }
 
-void Text::SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size)
+void Text::SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size)
 {
 #if ENABLE_VECTOR_FONT
     if (fontId_ == FONT_ID_MAX) {
@@ -546,7 +546,7 @@ void Text::SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size)
     }
 
     if (sizeSpans_ != nullptr && start <= characterSize_) {
-        for (int32_t i = start; i < end && i < characterSize_; i++) {
+        for (uint16_t i = start; i < end && i < characterSize_; i++) {
             sizeSpans_[i].fontId = fontId;
             sizeSpans_[i].size = size;
             sizeSpans_[i].isSizeSpan = true;
