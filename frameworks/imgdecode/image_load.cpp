@@ -140,11 +140,9 @@ bool ImageLoad::Unzip24Image(uint8_t* imageBuffer, uint32_t size, ImageInfo& ima
             *dest = value | BITMAP_ALPHA_MASK;
             dest++;
         } else {
-            value = 0;
             value = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW) + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
             source = source + BITMAP_ZIP_LEN;
 
-            count = 0;
             count = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW) + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
             source = source + BITMAP_ZIP_LEN;
 
