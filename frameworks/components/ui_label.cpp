@@ -189,7 +189,7 @@ void UILabel::SetText(const SpannableString* text)
 }
 #endif
 
-void UILabel::SetAbsoluteSizeSpan(int16_t start, int16_t end, uint8_t size)
+void UILabel::SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size)
 {
     if (labelText_ == nullptr) {
         return;
