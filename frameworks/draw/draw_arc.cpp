@@ -169,7 +169,6 @@ void DrawArc::DrawCircleNoEndpoint(BufferInfo& gfxDstBuffer,
             }
             if (y_ <= -inRadius_) {
                 lineEnd_ = -1;
-                xi = -1;
                 break;
             }
             if (currentSqr < inRadiusSqr_) {
