@@ -238,6 +238,9 @@ bool FocusManager::GetNextFocus(UIView* focusedView, UIView*& candidate, UIView*
 bool FocusManager::GetNextFocus(UIView* focusedView, UIView*& candidate, UIViewGroup* viewGroup, uint8_t direction)
 {
     UIViewGroup* current = viewGroup;
+    if (!current->IsVisible() || !current->IsFocusable()) {
+        return false;
+    }
     if (current->IsInterceptFocus()) {
         return GetNextFocus(focusedView, candidate, static_cast<UIView*>(current), direction);
     }
