@@ -58,6 +58,8 @@ SOURCES += \
     ../../../../test/uitest/test_digital_clock/ui_test_digital_clock.cpp \
     ../../../../test/uitest/test_draw_line/ui_test_draw_line.cpp \
     ../../../../test/uitest/test_draw_rect/ui_test_draw_rect.cpp \
+    ../../../../test/uitest/test_edit_text/ui_test_edit_text.cpp \
+    ../../../../test/uitest/test_edit_text/custom_input_method.cpp \
     ../../../../test/uitest/test_event_injector/ui_test_event_injector.cpp \
     ../../../../test/uitest/test_focus_manager/ui_test_focus_manager.cpp \
     ../../../../test/uitest/test_font/ui_test_font.cpp \

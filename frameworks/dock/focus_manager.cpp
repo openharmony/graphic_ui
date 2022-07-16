@@ -18,6 +18,8 @@
 #include "components/root_view.h"
 #include "gfx_utils/graphic_math.h"
 
+#include "common/input_method_manager.h"
+
 namespace OHOS {
 FocusManager* FocusManager::GetInstance()
 {
@@ -39,6 +41,13 @@ bool FocusManager::RequestFocus(UIView* view)
         lastFocusView_->Blur();
     }
     focusView_->Focus();
+    
+    UIViewType viewType = focusView_->GetViewType();
+    // show keyboard if the view is edittable
+    if (viewType == UI_EDIT_TEXT) {
+        InputMethodManager::GetInstance().ShowInputMethod(focusView_);
+    }
+
     return true;
 }
 

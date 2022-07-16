@@ -62,6 +62,7 @@ enum UIViewType : uint8_t {
     UI_VIEW_GROUP,
     UI_LABEL,
     UI_ARC_LABEL,
+    UI_EDIT_TEXT,
     UI_LABEL_BUTTON,
     UI_CHECK_BOX,
     UI_TOGGLE_BUTTON,
@@ -1431,7 +1432,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void Focus();
+    virtual void Focus();
 
     /**
      * @brief 组件失焦响应
@@ -1439,7 +1440,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void Blur();
+    virtual void Blur();
 
     /**
      * @brief 焦点改变事件监听类，开发者需要向视图组件注册该类实现事件的监听.

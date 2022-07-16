@@ -23,6 +23,7 @@ Theme::Theme()
     InitBasicStyle();
     InitButtonStyle();
     InitLabelStyle();
+    InitEditTextStyle();
     InitPickerStyle();
     InitProgressStyle();
     InitSliderStyle();
@@ -42,6 +43,11 @@ void Theme::InitButtonStyle()
 void Theme::InitLabelStyle()
 {
     labelStyle_ = StyleDefault::GetLabelStyle();
+}
+
+void Theme::InitEditTextStyle()
+{
+    editTextStyle_ = StyleDefault::GetEditTextStyle();
 }
 
 void Theme::InitPickerStyle()

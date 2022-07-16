@@ -30,6 +30,7 @@
 #endif
 #include "test_draw_line/ui_test_draw_line.h"
 #include "test_draw_rect/ui_test_draw_rect.h"
+#include "test_edit_text/ui_test_edit_text.h"
 #include "test_event_injector/ui_test_event_injector.h"
 #if ENABLE_FOCUS_MANAGER
 #include "test_focus_manager/ui_test_focus_manager.h"
@@ -86,6 +87,7 @@ void UITestGroup::AddTestCase(TestCaseInfo testCaseInfo)
 
 void UITestGroup::SetUpTestCase()
 {
+    testCaseList_.PushBack(TestCaseInfo{"EditText", new UITestEditText()});
     testCaseList_.PushBack(TestCaseInfo{"Clip", new UITestClip()});
 #if ENABLE_ROTATE_INPUT
     testCaseList_.PushBack(TestCaseInfo{"Rotate_Input", new UITestRotateInput()});
