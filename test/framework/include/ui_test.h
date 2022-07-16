@@ -73,7 +73,7 @@ public:
      */
     virtual const UIView* GetTestView() = 0;
 
-    void DeleteChildren(UIView* view)
+    static void DeleteChildren(UIView* view)
     {
         if (view == nullptr) {
             return;

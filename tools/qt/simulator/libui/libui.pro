@@ -86,6 +86,7 @@ SOURCES += \
     ../../../../frameworks/components/ui_circle_progress.cpp \
     ../../../../frameworks/components/ui_dialog.cpp \
     ../../../../frameworks/components/ui_digital_clock.cpp \
+    ../../../../frameworks/components/ui_edit_text.cpp \
     ../../../../frameworks/components/ui_image_animator.cpp \
     ../../../../frameworks/components/ui_image_view.cpp \
     ../../../../frameworks/components/ui_label.cpp \
@@ -104,6 +105,7 @@ SOURCES += \
     ../../../../frameworks/components/ui_view.cpp \
     ../../../../frameworks/components/ui_view_group.cpp \
     ../../../../frameworks/components/ui_extend_image_view.cpp \
+    ../../../../frameworks/core/input_method_manager.cpp \
     ../../../../frameworks/dock/focus_manager.cpp \
     ../../../../frameworks/core/render_manager.cpp \
     ../../../../frameworks/core/task_manager.cpp \
@@ -238,6 +240,7 @@ HEADERS += \
     ../../../../interfaces/innerkits/common/graphic_startup.h \
     ../../../../interfaces/innerkits/common/image_decode_ability.h \
     ../../../../interfaces/innerkits/common/input_device_manager.h \
+    ../../../../interfaces/innerkits/common/input_method_manager.h \
     ../../../../interfaces/innerkits/common/task_manager.h \
     ../../../../interfaces/innerkits/dock/focus_manager.h \
     ../../../../interfaces/innerkits/dock/rotate_input_device.h \
@@ -269,6 +272,7 @@ HEADERS += \
     ../../../../interfaces/kits/components/ui_circle_progress.h \
     ../../../../interfaces/kits/components/ui_dialog.h \
     ../../../../interfaces/kits/components/ui_digital_clock.h \
+    ../../../../interfaces/kits/components/ui_edit_text.h \
     ../../../../interfaces/kits/components/ui_image_animator.h \
     ../../../../interfaces/kits/components/ui_image_view.h \
     ../../../../interfaces/kits/components/ui_label.h \
