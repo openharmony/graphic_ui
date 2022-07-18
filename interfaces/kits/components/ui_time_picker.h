@@ -295,6 +295,7 @@ public:
         timePickerListener_ = timePickerListener;
     }
 
+    bool OnPressEvent(const PressEvent& event) override;
 private:
     class UIPickerListener : public UIPicker::SelectedListener {
     public:
