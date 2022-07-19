@@ -414,7 +414,7 @@ public:
     }
 
     void SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size);
-    void SetRelativeSizeSpan(int16_t start, int16_t end, float size);
+    void SetRelativeSizeSpan(uint16_t start, uint16_t end, float size);
 
     uint16_t GetSizeSpan()
     {
@@ -475,7 +475,7 @@ protected:
     List<ForegroundColor> foregroundColor_;
     List<LineBackgroundColor> linebackgroundColor_;
     SizeSpan* sizeSpans_;
-    uint16_t characterSize_;
+    uint32_t characterSize_;
 
 private:
     uint8_t horizontalAlign_ : 4; // UITextLanguageAlignment

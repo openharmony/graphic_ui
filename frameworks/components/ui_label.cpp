@@ -200,7 +200,7 @@ void UILabel::SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size)
     }
 }
 
-void UILabel::SetRelativeSizeSpan(int16_t start, int16_t end, float size)
+void UILabel::SetRelativeSizeSpan(uint16_t start, uint16_t end, float size)
 {
     if (labelText_ == nullptr) {
         return;
