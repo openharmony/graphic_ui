@@ -65,7 +65,6 @@ ohos_static_library("libupdater_layout") {
   include_dirs += [
     "//foundation/graphic/ui/frameworks",
   ]
-
   deps = [
     "//third_party/bounds_checking_function:libsec_static",
     "//third_party/freetype:freetype_static",
