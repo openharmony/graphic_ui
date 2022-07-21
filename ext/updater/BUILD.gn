@@ -62,9 +62,7 @@ ohos_static_library("libupdater_layout") {
     "$GRAPHIC_UI_PATH/frameworks/dock/virtual_input_device.cpp",
   ]
   include_dirs = graphic_ui_include_dirs + graphic_utils_include_dirs
-  include_dirs += [
-    "//foundation/graphic/ui/frameworks",
-  ]
+  include_dirs += [ "//foundation/graphic/ui/frameworks" ]
   deps = [
     "//third_party/bounds_checking_function:libsec_static",
     "//third_party/freetype:freetype_static",
