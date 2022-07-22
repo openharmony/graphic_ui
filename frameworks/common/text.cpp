@@ -554,7 +554,7 @@ void Text::SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size)
     }
 }
 
-void Text::SetRelativeSizeSpan(int16_t start, int16_t end, float size)
+void Text::SetRelativeSizeSpan(uint16_t start, uint16_t end, float size)
 {
     uint8_t absoluteSize = 0;
 #if ENABLE_VECTOR_FONT
