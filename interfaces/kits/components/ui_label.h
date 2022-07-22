@@ -441,7 +441,7 @@ public:
     }
 
     void SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size);
-    void SetRelativeSizeSpan(int16_t start, int16_t end, float size);
+    void SetRelativeSizeSpan(uint16_t start, uint16_t end, float size);
 
 protected:
     Text* labelText_;
