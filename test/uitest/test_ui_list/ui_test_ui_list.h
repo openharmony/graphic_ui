@@ -81,8 +81,6 @@ private:
     TextAdapter* adapter3_ = nullptr;
     TextAdapter* adapter4_ = nullptr;
     UIList* currentList_ = nullptr;
-    UIList* currentList2_ = nullptr;
-    UILabel* lastSelectLabel_ = nullptr;
     int16_t lastX_ = 0;
     int16_t lastY_ = 0;
     uint16_t autoAlignTime_ = 100; // 100: default list auto aling ACC
