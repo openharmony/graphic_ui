@@ -16,9 +16,7 @@
 #include "font/ui_font_adaptor.h"
 #include "common/typed_text.h"
 #include "graphic_config.h"
-#if ENABLE_ICU
 #include "font/ui_line_break.h"
-#endif
 #if ENABLE_SHAPING
 #include "font/ui_text_shaping.h"
 #endif
