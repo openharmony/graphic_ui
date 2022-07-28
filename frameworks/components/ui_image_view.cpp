@@ -61,7 +61,7 @@ public:
                           const SavedImage* savedImage,
                           GraphicsControlBlock gcb,
                           const ColorMapObject* colorMap) const;
-    const void OpenGifFile(const char* src);
+    void OpenGifFile(const char* src);
     void CloseGifFile();
 
 private:
@@ -83,7 +83,7 @@ private:
     const char* src_;
 };
 
-const void GifImageAnimator::OpenGifFile(const char* src)
+void GifImageAnimator::OpenGifFile(const char* src)
 {
     int error = D_GIF_SUCCEEDED;
     GifFileType* gifFileType = DGifOpenFileName(src, &error);

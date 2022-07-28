@@ -548,10 +548,6 @@ public:
      */
     void SetLineDash(float* lineDashs, const uint32_t ndash)
     {
-        if (ndash < 0) {
-            GRAPHIC_LOGE("SetLineDash fail,because ndash < =0");
-            return;
-        }
         ClearLineDash();
         if (lineDashs == nullptr || ndash == 0) {
             return;
@@ -1451,12 +1447,14 @@ public:
         if (isStroke) {
             if (paint.GetStyle() == Paint::STROKE_STYLE ||
                 paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
-                ChangeColor(color, paint.GetStrokeColor(), paint.GetStrokeColor().alpha * paint.GetGlobalAlpha());
+                ChangeColor(color, paint.GetStrokeColor(),
+                            static_cast<uint8_t>(paint.GetStrokeColor().alpha * paint.GetGlobalAlpha()));
             }
         } else {
             if (paint.GetStyle() == Paint::FILL_STYLE ||
                 paint.GetStyle() == Paint::STROKE_FILL_STYLE) {
-                ChangeColor(color, paint.GetFillColor(), paint.GetFillColor().alpha * paint.GetGlobalAlpha());
+                ChangeColor(color, paint.GetFillColor(),
+                            static_cast<uint8_t>(paint.GetFillColor().alpha * paint.GetGlobalAlpha()));
             }
         }
     }
