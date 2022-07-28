@@ -177,7 +177,6 @@ private:
     const int16_t TRANSLATE_X = 50;
     const int16_t TRANSLATE_Y = 50;
     const uint16_t STROKE3_WIDTH = 3;
-    const uint16_t STROKE8_WIDTH = 8;
     const uint16_t ARC_RADIUS = 80;
     const int16_t START1_ANGLE = 0;
     const int16_t END1_ANGLE = 180;
@@ -207,7 +206,6 @@ private:
     const int16_t ARC_ANGLE270 = 270;
     const int16_t ROTATE20 = 20;
     const int16_t ROTATE_20 = -20;
-    const int16_t ROTATE_45 = -45;
     const int16_t ROTATE45 = 45;
     const int16_t IMAGE_START60 = 60;
     const int16_t IMAGE_START100 = 100;
@@ -234,7 +232,6 @@ private:
     const int16_t LINET050 = 50;
     const int16_t LINET035 = 35;
     const int16_t LINET080 = 80;
-    const int16_t LINET0100 = 100;
     const int16_t LINET0200 = 200;
     const int16_t LINET0120 = 120;
     const int16_t LINET0180 = 180;
@@ -286,12 +283,9 @@ private:
     const float SCALE_X = 0.5f;
     const float SCALE_Y = 0.5f;
     const float ROTATE_ANGLE = 20;
-    const float ROTATE45_ANGLE = 45;
     const float SCALE1_X = 1;
-    const float SCALE2_X = 2;
     const float SCALE1_Y = 1;
     const float SCALE2_Y = 2;
-    const float SCALE4_Y = 4;
     const float SHEAR_X = 0.5f;
     const float SHEAR_Y = 0.5f;
     const float TRANSLATE1_X = 0;
