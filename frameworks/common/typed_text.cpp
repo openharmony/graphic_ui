@@ -396,6 +396,58 @@ void TypedText::Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t le
     }
 }
 
+int32_t TypedText::Utf16ToUtf32Word(const uint16_t* src, uint32_t& des)
+{
+    if (!src) {
+        return -1; // invalid
+    }
+
+    uint16_t w1 = src[0];
+    uint16_t flag = w1 & UTF16_MASK;
+    if (flag == UTF16_LOW_PARAM) {
+        uint16_t w2 = src[1];
+        flag = w2 & UTF16_MASK;
+        if (flag == UTF16_HIGH_PARAM1) {
+            des = (w1 & UTF16_LOW_MASK) + (((w2 & UTF16_LOW_MASK) + UTF16_HIGH_PARAM2) << UTF16_HIGH_SHIFT);
+            return 2; // 2 : used length
+        }
+        return -1;
+    } else if (flag == UTF16_HIGH_PARAM1) {
+        uint16_t w2 = src[1];
+        flag = w2 & UTF16_MASK;
+        if (flag == UTF16_LOW_PARAM) {
+            des = (w2 & UTF16_LOW_MASK) + (((w1 & UTF16_LOW_MASK) + UTF16_HIGH_PARAM2) << UTF16_HIGH_SHIFT);
+            return 2; // 2 : used length
+        }
+        return -1;
+    } else {
+        des = w1;
+        return 1;
+    }
+}
+
+void TypedText::Utf16ToUtf32(const uint16_t* utf16Str, uint32_t* utf32Str, uint32_t len)
+{
+    if (!utf16Str || (!utf32Str)) {
+        return;
+    }
+
+    while (len > 0) {
+        uint32_t tmp;
+        int32_t length = Utf16ToUtf32Word(utf16Str, tmp);
+        if (length == -1) {
+            utf32Str = nullptr;
+            return;
+        }
+        len -= length;
+        if (utf32Str) {
+            (*utf32Str) = tmp;
+            ++utf32Str;
+        }
+        utf16Str += length;
+    }
+}
+
 uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
 {
     if (utf8Str == nullptr) {
