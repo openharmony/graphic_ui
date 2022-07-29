@@ -29,9 +29,10 @@ class TypedText : public HeapBase {
 public:
     static constexpr uint32_t MAX_UINT16_LOW_SCOPE = 0xFFFF;
     static constexpr uint32_t MAX_UINT16_HIGH_SCOPE = 0xEFFFF;
+    static constexpr uint32_t UTF16_MASK = 0xFC00;
     static constexpr uint32_t UTF16_LOW_MASK = 0x03FF;
-    static constexpr uint32_t UTF16_LOW_PARAM = 56320;
-    static constexpr uint32_t UTF16_HIGH_PARAM1 = 55296;
+    static constexpr uint32_t UTF16_LOW_PARAM = 56320; // 0xDC00
+    static constexpr uint32_t UTF16_HIGH_PARAM1 = 55296; // 0xD800
     static constexpr uint8_t UTF16_HIGH_PARAM2 = 64;
     static constexpr uint8_t UTF16_HIGH_SHIFT = 10;
     static constexpr uint8_t UTF8_TO_UNICODE_SHIFT1 = 6;
@@ -84,6 +85,8 @@ public:
     static uint32_t GetByteIndexFromUTF8Id(const char* text, uint32_t utf8Id);
     static uint32_t GetUTF8CharacterSize(const char* text, uint32_t byteIndex = UINT32_MAX);
     static void Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t len);
+    static void Utf16ToUtf32(const uint16_t* utf16Str, uint32_t* utf32Str, uint32_t len);
+    static int32_t Utf16ToUtf32Word(const uint16_t* src, uint32_t& des);
     static uint32_t GetUtf16Cnt(const char* utf8Str);
 
     static bool IsEmoji(uint32_t codePoint);
