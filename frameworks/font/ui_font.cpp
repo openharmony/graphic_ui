@@ -18,7 +18,8 @@
 #include "font/ui_font_cache.h"
 #if ENABLE_VECTOR_FONT
 #include "font/ui_font_vector.h"
-#else
+#endif
+#if ENABLE_BITMAP_FONT
 #include "font/ui_font_bitmap.h"
 #endif
 #include "graphic_config.h"
@@ -35,15 +36,16 @@ UIFont::~UIFont(){}
 UIFont* UIFont::GetInstance()
 {
     static UIFont instance;
-#if ENABLE_VECTOR_FONT
+#if ENABLE_BITMAP_FONT
     if (instance.instance_ == nullptr) {
-        instance.defaultInstance_ = new UIFontVector();
+        instance.defaultInstance_ = new UIFontBitmap();
         instance.instance_ = instance.defaultInstance_;
         setFontAllocFlag_ = true;
     }
-#else
+#endif
+#if ENABLE_VECTOR_FONT
     if (instance.instance_ == nullptr) {
-        instance.defaultInstance_ = new UIFontBitmap();
+        instance.defaultInstance_ = new UIFontVector();
         instance.instance_ = instance.defaultInstance_;
         setFontAllocFlag_ = true;
     }
@@ -62,6 +64,63 @@ void UIFont::SetFont(BaseFont* font)
         defaultInstance_ = font;
         instance_ = font;
     }
+}
+
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+void UIFont::SetBitampFont(BaseFont* font)
+{
+    if (font == nullptr) {
+        return;
+    }
+    GetBitmapInstance()->SetFont(font);
+}
+
+UIFont* UIFont::GetBitmapInstance()
+{
+    static UIFont instance;
+    if (instance.instance_ == nullptr) {
+        instance.defaultInstance_ = new UIFontBitmap();
+        instance.instance_ = instance.defaultInstance_;
+        setFontAllocFlag_ = true;
+    }
+    return &instance;
+}
+#endif
+
+int8_t UIFont::SetCurrentLangId(uint8_t langId)
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    GetBitmapInstance()->SetCurrentLangId(langId);
+#else
+    return instance_->SetCurrentLangId(langId);
+#endif
+}
+
+uint8_t UIFont::GetCurrentLangId() const
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    return GetBitmapInstance()->GetCurrentLangId(langId);
+#else
+    return instance_->GetCurrentLangId();
+#endif
+}
+
+int8_t UIFont::GetTextUtf8(uint16_t textId, uint8_t** utf8Addr, uint16_t& utf8Len) const
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    return GetBitmapInstance()->GetTextUtf8(textId, utf8Addr, utf8Len);
+#else
+    return instance_->GetTextUtf8(textId, utf8Addr, utf8Len);
+#endif
+}
+
+int8_t UIFont::GetTextParam(uint16_t textId, UITextLanguageTextParam& param) const
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    return GetBitmapInstance()->GetTextParam(textId, param);
+#else
+    return instance_->GetTextParam(textId, param);
+#endif
 }
 
 uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize,

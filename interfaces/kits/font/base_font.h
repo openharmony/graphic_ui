@@ -170,6 +170,16 @@ public:
         return 0;
     }
 
+    virtual uint8_t RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    {
+        return 0;
+    }
+
+    virtual uint8_t UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    {
+        return 0;
+    }
+
     virtual uint8_t UnregisterFontInfo(const char* ttfName)
     {
         return 0;
