@@ -426,26 +426,29 @@ int32_t TypedText::Utf16ToUtf32Word(const uint16_t* src, uint32_t& des)
     }
 }
 
-void TypedText::Utf16ToUtf32(const uint16_t* utf16Str, uint32_t* utf32Str, uint32_t len)
+uint16_t TypedText::Utf16ToUtf32(const uint16_t* utf16Str, uint32_t* utf32Str, uint32_t len)
 {
     if (!utf16Str || (!utf32Str)) {
-        return;
+        return 0;
     }
 
+    uint16_t utf32Len = 0;
     while (len > 0) {
         uint32_t tmp;
         int32_t length = Utf16ToUtf32Word(utf16Str, tmp);
         if (length == -1) {
             utf32Str = nullptr;
-            return;
+            return 0;
         }
         len -= length;
         if (utf32Str) {
             (*utf32Str) = tmp;
             ++utf32Str;
+            ++utf32Len;
         }
         utf16Str += length;
     }
+    return utf32Len;
 }
 
 uint32_t TypedText::GetUtf16Cnt(const char* utf8Str)
