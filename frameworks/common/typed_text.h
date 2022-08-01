@@ -85,7 +85,7 @@ public:
     static uint32_t GetByteIndexFromUTF8Id(const char* text, uint32_t utf8Id);
     static uint32_t GetUTF8CharacterSize(const char* text, uint32_t byteIndex = UINT32_MAX);
     static void Utf8ToUtf16(const char* utf8Str, uint16_t* utf16Str, uint32_t len);
-    static void Utf16ToUtf32(const uint16_t* utf16Str, uint32_t* utf32Str, uint32_t len);
+    static uint16_t Utf16ToUtf32(const uint16_t* utf16Str, uint32_t* utf32Str, uint32_t len);
     static int32_t Utf16ToUtf32Word(const uint16_t* src, uint32_t& des);
     static uint32_t GetUtf16Cnt(const char* utf8Str);
 
