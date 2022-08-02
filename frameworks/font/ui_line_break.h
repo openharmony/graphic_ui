@@ -157,7 +157,7 @@ public:
      * @param str Input string.
      * @param len The length of string.
      */
-    UILineBreakProxy(uint16_t* str, uint16_t len) : str_(str), len_(len), prePos_(0) {}
+    UILineBreakProxy(uint32_t* str, uint16_t len) : str_(str), len_(len), prePos_(0) {}
 
     ~UILineBreakProxy()
     {
@@ -196,7 +196,7 @@ public:
      *
      * @return uint16_t* The str setted.
      */
-    const uint16_t* GetStr() const
+    const uint32_t* GetStr() const
     {
         if (prePos_ < len_) {
             return &(str_[prePos_]);
@@ -205,7 +205,7 @@ public:
     }
 
 private:
-    uint16_t* str_;
+    uint32_t* str_;
     uint16_t len_;
     uint16_t prePos_;
 };
