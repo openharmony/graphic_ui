@@ -49,7 +49,7 @@ UILineBreakEngine& UILineBreakEngine::GetInstance()
 
 uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)
 {
-    const UChar* str = reinterpret_cast<const UChar*>(record.GetStr());
+    const uint32_t* str = record.GetStr();
     if ((str == nullptr) || !initSuccess_ || (lineBreakTrie_ == nullptr)) {
         return 0;
     }
