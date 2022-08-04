@@ -1071,20 +1071,14 @@ public:
      * @return margin的宽度
      * @since 6
      */
-    int16_t GetWidthWithMargin()
-    {
-        return GetRelativeRect().GetWidth() + GetStyle(STYLE_MARGIN_LEFT) + GetStyle(STYLE_MARGIN_RIGHT);
-    }
+    int16_t GetWidthWithMargin();
 
     /**
      * @brief 获取组件设置margin属性后margin的高度度，包括组件宽度加marginTop 加 marginBottom.
      * @return margin的高度
      * @since 6
      */
-    int16_t GetHeightWithMargin()
-    {
-        return GetRelativeRect().GetHeight() + GetStyle(STYLE_MARGIN_TOP) + GetStyle(STYLE_MARGIN_BOTTOM);
-    }
+    int16_t GetHeightWithMargin();
 
     /**
      * @brief Sets the position for the view.
