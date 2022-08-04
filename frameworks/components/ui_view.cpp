@@ -1039,4 +1039,14 @@ bool UIView::IsOnViewTree()
     }
     return true;
 }
+
+int16_t UIView::GetWidthWithMargin()
+{
+    return GetRelativeRect().GetWidth() + GetStyle(STYLE_MARGIN_LEFT) + GetStyle(STYLE_MARGIN_RIGHT);
+}
+
+int16_t UIView::GetHeightWithMargin()
+{
+    return GetRelativeRect().GetHeight() + GetStyle(STYLE_MARGIN_TOP) + GetStyle(STYLE_MARGIN_BOTTOM);
+}
 } // namespace OHOS
