@@ -63,7 +63,6 @@ private:
         uint8_t* fontIds = nullptr;
         int8_t size = 0;
     };
-    static constexpr uint8_t MAX_LIST_NUM = 26;
     static constexpr uint8_t DEFAULT_SHAPING_ID = 1;
     static constexpr const char *ARABIC_LANG = "Arabic";
     static constexpr const char *THAI_LANG = "Thai";
@@ -79,7 +78,7 @@ private:
     uint8_t bengaliTtfId_;
     uint8_t topIndex_;
     uint8_t* fontIdIndex_;
-    FontIdNode fontNodes_[MAX_LIST_NUM];
+    FontIdNode fontNodes_[MAX_FONT_SEARCH_NUM];
 };
 }
 #endif
