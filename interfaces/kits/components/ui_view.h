@@ -386,10 +386,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetOnRotateListener(OnRotateListener* onRotateListener)
-    {
-        onRotateListener_ = onRotateListener;
-    }
+    void SetOnRotateListener(OnRotateListener* onRotateListener);
 
     /**
      * @brief Obtains the rotation event listener for the view.
@@ -580,10 +577,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnDragListener(OnDragListener* onDragListener)
-    {
-        onDragListener_ = onDragListener;
-    }
+    void SetOnDragListener(OnDragListener* onDragListener);
 
     /**
      * @brief Obtains the drag event listener for the view.
@@ -591,10 +585,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnDragListener*& GetOnDragListener()
-    {
-        return onDragListener_;
-    }
+    OnDragListener*& GetOnDragListener();
 
     /**
      * @brief Sets a click event listener for the view.
@@ -602,10 +593,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnClickListener(OnClickListener* onClickListener)
-    {
-        onClickListener_ = onClickListener;
-    }
+    void SetOnClickListener(OnClickListener* onClickListener);
 
     /**
      * @brief Obtains the click event listener for the view.
@@ -613,10 +601,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnClickListener*& GetOnClickListener()
-    {
-        return onClickListener_;
-    }
+    OnClickListener*& GetOnClickListener();
 
     /**
      * @brief Sets a long-press event listener for the view.
@@ -624,10 +609,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnLongPressListener(OnLongPressListener* onLongPressListener)
-    {
-        onLongPressListener_ = onLongPressListener;
-    }
+    void SetOnLongPressListener(OnLongPressListener* onLongPressListener);
 
     /**
      * @brief Obtains the long-press event listener for the view.
@@ -635,10 +617,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnLongPressListener*& GetOnLongPressListener()
-    {
-        return onLongPressListener_;
-    }
+    OnLongPressListener*& GetOnLongPressListener();
 
     /**
      * @brief Sets a touch event listener for the view.
@@ -646,10 +625,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOnTouchListener(OnTouchListener* onTouchListener)
-    {
-        onTouchListener_ = onTouchListener;
-    }
+    void SetOnTouchListener(OnTouchListener* onTouchListener);
 
     /**
      * @brief Obtains the touch event listener for the view.
@@ -657,10 +633,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    OnTouchListener*& GetTouchListener()
-    {
-        return onTouchListener_;
-    }
+    OnTouchListener*& GetTouchListener();
 
     /**
      * @brief Obtains the top-level view based on specified coordinates.
@@ -691,10 +664,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetParent(UIView* parent)
-    {
-        parent_ = parent;
-    }
+    void SetParent(UIView* parent);
 
     /**
      * @brief Obtains the parent view of the view.
@@ -702,10 +672,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIView* GetParent() const
-    {
-        return parent_;
-    }
+    UIView* GetParent() const;
 
     /**
      * @brief Sets the next sibling view for the view.
@@ -713,10 +680,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetNextSibling(UIView* sibling)
-    {
-        nextSibling_ = sibling;
-    }
+    void SetNextSibling(UIView* sibling);
 
     /**
      * @brief Obtains the next sibling view of the view.
@@ -724,10 +688,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UIView* GetNextSibling() const
-    {
-        return nextSibling_;
-    }
+    UIView* GetNextSibling() const;
 
     /**
      * @brief Sets whether the view is visible.
@@ -736,14 +697,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetVisible(bool visible)
-    {
-        if (visible_ != visible) {
-            visible_ = visible;
-            needRedraw_ = true;
-            Invalidate();
-        }
-    }
+    virtual void SetVisible(bool visible);
 
     /**
      * @brief Checks whether the view is visible.
@@ -751,10 +705,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsVisible() const
-    {
-        return visible_;
-    }
+    bool IsVisible() const;
 
     /**
      * @brief Sets whether the view is touchable.
@@ -763,10 +714,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetTouchable(bool touch)
-    {
-        touchable_ = touch;
-    }
+    void SetTouchable(bool touch);
 
     /**
      * @brief Checks whether the view is touchable.
@@ -774,10 +722,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsTouchable() const
-    {
-        return touchable_;
-    }
+    bool IsTouchable() const;
 
     /**
      * @brief Sets whether the view is draggable.
@@ -786,11 +731,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetDraggable(bool draggable)
-    {
-        draggable_ = draggable;
-        dragParentInstead_ = !draggable;
-    }
+    void SetDraggable(bool draggable);
 
     /**
      * @brief Checks whether the view is draggable.
@@ -798,10 +739,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsDraggable() const
-    {
-        return draggable_;
-    }
+    bool IsDraggable() const;
 
     /**
      * @brief Sets whether to transfer the drag event to the parent view for processing when the view is being dragged.
@@ -811,10 +749,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetDragParentInstead(bool dragParentInstead)
-    {
-        dragParentInstead_ = dragParentInstead;
-    }
+    void SetDragParentInstead(bool dragParentInstead);
 
     /**
      * @brief Obtains whether the view transfers a drag event to the parent view for processing.
@@ -823,10 +758,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsDragParentInstead() const
-    {
-        return dragParentInstead_;
-    }
+    bool IsDragParentInstead() const;
 
     /**
      * @brief Obtains the absolute rectangle area of the view. When the view has deformation such as rotation,
@@ -878,10 +810,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    Rect GetRelativeRect() const
-    {
-        return rect_;
-    }
+    Rect GetRelativeRect() const;
 
     /**
      * @brief Adjusts the size of the visible area. This operation may affect the final display size.
@@ -892,19 +821,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height)
-    {
-        if (visibleRect_ == nullptr) {
-            visibleRect_ = new Rect();
-            if (visibleRect_ == nullptr) {
-                GRAPHIC_LOGE("new Rect fail");
-                return;
-            }
-        }
-        visibleRect_->SetWidth(width);
-        visibleRect_->SetHeight(height);
-        visibleRect_->SetPosition(x, y);
-    }
+    void ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height);
 
     /**
      * @brief Sets the width for the view.
@@ -912,14 +829,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetWidth(int16_t width)
-    {
-        if (GetWidth() != width) {
-            int16_t newWidth = width + style_->paddingLeft_ + style_->paddingRight_ +
-                               (style_->borderWidth_ * 2); /* 2: left and right border */
-            rect_.SetWidth(newWidth);
-        }
-    }
+    virtual void SetWidth(int16_t width);
 
     /**
      * @brief Sets a percentage that represents the proportion of the view's width to the parent view's width.
@@ -935,11 +845,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual int16_t GetWidth()
-    {
-        return rect_.GetWidth() - (style_->paddingLeft_ + style_->paddingRight_) -
-               (style_->borderWidth_ * 2); /* 2: left and right border */
-    }
+    virtual int16_t GetWidth();
 
     /**
      * @brief Sets the height for the view.
@@ -947,14 +853,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetHeight(int16_t height)
-    {
-        if (GetHeight() != height) {
-            int16_t newHeight = height + style_->paddingTop_ + style_->paddingBottom_ +
-                                (style_->borderWidth_ * 2); /* 2: top and bottom border */
-            rect_.SetHeight(newHeight);
-        }
-    }
+    virtual void SetHeight(int16_t height);
 
     /**
      * @brief Sets a percentage that represents the proportion of the view's hieght to the parent view's hieght.
@@ -970,11 +869,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual int16_t GetHeight()
-    {
-        return rect_.GetHeight() - (style_->paddingTop_ + style_->paddingBottom_) -
-               (style_->borderWidth_ * 2); /* 2: top and bottom border */
-    }
+    virtual int16_t GetHeight();
 
     /**
      * @brief Adjusts the size of the view.
@@ -983,11 +878,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void Resize(int16_t width, int16_t height)
-    {
-        SetWidth(width);
-        SetHeight(height);
-    }
+    virtual void Resize(int16_t width, int16_t height);
 
     /**
      * @brief Adjusts the size of the view based on specified percentages.
@@ -1006,12 +897,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetX(int16_t x)
-    {
-        if (GetX() != x) {
-            rect_.SetX(x + GetStyle(STYLE_MARGIN_LEFT));
-        }
-    }
+    virtual void SetX(int16_t x);
 
     /**
      * @brief Sets a percentage that represents the proportion of the view's x-coordinate
@@ -1028,10 +914,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetX() const
-    {
-        return rect_.GetX() - GetStyle(STYLE_MARGIN_LEFT);
-    }
+    int16_t GetX() const;
 
     /**
      * @brief Sets the y-coordinate for the view.
@@ -1039,12 +922,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetY(int16_t y)
-    {
-        if (GetY() != y) {
-            rect_.SetY(y + GetStyle(STYLE_MARGIN_TOP));
-        }
-    }
+    virtual void SetY(int16_t y);
 
     /**
      * @brief Sets a percentage that represents the proportion of the view's y-coordinate
@@ -1061,10 +939,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetY() const
-    {
-        return rect_.GetY() - GetStyle(STYLE_MARGIN_TOP);
-    }
+    int16_t GetY() const;
 
     /**
      * @brief 获取组件设置margin属性后margin的宽度，包括组件宽度加marginLeft 加 marginRight.
@@ -1087,11 +962,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetPosition(int16_t x, int16_t y)
-    {
-        SetX(x);
-        SetY(y);
-    }
+    virtual void SetPosition(int16_t x, int16_t y);
 
     /**
      * @brief Sets the position percentages for the view.
@@ -1113,12 +984,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual void SetPosition(int16_t x, int16_t y, int16_t width, int16_t height)
-    {
-        SetPosition(x, y);
-        SetWidth(width);
-        SetHeight(height);
-    }
+    virtual void SetPosition(int16_t x, int16_t y, int16_t width, int16_t height);
 
     /**
      * @brief Sets the position and size percentages for the view.
@@ -1141,10 +1007,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsViewGroup() const
-    {
-        return isViewGroup_;
-    }
+    bool IsViewGroup() const;
 
     /**
      * @brief Sets whether to intercept the input event. If intercepted, the view does not transfer the input event to
@@ -1154,10 +1017,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetIntercept(bool isIntercept)
-    {
-        isIntercept_ = isIntercept;
-    }
+    void SetIntercept(bool isIntercept);
 
     /**
      * @brief Gets whether to intercept the input event. If intercepted, the view does not transfer the input event to
@@ -1166,10 +1026,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    bool IsIntercept()
-    {
-        return isIntercept_;
-    }
+    bool IsIntercept();
 
     /**
      * @brief Sets the affine transformation matrix.
@@ -1185,13 +1042,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    TransformMap& GetTransformMap()
-    {
-        if (transMap_ == nullptr) {
-            transMap_ = new TransformMap();
-        }
-        return *transMap_;
-    }
+    TransformMap& GetTransformMap();
 
     /**
      * @brief Obtains the child view of a specified ID.
@@ -1199,10 +1050,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual UIView* GetChildById(const char* id) const
-    {
-        return nullptr;
-    }
+    virtual UIView* GetChildById(const char* id) const;
 
     /**
      * @brief Sets the view ID.
@@ -1210,10 +1058,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetViewId(const char* id)
-    {
-        id_ = id;
-    }
+    void SetViewId(const char* id);
 
     /**
      * @brief Obtains the view ID.
@@ -1221,10 +1066,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    const char* GetViewId() const
-    {
-        return id_;
-    }
+    const char* GetViewId() const;
 
     /**
      * @brief Sets the view index.
@@ -1232,10 +1074,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetViewIndex(int16_t index)
-    {
-        index_ = index;
-    }
+    void SetViewIndex(int16_t index);
 
     /**
      * @brief Obtains the view index.
@@ -1243,10 +1082,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    int16_t GetViewIndex() const
-    {
-        return index_;
-    }
+    int16_t GetViewIndex() const;
 
     /**
      * @brief Obtains the view type.
@@ -1254,10 +1090,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual UIViewType GetViewType() const
-    {
-        return UI_NUMBER_MAX;
-    }
+    virtual UIViewType GetViewType() const;
 
     /**
      * @brief Lays out all child views according to the preset arrangement mode.
@@ -1442,10 +1275,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    virtual int64_t GetStyle(uint8_t key) const
-    {
-        return style_->GetStyle(key);
-    }
+    virtual int64_t GetStyle(uint8_t key) const;
 
     /**
      * @brief Obtains the view style. This function applies to scenarios where the style does not need to be modified,
@@ -1454,10 +1284,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    const Style& GetStyleConst() const
-    {
-        return *style_;
-    }
+    const Style& GetStyleConst() const;
 
     /**
      * @brief Sets the opacity for the view.
@@ -1466,10 +1293,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetOpaScale(uint8_t opaScale)
-    {
-        opaScale_ = opaScale;
-    }
+    void SetOpaScale(uint8_t opaScale);
 
     /**
      * @brief Obtains the view opacity.
@@ -1478,10 +1302,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint8_t GetOpaScale() const
-    {
-        return opaScale_;
-    }
+    uint8_t GetOpaScale() const;
 
     /**
      * @brief Obtains the extra message about a <b>UIView</b> instance. This field is ignored by the graphics
@@ -1491,10 +1312,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    ViewExtraMsg* GetExtraMsg()
-    {
-        return viewExtraMsg_;
-    }
+    ViewExtraMsg* GetExtraMsg();
 
     /**
      * @brief Sets the extra message about a <b>UIView</b> instance. This field is ignored by the graphics
@@ -1504,10 +1322,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetExtraMsg(ViewExtraMsg* extraMsg)
-    {
-        viewExtraMsg_ = extraMsg;
-    }
+    void SetExtraMsg(ViewExtraMsg* extraMsg);
 
     /**
      * @brief Rotates the view in 2d.
@@ -1599,10 +1414,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetFocusable(bool focusable)
-    {
-        focusable_ = focusable;
-    }
+    void SetFocusable(bool focusable);
 
     /**
      * @brief 获取视图是否可获焦.
@@ -1611,10 +1423,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    bool IsFocusable() const
-    {
-        return focusable_;
-    }
+    bool IsFocusable() const;
 
     /**
      * @brief 组件获焦响应
@@ -1676,10 +1485,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    void SetOnFocusListener(OnFocusListener* onFocusListener)
-    {
-        onFocusListener_ = onFocusListener;
-    }
+    void SetOnFocusListener(OnFocusListener* onFocusListener);
 
     /**
      * @brief 获取当前视图焦点改变事件监听者.
@@ -1687,10 +1493,7 @@ public:
      * @since 5.0
      * @version 3.0
      */
-    OnFocusListener* GetOnFocusListener() const
-    {
-        return onFocusListener_;
-    }
+    OnFocusListener* GetOnFocusListener() const;
 #endif
 
     /**

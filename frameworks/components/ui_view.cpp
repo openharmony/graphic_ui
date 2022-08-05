@@ -241,6 +241,36 @@ void UIView::UpdateRectInfo(uint8_t key, const Rect& rect)
     }
 }
 
+int64_t UIView::GetStyle(uint8_t key) const
+{
+    return style_->GetStyle(key);
+}
+
+const Style& UIView::GetStyleConst() const
+{
+    return *style_;
+}
+
+void UIView::SetOpaScale(uint8_t opaScale)
+{
+    opaScale_ = opaScale;
+}
+
+uint8_t UIView::GetOpaScale() const
+{
+    return opaScale_;
+}
+
+UIView::ViewExtraMsg* UIView::GetExtraMsg()
+{
+    return viewExtraMsg_;
+}
+
+void UIView::SetExtraMsg(ViewExtraMsg* extraMsg)
+{
+    viewExtraMsg_ = extraMsg;
+}
+
 void UIView::Rotate(int16_t angle, const Vector2<float>& pivot)
 {
     Vector3<float> pivotStart3D = Vector3<float>(pivot.x_, pivot.y_, 0);
@@ -517,6 +547,111 @@ bool UIView::OnCancelEvent(const CancelEvent& event)
     return isIntercept_;
 }
 
+void UIView::SetOnDragListener(OnDragListener* onDragListener)
+{
+    onDragListener_ = onDragListener;
+}
+
+UIView::OnDragListener*& UIView::GetOnDragListener()
+{
+    return onDragListener_;
+}
+
+void UIView::SetOnClickListener(OnClickListener* onClickListener)
+{
+    onClickListener_ = onClickListener;
+}
+
+UIView::OnClickListener*& UIView::GetOnClickListener()
+{
+    return onClickListener_;
+}
+
+void UIView::SetOnLongPressListener(OnLongPressListener* onLongPressListener)
+{
+    onLongPressListener_ = onLongPressListener;
+}
+
+UIView::OnLongPressListener*& UIView::GetOnLongPressListener()
+{
+    return onLongPressListener_;
+}
+
+void UIView::SetOnTouchListener(OnTouchListener* onTouchListener)
+{
+    onTouchListener_ = onTouchListener;
+}
+
+UIView::OnTouchListener*& UIView::GetTouchListener()
+{
+    return onTouchListener_;
+}
+
+void UIView::SetParent(UIView* parent)
+{
+    parent_ = parent;
+}
+
+UIView* UIView::GetParent() const
+{
+    return parent_;
+}
+
+void UIView::SetNextSibling(UIView* sibling)
+{
+    nextSibling_ = sibling;
+}
+
+UIView* UIView::GetNextSibling() const
+{
+    return nextSibling_;
+}
+
+void UIView::SetVisible(bool visible)
+{
+    if (visible_ != visible) {
+        visible_ = visible;
+        needRedraw_ = true;
+        Invalidate();
+    }
+}
+
+bool UIView::IsVisible() const
+{
+    return visible_;
+}
+
+void UIView::SetTouchable(bool touch)
+{
+    touchable_ = touch;
+}
+
+bool UIView::IsTouchable() const
+{
+    return touchable_;
+}
+
+void UIView::SetDraggable(bool draggable)
+{
+    draggable_ = draggable;
+    dragParentInstead_ = !draggable;
+}
+
+bool UIView::IsDraggable() const
+{
+    return draggable_;
+}
+
+void UIView::SetDragParentInstead(bool dragParentInstead)
+{
+    dragParentInstead_ = dragParentInstead;
+}
+
+bool UIView::IsDragParentInstead() const
+{
+    return dragParentInstead_;
+}
+
 #if ENABLE_ROTATE_INPUT
 bool UIView::OnRotateStartEvent(const RotateEvent& event)
 {
@@ -541,6 +676,12 @@ bool UIView::OnRotateEndEvent(const RotateEvent& event)
     }
     return false;
 }
+
+void UIView::SetOnRotateListener(OnRotateListener* onRotateListener)
+{
+    onRotateListener_ = onRotateListener;
+}
+
 #endif
 
 void UIView::GetTargetView(const Point& point, UIView** last)
@@ -581,6 +722,16 @@ void UIView::GetTargetView(const Point& point, UIView** current, UIView** target
 }
 
 #if ENABLE_FOCUS_MANAGER
+void UIView::SetFocusable(bool focusable)
+{
+    focusable_ = focusable;
+}
+
+bool UIView::IsFocusable() const
+{
+    return focusable_;
+}
+
 void UIView::Focus()
 {
     if (focusable_ && onFocusListener_ != nullptr) {
@@ -594,6 +745,17 @@ void UIView::Blur()
         onFocusListener_->OnBlur(*this);
     }
 }
+
+void UIView::SetOnFocusListener(OnFocusListener* onFocusListener)
+{
+    onFocusListener_ = onFocusListener;
+}
+
+UIView::OnFocusListener* UIView::GetOnFocusListener() const
+{
+    return onFocusListener_;
+}
+
 #endif
 
 Rect UIView::GetRect() const
@@ -689,6 +851,15 @@ void UIView::SetTransformMap(const TransformMap& transMap)
     InvalidateRect(joinRect);
 }
 
+void UIView::SetWidth(int16_t width)
+{
+    if (GetWidth() != width) {
+        int16_t newWidth = width + style_->paddingLeft_ + style_->paddingRight_ +
+                            (style_->borderWidth_ * 2); /* 2: left and right border */
+        rect_.SetWidth(newWidth);
+    }
+}
+
 void UIView::SetWidthPercent(float widthPercent)
 {
     if (IsInvalid(widthPercent)) {
@@ -697,6 +868,21 @@ void UIView::SetWidthPercent(float widthPercent)
     if ((GetParent() != nullptr) && (GetParent()->GetWidth() > 1)) {
         int16_t newWidth = static_cast<int16_t>(GetParent()->GetWidth() * widthPercent);
         SetWidth(newWidth);
+    }
+}
+
+int16_t UIView::GetWidth()
+{
+    return rect_.GetWidth() - (style_->paddingLeft_ + style_->paddingRight_) -
+            (style_->borderWidth_ * 2); /* 2: left and right border */
+}
+
+void UIView::SetHeight(int16_t height)
+{
+    if (GetHeight() != height) {
+        int16_t newHeight = height + style_->paddingTop_ + style_->paddingBottom_ +
+                            (style_->borderWidth_ * 2); /* 2: top and bottom border */
+        rect_.SetHeight(newHeight);
     }
 }
 
@@ -711,6 +897,18 @@ void UIView::SetHeightPercent(float heightPercent)
     }
 }
 
+int16_t UIView::GetHeight()
+{
+    return rect_.GetHeight() - (style_->paddingTop_ + style_->paddingBottom_) -
+            (style_->borderWidth_ * 2); /* 2: top and bottom border */
+}
+
+void UIView::Resize(int16_t width, int16_t height)
+{
+    SetWidth(width);
+    SetHeight(height);
+}
+
 void UIView::ResizePercent(float widthPercent, float heightPercent)
 {
     if (IsInvalid(widthPercent) || IsInvalid(heightPercent)) {
@@ -720,6 +918,13 @@ void UIView::ResizePercent(float widthPercent, float heightPercent)
         int16_t newWidth = static_cast<int16_t>(GetParent()->GetWidth() * widthPercent);
         int16_t newHeight = static_cast<int16_t>(GetParent()->GetHeight() * heightPercent);
         Resize(newWidth, newHeight);
+    }
+}
+
+void UIView::SetX(int16_t x)
+{
+    if (GetX() != x) {
+        rect_.SetX(x + GetStyle(STYLE_MARGIN_LEFT));
     }
 }
 
@@ -734,6 +939,18 @@ void UIView::SetXPercent(float xPercent)
     }
 }
 
+int16_t UIView::GetX() const
+{
+    return rect_.GetX() - GetStyle(STYLE_MARGIN_LEFT);
+}
+
+void UIView::SetY(int16_t y)
+{
+    if (GetY() != y) {
+        rect_.SetY(y + GetStyle(STYLE_MARGIN_TOP));
+    }
+}
+
 void UIView::SetYPercent(float yPercent)
 {
     if (IsInvalid(yPercent)) {
@@ -743,6 +960,17 @@ void UIView::SetYPercent(float yPercent)
         int16_t newY = static_cast<int16_t>(GetParent()->GetHeight() * yPercent);
         SetY(newY);
     }
+}
+
+int16_t UIView::GetY() const
+{
+    return rect_.GetY() - GetStyle(STYLE_MARGIN_TOP);
+}
+
+void UIView::SetPosition(int16_t x, int16_t y)
+{
+    SetX(x);
+    SetY(y);
 }
 
 void UIView::SetPositionPercent(float xPercent, float yPercent)
@@ -755,6 +983,13 @@ void UIView::SetPositionPercent(float xPercent, float yPercent)
         int16_t newY = static_cast<int16_t>(GetParent()->GetHeight() * yPercent);
         SetPosition(newX, newY);
     }
+}
+
+void UIView::SetPosition(int16_t x, int16_t y, int16_t width, int16_t height)
+{
+    SetPosition(x, y);
+    SetWidth(width);
+    SetHeight(height);
 }
 
 void UIView::SetPositionPercent(float xPercent, float yPercent, float widthPercent, float heightPercent)
@@ -771,12 +1006,65 @@ void UIView::SetPositionPercent(float xPercent, float yPercent, float widthPerce
     }
 }
 
+bool UIView::IsViewGroup() const
+{
+    return isViewGroup_;
+}
+
+void UIView::SetIntercept(bool isIntercept)
+{
+    isIntercept_ = isIntercept;
+}
+
+bool UIView::IsIntercept()
+{
+    return isIntercept_;
+}
+
 bool UIView::IsInvalid(float percent)
 {
     if ((percent < 1) && (percent > 0)) {
         return false;
     }
     return true;
+}
+
+TransformMap& UIView::GetTransformMap()
+{
+    if (transMap_ == nullptr) {
+        transMap_ = new TransformMap();
+    }
+    return *transMap_;
+}
+
+UIView* UIView::GetChildById(const char* id) const
+{
+    return nullptr;
+}
+
+void UIView::SetViewId(const char* id)
+{
+    id_ = id;
+}
+
+const char* UIView::GetViewId() const
+{
+    return id_;
+}
+
+void UIView::SetViewIndex(int16_t index)
+{
+    index_ = index;
+}
+
+int16_t UIView::GetViewIndex() const
+{
+    return index_;
+}
+
+UIViewType UIView::GetViewType() const
+{
+    return UI_NUMBER_MAX;
 }
 
 void UIView::LayoutCenterOfParent(int16_t xOffset, int16_t yOffset)
@@ -1048,5 +1336,24 @@ int16_t UIView::GetWidthWithMargin()
 int16_t UIView::GetHeightWithMargin()
 {
     return GetRelativeRect().GetHeight() + GetStyle(STYLE_MARGIN_TOP) + GetStyle(STYLE_MARGIN_BOTTOM);
+}
+
+Rect UIView::GetRelativeRect() const
+{
+    return rect_;
+}
+
+void UIView::ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t height)
+{
+    if (visibleRect_ == nullptr) {
+        visibleRect_ = new Rect();
+        if (visibleRect_ == nullptr) {
+            GRAPHIC_LOGE("new Rect fail");
+            return;
+        }
+    }
+    visibleRect_->SetWidth(width);
+    visibleRect_->SetHeight(height);
+    visibleRect_->SetPosition(x, y);
 }
 } // namespace OHOS
