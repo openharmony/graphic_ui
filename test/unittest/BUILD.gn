@@ -27,9 +27,9 @@ if (ohos_kernel_type != "liteos_m") {
       "//foundation/graphic/surface/interfaces/kits",
       "//third_party/bounds_checking_function/include",
       "//third_party/freetype/include",
-      "//foundation/distributedschedule/samgr_lite/interfaces/kits/registry",
-      "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
-      "//foundation/distributedschedule/samgr_lite/interfaces/kits/communication/broadcast",
+      "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/registry",
+      "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
+      "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/communication/broadcast",
       "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
       "//foundation/multimedia/utils/lite/interfaces/kits",
     ]
