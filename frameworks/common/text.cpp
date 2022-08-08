@@ -108,7 +108,7 @@ void Text::SetText(const char* text)
     }
     uint32_t textLen = static_cast<uint32_t>(strlen(text));
     if (textLen > MAX_TEXT_LENGTH) {
-        return;
+        textLen = MAX_TEXT_LENGTH;
     }
     if (text_ != nullptr) {
         if (strcmp(text, text_) == 0) {
@@ -117,11 +117,11 @@ void Text::SetText(const char* text)
         UIFree(text_);
         text_ = nullptr;
     }
-    text_ = static_cast<char*>(UIMalloc(++textLen));
+    text_ = static_cast<char*>(UIMalloc(textLen + 1));
     if (text_ == nullptr) {
         return;
     }
-    if (memcpy_s(text_, textLen, text, textLen) != EOK) {
+    if (strncpy_s(text_, textLen + 1, text, textLen) != EOK) {
         UIFree(text_);
         text_ = nullptr;
         return;

@@ -112,6 +112,16 @@ public:
     }
 
     /**
+     * @brief Obtains the style of this edit text.
+     *
+     * @return Returns the edit text style.
+     */
+    Style& GetEditTextStyle()
+    {
+        return editTextStyle_;
+    }
+
+    /**
      * @brief Obtains the background style of this picker.
      *
      * @return Returns the background style of this picker.
@@ -175,6 +185,7 @@ protected:
     Style basicStyle_;
     ButtonStyle buttonStyle_;
     Style labelStyle_;
+    Style editTextStyle_;
     Style pickerBackgroundStyle_;
     Style pickerHighlightStyle_;
     Style progressBackgroundStyle_;
@@ -184,6 +195,7 @@ protected:
     virtual void InitBasicStyle();
     virtual void InitButtonStyle();
     virtual void InitLabelStyle();
+    virtual void InitEditTextStyle();
     virtual void InitPickerStyle();
     virtual void InitProgressStyle();
     virtual void InitSliderStyle();
