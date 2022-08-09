@@ -95,17 +95,14 @@ enum UIViewType : uint8_t {
 
 #if ENABLE_DEBUG
 const char* const VIEW_TYPE_STRING[UI_NUMBER_MAX] = {
-    "RootView",         "UIViewGroup",     "UILabel",
-    "UIArcLabel",       "UILabelButton",   "UICheckBox",
-    "UIToggleButton",   "UIRadioButton",   "UIImageView",
-    "UIBoxProgress",    "UISlider",        "UICircleProgress",
-    "UIScrollView",     "UIList",          "UIDigitalClock",
-    "UIAnalogClock",    "UIPicker",        "UISwipeView",
-    "UITimePicker",     "UIAbstractClock", "UIAbstractProgress",
-    "UIAbstractScroll", "UIAxis",          "UIButton",
-    "UICanvas",         "UIChart",         "UIImageAnimatorView",
-    "UIRepeatButton",   "UITextureMapper", "UIDialog",
-    "UIQrcode",
+    "RootView",         "UIViewGroup",        "UILabel",          "UIArcLabel",
+    "UIEditText",       "UILabelButton",      "UICheckBox",       "UIToggleButton",
+    "UIRadioButton",    "UIImageView",        "UIBoxProgress",    "UISlider",
+    "UICircleProgress", "UIScrollView",       "UIList",           "UIDigitalClock",
+    "UIAnalogClock",    "UIPicker",           "UISwipeView",      "UITimePicker",
+    "UIAbstractClock",  "UIAbstractProgress", "UIAbstractScroll", "UIAxis",
+    "UIButton",         "UICanvas",           "UIChart",          "UIImageAnimatorView",
+    "UIRepeatButton",   "UITextureMapper",    "UIDialog",         "UIQrcode",
 };
 #endif // ENABLE_DEBUG
 

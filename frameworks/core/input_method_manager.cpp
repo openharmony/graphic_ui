@@ -39,7 +39,7 @@ void InputMethodManager::ShowInputMethod(UIView* view)
     inputView_ = view;
     UIViewType viewType = view->GetViewType();
     if (viewType == UI_EDIT_TEXT) {
-        UIEditText* tmpView = dynamic_cast<UIEditText*>(view);
+        UIEditText* tmpView = reinterpret_cast<UIEditText*>(view);
         InputMethodParam param;
         param.view = view;
         param.inputType = tmpView->GetInputType();
@@ -74,7 +74,7 @@ void InputMethodManager::InsertText(std::string text)
 
     UIViewType viewType = inputView_->GetViewType();
     if (viewType == UI_EDIT_TEXT) {
-        UIEditText* tmpView = dynamic_cast<UIEditText*>(inputView_);
+        UIEditText* tmpView = reinterpret_cast<UIEditText*>(inputView_);
         tmpView->InsertText(text);
     }
 }
@@ -87,7 +87,7 @@ void InputMethodManager::DeleteBackward(uint16_t length)
 
     UIViewType viewType = inputView_->GetViewType();
     if (viewType == UI_EDIT_TEXT) {
-        UIEditText* tmpView = dynamic_cast<UIEditText*>(inputView_);
+        UIEditText* tmpView = reinterpret_cast<UIEditText*>(inputView_);
         tmpView->DeleteBackward(length);
     }
 }
