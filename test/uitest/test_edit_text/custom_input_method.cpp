@@ -120,7 +120,7 @@ void CustomInputMethod::OnShow(InputMethodManager::InputMethodParam& param)
     editView_->SetText(param.text.c_str());
     editView_->SetInputType(param.inputType);
     if (param.view != nullptr) {
-        UIEditText* paramView = dynamic_cast<UIEditText*>(param.view);
+        UIEditText* paramView = reinterpret_cast<UIEditText*>(param.view);
         editView_->SetPlaceholder(paramView->GetPlaceholder());
         editView_->SetPlaceholderColor(paramView->GetPlaceholderColor());
         editView_->SetCursorColor(paramView->GetCursorColor());
