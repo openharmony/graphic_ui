@@ -55,6 +55,10 @@ void UIAnalogClock::SetHandImage(HandType type, const UIImageView& img, Point po
         }
         hand->imageInfo_ = entry.GetImageInfo();
     } else {
+        if (img.GetImageInfo() == nullptr) {
+            hand->imageInfo_.data = nullptr;
+            return;
+        }
         hand->imageInfo_ = *(img.GetImageInfo());
     }
 }
