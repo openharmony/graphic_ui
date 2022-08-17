@@ -19,6 +19,15 @@
 
 using namespace testing::ext;
 namespace OHOS {
+namespace {
+    const uint16_t size = 0;
+    const EasingFunc func(EasingEquation::CubicEaseOut);
+    const uint8_t value = 0;
+    const uint8_t threshold = 2;
+    const uint8_t side = 0;
+    const Point center = {0, 0};
+}
+
 class ScrollViewTest : public testing::Test {
 public:
     static void SetUpTestCase();
@@ -197,5 +206,138 @@ HWTEST_F(ScrollViewTest, UIScrollViewMoveChildByOffset_001, TestSize.Level0)
 
     scrollView_->Remove(view);
     delete view;
+}
+
+/**
+ * @tc.name: UIAbstractClockSetScrollBlankSize_001
+ * @tc.desc: Verify SetScrollBlankSize function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetScrollBlankSize_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetScrollBlankSize(size);
+    EXPECT_EQ(scrollView_->GetScrollBlankSize(), size);
+}
+
+/**
+ * @tc.name: UIAbstractClockSetReboundSize_001
+ * @tc.desc: Verify SetReboundSize function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetReboundSize_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetReboundSize(size);
+    EXPECT_EQ(scrollView_->GetReboundSize(), size);
+}
+
+/**
+ * @tc.name: UIAbstractClockSetDragFunc_001
+ * @tc.desc: Verify SetDragFunc function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetDragFunc_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetDragFunc(func);
+    EXPECT_EQ(scrollView_->GetDragFunc(), func);
+}
+
+#if ENABLE_ROTATE_INPUT
+/**
+ * @tc.name: UIAbstractClockSetRotateACCLevel_001
+ * @tc.desc: Verify SetRotateACCLevel function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetRotateACCLevel_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetRotateACCLevel(value);
+    EXPECT_EQ(scrollView_->GetRotateACCLevel(), value);
+}
+
+/**
+ * @tc.name: UIAbstractClockSetRotateThrowThreshold_001
+ * @tc.desc: Verify SetRotateThrowThreshold function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetRotateThrowThreshold_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetRotateThrowThreshold(threshold);
+    EXPECT_EQ(scrollView_->GetRotateThrowThreshold(), threshold);
+}
+
+/**
+ * @tc.name: UIAbstractClockRotateEvent_001
+ * @tc.desc: Verify OnRotateStartEvent OnRotateEvent OnRotateEndEvent function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollRotateEvent_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    RotateEvent* event = new RotateEvent(1);
+    EXPECT_EQ(scrollView_->OnRotateStartEvent(*event), false);
+    EXPECT_EQ(scrollView_->OnRotateEvent(*event), false);
+    EXPECT_EQ(scrollView_->OnRotateEndEvent(*event), false);
+    delete event;
+    event = nullptr;
+}
+#endif
+
+/**
+ * @tc.name: UIAbstractClockSetScrollBarSide_001
+ * @tc.desc: Verify SetScrollBarSide function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetScrollBarSide_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetScrollBarSide(side);
+    EXPECT_EQ(scrollView_->GetScrollBarSide(), side);
+}
+
+/**
+ * @tc.name: UIAbstractClockSetScrollBarCenter_001
+ * @tc.desc: Verify SetScrollBarCenter function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetScrollBarCenter_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetScrollBarCenter(center);
+    EXPECT_EQ(scrollView_->GetScrollBarCenter().x, center.x);
+    EXPECT_EQ(scrollView_->GetScrollBarCenter().y, center.y);
+}
+
+/**
+ * @tc.name: UIAbstractClockSetDirection_001
+ * @tc.desc: Verify SetDirection function.
+ */
+HWTEST_F(ScrollViewTest, UIAbstractScrollSetDirection_001, TestSize.Level1)
+{
+    if (scrollView_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    scrollView_->SetDirection(2);
+    EXPECT_EQ(scrollView_->GetDirection(), 2);
 }
 } // namespace OHOS

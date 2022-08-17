@@ -214,4 +214,19 @@ HWTEST_F(UIArcLabelTest, UIArcLabelGetDirect_001, TestSize.Level1)
     }
     EXPECT_EQ(arcLabel_->GetDirect(), UITextLanguageDirect(0));
 }
+
+/**
+ * @tc.name: UIArcLabelSetFontId_001
+ * @tc.desc: Verify SetFontId function, equal.
+ */
+HWTEST_F(UIArcLabelTest, UIArcLabelSetFontId_001, TestSize.Level1)
+{
+    if (arcLabel_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    uint8_t fontId = 0;
+    arcLabel_->SetFontId(fontId);
+    EXPECT_EQ(arcLabel_->GetFontId(), fontId);
+}
 }
