@@ -224,6 +224,7 @@ lite_library("ui") {
       "//third_party/bounds_checking_function:libsec_static",
       "//third_party/freetype:freetype",
       "//third_party/giflib:libgif",
+      "//third_party/icu/icu4c/source/common:icu_font",
       "//third_party/libjpeg:libjpeg",
       "//third_party/libpng:libpng",
       "//third_party/qrcodegen:qrcodegen",
@@ -263,9 +264,17 @@ lite_library("ui") {
 
   public_deps = [ "//foundation/graphic/utils:lite_graphic_utils" ]
   public_configs = [ ":graphic_define_config" ]
-  cflags = [
-    "-Wall",
-    "-fno-exceptions",
-  ]
-  cflags_cc = cflags
+  if (board_toolchain_type != "iccarm") {
+    cflags = [
+      "-Wall",
+      "-fno-exceptions",
+    ]
+    cflags_cc = cflags
+  } else {
+    cflags = [
+      "--diag_suppress",
+      "Pa093,Pe161",
+    ]
+    cflags_cc = cflags
+  }
 }
