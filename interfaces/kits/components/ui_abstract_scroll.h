@@ -96,6 +96,16 @@ public:
     }
 
     /**
+     * @brief Get the blank size for this scroll view.
+     *
+     * @return Returns the blank size for this scroll view
+     */
+    uint16_t GetScrollBlankSize() const
+    {
+        return scrollBlankSize_;
+    }
+
+    /**
      * @brief Sets the maximum scroll distance after a finger lifts the screen.
      *
      * @param distance Indicates the maximum scroll distance to set. The default value is <b>0</b>, indicating that the
@@ -122,6 +132,17 @@ public:
     }
 
     /**
+     * @brief Get the rebound size, which is the distance a knob moves after being released when it reaches the end of
+     *        a scrollbar.
+     *
+     * @return Returns the rebound size.
+     */
+    uint16_t GetReboundSize() const
+    {
+        return reboundSize_;
+    }
+
+    /**
      * @brief Obtains the maximum scroll distance after a finger lifts the screen.
      *
      * @return Returns the maximum scroll distance. The default value is <b>0</b>, indicating that the scroll distance
@@ -145,6 +166,17 @@ public:
     void SetDragFunc(EasingFunc func)
     {
         easingFunc_ = func;
+    }
+
+    /**
+     * @brief Get the easing function that specifies a scroll animation after a finger lifts the screen.
+     *
+     * @param func Returns the easing function to set. The default function is {@link EasingEquation::CubicEaseOut}.
+     *             For details, see {@link EasingEquation}.
+     */
+    EasingFunc GetDragFunc() const
+    {
+        return easingFunc_;
     }
 
     /**
@@ -290,6 +322,17 @@ public:
         rotateThrowthreshold_ = threshold;
     }
 
+    /**
+     * @brief Get threshold for rotation drag throw animation. The view will roll easier with larger threshold.
+     *
+     * @param Returns the threshold for rotation drag throw animation. The view will roll easier with larger threshold.
+     *
+     */
+    uint8_t GetRotateThrowThreshold() const
+    {
+        return rotateThrowthreshold_;
+    }
+
     bool OnRotateStartEvent(const RotateEvent& event) override;
 
     bool OnRotateEvent(const RotateEvent& event) override;
@@ -306,12 +349,34 @@ public:
         scrollBarSide_ = side;
     }
 
+    /**
+     * @brief Get ScrollBarSide.
+     *
+     * @param Returns the scrollBarSide_.
+     *
+     */
+    uint8_t GetScrollBarSide()
+    {
+        return scrollBarSide_;
+    }
+
     void SetScrollBarCenter(const Point& center)
     {
         scrollBarCenter_ = center;
         scrollBarCenterSetFlag_ = true;
     }
 
+    /**
+     * @brief Get scrollBarCenter.
+     *
+     * @param Returns the scrollBarCenter_.
+     *
+     */
+    Point GetScrollBarCenter()
+    {
+        return scrollBarCenter_;
+    }
+    
     /**
      * @brief Sets the list direction.
      *

@@ -53,6 +53,7 @@ if (ohos_kernel_type != "liteos_m") {
         "common/input_method_manager_unit_test.cpp",
         "common/screen_unit_test.cpp",
         "common/text_unit_test.cpp",
+        "components/ui_abstract_clock_unit_test.cpp",
         "components/ui_abstract_progress_unit_test.cpp",
         "components/ui_analog_clock_unit_test.cpp",
         "components/ui_arc_label_unit_test.cpp",
