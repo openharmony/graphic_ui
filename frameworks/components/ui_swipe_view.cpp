@@ -69,7 +69,7 @@ void UISwipeView::Remove(UIView* view)
 
 void UISwipeView::MoveHeadOrTailChild()
 {
-    if (loop_) {
+    if (loop_ && (childrenNum_ != 1)) {
         if (direction_ == HORIZONTAL) {
             while (childrenHead_->GetX() >= 0) {
                 MoveLastChildToFirst();
