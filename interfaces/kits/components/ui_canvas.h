@@ -174,10 +174,10 @@ public:
         ndashes_ = paint.ndashes_;
 #endif
         changeFlag_ = paint.changeFlag_;
-        scaleRadioX_= paint.scaleRadioX_;
-        scaleRadioY_= paint.scaleRadioY_;
-        translationX_= paint.translationX_;
-        translationY_= paint.translationY_;
+        scaleRadioX_ = paint.scaleRadioX_;
+        scaleRadioY_ = paint.scaleRadioY_;
+        translationX_ = paint.translationX_;
+        translationY_ = paint.translationY_;
         InitDash(paint);
 #if GRAPHIC_ENABLE_LINEJOIN_FLAG
         miterLimit_ = paint.miterLimit_;
