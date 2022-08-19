@@ -124,10 +124,10 @@ void CustomInputMethod::OnShow(InputMethodManager::InputMethodParam& param)
         editView_->SetPlaceholder(paramView->GetPlaceholder());
         editView_->SetPlaceholderColor(paramView->GetPlaceholderColor());
         editView_->SetCursorColor(paramView->GetCursorColor());
+        editView_->SetTextColor(paramView->GetTextColor());
         editView_->SetMaxLength(paramView->GetMaxLength());
     }
     editView_->Focus();
-
     container_->Invalidate();
 
     // keyboard show callback
@@ -162,6 +162,19 @@ void CustomInputMethod::SetupView(KeyboardType type)
     container_->Add(editView_);
     editView_->Resize(250, 40); // 250: width, 40: height
     editView_->SetPosition(0, 0);
+    editView_->SetViewId("Input_edit_text_view");
+
+    if (inputTypeBtn_ == nullptr) {
+        inputTypeBtn_ = new UILabelButton();
+        container_->Add(inputTypeBtn_);
+        inputTypeBtn_->Resize(100, 40); // 100: width, 40: height
+        inputTypeBtn_->SetText("toggle");
+        inputTypeBtn_->LayoutRightToSibling("Input_edit_text_view", 10); // 10: offset
+        inputTypeBtn_->SetOnClickListener(this);
+        inputTypeBtn_->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE,
+                                        UIButton::RELEASED);
+        inputTypeBtn_->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
+    }
 
     SetupKeyboard(type);
 }
@@ -258,9 +271,27 @@ void CustomInputMethod::TearDownView()
 
 bool CustomInputMethod::OnClick(UIView& view, const ClickEvent& event)
 {
+    if (inputTypeBtn_ == &view) {
+        InputType type = editView_->GetInputType();
+        if (type == InputType::TEXT_TYPE) {
+            editView_->SetInputType(InputType::PASSWORD_TYPE);
+            InputMethodManager::GetInstance().SetInputType(InputType::PASSWORD_TYPE);
+        } else {
+            editView_->SetInputType(InputType::TEXT_TYPE);
+            InputMethodManager::GetInstance().SetInputType(InputType::TEXT_TYPE);
+        }
+    } else {
+        DealKeyEvent(view);
+    }
+
+    return true;
+}
+
+void CustomInputMethod::DealKeyEvent(UIView& view)
+{
     const char* key = reinterpret_cast<UILabelButton*>(&view)->GetText();
     if (key == nullptr) {
-        return true;
+        return;
     }
 
     if (strcmp(key, "shift") == 0) {
@@ -291,8 +322,6 @@ bool CustomInputMethod::OnClick(UIView& view, const ClickEvent& event)
         InputMethodManager::GetInstance().InsertText(key);
         editView_->InsertText(key);
     }
-
-    return true;
 }
 
 void CustomInputMethod::ChangeKeyboard(KeyboardType type)

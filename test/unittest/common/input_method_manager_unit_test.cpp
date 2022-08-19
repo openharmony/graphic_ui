@@ -62,6 +62,7 @@ void InputMethodManagerTest::TearDownTestCase(void)
  * @tc.name: ShowInputMethod_001
  * @tc.desc: Verify ShowInputMethod function, equal.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(InputMethodManagerTest, ShowInputMethod_001, TestSize.Level0)
 {
@@ -75,6 +76,101 @@ HWTEST_F(InputMethodManagerTest, ShowInputMethod_001, TestSize.Level0)
 
     inputMethodManager.HideInputMethod();
     EXPECT_EQ(listener->GetShowStatus(), false);
+
+    delete listener;
+    listener = nullptr;
+    delete editView;
+    editView = nullptr;
+}
+
+/**
+ * @tc.name: InsertText_001
+ * @tc.desc: Verify InsertText function, equal.
+ * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
+ */
+HWTEST_F(InputMethodManagerTest, InsertText_001, TestSize.Level0)
+{
+    TestInputMethodListener* listener = new TestInputMethodListener();
+    InputMethodManager& inputMethodManager =  InputMethodManager::GetInstance();
+    inputMethodManager.SetInputMethodListener(listener);
+    UIEditText* editView = new UIEditText();
+    inputMethodManager.ShowInputMethod(editView);
+    std::string text = "hello";
+    inputMethodManager.InsertText(text);
+    int16_t ret = text.compare(editView->GetText());
+    EXPECT_EQ(ret, 0);
+
+    delete listener;
+    listener = nullptr;
+    delete editView;
+    editView = nullptr;
+}
+
+/**
+ * @tc.name: DeleteBackward_001
+ * @tc.desc: Verify DeleteBackward function, equal.
+ * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
+ */
+HWTEST_F(InputMethodManagerTest, DeleteBackward_001, TestSize.Level0)
+{
+    TestInputMethodListener* listener = new TestInputMethodListener();
+    InputMethodManager& inputMethodManager =  InputMethodManager::GetInstance();
+    inputMethodManager.SetInputMethodListener(listener);
+    UIEditText* editView = new UIEditText();
+    inputMethodManager.ShowInputMethod(editView);
+    std::string text = "hello world";
+    inputMethodManager.InsertText(text);
+    int16_t ret = text.compare(editView->GetText());
+    EXPECT_EQ(ret, 0);
+
+    uint16_t length = 0;
+    inputMethodManager.DeleteBackward(length);
+    EXPECT_EQ(editView->GetText(), text);
+
+    uint16_t length1 = 1;
+    inputMethodManager.DeleteBackward(length1);
+    std::string tmp = text.substr(0, text.length() - length1);
+    ret = tmp.compare(editView->GetText());
+    EXPECT_EQ(ret, 0);
+
+    uint16_t length2 = 2; // 2: length
+    inputMethodManager.DeleteBackward(length2);
+    tmp = text.substr(0, text.length() - length1 - length2);
+    ret = tmp.compare(editView->GetText());
+    EXPECT_EQ(ret, 0);
+
+    uint16_t length3 = 200; // 200: length
+    inputMethodManager.DeleteBackward(length3);
+    tmp = "";
+    ret = tmp.compare(editView->GetText());
+    EXPECT_EQ(ret, 0);
+
+    delete listener;
+    listener = nullptr;
+    delete editView;
+    editView = nullptr;
+}
+
+/**
+ * @tc.name: SetInputType_001
+ * @tc.desc: Verify SetInputType function, equal.
+ * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
+ */
+HWTEST_F(InputMethodManagerTest, SetInputType_001, TestSize.Level0)
+{
+    TestInputMethodListener* listener = new TestInputMethodListener();
+    InputMethodManager& inputMethodManager =  InputMethodManager::GetInstance();
+    inputMethodManager.SetInputMethodListener(listener);
+    UIEditText* editView = new UIEditText();
+    inputMethodManager.ShowInputMethod(editView);
+    inputMethodManager.SetInputType(InputType::TEXT_TYPE);
+    EXPECT_EQ(editView->GetInputType(), InputType::TEXT_TYPE);
+
+    inputMethodManager.SetInputType(InputType::PASSWORD_TYPE);
+    EXPECT_EQ(editView->GetInputType(), InputType::PASSWORD_TYPE);
 
     delete listener;
     listener = nullptr;
