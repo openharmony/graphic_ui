@@ -92,7 +92,18 @@ void InputMethodManager::DeleteBackward(uint16_t length)
     }
 }
 
-void InputMethodManager::SetInputType(InputType type) {}
+void InputMethodManager::SetInputType(InputType type)
+{
+    if (inputView_ == nullptr) {
+        return;
+    }
+
+    UIViewType viewType = inputView_->GetViewType();
+    if (viewType == UI_EDIT_TEXT) {
+        UIEditText* tmpView = reinterpret_cast<UIEditText*>(inputView_);
+        tmpView->SetInputType(type);
+    }
+}
 
 void InputMethodManager::OnKeyboardShow() {}
 

@@ -33,15 +33,14 @@ public:
     const UIView* GetTestView() override;
 
     void UIKit_UIEditText_Test_Display_001();
-    void UIKit_UIEditText_Test_Display_002();
-    void UIKit_UIEditText_Test_Display_003();
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnChange(UIView& view, const char* value) override;
 
 private:
     UIScrollView* container_ = nullptr;
-    UIEditText* editText_ = nullptr;
+    UILabel* changeHint_ = nullptr;
+    UIEditText* SetupEditText(const char* value, const char* placeholder, const char* viewId);
 };
 } // namespace OHOS
 #endif // UI_TEST_EDIT_TEXT_H
