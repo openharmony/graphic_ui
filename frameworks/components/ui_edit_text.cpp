@@ -385,8 +385,7 @@ void UIEditText::DrawCursor(BufferInfo& gfxDstBuffer, const Rect& invalidatedAre
 
 void UIEditText::InsertText(std::string text)
 {
-    textStr_.append(text);
-    SetText(textStr_);
+    SetText(textStr_ + text);
     if (cursorAnimator_ != nullptr) {
         static_cast<CursorAnimator*>(cursorAnimator_)->StartAnimator();
     }
@@ -416,6 +415,7 @@ void UIEditText::DeleteBackward(uint32_t length)
 
 void UIEditText::UpdateInnerText()
 {
+    InitText();
     if (inputType_ == InputType::TEXT_TYPE) {
         inputText_->SetText(GetInnerText().c_str());
     } else {
