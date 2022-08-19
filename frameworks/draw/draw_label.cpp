@@ -309,9 +309,7 @@ void DrawLabel::GetForegroundColor(uint16_t letterIndex, List<ForegroundColor>* 
 void DrawLabel::DrawLineBackgroundColor(BufferInfo& gfxDstBuffer, uint16_t letterIndex, const LabelLineInfo& labelLine)
 {
     uint32_t i = 0;
-    uint32_t letter;
     while (i < labelLine.lineLength) {
-        letter = TypedText::GetUTF8Next(labelLine.text, i, i);
         bool havelinebackground = false;
         ColorType linebackgroundColor;
         GetLineBackgroundColor(letterIndex, labelLine.linebackgroundColor, havelinebackground, linebackgroundColor);
