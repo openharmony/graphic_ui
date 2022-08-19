@@ -66,283 +66,255 @@ private:
 
 class UIEditTextTest : public testing::Test {
 public:
-    static void SetUpTestCase(void);
-    static void TearDownTestCase(void);
-    static UIEditText* editText_;
+    static void SetUpTestCase(void) {}
+    static void TearDownTestCase(void) {}
 };
-
-UIEditText* UIEditTextTest::editText_ = nullptr;
-
-void UIEditTextTest::SetUpTestCase(void)
-{
-    if (editText_ == nullptr) {
-        editText_ = new UIEditText();
-    }
-}
-
-void UIEditTextTest::TearDownTestCase(void)
-{
-    if (editText_ != nullptr) {
-        delete editText_;
-        editText_ = nullptr;
-    }
-}
 
 /**
  * @tc.name: UIEditTextGetViewType_001
  * @tc.desc: Verify GetViewType and GetHeight function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextGetViewType_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
-    EXPECT_EQ(editText_->GetViewType(), UI_EDIT_TEXT);
+    UIEditText* editText = new UIEditText();
+    EXPECT_EQ(editText->GetViewType(), UI_EDIT_TEXT);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextResize_001
  * @tc.desc: Verify Resize function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextResize_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
-    editText_->Resize(INIT_WIDTH, INIT_HEIGHT);
-    EXPECT_EQ(editText_->GetWidth(), INIT_WIDTH);
-    EXPECT_EQ(editText_->GetHeight(), INIT_HEIGHT);
+    UIEditText* editText = new UIEditText();
+    editText->Resize(INIT_WIDTH, INIT_HEIGHT);
+    EXPECT_EQ(editText->GetWidth(), INIT_WIDTH);
+    EXPECT_EQ(editText->GetHeight(), INIT_HEIGHT);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetText_001
  * @tc.desc: Verify SetText function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetText_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     const char* text = "abc";
-    editText_->Resize(INIT_WIDTH, INIT_HEIGHT);
-    editText_->SetText(text);
+    editText->Resize(INIT_WIDTH, INIT_HEIGHT);
+    editText->SetText(text);
 
-    const char* textTmp = editText_->GetText();
+    const char* textTmp = editText->GetText();
     ASSERT_TRUE(textTmp);
     EXPECT_EQ(strcmp(textTmp, text), 0);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetPlaceholder_001
  * @tc.desc: Verify SetPlaceholder function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetPlaceholder_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     const char* placeholder = "Name:";
-    editText_->Resize(INIT_WIDTH, INIT_HEIGHT);
-    editText_->SetPlaceholder(placeholder);
+    editText->Resize(INIT_WIDTH, INIT_HEIGHT);
+    editText->SetPlaceholder(placeholder);
 
-    const char* placeholderTmp = editText_->GetPlaceholder();
+    const char* placeholderTmp = editText->GetPlaceholder();
     ASSERT_TRUE(placeholderTmp);
     EXPECT_EQ(strcmp(placeholderTmp, placeholder), 0);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetMaxLength_001
  * @tc.desc: Verify SetMaxLength function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetMaxLength_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     uint16_t length1 = 20;
-    editText_->SetMaxLength(length1);
-    EXPECT_EQ(editText_->GetMaxLength(), length1);
+    editText->SetMaxLength(length1);
+    EXPECT_EQ(editText->GetMaxLength(), length1);
 
     uint16_t length2 = 0;
-    editText_->SetMaxLength(length2);
-    EXPECT_EQ(editText_->GetMaxLength(), length2);
+    editText->SetMaxLength(length2);
+    EXPECT_EQ(editText->GetMaxLength(), length2);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetInputType_001
  * @tc.desc: Verify SetInputType function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetInputType_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     // check the default type
-    EXPECT_EQ(editText_->GetInputType(), InputType::TEXT_TYPE);
+    EXPECT_EQ(editText->GetInputType(), InputType::TEXT_TYPE);
 
     InputType type = InputType::TEXT_TYPE;
-    editText_->SetInputType(type);
-    EXPECT_EQ(editText_->GetInputType(), type);
+    editText->SetInputType(type);
+    EXPECT_EQ(editText->GetInputType(), type);
 
     type = InputType::PASSWORD_TYPE;
-    editText_->SetInputType(type);
-    EXPECT_EQ(editText_->GetInputType(), type);
+    editText->SetInputType(type);
+    EXPECT_EQ(editText->GetInputType(), type);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetTextColor_001
  * @tc.desc: Verify SetTextColor function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetTextColor_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     ColorType color = Color::White();
 
-    editText_->SetTextColor(color);
-    EXPECT_EQ(editText_->GetTextColor().full, color.full);
+    editText->SetTextColor(color);
+    EXPECT_EQ(editText->GetTextColor().full, color.full);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetPlaceholderColor_001
  * @tc.desc: Verify SetPlaceholderColor function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetPlaceholderColor_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     ColorType color = Color::White();
 
-    editText_->SetPlaceholderColor(color);
-    EXPECT_EQ(editText_->GetPlaceholderColor().full, color.full);
+    editText->SetPlaceholderColor(color);
+    EXPECT_EQ(editText->GetPlaceholderColor().full, color.full);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetCursorColor_001
  * @tc.desc: Verify SetCursorColor function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetCursorColor_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     ColorType color = Color::White();
 
-    editText_->SetCursorColor(color);
-    EXPECT_EQ(editText_->GetCursorColor().full, color.full);
+    editText->SetCursorColor(color);
+    EXPECT_EQ(editText->GetCursorColor().full, color.full);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetFont_001
  * @tc.desc: Verify SetFont function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetFont_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
-    uint8_t fontId = editText_->GetFontId();
+    UIEditText* editText = new UIEditText();
+    uint8_t fontId = editText->GetFontId();
 
     const uint8_t fontSize = 20; // 20: font size for test
-    editText_->SetFont("error_font_name", fontSize);
+    editText->SetFont("error_font_name", fontSize);
 
-    EXPECT_EQ(editText_->GetFontId(), fontId);
+    EXPECT_EQ(editText->GetFontId(), fontId);
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextGetTextWidth_001
  * @tc.desc: Verify GetTextWidth function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextGetTextWidth_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     const char* text = "abc";
-    editText_->SetText(text);
-    uint16_t width = editText_->GetTextWidth();
-    EXPECT_NE(width, 0);
+    editText->SetText(text);
+    uint16_t width = editText->GetTextWidth();
+    EXPECT_EQ(width, 0); // no font file case
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextGetTextHeight_001
  * @tc.desc: Verify GetTextHeight function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextGetTextHeight_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     const char* text = "abc";
-    editText_->SetText(text);
-    uint16_t height = editText_->GetTextHeight();
-    EXPECT_NE(height, 0);
+    editText->SetText(text);
+    uint16_t height = editText->GetTextHeight();
+    EXPECT_EQ(height, 0); // no font file case
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetOnChangeListener_001
  * @tc.desc: Verify SetOnChangeListener function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetOnChangeListener_001, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     EditTextOnChangeListener* listener = new EditTextOnChangeListener();
-    editText_->SetOnChangeListener(listener);
-    EXPECT_NE(editText_->GetOnChangeListener(), listener);
+    editText->SetOnChangeListener(listener);
+    EXPECT_EQ(editText->GetOnChangeListener(), listener);
+    delete listener;
+    delete editText;
 }
 
 /**
  * @tc.name: UIEditTextSetOnChangeListener_002
  * @tc.desc: Verify OnChangeListener OnChange function.
  * @tc.type: FUNC
+ * @tc.require: issueI5AD4A
  */
 HWTEST_F(UIEditTextTest, UIEditTextSetOnChangeListener_002, TestSize.Level1)
 {
-    if (editText_ == nullptr) {
-        EXPECT_EQ(1, 0);
-        return;
-    }
+    UIEditText* editText = new UIEditText();
     EditTextOnChangeListener* listener = new EditTextOnChangeListener();
-    editText_->SetOnChangeListener(listener);
+    editText->SetOnChangeListener(listener);
     const char* text = "abc";
-    editText_->SetText(text);
-    const char* textTmp = editText_->GetText();
+    editText->SetText(text);
+    const char* textTmp = editText->GetText();
     const char* valueTmp = listener->GetValue();
     if ((textTmp == nullptr) || (valueTmp == nullptr)) {
         EXPECT_EQ(1, 0);
+        delete listener;
+        delete editText;
         return;
     }
     bool ret = strcmp(textTmp, valueTmp);
-    EXPECT_NE(ret, 0);
+    EXPECT_EQ(ret, 0);
+    delete listener;
+    delete editText;
 }
 } // namespace OHOS

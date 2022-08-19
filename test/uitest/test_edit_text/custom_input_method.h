@@ -60,8 +60,10 @@ private:
     void SetupKeyboard(KeyboardType type);
     void ChangeKeyboard(KeyboardType type);
     FlexLayout* SetupKeyRow(const char* name, int16_t width, int16_t height);
+    void DealKeyEvent(UIView& view);
 
     UIEditTextEx* editView_ = nullptr;
+    UILabelButton* inputTypeBtn_ = nullptr;
     UIViewGroup* container_ = nullptr;
     KeyboardType keyboardType_ = KeyboardType::LOW_CASE;
 };
