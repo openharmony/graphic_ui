@@ -113,10 +113,8 @@ void GlyphsFile::SetFontName(const char* fontName)
         return;
     }
 
-    uint32_t nameCopyOffset = 0;
     uint32_t nameLen = strlen(fontName);
     if (nameLen > FONT_NAME_LEN_MAX) {
-        nameCopyOffset = nameLen - FONT_NAME_LEN_MAX;
         nameLen = FONT_NAME_LEN_MAX;
     } else if (nameLen == 0) {
         return;
