@@ -99,7 +99,7 @@ Components are classified into basic components and container components.
 
 For details about how to use components and APIs of graphics, see the examples provided in  **foundation/graphic/ui/test/uitest**.
 
--   The Qt project can be debugged in the Windows environment. [User Guide](https://gitee.com/openharmony/ace_engine_lite/tree/master/frameworks/tools/qt/simulator)
+-   The Qt project can be debugged in the Windows environment. [User Guide](https://gitee.com/openharmony/arkui_ace_engine_lite/tree/master/frameworks/tools/qt/simulator)
 
     Project file path:
 
