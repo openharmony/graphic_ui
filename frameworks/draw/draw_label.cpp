@@ -148,8 +148,8 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                             const Point& arcCenter,
                             uint8_t fontId,
                             uint8_t fontSize,
-                            const UIArcLabel::ArcTextInfo arcTextInfo,
-                            UIArcLabel::TextOrientation orientation,
+                            const ArcTextInfo arcTextInfo,
+                            TextOrientation orientation,
                             const Style& style,
                             OpacityType opaScale)
 {
@@ -169,7 +169,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
     float posY;
     float rotateAngle;
 
-    bool orientationFlag = (orientation == UIArcLabel::TextOrientation::INSIDE);
+    bool orientationFlag = (orientation == TextOrientation::INSIDE);
     bool directFlag = (arcTextInfo.direct == TEXT_DIRECT_LTR);
     bool xorFlag = !((orientationFlag && directFlag) || (!orientationFlag && !directFlag));
 
@@ -194,7 +194,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
         float incrementAngle = TypedText::GetAngleForArcLen(static_cast<float>(arcLen), letterHeight,
                                                             arcTextInfo.radius, arcTextInfo.direct, orientation);
 
-        rotateAngle = (orientation == UIArcLabel::TextOrientation::INSIDE) ? angle : (angle - SEMICIRCLE_IN_DEGREE);
+        rotateAngle = (orientation == TextOrientation::INSIDE) ? angle : (angle - SEMICIRCLE_IN_DEGREE);
 
         // 2: half
         float fineTuningAngle = incrementAngle * (static_cast<float>(letterWidth) / (2 * arcLen));

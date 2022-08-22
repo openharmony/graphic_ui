@@ -192,12 +192,12 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetArcTextOrientation_001, TestSize.Level1)
         EXPECT_EQ(1, 0);
         return;
     }
-    arcLabel_->SetArcTextOrientation(UIArcLabel::TextOrientation::INSIDE);
+    arcLabel_->SetArcTextOrientation(TextOrientation::INSIDE);
     EXPECT_EQ(arcLabel_->GetArcTextOrientation(),
-        UIArcLabel::TextOrientation::INSIDE);
-    arcLabel_->SetArcTextOrientation(UIArcLabel::TextOrientation::OUTSIDE);
+        TextOrientation::INSIDE);
+    arcLabel_->SetArcTextOrientation(TextOrientation::OUTSIDE);
     EXPECT_EQ(arcLabel_->GetArcTextOrientation(),
-        UIArcLabel::TextOrientation::OUTSIDE);
+        TextOrientation::OUTSIDE);
 }
 
 /**
