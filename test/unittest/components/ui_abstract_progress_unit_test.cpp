@@ -24,6 +24,11 @@ namespace {
     const int16_t MAX_VALUE = 80;
     const int16_t MEDIAN_VALUE = 50;
     const int16_t MIN_VALUE = 20;
+    const char* foreground = "D:/";
+    const char* background = "D:/";
+    const ImageInfo* foregroundImageInfo;
+    const ImageInfo* backgroundImageInfo;
+    const ImageInfo* groundImageInfo;
 }
 class UIAbsatrctProgressTest : public testing::Test {
 public:
@@ -205,5 +210,78 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetCapType_001, TestSize.Leve
     abstractProgress_->SetCapType(CapType::CAP_ROUND);
     EXPECT_EQ(abstractProgress_->GetForegroundStyle(STYLE_LINE_CAP), CapType::CAP_ROUND);
     EXPECT_EQ(abstractProgress_->GetBackgroundStyle(STYLE_LINE_CAP), CapType::CAP_ROUND);
+}
+
+/**
+ * @tc.name: UIAbsatrctProgressSetImage_001
+ * @tc.desc: Verify SetImage function, equal.
+ */
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetImage_001, TestSize.Level1)
+{
+    if (abstractProgress_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    const Image* backgroundImage = new Image();
+    const Image* foregroundImage = new Image();
+    foreground = foregroundImage->GetPath();
+    background = backgroundImage->GetPath();
+    abstractProgress_->SetImage(foreground, background);
+    if (foreground == nullptr) {
+        EXPECT_EQ(foregroundImage->GetSrcType(), 2); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+    } else {
+        EXPECT_EQ(foregroundImage->GetSrcType(), 1); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+    }
+    if (background == nullptr) {
+        EXPECT_EQ(backgroundImage->GetSrcType(), 2); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+    } else {
+        EXPECT_EQ(backgroundImage->GetSrcType(), 1); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+    }
+    delete backgroundImage;
+    backgroundImage = nullptr;
+    delete foregroundImage;
+    foregroundImage = nullptr;
+}
+
+/**
+ * @tc.name: UIAbsatrctProgressSetImage_002
+ * @tc.desc: Verify SetImage function, equal.
+ */
+HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetImage_002, TestSize.Level1)
+{
+    if (abstractProgress_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    const Image* backgroundImage = new Image();
+    const Image* foregroundImage = new Image();
+    const Image* GroundImage = new Image();
+    foregroundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    backgroundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    groundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    abstractProgress_->SetImage(foregroundImageInfo, backgroundImageInfo);
+    if (foregroundImageInfo == nullptr && GroundImage->GetImageInfo() == nullptr) {
+        EXPECT_EQ(foregroundImage->GetSrcType(), 2); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+    } else {
+        if (groundImageInfo == foregroundImageInfo) {
+            EXPECT_EQ(foregroundImage->GetSrcType(), 0); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+        }
+    }
+    if (backgroundImageInfo == nullptr && GroundImage->GetImageInfo() == nullptr) {
+        EXPECT_EQ(backgroundImage->GetSrcType(), 2); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+    } else {
+        if (groundImageInfo == backgroundImageInfo) {
+            EXPECT_EQ(backgroundImage->GetSrcType(), 0); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+        }
+    }
+    delete backgroundImage;
+    backgroundImage = nullptr;
+    delete GroundImage;
+    GroundImage = nullptr;
+    delete foregroundImage;
+    foregroundImage = nullptr;
+    UIFree(&foregroundImageInfo);
+    UIFree(&backgroundImageInfo);
+    UIFree(&groundImageInfo);
 }
 } // namespace OHOS
