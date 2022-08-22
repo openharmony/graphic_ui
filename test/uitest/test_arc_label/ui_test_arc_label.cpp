@@ -70,7 +70,7 @@ void UITestArcLabel::UIKit_UIArcLabel_Test_Display_001()
 {
     const char* title = "显示内部角度从0到270的弧形文本 ";
     // 0: start angle  270: end angle
-    TestArcLabelDisplay(title, 0, 270, UIArcLabel::TextOrientation::INSIDE, VIEW_DISTANCE_TO_LEFT_SIDE,
+    TestArcLabelDisplay(title, 0, 270, TextOrientation::INSIDE, VIEW_DISTANCE_TO_LEFT_SIDE,
                         VIEW_DISTANCE_TO_TOP_SIDE);
 }
 
@@ -78,27 +78,27 @@ void UITestArcLabel::UIKit_UIArcLabel_Test_Display_002()
 {
     const char* title = "显示内部角度从0到-270的弧形文本 ";
     // 0: start angle  -270: end angle  100: y-coordinate
-    TestArcLabelDisplay(title, 0, -270, UIArcLabel::TextOrientation::INSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 100);
+    TestArcLabelDisplay(title, 0, -270, TextOrientation::INSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 100);
 }
 
 void UITestArcLabel::UIKit_UIArcLabel_Test_Display_003()
 {
     const char* title = "显示外部角度从0到270的弧形文本 ";
     // 0: start angle  270: end angle  200: y-coordinate
-    TestArcLabelDisplay(title, 0, 270, UIArcLabel::TextOrientation::OUTSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 200);
+    TestArcLabelDisplay(title, 0, 270, TextOrientation::OUTSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 200);
 }
 
 void UITestArcLabel::UIKit_UIArcLabel_Test_Display_004()
 {
     const char* title = "显示外部角度从0到-270的弧形文本 ";
     // 0: start angle  -270: end angle  300: y-coordinate
-    TestArcLabelDisplay(title, 0, -270, UIArcLabel::TextOrientation::OUTSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 300);
+    TestArcLabelDisplay(title, 0, -270, TextOrientation::OUTSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 300);
 }
 
 void UITestArcLabel::TestArcLabelDisplay(const char* title,
                                          const int16_t startAngle,
                                          const int16_t endAngle,
-                                         const UIArcLabel::TextOrientation orientation,
+                                         const TextOrientation orientation,
                                          int16_t x,
                                          int16_t y)
 {

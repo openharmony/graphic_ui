@@ -320,4 +320,49 @@ HWTEST_F(TextTest, TextSetText_006, TestSize.Level1)
     EXPECT_EQ(strcmp(text_->GetText(), text), 0);
 }
 #endif
+
+/**
+ * @tc.name: TextGetShapingFontId_001
+ * @tc.desc: Verify GetShapingFontId function, equal.
+ * @tc.type: FUNC
+ * @tc.require: AR000H8BB3
+ */
+HWTEST_F(TextTest, TextGetShapingFontId_001, TestSize.Level1)
+{
+    if (text_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(text_->GetShapingFontId(), 0);
+}
+
+/**
+ * @tc.name: TextGetCodePointNum_001
+ * @tc.desc: Verify GetCodePointNum function, equal.
+ * @tc.type: FUNC
+ * @tc.require: AR000H8BB3
+ */
+HWTEST_F(TextTest, TextGetCodePointNum_001, TestSize.Level1)
+{
+    if (text_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(text_->GetCodePointNum(), 0);
+}
+
+/**
+ * @tc.name: TextGetCodePoints_001
+ * @tc.desc: Verify GetCodePoints function, equal.
+ * @tc.type: FUNC
+ * @tc.require: AR000H8BB3
+ */
+HWTEST_F(TextTest, TextGetCodePoints_001, TestSize.Level1)
+{
+    if (text_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(text_->GetCodePoints(), nullptr);
+}
 } // namespace OHOS

@@ -65,14 +65,14 @@ public:
                                 uint8_t fontSize,
                                const Point& arcCenter,
                                int16_t letterSpace,
-                               UIArcLabel::TextOrientation orientation,
-                               const UIArcLabel::ArcTextInfo& arcTextInfo);
+                               TextOrientation orientation,
+                               const ArcTextInfo& arcTextInfo);
 
     static float GetAngleForArcLen(float len,
                                    uint16_t height,
                                    uint16_t radius,
                                    UITextLanguageDirect direct,
-                                   UIArcLabel::TextOrientation orientation);
+                                   TextOrientation orientation);
 
     static void GetArcLetterPos(const Point& arcCenter, uint16_t radius, float angle, float& posX, float& posY);
 
