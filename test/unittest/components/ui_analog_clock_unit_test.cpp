@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_analog_clock.h"
+#include "components/ui_image_view.h"
 
 #include <climits>
 #include <gtest/gtest.h>
@@ -228,5 +229,41 @@ HWTEST_F(UIAnalogClockTest, UIAnalogClockSetInitTime12Hour_002, TestSize.Level1)
     EXPECT_EQ(clock_->GetCurrentSecond(), INIT_SECOND);
     EXPECT_EQ(clock_->GetHandInitAngle(UIAnalogClock::HandType::HOUR_HAND), SEMICIRCLE_IN_DEGREE);
     EXPECT_EQ(clock_->GetHandCurrentAngle(UIAnalogClock::HandType::HOUR_HAND), SEMICIRCLE_IN_DEGREE);
+}
+
+/**
+ * @tc.name: UIAnalogClockSetHandImage_001
+ * @tc.desc: Verify SetHandImage function, equal.
+ */
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetHandImage_001, TestSize.Level1)
+{
+    if (clock_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    UIImageView* img = new UIImageView();
+    Point position = { 214, 3 }; // { 214, 3 } : the position of the line endpoint close
+    Point center = { 14, 223 }; // { 14, 223 }: the rotation center of this clock hand
+    clock_->SetHandImage(UIAnalogClock::HandType::SECOND_HAND, *img, position, center);
+    EXPECT_EQ(clock_->GetHandPosition(UIAnalogClock::HandType::SECOND_HAND).x, position.x);
+    EXPECT_EQ(clock_->GetHandPosition(UIAnalogClock::HandType::SECOND_HAND).y, position.y);
+    EXPECT_EQ(clock_->GetHandRotateCenter(UIAnalogClock::HandType::SECOND_HAND).x, center.x);
+    EXPECT_EQ(clock_->GetHandRotateCenter(UIAnalogClock::HandType::SECOND_HAND).y, center.y);
+    delete img;
+    img = nullptr;
+}
+
+/**
+ * @tc.name: UIAnalogClockSetWorkMode_001
+ * @tc.desc: Verify SetWorkMode function, equal.
+ */
+HWTEST_F(UIAnalogClockTest, UIAnalogClockSetWorkMode_001, TestSize.Level1)
+{
+    if (clock_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    clock_->SetWorkMode(UIAnalogClock::NORMAL);
+    EXPECT_EQ(clock_->GetWorkMode(), UIAnalogClock::NORMAL);
 }
 }

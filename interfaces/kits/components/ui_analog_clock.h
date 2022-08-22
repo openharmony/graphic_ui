@@ -327,6 +327,16 @@ public:
     void SetWorkMode(WorkMode newMode) override;
 
     /**
+     * @brief Get the working mode for this analog clock.
+     *
+     * @return Returns the working mode for this analog clock.
+     */
+    WorkMode GetWorkMode() const override
+    {
+        return mode_;
+    }
+    
+    /**
      * @brief Updates the time of this analog clock.
      *
      * @param clockInit Specifies whether it is the first initialization. <b>true</b> indicates it is the
