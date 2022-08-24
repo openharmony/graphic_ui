@@ -175,6 +175,20 @@ public:
     }
 
     /**
+     * @brief Obtains the first render child view in this view group.
+     *
+     * @return Returns the first render child view.
+     */
+    UIView* GetChildrenRenderHead() const;
+
+    /**
+     * @brief Set the first render child view in this view group.
+     *
+     * @param renderHead the first render child view.
+     */
+    void SetChildrenRenderHead(UIView* renderHead);
+
+    /**
      * @brief Sets whether this view group is intercepted upon touch events.
      *
      * @param flag Specifies whether this view group is intercepted upon touch events. <b>true</b> indicates that
@@ -236,6 +250,13 @@ public:
     }
 #endif
 
+    /**
+     * @brief Update the render tree
+     *
+     * @param targetView the view being added/removed or changed zIndex.
+     */
+    void UpdateRenderView(UIView* targetView);
+
 protected:
     /**
      * @brief Obtains the rectangle area of a new view group after being adaptive to the size of all child views.
@@ -258,6 +279,11 @@ protected:
      * @brief Indicates the pointer to the first child view of this view group.
      */
     UIView* childrenHead_;
+
+    /**
+     * @brief Indicates the pointer to the first render child view of this view group.
+     */
+    UIView* childrenRenderHead_;
 
     /**
      * @brief Indicates the pointer to the last child view of this view group.
@@ -286,6 +312,8 @@ protected:
 
 private:
     void AutoResize();
+    void InsertRenderView(UIView* anchorView, UIView* anchorPreView, UIView* targetView);
+    void RemoveRenderView(UIView* targetView);
 #if ENABLE_FOCUS_MANAGER
     bool isInterceptFocus_ : 1;
 #endif
