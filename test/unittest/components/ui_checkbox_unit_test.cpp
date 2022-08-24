@@ -14,6 +14,7 @@
  */
 
 #include "components/ui_checkbox.h"
+#include "test_resource_config.h"
 
 #include <climits>
 #include <gtest/gtest.h>
@@ -93,5 +94,36 @@ HWTEST_F(UICheckBoxTest, UICheckBoxSetState_001, TestSize.Level0)
     EXPECT_EQ(checkBox_->GetState(), UICheckBox::UICheckBoxState::SELECTED);
     checkBox_->SetState(UICheckBox::UICheckBoxState::UNSELECTED);
     EXPECT_EQ(checkBox_->GetState(), UICheckBox::UICheckBoxState::UNSELECTED);
+}
+
+/**
+ * @tc.name: UICheckBoxSetSelectedStateColor_001
+ * @tc.desc: Verify SetSelectedStateColor function, equal.
+ */
+HWTEST_F(UICheckBoxTest, UICheckBoxSetSelectedStateColor_001, TestSize.Level0)
+{
+    if (checkBox_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    ColorType color = Color::Red();
+    checkBox_->SetSelectedStateColor(color);
+    EXPECT_EQ(checkBox_->GetSelectedStateColor().full, color.full);
+}
+
+/**
+ * @tc.name: UICheckBoxOnPreDraw_001
+ * @tc.desc: Verify OnPreDraw function, equal.
+ */
+HWTEST_F(UICheckBoxTest, UICheckBoxOnPreDraw_001, TestSize.Level0)
+{
+    if (checkBox_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    Rect* invalidatedArea = new Rect();
+    EXPECT_EQ(checkBox_->OnPreDraw(*invalidatedArea), false);
+    delete invalidatedArea;
+    invalidatedArea = nullptr;
 }
 } // namespace OHOS
