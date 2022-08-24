@@ -274,14 +274,14 @@ void RootView::RemoveViewFromInvalidMap(UIView* view)
             /* delete node's children */
             if (view->IsViewGroup() && stackCount < COMPONENT_NESTING_DEPTH) {
                 g_viewStack[stackCount++] = view;
-                view = static_cast<UIViewGroup*>(view)->GetChildrenHead();
+                view = static_cast<UIViewGroup*>(view)->GetChildrenRenderHead();
                 continue;
             }
-            /* only go to child's sibling */
-            view = view->GetNextSibling();
+            /* only go to child's render sibling */
+            view = view->GetNextRenderSibling();
         }
         if (--stackCount >= 0) {
-            view = g_viewStack[stackCount]->GetNextSibling();
+            view = g_viewStack[stackCount]->GetNextRenderSibling();
         }
     } while (stackCount >= 0);
 
@@ -349,7 +349,7 @@ void RootView::OptimizeInvalidMap()
             }
             g_viewStack[stackCount] = curview;
             flags[stackCount++] = false;
-            curview = curview->GetNextSibling();
+            curview = curview->GetNextRenderSibling();
             continue;
         }
 
@@ -374,7 +374,7 @@ void RootView::OptimizeInvalidMap()
                     return;
                 }
                 flags[stackCount++] = true;
-                curview = static_cast<UIViewGroup*>(curview)->GetChildrenHead();
+                curview = static_cast<UIViewGroup*>(curview)->GetChildrenRenderHead();
                 continue;
             }
         } else { // Back from child
@@ -480,11 +480,11 @@ void RootView::Measure()
 {
 #if LOCAL_RENDER
     if (!invalidateMap_.empty()) {
-        MeasureView(childrenHead_);
+        MeasureView(GetChildrenRenderHead());
     }
 #else
     if (invalidateRects_.Size() > 0) {
-        MeasureView(childrenHead_);
+        MeasureView(GetChildrenRenderHead());
     }
 #endif
 }
@@ -499,14 +499,14 @@ void RootView::MeasureView(UIView* view)
                 curView->ReMeasure();
                 if (curView->IsViewGroup() && stackCount < COMPONENT_NESTING_DEPTH) {
                     g_viewStack[stackCount++] = curView;
-                    curView = static_cast<UIViewGroup*>(curView)->GetChildrenHead();
+                    curView = static_cast<UIViewGroup*>(curView)->GetChildrenRenderHead();
                     continue;
                 }
             }
-            curView = curView->GetNextSibling();
+            curView = curView->GetNextRenderSibling();
         }
         if (--stackCount >= 0) {
-            curView = (g_viewStack[stackCount])->GetNextSibling();
+            curView = (g_viewStack[stackCount])->GetNextRenderSibling();
         }
     }
 }
@@ -670,7 +670,7 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                         g_viewStack[stackCount] = curView;
                         g_maskStack[stackCount] = mask;
                         stackCount++;
-                        curView = static_cast<UIViewGroup*>(curView)->GetChildrenHead();
+                        curView = static_cast<UIViewGroup*>(curView)->GetChildrenRenderHead();
                         mask = par->GetContentRect();
                         mask.Intersect(mask, curViewRect);
                         continue;
@@ -695,7 +695,7 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                     }
                 }
             }
-            curView = curView->GetNextSibling();
+            curView = curView->GetNextRenderSibling();
             continue;
         }
         if (--stackCount >= 0) {
@@ -719,12 +719,12 @@ void RootView::DrawTop(UIView* view, const Rect& rect)
                                             relativeRect.GetY() - transViewGroup->GetStyle(STYLE_MARGIN_TOP));
                 transViewGroup = nullptr;
             }
-            curView = g_viewStack[stackCount]->GetNextSibling();
+            curView = g_viewStack[stackCount]->GetNextRenderSibling();
             par = par->GetParent();
             continue;
         }
         stackCount = 0;
-        curView = par->GetNextSibling();
+        curView = par->GetNextRenderSibling();
         if (enableAnimator) {
             par->OnPostDraw(*dc_.mapBufferInfo, rect);
         } else {
@@ -749,14 +749,14 @@ UIView* RootView::GetTopUIView(const Rect& rect)
                 }
                 if (currentView->IsViewGroup() && stackCount < COMPONENT_NESTING_DEPTH) {
                     g_viewStack[stackCount++] = currentView;
-                    currentView = static_cast<UIViewGroup*>(currentView)->GetChildrenHead();
+                    currentView = static_cast<UIViewGroup*>(currentView)->GetChildrenRenderHead();
                     continue;
                 }
             }
-            currentView = currentView->GetNextSibling();
+            currentView = currentView->GetNextRenderSibling();
         }
         if (--stackCount >= 0) {
-            currentView = (g_viewStack[stackCount])->GetNextSibling();
+            currentView = (g_viewStack[stackCount])->GetNextRenderSibling();
         }
     }
     UIView* parentView = topView;
@@ -779,7 +779,7 @@ bool RootView::FindSubView(const UIView& parentView, const UIView* subView)
         return false;
     }
 
-    UIView* currentView = static_cast<const UIViewGroup*>(root)->GetChildrenHead();
+    UIView* currentView = static_cast<const UIViewGroup*>(root)->GetChildrenRenderHead();
     const UIView* parent = root;
     int8_t deep = 1;
     while (deep > 0) {
@@ -787,15 +787,15 @@ bool RootView::FindSubView(const UIView& parentView, const UIView* subView)
             return true;
         }
         if (currentView == nullptr) {
-            currentView = parent->GetNextSibling();
+            currentView = parent->GetNextRenderSibling();
             parent = parent->GetParent();
             deep--;
         } else if (currentView->IsViewGroup()) {
             parent = currentView;
-            currentView = static_cast<UIViewGroup*>(currentView)->GetChildrenHead();
+            currentView = static_cast<UIViewGroup*>(currentView)->GetChildrenRenderHead();
             deep++;
         } else {
-            currentView = currentView->GetNextSibling();
+            currentView = currentView->GetNextRenderSibling();
         }
     }
     return false;

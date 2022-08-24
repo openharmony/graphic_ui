@@ -23,6 +23,7 @@
 namespace OHOS {
 UIViewGroup::UIViewGroup()
     : childrenHead_(nullptr),
+      childrenRenderHead_(nullptr),
       childrenTail_(nullptr),
       childrenNum_(0),
       isDragging_(false),
@@ -63,6 +64,7 @@ void UIViewGroup::Add(UIView* view)
     if (isAutoSize_) {
         AutoResize();
     }
+    UpdateRenderView(view);
     OnChildChanged();
 }
 
@@ -80,6 +82,7 @@ void UIViewGroup::Insert(UIView* prevView, UIView* insertView)
 
     if (childrenHead_ == nullptr) {
         Add(insertView);
+        UpdateRenderView(insertView);
         return;
     }
 
@@ -100,6 +103,7 @@ void UIViewGroup::Insert(UIView* prevView, UIView* insertView)
     if (isAutoSize_) {
         AutoResize();
     }
+    UpdateRenderView(insertView);
     OnChildChanged();
 }
 
@@ -114,6 +118,7 @@ void UIViewGroup::Remove(UIView* view)
     InvalidateRect(view->GetRect());
 #endif
     if (childrenHead_ == view) {
+        RemoveRenderView(view);
         childrenHead_ = childrenHead_->GetNextSibling();
         view->SetParent(nullptr);
         view->SetNextSibling(nullptr);
@@ -127,6 +132,7 @@ void UIViewGroup::Remove(UIView* view)
     UIView* node = childrenHead_;
     while (node->GetNextSibling() != nullptr) {
         if (node->GetNextSibling() == view) {
+            RemoveRenderView(view);
             node->SetNextSibling(view->GetNextSibling());
             view->SetParent(nullptr);
             view->SetNextSibling(nullptr);
@@ -146,6 +152,7 @@ void UIViewGroup::RemoveAll()
     UIView* node = childrenHead_;
     childrenHead_ = nullptr;
     childrenTail_ = nullptr;
+    childrenRenderHead_ = nullptr;
     childrenNum_ = 0;
     UIView* tmp = nullptr;
     while (node != nullptr) {
@@ -153,6 +160,7 @@ void UIViewGroup::RemoveAll()
         node = node->GetNextSibling();
         tmp->SetParent(nullptr);
         tmp->SetNextSibling(nullptr);
+        tmp->SetNextRenderSibling(nullptr);
     }
     OnChildChanged();
 }
@@ -180,7 +188,7 @@ void UIViewGroup::GetTargetView(const Point& point, UIView** last)
     if (isDragging_) {
         return;
     }
-    UIView* view = childrenHead_;
+    UIView* view = GetChildrenRenderHead();
     while (view != nullptr) {
         if (!view->IsViewGroup()) {
             rect = view->GetRect();
@@ -191,7 +199,7 @@ void UIViewGroup::GetTargetView(const Point& point, UIView** last)
             UIViewGroup* viewGroup = static_cast<UIViewGroup*>(view);
             viewGroup->GetTargetView(point, last);
         }
-        view = view->GetNextSibling();
+        view = view->GetNextRenderSibling();
     }
 }
 
@@ -220,7 +228,7 @@ void UIViewGroup::GetTargetView(const Point& point, UIView** current, UIView** t
     if (isDragging_) {
         return;
     }
-    UIView* view = childrenHead_;
+    UIView* view = GetChildrenRenderHead();
     while (view != nullptr) {
         if (!view->IsViewGroup()) {
             rect = view->GetRect();
@@ -231,7 +239,7 @@ void UIViewGroup::GetTargetView(const Point& point, UIView** current, UIView** t
             UIViewGroup* viewGroup = static_cast<UIViewGroup*>(view);
             viewGroup->GetTargetView(point, current, target);
         }
-        view = view->GetNextSibling();
+        view = view->GetNextRenderSibling();
     }
 }
 
@@ -255,6 +263,20 @@ Rect UIViewGroup::GetAllChildRelativeRect() const
         view = view->GetNextSibling();
     }
     return rect;
+}
+
+UIView* UIViewGroup::GetChildrenRenderHead() const
+{
+    return childrenRenderHead_;
+}
+
+void UIViewGroup::SetChildrenRenderHead(UIView* renderHead)
+{
+    if ((renderHead != nullptr) && (renderHead->GetParent() != this)) {
+        GRAPHIC_LOGE("can not set as render head if it is not a child view");
+        return;
+    }
+    childrenRenderHead_ = renderHead;
 }
 
 UIView* UIViewGroup::GetChildById(const char* id) const
@@ -303,5 +325,147 @@ void UIViewGroup::AutoResize()
     Rect rect = GetAllChildRelativeRect();
     SetWidth(rect.GetWidth() + rect.GetLeft());
     SetHeight(rect.GetHeight() + rect.GetTop());
+}
+
+void UIViewGroup::RemoveRenderView(UIView* targetView)
+{
+    if (targetView == nullptr) {
+        return;
+    }
+
+    if (targetView->GetParent() == nullptr) {
+        return;
+    }
+
+    UIViewGroup* viewGroup = reinterpret_cast<UIViewGroup*>(targetView->GetParent());
+    UIView* node = viewGroup->GetChildrenRenderHead();
+    if (node == nullptr) {
+        return;
+    }
+    if (node == targetView) {
+        viewGroup->SetChildrenRenderHead(node->GetNextRenderSibling());
+        targetView->SetNextRenderSibling(nullptr);
+    } else {
+        while (node->GetNextRenderSibling() != nullptr) {
+            if (node->GetNextRenderSibling() == targetView) {
+                node->SetNextRenderSibling(targetView->GetNextRenderSibling());
+                targetView->SetNextRenderSibling(nullptr);
+                break;
+            }
+            node = node->GetNextRenderSibling();
+        }
+    }
+}
+
+void UIViewGroup::UpdateRenderView(UIView* targetView)
+{
+    if (targetView == nullptr) {
+        return;
+    }
+
+    if (targetView->GetParent() == nullptr) {
+        return;
+    }
+    RemoveRenderView(targetView);
+
+    UIViewGroup* viewGroup = reinterpret_cast<UIViewGroup*>(targetView->GetParent());
+    UIView* curView = viewGroup->GetChildrenRenderHead();
+    if (curView == nullptr) {
+        viewGroup->SetChildrenRenderHead(targetView);
+        targetView->SetNextRenderSibling(nullptr);
+        return;
+    }
+
+    int16_t curZIndex = curView->GetZIndex();
+    int16_t targetZIndex = targetView->GetZIndex();
+    int16_t nextZIndex;
+    UIView* nextView = curView->GetNextRenderSibling();
+    UIView* preView = nullptr;
+
+    if (curZIndex > targetZIndex) {
+        targetView->SetNextRenderSibling(curView);
+        viewGroup->SetChildrenRenderHead(targetView);
+        return;
+    }
+
+    if (nextView == nullptr) {
+        curView->SetNextRenderSibling(targetView);
+        targetView->SetNextRenderSibling(nullptr);
+        return;
+    }
+
+    while (nextView != nullptr) {
+        curZIndex = curView->GetZIndex();
+        nextZIndex = nextView->GetZIndex();
+        if (curZIndex == targetZIndex) {
+            InsertRenderView(curView, preView, targetView);
+            return;
+        }
+        if ((curZIndex < targetZIndex) && (targetZIndex < nextZIndex)) {
+            curView->SetNextRenderSibling(targetView);
+            targetView->SetNextRenderSibling(nextView);
+            return;
+        }
+        preView = curView;
+        curView = nextView;
+        nextView = nextView->GetNextRenderSibling();
+    }
+
+    curView->SetNextRenderSibling(targetView);
+    targetView->SetNextRenderSibling(nullptr);
+}
+
+void UIViewGroup::InsertRenderView(UIView* archorView, UIView* anchorPreView, UIView* targetView)
+{
+    if ((targetView == nullptr) || (archorView == nullptr)) {
+        return;
+    }
+
+    if (archorView->GetParent() == nullptr) {
+        return;
+    }
+
+    UIViewGroup* viewGroup = reinterpret_cast<UIViewGroup*>(archorView->GetParent());
+    UIView* node = viewGroup->GetChildrenHead();
+    if (node == nullptr) {
+        return;
+    }
+
+    int16_t curZIndex = node->GetZIndex();
+    int16_t targetZIndex = targetView->GetZIndex();
+    UIView* newArchorView = nullptr;
+
+    if (node == targetView) {
+        targetView->SetNextRenderSibling(viewGroup->GetChildrenRenderHead());
+        viewGroup->SetChildrenRenderHead(targetView);
+        return;
+    }
+
+    while (node->GetNextSibling() != nullptr) {
+        curZIndex = node->GetNextSibling()->GetZIndex();
+        if (curZIndex == targetZIndex) {
+            if ((node->GetNextSibling() == targetView) && (newArchorView == nullptr)) {
+                targetView->SetNextRenderSibling(archorView);
+                if (viewGroup->GetChildrenRenderHead() == archorView) {
+                    viewGroup->SetChildrenRenderHead(targetView);
+                }
+                if (anchorPreView != nullptr) {
+                    anchorPreView->SetNextRenderSibling(targetView);
+                }
+                break;
+            }
+            if (node->GetNextSibling() != targetView) {
+                newArchorView = node->GetNextSibling();
+            }
+        }
+        if (node->GetNextSibling() == targetView) {
+            if (newArchorView != nullptr) {
+                targetView->SetNextRenderSibling(newArchorView->GetNextRenderSibling());
+                newArchorView->SetNextRenderSibling(targetView);
+            }
+            break;
+        }
+        node = node->GetNextSibling();
+    }
 }
 } // namespace OHOS

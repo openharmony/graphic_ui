@@ -1505,6 +1505,31 @@ public:
 
     bool IsOnViewTree();
 
+    /**
+     * @brief Set view zIndex order
+     * @param zIndex specifies the stack order of an view. The default is zero.
+     *               The greater order is in front of the lower order.
+     */
+    void SetZIndex(int16_t zIndex);
+
+    /**
+     * @brief Get zIndex value of the view
+     * @return the zIndex order value
+     */
+    int16_t GetZIndex();
+
+    /**
+     * @brief Sets the next render sibling view for the view.
+     * @param sibling Indicates the pointer to the next render sibling view to set.
+     */
+    void SetNextRenderSibling(UIView* renderSibling);
+
+    /**
+     * @brief Obtains the next render sibling view of the view.
+     * @return Returns the pointer to the next render sibling view.
+     */
+    UIView* GetNextRenderSibling() const;
+
 protected:
     bool touchable_ : 1;
     bool visible_ : 1;
@@ -1519,9 +1544,11 @@ protected:
 #endif
     uint8_t opaScale_;
     int16_t index_;
+    int16_t zIndex_;
     const char* id_;
     UIView* parent_;
     UIView* nextSibling_;
+    UIView* nextRenderSibling_;
     Style* style_;
     TransformMap* transMap_;
     OnClickListener* onClickListener_;
