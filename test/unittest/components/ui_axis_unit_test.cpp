@@ -24,6 +24,7 @@ namespace OHOS {
 namespace {
     const int16_t LARGER_VALUE = 10;
     const int16_t SMALLER_VALUE = 2;
+    const bool ENABLE = true;
 }
 class UIAxisTest : public testing::Test {
 public:
@@ -145,5 +146,200 @@ HWTEST_F(UIAxisTest, UIYAxisSetDataRange_002, TestSize.Level1)
         return;
     }
     EXPECT_EQ(axisY_->SetDataRange(LARGER_VALUE, SMALLER_VALUE), false);
+}
+
+/**
+ * @tc.name: UIYAxisSetMarkNum_001
+ * @tc.desc: Verify SetMarkNum function, equal.
+ */
+HWTEST_F(UIAxisTest, UIXAxisSetMarkNum_001, TestSize.Level1)
+{
+    if (axisY_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    int16_t COUNT = 1;
+    axisX_->SetMarkNum(COUNT);
+    EXPECT_EQ(axisX_->GetMarkNum(), COUNT);
+}
+
+/**
+ * @tc.name: UIYAxisSetMarkNum_001
+ * @tc.desc: Verify SetMarkNum function, equal.
+ */
+HWTEST_F(UIAxisTest, UIYAxisSetMarkNum_001, TestSize.Level1)
+{
+    if (axisY_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    int16_t COUNT = 1;
+    axisY_->SetMarkNum(COUNT);
+    EXPECT_EQ(axisY_->GetMarkNum(), COUNT);
+    COUNT = 2;
+    axisY_->SetMarkNum(COUNT);
+    axisY_->UpdateAxis();
+    EXPECT_EQ(axisY_->GetMarkNum(), COUNT);
+}
+
+/**
+ * @tc.name: UIAxisEnableReverse_001
+ * @tc.desc: Verify EnableReverse function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisEnableReverse_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    axisX_->EnableReverse(ENABLE);
+    EXPECT_EQ(axisX_->GetEnableReverse(), ENABLE);
+}
+
+/**
+ * @tc.name: UIAxisGetStartPoint_001
+ * @tc.desc: Verify GetStartPoint function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisGetStartPoint_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    Point start_ = {0, 0};
+    EXPECT_EQ(axisX_->GetStartPoint().x, start_.x);
+    EXPECT_EQ(axisX_->GetStartPoint().y, start_.y);
+}
+
+/**
+ * @tc.name: UIAxisGetEndPoint_001
+ * @tc.desc: Verify GetEndPoint function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisGetEndPoint_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    Point end_ = {0, 0};
+    EXPECT_EQ(axisX_->GetEndPoint().x, end_.x);
+    EXPECT_EQ(axisX_->GetEndPoint().y, end_.y);
+}
+
+/**
+ * @tc.name: UIAxisGetMarkInterval_001
+ * @tc.desc: Verify GetMarkInterval function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisGetMarkInterval_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    float markInterval = 0;
+    axisX_->SetMarkInterval(markInterval);
+    EXPECT_EQ(axisX_->GetMarkInterval(), markInterval);
+}
+
+/**
+ * @tc.name: UIAxisOnPreDraw_001
+ * @tc.desc: Verify OnPreDraw function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisOnPreDraw_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    Rect* invalidatedArea = new Rect();
+    EXPECT_EQ(axisX_->OnPreDraw(*invalidatedArea), false);
+    delete invalidatedArea;
+    invalidatedArea = nullptr;
+}
+
+/**
+ * @tc.name: UIAxisUpdateAxisPoints_001
+ * @tc.desc: Verify UpdateAxisPoints function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisUpdateAxisPoints_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    axisX_->UpdateAxisPoints();
+    Point endx = axisX_->GetEndPoint();
+    Point startx = axisX_->GetStartPoint();
+    EXPECT_EQ(endx.y, startx.y);
+}
+
+/**
+ * @tc.name: UIAxisUpdateAxisPoints_002
+ * @tc.desc: Verify UpdateAxisPoints function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisUpdateAxisPoints_002, TestSize.Level1)
+{
+    if (axisY_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    axisY_->UpdateAxisPoints();
+    Point endx = axisY_->GetEndPoint();
+    Point startx = axisY_->GetStartPoint();
+    EXPECT_EQ(endx.x, startx.x);
+}
+
+/**
+ * @tc.name: UIAxisTranslateToPixel_001
+ * @tc.desc: Verify TranslateToPixel function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisTranslateToPixel_001, TestSize.Level1)
+{
+    if (axisX_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    int16_t value = 2;
+    float minXStep = 0;
+    Point startx = axisX_->GetStartPoint();
+    axisX_->TranslateToPixel(value);
+    int16_t value2 = startx.x + static_cast<int16_t>((value - 0) * minXStep);
+    EXPECT_EQ(value, value2);
+}
+
+/**
+ * @tc.name: UIAxisTranslateToPixel_002
+ * @tc.desc: Verify TranslateToPixel function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisTranslateToPixel_002, TestSize.Level1)
+{
+    if (axisY_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    int16_t value = 2;
+    float minYStep = 0;
+    Point starty = axisY_->GetStartPoint();
+    axisX_->TranslateToPixel(value);
+    int16_t value2 = starty.y + static_cast<int16_t>((0 - value + 0) * minYStep);
+    EXPECT_EQ(value, value2);
+}
+
+/**
+ * @tc.name: UIAxisTranslateToPixel_003
+ * @tc.desc: Verify TranslateToPixel function, equal.
+ */
+HWTEST_F(UIAxisTest, UIAxisTranslateToPixel_003, TestSize.Level1)
+{
+    if (axisY_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    int16_t value = 2;
+    float minYStep = 0;
+    Point starty = axisY_->GetStartPoint();
+    axisY_->TranslateToPixel(value);
+    int16_t value2 = starty.y - static_cast<int16_t>((value - 0) * minYStep);
+    EXPECT_EQ(value, value2);
 }
 } // namespace OHOS

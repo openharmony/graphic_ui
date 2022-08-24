@@ -488,4 +488,35 @@ HWTEST_F(UIChartDataSerialTest, UIChartClearDataSerial_001, TestSize.Level1)
     ret = chart_->DeleteDataSerial(chartDataSerial_);
     EXPECT_EQ(ret, false);
 }
+
+/**
+ * @tc.name: UIChartGetValleyData_001
+ * @tc.desc: Verify GetValleyData function, equal.
+ */
+HWTEST_F(UIChartDataSerialTest, UIChartGetValleyData_001, TestSize.Level1)
+{
+    if (chart_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    UIChart* chart = static_cast<UIChart*>(chart_);
+    chartDataSerial_->BindToChart(chart);
+    bool flag = true;
+    chartDataSerial_->EnableHeadPoint(flag);
+    chartDataSerial_->EnableTopPoint(flag);
+    chartDataSerial_->EnableBottomPoint(flag);
+    EXPECT_EQ(chartDataSerial_->GetEnableHeadPoint(), flag);
+    EXPECT_EQ(chartDataSerial_->GetEnableTopPoint(), flag);
+    EXPECT_EQ(chartDataSerial_->GetEnableBottomPoint(), flag);
+
+    BufferInfo* gfxDstBuffer = new BufferInfo();
+    Rect* mask = new Rect();
+    chartDataSerial_->DrawPoint(*gfxDstBuffer, *mask);
+    chartDataSerial_->Refresh();
+    EXPECT_EQ(chartDataSerial_->GetValleyData(), 0);
+    delete gfxDstBuffer;
+    gfxDstBuffer = nullptr;
+    delete mask;
+    mask = nullptr;
+}
 }

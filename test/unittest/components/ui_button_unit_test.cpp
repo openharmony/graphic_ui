@@ -18,6 +18,7 @@
 #include <climits>
 #include <gtest/gtest.h>
 #include "test_resource_config.h"
+#include "draw/draw_utils.h"
 
 using namespace testing::ext;
 
@@ -336,5 +337,41 @@ HWTEST_F(UIButtonTest, UIButtonSetStateForStyle_001, TestSize.Level1)
     EXPECT_EQ(button_->GetStyle(STYLE_BACKGROUND_COLOR), Color::Red().full);
     button_->SetStateForStyle(UIButton::ButtonState::PRESSED);
     EXPECT_EQ(button_->GetStyle(STYLE_BACKGROUND_COLOR), Color::Green().full);
+}
+
+/**
+ * @tc.name: UIButtonSetImageSrc_002
+ * @tc.desc: Verify SetImageSrc function.
+ */
+HWTEST_F(UIButtonTest, UIButtonSetImageSrc_002, TestSize.Level0)
+{
+    if (button_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    ImageInfo* defaultImgSrc  = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    ImageInfo* triggeredImgSrc = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    button_->SetImageSrc(defaultImgSrc, triggeredImgSrc);
+    ASSERT_TRUE(button_->GetCurImageSrc());
+    EXPECT_EQ(button_->GetCurImageSrc()->GetSrcType(), IMG_SRC_VARIABLE);
+    UIFree(triggeredImgSrc);
+    triggeredImgSrc = nullptr;
+    UIFree(defaultImgSrc);
+    defaultImgSrc = nullptr;
+}
+
+/**
+ * @tc.name: UIButtonEnableButtonAnimation_001
+ * @tc.desc: Verify EnableButtonAnimation function.
+ */
+HWTEST_F(UIButtonTest, UIButtonEnableButtonAnimation_001, TestSize.Level0)
+{
+    if (button_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    bool enable = true;
+    button_->EnableButtonAnimation(enable);
+    EXPECT_EQ(button_->GetEnableButtonAnimation(), enable);
 }
 } // namespace OHOS
