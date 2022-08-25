@@ -19,7 +19,7 @@
     "ram": "~90KB",
     "deps": {
       "third_party": [
-        "libjpeg",
+        "libjpeg-turbo",
         "cjson",
         "freetype"
       ]
