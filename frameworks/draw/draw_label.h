@@ -29,8 +29,8 @@ public:
                                     uint16_t& letterIndex);
 
     static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text, const Point& arcCenter,
-                            uint8_t fontId, uint8_t fontSize, const UIArcLabel::ArcTextInfo arcTextInfo,
-                            UIArcLabel::TextOrientation orientation, const Style& style, uint8_t opaScale);
+                            uint8_t fontId, uint8_t fontSize, const ArcTextInfo arcTextInfo,
+                            TextOrientation orientation, const Style& style, uint8_t opaScale);
 
     static void DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,

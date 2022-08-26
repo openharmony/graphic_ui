@@ -75,6 +75,31 @@ enum UITextLanguageDirect : uint8_t {
     TEXT_DIRECT_MIXED,
 };
 
+/**
+ * @brief Stores the attribute information about this arc text to draw.
+ */
+struct ArcTextInfo {
+    uint16_t radius;
+    float startAngle;
+    Point arcCenter;
+    uint32_t lineStart;
+    uint32_t lineEnd;
+    UITextLanguageDirect direct;
+    uint32_t* codePoints;
+    uint16_t codePointsNum;
+    uint8_t shapingFontId;
+};
+
+/**
+ * @brief Enumerates text orientations.
+ */
+enum class TextOrientation : uint8_t {
+    /** Inside */
+    INSIDE,
+    /** Outside */
+    OUTSIDE,
+};
+
 struct BackgroundColor : public HeapBase {
     int16_t start;
     int16_t end;
@@ -365,6 +390,36 @@ public:
      * @version 1.0
      */
     uint16_t GetEllipsisIndex(const Rect& textRect, const Style& style);
+
+    /**
+     * @brief Get the GetShapingFontId of text
+     *
+     * @return Return ShapingFontId
+     */
+    virtual uint8_t GetShapingFontId() const
+    {
+        return 0;
+    }
+
+    /**
+     * @brief Get the GetCodePointNum of text
+     *
+     * @return Return num of CodePoints
+     */
+    virtual uint16_t GetCodePointNum() const
+    {
+        return 0;
+    }
+
+    /**
+     * @brief Get the GetCodePoints of text
+     *
+     * @return Return CodePoints of text
+     */
+    virtual uint32_t* GetCodePoints() const
+    {
+        return nullptr;
+    }
 
     void SetSupportBaseLine(bool baseLine)
     {

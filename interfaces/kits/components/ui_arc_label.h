@@ -50,16 +50,6 @@ namespace OHOS {
 class UIArcLabel : public UIView {
 public:
     /**
-     * @brief Enumerates text orientations.
-     */
-    enum class TextOrientation : uint8_t {
-        /** Inside */
-        INSIDE,
-        /** Outside */
-        OUTSIDE,
-    };
-
-    /**
      * @brief A default constructor used to create a <b>UIArcLabel</b> instance.
      *
      * @since 1.0
@@ -346,18 +336,6 @@ public:
      */
     void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
-    /**
-     * @brief Stores the attribute information about this arc text to draw.
-     */
-    struct ArcTextInfo {
-        uint16_t radius;
-        float startAngle;
-        Point arcCenter;
-        uint32_t lineStart;
-        uint32_t lineEnd;
-        UITextLanguageDirect direct;
-    };
-
 protected:
     Text* arcLabelText_;
 
@@ -373,10 +351,23 @@ protected:
     }
     void RefreshArcLabel();
 
+    virtual void DrawArcText(BufferInfo& gfxDstBuffer,
+                             const Rect& mask,
+                             OpacityType opaScale,
+                             const ArcTextInfo arcTextInfo,
+                             TextOrientation orientation);
+
+    virtual Rect GetArcTextRect(const char* text,
+                                uint8_t fontId,
+                                uint8_t fontSize,
+                                const Point& arcCenter,
+                                int16_t letterSpace,
+                                TextOrientation orientation,
+                                const ArcTextInfo& arcTextInfo);
+
 private:
     void ReMeasure() override;
     void MeasureArcTextInfo();
-    void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, OpacityType opaScale);
 
     bool needRefresh_;
     Point textSize_;

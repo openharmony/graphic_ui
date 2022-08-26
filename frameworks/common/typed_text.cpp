@@ -88,8 +88,8 @@ Rect TypedText::GetArcTextRect(const char* text,
                                uint8_t fontSize,
                                const Point& arcCenter,
                                int16_t letterSpace,
-                               UIArcLabel::TextOrientation orientation,
-                               const UIArcLabel::ArcTextInfo& arcTextInfo)
+                               TextOrientation orientation,
+                               const ArcTextInfo& arcTextInfo)
 {
     if ((text == nullptr) || (arcTextInfo.lineStart == arcTextInfo.lineEnd) || (arcTextInfo.radius == 0)) {
         GRAPHIC_LOGE("TypedText::GetArcTextRect invalid parameter\n");
@@ -97,7 +97,7 @@ Rect TypedText::GetArcTextRect(const char* text,
     }
 
     uint16_t letterHeight = UIFont::GetInstance()->GetHeight(fontId, fontSize);
-    bool xorFlag = (orientation == UIArcLabel::TextOrientation::INSIDE) ^ (arcTextInfo.direct == TEXT_DIRECT_LTR);
+    bool xorFlag = (orientation == TextOrientation::INSIDE) ^ (arcTextInfo.direct == TEXT_DIRECT_LTR);
     float posX = 0;
     float posY = 0;
     uint32_t i = arcTextInfo.lineStart;
@@ -133,7 +133,7 @@ Rect TypedText::GetArcTextRect(const char* text,
         float incrementAngle = GetAngleForArcLen(static_cast<float>(arcLen), letterHeight, arcTextInfo.radius,
                                                  arcTextInfo.direct, orientation);
         float rotateAngle =
-            (orientation == UIArcLabel::TextOrientation::INSIDE) ? angle : (angle - SEMICIRCLE_IN_DEGREE);
+            (orientation == TextOrientation::INSIDE) ? angle : (angle - SEMICIRCLE_IN_DEGREE);
         // 2: letterWidth's half
         float fineTuningAngle = incrementAngle * (static_cast<float>(letterWidth) / (2 * arcLen));
         rotateAngle += (xorFlag ? -fineTuningAngle : fineTuningAngle);
@@ -151,13 +151,13 @@ float TypedText::GetAngleForArcLen(float len,
                                    uint16_t height,
                                    uint16_t radius,
                                    UITextLanguageDirect direct,
-                                   UIArcLabel::TextOrientation orientation)
+                                   TextOrientation orientation)
 {
     if (radius == 0) {
         return 0;
     }
     float realRadius =
-        static_cast<float>((orientation == UIArcLabel::TextOrientation::OUTSIDE) ? (radius + height) : radius);
+        static_cast<float>((orientation == TextOrientation::OUTSIDE) ? (radius + height) : radius);
     float angle = static_cast<float>(len * SEMICIRCLE_IN_DEGREE) / (UI_PI * realRadius);
     return (direct == TEXT_DIRECT_LTR) ? angle : -angle;
 }
