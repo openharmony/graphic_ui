@@ -358,13 +358,13 @@ INCLUDEPATH += \
     ../../../../../../../third_party/icu/icu4c/source/common \
     ../../../../../../../third_party/freetype/include \
     ../../../../../../../third_party/cJSON \
-    ../../../../../../../third_party/libjpeg \
+    ../../../../../../../third_party/libjpeg-turbo \
     ../../../../../../../third_party/libpng \
     ../../../../../../../third_party/qrcodegen/cpp \
     ../../../../../../../third_party/giflib
 
 LIBS += $$OUT_PWD/../libs/libpng.dll
-LIBS += $$OUT_PWD/../libs/libjpeg.dll
+LIBS += $$OUT_PWD/../libs/libjpeg-turbo.dll
 LIBS += $$OUT_PWD/../libs/qrcodegen.dll
 LIBS += $$OUT_PWD/../libs/freetype.dll
 LIBS += $$OUT_PWD/../libs/libharfbuzz.a

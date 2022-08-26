@@ -177,7 +177,7 @@ INCLUDEPATH += \
     ../../../../../../../third_party/icu/icu4c/source/common \
     ../../../../../../../third_party/freetype/include \
     ../../../../../../../third_party/cJSON \
-    ../../../../../../../third_party/libjpeg \
+    ../../../../../../../third_party/libjpeg-turbo \
     ../../../../../../../third_party/libpng \
     ../../../../../../../third_party/giflib
 LIBS += $$OUT_PWD/../libs/libui.dll
