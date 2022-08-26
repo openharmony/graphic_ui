@@ -123,20 +123,28 @@ void UIArcLabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     if ((text == nullptr) || (radius_ == 0)) {
         return;
     }
-    Rect trunc = invalidatedArea;
     OpacityType opa = GetMixOpaScale();
     UIView::OnDraw(gfxDstBuffer, invalidatedArea);
-    DrawArcText(gfxDstBuffer, trunc, opa);
+    DrawArcText(gfxDstBuffer, invalidatedArea, opa, arcTextInfo_, orientation_);
 }
 
-void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, OpacityType opaScale)
+void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer,
+                             const Rect& mask,
+                             OpacityType opaScale,
+                             const ArcTextInfo arcTextInfo,
+                             TextOrientation orientation)
 {
     Point center;
     center.x = arcTextInfo_.arcCenter.x + GetRect().GetX();
     center.y = arcTextInfo_.arcCenter.y + GetRect().GetY();
-    InitArcLabelText();
     DrawLabel::DrawArcText(gfxDstBuffer, mask, arcLabelText_->GetText(), center, arcLabelText_->GetFontId(),
-                           arcLabelText_->GetFontSize(), arcTextInfo_, orientation_, *style_, opaScale);
+                           arcLabelText_->GetFontSize(), arcTextInfo, orientation, *style_, opaScale);
+}
+
+Rect UIArcLabel::GetArcTextRect(const char* text, uint8_t fontId, uint8_t fontSize, const Point& arcCenter,
+                                int16_t letterSpace, TextOrientation orientation, const ArcTextInfo& arcTextInfo)
+{
+    return TypedText::GetArcTextRect(text, fontId, fontSize, arcCenter, letterSpace, orientation, arcTextInfo);
 }
 
 void UIArcLabel::RefreshArcLabel()
@@ -156,9 +164,12 @@ void UIArcLabel::ReMeasure()
     InitArcLabelText();
 
     MeasureArcTextInfo();
+    arcTextInfo_.shapingFontId = arcLabelText_->GetShapingFontId();
+    arcTextInfo_.codePoints = arcLabelText_->GetCodePoints();
+    arcTextInfo_.codePointsNum = arcLabelText_->GetCodePointNum();
     Rect textRect =
-        TypedText::GetArcTextRect(arcLabelText_->GetText(), arcLabelText_->GetFontId(), arcLabelText_->GetFontSize(),
-                                  arcCenter_, style_->letterSpace_, orientation_, arcTextInfo_);
+        GetArcTextRect(arcLabelText_->GetText(), arcLabelText_->GetFontId(), arcLabelText_->GetFontSize(),
+                       arcCenter_, style_->letterSpace_, orientation_, arcTextInfo_);
     int16_t arcTextWidth = textRect.GetWidth();
     int16_t arcTextHeight = textRect.GetHeight();
 
@@ -196,6 +207,11 @@ void UIArcLabel::MeasureArcTextInfo()
     // calculate max arc length
     float maxLength = static_cast<float>((UI_PI * radius_ * arcAngle) / SEMICIRCLE_IN_DEGREE);
     arcTextInfo_.lineStart = 0;
+
+    Rect rect;
+    rect.SetWidth(static_cast<int16_t>(maxLength));
+    arcLabelText_->ReMeasureTextSize(rect, *style_);
+
     arcTextInfo_.lineEnd = TypedText::GetNextLine(&text[arcTextInfo_.lineStart], arcLabelText_->GetFontId(),
                                                   arcLabelText_->GetFontSize(), style_->letterSpace_,
                                                   static_cast<int16_t>(maxLength));

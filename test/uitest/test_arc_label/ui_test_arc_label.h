@@ -72,7 +72,7 @@ private:
 
     // for direction and orientation
     void TestArcLabelDisplay(const char* title, const int16_t startAngle, const int16_t endAngle,
-        const UIArcLabel::TextOrientation orientation, int16_t x, int16_t y);
+        const TextOrientation orientation, int16_t x, int16_t y);
 };
 } // namespace OHOS
 #endif // UI_TEST_ARC_LABEL_H
