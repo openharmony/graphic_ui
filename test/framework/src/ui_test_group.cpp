@@ -69,6 +69,7 @@
 #include "test_view_bounds/ui_test_view_bounds.h"
 #include "test_view_group/ui_test_view_group.h"
 #include "test_view_percent/ui_test_view_percent.h"
+#include "test_view_zindex/ui_test_view_zindex.h"
 #include "test_view_scale_rotate/ui_test_view_scale_rotate.h"
 #if ENABLE_VECTOR_FONT
 #include "test_vector_font/ui_test_vector_font.h"
@@ -87,6 +88,7 @@ void UITestGroup::AddTestCase(TestCaseInfo testCaseInfo)
 
 void UITestGroup::SetUpTestCase()
 {
+    testCaseList_.PushBack(TestCaseInfo{"View zIndex", new UITestViewZIndex()});
     testCaseList_.PushBack(TestCaseInfo{"EditText", new UITestEditText()});
     testCaseList_.PushBack(TestCaseInfo{"Clip", new UITestClip()});
 #if ENABLE_ROTATE_INPUT

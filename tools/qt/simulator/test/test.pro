@@ -91,6 +91,7 @@ SOURCES += \
     ../../../../test/uitest/test_view_bounds/ui_test_view_bounds.cpp \
     ../../../../test/uitest/test_view_group/ui_test_view_group.cpp \
     ../../../../test/uitest/test_view_percent/ui_test_view_percent.cpp \
+    ../../../../test/uitest/test_view_zindex/ui_test_view_zindex.cpp \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp
 
 SOURCES += \
@@ -151,6 +152,7 @@ HEADERS += \
     ../../../../test/uitest/test_view_bitmap/ui_test_view_bitmap.h \
     ../../../../test/uitest/test_view_group/ui_test_view_group.h \
     ../../../../test/uitest/test_view_percent/ui_test_view_percent.h \
+    ../../../../test/uitest/test_view_zindex/ui_test_view_zindex.h \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.h
 
 HEADERS += \

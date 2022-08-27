@@ -16,6 +16,7 @@
 #include "components/ui_view.h"
 
 #include "components/root_view.h"
+#include "components/ui_view_group.h"
 #include "core/render_manager.h"
 #include "dfx/ui_view_bounds.h"
 #include "dock/focus_manager.h"
@@ -41,9 +42,11 @@ UIView::UIView()
 #endif
       opaScale_(OPA_OPAQUE),
       index_(0),
+      zIndex_(0),
       id_(nullptr),
       parent_(nullptr),
       nextSibling_(nullptr),
+      nextRenderSibling_(nullptr),
       style_(nullptr),
       transMap_(nullptr),
       onClickListener_(nullptr),
@@ -605,6 +608,16 @@ void UIView::SetNextSibling(UIView* sibling)
 UIView* UIView::GetNextSibling() const
 {
     return nextSibling_;
+}
+
+void UIView::SetNextRenderSibling(UIView* renderSibling)
+{
+    nextRenderSibling_ = renderSibling;
+}
+
+UIView* UIView::GetNextRenderSibling() const
+{
+    return nextRenderSibling_;
 }
 
 void UIView::SetVisible(bool visible)
@@ -1263,11 +1276,11 @@ uint8_t UIView::GetMixOpaScale() const
 
 bool UIView::GetBitmap(ImageInfo& bitmap)
 {
-    UIView* tempSibling = nextSibling_;
+    UIView* tempRenderSibling = nextRenderSibling_;
     UIView* tempParent = parent_;
     int16_t tempX = rect_.GetX();
     int16_t tempY = rect_.GetY();
-    nextSibling_ = nullptr;
+    nextRenderSibling_ = nullptr;
     parent_ = nullptr;
 
     rect_.SetPosition(0, 0);
@@ -1283,7 +1296,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     void* viewBitmapBuffer = ImageCacheMalloc(bitmap);
     if (viewBitmapBuffer == nullptr) {
         GRAPHIC_LOGE("GetBitmap buffer alloc failed.");
-        nextSibling_ = tempSibling;
+        nextRenderSibling_ = tempRenderSibling;
         parent_ = tempParent;
         rect_.SetPosition(tempX, tempY);
         return false;
@@ -1310,7 +1323,7 @@ bool UIView::GetBitmap(ImageInfo& bitmap)
     RootView::GetInstance()->MeasureView(this);
     RootView::GetInstance()->DrawTop(this, mask);
     RootView::GetInstance()->RestoreDrawContext();
-    nextSibling_ = tempSibling;
+    nextRenderSibling_ = tempRenderSibling;
     parent_ = tempParent;
     rect_.SetPosition(tempX, tempY);
     return true;
@@ -1355,5 +1368,22 @@ void UIView::ResizeVisibleArea(int16_t x, int16_t y, int16_t width, int16_t heig
     visibleRect_->SetWidth(width);
     visibleRect_->SetHeight(height);
     visibleRect_->SetPosition(x, y);
+}
+
+void UIView::SetZIndex(int16_t zIndex)
+{
+    if (zIndex_ == zIndex) {
+        return;
+    }
+
+    zIndex_ = zIndex;
+    if (parent_ != nullptr) {
+        reinterpret_cast<UIViewGroup*>(parent_)->UpdateRenderView(this);
+    }
+}
+
+int16_t UIView::GetZIndex()
+{
+    return zIndex_;
 }
 } // namespace OHOS
