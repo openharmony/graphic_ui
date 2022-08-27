@@ -1122,4 +1122,113 @@ HWTEST_F(UIViewTest, Graphic_UIView_Test_Border_001, TestSize.Level0)
     EXPECT_EQ(BORDER_WIDTH + BORDER_WIDTH + DEFAULE_WIDTH - 1, rect.GetRight());
     EXPECT_EQ(BORDER_WIDTH + BORDER_WIDTH + DEFAULE_HEIGHT - 1, rect.GetBottom());
 }
+
+/**
+ * @tc.name: Graphic_UIView_Test_SetZIndex_001
+ * @tc.desc: Check zIndex equal
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_SetZIndex_001, TestSize.Level0)
+{
+    UIView* view = new UIView();
+
+    // check 0
+    int16_t zIndex = 0;
+    view->SetZIndex(zIndex);
+    EXPECT_EQ(zIndex, view->GetZIndex());
+
+    // check negative
+    zIndex = 20;
+    view->SetZIndex(zIndex);
+    EXPECT_EQ(zIndex, view->GetZIndex());
+
+    // check big num
+    zIndex = 66666;
+    view->SetZIndex(zIndex);
+    EXPECT_EQ(zIndex, view->GetZIndex());
+
+    // check negative
+    zIndex = -1;
+    view->SetZIndex(zIndex);
+    EXPECT_EQ(zIndex, view->GetZIndex());
+
+    zIndex = -66666;
+    view->SetZIndex(zIndex);
+    EXPECT_EQ(zIndex, view->GetZIndex());
+
+    // check set multi times
+    zIndex = 20;
+    view->SetZIndex(zIndex);
+    view->SetZIndex(zIndex * 2);
+    EXPECT_EQ(zIndex * 2, view->GetZIndex());
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_GetZIndex_001
+ * @tc.desc: Check the default zIndex
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_GetZIndex_001, TestSize.Level0)
+{
+    UIView* view = new UIView();
+    // check default zIndex value
+    EXPECT_EQ(0, view->GetZIndex());
+
+    UIViewGroup* viewGroup = new UIViewGroup();
+    // check default zIndex value
+    EXPECT_EQ(0, viewGroup->GetZIndex());
+    delete view;
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_GetNextRenderSibling_001
+ * @tc.desc: Check the default zIndex
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_GetNextRenderSibling_001, TestSize.Level0)
+{
+    UIView* view = new UIView();
+    UIView* sibling = view->GetNextRenderSibling();
+    if (sibling != nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(0, 0);
+
+    UIViewGroup* viewGroup = new UIViewGroup();
+    sibling = viewGroup->GetNextRenderSibling();
+    if (sibling != nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(0, 0);
+    delete view;
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_SetNextRenderSibling_001
+ * @tc.desc: Check the default zIndex
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewTest, Graphic_UIView_Test_SetNextRenderSibling_001, TestSize.Level0)
+{
+    UIView* view = new UIView();
+    UIView* tempView = new UIView();
+    view->SetNextRenderSibling(tempView);
+    EXPECT_EQ(view->GetNextRenderSibling(), tempView);
+
+    UIViewGroup* viewGroup = new UIViewGroup();
+    viewGroup->SetNextRenderSibling(tempView);
+    EXPECT_EQ(viewGroup->GetNextRenderSibling(), tempView);
+
+    delete tempView;
+    delete view;
+    delete viewGroup;
+}
 } // namespace OHOS

@@ -158,4 +158,204 @@ HWTEST_F(UIViewGroupTest, UIViewGroupGetViewType_001, TestSize.Level1)
     }
     EXPECT_EQ(viewGroup_->GetViewType(), UI_VIEW_GROUP);
 }
+
+/**
+ * @tc.name: Graphic_UIView_Test_GetChildrenRenderHead_001
+ * @tc.desc: Check the child render head
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_GetChildrenRenderHead_001, TestSize.Level0)
+{
+    UIViewGroup* viewGroup = new UIViewGroup();
+    UIView* sibling = viewGroup->GetChildrenRenderHead();
+    if (sibling != nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    EXPECT_EQ(0, 0);
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_GetChildrenRenderHead_001
+ * @tc.desc: Check child render head
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_GetChildrenRenderHead_002, TestSize.Level0)
+{
+    UIView* view1 = new UIView();
+    UIView* view2 = new UIView();
+    UIView* view3 = new UIView();
+    UIViewGroup* viewGroup = new UIViewGroup();
+    viewGroup->Add(view1);
+    // check child head
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view1);
+
+    viewGroup->Add(view2);
+    // check child head with two child
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view1);
+
+    viewGroup->Remove(view1);
+    // check child head when remove head
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view2);
+
+    viewGroup->Remove(view2);
+    // check child head when remove all
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), nullptr);
+
+    viewGroup->Add(view1);
+    viewGroup->Add(view2);
+    viewGroup->RemoveAll();
+    // check child head when remove all
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), nullptr);
+
+    viewGroup->Add(view1);
+    viewGroup->Add(view2);
+    viewGroup->Insert(view1, view3);
+    viewGroup->Remove(view1);
+    // check child head when insert view
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view3);
+
+    delete view1;
+    delete view2;
+    delete view3;
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_GetChildrenRenderHead_003
+ * @tc.desc: Check child render head when zIndex change
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_GetChildrenRenderHead_003, TestSize.Level0)
+{
+    UIView* view1 = new UIView();
+    UIView* view2 = new UIView();
+    UIView* view3 = new UIView();
+    UIView* view4 = new UIView();
+    UIViewGroup* viewGroup = new UIViewGroup();
+    viewGroup->Add(view1);
+    viewGroup->Add(view2);
+    viewGroup->Add(view3);
+    viewGroup->Add(view4);
+    // check child with zIndex = 0
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view1);
+
+    view1->SetZIndex(10); // 10: zindex
+    // check child when zIndex change
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view2);
+
+    view3->SetZIndex(-10); // -10: zindex
+    // check child when zIndex change
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view3);
+
+    delete view1;
+    delete view2;
+    delete view3;
+    delete view4;
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_GetChildrenRenderHead_004
+ * @tc.desc: Check child render head when zIndex change
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_GetChildrenRenderHead_004, TestSize.Level0)
+{
+    UIView* view1 = new UIView();
+    UIView* view2 = new UIView();
+    UIView* view3 = new UIView();
+    UIView* view4 = new UIView();
+    UIViewGroup* viewGroup = new UIViewGroup();
+    viewGroup->Add(view1);
+    viewGroup->Add(view2);
+    viewGroup->Add(view3);
+    viewGroup->Add(view4);
+    // check child with zIndex = 0
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view1);
+    EXPECT_EQ(view1->GetNextRenderSibling(), view2);
+    EXPECT_EQ(view2->GetNextRenderSibling(), view3);
+    EXPECT_EQ(view3->GetNextRenderSibling(), view4);
+
+    view1->SetZIndex(10); // 10: zindex
+    // check child when zIndex change
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view2);
+    EXPECT_EQ(view2->GetNextRenderSibling(), view3);
+    EXPECT_EQ(view3->GetNextRenderSibling(), view4);
+    EXPECT_EQ(view4->GetNextRenderSibling(), view1);
+
+    view3->SetZIndex(-10); // -10: zindex
+    // check child when zIndex change
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view3);
+    EXPECT_EQ(view3->GetNextRenderSibling(), view2);
+    EXPECT_EQ(view2->GetNextRenderSibling(), view4);
+    EXPECT_EQ(view4->GetNextRenderSibling(), view1);
+
+    viewGroup->Remove(view3);
+    // check child when zIndex change
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view2);
+    EXPECT_EQ(view2->GetNextRenderSibling(), view4);
+    EXPECT_EQ(view4->GetNextRenderSibling(), view1);
+
+    delete view1;
+    delete view2;
+    delete view3;
+    delete view4;
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_SetChildrenRenderHead_001
+ * @tc.desc: Check child render head
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_SetChildrenRenderHead_001, TestSize.Level0)
+{
+    UIView* view1 = new UIView();
+    UIViewGroup* viewGroup = new UIViewGroup();
+
+    // check default child head
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), nullptr);
+
+    viewGroup->SetChildrenRenderHead(view1);
+    // can not set child head if it is not child
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), nullptr);
+
+    viewGroup->Add(view1);
+    // check child head
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view1);
+
+    delete view1;
+    delete viewGroup;
+}
+
+/**
+ * @tc.name: Graphic_UIView_Test_UpdateRenderView_001
+ * @tc.desc: check update render view
+ * @tc.type: FUNC
+ * @tc.require:issueI5AD8G
+ */
+HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_UpdateRenderView_001, TestSize.Level0)
+{
+    UIView* view1 = new UIView();
+    UIView* view2 = new UIView();
+    UIViewGroup* viewGroup = new UIViewGroup();
+    viewGroup->Add(view1);
+    viewGroup->Add(view2);
+    viewGroup->UpdateRenderView(view2);
+    // check child head when remove all
+    EXPECT_EQ(viewGroup->GetChildrenRenderHead(), view1);
+    // check child head when insert view
+    EXPECT_EQ(view1->GetNextRenderSibling(), view2);
+
+    delete view1;
+    delete view2;
+    delete viewGroup;
+}
 } // namespace OHOS
