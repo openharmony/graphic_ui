@@ -26,9 +26,6 @@ namespace {
     const int16_t MIN_VALUE = 20;
     const char* foreground = "D:/";
     const char* background = "D:/";
-    const ImageInfo* foregroundImageInfo;
-    const ImageInfo* backgroundImageInfo;
-    const ImageInfo* groundImageInfo;
 }
 class UIAbsatrctProgressTest : public testing::Test {
 public:
@@ -256,9 +253,9 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetImage_002, TestSize.Level1
     const Image* backgroundImage = new Image();
     const Image* foregroundImage = new Image();
     const Image* GroundImage = new Image();
-    foregroundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
-    backgroundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
-    groundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    ImageInfo* foregroundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    ImageInfo* backgroundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
+    ImageInfo* groundImageInfo = static_cast<ImageInfo*>(UIMalloc(sizeof(ImageInfo)));
     abstractProgress_->SetImage(foregroundImageInfo, backgroundImageInfo);
     if (foregroundImageInfo == nullptr && GroundImage->GetImageInfo() == nullptr) {
         EXPECT_EQ(foregroundImage->GetSrcType(), 2); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
@@ -280,8 +277,11 @@ HWTEST_F(UIAbsatrctProgressTest, UIAbsatrctProgressSetImage_002, TestSize.Level1
     GroundImage = nullptr;
     delete foregroundImage;
     foregroundImage = nullptr;
-    UIFree(&foregroundImageInfo);
-    UIFree(&backgroundImageInfo);
-    UIFree(&groundImageInfo);
+    UIFree(foregroundImageInfo);
+    foregroundImageInfo = nullptr;
+    UIFree(backgroundImageInfo);
+    backgroundImageInfo = nullptr;
+    UIFree(groundImageInfo);
+    groundImageInfo = nullptr;
 }
 } // namespace OHOS
