@@ -107,6 +107,16 @@ public:
         enableReverse_ = enable;
     }
 
+    /**
+     * @brief Obtains the enableReverse_.
+     *
+     * @return Returns the enableReverse_.
+     */
+    bool GetEnableReverse() const
+    {
+        return enableReverse_;
+    }
+
     const Point& GetStartPoint() const
     {
         return start_;
@@ -115,6 +125,16 @@ public:
     const Point& GetEndPoint() const
     {
         return end_;
+    }
+
+    /**
+     * @brief Sets the markInterval_.
+     *
+     * @param Sets the markInterval_.
+     */
+    void SetMarkInterval(float Interval)
+    {
+        markInterval_ = Interval;
     }
 
     float GetMarkInterval() const
@@ -237,6 +257,16 @@ public:
      */
     void SetMarkNum(uint16_t count) override;
 
+    /**
+     * @brief Obtains the markDataCount_.
+     *
+     * @return Returns the markDataCount_.
+     */
+    uint16_t GetMarkNum() const
+    {
+        return markDataCount_;
+    }
+
     void UpdateAxisPoints() override;
 
 private:
@@ -304,6 +334,16 @@ public:
      * @version 1.0
      */
     void SetMarkNum(uint16_t count) override;
+
+    /**
+     * @brief Obtains the markDataCount_.
+     *
+     * @return Returns the markDataCount_.
+     */
+    uint16_t GetMarkNum() const
+    {
+        return markDataCount_;
+    }
 
     void UpdateAxisPoints() override;
 

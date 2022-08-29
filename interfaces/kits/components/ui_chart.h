@@ -479,6 +479,16 @@ public:
     }
 
     /**
+     * @brief enableHeadPoint_.
+     *
+     * @return Returns enableHeadPoint_.
+     */
+    bool GetEnableHeadPoint() const
+    {
+        return enableHeadPoint_;
+    }
+
+    /**
      * @brief Enables the feature of drawing the top point of a polyline. If there are multiple top points,
      *        only the first one is drawn.
      *
@@ -493,6 +503,16 @@ public:
     }
 
     /**
+     * @brief enableTopPoint_.
+     *
+     * @return Returns enableTopPoint_.
+     */
+    bool GetEnableTopPoint() const
+    {
+        return enableTopPoint_;
+    }
+
+    /**
      * @brief Enables the feature of drawing the bottom point of a polyline. If there are multiple bottom points,
      *        only the first one is drawn.
      *
@@ -504,6 +524,16 @@ public:
     void EnableBottomPoint(bool enable)
     {
         enableBottomPoint_ = enable;
+    }
+
+    /**
+     * @brief enableBottomPoint_.
+     *
+     * @return Returns enableBottomPoint_.
+     */
+    bool GetEnableBottomPoint() const
+    {
+        return enableBottomPoint_;
     }
 
     void DrawPoint(BufferInfo& gfxDstBuffer, const Rect& mask);

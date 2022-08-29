@@ -411,6 +411,17 @@ public:
     {
         enableAnimation_ = enable;
     }
+
+    /**
+     * @brief Obtains the value of a style.
+     *
+     * @param enableAnimation.
+     * @return Returns enableAnimation_.
+     */
+    bool GetEnableButtonAnimation() const
+    {
+        return enableAnimation_;
+    }
 #endif
 
 protected:
