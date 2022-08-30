@@ -271,6 +271,16 @@ public:
     void SetResizeMode(ImageResizeMode mode);
     void SetWidth(int16_t width) override;
     void SetHeight(int16_t height) override;
+
+    /**
+     * @brief Obtains the ImageResizeMode.
+     *
+     * @return Returns ImageResizeMode.
+     */
+    ImageResizeMode GetResizeMode() const
+    {
+        return imageResizeMode_;
+    }
 #if (ENABLE_GIF == 1)
     Animator* GetGifImageAnimator() const
     {

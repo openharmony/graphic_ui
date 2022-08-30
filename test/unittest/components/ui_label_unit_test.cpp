@@ -17,6 +17,7 @@
 
 #include <climits>
 #include <gtest/gtest.h>
+#include "font/ui_font.h"
 
 using namespace testing::ext;
 namespace OHOS {
@@ -223,5 +224,131 @@ HWTEST_F(UILabelTest, UILabelSetFont_001, TestSize.Level1)
     label_->SetFont("error_font_name", fontSize);
 
     EXPECT_EQ(label_->GetFontId(), fontId);
+}
+
+/**
+ * @tc.name: UILabelSetStyle_001
+ * @tc.desc: Verify SetStyle function, equal.
+ */
+HWTEST_F(UILabelTest, UILabelSetStyle_001, TestSize.Level1)
+{
+    if (label_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    UIView* view = new UIView();
+    Style style;
+    style.borderOpa_ = OPA_OPAQUE;
+    label_->SetStyle(style);
+    EXPECT_EQ(view->GetStyleConst().borderOpa_, OPA_OPAQUE);
+    label_->SetStyle(STYLE_LINE_OPA, OPA_OPAQUE);
+    EXPECT_EQ(view->GetStyle(STYLE_LINE_OPA), OPA_OPAQUE);
+    delete view;
+    view = nullptr;
+}
+
+/**
+ * @tc.name: UILabelOnPreDraw_001
+ * @tc.desc: Verify OnPreDraw function, equal.
+ */
+HWTEST_F(UILabelTest, UILabelOnPreDraw_001, TestSize.Level1)
+{
+    if (label_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    Rect* invalidatedArea = new Rect();
+    EXPECT_EQ(label_->OnPreDraw(*invalidatedArea), false);
+    delete invalidatedArea;
+    invalidatedArea = nullptr;
+}
+
+#if ENABLE_VECTOR_FONT
+/**
+ * @tc.name: UILabelSetText_002
+ * @tc.desc: Verify SetText function.
+ */
+HWTEST_F(UILabelTest, UILabelSetText_002, TestSize.Level1)
+{
+    if (label_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    SpannableString spannableString("图形子系统测试正常粗体斜体粗斜体");
+    spannableString.SetTextStyle(TEXT_STYLE_ITALIC, 11, 13);
+    spannableString.SetTextStyle(TEXT_STYLE_BOLD, 9, 11);
+    spannableString.SetTextStyle(TEXT_STYLE_BOLD_ITALIC, 13, 16);
+    label_->SetText(&spannableString);
+    EXPECT_EQ(spannableString.spanList_.Size(), 3);
+}
+#endif
+
+/**
+ * @tc.name: UILabelSetFontId_001
+ * @tc.desc: Verify SetFontId function.
+ */
+HWTEST_F(UILabelTest, UILabelSetFontId_001, TestSize.Level0)
+{
+    if (label_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    const uint8_t fontId = 16;
+    label_->SetFontId(fontId);
+    if (!UIFont::GetInstance()->IsVectorFont()) {
+        EXPECT_EQ(label_->GetFontId(), fontId);
+    } else {
+        EXPECT_EQ(label_->GetFontId(), 0);
+    }
+}
+
+/**
+ * @tc.name: UILabelSetRollSpeed_001
+ * @tc.desc: Verify SetRollSpeed function.
+ */
+HWTEST_F(UILabelTest, UILabelSetRollSpeed_001, TestSize.Level0)
+{
+    if (label_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    const uint16_t RollSpeed = 50;
+
+    label_->SetRollSpeed(RollSpeed);
+    EXPECT_EQ(label_->GetRollSpeed(), RollSpeed);
+}
+
+/**
+ * @tc.name: UILabelGetTextSize_001
+ * @tc.desc: Verify GetTextSize function.
+ */
+HWTEST_F(UILabelTest, UILabelGetTextSize_001, TestSize.Level0)
+{
+    if (label_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    Text* labelText = new Text();
+    EXPECT_EQ(labelText->GetTextSize().x, label_->GetTextWidth());
+    EXPECT_EQ(labelText->GetTextSize().y, label_->GetTextHeight());
+    delete labelText;
+    labelText = nullptr;
+}
+
+/**
+ * @tc.name: UILabelSetSize_001
+ * @tc.desc: Verify SetSize function.
+ */
+HWTEST_F(UILabelTest, UILabelSetSize_001, TestSize.Level0)
+{
+    if (label_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    label_->SetWidth(0);
+    EXPECT_EQ(label_->GetWidth(), 0);
+
+    label_->SetHeight(0);
+    EXPECT_EQ(label_->GetHeight(), 0);
 }
 } // namespace OHOS

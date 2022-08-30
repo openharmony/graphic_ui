@@ -364,6 +364,13 @@ public:
     void SetRollSpeed(uint16_t speed);
 
     /**
+     * @brief Obtains the scroll speed for this text.
+     *
+     * @return Returns the scroll speed.
+     */
+    uint16_t GetRollSpeed() const;
+    
+    /**
      * @brief Obtains the width of this text.
      *
      * @return Returns the text width.
