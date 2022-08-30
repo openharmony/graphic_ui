@@ -174,4 +174,54 @@ HWTEST_F(UIDigitalClockTest, UIDigitalClockSetTime12Hour_002, TestSize.Level1)
     EXPECT_EQ(digitalClock_->GetCurrentMinute(), CURRENT_MINUTE);
     EXPECT_EQ(digitalClock_->GetCurrentSecond(), CURRENT_SECOND);
 }
+
+/**
+ * @tc.name: UIDigitalClockSetFont_001
+ * @tc.desc: Verify SetFont function, equal.
+ */
+HWTEST_F(UIDigitalClockTest, UIDigitalClockSetFont_001, TestSize.Level1)
+{
+    if (digitalClock_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    uint8_t size = 10;
+    const char* name = "xxx";
+    digitalClock_->SetFont(name, size);
+    digitalClock_->UpdateClock(false);
+    Text* text = new Text();
+    EXPECT_EQ(text->GetFontId(), 0);
+    delete text;
+    text = nullptr;
+}
+
+/**
+ * @tc.name: UIDigitalClockSetColor_001
+ * @tc.desc: Verify SetColor function, equal.
+ */
+HWTEST_F(UIDigitalClockTest, UIDigitalClockSetColor_001, TestSize.Level1)
+{
+    if (digitalClock_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    ColorType color = Color::Red();
+    digitalClock_->SetColor(color);
+    EXPECT_EQ(digitalClock_->GetColor().full, color.full);
+}
+
+/**
+ * @tc.name: UIDigitalClockDisplayLeadingZero_001
+ * @tc.desc: Verify DisplayLeadingZero function, equal.
+ */
+HWTEST_F(UIDigitalClockTest, UIDigitalClockDisplayLeadingZero_001, TestSize.Level1)
+{
+    if (digitalClock_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    bool flag = false;
+    digitalClock_->DisplayLeadingZero(flag);
+    EXPECT_EQ(digitalClock_->GetLeadingZero(), flag);
+}
 }

@@ -96,6 +96,11 @@ public:
         decimal_ = 0;
     }
 
+    int16_t GetAnimatorSpeed() const
+    {
+        return speed_;
+    }
+
 private:
     static constexpr uint8_t ANIM_WAIT_COUNT = 50;
     int16_t startPos_;
@@ -401,6 +406,11 @@ void UILabel::SetRollSpeed(uint16_t speed)
     } else {
         animator_.speed = speed;
     }
+}
+
+uint16_t UILabel::GetRollSpeed() const
+{
+    return hasAnimator_ ? static_cast<LabelAnimator*>(animator_.animator)->GetAnimatorSpeed() : animator_.speed;
 }
 
 void UILabel::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)

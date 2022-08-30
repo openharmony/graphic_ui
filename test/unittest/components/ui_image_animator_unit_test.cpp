@@ -364,4 +364,37 @@ HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetFillMode_004, TestSize.L
     imageAnimator_->Stop();
     EXPECT_STREQ(imageAnimator_->GetPath(), g_imageAnimatorInfo[2].imagePath); // 2: the last image
 }
+
+/**
+ * @tc.name: UIImageAnimatorViewSetImageAnimatorSrc_003
+ * @tc.desc: Verify SetImageAnimatorSrc function, equal.
+ */
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetImageAnimatorSrc_003, TestSize.Level1)
+{
+    if (imageAnimator_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    const uint8_t imageSize = IMAGE_SIZE;
+    const uint16_t timeOfUpdate = 1;
+
+    imageAnimator_->SetImageAnimatorSrc(g_imageAnimatorInfo, imageSize, timeOfUpdate);
+    EXPECT_EQ(imageAnimator_->GetTimeOfUpdate(), timeOfUpdate);
+}
+
+/**
+ * @tc.name: UIImageAnimatorViewSetRepeatTimes_001
+ * @tc.desc: Verify SetRepeatTimes function, equal.
+ */
+HWTEST_F(UIImageAnimatorViewTest, UIImageAnimatorViewSetRepeatTimes_001, TestSize.Level1)
+{
+    if (imageAnimator_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    uint32_t times = 1;
+
+    imageAnimator_->SetRepeatTimes(times);
+    EXPECT_EQ(imageAnimator_->GetRepeatTimes(), times);
+}
 } // namespace OHOS
