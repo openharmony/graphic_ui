@@ -126,6 +126,7 @@ SOURCES += \
     ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
     ../../../../frameworks/draw/clip_utils.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
+    ../../../../frameworks/draw/draw_canvas.cpp \
     ../../../../frameworks/draw/draw_curve.cpp \
     ../../../../frameworks/draw/draw_image.cpp \
     ../../../../frameworks/draw/draw_label.cpp \
@@ -181,6 +182,7 @@ HEADERS += \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_basics.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_clip_operate.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/common_math.h \
+    ../../../../../utils/interfaces/kits/gfx_utils/diagram/common/paint.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_adaptor_vertex_generate.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_curve.h \
     ../../../../../utils/interfaces/kits/gfx_utils/diagram/depiction/depict_dash.h \
@@ -221,6 +223,7 @@ HEADERS += \
     ../../../../frameworks/dock/virtual_input_device.h \
     ../../../../frameworks/draw/clip_utils.h \
     ../../../../frameworks/draw/draw_arc.h \
+    ../../../../frameworks/draw/draw_canvas.h \
     ../../../../frameworks/draw/draw_curve.h \
     ../../../../frameworks/draw/draw_image.h \
     ../../../../frameworks/draw/draw_label.h \

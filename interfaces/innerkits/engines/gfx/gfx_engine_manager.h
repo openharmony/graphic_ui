@@ -16,6 +16,7 @@
 #ifndef GRAPHIC_LITE_GFX_ENGINE_MANAGER_H
 #define GRAPHIC_LITE_GFX_ENGINE_MANAGER_H
 
+#include "gfx_utils/diagram/common/paint.h"
 #include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_buffer.h"
 #include "gfx_utils/graphic_math.h"
@@ -128,9 +129,23 @@ public:
                       const ColorType color,
                       const OpacityType opacity);
 
+    virtual void DrawPath(BufferInfo& dst,
+                          void* param,
+                          const Paint& paint,
+                          const Rect& rect,
+                          const Rect& invalidatedArea,
+                          const Style& style);
+
+    virtual void FillPath(BufferInfo& dst,
+                          void* param,
+                          const Paint& paint,
+                          const Rect& rect,
+                          const Rect& invalidatedArea,
+                          const Style& style);
+
     virtual uint8_t* AllocBuffer(uint32_t size, uint32_t usage);
 
-    virtual void FreeBuffer(uint8_t* buffer);
+    virtual void FreeBuffer(uint8_t* buffer, uint32_t usage);
 
     virtual BufferInfo* GetFBBufferInfo()
     {
