@@ -824,7 +824,7 @@ void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
 void RootView::DestroyMapBufferInfo()
 {
     if (dc_.mapBufferInfo != nullptr) {
-        BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t*>(dc_.mapBufferInfo->virAddr));
+        BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t*>(dc_.mapBufferInfo->virAddr), BUFFER_MAP_SURFACE);
         dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr = nullptr;
         delete dc_.mapBufferInfo;
         dc_.mapBufferInfo = nullptr;

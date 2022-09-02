@@ -2147,6 +2147,7 @@ HWTEST_F(UICanvasTest, UICanvasSetRotate_002, TestSize.Level1)
  * @tc.name: UICanvasInitDash_001
  * @tc.desc: Verify InitDash function, equal.
  * @tc.type: FUNC
+ * @tc.require: AR000H8BAB
  */
 HWTEST_F(UICanvasTest, UICanvasInitDash_001, TestSize.Level0)
 {
@@ -2183,8 +2184,6 @@ HWTEST_F(UICanvasTest, UICanvasInitDash_001, TestSize.Level0)
     EXPECT_EQ(paint1->GetStyle(), Paint::PaintStyle::STROKE_FILL_STYLE);
 
     paint1->GetTransAffine();
-    paint1->SetUICanvas(canvas_);
-    EXPECT_EQ(paint1->GetUICanvas(), canvas_);
 
     EXPECT_EQ(paint1->HaveComposite(), false);
     delete paint1;

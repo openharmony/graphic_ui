@@ -19,9 +19,11 @@
 
 #include "draw/clip_utils.h"
 #include "draw/draw_arc.h"
+#include "draw/draw_canvas.h"
 #include "draw/draw_curve.h"
 #include "draw/draw_line.h"
 #include "draw/draw_rect.h"
+
 
 namespace OHOS {
 BaseGfxEngine* BaseGfxEngine::baseEngine_ = nullptr;
@@ -115,12 +117,32 @@ void BaseGfxEngine::Fill(BufferInfo& dst, const Rect& fillArea, const ColorType 
     DrawUtils::GetInstance()->FillAreaWithSoftWare(dst, fillArea, color, opacity);
 }
 
+void BaseGfxEngine::DrawPath(BufferInfo& dst,
+                             void* param,
+                             const Paint& paint,
+                             const Rect& rect,
+                             const Rect& invalidatedArea,
+                             const Style& style)
+{
+    DrawCanvas::DoRender(dst, param, paint, rect, invalidatedArea, style, true);
+}
+
+void BaseGfxEngine::FillPath(BufferInfo& dst,
+                             void* param,
+                             const Paint& paint,
+                             const Rect& rect,
+                             const Rect& invalidatedArea,
+                             const Style& style)
+{
+    DrawCanvas::DoRender(dst, param, paint, rect, invalidatedArea, style, false);
+}
+
 uint8_t* BaseGfxEngine::AllocBuffer(uint32_t size, uint32_t usage)
 {
     return static_cast<uint8_t *>(malloc(size));
 }
 
-void BaseGfxEngine::FreeBuffer(uint8_t* buffer)
+void BaseGfxEngine::FreeBuffer(uint8_t* buffer, uint32_t usage)
 {
     free(buffer);
 }
