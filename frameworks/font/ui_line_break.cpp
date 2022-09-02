@@ -20,6 +20,7 @@
 #include "font/ui_line_break.h"
 #include "rbbidata.h"
 #include "ucmndata.h"
+#include "utrie2.h"
 
 using namespace U_ICU_NAMESPACE;
 namespace OHOS {
@@ -55,8 +56,8 @@ uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)
     }
     int32_t state = LINE_BREAK_STATE_START;
     const RBBIStateTable* rbbStateTable = reinterpret_cast<const RBBIStateTable*>(stateTbl_);
-    const RBBIStateTableRow* row =
-        reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
+    const RBBIStateTableRow16* row =
+        reinterpret_cast<const RBBIStateTableRow16*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
     UTrie2* trie2 = reinterpret_cast<UTrie2*>(lineBreakTrie_);
     for (uint16_t index = 0; index < record.GetStrLen(); ++index) {
         uint16_t category = UTRIE2_GET16(trie2, static_cast<uint32_t>(str[index]));
@@ -66,7 +67,7 @@ uint16_t UILineBreakEngine::GetNextBreakPos(UILineBreakProxy& record)
             category &= ~0x4000;
         }
         state = row->fNextState[category];
-        row = reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
+        row = reinterpret_cast<const RBBIStateTableRow16*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
         int16_t completedRule = row->fAccepting;
         if ((completedRule > 0) || (state == LINE_BREAK_STATE_STOP)) {
             return index;
@@ -195,8 +196,8 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fon
         return true;
     }
     const RBBIStateTable* rbbStateTable = reinterpret_cast<const RBBIStateTable*>(stateTbl_);
-    const RBBIStateTableRow* row =
-        reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
+    const RBBIStateTableRow16* row =
+        reinterpret_cast<const RBBIStateTableRow16*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
     uint16_t utf16 = 0;
     if (unicode <= TypedText::MAX_UINT16_LOW_SCOPE) {
         utf16 = (unicode & TypedText::MAX_UINT16_LOW_SCOPE);
@@ -209,7 +210,7 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fon
             category &= ~0x4000;
         }
         state = row->fNextState[category];
-        row = reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
+        row = reinterpret_cast<const RBBIStateTableRow16*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
         utf16 = static_cast<uint16_t>(TypedText::UTF16_HIGH_PARAM1 + (unicode >> TypedText::UTF16_HIGH_SHIFT) -
                                       TypedText::UTF16_HIGH_PARAM2); // high
     }
@@ -220,7 +221,7 @@ bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fon
         category &= ~0x4000;
     }
     state = row->fNextState[category];
-    row = reinterpret_cast<const RBBIStateTableRow*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
+    row = reinterpret_cast<const RBBIStateTableRow16*>(rbbStateTable->fTableData + rbbStateTable->fRowLen * state);
     return (row->fAccepting > 0 || state == LINE_BREAK_STATE_STOP);
 }
 } // namespace OHOS
