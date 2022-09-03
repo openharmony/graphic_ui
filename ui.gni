@@ -88,6 +88,7 @@ graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/dock/virtual_input_device.cpp",
   "$GRAPHIC_UI_PATH/frameworks/draw/clip_utils.cpp",
   "$GRAPHIC_UI_PATH/frameworks/draw/draw_arc.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/draw/draw_canvas.cpp",
   "$GRAPHIC_UI_PATH/frameworks/draw/draw_curve.cpp",
   "$GRAPHIC_UI_PATH/frameworks/draw/draw_image.cpp",
   "$GRAPHIC_UI_PATH/frameworks/draw/draw_label.cpp",

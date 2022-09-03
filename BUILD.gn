@@ -167,6 +167,7 @@ lite_library("ui") {
     "frameworks/dock/virtual_input_device.cpp",
     "frameworks/draw/clip_utils.cpp",
     "frameworks/draw/draw_arc.cpp",
+    "frameworks/draw/draw_canvas.cpp",
     "frameworks/draw/draw_curve.cpp",
     "frameworks/draw/draw_image.cpp",
     "frameworks/draw/draw_label.cpp",
