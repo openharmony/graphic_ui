@@ -16,7 +16,6 @@
 #include "font/ui_font_vector.h"
 #include <freetype/ftoutln.h>
 #include <freetype/internal/ftobjs.h>
-#include <freetype/internal/ftstream.h>
 #include <freetype/ftbitmap.h>
 #include "common/typed_text.h"
 #include "draw/draw_utils.h"
@@ -142,78 +141,6 @@ uint8_t UIFontVector::RegisterFontInfo(const UITextLanguageFontParam* fontsTable
         count++;
     }
     return count;
-}
-
-/* Note: when use ttc font file, freetype should export FT_Stream_New/FT_Stream_Free function*/
-uint8_t UIFontVector::RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
-{
-    if ((ttcName == nullptr) || !freeTypeInited_) {
-        return FONT_INVALID_TTF_ID;
-    }
-
-    if (bitmapCache_ == nullptr) {
-        bitmapCache_ = new (std::nothrow) UIFontCache(reinterpret_cast<uint8_t*>(GetRamAddr()), GetRamLen());
-        if (bitmapCache_ == nullptr) {
-            return FONT_INVALID_TTF_ID;
-        }
-    }
-
-    int32_t i = 0;
-    int32_t error = 0;
-    while (i < FONT_ID_MAX) {
-        if ((ttcInfos_[i].ttcName != nullptr) && !strncmp(ttcInfos_[i].ttcName, ttcName, TTF_NAME_LEN_MAX)) {
-            return i;
-        } else if (ttcInfos_[i].ttcName == nullptr) {
-            std::string ttcPath = ttfDir_;
-            ttcPath.append(ttcName);
-            FT_Open_Args args = {FT_OPEN_PATHNAME, nullptr, 0, const_cast<char*>(ttcPath.c_str()),
-                                 nullptr, nullptr, 0, nullptr};
-            error = FT_Stream_New(ftLibrary_, &args, &ttcInfos_[i].stream);
-            if (error != 0) {
-                return FONT_INVALID_TTF_ID;
-            }
-            ttcInfos_[i].ttcName = ttcName;
-            args = {FT_OPEN_STREAM, nullptr, 0, nullptr, ttcInfos_[i].stream, nullptr, 0, nullptr};
-            for (uint8_t j = 0; j < count; j++) {
-                error = FT_Open_Face(ftLibrary_, &args, j, &ftFaces_[i]);
-                if (error != 0) {
-                    continue;
-                }
-                fontInfo_[i].ttfName = ttfInfo[j].ttfName;
-                fontInfo_[i].shaping = ttfInfo[j].shaping;
-                fontInfo_[i].ttfId = i;
-                if (IsColorEmojiFont(ftFaces_[i])) {
-                    SetupColorFont(ftFaces_[i]);
-                }
-#if ENABLE_MULTI_FONT
-                UIMultiFontManager::GetInstance()->UpdateScript(fontInfo_[j]);
-#endif
-            }
-            return i;
-        }
-        i++;
-    }
-    return FONT_INVALID_TTF_ID;
-}
-
-uint8_t UIFontVector::UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
-{
-    if (ttcName == nullptr || ttfInfo == nullptr) {
-        return FONT_INVALID_TTF_ID;
-    }
-
-    uint8_t i = 0;
-    while (i < FONT_ID_MAX) {
-        if ((ttcInfos_[i].ttcName != nullptr) && !strncmp(ttcInfos_[i].ttcName, ttcName, TTF_NAME_LEN_MAX)) {
-            FT_Stream_Free(ttcInfos_[i].stream, 1);
-            for (uint8_t j = 0; j < count; j++) {
-                UnregisterFontInfo(ttfInfo[j].ttfName);
-            }
-            return i;
-        }
-        i++;
-    }
-    return FONT_INVALID_TTF_ID;
 }
 
 uint8_t UIFontVector::UnregisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num)
@@ -599,7 +526,10 @@ int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Fac
 {
     bool isHaveBitmap = false;
     int32_t error;
-    if (fontInfo_[fontId].shaping != 0) {
+    if (IsGlyphFont(unicode) != 0) {
+        if (fontId != GetFontId(unicode)) {
+            return INVALID_RET_VALUE;
+        }
         unicode = unicode & (0xFFFFFF); // Whether 0 ~24 bit storage is unicode
         error = FT_Load_Glyph(face, unicode, FT_LOAD_RENDER);
         isHaveBitmap = true;
