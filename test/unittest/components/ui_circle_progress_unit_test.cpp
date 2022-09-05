@@ -142,4 +142,66 @@ HWTEST_F(UICircleProgressTest, UICircleProgressSetStartAngle_001, TestSize.Level
     circleProgress_->SetEndAngle(endAngle);
     EXPECT_EQ(circleProgress_->GetEndAngle(), endAngle);
 }
+
+/**
+ * @tc.name: UICircleProgressOnPreDraw_001
+ * @tc.desc: Verify OnPreDraw function, equal.
+ */
+HWTEST_F(UICircleProgressTest, UICircleProgressOnPreDraw_001, TestSize.Level0)
+{
+    if (circleProgress_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    Rect* invalidatedArea = new Rect();
+    EXPECT_EQ(circleProgress_->OnPreDraw(*invalidatedArea), false);
+    delete invalidatedArea;
+    invalidatedArea = nullptr;
+}
+
+/**
+ * @tc.name: UICircleProgressSetProgressImagePosition_001
+ * @tc.desc: Verify SetProgressImagePosition function, equal.
+ */
+HWTEST_F(UICircleProgressTest, UICircleProgressSetProgressImagePosition_001, TestSize.Level0)
+{
+    if (circleProgress_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    int16_t x = 1;
+    int16_t y = 1;
+    UIView* view = new UIView();
+    circleProgress_->SetCenterPosition(x, y);
+    int16_t x1 = x + view->GetStyleConst().paddingLeft_ + view->GetStyleConst().borderWidth_;
+    int16_t y1 = y + view->GetStyleConst().paddingTop_ + view->GetStyleConst().borderWidth_;
+    circleProgress_->SetProgressImagePosition(x, y);
+    EXPECT_EQ(circleProgress_->GetCenterPosition().x, x1);
+    EXPECT_EQ(circleProgress_->GetCenterPosition().y, y1);
+    delete view;
+    view = nullptr;
+}
+
+/**
+ * @tc.name: UICircleProgressSetBackgroundImagePosition_001
+ * @tc.desc: Verify SetBackgroundImagePosition function, equal.
+ */
+HWTEST_F(UICircleProgressTest, UICircleProgressSetBackgroundImagePosition_001, TestSize.Level0)
+{
+    if (circleProgress_ == nullptr) {
+        EXPECT_NE(0, 0);
+        return;
+    }
+    int16_t x = 1;
+    int16_t y = 1;
+    UIView* view = new UIView();
+    circleProgress_->SetCenterPosition(x, y);
+    int16_t x1 = x + view->GetStyleConst().paddingLeft_ + view->GetStyleConst().borderWidth_;
+    int16_t y1 = y + view->GetStyleConst().paddingTop_ + view->GetStyleConst().borderWidth_;
+    circleProgress_->SetBackgroundImagePosition(x, y);
+    EXPECT_EQ(circleProgress_->GetCenterPosition().x, x1);
+    EXPECT_EQ(circleProgress_->GetCenterPosition().y, y1);
+    delete view;
+    view = nullptr;
+}
 } // namespace OHOS

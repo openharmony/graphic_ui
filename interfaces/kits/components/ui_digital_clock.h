@@ -196,6 +196,25 @@ public:
      */
     void UpdateClock(bool clockInit) override;
 
+    /**
+     * @brief Obtains the color_.
+     *
+     * @return Returns the color_.
+     */
+    ColorType GetColor() const
+    {
+        return color_;
+    }
+
+    /**
+     * @brief Obtains the leadingZero_.
+     *
+     * @return Returns the leadingZero_.
+     */
+    bool GetLeadingZero() const
+    {
+        return leadingZero_;
+    }
 protected:
     static constexpr uint8_t TIME_ELEMENT_COUNT = 3;
     UILabel* timeLabels_[TIME_ELEMENT_COUNT];
