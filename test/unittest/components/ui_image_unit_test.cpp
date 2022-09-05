@@ -149,6 +149,19 @@ HWTEST_F(UIImageViewTest, UIImageViewSetSrc_003, TestSize.Level1)
     imageView_->SetSrc(strPath);
     EXPECT_STREQ(imageView_->GetPath(), strPath);
 }
+
+/**
+ * @tc.name: UIImageViewGetGifImageAnimator_001
+ * @tc.desc: Verify GetGifImageAnimator function, equal.
+ */
+HWTEST_F(UIImageViewTest, UIImageViewGetGifImageAnimator_001, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    EXPECT_EQ(imageView_->GetGifImageAnimator(), nullptr);
+}
 #endif
 
 /**
@@ -478,5 +491,51 @@ HWTEST_F(UIImageViewTest, UIImageViewSetTransformAlgorithm_001, TestSize.Level0)
     TransformAlgorithm algorithm = NEAREST_NEIGHBOR;
     imageView_->SetTransformAlgorithm(algorithm);
     EXPECT_EQ(imageView_->GetTransformAlgorithm(), algorithm);
+}
+
+/**
+ * @tc.name: UIImageViewOnPreDraw_001
+ * @tc.desc: Verify OnPreDraw function, equal.
+ */
+HWTEST_F(UIImageViewTest, UIImageViewOnPreDraw_001, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    Rect* invalidatedArea = new Rect();
+    EXPECT_EQ(imageView_->OnPreDraw(*invalidatedArea), true);
+    delete invalidatedArea;
+    invalidatedArea = nullptr;
+}
+
+/**
+ * @tc.name: UIImageViewGetSrcType_001
+ * @tc.desc: Verify GetSrcType function, equal.
+ */
+HWTEST_F(UIImageViewTest, UIImageViewGetSrcType_001, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    char* srcPath = nullptr;
+    imageView_->SetSrc(srcPath);
+    EXPECT_EQ(imageView_->GetSrcType(), 2); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
+}
+
+/**
+ * @tc.name: UIImageViewSetResizeMode_001
+ * @tc.desc: Verify SetResizeMode function, equal.
+ */
+HWTEST_F(UIImageViewTest, UIImageViewSetResizeMode_001, TestSize.Level0)
+{
+    if (imageView_ == nullptr) {
+        EXPECT_EQ(1, 0);
+        return;
+    }
+    UIImageView::ImageResizeMode mode = UIImageView::NONE;
+    imageView_->SetResizeMode(mode);
+    EXPECT_EQ(imageView_->GetResizeMode(), mode); // 0 : IMG_SRC_VARIABLE 1 : IMG_SRC_FILE 2 : IMG_SRC_UNKNOWN
 }
 } // namespace OHOS

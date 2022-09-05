@@ -150,11 +150,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetFontId_002, TestSize.Level1)
 HWTEST_F(UIFontTest, Graphic_Font_Test_GetHeight_001, TestSize.Level1)
 {
     uint16_t height = UIFont::GetInstance()->GetHeight(FONT_ID, 0);
-#if ENABLE_VECTOR_FONT
-    EXPECT_EQ(height, 0);
-#else
     EXPECT_EQ(height, static_cast<uint16_t>(INVALID_RET));
-#endif
 }
 
 /**

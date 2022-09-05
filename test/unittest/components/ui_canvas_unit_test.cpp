@@ -67,10 +67,10 @@ namespace {
     const double END_X = 150.0;
     const double END_Y = 100.0;
     const double END_R = 80.0;
-    const double COLOR_STOP_0 = 0.0;
-    const double COLOR_STOP_1 = 0.3;
-    const double COLOR_STOP_2 = 0.6;
-    const double COLOR_STOP_3 = 1.0;
+    const float COLOR_STOP_0 = 0.0;
+    const float COLOR_STOP_1 = 0.3;
+    const float COLOR_STOP_2 = 0.6;
+    const float COLOR_STOP_3 = 1.0;
     const float ROTATE = 10;
     const int16_t LINE_X = 30;
     const int16_t LINE_Y = 70;
