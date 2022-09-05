@@ -46,6 +46,8 @@ public:
     uint8_t RegisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num) override;
     uint8_t UnregisterFontInfo(const char* ttfName) override;
     uint8_t UnregisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num) override;
+    uint8_t RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count) override;
+    uint8_t UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count) override;
     const UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const override;
     int32_t OpenVectorFont(uint8_t ttfId) override;
     bool IsColorEmojiFont(FT_Face &face);
@@ -71,6 +73,10 @@ private:
         FT_Face face;
         uint32_t key;
     };
+    struct TtcInfo {
+        const char* ttcName;
+        FT_Stream stream;
+    };
     struct Metric {
         int left;
         int top;
@@ -79,6 +85,7 @@ private:
         int advance;
         uint8_t buf[0];
     };
+    TtcInfo ttcInfos_[FONT_ID_MAX] = {0};
     void SetFace(FaceInfo& faceInfo, uint32_t unicode) const;
 #if ENABLE_VECTOR_FONT
     void SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const;
