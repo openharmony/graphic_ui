@@ -389,12 +389,6 @@ struct FileCommonHeader {
     const char magicWord[5]; // 5:file identifier's length is 5
     uint32_t fileLength;
 };
-
-struct TtfInfo {
-    const char* ttfName;
-    uint8_t shaping;
-};
-
 #pragma pack()
 } // namespace OHOS
 #endif /* UI_FONT_HEADER_H */
