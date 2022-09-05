@@ -40,6 +40,13 @@ config("graphic_define_config") {
     "GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG=1",
     "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1",
   ]
+  if (defined(board_toolchain_type) && board_toolchain_type == "iccarm") {
+    cflags = [
+      "--diag_suppress",
+      "Pa093,Pa137,Pe161,Pe177,Pe186,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940",
+    ]
+    cflags_cc = cflags
+  }
   if (ohos_kernel_type != "liteos_m") {
     defines += [
       "ENABLE_VECTOR_FONT=1",
@@ -273,10 +280,6 @@ lite_library("ui") {
     ]
     cflags_cc = cflags
   } else {
-    cflags = [
-      "--diag_suppress",
-      "Pa093,Pa137,Pe161,Pe177,Pe186,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940",
-    ]
-    cflags_cc = cflags
+    defines = [ "ENABLE_ICU=1" ]
   }
 }
