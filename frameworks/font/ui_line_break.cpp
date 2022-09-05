@@ -18,6 +18,7 @@
 #include "draw/draw_utils.h"
 #include "font/ui_font.h"
 #include "font/ui_line_break.h"
+#include "font/icu_umutex_stub.h"
 #include "rbbidata.h"
 #include "ucmndata.h"
 
