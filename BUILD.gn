@@ -274,6 +274,7 @@ lite_library("ui") {
     ]
     cflags_cc = cflags
   } else {
+    defines = [ "ENABLE_ICU=1" ]
     cflags = [
       "--diag_suppress",
       "Pa093,Pa137,Pe177,Pe186,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940",
