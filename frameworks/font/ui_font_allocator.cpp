@@ -16,8 +16,10 @@
 #include "font/ui_font_allocator.h"
 
 namespace OHOS {
-UIFontAllocator::UIFontAllocator() : ram_(nullptr), ramSize_(0), freeSize_(0),
-    minSize_(0), end_(nullptr), free_(nullptr) {}
+UIFontAllocator::UIFontAllocator()
+    : ram_(nullptr), ramSize_(0), freeSize_(0), minSize_(0), end_(nullptr), free_(nullptr)
+{
+}
 
 UIFontAllocator::~UIFontAllocator() {}
 
@@ -41,9 +43,9 @@ void UIFontAllocator::SetRamAddr(uint8_t* ram, uint32_t size)
     freeSize_ = size - sizeof(struct Chunk);
 }
 
-uint32_t UIFontAllocator::GetSize(void *addr)
+uint32_t UIFontAllocator::GetSize(void* addr)
 {
-    struct Chunk *chunk = reinterpret_cast<struct Chunk*>(static_cast<uint8_t*>(addr) - sizeof(struct Chunk));
+    struct Chunk* chunk = reinterpret_cast<struct Chunk*>(static_cast<uint8_t*>(addr) - sizeof(struct Chunk));
     return chunk->next - (reinterpret_cast<uint8_t*>(addr) - reinterpret_cast<uint8_t*>(ram_));
 }
 
