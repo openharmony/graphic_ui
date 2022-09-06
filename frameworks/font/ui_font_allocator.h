@@ -37,15 +37,15 @@ public:
 
     void SetMinChunkSize(uint32_t size);
 
-    uint32_t GetSize(void *addr);
+    uint32_t GetSize(void* addr);
 
     /**
-    * @brief allocate memory
-    *
-    * @param size
-    * @return memory address
-    */
-    void *Allocate(uint32_t size);
+     * @brief allocate memory
+     *
+     * @param size
+     * @return memory address
+     */
+    void* Allocate(uint32_t size);
 
     void Free(void* addr);
 
