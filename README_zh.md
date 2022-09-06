@@ -99,7 +99,7 @@ hb build -T //foundation/graphic/ui/test/unittest:lite_graphic_ui_test -f # 编�
 
 foundation/graphic/ui/test/uitest中提供了图形所有组件和功能接口的使用范例。
 
--   Windows环境可运行QT工程调试，详见[使用说明](https://gitee.com/openharmony/arkui_ace_engine_lite/tree/master/frameworks/tools/qt/simulator)
+-   Windows环境可运行QT工程调试，详见[加入指引](https://gitee.com/openharmony/graphic_ui/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/%E5%8A%A0%E5%85%A5%E6%8C%87%E5%BC%95)
 
     工程文件路径：
 
