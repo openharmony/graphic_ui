@@ -73,6 +73,7 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
         ThreadCreate(AutoTestThread, nullptr, nullptr);
+        return true;
     }
 };
 
