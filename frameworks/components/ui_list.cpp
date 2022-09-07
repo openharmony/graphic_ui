@@ -385,9 +385,13 @@ void UIList::UpdateScrollBar()
     auto allItemsRect = recycle_.GetAdapterItemsReletiveRect();
     float totalHeight = allItemsRect.GetHeight() + 2.0f * scrollBlankSize_; // 2: two blank spaces on both sides
     int16_t height = GetHeight();
-    yScrollBar_->SetForegroundProportion(height / totalHeight);
-    yScrollBar_->SetScrollProgress((scrollBlankSize_ - allItemsRect.GetTop()) /
+    if (totalHeight < height) {
+        return;
+    } else {
+        yScrollBar_->SetForegroundProportion(height / totalHeight);
+        yScrollBar_->SetScrollProgress((scrollBlankSize_ - allItemsRect.GetTop()) /
                                    (totalHeight - height));
+    }
     RefreshAnimator();
 }
 
