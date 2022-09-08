@@ -17,6 +17,7 @@
 #define GLYPHS_FILE_H
 
 #include "font/ui_font_header.h"
+#include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
 class GlyphsFile {
@@ -39,7 +40,7 @@ public:
 
     const FontHeader* GetFontHeader(uint8_t fontId);
 
-    int8_t GetBitmap(GlyphNode& node, uint8_t* bitmap);
+    int8_t GetBitmap(GlyphNode& node, BufferInfo& bufInfo);
 
     int8_t SetFile(const char* fontName, int32_t fp, uint32_t start);
 

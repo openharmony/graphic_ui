@@ -43,7 +43,7 @@ public:
 
     const GlyphNode* GetGlyphNode(uint32_t unicode, uint8_t fontId);
 
-    int8_t GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId);
+    int8_t GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId);
 
     int8_t SetFile(const char* fontName, int32_t fp, uint32_t start);
 

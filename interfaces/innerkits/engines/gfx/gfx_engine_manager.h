@@ -157,16 +157,18 @@ public:
         return nullptr;
     }
 
-    virtual void Flush() {}
+    virtual void AdjustLineStride(BufferInfo& info) {}
+
+    virtual void Flush(const Rect& flushRect) {}
 
     virtual uint16_t GetScreenWidth()
     {
-        return width_;
+        return screenWidth_;
     }
 
     virtual uint16_t GetScreenHeight()
     {
-        return height_;
+        return screenHeight_;
     }
 
     virtual void SetScreenShape(ScreenShape screenShape)
@@ -196,8 +198,8 @@ public:
 
 protected:
     static BaseGfxEngine* baseEngine_;
-    uint16_t width_ = HORIZONTAL_RESOLUTION;
-    uint16_t height_ = VERTICAL_RESOLUTION;
+    uint16_t screenWidth_ = HORIZONTAL_RESOLUTION;
+    uint16_t screenHeight_ = VERTICAL_RESOLUTION;
     ScreenShape screenShape_ = RECTANGLE;
 };
 } // namespace OHOS
