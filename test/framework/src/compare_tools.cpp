@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -103,6 +103,102 @@ bool CompareTools::CompareByBit(uint32_t fd)
     return flag;
 }
 
+bool CompareTools::CompareByBitmap(const BitmapInfoHeader bitmapInfoBase,
+    const BitmapInfoHeader bitmapInfoRun, uint32_t fdBase, uint32_t fdRun)
+{
+    bool flag = true;
+    uint32_t buffSizeBase = bitmapInfoBase.biSizeImage / MATH_ABS(bitmapInfoBase.biHeight);
+    auto buffBase = new uint8_t[buffSizeBase];
+
+    uint32_t buffSizeRun = bitmapInfoRun.biSizeImage / MATH_ABS(bitmapInfoRun.biHeight);
+    auto buffRun = new uint8_t[buffSizeRun];
+
+    for (uint32_t i = 0; i < MATH_ABS(bitmapInfoBase.biHeight); i++) {
+        if (flag && (memset_s(buffBase, buffSizeBase, 0, buffSizeBase) != EOK)) {
+            flag = false;
+            break;
+        }
+        if (flag && (memset_s(buffRun, buffSizeRun, 0, buffSizeRun) != EOK)) {
+            flag = false;
+            break;
+        }
+        uint32_t retBase = read(fdBase, buffBase, buffSizeBase);
+        if (retBase < 0) {
+            flag = false;
+            break;
+        }
+        uint32_t retRun = read(fdRun, buffRun, buffSizeBase);
+        if (retRun < 0) {
+            flag = false;
+            break;
+        }
+        if (retBase != retRun) {
+            flag = false;
+            break;
+        }
+
+        for (uint32_t j = 0; j < retBase; j++) {
+            if (buffBase[j] != buffRun[j]) {
+                flag = false;
+                break;
+            }
+        }
+    }
+
+    delete [] buffBase;
+    buffBase = nullptr;
+    delete [] buffRun;
+    buffRun = nullptr;
+
+    return flag;
+}
+
+
+bool CompareTools::CompareFile(const char* fileBasePath, const char* fileRunPath)
+{
+    if (fileBasePath == nullptr || fileRunPath == nullptr) {
+        return false;
+    }
+#ifdef _WIN32
+    uint32_t fdBase = open(fileBasePath, O_RDONLY | O_BINARY);
+    uint32_t fdRun = open(fileRunPath, O_RDONLY | O_BINARY);
+#else
+    uint32_t fdBase = open(fileBasePath, O_RDONLY);
+    uint32_t fdRun = open(fileRunPath, O_RDONLY);
+#endif
+    struct BitmapInfoHeader bitmapInfoBase = {0};
+    lseek(fdBase, sizeof(uint16_t), SEEK_SET);
+    if (read(fdBase, &bitmapInfoBase, sizeof(bitmapInfoBase)) < 0) {
+        close(fdBase);
+        close(fdRun);
+        return false;
+    }
+
+    struct BitmapInfoHeader bitmapInfoRun = {0};
+    lseek(fdRun, sizeof(uint16_t), SEEK_SET);
+    if (read(fdRun, &bitmapInfoRun, sizeof(bitmapInfoRun)) < 0) {
+        close(fdBase);
+        close(fdRun);
+        return false;
+    }
+
+    if (bitmapInfoBase.biSizeImage != bitmapInfoRun.biSizeImage) {
+        close(fdBase);
+        close(fdRun);
+        return false;
+    }
+
+    if (!CompareByBitmap(bitmapInfoBase, bitmapInfoRun, fdBase, fdRun)) {
+        close(fdBase);
+        close(fdRun);
+        return false;
+    }
+
+    close(fdBase);
+    close(fdRun);
+    return true;
+}
+
 bool CompareTools::CompareFile(const char* filePath, size_t length)
 {
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
@@ -169,6 +265,15 @@ bool CompareTools::SaveByBit(uint32_t fd)
     return flag;
 }
 
+void CompareTools::SaveResultLog(const char* filePath, const char* buff, size_t bufSize)
+{
+    if (filePath == nullptr || buff == nullptr || bufSize <= 0) {
+        return;
+    }
+
+    SaveLog(buff, bufSize, filePath);
+}
+
 bool CompareTools::SaveFile(const char* filePath, size_t length)
 {
     if ((filePath == nullptr) || (length > DEFAULT_FILE_NAME_MAX_LENGTH)) {
@@ -184,25 +289,6 @@ bool CompareTools::SaveFile(const char* filePath, size_t length)
     }
     bool flag = SaveByBit(fd);
     close(fd);
-    if (flag) {
-        GRAPHIC_LOGI("[SAVE_SUCCESS]:filePath = %s", filePath);
-        if (enableLog_) {
-            char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
-            if (sprintf_s(logInfo, sizeof(logInfo), "[SAVE_SUCCESS]:fileName=%s\n", filePath) < 0) {
-                return false;
-            }
-            SaveLog(logInfo, strlen(logInfo));
-        }
-    } else {
-        GRAPHIC_LOGI("[SAVE_FAILURE]:filePath = %s", filePath);
-        if (enableLog_) {
-            char logInfo[DEFAULT_FILE_NAME_MAX_LENGTH] = {0};
-            if (sprintf_s(logInfo, sizeof(logInfo), "[SAVE_FAILURE]:fileName=%s\n", filePath) < 0) {
-                return false;
-            }
-            SaveLog(logInfo, strlen(logInfo));
-        }
-    }
     return flag;
 }
 
@@ -243,12 +329,18 @@ void CompareTools::UnsetLogPath()
     }
 }
 
-bool CompareTools::SaveLog(const char* buff, size_t bufSize)
+bool CompareTools::SaveLog(const char* buff, size_t bufSize, const char* filePath)
 {
-    if ((buff == nullptr) || (logPath_ == nullptr)) {
+    if (buff == nullptr) {
         return false;
     }
-    uint32_t logFd = open(logPath_, O_WRONLY | O_CREAT | O_APPEND, DEFAULT_FILE_PERMISSION);
+
+    const char* useLogPath = filePath == nullptr ? logPath_ : filePath;
+    if (useLogPath == nullptr) {
+        return false;
+    }
+
+    uint32_t logFd = open(useLogPath, O_WRONLY | O_CREAT | O_APPEND, DEFAULT_FILE_PERMISSION);
     if (logFd == -1) {
         GRAPHIC_LOGE("open log failed");
         return false;

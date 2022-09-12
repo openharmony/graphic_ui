@@ -82,10 +82,6 @@ if (enable_video_component) {
 }
 
 auto_test_sources = [
-  "../uitest/test_layout/ui_auto_test_basic_layout.cpp",
-  "../uitest/test_render/ui_auto_test_render.cpp",
-  "src/auto_test_app.cpp",
-  "src/auto_test_case_group.cpp",
   "src/compare_tools.cpp",
   "src/ui_auto_test.cpp",
 ]
