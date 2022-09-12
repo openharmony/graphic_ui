@@ -1,0 +1,22 @@
+{
+	"testInfo": [
+        {
+            "className": "clip_test_radius_01",
+            "pageNav": ["Clip"],
+            "testSteps": [
+                {
+                    "viewID": "radius+1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "radius-1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+	]
+}

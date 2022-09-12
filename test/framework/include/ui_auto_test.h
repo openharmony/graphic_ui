@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,24 +13,42 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_UI_AUTO_TEST_H
-#define GRAPHIC_LITE_UI_AUTO_TEST_H
+#ifndef GRAPHIC_LITE_AUTO_TEST_H
+#define GRAPHIC_LITE_AUTO_TEST_H
 
-#include "auto_test_case_group.h"
 #include "components/ui_view.h"
+#include "compare_tools.h"
+#include "ui_test_message.h"
 
 namespace OHOS {
-class UIAutoTest : public AutoTestCaseGroup::AutoTestCase {
+class UIAutoTest {
 public:
-    UIAutoTest() {}
-    virtual ~UIAutoTest() {}
+    UIAutoTest();
+    virtual ~UIAutoTest();
 
-    static void SetUpTestCase();
     void ResetMainMenu() const;
+    void Reset(std::string testID) const;
+
+    void RunTest(std::vector<std::shared_ptr<TestMsgInfo>> msgInfo);
+    void TestComplete() const;
+
     void EnterSubMenu(const char* id) const;
     void ClickViewById(const char* id) const;
     void DragViewToHead(const char* id) const;
-    void CompareByBinary(const char* fileName) const;
+    bool CompareByBinary(const char* fileName) const;
+    void DrageToView(const char* id, int16_t x, int16_t y) const;
+
+private:
+    void OnTest(std::shared_ptr<TestMsgInfo> info);
+    void OnEnterPage(std::vector<std::string> pageNav);
+    void OnTestBySteps(std::vector<TestSteps> steps, std::string className);
+    void OnTestOneStep(TestSteps step, std::string className, size_t stepIndex);
+    void OnSaveFile(std::string className, std::string viewID, size_t stepIndex);
+    void OnCompareFile(std::string fileName) const;
+    std::string OnGetSystemTime() const;
+
+private:
+    std::vector<std::string> fileNames_;
 };
 } // namespace OHOS
-#endif // GRAPHIC_LITE_UI_AUTO_TEST_H
+#endif // GRAPHIC_LITE_AUTO_TEST_H

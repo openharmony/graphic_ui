@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -32,6 +32,7 @@
 #include "monitor.h"
 #include "mouse_input.h"
 #include "mousewheel_input.h"
+#include "scoket_thread.h"
 #include "task_thread.h"
 #include "ui_mainwidget.h"
 
@@ -50,6 +51,7 @@ public:
     ~MainWidget();
     void CreateGUIThread();
     void CreateTaskThread();
+    void CreateSocketThread();
 
 protected:
     void mouseMoveEvent(QMouseEvent* event) override;
@@ -67,6 +69,7 @@ private:
     uint32_t height_;
     GUIThread* guiThread_;
     TaskThread* taskThread_;
+    SocketThread* socketThread_;
 
 public slots:
     void UpdatePaintSlot(uint32_t* tftFb, uint32_t imgWidth, uint32_t imgHeight)
@@ -80,6 +83,17 @@ public slots:
         }
         update();
     };
+
+    void SendMsgSlot(size_t mainID)
+    {
+        TcpScoketClient* tcpSocket = OHOS::TcpSocketClientManager::GetInstance()->GetTcpSocket();
+        if (tcpSocket) {
+            QString str = QString::number(mainID);
+            printf("SendMsgSlot----------str=[%s] \n", str.toStdString().c_str());
+            fflush(stdout);
+            tcpSocket->OnSendMessage(str);
+        }
+    }
 };
 } // namespace OHOS
 

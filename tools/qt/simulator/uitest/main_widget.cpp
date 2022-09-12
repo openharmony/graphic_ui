@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,6 +22,7 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), guiThread_(nullptr), 
     ui_->setupUi(this);
     CreateGUIThread();
     CreateTaskThread();
+    CreateSocketThread();
 }
 
 MainWidget::~MainWidget()
@@ -36,6 +37,11 @@ MainWidget::~MainWidget()
         taskThread_->Quit();
         taskThread_->wait();
         delete taskThread_;
+    }
+    if (socketThread_ != nullptr) {
+        socketThread_->Quit();
+        socketThread_->wait();
+        delete socketThread_;
     }
 }
 
@@ -55,6 +61,17 @@ void MainWidget::CreateTaskThread()
     taskThread_ = new TaskThread();
     if (taskThread_ != nullptr) {
         taskThread_->start();
+    }
+}
+
+void MainWidget::CreateSocketThread()
+{
+    socketThread_ = new SocketThread();
+    if (socketThread_ != nullptr) {
+        socketThread_->start();
+        qRegisterMetaType<size_t>("size_t");
+        connect(socketThread_->GetClientManager(), SIGNAL(SendMsgSignal(size_t)), this,
+                SLOT(SendMsgSlot(size_t)));
     }
 }
 

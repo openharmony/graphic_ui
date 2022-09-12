@@ -95,12 +95,9 @@ SOURCES += \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp
 
 SOURCES += \
-    ../../../../test/framework/src/auto_test_app.cpp \
-    ../../../../test/framework/src/auto_test_case_group.cpp \
+    ../../../../test/framework/src/auto_test_manager.cpp \
     ../../../../test/framework/src/compare_tools.cpp \
     ../../../../test/framework/src/ui_auto_test.cpp \
-    ../../../../test/uitest/test_render/ui_auto_test_render.cpp \
-    ../../../../test/uitest/test_layout/ui_auto_test_basic_layout.cpp
 
 HEADERS += \
     ../../../../test/framework/common/ui_text_language.h \
@@ -117,7 +114,7 @@ HEADERS += \
     ../../../../test/uitest/test_canvas/ui_test_canvas.h \
     ../../../../test/uitest/test_chart/ui_test_chart_pillar.h \
     ../../../../test/uitest/test_chart/ui_test_chart_polyline.h \
-    ../../../../test/uitest/test_clip/ui_test_clip.cpp \
+    ../../../../test/uitest/test_clip/ui_test_clip.h \
     ../../../../test/uitest/test_dialog/ui_test_dialog.h \
     ../../../../test/uitest/test_digital_clock/ui_test_digital_clock.h \
     ../../../../test/uitest/test_draw_line/ui_test_draw_line.h \
@@ -156,12 +153,10 @@ HEADERS += \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.h
 
 HEADERS += \
-    ../../../../test/framework/include/auto_test_app.h \
-    ../../../../test/framework/include/auto_test_case_group.h \
+    ../../../../test/framework/include/auto_test_manager.h \
     ../../../../test/framework/include/compare_tools.h \
     ../../../../test/framework/include/ui_auto_test.h \
-    ../../../../test/uitest/test_render/ui_auto_test_render.h \
-    ../../../../test/uitest/test_layout/ui_auto_test_basic_layout.h
+    ../../../../test/framework/include/ui_test_message.h \
 
 INCLUDEPATH += \
     ../../../../frameworks \
