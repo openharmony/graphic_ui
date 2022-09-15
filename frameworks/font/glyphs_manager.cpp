@@ -132,7 +132,7 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint8_t fontId)
     return node->advance;
 }
 
-int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
+int8_t GlyphsManager::GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId)
 {
     GlyphNode* node = const_cast<GlyphNode *>(GetGlyphNode(unicode, fontId));
     if (node == nullptr) {
@@ -141,7 +141,7 @@ int8_t GlyphsManager::GetBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontI
     }
 
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
-        int8_t ret = glyphsFiles_[i]->GetBitmap(*node, bitmap);
+        int8_t ret = glyphsFiles_[i]->GetBitmap(*node, bufInfo);
         if (ret == RET_VALUE_OK) {
             return RET_VALUE_OK;
         }

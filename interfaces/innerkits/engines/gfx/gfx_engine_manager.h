@@ -28,19 +28,19 @@
 namespace OHOS {
 class BaseGfxEngine;
 enum BlendMode {
-    BLEND_MODE,          /* no blending */
-    BLEND_SRC,           /* S */
-    BLEND_DST,           /* D */
-    BLEND_SRC_OVER,      /* S + (1 - Sa) * D */
-    BLEND_DST_OVER,      /* (1 - Da) * S + D */
-    BLEND_SRC_IN,        /* Da * S */
-    BLEND_DST_IN,        /* Sa * D */
-    BLEND_SRC_OUT,       /* S * (1 - Da) */
-    BLEND_DST_OUT,       /* D * (1 - Sa) */
-    BLEND_SCREEN,        /* S + D - S * D */
-    BLEND_MULTIPLY,      /* S * (1 - Da) + D * (1 - Sa) + S * D */
-    BLEND_ADDITIVE,      /* S + D */
-    BLEND_SUBTRACT,      /* D * (1 - S) */
+    BLEND_MODE,     /* no blending */
+    BLEND_SRC,      /* S */
+    BLEND_DST,      /* D */
+    BLEND_SRC_OVER, /* S + (1 - Sa) * D */
+    BLEND_DST_OVER, /* (1 - Da) * S + D */
+    BLEND_SRC_IN,   /* Da * S */
+    BLEND_DST_IN,   /* Sa * D */
+    BLEND_SRC_OUT,  /* S * (1 - Da) */
+    BLEND_DST_OUT,  /* D * (1 - Sa) */
+    BLEND_SCREEN,   /* S + D - S * D */
+    BLEND_MULTIPLY, /* S * (1 - Da) + D * (1 - Sa) + S * D */
+    BLEND_ADDITIVE, /* S + D */
+    BLEND_SUBTRACT, /* D * (1 - S) */
 };
 
 #ifndef TRANSFORMOPTION
@@ -75,19 +75,24 @@ struct TransformDataInfo {
     TransformAlgorithm algorithm;
 };
 
-enum BufferInfoUsage {
-    BUFFER_FB_SURFACE,
-    BUFFER_MAP_SURFACE,
-    BUFFER_SNAPSHOT_SURFACE
-};
+enum BufferInfoUsage { BUFFER_FB_SURFACE, BUFFER_MAP_SURFACE, BUFFER_SNAPSHOT_SURFACE };
 
 class BaseGfxEngine : public HeapBase {
 public:
-    virtual void DrawArc(BufferInfo& dst, ArcInfo& arcInfo, const Rect& mask,
-                         const Style& style, OpacityType opacity, uint8_t cap);
+    virtual void DrawArc(BufferInfo& dst,
+                         ArcInfo& arcInfo,
+                         const Rect& mask,
+                         const Style& style,
+                         OpacityType opacity,
+                         uint8_t cap);
 
-    virtual void DrawLine(BufferInfo& dst, const Point& start, const Point& end,
-                          const Rect& mask, int16_t width, ColorType color, OpacityType opacity);
+    virtual void DrawLine(BufferInfo& dst,
+                          const Point& start,
+                          const Point& end,
+                          const Rect& mask,
+                          int16_t width,
+                          ColorType color,
+                          OpacityType opacity);
 
     virtual void DrawLetter(BufferInfo& gfxDstBuffer,
                             const uint8_t* fontMap,
@@ -97,15 +102,18 @@ public:
                             const ColorType& color,
                             const OpacityType opa);
 
-    virtual void DrawCubicBezier(BufferInfo& dst, const Point& start, const Point& control1,
-                                 const Point& control2, const Point& end, const Rect& mask,
-                                 int16_t width, ColorType color, OpacityType opacity);
+    virtual void DrawCubicBezier(BufferInfo& dst,
+                                 const Point& start,
+                                 const Point& control1,
+                                 const Point& control2,
+                                 const Point& end,
+                                 const Rect& mask,
+                                 int16_t width,
+                                 ColorType color,
+                                 OpacityType opacity);
 
-    virtual void DrawRect(BufferInfo& dst,
-                          const Rect& rect,
-                          const Rect& dirtyRect,
-                          const Style& style,
-                          OpacityType opacity);
+    virtual void
+        DrawRect(BufferInfo& dst, const Rect& rect, const Rect& dirtyRect, const Style& style, OpacityType opacity);
 
     virtual void DrawTransform(BufferInfo& dst,
                                const Rect& mask,
@@ -124,10 +132,7 @@ public:
                       const Rect& subRect,
                       const BlendOption& blendOption);
 
-    virtual void Fill(BufferInfo& dst,
-                      const Rect& fillArea,
-                      const ColorType color,
-                      const OpacityType opacity);
+    virtual void Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color, const OpacityType opacity);
 
     virtual void DrawPath(BufferInfo& dst,
                           void* param,
@@ -152,16 +157,18 @@ public:
         return nullptr;
     }
 
-    virtual void Flush() {}
+    virtual void AdjustLineStride(BufferInfo& info) {}
+
+    virtual void Flush(const Rect& flushRect) {}
 
     virtual uint16_t GetScreenWidth()
     {
-        return width_;
+        return screenWidth_;
     }
 
     virtual uint16_t GetScreenHeight()
     {
-        return height_;
+        return screenHeight_;
     }
 
     virtual void SetScreenShape(ScreenShape screenShape)
@@ -188,12 +195,13 @@ public:
         }
         baseEngine_ = gfxEngine;
     }
+
 protected:
     static BaseGfxEngine* baseEngine_;
-    uint16_t width_ = HORIZONTAL_RESOLUTION;
-    uint16_t height_ = VERTICAL_RESOLUTION;
+    uint16_t screenWidth_ = HORIZONTAL_RESOLUTION;
+    uint16_t screenHeight_ = VERTICAL_RESOLUTION;
     ScreenShape screenShape_ = RECTANGLE;
 };
-}
+} // namespace OHOS
 
 #endif // GRAPHIC_LITE_GFX_ENGINE_MANAGER_H

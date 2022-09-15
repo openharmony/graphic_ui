@@ -232,23 +232,7 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
         return;
     }
     uint8_t fontWeight = fontEngine->GetFontWeight(fontId);
-    ColorMode colorMode;
-    switch (fontWeight) {
-        case FONT_WEIGHT_1:
-            colorMode = A1;
-            break;
-        case FONT_WEIGHT_2:
-            colorMode = A2;
-            break;
-        case FONT_WEIGHT_4:
-            colorMode = A4;
-            break;
-        case FONT_WEIGHT_8:
-            colorMode = A8;
-            break;
-        default:
-            return;
-    }
+    ColorMode colorMode = fontEngine->GetColorType(fontId);
     Rect rectLetter;
     rectLetter.SetPosition(pos.x + node.left, pos.y + head.ascender - node.top);
     rectLetter.Resize(node.cols, node.rows);
