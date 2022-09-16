@@ -13,6 +13,27 @@
  * limitations under the License.
  */
 
+/* 
+ * Font cache is used for managing font bitmap.
+ * Each bitmap is contained in a chunk block which can be searched quickly in a hash-table.
+ * All the struct and memory block are force-aligned to ALIGNMENT_BYTES.
+ * To make the most frequently used memroy hot, chunk blocks are managed with an easy lru algorithm.
+ * Memory maps of font cache is shown below:
+ * 
+ *  aligned bitmapCache    ─────────►┌────────────────────┐
+ *  (FONT_BITMAP_CACHE_SIZE)         │    HashTable       │
+ *                                   │    (ListHead*32)   │
+ *  UIFontAllocator::free_ ──────────┼────────────────────┼───────────► ┌──────────────┐
+ *                                   │    chunk block     │             │ struct Chunk │
+ *                                   ├────────────────────┼──────┐      ├──────────────┤
+ *                                   │    ...             │      │      │ struct Bitmap│
+ *                                   ├────────────────────┤      │      ├──────────────┤
+ *                                   │    chunk block     │      │      │  FontCache   │
+ *                                   ├────────────────────┤      │      │  (20*20*n)   │
+ *                                   │    last_chunk      │      └────► └──────────────┘
+ *                                   │    (Head only)     │
+ *                                   └────────────────────┘
+ */
 #ifndef UI_FONT_CACHE_H
 #define UI_FONT_CACHE_H
 
@@ -24,11 +45,11 @@ class UIFontCache {
 public:
     static constexpr uint8_t FONT_CACHE_HASH_NR = 32;
     static constexpr uint32_t FONT_CACHE_MIN_SIZE = 20 * 20;
-    struct ListHead {
+    struct UI_STRUCT_ALIGN ListHead {
         ListHead* prev;
         ListHead* next;
     };
-    struct Bitmap {
+    struct UI_STRUCT_ALIGN Bitmap {
         ListHead hashHead;
         ListHead lruHead;
         uint8_t fontId;
