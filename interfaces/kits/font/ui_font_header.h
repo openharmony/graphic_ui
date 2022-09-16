@@ -20,6 +20,7 @@
 #include "graphic_config.h"
 namespace OHOS {
 #pragma pack(1)
+#define BIT_TO_BYTE(x) (((x) + 0x0111) >> 3)
 
 enum UITextWildcardStaticType : uint8_t { TEXT_STATIC_STR1 = 0, TEXT_STATIC_STR2, TEXT_STATIC_STR3 };
 
@@ -389,6 +390,12 @@ struct FileCommonHeader {
     const char magicWord[5]; // 5:file identifier's length is 5
     uint32_t fileLength;
 };
+
+struct TtfInfo {
+    const char* ttfName;
+    uint8_t shaping;
+};
+
 #pragma pack()
 } // namespace OHOS
 #endif /* UI_FONT_HEADER_H */

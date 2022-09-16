@@ -124,25 +124,16 @@ public:
         return instance_->IsVectorFont();
     }
 
-    int8_t SetCurrentLangId(uint8_t langId)
-    {
-        return instance_->SetCurrentLangId(langId);
-    }
+    int8_t SetCurrentLangId(uint8_t langId);
 
-    uint8_t GetCurrentLangId() const
-    {
-        return instance_->GetCurrentLangId();
-    }
+    uint8_t GetCurrentLangId() const;
 
     int8_t GetDefaultParamByLangId(uint8_t langId, LangTextParam** pParam) const
     {
         return instance_->GetDefaultParamByLangId(langId, pParam);
     }
 
-    int8_t GetTextUtf8(uint16_t textId, uint8_t** utf8Addr, uint16_t& utf8Len) const
-    {
-        return instance_->GetTextUtf8(textId, utf8Addr, utf8Len);
-    }
+    int8_t GetTextUtf8(uint16_t textId, uint8_t** utf8Addr, uint16_t& utf8Len) const;
 
     uint8_t GetFontTtfId(uint8_t fontId, uint8_t size) const
     {
@@ -179,6 +170,16 @@ public:
         return instance_->RegisterFontInfo(fontsTable, num);
     }
 
+    uint8_t RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    {
+        return instance_->RegisterTtcFontInfo(ttcName, ttfInfo, count);
+    }
+
+    uint8_t UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    {
+        return instance_->UnregisterTtcFontInfo(ttcName, ttfInfo, count);
+    }
+
     uint8_t UnregisterFontInfo(const char* ttfName)
     {
         return instance_->UnregisterFontInfo(ttfName);
@@ -189,10 +190,7 @@ public:
         return instance_->UnregisterFontInfo(fontsTable, num);
     }
 
-    int8_t GetTextParam(uint16_t textId, UITextLanguageTextParam& param) const
-    {
-        return instance_->GetTextParam(textId, param);
-    }
+    int8_t GetTextParam(uint16_t textId, UITextLanguageTextParam& param) const;
 
     int8_t GetWildCardStaticStr(uint16_t textId, UITextWildcardStaticType type,
         uint8_t** strAddr, uint16_t& strLen) const
@@ -203,6 +201,22 @@ public:
     int8_t GetCodePoints(uint16_t textId, uint32_t** codePoints, uint16_t& codePointsNum) const
     {
         return instance_->GetCodePoints(textId, codePoints, codePointsNum);
+    }
+
+    ColorMode GetColorType(uint8_t fontId)
+    {
+        switch (instance_->GetFontWeight(fontId)) {
+            case FONT_WEIGHT_1:
+                return A1;
+            case FONT_WEIGHT_2:
+                return A2;
+            case FONT_WEIGHT_4:
+                return A4;
+            case FONT_WEIGHT_8:
+                return A8;
+            default:
+                return UNKNOWN;
+        }
     }
 
     static UIFont* GetInstance();
@@ -226,6 +240,16 @@ public:
     {
         return instance_->IsEmojiFont(fontid);
     }
+
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    /**
+     * @brief Set bitmap font, only needed when using both vector font and bitmap font
+     *
+     * @param font bitmap font
+     */
+    void SetBitampFont(BaseFont* font);
+#endif
+
 private:
     UIFont();
     /**
@@ -233,6 +257,15 @@ private:
      *
      */
     ~UIFont();
+
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    /**
+     * @brief Get bitmap font, only needed when using both vector font and bitmap font
+     *
+     * @return UIFont bitmap font instance
+     */
+    static UIFont* GetBitmapInstance();
+#endif
 
     BaseFont* instance_;
     BaseFont* defaultInstance_;
