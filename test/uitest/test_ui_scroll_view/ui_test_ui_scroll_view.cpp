@@ -28,7 +28,6 @@ static int16_t g_buttonH = 400;
 static int16_t g_buttonW = 400;
 static int16_t g_smallButtonH = 40;
 static int16_t g_smallButtonW = 40;
-static int16_t g_blank = 20;
 static int16_t g_scrollH = 300;
 static int16_t g_scrollW = 300;
 static UILabel* g_scrollSateLabel = nullptr;
