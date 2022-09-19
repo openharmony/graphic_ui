@@ -15,21 +15,16 @@
 
 #include "font/ui_font_allocator.h"
 
-#include "gfx_utils/graphic_buffer.h"
-
 namespace OHOS {
-UIFontAllocator::UIFontAllocator()
-    : ram_(nullptr), ramSize_(0), freeSize_(0), minSize_(0), end_(nullptr), free_(nullptr)
-{
-}
+UIFontAllocator::UIFontAllocator() : ram_(nullptr), ramSize_(0), freeSize_(0),
+    minSize_(0), end_(nullptr), free_(nullptr) {}
 
 UIFontAllocator::~UIFontAllocator() {}
 
 void UIFontAllocator::SetRamAddr(uint8_t* ram, uint32_t size)
 {
-    UI_ADDR_ALIGN(ram, size);
-
     struct Chunk* chunk = nullptr;
+
     ram_ = ram;
     ramSize_ = size - sizeof(struct Chunk) * 2; // head and tail two chunk
     chunk = reinterpret_cast<struct Chunk*>(ram_);
@@ -46,15 +41,15 @@ void UIFontAllocator::SetRamAddr(uint8_t* ram, uint32_t size)
     freeSize_ = size - sizeof(struct Chunk);
 }
 
-uint32_t UIFontAllocator::GetSize(void* addr)
+uint32_t UIFontAllocator::GetSize(void *addr)
 {
-    struct Chunk* chunk = reinterpret_cast<struct Chunk*>(static_cast<uint8_t*>(addr) - sizeof(struct Chunk));
+    struct Chunk *chunk = reinterpret_cast<struct Chunk*>(static_cast<uint8_t*>(addr) - sizeof(struct Chunk));
     return chunk->next - (reinterpret_cast<uint8_t*>(addr) - reinterpret_cast<uint8_t*>(ram_));
 }
 
 void UIFontAllocator::SetMinChunkSize(uint32_t size)
 {
-    minSize_ = UI_ALIGN_UP(size);
+    minSize_ = AlignSize(size);
 }
 
 void* UIFontAllocator::Allocate(uint32_t size)
@@ -65,7 +60,7 @@ void* UIFontAllocator::Allocate(uint32_t size)
     struct Chunk* chunk2 = nullptr;
     struct Chunk* chunk3 = nullptr;
 
-    size = UI_ALIGN_UP(size);
+    size = AlignSize(size);
     if (size < minSize_) {
         size = minSize_;
     }

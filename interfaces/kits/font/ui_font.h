@@ -203,22 +203,6 @@ public:
         return instance_->GetCodePoints(textId, codePoints, codePointsNum);
     }
 
-    ColorMode GetColorType(uint8_t fontId)
-    {
-        switch (instance_->GetFontWeight(fontId)) {
-            case FONT_WEIGHT_1:
-                return A1;
-            case FONT_WEIGHT_2:
-                return A2;
-            case FONT_WEIGHT_4:
-                return A4;
-            case FONT_WEIGHT_8:
-                return A8;
-            default:
-                return UNKNOWN;
-        }
-    }
-
     static UIFont* GetInstance();
     void SetFont(BaseFont* font);
 

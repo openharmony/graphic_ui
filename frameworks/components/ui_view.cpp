@@ -209,7 +209,7 @@ void UIView::SetStyle(uint8_t key, int64_t value)
     int16_t x = GetX();
     int16_t y = GetY();
     style_->SetStyle(key, value);
-    Rect rect(x, y, x + width - 1, y + height - 1);
+    Rect rect(x, y, x + width - 1, y + height -  1);
     UpdateRectInfo(key, rect);
 }
 
@@ -868,7 +868,7 @@ void UIView::SetWidth(int16_t width)
 {
     if (GetWidth() != width) {
         int16_t newWidth = width + style_->paddingLeft_ + style_->paddingRight_ +
-                           (style_->borderWidth_ * 2); /* 2: left and right border */
+                            (style_->borderWidth_ * 2); /* 2: left and right border */
         rect_.SetWidth(newWidth);
     }
 }
@@ -887,7 +887,7 @@ void UIView::SetWidthPercent(float widthPercent)
 int16_t UIView::GetWidth()
 {
     return rect_.GetWidth() - (style_->paddingLeft_ + style_->paddingRight_) -
-           (style_->borderWidth_ * 2); /* 2: left and right border */
+            (style_->borderWidth_ * 2); /* 2: left and right border */
 }
 
 void UIView::SetHeight(int16_t height)
@@ -913,7 +913,7 @@ void UIView::SetHeightPercent(float heightPercent)
 int16_t UIView::GetHeight()
 {
     return rect_.GetHeight() - (style_->paddingTop_ + style_->paddingBottom_) -
-           (style_->borderWidth_ * 2); /* 2: top and bottom border */
+            (style_->borderWidth_ * 2); /* 2: top and bottom border */
 }
 
 void UIView::Resize(int16_t width, int16_t height)
@@ -1274,51 +1274,55 @@ uint8_t UIView::GetMixOpaScale() const
     return opaMix;
 }
 
-bool UIView::GetBitmap(ImageInfo& imageInfo)
+bool UIView::GetBitmap(ImageInfo& bitmap)
 {
     UIView* tempRenderSibling = nextRenderSibling_;
-    nextRenderSibling_ = nullptr;
     UIView* tempParent = parent_;
-    parent_ = nullptr;
     int16_t tempX = rect_.GetX();
     int16_t tempY = rect_.GetY();
+    nextRenderSibling_ = nullptr;
+    parent_ = nullptr;
+
     rect_.SetPosition(0, 0);
-
     Rect mask = GetRect();
-    BufferInfo bufInfo{mask, 0, nullptr, nullptr, 0, 0, ARGB8888, 0};
-    bufInfo.width = mask.GetWidth();
-    bufInfo.height = mask.GetHeight();
-    bufInfo.stride = bufInfo.width * DrawUtils::GetByteSizeByColorMode(bufInfo.mode);
-    BaseGfxEngine::GetInstance()->AdjustLineStride(bufInfo);
-    imageInfo.header.colorMode = bufInfo.mode;
-    imageInfo.dataSize = bufInfo.stride * bufInfo.height;
-    imageInfo.header.width = bufInfo.width;
-    imageInfo.header.height = bufInfo.height;
-    imageInfo.header.reserved = 0;
+    uint16_t bufferWidth = static_cast<uint16_t>(mask.GetWidth());
+    uint16_t bufferHeight = static_cast<uint16_t>(mask.GetHeight());
+    bitmap.header.colorMode = ARGB8888;
+    bitmap.dataSize = bufferWidth * bufferHeight * DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
+    bitmap.header.width = bufferWidth;
+    bitmap.header.height = bufferHeight;
+    bitmap.header.reserved = 0;
 
-    bufInfo.virAddr = ImageCacheMalloc(imageInfo);
-    if (bufInfo.virAddr == nullptr) {
+    void* viewBitmapBuffer = ImageCacheMalloc(bitmap);
+    if (viewBitmapBuffer == nullptr) {
         GRAPHIC_LOGE("GetBitmap buffer alloc failed.");
         nextRenderSibling_ = tempRenderSibling;
         parent_ = tempParent;
         rect_.SetPosition(tempX, tempY);
         return false;
     }
-    imageInfo.data = reinterpret_cast<uint8_t*>(bufInfo.virAddr);
-    if (memset_s(bufInfo.virAddr, imageInfo.dataSize, 0, imageInfo.dataSize) != EOK) {
+    bitmap.data = reinterpret_cast<uint8_t*>(viewBitmapBuffer);
+    if (memset_s(viewBitmapBuffer, bitmap.dataSize, 0, bitmap.dataSize) != EOK) {
         GRAPHIC_LOGE("GetBitmap buffer memset failed.");
-        ImageCacheFree(imageInfo);
-        imageInfo.data = nullptr;
+        ImageCacheFree(bitmap);
+        bitmap.data = nullptr;
         return false;
     }
-    bufInfo.phyAddr = bufInfo.virAddr;
+
+    BufferInfo newBufferInfo;
+    newBufferInfo.virAddr = viewBitmapBuffer;
+    newBufferInfo.phyAddr = newBufferInfo.virAddr;
+    newBufferInfo.rect = mask;
+    newBufferInfo.width = bufferWidth;
+    newBufferInfo.height = bufferHeight;
+    newBufferInfo.mode = ARGB8888;
+    newBufferInfo.stride = bufferWidth *  DrawUtils::GetByteSizeByColorMode(bitmap.header.colorMode);
 
     RootView::GetInstance()->SaveDrawContext();
-    RootView::GetInstance()->UpdateBufferInfo(&bufInfo);
+    RootView::GetInstance()->UpdateBufferInfo(&newBufferInfo);
     RootView::GetInstance()->MeasureView(this);
     RootView::GetInstance()->DrawTop(this, mask);
     RootView::GetInstance()->RestoreDrawContext();
-
     nextRenderSibling_ = tempRenderSibling;
     parent_ = tempParent;
     rect_.SetPosition(tempX, tempY);

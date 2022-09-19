@@ -49,9 +49,9 @@ public:
     bool IsEmojiFont(uint8_t fontId) override;
     void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen) override;
 protected:
-    int8_t GetDynamicFontBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId);
+    int8_t GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId);
     uint8_t* GetCacheBitmap(uint8_t fontId, uint32_t unicode);
-    BufferInfo GetCacheBuffer(uint8_t fontId, uint32_t unicode, GlyphNode& glyphNode);
+    uint8_t* GetCacheSpace(uint8_t fontId, uint32_t unicode, uint32_t size);
     void PutCacheSpace(uint8_t* addr);
     int16_t GetDynamicFontWidth(uint32_t unicode, uint8_t fontId);
     uint32_t offset_;

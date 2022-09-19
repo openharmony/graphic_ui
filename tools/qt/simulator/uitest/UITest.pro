@@ -59,7 +59,6 @@ INCLUDEPATH += \
     ../../../../../utils/interfaces/innerkits \
     ../../../../../utils/interfaces/kits \
     ../../../../../../../third_party/freetype/include \
-    ../../../../../../../third_party/bounds_checking_function/include
 
 LIBS += $$OUT_PWD/../libs/libui.dll
 LIBS += $$OUT_PWD/../libs/test.dll

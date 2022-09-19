@@ -14,7 +14,6 @@
  */
 
 #include "font/glyphs_file.h"
-#include "draw/draw_utils.h"
 #include "font/font_ram_allocator.h"
 #include "font/ui_font_builder.h"
 #include "gfx_utils/file.h"
@@ -52,7 +51,7 @@ int8_t GlyphsFile::CacheInit()
         size += fontHeaderCache_[i].indexLen;
     }
 
-    indexCache_ = reinterpret_cast<uint8_t*>(FontRamAllocator::GetInstance().Allocate(size));
+    indexCache_ = reinterpret_cast<uint8_t *>(FontRamAllocator::GetInstance().Allocate(size));
     if (indexCache_ == nullptr) {
         GRAPHIC_LOGE("GlyphsFile::CacheInit Allocate failed");
         return INVALID_RET_VALUE;
@@ -121,7 +120,7 @@ void GlyphsFile::SetFontName(const char* fontName)
         return;
     }
 
-    fontName_ = static_cast<char*>(UIMalloc(++nameLen));
+    fontName_ = static_cast<char *>(UIMalloc(++nameLen));
     if (fontName_ == nullptr) {
         return;
     }
@@ -293,34 +292,10 @@ int16_t GlyphsFile::GetFontHeight(uint8_t fontId)
 
     return glyphInfo.fontHeader->fontHeight;
 }
-namespace {
-void RearrangeBitmap(BufferInfo& bufInfo, uint32_t fileSz)
+
+int8_t GlyphsFile::GetBitmap(GlyphNode& node, uint8_t* bitmap)
 {
-    uint32_t word = bufInfo.width;
-    word = BIT_TO_BYTE(word * DrawUtils::GetPxSizeByColorMode(bufInfo.mode));
-    if (bufInfo.stride <= word) {
-        return;
-    }
-
-    uint8_t* bitmap = reinterpret_cast<uint8_t*>(bufInfo.virAddr);
-    uint32_t suffixLen = bufInfo.stride - word;
-    uint8_t* rdestBuf = bitmap + bufInfo.stride * bufInfo.height;
-    uint8_t* rsrcBuf = bitmap + fileSz;
-
-    /* Rearrange bitmap in local buffer */
-    for (uint32_t row = 0; row < bufInfo.height; row++) {
-        rdestBuf -= suffixLen;
-        (void)memset_s(rdestBuf, suffixLen, 0, suffixLen);
-        for (uint32_t i = 0; i < word; i++) {
-            *(--rdestBuf) = *(--rsrcBuf);
-        }
-    }
-}
-} // namespace
-
-int8_t GlyphsFile::GetBitmap(GlyphNode& node, BufferInfo& bufInfo)
-{
-    if (bufInfo.virAddr == nullptr) {
+    if (bitmap == nullptr) {
         GRAPHIC_LOGE("GlyphsFile::GetBitmap invalid parameter");
         return INVALID_RET_VALUE;
     }
@@ -340,12 +315,11 @@ int8_t GlyphsFile::GetBitmap(GlyphNode& node, BufferInfo& bufInfo)
         return INVALID_RET_VALUE;
     }
 
-    int32_t readSize = read(fp_, bufInfo.virAddr, size);
+    int32_t readSize = read(fp_, bitmap, size);
     if (readSize != static_cast<int32_t>(size)) {
         GRAPHIC_LOGE("GlyphsFile::GetBitmap read failed");
         return INVALID_RET_VALUE;
     }
-    RearrangeBitmap(bufInfo, size);
 
     node.dataFlag = node.fontId;
     return RET_VALUE_OK;
