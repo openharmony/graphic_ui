@@ -18,11 +18,11 @@
 
 #include <stdint.h>
 
-#include "gfx_utils/graphic_buffer.h"
-
 namespace OHOS {
 class UIFontAllocator {
-    struct UI_STRUCT_ALIGN Chunk {
+    static constexpr uint8_t UI_FONT_MEM_ALIGNMENT = 4;
+
+    struct Chunk {
         uint32_t next;
         uint32_t prev;
         bool used;
@@ -37,19 +37,23 @@ public:
 
     void SetMinChunkSize(uint32_t size);
 
-    uint32_t GetSize(void* addr);
+    uint32_t GetSize(void *addr);
 
     /**
-     * @brief allocate memory
-     *
-     * @param size
-     * @return memory address
-     */
-    void* Allocate(uint32_t size);
+    * @brief allocate memory
+    *
+    * @param size
+    * @return memory address
+    */
+    void *Allocate(uint32_t size);
 
     void Free(void* addr);
 
 private:
+    uint32_t AlignSize(uint32_t size)
+    {
+        return (size + UI_FONT_MEM_ALIGNMENT - 1U) & ~(UI_FONT_MEM_ALIGNMENT - 1U);
+    }
     void CombineFree(Chunk* cache);
 
     uint8_t* ram_;

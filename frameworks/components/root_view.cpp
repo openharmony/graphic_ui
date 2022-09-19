@@ -517,29 +517,27 @@ void RootView::Render()
     pthread_mutex_lock(&lock_);
 #endif
 #if !LOCAL_RENDER
-    OptimizeInvalidateRects();
+   OptimizeInvalidateRects();
 #endif
 
-    Rect flushRect(GetScreenRect());
 #if LOCAL_RENDER
     if (!invalidateMap_.empty()) {
-        RenderManager::RenderRect(flushRect, this);
+        RenderManager::RenderRect(GetRect(), this);
         invalidateMap_.clear();
 #else
-    if (invalidateRects_.Size() > 0) {
-        /* Fully draw whole reacts. If there are two buffers or more to display, buffers could be
-        independent between each other, so buffers need to be FULLY_RENDER. */
+    if ( invalidateRects_.Size() > 0) {
 #if (FULLY_RENDER != 1)
-        flushRect = invalidateRects_.Begin()->data_;
         // only draw invalid rects. in this case, buffers (if there are two buffers or more to display) should keep
         // same with each others, because only delta changes write to the buffer between each frames, so it fits one
         // buffer to display.
         for (ListNode<Rect>* iter = invalidateRects_.Begin(); iter != invalidateRects_.End(); iter = iter->next_) {
             RenderManager::RenderRect(iter->data_, this);
-            flushRect.Join(flushRect, iter->data_);
         }
+#else
+        // fully draw whole reacts. in this case, buffers (if there are two buffers or more to display) could be
+        // independent on each others, so it fits two buffers or more to display.
+        RenderManager::RenderRect(GetScreenRect(), this);
 #endif
-        RenderManager::RenderRect(flushRect, this);
         invalidateRects_.Clear();
 #endif
 
@@ -549,7 +547,7 @@ void RootView::Render()
             boundWindow_->Update();
         }
 #endif
-        BaseGfxEngine::GetInstance()->Flush(flushRect);
+        BaseGfxEngine::GetInstance()->Flush();
     }
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_unlock(&lock_);
@@ -593,16 +591,16 @@ void RootView::UpdateMapBufferInfo(Rect& invalidatedArea)
     invalidatedArea.SetHeight(width);
     dc_.mapBufferInfo->width = height;
     dc_.mapBufferInfo->height = width;
-    dc_.mapBufferInfo->stride =
-        dc_.mapBufferInfo->width * (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
+    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
+                                (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
 }
 
 void RootView::RestoreMapBufferInfo()
 {
     dc_.mapBufferInfo->width = dc_.bufferInfo->width;
     dc_.mapBufferInfo->height = dc_.bufferInfo->height;
-    dc_.mapBufferInfo->stride =
-        dc_.mapBufferInfo->width * (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
+    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
+                                (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift 3 bits
 }
 
 void RootView::DrawTop(UIView* view, const Rect& rect)
@@ -816,8 +814,8 @@ void RootView::InitMapBufferInfo(BufferInfo* bufferInfo)
         return;
     }
     dc_.mapBufferInfo->mode = ARGB8888;
-    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width * (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >>
-                                                            3); // 3: Shift right 3 bits
+    dc_.mapBufferInfo->stride = dc_.mapBufferInfo->width *
+        (DrawUtils::GetPxSizeByColorMode(dc_.mapBufferInfo->mode) >> 3); // 3: Shift right 3 bits
     uint32_t bufferSize = dc_.mapBufferInfo->stride * dc_.mapBufferInfo->height;
     dc_.mapBufferInfo->virAddr = dc_.mapBufferInfo->phyAddr =
         BaseGfxEngine::GetInstance()->AllocBuffer(bufferSize, BUFFER_MAP_SURFACE);

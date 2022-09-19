@@ -15,14 +15,12 @@
 
 #include "font/ui_font_bitmap.h"
 
-#include "draw/draw_utils.h"
-#include "font/font_ram_allocator.h"
-#include "font/ui_font.h"
 #include "font/ui_font_adaptor.h"
 #include "font/ui_font_builder.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
+#include "font/font_ram_allocator.h"
 #if ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
@@ -227,9 +225,9 @@ UITextLanguageFontParam* UIFontBitmap::GetFontInfo(uint8_t fontId) const
     return UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
 }
 
-int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId)
+int8_t UIFontBitmap::GetDynamicFontBitmap(uint32_t unicode, uint8_t* bitmap, uint8_t fontId)
 {
-    return dynamicFont_.GetBitmap(unicode, bufInfo, fontId);
+    return dynamicFont_.GetBitmap(unicode, bitmap, fontId);
 }
 
 uint8_t* UIFontBitmap::GetCacheBitmap(uint8_t fontId, uint32_t unicode)
@@ -241,21 +239,13 @@ uint8_t* UIFontBitmap::GetCacheBitmap(uint8_t fontId, uint32_t unicode)
     return nullptr;
 }
 
-BufferInfo UIFontBitmap::GetCacheBuffer(uint8_t fontId, uint32_t unicode, GlyphNode& glyphNode)
+uint8_t* UIFontBitmap::GetCacheSpace(uint8_t fontId, uint32_t unicode, uint32_t size)
 {
-    ColorMode mode = UIFont::GetInstance()->GetColorType(fontId);
-    BufferInfo bufInfo{Rect(), 0, nullptr, nullptr, glyphNode.cols, glyphNode.rows, mode, 0};
-    bufInfo.stride = BIT_TO_BYTE(bufInfo.width * DrawUtils::GetPxSizeByColorMode(bufInfo.mode));
-
-    if (bitmapCache_ == nullptr) {
-        GRAPHIC_LOGE("UIFontBitmap::GetCacheBuffer invalid bitmapCache");
-        return bufInfo;
+    if (bitmapCache_ != nullptr) {
+        return bitmapCache_->GetSpace(fontId, unicode, size);
     }
-
-    BaseGfxEngine::GetInstance()->AdjustLineStride(bufInfo);
-    uint32_t bitmapSize = bufInfo.stride * bufInfo.height;
-    bufInfo.virAddr = reinterpret_cast<void*>(bitmapCache_->GetSpace(fontId, unicode, bitmapSize));
-    return bufInfo;
+    GRAPHIC_LOGE("UIFontBitmap::GetCacheSpace invalid bitmapCache");
+    return nullptr;
 }
 
 void UIFontBitmap::PutCacheSpace(uint8_t* addr)
@@ -296,13 +286,15 @@ uint8_t* UIFontBitmap::SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint
     if (glyphNode.kernOff <= glyphNode.dataOff) {
         return nullptr;
     }
-
-    BufferInfo bufInfo = GetCacheBuffer(fontId, unicode, glyphNode);
-    ret = dynamicFont_.GetBitmap(unicode, bufInfo, fontId);
-    if (ret == RET_VALUE_OK) {
-        return reinterpret_cast<uint8_t*>(bufInfo.virAddr);
+    uint32_t bitmapSize = glyphNode.kernOff - glyphNode.dataOff;
+    if (bitmap == nullptr) {
+        bitmap = bitmapCache_->GetSpace(fontId, unicode, bitmapSize);
     }
-    PutCacheSpace(reinterpret_cast<uint8_t*>(bufInfo.virAddr));
+    ret = dynamicFont_.GetBitmap(unicode, bitmap, fontId);
+    if (ret == RET_VALUE_OK) {
+        return bitmap;
+    }
+    bitmapCache_->PutSpace(bitmap);
     return nullptr;
 }
 
@@ -320,11 +312,8 @@ void UIFontBitmap::SetFontFileOffset(uint32_t offset)
     offset_ = offset;
 }
 
-uint16_t UIFontBitmap::GetOffsetPosY(const char* text,
-                                     uint16_t lineLength,
-                                     bool& isEmoijLarge,
-                                     uint8_t fontId,
-                                     uint8_t fontSize)
+uint16_t UIFontBitmap::GetOffsetPosY(const char *text, uint16_t lineLength,
+                                     bool& isEmoijLarge, uint8_t fontId, uint8_t fontSize)
 {
     uint32_t i = 0;
     uint32_t unicode;
@@ -376,12 +365,8 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char* text,
     return offset;
 }
 
-uint16_t UIFontBitmap::GetLineMaxHeight(const char* text,
-                                        uint16_t lineLength,
-                                        uint8_t fontId,
-                                        uint8_t fontSize,
-                                        uint16_t& letterIndex,
-                                        SizeSpan* sizeSpans)
+uint16_t UIFontBitmap::GetLineMaxHeight(const char *text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+                                        uint16_t& letterIndex, SizeSpan* sizeSpans)
 {
     uint16_t maxHeight = GetHeight(fontId, fontSize);
     if (sizeSpans == nullptr) {

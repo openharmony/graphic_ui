@@ -80,7 +80,7 @@ BufferInfo* Monitor::GetFBBufferInfo()
     return bufferInfo;
 }
 
-void Monitor::Flush(const Rect &rect)
+void Monitor::Flush()
 {
     UpdatePaint(tftFb_, HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION);
 }

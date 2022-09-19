@@ -36,7 +36,7 @@ public:
     void GUILoopStart() const;
     void GUIRefresh();
     void GUILoopQuit() const;
-    void Flush(const Rect &rect) override;
+    void Flush() override;
     BufferInfo* GetFBBufferInfo() override;
 signals:
     void UpdatePaintSignal(uint32_t* tftFb, uint32_t imgWidth, uint32_t imgHeight);
