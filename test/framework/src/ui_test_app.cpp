@@ -41,6 +41,7 @@ void* AutoTestThread(void*)
     AutoTestApp::GetInstance()->Start();
     AutoTestCaseGroup::TearDownTestCase();
     CompareTools::UnsetLogPath();
+    return nullptr;
 }
 
 UITestApp* UITestApp::GetInstance()
