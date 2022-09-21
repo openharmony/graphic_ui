@@ -149,10 +149,7 @@ void BlendSourceAtop(RasterizerScanlineAntialias& raster1, RasterizerScanlineAnt
         int32_t y2 = scanline2.GetYLevel();
         uint32_t numSpans2 = scanline2.NumSpans();
         GeometryScanline::ConstIterator span2 = scanline2.Begin();
-        GeometryScanline::ConstIterator span1;
-        if (y1 == y2) {
-            span1 = scanline1.Begin();
-        }
+        GeometryScanline::ConstIterator span1 = scanline1.Begin();
         if (y2 > y1) {
             while (raster1.SweepScanline(scanline1)) {
                 y1 = scanline1.GetYLevel();
@@ -278,10 +275,7 @@ void BlendSourceOut(RasterizerScanlineAntialias& raster1, RasterizerScanlineAnti
         int32_t y2 = scanline2.GetYLevel();
         uint32_t numSpans2 = scanline2.NumSpans();
         GeometryScanline::ConstIterator span2 = scanline2.Begin();
-        GeometryScanline::ConstIterator span1;
-        if (y1 == y2) {
-            span1 = scanline1.Begin();
-        }
+        GeometryScanline::ConstIterator span1 = scanline1.Begin();
         while (true) {
             int32_t x2 = span2->x;
             if (y1 == y2) {
@@ -417,10 +411,7 @@ void BlendXOR(RasterizerScanlineAntialias& raster1, RasterizerScanlineAntialias&
         spanGen2.Prepare();
         uint32_t numSpans2 = scanline2.NumSpans();
         GeometryScanline::ConstIterator span2 = scanline2.Begin();
-        GeometryScanline::ConstIterator span1;
-        if (y1 == y2) {
-            span1 = scanline1.Begin();
-        }
+        GeometryScanline::ConstIterator span1 = scanline1.Begin();
         while (true) {
             int32_t x2 = span2->x;
             if (y1 == y2) {
@@ -571,12 +562,7 @@ void BlendSourceInLoop(RasterizerScanlineAntialias& raster1, GeometryScanline& s
     int32_t y2 = scanline2.GetYLevel();
     uint32_t numSpans2 = scanline2.NumSpans();
     GeometryScanline::ConstIterator span2 = scanline2.Begin();
-
-    GeometryScanline::ConstIterator span1;
-
-    if (y1 == y2) {
-        span1 = scanline1.Begin();
-    }
+    GeometryScanline::ConstIterator span1 = scanline1.Begin();
 
     if (y2 > y1) {
         while (raster1.SweepScanline(scanline1)) {
