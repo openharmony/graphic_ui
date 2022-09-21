@@ -538,8 +538,9 @@ void RootView::Render()
             RenderManager::RenderRect(iter->data_, this);
             flushRect.Join(flushRect, iter->data_);
         }
-#endif
+#else
         RenderManager::RenderRect(flushRect, this);
+#endif
         invalidateRects_.Clear();
 #endif
 
