@@ -18,6 +18,7 @@
 #include <cstring>
 
 #include "components/root_view.h"
+#include "components/ui_tree_manager.h"
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
@@ -112,6 +113,7 @@ void UIViewGroup::Remove(UIView* view)
     if ((childrenHead_ == nullptr) || (view == nullptr)) {
         return;
     }
+    UITreeManager::GetInstance().OnLifeEvent(view, UITreeManager::REMOVE);
 
 #if LOCAL_RENDER
     RootView::GetInstance()->RemoveViewFromInvalidMap(view);
@@ -157,6 +159,7 @@ void UIViewGroup::RemoveAll()
     UIView* tmp = nullptr;
     while (node != nullptr) {
         tmp = node;
+        UITreeManager::GetInstance().OnLifeEvent(node, UITreeManager::REMOVE);
         node = node->GetNextSibling();
         tmp->SetParent(nullptr);
         tmp->SetNextSibling(nullptr);

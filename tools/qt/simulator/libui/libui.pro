@@ -78,6 +78,7 @@ SOURCES += \
     ../../../../frameworks/components/ui_arc_scroll_bar.cpp \
     ../../../../frameworks/components/ui_axis.cpp \
     ../../../../frameworks/components/ui_box_progress.cpp \
+    ../../../../frameworks/components/ui_tree_manager.cpp \
     ../../../../frameworks/components/ui_box_scroll_bar.cpp \
     ../../../../frameworks/components/ui_button.cpp \
     ../../../../frameworks/components/ui_canvas.cpp \
@@ -217,6 +218,7 @@ HEADERS += \
     ../../../../frameworks/default_resource/check_box_res.h \
     ../../../../frameworks/dfx/key_event_injector.h \
     ../../../../frameworks/dfx/point_event_injector.h \
+    ../../../../frameworks/components/ui_tree_manager.h \
     ../../../../frameworks/dfx/ui_view_bounds.h \
     ../../../../frameworks/dock/input_device.h \
     ../../../../frameworks/dock/pointer_input_device.h \

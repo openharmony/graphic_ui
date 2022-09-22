@@ -66,6 +66,7 @@ graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/components/ui_texture_mapper.cpp",
   "$GRAPHIC_UI_PATH/frameworks/components/ui_time_picker.cpp",
   "$GRAPHIC_UI_PATH/frameworks/components/ui_toggle_button.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/components/ui_tree_manager.cpp",
   "$GRAPHIC_UI_PATH/frameworks/components/ui_view.cpp",
   "$GRAPHIC_UI_PATH/frameworks/components/ui_view_group.cpp",
   "$GRAPHIC_UI_PATH/frameworks/core/input_method_manager.cpp",
