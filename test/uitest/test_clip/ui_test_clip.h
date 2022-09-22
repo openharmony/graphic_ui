@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,6 +23,10 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_RADIUS_1 = "radius+1";
+constexpr char* UI_TEST_RADIUS_2 = "radius-1";
+constexpr char* UI_TEST_RADIUS_3 = "radius+5";
+constexpr char* UI_TEST_RADIUS_4 = "radius-5";
 class UITestClip : public UITest, public UIView::OnClickListener {
 public:
     UITestClip() {}
@@ -53,7 +57,7 @@ private:
     void CreateTitleLabel(const char* title);
     UIImageView* CreateImageView();
     void ClipImage(UIImageView* imageView, ClipPath& path);
-    void SetUpButton(UILabelButton* btn, const char* title, int16_t x, int16_t y);
+    void SetUpButton(UILabelButton* btn, const char* title, int16_t x, int16_t y, const char* id = nullptr);
 
     UILabelButton* btnRadiusInc1_ = nullptr;
     UILabelButton* btnRadiusInc5_ = nullptr;

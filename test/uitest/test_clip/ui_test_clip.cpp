@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,6 +16,7 @@
 #include "ui_test_clip.h"
 
 #include <cmath>
+
 #include "common/image.h"
 #include "draw/clip_utils.h"
 #include "gfx_utils/graphic_math.h"
@@ -137,7 +138,7 @@ UIImageView* UITestClip::CreateImageView()
     return imageVIew;
 }
 
-void UITestClip::SetUpButton(UILabelButton* btn, const char* title, int16_t x, int16_t y)
+void UITestClip::SetUpButton(UILabelButton* btn, const char* title, int16_t x, int16_t y, const char* id)
 {
     if (btn == nullptr) {
         return;
@@ -147,6 +148,7 @@ void UITestClip::SetUpButton(UILabelButton* btn, const char* title, int16_t x, i
     btn->SetText(title);
     btn->SetFont(DEFAULT_VECTOR_FONT_FILENAME, BUTTON_LABEL_SIZE);
     btn->SetOnClickListener(this);
+    btn->SetViewId(id);
     btn->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::INACTIVE);
@@ -171,14 +173,14 @@ void UITestClip::UIKitClipTest001()
     int16_t x = VIEW_DISTANCE_TO_LEFT_SIDE + BLOCK_WIDTH + GAP;
     int16_t y = positionY_;
     btnRadiusInc1_ = new UILabelButton();
-    SetUpButton(btnRadiusInc1_, "半径+1", x, y);
+    SetUpButton(btnRadiusInc1_, "半径+1", x, y, UI_TEST_RADIUS_1);
     btnRadiusDec1_ = new UILabelButton();
-    SetUpButton(btnRadiusDec1_, "半径-1", x + BUTTON_WIDHT2 + GAP, y);
+    SetUpButton(btnRadiusDec1_, "半径-1", x + BUTTON_WIDHT2 + GAP, y, UI_TEST_RADIUS_2);
     btnRadiusInc5_ = new UILabelButton();
     y += BUTTON_HEIGHT2 + GAP;
-    SetUpButton(btnRadiusInc5_, "半径+5", x, y);
+    SetUpButton(btnRadiusInc5_, "半径+5", x, y, UI_TEST_RADIUS_3);
     btnRadiusDec5_ = new UILabelButton();
-    SetUpButton(btnRadiusDec5_, "半径-5", x + BUTTON_WIDHT2 + GAP, y);
+    SetUpButton(btnRadiusDec5_, "半径-5", x + BUTTON_WIDHT2 + GAP, y, UI_TEST_RADIUS_4);
     y += BUTTON_HEIGHT2 + GAP;
 
     radiusText_ = new UILabel();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,35 +15,12 @@
 
 #include "ui_test_app.h"
 
-#include "auto_test_app.h"
 #include "compare_tools.h"
 #include "test_resource_config.h"
-#include "ui_auto_test.h"
 #include "ui_test.h"
 #include "ui_test_group.h"
 
 namespace OHOS {
-#ifdef _WIN32
-DWORD AutoTestThread(LPVOID)
-#elif defined __linux__ || defined __LITEOS__ || defined __APPLE__
-void* AutoTestThread(void*)
-#endif // _WIN32
-{
-#ifdef _WIN32
-    const char logPath[] = ".\\auto_test_log.txt";
-    CompareTools::SetLogPath(logPath, sizeof(logPath));
-#else
-    const char logPath[] = "./auto_test_log.txt";
-    CompareTools::SetLogPath(logPath, sizeof(logPath));
-#endif
-    // 装载用例
-    UIAutoTest::SetUpTestCase();
-    AutoTestApp::GetInstance()->Start();
-    AutoTestCaseGroup::TearDownTestCase();
-    CompareTools::UnsetLogPath();
-    return nullptr;
-}
-
 UITestApp* UITestApp::GetInstance()
 {
     static UITestApp instance;
@@ -73,8 +50,6 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override
     {
-        ThreadCreate(AutoTestThread, nullptr, nullptr);
-        return true;
     }
 };
 
@@ -111,6 +86,7 @@ void UITestApp::InitMainMenu()
             autoTestBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::RELEASED);
             autoTestBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::PRESSED);
             autoTestBtn_->SetStyleForState(STYLE_BACKGROUND_OPA, 0, UIButton::INACTIVE);
+            autoTestBtn_->SetVisible(false);
             mainMenu_->Add(autoTestBtn_);
         }
         if ((mainList_ == nullptr) && (adapter_ == nullptr)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,6 +17,7 @@
 #define GRAPHIC_LITE_COMPARE_TOOLS_H
 
 #include "graphic_config.h"
+#include <string>
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -25,7 +26,7 @@
 
 namespace OHOS {
 namespace {
-    constexpr uint16_t DEFAULT_WAIT_TIME_MS = 300;
+    constexpr uint16_t DEFAULT_WAIT_TIME_MS = 500;
     constexpr size_t DEFAULT_FILE_NAME_MAX_LENGTH = 256;
     constexpr uint8_t BITMAP_HEADER_SIZE = 54;
 }
@@ -56,12 +57,16 @@ public:
     static bool CheckFileExist(const char* filePath, size_t length);
     static void SetLogPath(const char* filePath, size_t length);
     static void UnsetLogPath();
+    static void SaveResultLog(const char* filePath, const char* buff, size_t bufSize);
+    static bool CompareFile(const char* fileBasePath, const char* fileRunPath);
 
 private:
     CompareTools() {}
     virtual ~CompareTools() {}
 
-    static bool SaveLog(const char* buff, size_t bufSize);
+    static bool CompareByBitmap(const BitmapInfoHeader bitmapInfoBase, const BitmapInfoHeader bitmapInfoRun,
+            uint32_t fdBase, uint32_t fdRun);
+    static bool SaveLog(const char* buff, size_t bufSize, const char* filePath = nullptr);
     static bool CompareByBit(uint32_t fd);
     static bool SaveByBit(uint32_t fd);
     static bool enableLog_;

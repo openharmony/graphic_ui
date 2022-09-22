@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,14 +13,13 @@
  * limitations under the License.
  */
 
-#ifndef UI_TEST_APP_LIST_H
-#define UI_TEST_APP_LIST_H
+#ifndef GRAPHIC_LITE_TEST_APP_H
+#define GRAPHIC_LITE_TEST_APP_H
 
 #include "components/root_view.h"
 #include "components/ui_label.h"
 #include "components/ui_label_button.h"
 #include "components/ui_list.h"
-#include "graphic_thread.h"
 #include "test_case_list_adapter.h"
 
 namespace OHOS {
@@ -28,11 +27,6 @@ namespace {
     constexpr char* UI_TEST_MAIN_LIST_ID = "main_list";
     constexpr char* UI_TEST_BACK_BUTTON_ID = "back_button";
 }
-#ifdef _WIN32
-DWORD AutoTestThread(LPVOID);
-#elif defined __linux__ || defined __LITEOS__ || defined __APPLE__
-void* AutoTestThread(void*);
-#endif // _WIN32
 class UITestApp {
 public:
     static UITestApp* GetInstance();
@@ -61,4 +55,4 @@ private:
     UIViewGroup* mainMenu_ = nullptr;
 };
 } // namespace OHOS
-#endif
+#endif // GRAPHIC_LITE_TEST_APP_H
