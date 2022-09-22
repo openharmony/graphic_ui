@@ -35,6 +35,9 @@ SOURCES += \
     ../drivers/indev/key_input.cpp \
     ../drivers/indev/mouse_input.cpp \
     ../drivers/indev/mousewheel_input.cpp \
+    ../drivers/display/socket_thread.cpp \
+    tcp_socket.cpp \
+    tcp_socket_manager.cpp \
     main.cpp \
     main_widget.cpp
 
@@ -46,6 +49,9 @@ HEADERS += \
     ../drivers/indev/key_input.h \
     ../drivers/indev/mouse_input.h \
     ../drivers/indev/mousewheel_input.h \
+    ../drivers/display/scoket_thread.h \
+    tcp_socket.h \
+    tcp_socket_manager.h \
     main_widget.h
 
 INCLUDEPATH += \
@@ -59,6 +65,7 @@ INCLUDEPATH += \
     ../../../../../utils/interfaces/innerkits \
     ../../../../../utils/interfaces/kits \
     ../../../../../../../third_party/freetype/include \
+    ../../../../test/framework/include \
     ../../../../../../../third_party/bounds_checking_function/include
 
 LIBS += $$OUT_PWD/../libs/libui.dll

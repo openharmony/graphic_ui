@@ -1,0 +1,25 @@
+{
+    "start_test_time": "11:08",
+    "testGroup":[
+        {
+            "test_mode" : 2,
+            "process_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/build-simulator-Desktop_Qt_6_3_1_MinGW_64_bit-Debug/libs/",
+            "process_name": "UITest.exe",
+            "base_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/simulator/config/auto_test/A/",
+            "run_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/simulator/config/auto_test/B/",
+            "log_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/simulator/config/auto_test/",
+            "test_case": [],
+            "test_case_dir": "D:/WorkSpace/Pyhton_demo/test_case"
+        }, 
+        {
+            "test_mode" : 2,  
+            "process_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/build-simulator-Desktop_Qt_6_3_1_MinGW_64_bit-Debug/libs/",
+            "process_name": "UITest.exe",
+            "base_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/simulator/config/auto_test/A/",
+            "run_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/simulator/config/auto_test/B/",
+            "log_dir": "D:/WorkSpace/OpenHarmony/foundation/graphic/ui/tools/qt/simulator/config/auto_test/",
+            "test_case": [],
+            "test_case_dir": "D:/WorkSpace/Pyhton_demo/test_case"
+        }
+    ]
+}

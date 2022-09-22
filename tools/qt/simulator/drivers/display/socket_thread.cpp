@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,23 +13,30 @@
  * limitations under the License.
  */
 
-#ifndef GRAPHIC_LITE_AUTO_TEST_APP_H
-#define GRAPHIC_LITE_AUTO_TEST_APP_H
+#include "scoket_thread.h"
 
 namespace OHOS {
-class AutoTestApp {
-public:
-    static AutoTestApp* GetInstance();
-    void Start();
+SocketThread::SocketThread()
+{
+    clientManager_ = TcpSocketClientManager::GetInstance();
+}
 
-private:
-    AutoTestApp() {}
-    virtual ~AutoTestApp();
+SocketThread::~SocketThread()
+{
+    clientManager_ = nullptr;
+}
 
-    AutoTestApp(const AutoTestApp&) = delete;
-    AutoTestApp& operator=(const AutoTestApp&) = delete;
-    AutoTestApp(AutoTestApp&&) = delete;
-    AutoTestApp& operator=(AutoTestApp&&) = delete;
-};
+void SocketThread::run()
+{
+    taskQuitQry = false;
+    while (!taskQuitQry) {
+        TcpSocketClientManager::GetInstance()->DispatchMsg();
+        Sleep(DEFAULT_TASK_PERIOD);
+    }
+}
+
+void SocketThread::Quit()
+{
+    taskQuitQry = true;
+}
 } // namespace OHOS
-#endif // GRAPHIC_LITE_AUTO_TEST_APP_H
