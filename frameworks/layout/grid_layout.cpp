@@ -56,9 +56,8 @@ void GridLayout::LayoutHorizontal()
     int16_t layoutWidth = GetWidth() / cols_;
     int16_t layoutHeight = GetHeight() / rows_;
     int16_t posX;
-    int16_t posY;
     for (int16_t i = 0; i < rows_; i++) {
-        posY = i * layoutHeight;
+        int16_t posY = i * layoutHeight;
         for (int16_t j = 0; j < cols_; j++) {
             if (child == nullptr) {
                 return;
@@ -90,10 +89,9 @@ void GridLayout::LayoutVertical()
     int16_t bottom;
     int16_t layoutWidth = GetWidth() / cols_;
     int16_t layoutHeight = GetHeight() / rows_;
-    int16_t posX;
     int16_t posY;
     for (int16_t i = 0; i < cols_; i++) {
-        posX = i * layoutWidth;
+        int16_t posX = i * layoutWidth;
         for (int16_t j = 0; j < rows_; j++) {
             if (child == nullptr) {
                 return;

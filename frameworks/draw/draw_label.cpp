@@ -37,16 +37,14 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     }
 
     uint32_t i = 0;
-    uint32_t letter;
     uint16_t retOffsetY = 0; // ret value elipse offsetY
     uint16_t offsetPosY = 0;
     uint8_t maxLetterSize = GetLineMaxLetterSize(labelLine.text, labelLine.lineLength, labelLine.fontId,
                                                  labelLine.fontSize, letterIndex, labelLine.sizeSpans);
     DrawLineBackgroundColor(gfxDstBuffer, letterIndex, labelLine);
     GlyphNode glyphNode;
-    uint8_t* fontMap;
     while (i < labelLine.lineLength) {
-        letter = TypedText::GetUTF8Next(labelLine.text, i, i);
+        uint32_t letter = TypedText::GetUTF8Next(labelLine.text, i, i);
         uint8_t fontId = labelLine.fontId;
         uint8_t fontSize = labelLine.fontSize;
         if (labelLine.sizeSpans != nullptr && labelLine.sizeSpans[letterIndex].isSizeSpan) {
@@ -88,8 +86,8 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
         glyphNode.textStyle = letterInfo.textStyle;
 #endif
         glyphNode.advance = 0;
-        fontMap = fontEngine->GetBitmap(letterInfo.letter, glyphNode, letterInfo.fontId, letterInfo.fontSize,
-                                        letterInfo.shapingId);
+        uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, glyphNode, letterInfo.fontId, letterInfo.fontSize,
+                                                 letterInfo.shapingId);
         if (fontMap != nullptr) {
 #if ENABLE_VECTOR_FONT
             if (TypedText::IsColourWord(letterInfo.letter, fontId, fontSize)) {
@@ -123,10 +121,9 @@ uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, u
         return fontSize;
     }
     uint32_t i = 0;
-    uint32_t unicode;
     uint8_t maxLetterSize = fontSize;
     while (i < lineLength) {
-        unicode = TypedText::GetUTF8Next(text, i, i);
+        uint32_t unicode = TypedText::GetUTF8Next(text, i, i);
         if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
             letterIndex++;
             continue;

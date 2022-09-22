@@ -70,7 +70,6 @@ int8_t GlyphsFile::CacheInit()
 int8_t GlyphsFile::GetNodeFromFile(uint32_t unicode, uint8_t fontId, GlyphNode& node)
 {
     uint16_t idx = 0;
-    uint8_t key;
     uint32_t offset;
     GlyphInfo glyphInfo;
     int8_t result = GetGlyphInfo(fontId, glyphInfo);
@@ -79,7 +78,7 @@ int8_t GlyphsFile::GetNodeFromFile(uint32_t unicode, uint8_t fontId, GlyphNode& 
     }
     for (int32_t i = RADIX_SHIFT_START; i >= 0; i -= RADIX_TREE_BITS) {
         offset = idx * sizeof(IndexNode);
-        key = static_cast<uint8_t>((unicode >> static_cast<uint8_t>(i)) & RADIX_TREE_MASK);
+        uint8_t key = static_cast<uint8_t>((unicode >> static_cast<uint8_t>(i)) & RADIX_TREE_MASK);
         offset += key * sizeof(uint16_t);
         idx = *(reinterpret_cast<uint16_t*>(glyphInfo.indexCache + offset));
         if (idx == 0) {
