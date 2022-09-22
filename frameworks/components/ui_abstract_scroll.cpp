@@ -36,7 +36,7 @@ public:
     BarEaseInOutAnimator(BarEaseInOutAnimator&&) = delete;
     BarEaseInOutAnimator& operator=(BarEaseInOutAnimator&&) = delete;
 
-    BarEaseInOutAnimator(UIAbstractScroll& scrollView)
+    explicit BarEaseInOutAnimator(UIAbstractScroll& scrollView)
         : scrollView_(scrollView),
           timer_(APPEAR_PERIOD, TimerCb, this),
           animator_(this, nullptr, ANIMATOR_DURATION, false)
@@ -172,11 +172,9 @@ void UIAbstractScroll::MoveChildByOffset(int16_t offsetX, int16_t offsetY)
         return;
     }
     UIView* view = GetChildrenHead();
-    int16_t x;
-    int16_t y;
     while (view != nullptr) {
-        x = view->GetX() + offsetX;
-        y = view->GetY() + offsetY;
+        int16_t x = view->GetX() + offsetX;
+        int16_t y = view->GetY() + offsetY;
         view->SetPosition(x, y);
         view = view->GetNextSibling();
     }

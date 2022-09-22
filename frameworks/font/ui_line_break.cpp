@@ -133,7 +133,7 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
     int32_t state = LINE_BREAK_STATE_START;
     int16_t width = 0;
     int16_t height = 0;
-    while ((text[byteIdx] != '\0') && (byteIdx < len)) {
+    while ((byteIdx < len) && (text[byteIdx] != '\0')) {
         uint32_t unicode = TypedText::GetUTF8Next(text, preIndex, byteIdx);
         if (unicode == 0) {
             preIndex = byteIdx;
