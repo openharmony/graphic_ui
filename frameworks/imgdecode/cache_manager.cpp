@@ -132,7 +132,7 @@ RetCode CacheManager::Open(const char* path, const Style& style, CacheEntry& ent
     }
 
     SelectEntryToReplace(indexHitted);
-    if (entryArr_[indexHitted].dsc_.path != nullptr) {
+    if ((entryArr_[indexHitted].dsc_.path != nullptr) && (entryArr_[indexHitted].dsc_.decoder != nullptr)) {
         entryArr_[indexHitted].dsc_.decoder->Close(entryArr_[indexHitted].dsc_);
     }
 
@@ -161,13 +161,11 @@ RetCode CacheManager::Close(const char* path)
                 continue;
             }
             if (strcmp(entryArr_[index].dsc_.path, path) == 0) {
-                entryArr_[index].dsc_.decoder->Close(entryArr_[index].dsc_);
                 Clear(entryArr_[index]);
                 break;
             }
         } else {
             if (entryArr_[index].dsc_.path == path) {
-                entryArr_[index].dsc_.decoder->Close(entryArr_[index].dsc_);
                 Clear(entryArr_[index]);
                 break;
             }
@@ -199,7 +197,6 @@ RetCode CacheManager::Reset()
 
     for (uint16_t index = 0; index < GetSize(); index++) {
         if (entryArr_[index].dsc_.path != nullptr) {
-            entryArr_[index].dsc_.decoder->Close(entryArr_[index].dsc_);
             Clear(entryArr_[index]);
         }
     }
@@ -209,6 +206,9 @@ RetCode CacheManager::Reset()
 
 RetCode CacheManager::ReadToCache(CacheEntry& entry)
 {
+    if (entry.dsc_.decoder == nullptr) {
+        return RetCode::FAIL;
+    }
     return entry.dsc_.decoder->ReadToCache(entry.dsc_);
 }
 
