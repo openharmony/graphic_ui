@@ -16,6 +16,7 @@
 #include "dock/pointer_input_device.h"
 
 #include "components/root_view.h"
+#include "components/ui_tree_manager.h"
 #include "core/render_manager.h"
 #if ENABLE_AOD
 #include "events/aod_callback.h"
@@ -44,19 +45,6 @@ void PointerInputDevice::DispatchEvent(const DeviceData& data)
     if (rootView == nullptr) {
         GRAPHIC_LOGE("No valid rootview to dispatch input event!\n");
         return;
-    }
-    // invalid touchable and draggable view will be reset to nullptr
-    if ((touchableView_ != nullptr) && !RootView::FindSubView(*rootView, touchableView_)) {
-        touchableView_ = nullptr;
-        lastPos_ = curPos_;
-    }
-    if ((draggableView_ != nullptr) && !RootView::FindSubView(*rootView, draggableView_)) {
-        draggableView_ = nullptr;
-        lastPos_ = curPos_;
-        dragLastPos_ = curPos_;
-        dragLen_ = { 0, 0 };
-        dragStep_ = { 0, 0 };
-        isDragging_ = false;
     }
 
     if (data.state == STATE_PRESS) {
@@ -267,8 +255,8 @@ void PointerInputDevice::DispatchDragEndEvent()
         OnDragEndEventHappen(*draggableView_);
 #endif
     }
-    dragLen_ = { 0, 0 };
-    dragStep_ = { 0, 0 };
+    dragLen_ = {0, 0};
+    dragStep_ = {0, 0};
     draggableView_ = nullptr;
 }
 
@@ -319,4 +307,36 @@ void PointerInputDevice::DispatchCancelEvent()
     }
     cancelSent_ = true;
 }
-}  // namespace OHOS
+
+void PointerInputDevice::UpdateEventViews(UIView* view)
+{
+    // view should not be nullptr
+    // invalid touchable and draggable view will be reset to nullptr
+    if ((touchableView_ != nullptr) && RootView::FindSubView(*view, touchableView_)) {
+        touchableView_ = nullptr;
+        lastPos_ = curPos_;
+    }
+
+    if ((draggableView_ != nullptr) && RootView::FindSubView(*view, draggableView_)) {
+        draggableView_ = nullptr;
+        lastPos_ = curPos_;
+        dragLastPos_ = curPos_;
+        dragLen_ = {0, 0};
+        dragStep_ = {0, 0};
+        isDragging_ = false;
+    }
+}
+
+void PointerInputDevice::OnViewLifeEvent()
+{
+    UIView* view;
+    UITreeManager::ViewLifeEvent event;
+    UITreeManager::GetInstance().GetLastEvent(view, event);
+
+    if ((event != UITreeManager::REMOVE) || (view == nullptr)) {
+        return;
+    }
+    UpdateEventViews(view);
+}
+
+} // namespace OHOS
