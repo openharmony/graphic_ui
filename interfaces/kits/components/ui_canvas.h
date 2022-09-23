@@ -55,7 +55,6 @@
 #include "gfx_utils/list.h"
 
 namespace OHOS {
-const uint16_t DEFAULT_STROKE_WIDTH = 2;
 class UICanvas;
 class RenderBase;
 class RenderBuffer;
@@ -78,7 +77,7 @@ public:
           fillColor_(Color::Black()),
           strokeColor_(Color::White()),
           opacity_(OPA_OPAQUE),
-          strokeWidth_(DEFAULT_STROKE_WIDTH),
+          strokeWidth_(UI_DEFAULT_STROKE_WIDTH),
           changeFlag_(false),
 #if GRAPHIC_ENABLE_LINEJOIN_FLAG
           lineJoin_(LineJoin::ROUND_JOIN),
@@ -1016,6 +1015,7 @@ private:
     uint8_t opacity_;
     uint16_t strokeWidth_;
     bool changeFlag_;
+    const uint16_t UI_DEFAULT_STROKE_WIDTH = 2;
 #if GRAPHIC_ENABLE_LINEJOIN_FLAG
     LineJoin lineJoin_;
 #endif
