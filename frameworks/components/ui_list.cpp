@@ -628,8 +628,6 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
     if (view == nullptr) {
         return;
     }
-    int16_t x;
-    int16_t y;
     int16_t height;
     int16_t width;
 
@@ -660,8 +658,8 @@ void UIList::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
     }
     bool isSelectViewFind = false;
     do {
-        x = view->GetX() + xOffset;
-        y = view->GetY() + yOffset;
+        int16_t x = view->GetX() + xOffset;
+        int16_t y = view->GetY() + yOffset;
         view->SetPosition(x, y);
         if ((selectPosition_ != 0) && !isSelectViewFind) {
             if (direction_ == VERTICAL) {

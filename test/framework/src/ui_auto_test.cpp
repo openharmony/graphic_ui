@@ -15,6 +15,7 @@
 
 #include "ui_auto_test.h"
 
+#include <sys/time.h>
 #include "auto_test_manager.h"
 #include "components/root_view.h"
 #include "components/ui_view_group.h"

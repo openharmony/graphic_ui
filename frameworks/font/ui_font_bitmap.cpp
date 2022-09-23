@@ -327,7 +327,6 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char* text,
                                      uint8_t fontSize)
 {
     uint32_t i = 0;
-    uint32_t unicode;
     uint16_t textNum = 0;
     uint16_t emojiNum = 0;
 
@@ -336,7 +335,7 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char* text,
     GlyphNode emoijMaxNode = {};
     uint8_t maxFontSie = fontSize;
     while (i < lineLength) {
-        unicode = TypedText::GetUTF8Next(text, i, i);
+        uint32_t unicode = TypedText::GetUTF8Next(text, i, i);
 #if ENABLE_MULTI_FONT
         uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
 #else
@@ -389,9 +388,8 @@ uint16_t UIFontBitmap::GetLineMaxHeight(const char* text,
     }
 
     uint32_t i = 0;
-    uint32_t unicode;
     while (i < lineLength) {
-        unicode = TypedText::GetUTF8Next(text, i, i);
+        TypedText::GetUTF8Next(text, i, i);
         if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
             uint16_t spannableHeight = 0;
             if (sizeSpans[letterIndex].height == 0) {
