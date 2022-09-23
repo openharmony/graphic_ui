@@ -430,7 +430,7 @@ uint32_t Text::CalculateLineWithEllipsis(uint32_t begin, uint32_t textLen, int16
 
 uint32_t Text::GetTextStrLen()
 {
-    return strlen(text_);
+    return (text_ != nullptr) ? (strlen(text_)) : 0;
 }
 
 uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint16_t lineNum, uint8_t letterSpace,
