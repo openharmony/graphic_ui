@@ -482,8 +482,14 @@ protected:
         uint8_t fontOpa;
         FontStyle fontStyle;
         Text* textComment;
-        TextParam()
+        TextParam() : text(nullptr), position({0, 0}), fontOpa(0)
         {
+            fontColor.full = 0;
+            fontStyle.direct = UITextLanguageDirect::TEXT_DIRECT_LTR;
+            fontStyle.align = UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT;
+            fontStyle.fontSize = 0;
+            fontStyle.letterSpace = 0;
+            fontStyle.fontName = nullptr;
             textComment = new Text;
         }
 
