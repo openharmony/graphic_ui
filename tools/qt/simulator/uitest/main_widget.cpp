@@ -19,15 +19,19 @@
 namespace OHOS {
 MainWidget::MainWidget(QWidget* parent) : QWidget(parent), guiThread_(nullptr), taskThread_(nullptr)
 {
-    ui_->setupUi(this);
-    CreateGUIThread();
-    CreateTaskThread();
-    CreateSocketThread();
+    if (ui_ != nullptr) {
+        ui_->setupUi(this);
+        CreateGUIThread();
+        CreateTaskThread();
+        CreateSocketThread();
+    }
 }
 
 MainWidget::~MainWidget()
 {
-    delete ui_;
+    if (ui_ != nullptr) {
+        delete ui_;
+    }
     if (guiThread_ != nullptr) {
         guiThread_->Quit();
         guiThread_->wait();
