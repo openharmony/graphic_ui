@@ -25,7 +25,7 @@ namespace OHOS {
 #if USE_KEY
 class KeyInput : public KeyInputDevice {
 public:
-    KeyInput() {}
+    KeyInput() : leftButtonDown_(false), lastX_(0), lastY_(0) {}
     virtual ~KeyInput() {}
     static KeyInput* GetInstance();
     bool Read(DeviceData& data) override;

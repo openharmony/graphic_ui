@@ -89,6 +89,10 @@ void Text::SetSpannableString(const SpannableString* spannableString)
         return;
     }
     textStyles_ = static_cast<TextStyle*>(UIMalloc(textLen));
+    if (textStyles_ == nullptr) {
+        GRAPHIC_LOGE("Text::SetSpannableString invalid parameter");
+        return;
+    }
     ListNode<StyleSpan*>* node = spannableString->spanList_.Begin();
     while (node != spannableString->spanList_.End()) {
         for (uint32_t i = node->data_->start_; i < node->data_->end_; i++) {
@@ -561,6 +565,10 @@ void Text::SetRelativeSizeSpan(uint16_t start, uint16_t end, float size)
     absoluteSize = static_cast<uint8_t>(size * fontSize_);
 #else
     UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId_);
+    if (fontParam == nullptr) {
+        GRAPHIC_LOGE("Text::SetRelativeSizeSpan invalid parameter");
+        return;
+    }
     absoluteSize = static_cast<uint8_t>(size * fontParam->size);
 #endif
     SetAbsoluteSizeSpan(start, end, absoluteSize);

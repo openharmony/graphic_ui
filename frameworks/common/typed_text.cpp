@@ -177,21 +177,18 @@ uint32_t TypedText::GetNextLine(const char* text, uint8_t fontId, uint8_t fontSi
         return index;
     }
     uint32_t lastBreakPos = 0;
-    int16_t curW;
     uint32_t tmp = 0;
     while (true) {
-        curW = TypedText::GetTextWidth(text, fontId, fontSize, index, letterSpace);
+        int16_t curW = TypedText::GetTextWidth(text, fontId, fontSize, index, letterSpace);
         if (curW > maxWidth) {
             index = lastBreakPos;
             if (lastBreakPos == 0) {
                 curW = 0;
                 uint32_t i = 0;
-                uint32_t letter;
-                uint16_t letterWidth;
                 while (text[i] != '\0') {
                     tmp = i;
-                    letter = TypedText::GetUTF8Next(text, tmp, i);
-                    letterWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
+                    uint32_t letter = TypedText::GetUTF8Next(text, tmp, i);
+                    uint16_t letterWidth = UIFont::GetInstance()->GetWidth(letter, fontId, fontSize, 0);
                     curW += letterWidth;
                     if (letterWidth > 0) {
                         curW += letterSpace;
@@ -228,13 +225,12 @@ bool TypedText::GetWrapPoint(const char* text, uint32_t& breakPoint)
 {
     breakPoint = 0;
     uint32_t j = 0;
-    uint32_t letter = 0;
     if (text == nullptr) {
         return true;
     }
 
     while (text[breakPoint] != '\0') {
-        letter = GetUTF8Next(text, breakPoint, j);
+        uint32_t letter = GetUTF8Next(text, breakPoint, j);
         breakPoint = j;
         if ((letter == ' ') || (letter == '.') || (letter == ',') || (letter == '!') || (letter == '=')
             || (letter == '?')) {
@@ -261,10 +257,9 @@ int16_t TypedText::GetTextWidth(const char* text, uint8_t fontId, uint8_t fontSi
 
     uint32_t i = 0;
     uint16_t width = 0;
-    uint32_t letter;
 
     while (i < length) {
-        letter = GetUTF8Next(text, i, i);
+        uint32_t letter = GetUTF8Next(text, i, i);
         if ((letter == 0) || (letter == '\n') || (letter == '\r')) {
             continue;
         }
@@ -533,8 +528,8 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSiz
 #if ENABLE_MULTI_FONT
         uint8_t* searchLists = nullptr;
         int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
-        int8_t currentIndex = 0;
         if ((listSize > 0) && (searchLists != nullptr)) {
+            int8_t currentIndex = 0;
             do {
                 weight = UIFont::GetInstance()->GetFontWeight(searchLists[currentIndex]);
                 if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
