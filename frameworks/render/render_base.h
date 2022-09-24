@@ -191,7 +191,8 @@ public:
      * @param covers Scan line corresponding coverage array.
      * @return Returns true if should run the follow programs.
      */
-    bool ColorHSpanHandler(int32_t& x, int32_t& y, int32_t& len, const Rgba8T*& colors, const uint8_t*& covers);
+    bool ColorHSpanHandler(int32_t& x, const int32_t& y, int32_t& len, const Rgba8T*& colors,
+                           const uint8_t*& covers) const;
 
 private:
     RenderPixfmtRgbaBlend* pixfmtType_;

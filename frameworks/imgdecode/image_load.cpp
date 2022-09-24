@@ -77,9 +77,6 @@ bool ImageLoad::UncompressImageInZip(ImageInfo& imageInfo, uint8_t* buffer, uint
 
 bool ImageLoad::UnzipImage(uint8_t* imageBuffer, uint32_t size, ImageInfo& imageInfo)
 {
-    uint32_t value = 0;
-    uint32_t count = 0;
-
     if ((imageBuffer == nullptr) || (size == 0)) {
         GRAPHIC_LOGE("imageHeader is null.");
         return false;
@@ -98,8 +95,8 @@ bool ImageLoad::UnzipImage(uint8_t* imageBuffer, uint32_t size, ImageInfo& image
             *dest++ = *source++;
         } else {
             source++;
-            value = *source++;
-            count = *source++;
+            uint32_t value = *source++;
+            uint32_t count = *source++;
             if (destEnd < count + dest) {
                 break;
             }
@@ -130,11 +127,9 @@ bool ImageLoad::Unzip24Image(uint8_t* imageBuffer, uint32_t size, ImageInfo& ima
     uint32_t* dest = reinterpret_cast<uint32_t*>(const_cast<uint8_t*>(imageInfo.data));
     uint32_t* destEnd = reinterpret_cast<uint32_t*>(const_cast<uint8_t*>(imageInfo.data) + imageInfo.dataSize);
     while ((source < sourceEnd) && (dest < destEnd)) {
-        uint32_t count = 0;
-        uint32_t value = 0;
-
         // Little endian
-        value = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW) + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
+        uint32_t value = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW)
+                         + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
         source = source + BITMAP_ZIP_LEN;
         if (value != BITMAP_ZIP24_FLAG) {
             *dest = value | BITMAP_ALPHA_MASK;
@@ -143,7 +138,8 @@ bool ImageLoad::Unzip24Image(uint8_t* imageBuffer, uint32_t size, ImageInfo& ima
             value = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW) + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
             source = source + BITMAP_ZIP_LEN;
 
-            count = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW) + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
+            uint32_t count = ((*source)) + (*(source + BITMAP_MID_BIT) << MOVE_LOW)
+                             + (*(source + BITMAP_LOW_BIT) << MOVE_HIGH);
             source = source + BITMAP_ZIP_LEN;
 
             if (count > BITMAP_MAXCON_PIXNUM) {
