@@ -127,7 +127,7 @@ bool UIScrollView::OnRotateEvent(const RotateEvent& event)
     }
     VibratorFunc vibratorFunc = VibratorManager::GetInstance()->GetVibratorFunc();
     if (vibratorFunc != nullptr && !isEdge) {
-        uint16_t rotateLen = MATH_ABS(totalRotateLen_ - lastVibratorRotateLen_);
+        rotateLen = MATH_ABS(totalRotateLen_ - lastVibratorRotateLen_);
         if (rotateLen > DEFAULT_SCROLL_VIEW_VIBRATION_LEN) {
             uint16_t vibrationCnt = rotateLen / DEFAULT_SCROLL_VIEW_VIBRATION_LEN;
             for (uint16_t i = 0; i < vibrationCnt; i++) {

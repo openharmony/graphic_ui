@@ -686,7 +686,6 @@ uint16_t UIFontVector::GetOffsetPosY(const char* text,
         return INVALID_RET_VALUE;
     }
     uint32_t i = 0;
-    uint32_t unicode;
     uint16_t textNum = 0;
     uint16_t emojiNum = 0;
     uint16_t loopNum = 0;
@@ -694,7 +693,7 @@ uint16_t UIFontVector::GetOffsetPosY(const char* text,
     GlyphNode emojiMaxNode = {};
     uint8_t maxFontSize = fontSize;
     while (i < lineLength) {
-        unicode = TypedText::GetUTF8Next(text, i, i);
+        uint32_t unicode = TypedText::GetUTF8Next(text, i, i);
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
         if (ret == RET_VALUE_OK) {
 #if ENABLE_VECTOR_FONT
@@ -741,13 +740,12 @@ uint16_t UIFontVector::GetLineMaxHeight(const char *text, uint16_t lineLength, u
         return INVALID_RET_VALUE;
     }
     uint32_t i = 0;
-    uint32_t unicode;
     uint16_t textNum = 0;
     uint16_t emojiNum = 0;
     uint16_t loopNum = 0;
     uint16_t maxHeight = GetHeight(fontId, fontSize);
     while (i < lineLength) {
-        unicode = TypedText::GetUTF8Next(text, i, i);
+        uint32_t unicode = TypedText::GetUTF8Next(text, i, i);
         TypedText::IsColourWord(unicode, fontId, fontSize) ? emojiNum++ : textNum++;
         loopNum++;
         if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
@@ -791,10 +789,9 @@ uint16_t UIFontVector::GetMaxSubLineHeight(uint16_t textNum, uint16_t loopNum, u
         }
     }
     // A line has both emoji and words
-    uint16_t tmpHeight = 0;
     if ((textNum > 0) && (emojiNum > 0)) {
         for (uint8_t i = 0; i < currentFontInfoNum_; i++) {
-            tmpHeight = static_cast<uint16_t>(ftFaces_[i]->size->metrics.height / FONT_PIXEL_IN_POINT);
+            uint16_t tmpHeight = static_cast<uint16_t>(ftFaces_[i]->size->metrics.height / FONT_PIXEL_IN_POINT);
             maxHeight = tmpHeight > maxHeight ? tmpHeight : maxHeight;
         }
     }

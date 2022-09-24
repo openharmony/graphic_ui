@@ -176,9 +176,9 @@ void ClipUtils::DrawPixel(int16_t x, int16_t y, uint8_t opa, const ImageInfo* im
     }
 }
 
-void ClipUtils::DrawHorLine(int16_t x, int16_t y, int16_t len, uint8_t opa, const ImageInfo* imageInfo)
+void ClipUtils::DrawHorLine(int16_t x, int16_t y, int16_t width, uint8_t opa, const ImageInfo* imageInfo)
 {
-    for (int32_t i = x; i <= x + len; i++) {
+    for (int32_t i = x; i <= x + width; i++) {
         DrawPixel(i, y, opa, imageInfo);
     }
 }

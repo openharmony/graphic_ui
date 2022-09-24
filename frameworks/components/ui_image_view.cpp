@@ -368,6 +368,10 @@ void UIImageView::UpdateDrawTransMap(bool updateContentMatrix)
     }
     // only contentMatrix
     if (transMap_ == nullptr || transMap_->IsInvalid()) {
+        if (contentMatrix_ == nullptr) {
+            GRAPHIC_LOGE("Text: UpdateDrawTransMap contentMatrix_ is nullptr");
+            return;
+        }
         drawTransMap_->SetMatrix(*contentMatrix_);
         return;
     }

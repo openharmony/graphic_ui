@@ -324,9 +324,8 @@ bool UIPicker::RefreshSelected(uint16_t index)
         UIView* childView = static_cast<UIView*>(list_.GetChildrenHead());
         uint16_t lastSelectIndex = listListener_->GetSelectIndex();
 
-        int16_t viewIndex;
         while (childView != nullptr) {
-            viewIndex = childView->GetViewIndex();
+            int16_t viewIndex = childView->GetViewIndex();
             if (viewIndex == lastSelectIndex) {
                 childView->SetStyle(STYLE_TEXT_COLOR, GetBackgroundTextColor().full);
                 if (backgroundFontName_ == nullptr) {
