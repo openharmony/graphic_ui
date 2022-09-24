@@ -181,7 +181,6 @@ void UICheckBox::UnSelectedStateSoftwareDrawing(BufferInfo& gfxDstBuffer,
                                                 int16_t borderRadius,
                                                 int16_t rectLineWidth)
 {
-    Rect contentRect = GetContentRect();
     Style styleUnSelect = StyleDefault::GetBackgroundTransparentStyle();
     styleUnSelect.borderWidth_ = rectLineWidth;
     styleUnSelect.borderRadius_ = borderRadius;

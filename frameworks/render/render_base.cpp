@@ -123,7 +123,8 @@ void RenderBase::BlendColorHSpan(int32_t x, int32_t y, int32_t len, const Rgba8T
     pixfmtType_->BlendColorHSpan(x, y, len, colors, covers, cover);
 }
 
-bool RenderBase::ColorHSpanHandler(int32_t& x, int32_t& y, int32_t& len, const Rgba8T*& colors, const uint8_t*& covers)
+bool RenderBase::ColorHSpanHandler(int32_t& x, const int32_t& y, int32_t& len, const Rgba8T*& colors,
+                                   const uint8_t*& covers) const
 {
     if (y > GetYMax() || y < GetYMin()) {
         return false;

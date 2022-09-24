@@ -28,7 +28,7 @@ public:
         QMetaObject::connectSlotsByName(MainWidget);
     } // setupUi
 
-    void retranslateUi(QWidget* MainWidget)
+    static void retranslateUi(QWidget* MainWidget)
     {
         MainWidget->setWindowTitle(QCoreApplication::translate("MainWidget", "MainWidget", nullptr));
     } // retranslateUi
