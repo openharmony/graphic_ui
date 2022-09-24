@@ -310,11 +310,9 @@ UIView* UIViewGroup::GetChildById(const char* id) const
 void UIViewGroup::MoveChildByOffset(int16_t xOffset, int16_t yOffset)
 {
     UIView* view = childrenHead_;
-    int16_t x;
-    int16_t y;
     while (view != nullptr) {
-        x = view->GetX() + xOffset;
-        y = view->GetY() + yOffset;
+        int16_t x = view->GetX() + xOffset;
+        int16_t y = view->GetY() + yOffset;
         view->SetPosition(x, y);
         view = view->GetNextSibling();
     }
@@ -378,7 +376,6 @@ void UIViewGroup::UpdateRenderView(UIView* targetView)
 
     int16_t curZIndex = curView->GetZIndex();
     int16_t targetZIndex = targetView->GetZIndex();
-    int16_t nextZIndex;
     UIView* nextView = curView->GetNextRenderSibling();
     UIView* preView = nullptr;
 
@@ -396,7 +393,7 @@ void UIViewGroup::UpdateRenderView(UIView* targetView)
 
     while (nextView != nullptr) {
         curZIndex = curView->GetZIndex();
-        nextZIndex = nextView->GetZIndex();
+        int16_t nextZIndex = nextView->GetZIndex();
         if (curZIndex == targetZIndex) {
             InsertRenderView(curView, preView, targetView);
             return;
@@ -431,7 +428,6 @@ void UIViewGroup::InsertRenderView(UIView* archorView, UIView* anchorPreView, UI
         return;
     }
 
-    int16_t curZIndex = node->GetZIndex();
     int16_t targetZIndex = targetView->GetZIndex();
     UIView* newArchorView = nullptr;
 
@@ -442,7 +438,7 @@ void UIViewGroup::InsertRenderView(UIView* archorView, UIView* anchorPreView, UI
     }
 
     while (node->GetNextSibling() != nullptr) {
-        curZIndex = node->GetNextSibling()->GetZIndex();
+        int16_t curZIndex = node->GetNextSibling()->GetZIndex();
         if (curZIndex == targetZIndex) {
             if ((node->GetNextSibling() == targetView) && (newArchorView == nullptr)) {
                 targetView->SetNextRenderSibling(archorView);

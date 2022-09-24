@@ -149,17 +149,11 @@ void BlendSourceAtop(RasterizerScanlineAntialias& raster1, RasterizerScanlineAnt
         int32_t y2 = scanline2.GetYLevel();
         uint32_t numSpans2 = scanline2.NumSpans();
         GeometryScanline::ConstIterator span2 = scanline2.Begin();
-        uint32_t numSpans1;
-        GeometryScanline::ConstIterator span1;
-        if (y1 == y2) {
-            numSpans1 = scanline1.NumSpans();
-            span1 = scanline1.Begin();
-        }
+        GeometryScanline::ConstIterator span1 = scanline1.Begin();
         if (y2 > y1) {
             while (raster1.SweepScanline(scanline1)) {
                 y1 = scanline1.GetYLevel();
                 if (y1 == y2) {
-                    numSpans1 = scanline1.NumSpans();
                     span1 = scanline1.Begin();
                     break;
                 }
@@ -222,8 +216,6 @@ void BlendSourceAtop(RasterizerScanlineAntialias& raster1, RasterizerScanlineAnt
         if (y1 == y2) {
             raster1.SweepScanline(scanline1);
             y1 = scanline1.GetYLevel();
-            numSpans1 = scanline1.NumSpans();
-            span1 = scanline1.Begin();
         }
     }
 }
@@ -282,12 +274,7 @@ void BlendSourceOut(RasterizerScanlineAntialias& raster1, RasterizerScanlineAnti
         int32_t y2 = scanline2.GetYLevel();
         uint32_t numSpans2 = scanline2.NumSpans();
         GeometryScanline::ConstIterator span2 = scanline2.Begin();
-        uint32_t numSpans1;
-        GeometryScanline::ConstIterator span1;
-        if (y1 == y2) {
-            numSpans1 = scanline1.NumSpans();
-            span1 = scanline1.Begin();
-        }
+        GeometryScanline::ConstIterator span1 = scanline1.Begin();
         while (true) {
             int32_t x2 = span2->x;
             if (y1 == y2) {
@@ -337,8 +324,6 @@ void BlendSourceOut(RasterizerScanlineAntialias& raster1, RasterizerScanlineAnti
         if (y1 == y2 && y1 < raster2.GetMaxY() - 1) {
             if (raster1.SweepScanline(scanline1)) {
                 y1 = scanline1.GetYLevel();
-                numSpans1 = scanline1.NumSpans();
-                span1 = scanline1.Begin();
             }
         }
     }
@@ -424,12 +409,7 @@ void BlendXOR(RasterizerScanlineAntialias& raster1, RasterizerScanlineAntialias&
         spanGen2.Prepare();
         uint32_t numSpans2 = scanline2.NumSpans();
         GeometryScanline::ConstIterator span2 = scanline2.Begin();
-        uint32_t numSpans1;
-        GeometryScanline::ConstIterator span1;
-        if (y1 == y2) {
-            numSpans1 = scanline1.NumSpans();
-            span1 = scanline1.Begin();
-        }
+        GeometryScanline::ConstIterator span1 = scanline1.Begin();
         while (true) {
             int32_t x2 = span2->x;
             if (y1 == y2) {
@@ -507,8 +487,6 @@ void BlendXOR(RasterizerScanlineAntialias& raster1, RasterizerScanlineAntialias&
         if (y1 == y2 && y1 < raster2.GetMaxY() - 1) {
             if (raster1.SweepScanline(scanline1)) {
                 y1 = scanline1.GetYLevel();
-                numSpans1 = scanline1.NumSpans();
-                span1 = scanline1.Begin();
             }
         }
     }
@@ -581,20 +559,12 @@ void BlendSourceInLoop(RasterizerScanlineAntialias& raster1, GeometryScanline& s
     int32_t y2 = scanline2.GetYLevel();
     uint32_t numSpans2 = scanline2.NumSpans();
     GeometryScanline::ConstIterator span2 = scanline2.Begin();
-
-    uint32_t numSpans1;
-    GeometryScanline::ConstIterator span1;
-
-    if (y1 == y2) {
-        numSpans1 = scanline1.NumSpans();
-        span1 = scanline1.Begin();
-    }
+    GeometryScanline::ConstIterator span1 = scanline1.Begin();
 
     if (y2 > y1) {
         while (raster1.SweepScanline(scanline1)) {
             y1 = scanline1.GetYLevel();
             if (y1 == y2) {
-                numSpans1 = scanline1.NumSpans();
                 span1 = scanline1.Begin();
                 break;
             }
@@ -643,8 +613,6 @@ void BlendSourceInLoop(RasterizerScanlineAntialias& raster1, GeometryScanline& s
     if (y1 == y2) {
         raster1.SweepScanline(scanline1);
         y1 = scanline1.GetYLevel();
-        numSpans1 = scanline1.NumSpans();
-        span1 = scanline1.Begin();
     }
 }
 

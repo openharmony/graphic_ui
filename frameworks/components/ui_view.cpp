@@ -1264,9 +1264,8 @@ uint8_t UIView::GetMixOpaScale() const
 {
     uint8_t opaMix = opaScale_;
     UIView* parent = parent_;
-    uint8_t opaParent;
     while (parent != nullptr) {
-        opaParent = parent->GetOpaScale();
+        uint8_t opaParent = parent->GetOpaScale();
         // 8: Shift right 8 bits
         opaMix = (opaParent == OPA_OPAQUE) ? opaMix : ((static_cast<uint16_t>(opaParent) * opaMix) >> 8);
         parent = parent->GetParent();
