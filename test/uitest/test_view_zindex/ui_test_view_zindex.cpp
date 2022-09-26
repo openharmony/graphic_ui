@@ -288,6 +288,7 @@ void UITestViewZIndex::SetupChangeView()
     target->SetTextColor(Color::Black());
     UIView* tmpView = group->GetChildById(ZINDEX_VIEW_GROUP[2].text);
     if (tmpView == nullptr) {
+        delete target;
         return;
     }
     group->Insert(tmpView, target);
