@@ -16,7 +16,7 @@
 #include "tcp_socket.h"
 
 namespace OHOS {
-TcpScoketClient::TcpScoketClient() : tcpSocket_(nullptr)
+TcpScoketClient::TcpScoketClient() : tcpSocket_(nullptr), tcpSocketManager_(nullptr)
 {
 }
 
