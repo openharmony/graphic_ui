@@ -45,6 +45,8 @@ public:
     constexpr static uint8_t STATE_RELEASE = 0;
     constexpr static uint8_t STATE_PRESS = 1;
 
+    virtual void OnViewLifeEvent() {}
+
 protected:
     uint16_t rawDataState_;
 

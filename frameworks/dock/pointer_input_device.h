@@ -34,6 +34,7 @@ public:
 
 protected:
     void DispatchEvent(const DeviceData& data) override;
+    void OnViewLifeEvent() override;
 
 private:
     UIView* touchableView_;
@@ -60,6 +61,7 @@ private:
     void DispatchLongPressEvent(uint32_t elapse);
     void DispatchCancelEvent();
     bool ProcessReleaseEvent();
+    void UpdateEventViews(UIView* view);
     UIView* GetDraggableView(UIView* targetView) const
     {
         UIView* tempView = targetView;

@@ -150,6 +150,7 @@ lite_library("ui") {
     "frameworks/components/ui_texture_mapper.cpp",
     "frameworks/components/ui_time_picker.cpp",
     "frameworks/components/ui_toggle_button.cpp",
+    "frameworks/components/ui_tree_manager.cpp",
     "frameworks/components/ui_view.cpp",
     "frameworks/components/ui_view_group.cpp",
     "frameworks/core/input_method_manager.cpp",
