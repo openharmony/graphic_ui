@@ -53,8 +53,8 @@ void UIAutoTest::EnterSubMenu(const char* id) const
 
     UIView* view = RootView::GetInstance()->GetChildById(id);
     if (view == nullptr) {
-        UIView* view = RootView::GetInstance()->GetChildById(UI_TEST_MAIN_LIST_ID);
-        if (view == nullptr) {
+        UIView* listView = RootView::GetInstance()->GetChildById(UI_TEST_MAIN_LIST_ID);
+        if (listView == nullptr) {
             return;
         }
         ListNode<TestCaseInfo>* node = UITestGroup::GetTestCase().Begin();
@@ -66,7 +66,7 @@ void UIAutoTest::EnterSubMenu(const char* id) const
             }
             node = node->next_;
         }
-        reinterpret_cast<UIList*>(view)->RefreshList();
+        reinterpret_cast<UIList*>(listView)->RefreshList();
         CompareTools::WaitSuspend();
     }
 

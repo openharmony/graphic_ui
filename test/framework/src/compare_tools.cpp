@@ -85,7 +85,7 @@ bool CompareTools::CompareByBit(uint32_t fd)
             flag = false;
             break;
         }
-        uint32_t ret = read(fd, buff, buffSize);
+        int32_t ret = read(fd, buff, buffSize);
         if (ret < 0) {
             flag = false;
             break;
@@ -122,12 +122,12 @@ bool CompareTools::CompareByBitmap(const BitmapInfoHeader bitmapInfoBase,
             flag = false;
             break;
         }
-        uint32_t retBase = read(fdBase, buffBase, buffSizeBase);
+        int32_t retBase = read(fdBase, buffBase, buffSizeBase);
         if (retBase < 0) {
             flag = false;
             break;
         }
-        uint32_t retRun = read(fdRun, buffRun, buffSizeBase);
+        int32_t retRun = read(fdRun, buffRun, buffSizeBase);
         if (retRun < 0) {
             flag = false;
             break;
@@ -254,7 +254,7 @@ bool CompareTools::SaveByBit(uint32_t fd)
     bitmapInfo.biPlanes = 1;
     bitmapInfo.biBitCount = sizeByColorMode * 8; // 8: uint8_t bit
     bitmapInfo.biSizeImage = imageBit.dataSize;
-    if (!flag && (write(fd, &bfType, sizeof(bfType)) > 0)) {
+    if (write(fd, &bfType, sizeof(bfType)) > 0) {
         if (write(fd, &bitmapInfo, sizeof(bitmapInfo)) > 0) {
             if (write(fd, imageBit.data, imageBit.dataSize) > 0) {
                 flag = true;

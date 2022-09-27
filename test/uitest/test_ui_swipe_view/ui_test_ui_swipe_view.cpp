@@ -297,15 +297,15 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode a
         return;
     }
 
-    const char* leftTitle = "UISwipeView 子组件左对齐";
-    const char* centerTitle = "UISwipeView 子组件Center对齐";
-    const char* rightTitle = "UISwipeView 子组件右对齐";
     UILabel* label;
     if (alignMode == UISwipeView::ALIGN_LEFT) {
+        const char* leftTitle = "UISwipeView 子组件左对齐";
         label = GetTitleLabel(leftTitle);
     } else if (alignMode == UISwipeView::ALIGN_RIGHT) {
+        const char* rightTitle = "UISwipeView 子组件右对齐";
         label = GetTitleLabel(rightTitle);
     } else {
+        const char* centerTitle = "UISwipeView 子组件Center对齐";
         label = GetTitleLabel(centerTitle);
     }
 
@@ -335,12 +335,12 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode a
     swipe->Add(button3);
 
     UILabel* tmpLabel = nullptr;
-    const char* tmpOkTitle = "The result of GetAlignMode is OK.";
-    const char* tmpErrTitle = "The result of GetAlignMode is Error.";
     uint8_t tmpAlignMode = swipe->GetAlignMode();
     if (tmpAlignMode == alignMode) {
+        const char* tmpOkTitle = "The result of GetAlignMode is OK.";
         tmpLabel = GetTitleLabel(tmpOkTitle);
     } else {
+        const char* tmpErrTitle = "The result of GetAlignMode is Error.";
         tmpLabel = GetTitleLabel(tmpErrTitle);
     }
     tmpLabel->SetPosition(positionX_, 100, 250, 25); // 100: y, 250:width, 25:height
@@ -421,8 +421,8 @@ bool UITestUISwipeView::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == removeHeadBtn_) {
         currentSwipe_->Remove(currentSwipe_->GetChildrenHead());
     } else if (&view == removeMidBtn_) {
-        UIView* view = currentSwipe_->GetViewByIndex(1);
-        currentSwipe_->Remove(view);
+        UIView* viewToBeRemoved = currentSwipe_->GetViewByIndex(1);
+        currentSwipe_->Remove(viewToBeRemoved);
     } else if (&view == removeAllBtn_) {
         currentSwipe_->RemoveAll();
     } else if (&view == loopBtn_) {
