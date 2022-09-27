@@ -70,8 +70,8 @@ public:
 private:
     UIViewGroup* rootView_;
     UIViewGroup* mainMenu_;
-    UILabel* testCaseLabel_;
     UITest* uiTest_;
+    UILabel* testCaseLabel_;
 };
 
 class BtnOnClickUiTestListener : public UIView::OnClickListener {
@@ -130,8 +130,8 @@ private:
     UIViewGroup* rootView_;
     UIViewGroup* mainMenu_;
     UILabelButton* backBtn_;
-    UITest* uiTest_;
     UILabel* testCaseLabel_;
+    UITest* uiTest_;
     const char* sliceId_;
 };
 

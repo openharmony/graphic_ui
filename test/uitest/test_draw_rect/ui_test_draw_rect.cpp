@@ -744,7 +744,6 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_011()
     UIView* view = CreateUIView();
     int16_t width = 120; // 120 : width
     int16_t height = 50; // 50 : height
-    int16_t borderWidth = 10; // 10 : borderWidth
     view->SetPosition(VIEW_DISTANCE_TO_LEFT_SIDE, VIEW_DISTANCE_TO_TOP_SIDE);
     view->SetStyle(STYLE_BORDER_WIDTH, 2); // 2: borderWidth
     view->SetStyle(STYLE_BORDER_RADIUS, 1); // 1 : math_num

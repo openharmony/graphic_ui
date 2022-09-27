@@ -110,8 +110,8 @@ void TcpSocketClientManager::OnGetTestSetps(QJsonArray array, std::vector<TestSt
         if (arrobj.contains(JSON_VALUE_EVENT_VALUE.c_str())) {
             QJsonValue arrays_value = arrobj.take(JSON_VALUE_EVENT_VALUE.c_str());
             if (arrays_value.isArray()) {
-                QJsonArray array = arrays_value.toArray();
-                OnGetEventValue(array, testSteps.eventValue);
+                QJsonArray localArray = arrays_value.toArray();
+                OnGetEventValue(localArray, testSteps.eventValue);
             }
         }
         if (arrobj.contains(JSON_VALUE_SAVE_CHECK_POINT.c_str())) {
