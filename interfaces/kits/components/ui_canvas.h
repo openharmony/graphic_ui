@@ -1009,13 +1009,13 @@ public:
     }
 
 private:
+    const uint16_t UI_DEFAULT_STROKE_WIDTH = 2;
     PaintStyle style_;
     ColorType fillColor_;
     ColorType strokeColor_;
     uint8_t opacity_;
     uint16_t strokeWidth_;
     bool changeFlag_;
-    const uint16_t UI_DEFAULT_STROKE_WIDTH = 2;
 #if GRAPHIC_ENABLE_LINEJOIN_FLAG
     LineJoin lineJoin_;
 #endif
