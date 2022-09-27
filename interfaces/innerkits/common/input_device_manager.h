@@ -16,9 +16,9 @@
 #ifndef GRAPHIC_LITE_INPUT_DEVICE_MANAGER_H
 #define GRAPHIC_LITE_INPUT_DEVICE_MANAGER_H
 
+#include "common/task.h"
 #include "dock/input_device.h"
 #include "gfx_utils/list.h"
-#include "common/task.h"
 
 namespace OHOS {
 /**
@@ -63,6 +63,8 @@ private:
     InputDeviceManager& operator=(const InputDeviceManager&) = delete;
     InputDeviceManager(InputDeviceManager&&) = delete;
     InputDeviceManager& operator=(InputDeviceManager&&) = delete;
+
+    static void OnViewLifeEvent();
 
     List<InputDevice*> deviceList_;
 };

@@ -15,6 +15,7 @@
 
 #include "common/input_device_manager.h"
 #include "common/task_manager.h"
+#include "components/ui_tree_manager.h"
 #include "gfx_utils/graphic_log.h"
 
 namespace OHOS {
@@ -26,6 +27,7 @@ InputDeviceManager* InputDeviceManager::GetInstance()
 
 void InputDeviceManager::Init()
 {
+    UITreeManager::GetInstance().RegistViewLifeEvent(OnViewLifeEvent);
     if (INDEV_READ_PERIOD > 0) {
         SetPeriod(INDEV_READ_PERIOD);
         TaskManager::GetInstance()->Add(this);
@@ -69,4 +71,15 @@ void InputDeviceManager::Clear()
 {
     deviceList_.Clear();
 }
-}  // namespace OHOS
+
+void InputDeviceManager::OnViewLifeEvent()
+{
+    auto& devices = GetInstance()->deviceList_;
+    auto node = devices.Begin();
+    while (node != devices.End()) {
+        node->data_->OnViewLifeEvent();
+        node = node->next_;
+    }
+}
+
+} // namespace OHOS
