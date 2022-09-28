@@ -19,7 +19,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "main.cpp"
 #include "auto_test_manager.h"
 
 namespace OHOS {
