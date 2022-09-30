@@ -17,7 +17,7 @@ QT_BEGIN_NAMESPACE
 
 class Ui_MainWidget {
 public:
-    void setupUi(QWidget* MainWidget)
+    static void setupUi(QWidget* MainWidget)
     {
         if (MainWidget->objectName().isEmpty())
             MainWidget->setObjectName(QString::fromUtf8("MainWidget"));

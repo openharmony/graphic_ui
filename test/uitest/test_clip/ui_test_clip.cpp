@@ -217,7 +217,6 @@ void UITestClip::UIKitClipTest002()
     SetUpButton(btnEndAngleInc_, "结束角度+", x, y);
     btnEndAngleDec_ = new UILabelButton();
     SetUpButton(btnEndAngleDec_, "结束角度-", x + BUTTON_WIDHT2 + GAP, y);
-    y += BUTTON_HEIGHT2 + GAP;
 
     ClipPath path;
     // {80, 80}: center; 50: radius

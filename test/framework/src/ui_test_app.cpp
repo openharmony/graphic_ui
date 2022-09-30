@@ -161,9 +161,7 @@ UITestApp::~UITestApp()
         delete backBtn_;
         backBtn_ = nullptr;
     }
-    if (rootView_ != nullptr) {
-        rootView_ = nullptr;
-    }
+    rootView_ = nullptr;
     if (autoTestBtn_ != nullptr) {
         auto listener = autoTestBtn_->GetOnClickListener();
         if (listener != nullptr) {
