@@ -15,7 +15,6 @@
 
 #include "ui_test_app.h"
 
-#include "compare_tools.h"
 #include "test_resource_config.h"
 #include "ui_test.h"
 #include "ui_test_group.h"

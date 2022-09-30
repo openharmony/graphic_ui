@@ -13,6 +13,7 @@ SUBDIRS += \
     third_party/qrcodegen \
     libui \
     test \
+    autotest/auto_test.pro \
     uitest/UITest.pro
 
 HEADERS += \

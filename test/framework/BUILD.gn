@@ -81,14 +81,8 @@ if (enable_video_component) {
   test_sources += [ "../uitest/test_video/ui_test_video.cpp" ]
 }
 
-auto_test_sources = [
-  "src/compare_tools.cpp",
-  "src/ui_auto_test.cpp",
-]
-
 static_library("framework") {
   sources = test_sources
-  sources += auto_test_sources
 
   include_dirs = [
     "common",
@@ -113,7 +107,6 @@ static_library("framework") {
 
 static_library("auto_framework") {
   sources = test_sources
-  sources += auto_test_sources
   include_dirs = [
     "common",
     "include",
