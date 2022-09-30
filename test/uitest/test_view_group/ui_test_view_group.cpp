@@ -199,17 +199,17 @@ bool UITestViewGroup::OnClick(UIView& view, const ClickEvent& event)
     } else if (&view == removeAddBtn_) {
         RemoveAndAddView();
     } else if (&view == addTwiceBtn_) {
-        UIView* view = new UIView();
-        container_->Add(view);
-        container_->Add(view);
+        UIView* viewToAdd = new UIView();
+        container_->Add(viewToAdd);
+        container_->Add(viewToAdd);
     } else if (&view == addMultiParentBtn_) {
         AddMultiParent();
     } else if (&view == addSelfBtn_) {
         container_->Add(container_);
     } else if (&view == insertTwiceBtn_) {
-        UIView* view = new UIView();
-        container_->Insert(nullptr, view);
-        container_->Insert(nullptr, view);
+        UIView* viewToBeInsert = new UIView();
+        container_->Insert(nullptr, viewToBeInsert);
+        container_->Insert(nullptr, viewToBeInsert);
     } else if (&view == insertMultiParentBtn_) {
         InsertMultiParent();
     } else if (&view == insertSelfBtn_) {

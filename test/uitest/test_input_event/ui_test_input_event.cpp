@@ -536,9 +536,8 @@ void UITestInputEvent::InnerBubbleDragTest(const char* title,
     int32_t itemH2 = itemH1 + ITEM_H;
     int32_t itemH3 = itemH2 + ITEM_H;
     int32_t halfScreenWith = Screen::GetInstance().GetWidth() / 2; // 2: half screen width
-    int32_t offset = 30;                                           // 40 pixel offset
-
     if (container_ != nullptr) {
+        int32_t offset = 30;                                         // 40 pixel offset
         UILabel* label = new UILabel();
         container_->Add(label);
         // 2: half screen width
