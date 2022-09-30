@@ -28,7 +28,6 @@ DEFINES += QT_DEPRECATED_WARNINGS \
     "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1" \
     "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1" \
     "DEFAULT_ANIMATION=1" \
-    AUTO_TEST_RESOURCE_PATH=../../simulator/config/auto_test/ \
 
 DEFINES += QT_COMPILER
 
@@ -94,11 +93,6 @@ SOURCES += \
     ../../../../test/uitest/test_view_zindex/ui_test_view_zindex.cpp \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.cpp
 
-SOURCES += \
-    ../../../../test/framework/src/auto_test_manager.cpp \
-    ../../../../test/framework/src/compare_tools.cpp \
-    ../../../../test/framework/src/ui_auto_test.cpp \
-
 HEADERS += \
     ../../../../test/framework/common/ui_text_language.h \
     ../../../../test/framework/common/ui_test_canvas_common.h \
@@ -151,12 +145,6 @@ HEADERS += \
     ../../../../test/uitest/test_view_percent/ui_test_view_percent.h \
     ../../../../test/uitest/test_view_zindex/ui_test_view_zindex.h \
     ../../../../test/uitest/test_view_scale_rotate/ui_test_view_scale_rotate.h
-
-HEADERS += \
-    ../../../../test/framework/include/auto_test_manager.h \
-    ../../../../test/framework/include/compare_tools.h \
-    ../../../../test/framework/include/ui_auto_test.h \
-    ../../../../test/framework/include/ui_test_message.h \
 
 INCLUDEPATH += \
     ../../../../frameworks \
