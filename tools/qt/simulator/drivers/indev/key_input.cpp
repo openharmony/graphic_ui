@@ -21,7 +21,7 @@
 #include "events/key_event.h"
 
 namespace OHOS {
-#if USE_KEY
+#if defined(USE_KEY) && USE_KEY
 namespace {
 static uint16_t g_lastKeyId = 0;
 static uint16_t g_lastKeyState = INVALID_KEY_STATE;

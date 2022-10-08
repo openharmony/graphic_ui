@@ -516,7 +516,7 @@ void RootView::Render()
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_lock(&lock_);
 #endif
-#if !LOCAL_RENDER
+#if defined(LOCAL_RENDER) && (!LOCAL_RENDER)
     OptimizeInvalidateRects();
 #endif
 
@@ -529,7 +529,7 @@ void RootView::Render()
     if (invalidateRects_.Size() > 0) {
         /* Fully draw whole reacts. If there are two buffers or more to display, buffers could be
         independent between each other, so buffers need to be FULLY_RENDER. */
-#if (FULLY_RENDER != 1)
+#if defined(FULLY_RENDER) && (FULLY_RENDER != 1)
         flushRect = invalidateRects_.Begin()->data_;
         // only draw invalid rects. in this case, buffers (if there are two buffers or more to display) should keep
         // same with each others, because only delta changes write to the buffer between each frames, so it fits one

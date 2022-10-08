@@ -19,7 +19,7 @@
 #include <locale>
 #include <string>
 #include "common/text.h"
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "common/spannable_string.h"
 #else
 #include "common/ui_text_language.h"
@@ -166,7 +166,7 @@ HWTEST_F(TextTest, TextSetLineBackgroundSpan_001, TestSize.Level1)
 HWTEST_F(TextTest, TextSetAbsoluteSizeSpan_001, TestSize.Level1)
 {
     Text* text = new Text();
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #else
     text->SetFontId(16);
 #endif
@@ -184,7 +184,8 @@ HWTEST_F(TextTest, TextSetRelativeSpan_001, TestSize.Level1)
     delete text;
     text = nullptr;
 }
-#if ENABLE_VECTOR_FONT
+
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 HWTEST_F(TextTest, TextSetStyleSpan_001, TestSize.Level1)
 {
     SpannableString spannableString("图形子系统测试正常粗体斜体粗斜体");
@@ -195,7 +196,7 @@ HWTEST_F(TextTest, TextSetStyleSpan_001, TestSize.Level1)
 }
 #endif
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 HWTEST_F(TextTest, TextSetText_002, TestSize.Level0)
 {
     if (text_ == nullptr) {
@@ -220,7 +221,7 @@ HWTEST_F(TextTest, TextSetText_002, TestSize.Level0)
 }
 #endif
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 HWTEST_F(TextTest, TextSetText_003, TestSize.Level0)
 {
     if (text_ == nullptr) {
@@ -245,7 +246,7 @@ HWTEST_F(TextTest, TextSetText_003, TestSize.Level0)
 }
 #endif
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 HWTEST_F(TextTest, TextSetText_004, TestSize.Level1)
 {
     if (text_ == nullptr) {
@@ -271,7 +272,7 @@ HWTEST_F(TextTest, TextSetText_004, TestSize.Level1)
 #endif
 
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 HWTEST_F(TextTest, TextSetText_005, TestSize.Level1)
 {
     if (text_ == nullptr) {
@@ -296,7 +297,7 @@ HWTEST_F(TextTest, TextSetText_005, TestSize.Level1)
 }
 #endif
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 HWTEST_F(TextTest, TextSetText_006, TestSize.Level1)
 {
     if (text_ == nullptr) {

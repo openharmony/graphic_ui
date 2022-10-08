@@ -43,7 +43,7 @@ void DrawCanvas::DoRender(BufferInfo& gfxDstBuffer,
     if (param == nullptr) {
         return;
     }
-#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG) && GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
     if (paint.HaveShadow()) {
         DrawCanvas::DoDrawShadow(gfxDstBuffer, param, paint, rect, invalidatedArea, style, isStroke);
     }
@@ -72,19 +72,19 @@ void DrawCanvas::DoRender(BufferInfo& gfxDstBuffer,
         RenderSolid(paint, rasterizer, renBase, isStroke);
     }
 
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     if (paint.GetStyle() == Paint::GRADIENT) {
         RenderGradient(paint, rasterizer, transform, renBase, renderBuffer, allocator, invalidatedArea);
     }
 #endif
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     if (paint.GetStyle() == Paint::PATTERN) {
         RenderPattern(paint, pathParam->imageParam, rasterizer, renBase, allocator, rect);
     }
 #endif
 }
 
-#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG) && GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
 void DrawCanvas::DoDrawShadow(BufferInfo& gfxDstBuffer,
                               void* param,
                               const Paint& paint,
@@ -165,7 +165,7 @@ void DrawCanvas::SetRasterizer(UICanvasVertices& vertices,
 {
     DepictCurve canvasPath(vertices);
     if (isStroke) {
-#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+#if defined(GRAPHIC_ENABLE_DASH_GENERATE_FLAG) && GRAPHIC_ENABLE_DASH_GENERATE_FLAG
         if (paint.IsLineDash()) {
             using DashStyle = DepictDash;
             using StrokeDashStyle = DepictStroke<DashStyle>;
@@ -194,7 +194,7 @@ void DrawCanvas::SetRasterizer(UICanvasVertices& vertices,
     }
 }
 
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 void DrawCanvas::RenderGradient(const Paint& paint,
                                 RasterizerScanlineAntialias& rasterizer,
                                 TransAffine& transform,
@@ -266,7 +266,7 @@ void DrawCanvas::BuildRadialGradientMatrix(const Paint& paint,
 }
 #endif // GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
 void DrawCanvas::RenderPattern(const Paint& paint,
                                void* param,
                                RasterizerScanlineAntialias& rasterizer,

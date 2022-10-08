@@ -18,7 +18,7 @@
 #include <QtCore/qvariant.h>
 
 namespace OHOS {
-#if USE_MOUSE
+#if defined(USE_MOUSE) && USE_MOUSE
 MouseInput* MouseInput::GetInstance()
 {
     static MouseInput mouseInput;

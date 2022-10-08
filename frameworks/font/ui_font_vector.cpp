@@ -185,7 +185,7 @@ uint8_t UIFontVector::RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo,
                 if (IsColorEmojiFont(ftFaces_[i])) {
                     SetupColorFont(ftFaces_[i]);
                 }
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
                 UIMultiFontManager::GetInstance()->UpdateScript(fontInfo_[j]);
 #endif
             }
@@ -499,7 +499,7 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_
         glyphNode.advance = f->advance;
         return RET_VALUE_OK;
     }
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     int8_t error = LoadGlyphIntoFace(fontId, unicode, faceInfo.face, glyphNode.textStyle);
 #else
     int8_t error = LoadGlyphIntoFace(fontId, unicode, faceInfo.face);
@@ -531,7 +531,7 @@ uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t
     if (ret != RET_VALUE_OK) {
         return nullptr;
     }
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode, glyphNode.textStyle);
 #else
     uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode);
@@ -539,7 +539,7 @@ uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t
     if (bitmap != nullptr) {
         return bitmap + sizeof(Metric);
     }
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     SetFace(faceInfo, unicode, glyphNode.textStyle);
 #else
     SetFace(faceInfo, unicode);
@@ -552,7 +552,7 @@ bool UIFontVector::IsEmojiFont(uint8_t fontId)
     return IsColorEmojiFont(ftFaces_[fontId]);
 }
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 void UIFontVector::SetItaly(FT_GlyphSlot slot)
 {
     if (slot->format != FT_GLYPH_FORMAT_OUTLINE) {
@@ -626,7 +626,7 @@ int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Fac
     return RET_VALUE_OK;
 }
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle)
 {
     int32_t error;
@@ -687,7 +687,7 @@ uint8_t UIFontVector::IsGlyphFont(uint32_t unicode)
 
 void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode) const
 {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     SetFace(faceInfo, unicode, TEXT_STYLE_NORMAL);
 #else
     Metric f;
@@ -714,7 +714,7 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode) const
 #endif
 }
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const
 {
     Metric f;
@@ -766,7 +766,7 @@ uint16_t UIFontVector::GetOffsetPosY(const char* text,
         uint32_t unicode = TypedText::GetUTF8Next(text, i, i);
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);
         if (ret == RET_VALUE_OK) {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
             if (TypedText::IsColourWord(unicode, fontId, fontSize)) {
 #else
             uint8_t weight = GetFontWeight(glyphNode.fontId);

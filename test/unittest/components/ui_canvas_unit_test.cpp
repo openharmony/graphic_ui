@@ -399,7 +399,7 @@ HWTEST_F(UICanvasTest, UICanvasLineTo_002, TestSize.Level1)
     EXPECT_EQ(end.y, LINE2_Y);
 }
 
-#if GRAPHIC_ENABLE_ARC_FLAG
+#if defined(GRAPHIC_ENABLE_ARC_FLAG) && GRAPHIC_ENABLE_ARC_FLAG
 /**
  * @tc.name: UICanvasArcTo_001
  * @tc.desc: Verify ArcTo function, equal.
@@ -606,7 +606,7 @@ HWTEST_F(UICanvasTest, UICanvasClosePath_002, TestSize.Level1)
     EXPECT_EQ(end.y, 0);
 }
 
-#if GRAPHIC_ENABLE_LINECAP_FLAG
+#if defined(GRAPHIC_ENABLE_LINECAP_FLAG) && GRAPHIC_ENABLE_LINECAP_FLAG
 /**
  * @tc.name: UICanvasSetLineCap_001
  * @tc.desc: Verify SetLineCap function, equal.
@@ -651,7 +651,7 @@ HWTEST_F(UICanvasTest, UICanvasSetLineCap_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
 /**
  * @tc.name: UICanvasSetLineJoin_001
  * @tc.desc: Verify SetLineJoin function, equal.
@@ -695,7 +695,7 @@ HWTEST_F(UICanvasTest, UICanvasSetLineJoin_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+#if defined(GRAPHIC_ENABLE_DASH_GENERATE_FLAG) && GRAPHIC_ENABLE_DASH_GENERATE_FLAG
 /**
  * @tc.name: UICanvasSetLineDashOffset_001
  * @tc.desc: Verify SetLineDashOffset function, equal.
@@ -739,7 +739,7 @@ HWTEST_F(UICanvasTest, UICanvasSetLineDashOffset_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
 /**
  * @tc.name: UICanvasMiterLimit_001
  * @tc.desc: Verify MiterLimit function, equal.
@@ -936,7 +936,7 @@ HWTEST_F(UICanvasTest, UICanvasCleanRect_001, TestSize.Level1)
     EXPECT_EQ(canvas_->GetStartPos().y, RECT_Y - 10);
     viewGroup->Remove(canvas_);
 }
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
 /**
  * @tc.name: UICanvasDrawImage_001
  * @tc.desc: Verify DrawImage function, equal.
@@ -1092,7 +1092,7 @@ HWTEST_F(UICanvasTest, UICanvasDrawImage_003, TestSize.Level1)
 }
 #endif
 
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
 /**
  * @tc.name: UICanvasStrokeText_001
  * @tc.desc: Verify StrokeText function, equal.
@@ -1282,7 +1282,7 @@ HWTEST_F(UICanvasTest, UICanvasSetScale_002, TestSize.Level1)
     fontStyle.letterSpace = LETTER_SPACE;
 
     paint_->Scale(SCALE_X, SCALE_Y);
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     canvas_->StrokeText("hello world", {POS_X, POS_Y}, fontStyle, *paint_);
 #endif
 
@@ -1355,7 +1355,7 @@ HWTEST_F(UICanvasTest, UICanvasSetTranslate_002, TestSize.Level1)
     fontStyle.letterSpace = LETTER_SPACE;
 
     paint_->Translate(TRANSLATE_X, TRANSLATE_Y);
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     canvas_->StrokeText("hello world", {POS_X, POS_Y}, fontStyle, *paint_);
 #endif
 
@@ -1430,7 +1430,7 @@ HWTEST_F(UICanvasTest, UICanvasTransform_002, TestSize.Level1)
     fontStyle.letterSpace = LETTER_SPACE;
 
     paint_->Transform(SCALE_X, SHEAR_X, SHEAR_Y, SCALE_Y, TRANSLATE_X, TRANSLATE_Y);
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     canvas_->StrokeText("hello world", {POS_X, POS_Y}, fontStyle, *paint_);
 #endif
 
@@ -1507,7 +1507,7 @@ HWTEST_F(UICanvasTest, UICanvasSetTransform_002, TestSize.Level1)
     fontStyle.letterSpace = LETTER_SPACE;
 
     paint_->SetTransform(SCALE_X, SHEAR_X, SHEAR_Y, SCALE_Y, TRANSLATE_X, TRANSLATE_Y);
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     canvas_->StrokeText("hello world", {POS_X, POS_Y}, fontStyle, *paint_);
 #endif
 
@@ -1840,7 +1840,7 @@ HWTEST_F(UICanvasTest, UICanvasRestore_002, TestSize.Level1)
 
     EXPECT_EQ(paint_->GetFillColor().full, color.full);
 }
-#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG) && GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
 HWTEST_F(UICanvasTest, UICanvasShadowColor_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
@@ -1864,7 +1864,7 @@ HWTEST_F(UICanvasTest, UICanvasShadowColor_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_BLUR_EFFECT_FLAG) && GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
 HWTEST_F(UICanvasTest, UICanvasShadowBlur_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
@@ -1928,7 +1928,7 @@ HWTEST_F(UICanvasTest, UICanvasShadowOffsetY_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 HWTEST_F(UICanvasTest, UICanvasCreateLinearGradient_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
@@ -1991,7 +1991,7 @@ HWTEST_F(UICanvasTest, UICanvasCreateRadialGradient_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
 HWTEST_F(UICanvasTest, UICanvasCreatePattern_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
@@ -2015,7 +2015,7 @@ HWTEST_F(UICanvasTest, UICanvasCreatePattern_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 HWTEST_F(UICanvasTest, UICanvasAddColorStop_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {
@@ -2131,7 +2131,7 @@ HWTEST_F(UICanvasTest, UICanvasSetRotate_002, TestSize.Level1)
     fontStyle.letterSpace = LETTER_SPACE;
 
     paint_->Rotate(ROTATE);
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     canvas_->StrokeText("hello world", {POS_X, POS_Y}, fontStyle, *paint_);
 #endif
 
@@ -2160,7 +2160,7 @@ HWTEST_F(UICanvasTest, UICanvasInitDash_001, TestSize.Level0)
         EXPECT_EQ(1, 0);
         return;
     }
-#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+#if defined(GRAPHIC_ENABLE_DASH_GENERATE_FLAG) && GRAPHIC_ENABLE_DASH_GENERATE_FLAG
     Paint* paint3 = new Paint();
     paint_->InitDash(*paint3);
     EXPECT_EQ(paint_->GetLineDash(), nullptr);

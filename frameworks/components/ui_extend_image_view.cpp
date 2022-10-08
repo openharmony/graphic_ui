@@ -18,7 +18,7 @@ namespace OHOS {
 void UIExtendImageView::SetSrc(const char* src)
 {
     UIImageView::SetSrc(src);
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     if (GetGifImageAnimator() != nullptr && this->canvas_ &&
         this->canvas_->GetViewType() == UI_CANVAS) {
         this->canvas_->Invalidate();
@@ -29,7 +29,7 @@ void UIExtendImageView::SetSrc(const char* src)
 void UIExtendImageView::SetSrc(const ImageInfo* src)
 {
     UIImageView::SetSrc(src);
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     if (GetGifImageAnimator() != nullptr && this->canvas_ &&
         this->canvas_->GetViewType() == UI_CANVAS) {
         this->canvas_->Invalidate();

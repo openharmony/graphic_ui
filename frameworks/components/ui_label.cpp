@@ -183,7 +183,7 @@ void UILabel::SetText(const char* text)
     }
 }
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 void UILabel::SetText(const SpannableString* text)
 {
     InitLabelText();
