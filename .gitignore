@@ -1,2 +1,3 @@
 tools/qt/build*
 tools/qt/simulator/simulator.pro.user
+h*_proprietary/
