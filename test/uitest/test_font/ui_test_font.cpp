@@ -114,7 +114,7 @@ void UITestFont::UIKitFontTestDisplay001()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -134,7 +134,7 @@ void UITestFont::UIKitFontTestDisplay002()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -155,7 +155,7 @@ void UITestFont::UIKitFontTestDisplay003()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -176,7 +176,7 @@ void UITestFont::UIKitFontTestDisplay004()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -197,7 +197,7 @@ void UITestFont::UIKitFontTestDisplay005()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -217,7 +217,7 @@ void UITestFont::UIKitFontTestDisplay006()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -238,7 +238,7 @@ void UITestFont::UIKitFontTestDisplay007()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -259,7 +259,7 @@ void UITestFont::UIKitFontTestDisplay008()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -282,7 +282,7 @@ void UITestFont::UIKitFontTestDisplay009()
     label->SetPosition(positionX_ + 100, positionY_);  // 100 : offset x
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
     label->SetLineBreakMode(UILabel::LineBreakMode::LINE_BREAK_ADAPT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -305,7 +305,7 @@ void UITestFont::UIKitFontTestDisplay010()
     label->SetPosition(positionX_ + 100, positionY_); // 100 : offset x
     label->Resize(LABEL_WIDTH / 2, LABEL_HEIGHT); // 2 : half
     label->SetLineBreakMode(UILabel::LineBreakMode::LINE_BREAK_MARQUEE);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -523,7 +523,7 @@ void UITestFont::UIKitFontTestBackgroundColor()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -545,7 +545,7 @@ void UITestFont::UIKitFontTestForegroundColor()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -567,7 +567,7 @@ void UITestFont::UIKitFontTestLineBackgroundSpan()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -589,7 +589,7 @@ void UITestFont::UIKitFontTestAbsoluteSizeSpan()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -613,7 +613,7 @@ void UITestFont::UIKitFontTestRelativeSizeSpan()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2); // 2 : double
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_SIZE);
 #else
@@ -635,7 +635,7 @@ void UITestFont::UIKitFontTestDisplayEmoji001()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 3); // 2 : double; 3 : triple
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
@@ -646,7 +646,7 @@ void UITestFont::UIKitFontTestDisplayEmoji001()
 #else
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 2);
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     uint8_t findPath[] = {F_HWEMOJI_REGULAR_30_32};
     UIMultiFontManager::GetInstance()->SetSearchFontList(F_SOURCEHANSANSSC_REGULAR_30_4, findPath, sizeof(findPath));
 #endif
@@ -666,7 +666,7 @@ void UITestFont::UIKitFontTestDisplayEmoji002()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 6); // 2 : double; 6 : six times
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
@@ -677,7 +677,7 @@ void UITestFont::UIKitFontTestDisplayEmoji002()
 #else
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 3); // 3 : triple
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     uint8_t findPath[] = {F_HWEMOJI_REGULAR_30_32};
     UIMultiFontManager::GetInstance()->SetSearchFontList(F_SOURCEHANSANSSC_REGULAR_30_4, findPath, sizeof(findPath));
 #endif
@@ -696,7 +696,7 @@ void UITestFont::UIKitFontTestDisplayEmoji003()
     UILabel* label = new UILabel();
     label->SetPosition(positionX_, positionY_);
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 12); // 2 : double; 12 : twelve times
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
@@ -707,7 +707,7 @@ void UITestFont::UIKitFontTestDisplayEmoji003()
 #else
     label->Resize(380, LABEL_HEIGHT * 3); // 3 : triple
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     uint8_t findPath[] = {F_HWEMOJI_REGULAR_30_32};
     UIMultiFontManager::GetInstance()->SetSearchFontList(F_SOURCEHANSANSSC_REGULAR_30_4, findPath, sizeof(findPath));
 #endif

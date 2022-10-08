@@ -21,7 +21,7 @@
 #include "draw/draw_utils.h"
 #include "font/ui_font.h"
 #include "font/ui_font_header.h"
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "font/ui_font_vector.h"
 #else
 #include "common/ui_text_language.h"
@@ -47,17 +47,17 @@ Monitor* Monitor::GetInstance()
 
 void Monitor::InitHal()
 {
-#if USE_MOUSE
+#if defined(USE_MOUSE) && USE_MOUSE
     MouseInput* mouse = MouseInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(mouse);
 #endif
 
-#if USE_MOUSEWHEEL && ENABLE_ROTATE_INPUT
+#if defined(USE_MOUSEWHEEL) && defined(ENABLE_ROTATE_INPUT) && USE_MOUSEWHEEL && ENABLE_ROTATE_INPUT
     MousewheelInput* mousewheel = MousewheelInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(mousewheel);
 #endif
 
-#if USE_KEY
+#if defined(USE_KEY) && USE_KEY
     KeyInput* key = KeyInput::GetInstance();
     InputDeviceManager::GetInstance()->Add(key);
 #endif
@@ -87,13 +87,13 @@ void Monitor::Flush(const Rect &rect)
 
 // assuming below are the memory pool
 static uint8_t g_fontMemBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
-#if ENABLE_ICU
+#if define(ENABLE_ICU) && ENABLE_ICU
 static uint8_t g_icuMemBaseAddr[OHOS::SHAPING_WORD_DICT_LENGTH];
 #endif
 
 void Monitor::InitFontEngine()
 {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     GraphicStartUp::InitFontEngine(reinterpret_cast<uintptr_t>(g_fontMemBaseAddr), MIN_FONT_PSRAM_LENGTH,
                                    VECTOR_FONT_DIR, DEFAULT_VECTOR_FONT_FILENAME);
 #else
@@ -106,7 +106,7 @@ void Monitor::InitFontEngine()
                                    dPath.c_str(), nullptr);
 #endif
 
-#if ENABLE_ICU
+#if defined(ENABLE_ICU) && ENABLE_ICU
     GraphicStartUp::InitLineBreakEngine(reinterpret_cast<uintptr_t>(g_icuMemBaseAddr), SHAPING_WORD_DICT_LENGTH,
                                         VECTOR_FONT_DIR, DEFAULT_LINE_BREAK_RULE_FILENAME);
 #endif

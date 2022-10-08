@@ -250,7 +250,7 @@ HWTEST_F(ScrollViewTest, UIAbstractScrollSetDragFunc_001, TestSize.Level1)
     EXPECT_EQ(scrollView_->GetDragFunc(), func);
 }
 
-#if ENABLE_ROTATE_INPUT
+#if defined(ENABLE_ROTATE_INPUT) && ENABLE_ROTATE_INPUT
 /**
  * @tc.name: UIAbstractClockSetRotateACCLevel_001
  * @tc.desc: Verify SetRotateACCLevel function.

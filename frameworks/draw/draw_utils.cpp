@@ -1190,7 +1190,7 @@ static void DrawTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
 }
 #endif
 
-#if ENABLE_FIXED_POINT
+#if defined(ENABLE_FIXED_POINT) && ENABLE_FIXED_POINT
 static void DrawFixedTriangleTrueColorBilinear8888Inner(const TriangleScanInfo& in,
                                                         uint8_t* screenBuffer,
                                                         int16_t len,

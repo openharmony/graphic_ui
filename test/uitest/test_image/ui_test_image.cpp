@@ -42,7 +42,7 @@ void UITestImage::TearDown()
 {
     DeleteChildren(container_);
     container_ = nullptr;
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     gifImageView_ = nullptr;
     gifToGif_ = nullptr;
     gifToJpeg_ = nullptr;
@@ -69,7 +69,7 @@ const UIView* UITestImage::GetTestView()
     UIKit_UIImage_Test_SetImage_012();
     UIKit_UIImage_Test_SetImage_013();
     UIKit_UIImage_Test_SetImage_014();
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     UIKit_UIImage_Test_SetImage_015();
     UIKit_UIImage_Test_SetImage_016();
 #endif
@@ -382,7 +382,7 @@ void UITestImage::UIKit_UIImage_Test_SetImage_014()
     }
 }
 
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
 void UITestImage::UIKit_UIImage_Test_SetImage_015()
 {
     if (container_ != nullptr) {
