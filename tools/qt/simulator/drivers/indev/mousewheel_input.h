@@ -20,7 +20,7 @@
 #include "dock/rotate_input_device.h"
 
 namespace OHOS {
-#if USE_MOUSEWHEEL
+#if defined(USE_MOUSEWHEEL) && USE_MOUSEWHEEL
 #if ENABLE_ROTATE_INPUT
 class MousewheelInput : public RotateInputDevice {
 public:

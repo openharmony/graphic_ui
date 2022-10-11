@@ -15,7 +15,7 @@
 
 #include "font/ui_font_cache.h"
 #include <cstddef>
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "gfx_utils/style.h"
 
 #endif
@@ -73,7 +73,7 @@ uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, 
 
     bitmap->fontId = fontId;
     bitmap->unicode = unicode;
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     bitmap->textStyle = textStyle;
 #endif
 
@@ -101,7 +101,7 @@ uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle text
         bitmap = reinterpret_cast<struct Bitmap*>(reinterpret_cast<uint8_t*>(node) -
                                                   offsetof(struct Bitmap, hashHead));
         if ((bitmap->fontId == fontId) &&
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
             (bitmap->textStyle == textStyle) &&
 #endif
             (bitmap->unicode == unicode)) {

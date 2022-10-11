@@ -85,7 +85,7 @@ ClipPath& ClipPath::Circle(const PointF& center, float radius)
         return *this;
     }
     vertices_->RemoveAll();
-#if GRAPHIC_ENABLE_BEZIER_ARC_FLAG
+#if defined(GRAPHIC_ENABLE_BEZIER_ARC_FLAG) && GRAPHIC_ENABLE_BEZIER_ARC_FLAG
     BezierArc arc(center.x, center.y, radius, radius, 0, TWO_TIMES * PI);
     vertices_->ConcatPath(arc, 0);
 #endif

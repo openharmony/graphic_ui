@@ -17,7 +17,7 @@
 #include "gfx_utils/graphic_log.h"
 #include "securec.h"
 namespace OHOS {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 SpannableString::~SpannableString()
 {
     if (text_ != nullptr) {

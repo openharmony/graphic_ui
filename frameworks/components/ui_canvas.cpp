@@ -335,7 +335,7 @@ void UICanvas::ClearRect(const Point& startPoint, int16_t height, int16_t width)
 void UICanvas::DrawCircle(const Point& center, uint16_t radius, const Paint& paint)
 {
     if (paint.GetChangeFlag()) {
-#if GRAPHIC_ENABLE_BEZIER_ARC_FLAG
+#if defined(GRAPHIC_ENABLE_BEZIER_ARC_FLAG) && GRAPHIC_ENABLE_BEZIER_ARC_FLAG
         if (vertices_ == nullptr) {
             vertices_ = new UICanvasVertices();
         }
@@ -465,7 +465,7 @@ void UICanvas::DrawLabel(const Point& startPoint,
         Invalidate();
     }
 }
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
 void UICanvas::DrawImage(const Point &startPoint, const char* image, const Paint& paint)
 {
     if (image == nullptr) {
@@ -547,7 +547,7 @@ void UICanvas::DrawPath(const Paint& paint)
 
     pathParam->vertices = vertices_;
     pathParam->isStroke = true;
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     if (paint.GetStyle() == Paint::PATTERN) {
         ImageParam* imageParam = new ImageParam;
         if (imageParam == nullptr) {
@@ -595,7 +595,7 @@ void UICanvas::FillPath(const Paint& paint)
 
     pathParam->vertices = vertices_;
     pathParam->isStroke = false;
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     if (paint.GetStyle() == Paint::PATTERN) {
         ImageParam* imageParam = new ImageParam;
         if (imageParam == nullptr) {
@@ -669,7 +669,7 @@ void OnBlendDrawPattern(ListNode<UICanvas::DrawCmd>* curDraw,
                         TransAffine& transform,
                         PathParam* pathParamBlend)
 {
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     if (curDraw->data_.paint.GetStyle() == Paint::PATTERN) {
         if (curDraw->data_.param == nullptr) {
             return;
@@ -696,7 +696,7 @@ void OnBlendDrawGradient(ListNode<UICanvas::DrawCmd>* curDraw,
                          TransAffine& transform,
                          PathParam* pathParamBlend)
 {
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     if (curDraw->data_.paint.GetStyle() == Paint::GRADIENT) {
         TransAffine gradientMatrix;
         FillInterpolator interpolatorType(gradientMatrix);
@@ -766,7 +766,7 @@ void UICanvas::OnBlendDraw(BufferInfo& gfxDstBuffer, const Rect& trunc)
             continue;
         }
         PathParam* pathParam = static_cast<PathParam*>(curDraw->data_.param);
-#if GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_BLUR_EFFECT_FLAG) && GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
         if (curDraw->data_.paint.HaveShadow()) {
             DrawCanvas::DoDrawShadow(gfxDstBuffer, curDraw->data_.param, curDraw->data_.paint, rect, trunc, *style_,
                                      pathParam->isStroke);
@@ -997,7 +997,7 @@ void UICanvas::DoDrawArc(BufferInfo& gfxDstBuffer,
     BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
                                           CapType::CAP_NONE);
 }
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
 void UICanvas::DoDrawImage(BufferInfo& gfxDstBuffer,
                            void* param,
                            const Paint& paint,
@@ -1084,7 +1084,7 @@ void UICanvas::DoFillPath(BufferInfo& gfxDstBuffer,
     BaseGfxEngine::GetInstance()->FillPath(gfxDstBuffer, param, paint, rect, invalidatedArea, style);
 }
 
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
 void UICanvas::StrokeText(const char* text, const Point& point, const FontStyle& fontStyle, const Paint& paint)
 {
     if (text == nullptr) {
@@ -1151,7 +1151,7 @@ void UICanvas::BlitMapBuffer(BufferInfo &gfxDstBuffer, BufferInfo& gfxMapBuffer,
     }
 }
 
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
 void UICanvas::DoDrawText(BufferInfo& gfxDstBuffer,
                           void* param,
                           const Paint& paint,
@@ -1286,7 +1286,7 @@ void UICanvas::BlendRaster(const Paint& paint,
         BlendScanLine(paint.GetGlobalCompositeOperation(), blendRasterizer, rasterizer,
                       scanline1, scanline2, renBase, allocator1, spanBlendSoildColor, spanGen);
     }
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     FillInterpolator interpolatorTypeBlend(gradientMatrixBlend);
     FillGradientLut gradientColorModeBlend;
     if (paint.GetStyle() == Paint::GRADIENT) {
@@ -1313,7 +1313,7 @@ void UICanvas::BlendRaster(const Paint& paint,
         }
     }
 #endif
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     if (paint.GetStyle() == Paint::PATTERN) {
         if (param == nullptr) {
             return;
