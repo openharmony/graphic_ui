@@ -16,14 +16,14 @@
 #include "font/ui_font.h"
 #include "common/text.h"
 #include "font/ui_font_cache.h"
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "font/ui_font_vector.h"
 #endif
-#if ENABLE_BITMAP_FONT
+#if defined(ENABLE_BITMAP_FONT) && ENABLE_BITMAP_FONT
 #include "font/ui_font_bitmap.h"
 #endif
 #include "graphic_config.h"
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
 
@@ -36,14 +36,14 @@ UIFont::~UIFont(){}
 UIFont* UIFont::GetInstance()
 {
     static UIFont instance;
-#if ENABLE_BITMAP_FONT
+#if defined(ENABLE_BITMAP_FONT) && ENABLE_BITMAP_FONT
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontBitmap();
         instance.instance_ = instance.defaultInstance_;
         setFontAllocFlag_ = true;
     }
 #endif
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     if (instance.instance_ == nullptr) {
         instance.defaultInstance_ = new UIFontVector();
         instance.instance_ = instance.defaultInstance_;
@@ -166,7 +166,7 @@ int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t font
         return result;
     }
 
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     uint8_t* searchLists = nullptr;
     int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
     if ((searchLists == nullptr) || (listSize == 0)) {

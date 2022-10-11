@@ -19,7 +19,7 @@
 #include "gfx_utils/graphic_log.h"
 #include "gfx_utils/mem_api.h"
 #include "gfx_utils/transform.h"
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
 
@@ -516,7 +516,7 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
 
 bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
 {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     return ((codePoint >= 0xF000) && (codePoint <= 0xF8FF)) || IsEmoji(codePoint) || IsEmojiModifier(codePoint) ||
             IsEmojiBase(codePoint);
 #else
@@ -525,7 +525,7 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSiz
     if (weight >= 16) { // 16: rgb565->16 rgba8888->32 font with rgba
         hasColor = true;
     } else {
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
         uint8_t* searchLists = nullptr;
         int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
         if ((listSize > 0) && (searchLists != nullptr)) {

@@ -57,7 +57,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
 
         ColorType foregroundColor = labelLine.style.textColor_;
         GetForegroundColor(letterIndex, labelLine.foregroundColor, foregroundColor);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
         TextStyle textStyle = TEXT_STYLE_NORMAL;
         if (labelLine.textStyles) {
             textStyle = labelLine.textStyles[letterIndex];
@@ -74,7 +74,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    fontId,
                                    0,
                                    fontSize,
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
                                    textStyle,
 #endif
                                    labelLine.baseLine,
@@ -217,7 +217,7 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     UIFont* fontEngine = UIFont::GetInstance();
     FontHeader head;
     GlyphNode node;
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     node.textStyle = TEXT_STYLE_NORMAL;
 #endif
     if (fontEngine->GetFontHeader(head, fontId, fontSize) != 0) {

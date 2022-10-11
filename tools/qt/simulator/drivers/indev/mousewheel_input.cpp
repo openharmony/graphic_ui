@@ -20,7 +20,7 @@
 static int16_t g_rotate = 0;
 
 namespace OHOS {
-#if USE_MOUSEWHEEL
+#if defined(USE_MOUSEWHEEL) && USE_MOUSEWHEEL
 #if ENABLE_ROTATE_INPUT
 MousewheelInput* MousewheelInput::GetInstance()
 {

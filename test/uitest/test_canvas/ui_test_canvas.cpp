@@ -323,7 +323,7 @@ void UITestCanvas::UIKitCanvasTestDrawImage001()
     }
     CreateTitleLabel("绘制图片");
     // {200, 50}: start point coordinates
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
     UICanvas* canvas = CreateCanvas();
 
     Paint paint;
@@ -343,7 +343,7 @@ void UITestCanvas::UIKitCanvasTestDrawImage002()
     }
     CreateTitleLabel("绘制图片");
     // {200, 50}: start point coordinates
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
     UICanvas* canvas = CreateCanvas();
     const float scale = 1.5f;
     const int16_t trx = 50;
@@ -353,7 +353,7 @@ void UITestCanvas::UIKitCanvasTestDrawImage002()
     paint.Translate(trx, 0);
     paint.SetOpacity(OPARCITY_127); // 127: opacity
     canvas->DrawImage({ 200, 50 }, GREEN_IMAGE_PATH, paint);
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     UICanvas::FontStyle fontStyle;
     fontStyle.align = TEXT_ALIGNMENT_CENTER;
     fontStyle.direct = TEXT_DIRECT_LTR;
@@ -1013,7 +1013,7 @@ void UITestCanvas::RM009LineCapDrawPath()
     Paint paint;
     paint.SetStrokeWidth(STROKE_WIDTH12);
     paint.SetStrokeColor(Color::Green());
-#if GRAPHIC_ENABLE_LINECAP_FLAG
+#if defined(GRAPHIC_ENABLE_LINECAP_FLAG) && GRAPHIC_ENABLE_LINECAP_FLAG
     paint.SetLineCap(LineCap::BUTT_CAP);
 #endif
     canvas->BeginPath();
@@ -1029,7 +1029,7 @@ void UITestCanvas::RM009LineCapDrawPath()
     canvas->LineTo({LINE18_X, LINE1_Y});
     canvas->DrawPath(paint);
     paint.SetStrokeColor(Color::Red());
-#if GRAPHIC_ENABLE_LINECAP_FLAG
+#if defined(GRAPHIC_ENABLE_LINECAP_FLAG) && GRAPHIC_ENABLE_LINECAP_FLAG
     paint.SetLineCap(LineCap::SQUARE_CAP);
 #endif
     canvas->BeginPath();
@@ -1045,7 +1045,7 @@ void UITestCanvas::RM009LineCapDrawPath()
     canvas->LineTo({LINE21_X, LINE1_Y});
     canvas->DrawPath(paint);
     paint.SetStrokeColor(Color::Blue());
-#if GRAPHIC_ENABLE_LINECAP_FLAG
+#if defined(GRAPHIC_ENABLE_LINECAP_FLAG) && GRAPHIC_ENABLE_LINECAP_FLAG
     paint.SetLineCap(LineCap::ROUND_CAP);
 #endif
     canvas->BeginPath();
@@ -1072,7 +1072,7 @@ void UITestCanvas::RM009LineJoinDrawPath()
     Paint paint;
     paint.SetStrokeWidth(STROKE_WIDTH10);
     paint.SetStrokeColor(Color::Green());
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
     paint.SetLineJoin(LineJoin::ROUND_JOIN);
 #endif
     canvas->BeginPath();
@@ -1081,7 +1081,7 @@ void UITestCanvas::RM009LineJoinDrawPath()
     canvas->LineTo({LINE25_X, LINE25_X});
     canvas->LineTo({LINE22_X, LINE11_Y});
     canvas->DrawPath(paint);
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
     paint.SetLineJoin(LineJoin::BEVEL_JOIN);
 #endif
     canvas->BeginPath();
@@ -1090,7 +1090,7 @@ void UITestCanvas::RM009LineJoinDrawPath()
     canvas->LineTo({LINE26_X, LINE25_Y});
     canvas->LineTo({LINE27_X, LINE11_Y});
     canvas->DrawPath(paint);
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
     paint.SetLineJoin(LineJoin::MITER_JOIN);
 #endif
     canvas->BeginPath();
@@ -1099,7 +1099,7 @@ void UITestCanvas::RM009LineJoinDrawPath()
     canvas->LineTo({LINE28_X, LINE25_Y});
     canvas->LineTo({LINE29_X, LINE11_Y});
     canvas->DrawPath(paint);
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
     // 当斜接角度超过MiterLimit时应该转化为平角
     paint.SetLineJoin(LineJoin::MITER_JOIN);
     paint.SetMiterLimit(MITERLIMIT4);
@@ -1114,7 +1114,7 @@ void UITestCanvas::RM009LineJoinDrawPath()
 }
 void UITestCanvas::RM009LineDashDrawPath()
 {
-#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+#if defined(GRAPHIC_ENABLE_DASH_GENERATE_FLAG) && GRAPHIC_ENABLE_DASH_GENERATE_FLAG
     if (container_ == nullptr) {
         return;
     }
@@ -1225,7 +1225,7 @@ void UITestCanvas::RM008UIKitCanvasTest002()
     canvas->ClosePath();
     canvas->FillPath(paint);
     // 放射渐变
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     paint.createRadialGradient(RADIAL_GRADIENT300, RADIAL_GRADIENT140, RADIAL_GRADIENT5,
                                RADIAL_GRADIENT270, RADIAL_GRADIENT100, RADIAL_GRADIENT80);
 #endif
@@ -1254,7 +1254,7 @@ void UITestCanvas::RM008UIKitCanvasTest003()
     paint.SetStyle(Paint::GRADIENT);
     paint.SetStrokeWidth(STROKE_WIDTH8);
     // 线性渐变
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     paint.createLinearGradient(LINEARGRADIENT50, LINEARGRADIENT50, LINEARGRADIENT150, LINEARGRADIENT150);
     paint.addColorStop(0, Color::Yellow());
     paint.addColorStop(COLOR_STOP3, Color::White());
@@ -1273,7 +1273,7 @@ void UITestCanvas::RM008UIKitCanvasTest003()
     canvas->ClosePath();
     canvas->DrawPath(paint);
     // 放射渐变
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     paint.createRadialGradient(LINEARGRADIENT300, LINEARGRADIENT140, LINEARGRADIENT5,
                                LINEARGRADIENT270, LINEARGRADIENT100, LINEARGRADIENT80);
 #endif
@@ -1300,7 +1300,7 @@ void UITestCanvas::RM008UIKitCanvasTest004()
     Paint paint;
     paint.SetStyle(Paint::PATTERN);
     paint.SetStrokeWidth(STROKEWIDTH8);
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     paint.CreatePattern(RED_IMAGE_PATH, REPEAT);
 #endif
     canvas->BeginPath();
@@ -1337,7 +1337,7 @@ void UITestCanvas::RM008UIKitCanvasTest005()
     Paint paint;
     paint.SetStyle(Paint::PATTERN);
     paint.SetStrokeWidth(STROKEWIDTH8);
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     paint.CreatePattern(RED_IMAGE_PATH, REPEAT_X);
 #endif
     canvas->BeginPath();
@@ -1375,7 +1375,7 @@ void UITestCanvas::RM008UIKitCanvasTest006()
     Paint paint;
     paint.SetStyle(Paint::PATTERN);
     paint.SetStrokeWidth(STROKEWIDTH8);
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     paint.CreatePattern(RED_IMAGE_PATH, REPEAT_Y);
 #endif
     canvas->BeginPath();
@@ -1404,7 +1404,7 @@ void UITestCanvas::RM008UIKitCanvasTest007()
     Paint paint;
     paint.SetStyle(Paint::PATTERN);
     paint.SetStrokeWidth(STROKEWIDTH8);
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     paint.CreatePattern(RED_IMAGE_PATH, NO_REPEAT);
 #endif
     canvas->BeginPath();
@@ -1426,7 +1426,7 @@ void UITestCanvas::RM008UIKitCanvasTest007()
 
 void UITestCanvas::RM008UIKitCanvasShadowTest008()
 {
-#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG) && GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
     if (container_ == nullptr) {
         return;
     }
@@ -1502,7 +1502,7 @@ void UITestCanvas::RM011StrokeText001()
 {
     CreateTitleLabel("RM011_StrokeText_多国文字加旋转放大");
 
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     UICanvas* canvas = CreateCanvas();
     UICanvas::FontStyle fontStyle;
     fontStyle.align = TEXT_ALIGNMENT_CENTER;

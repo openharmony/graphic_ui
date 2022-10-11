@@ -336,7 +336,7 @@ uint16_t UIFontBitmap::GetOffsetPosY(const char* text,
     uint8_t maxFontSie = fontSize;
     while (i < lineLength) {
         uint32_t unicode = TypedText::GetUTF8Next(text, i, i);
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
         uint8_t ret = GetMultiGlyphNode(unicode, glyphNode, fontId);
 #else
         uint8_t ret = GetGlyphNode(unicode, glyphNode, fontId, fontSize);

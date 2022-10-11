@@ -133,10 +133,10 @@ UIAbstractScroll::UIAbstractScroll()
       scrollBarCenter_({0, 0}),
       scrollBarCenterSetFlag_(false)
 {
-#if ENABLE_FOCUS_MANAGER
+#if defined(ENABLE_FOCUS_MANAGER) && ENABLE_FOCUS_MANAGER
     focusable_ = true;
 #endif
-#if ENABLE_ROTATE_INPUT
+#if defined(ENABLE_ROTATE_INPUT) && ENABLE_ROTATE_INPUT
     rotateFactor_ = DEFAULT_SCROLL_VIEW_ROTATE_FACTOR;
     rotateThrowthreshold_ = ABSTRACT_ROTATE_THROW_THRESHOLD;
     rotateAccCoefficient_ = ABSTRACT_ROTATE_DISTANCE_COEFF;
@@ -150,7 +150,7 @@ UIAbstractScroll::UIAbstractScroll()
 
 UIAbstractScroll::~UIAbstractScroll()
 {
-#if DEFAULT_ANIMATION
+#if defined(DEFAULT_ANIMATION) && DEFAULT_ANIMATION
     if (barEaseInOutAnimator_ != nullptr) {
         delete barEaseInOutAnimator_;
         barEaseInOutAnimator_ = nullptr;

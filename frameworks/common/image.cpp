@@ -236,7 +236,7 @@ bool Image::PreParse(const char *src)
     }
     path_ = path;
     bool isSucess = true;
-#if ENABLE_JPEG_AND_PNG
+#if defined(ENABLE_JPEG_AND_PNG) && ENABLE_JPEG_AND_PNG
     ImageType imageType = CheckImgType(src);
     if (imageType == IMG_PNG) {
         isSucess = SetPNGSrc(src);
