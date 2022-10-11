@@ -23,6 +23,19 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_POLYLINE_ADD_DATA = "add_data";
+constexpr char* UI_TEST_POLYLINE_DELETE_DATA = "delete_data";
+constexpr char* UI_TEST_POLYLINE_CLEAR_DATA = "clear_data";
+constexpr char* UI_TEST_POLYLINE_HIGHESET_POINT = "highest_point";
+constexpr char* UI_TEST_POLYLINE_LOWEST_POINT = "lowest_point";
+constexpr char* UI_TEST_POLYLINE_NEW_POINT = "new_point";
+constexpr char* UI_TEST_POLYLINE_FLIP = "flip";
+constexpr char* UI_TEST_POLYLINE_FILL_BOTTOM = "fill_bottom";
+
+constexpr char* UI_TEST_POLYLINE_ADD_POINT = "add_point";
+constexpr char* UI_TEST_POLYLINE_SMOOTHING = "smoothing";
+constexpr char* UI_TEST_POLYLINE_HIDE_POINT = "hide_point";
+
 class UITestChartPolyline : public UITest, public UIView::OnClickListener {
 public:
     UITestChartPolyline() {}
@@ -31,7 +44,7 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void SetUpButton(UILabelButton* btn, const char* title);
+    void SetUpButton(UILabelButton* btn, const char* title, const char* id);
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
     bool ClickExpand(UIView& view, UIChartDataSerial::PointStyle pointStyle);

@@ -1,0 +1,184 @@
+{
+	"testInfo": [
+        {
+            "className": "chart_polylin_test_01",
+            "pageNav": ["Chart_Polyline"],
+            "testSteps": [
+                {
+                    "viewID": "add_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "delete_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "highest_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "lowest_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "new_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "flip",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "fill_bottom",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "clear_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "chart_polylin_test_02",
+            "pageNav": ["Chart_Polyline"],
+            "testSteps": [
+                {
+                    "viewID": "clear_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "flip",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "fill_bottom",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "highest_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "lowest_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "new_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "delete_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "delete_data",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "chart_polylin_test_03",
+            "pageNav": ["Chart_Polyline"],
+            "testSteps": [
+                {
+                    "viewID": "add_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "smoothing",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hide_point",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+	]
+}

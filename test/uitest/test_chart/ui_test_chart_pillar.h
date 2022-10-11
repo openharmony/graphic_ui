@@ -23,6 +23,13 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_ADD_DATA = "add_data";
+constexpr char* UI_TEST_DELETE_DATA = "delete_data";
+constexpr char* UI_TEST_CLEAR_DATA = "clear_data";
+constexpr char* UI_TEST_FLIP = "flip";
+constexpr char* UI_TEST_AXIS_COLOR = "axis_color";
+constexpr char* UI_TEST_AXIS_NOT_VISIBLE = "axis_not_visible";
+
 class UITestChartPillar : public UITest, public UIView::OnClickListener {
 public:
     UITestChartPillar() : dataSerial_() {}
@@ -31,7 +38,7 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void SetUpButton(UILabelButton* btn, const char* title);
+    void SetUpButton(UILabelButton* btn, const char* title, const char* id);
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 

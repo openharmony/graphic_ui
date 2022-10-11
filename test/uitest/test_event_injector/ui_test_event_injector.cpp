@@ -224,56 +224,56 @@ void UITestEventInjector::UIKit_Event_Injector_Key_Event_004()
 void UITestEventInjector::UIKit_Event_Injector_Up_to_Down_005()
 {
     upToDownBtn_ = new UILabelButton();
-    SetUpButton(upToDownBtn_, "up to down");
+    SetUpButton(upToDownBtn_, "up to down", UI_TEST_UP_TO_DOWN);
 }
 
 void UITestEventInjector::UIKit_Event_Injector_Down_to_Up_006()
 {
     downToUpBtn_ = new UILabelButton();
-    SetUpButton(downToUpBtn_, "down to up");
+    SetUpButton(downToUpBtn_, "down to up", UI_TEST_DOWN_TO_UP);
 }
 
 void UITestEventInjector::UIKit_Event_Injector_Left_to_Right_007()
 {
     leftToRightBtn_ = new UILabelButton();
-    SetUpButton(leftToRightBtn_, "left to right");
+    SetUpButton(leftToRightBtn_, "left to right", UI_TEST_LEFT_TO_RIGHT);
 }
 
 void UITestEventInjector::UIKit_Event_Injector_Right_to_Left_008()
 {
     rightToLeftBtn_ = new UILabelButton();
-    SetUpButton(rightToLeftBtn_, "right to left");
+    SetUpButton(rightToLeftBtn_, "right to left", UI_TEST_RIGHT_TO_LEFT);
 }
 
 void UITestEventInjector::UIKit_Event_Injector_ULeft_to_LRight_009()
 {
     uLeftTolRightBtn_ = new UILabelButton();
-    SetUpButton(uLeftTolRightBtn_, "uLeft to lRight");
+    SetUpButton(uLeftTolRightBtn_, "uLeft to lRight", UI_TEST_ULEFT_TO_LRIGHT);
 }
 
 void UITestEventInjector::UIKit_Event_Injector_LRight_to_ULeft_010()
 {
     lRightTouLeftBtn_ = new UILabelButton();
-    SetUpButton(lRightTouLeftBtn_, "lRight to uleft");
+    SetUpButton(lRightTouLeftBtn_, "lRight to uleft", UI_TEST_LRIGHT_TO_ULEFT);
 }
 
 void UITestEventInjector::IncreaseDragTime()
 {
     increaseDragTimeBtn_ = new UILabelButton();
-    SetUpButton(increaseDragTimeBtn_, "increase drag time");
+    SetUpButton(increaseDragTimeBtn_, "increase drag time", UI_TEST_INCREASE_DRAG_TIME);
 }
 
 void UITestEventInjector::DecreaseDragTime()
 {
     decreaseDragTimeBtn_ = new UILabelButton();
-    SetUpButton(decreaseDragTimeBtn_, "decrease drag time");
+    SetUpButton(decreaseDragTimeBtn_, "decrease drag time", UI_TEST_DECREASE_DRAG_TIME);
 }
 
 void UITestEventInjector::DragTimeDisplay()
 {
     DragTimeDisplayBtn_ = new UILabelButton();
     std::string dragTimestr = "dragTime:" + std::to_string(dragTime_);
-    SetUpButton(DragTimeDisplayBtn_, dragTimestr.c_str());
+    SetUpButton(DragTimeDisplayBtn_, dragTimestr.c_str(), UI_TEST_SET_DRAGE_TIME);
 }
 
 void UITestEventInjector::InnerTest(const char* title,
@@ -373,9 +373,9 @@ void UITestEventInjector::SetLastPos(UIView* view)
     positionY_ = lastY_ + 8 * GAP; /* 8:ratio */
 }
 
-void UITestEventInjector::SetUpButton(UILabelButton* btn, const char* title)
+void UITestEventInjector::SetUpButton(UILabelButton* btn, const char* title, const char* id)
 {
-    if (btn == nullptr) {
+    if (btn == nullptr || title == nullptr || id == nullptr) {
         return;
     }
     layout_->Add(btn);
@@ -389,6 +389,7 @@ void UITestEventInjector::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+    btn->SetViewId(id);
 }
 
 void UITestEventInjector::SetDragTimeDisplay(uint16_t dragTime)

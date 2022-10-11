@@ -40,6 +40,18 @@ private:
     int16_t count_ = 0;
 };
 
+constexpr char* UI_TEST_SWITCH_MODE_1 = "switch_mode_1";
+constexpr char* UI_TEST_SHIF_LEFT_1 = "shift_left_1";
+constexpr char* UI_TEST_SHIF_RIGHT_1 = "shift_right_1";
+constexpr char* UI_TEST_SHIF_UP_1 = "shift_up_1";
+constexpr char* UI_TEST_SHIF_DOWN_1 = "shift_down_1";
+
+constexpr char* UI_TEST_SWITCH_MODE_2 = "switch_mode_2";
+constexpr char* UI_TEST_SHIF_LEFT_2 = "shift_left_2";
+constexpr char* UI_TEST_SHIF_RIGHT_2 = "shift_right_2";
+constexpr char* UI_TEST_SHIF_UP_2 = "shift_up_2";
+constexpr char* UI_TEST_SHIF_DOWN_2 = "shift_down_2";
+
 class UITestAnalogClock : public UITest {
 public:
     UITestAnalogClock() {}
@@ -69,7 +81,7 @@ private:
     UIView::OnClickListener* clickMoveRightListener1_ = nullptr;
     UIView::OnClickListener* clickMoveTopListener1_ = nullptr;
     UIView::OnClickListener* clickMoveBottomListener1_ = nullptr;
-    UILabelButton* SetUpButton(const char* title)
+    UILabelButton* SetUpButton(const char* title, const char* id)
     {
         UILabelButton* btn = new UILabelButton();
         btn->Resize(BUTTON_WIDHT2, BUTTON_HEIGHT2);
@@ -81,6 +93,7 @@ private:
         btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
         btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
         btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+        btn->SetViewId(id);
         return btn;
     }
 };
