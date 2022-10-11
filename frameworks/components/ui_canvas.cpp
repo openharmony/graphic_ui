@@ -707,8 +707,8 @@ void OnBlendDrawGradient(ListNode<UICanvas::DrawCmd>* curDraw,
             DrawCanvas::BuildLineGradientMatrix(drawCmd.paint, gradientMatrix, transform, distance);
             GradientLinearCalculate gradientLinearCalculate;
             FillGradient span(interpolatorType, gradientLinearCalculate, gradientColorMode, 0, distance);
-            UICanvas::BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase, transform, span, trunc,
-                        pathParamBlend->isStroke);
+            UICanvas::BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase,
+                                  transform, span, trunc, pathParamBlend->isStroke);
         }
         if (curDraw->data_.paint.GetGradient() == Paint::Radial) {
             Paint::RadialGradientPoint radialPoint = drawCmd.paint.GetRadialGradientPoint();
@@ -718,8 +718,8 @@ void OnBlendDrawGradient(ListNode<UICanvas::DrawCmd>* curDraw,
             GradientRadialCalculate gradientRadialCalculate(endRadius, radialPoint.x0 - radialPoint.x1,
                                                             radialPoint.y0 - radialPoint.y1);
             FillGradient span(interpolatorType, gradientRadialCalculate, gradientColorMode, startRadius, endRadius);
-            UICanvas::BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase, transform, span, trunc,
-                        pathParamBlend->isStroke);
+            UICanvas::BlendRaster(drawCmd.paint, drawCmd.param, blendRasterizer, rasterizer, renBase,
+                                  transform, span, trunc, pathParamBlend->isStroke);
         }
     }
 #endif
@@ -1015,7 +1015,7 @@ void UICanvas::DoDrawImage(BufferInfo& gfxDstBuffer,
     imageView->SetPosition(start.x, start.y);
     if (!paint.GetTransAffine().IsIdentity()) {
         float angle = paint.GetRotateAngle();
-        imageView->Rotate(MATH_ROUND(angle),Vector2<float>(0, 0));
+        imageView->Rotate(MATH_ROUND(angle), Vector2<float>(0, 0));
         imageView->Translate(Vector3<int16_t>(paint.GetTranslateX(), paint.GetTranslateY(), 1));
         Vector2<float> scale(static_cast<float>(paint.GetScaleX()), static_cast<float>(paint.GetScaleY()));
         imageView->Scale(scale, Vector2<float>(0, 0));

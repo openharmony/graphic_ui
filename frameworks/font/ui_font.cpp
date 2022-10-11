@@ -29,9 +29,9 @@
 
 namespace OHOS {
 bool UIFont::setFontAllocFlag_ = false;
-UIFont::UIFont() : instance_(nullptr), defaultInstance_(nullptr){}
+UIFont::UIFont() : instance_(nullptr), defaultInstance_(nullptr) {}
 
-UIFont::~UIFont(){}
+UIFont::~UIFont() {}
 
 UIFont* UIFont::GetInstance()
 {

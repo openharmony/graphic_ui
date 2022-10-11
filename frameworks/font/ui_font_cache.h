@@ -54,7 +54,7 @@ public:
         ListHead lruHead;
         uint8_t fontId;
         uint32_t unicode;
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
         TextStyle textStyle;
 #endif
         uint8_t data[];

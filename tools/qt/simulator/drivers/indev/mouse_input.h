@@ -22,7 +22,7 @@
 #include "dock/pointer_input_device.h"
 
 namespace OHOS {
-#if USE_MOUSE
+#if defined(USE_MOUSE) && USE_MOUSE
 class MouseInput : public PointerInputDevice {
 public:
     MouseInput() : leftButtonDown_(false), lastX_(0), lastY_(0) {}
