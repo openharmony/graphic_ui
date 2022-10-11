@@ -346,8 +346,8 @@ void DrawUtils::DrawNormalLetter(BufferInfo& gfxDstBuffer,
     }
 
     if (letterInfo.havebackgroundColor) {
-        Rect backgroundRect(posX, letterInfo.mask.GetTop(),
-                            posX + letterW + letterInfo.letterSpace_ - 1, letterInfo.mask.GetBottom() - letterInfo.lineSpace_);
+        Rect backgroundRect(posX, letterInfo.mask.GetTop(), posX + letterW + letterInfo.letterSpace_ - 1,
+                            letterInfo.mask.GetBottom() - letterInfo.lineSpace_);
         Style style;
         style.bgColor_ = letterInfo.backgroundColor;
         BaseGfxEngine::GetInstance()->DrawRect(gfxDstBuffer, backgroundRect,
