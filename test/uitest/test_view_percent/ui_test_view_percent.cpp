@@ -110,9 +110,9 @@ void UITestViewPercent::InitView()
     gridLayout->SetRows(1); // set gridlayout row as 1
     gridLayout->SetCols(3); // set gridlayout column as 3
 
-    SetUpButton(*gridLayout, *resetfBtn_, "reset");
-    SetUpButton(*gridLayout, *BiggerBtn_, "Bigger");
-    SetUpButton(*gridLayout, *SmallerBtn_, "Smaller");
+    SetUpButton(*gridLayout, *resetfBtn_, "reset", UI_TEST_RESET);
+    SetUpButton(*gridLayout, *BiggerBtn_, "Bigger", UI_TEST_BIGGER);
+    SetUpButton(*gridLayout, *SmallerBtn_, "Smaller", UI_TEST_SMALLER);
     gridLayout->LayoutChildren(true);
     container_->LayoutChildren(true);
 }

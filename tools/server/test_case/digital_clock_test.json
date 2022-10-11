@@ -1,0 +1,22 @@
+{
+	"testInfo": [
+        {
+            "className": "ui_digital_clock_test_01",
+            "pageNav": ["Digital_Clock"],
+            "testSteps": [
+                {
+                    "viewID": "",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

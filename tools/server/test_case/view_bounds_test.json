@@ -1,0 +1,52 @@
+{
+	"testInfo": [
+        {
+            "className": "ui_view_bounds_test_01",
+            "pageNav": ["View Bounds"],
+            "testSteps": [
+                {
+                    "viewID": "show_view_bounds",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "show_view_bounds",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -500],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "ui_view_bounds_test_02",
+            "pageNav": ["View Bounds"],
+            "testSteps": [
+                {
+                    "viewID": "show_view_bounds",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -500],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "show_view_bounds",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

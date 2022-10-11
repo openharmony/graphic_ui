@@ -121,22 +121,22 @@ void UITestChartPillar::UIKit_ChartPillar_Test_AddDataSerial_001()
 
     positionY_ = lastY_ + 10; // 10: increase y-coordinate
     positionX_ = 48; // 48: x-coordinate
-    SetUpButton(addDataSerialBtn_, "添加数据 ");
+    SetUpButton(addDataSerialBtn_, "添加数据 ", UI_TEST_ADD_DATA);
 
     positionX_ = addDataSerialBtn_->GetX() + addDataSerialBtn_->GetWidth() + g_blank;
     positionY_ = addDataSerialBtn_->GetY();
-    SetUpButton(deleteDataSerialBtn_, "删除数据 ");
+    SetUpButton(deleteDataSerialBtn_, "删除数据 ", UI_TEST_DELETE_DATA);
 
     positionX_ = deleteDataSerialBtn_->GetX() + deleteDataSerialBtn_->GetWidth() + g_blank;
     positionY_ = deleteDataSerialBtn_->GetY();
-    SetUpButton(clearDataSerialBtn_, "清空数据 ");
+    SetUpButton(clearDataSerialBtn_, "清空数据 ", UI_TEST_CLEAR_DATA);
 }
 
 void UITestChartPillar::UIKit_ChartPillar_Test_EnableReverse_002()
 {
     reverseBtn_ = new UILabelButton();
     positionX_ = 48; // 48: x-coordinate
-    SetUpButton(reverseBtn_, "翻转 ");
+    SetUpButton(reverseBtn_, "翻转 ", UI_TEST_FLIP);
 }
 
 void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineColor_003()
@@ -144,7 +144,7 @@ void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineColor_003()
     setAxisColorBtn_ = new UILabelButton();
     positionX_ = reverseBtn_->GetX() + reverseBtn_->GetWidth() + g_blank;
     positionY_ = reverseBtn_->GetY();
-    SetUpButton(setAxisColorBtn_, "坐标轴颜色 ");
+    SetUpButton(setAxisColorBtn_, "坐标轴颜色 ", UI_TEST_AXIS_COLOR);
 }
 
 void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineVisible_004()
@@ -152,7 +152,7 @@ void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineVisible_004()
     setAxisVisibleBtn_ = new UILabelButton();
     positionX_ = setAxisColorBtn_->GetX() + setAxisColorBtn_->GetWidth() + g_blank;
     positionY_ = setAxisColorBtn_->GetY();
-    SetUpButton(setAxisVisibleBtn_, "坐标轴不可见");
+    SetUpButton(setAxisVisibleBtn_, "坐标轴不可见", UI_TEST_AXIS_NOT_VISIBLE);
 }
 
 bool UITestChartPillar::OnClick(UIView& view, const ClickEvent& event)
@@ -194,9 +194,9 @@ bool UITestChartPillar::OnClick(UIView& view, const ClickEvent& event)
     return true;
 }
 
-void UITestChartPillar::SetUpButton(UILabelButton* btn, const char* title)
+void UITestChartPillar::SetUpButton(UILabelButton* btn, const char* title, const char* id)
 {
-    if (btn == nullptr) {
+    if (btn == nullptr || title == nullptr || id == nullptr) {
         return;
     }
     container_->Add(btn);
@@ -211,6 +211,7 @@ void UITestChartPillar::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+    btn->SetViewId(id);
     container_->Invalidate();
 }
 

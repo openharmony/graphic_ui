@@ -1,0 +1,40 @@
+{
+	"testInfo": [
+        {
+            "className": "view_bitmap_01",
+            "pageNav": ["View Bitmap"],
+            "testSteps": [
+                {
+                    "viewID": "component_screenshot",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "full_screen_capture",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "view_bitmap_02",
+            "pageNav": ["View Bitmap"],
+            "testSteps": [
+                {
+                    "viewID": "full_screen_capture",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "component_screenshot",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

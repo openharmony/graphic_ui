@@ -29,6 +29,17 @@
 
 namespace OHOS {
 class TestEventInjectorView;
+
+constexpr char* UI_TEST_UP_TO_DOWN = "up_to_down";
+constexpr char* UI_TEST_DOWN_TO_UP = "down_to_up";
+constexpr char* UI_TEST_LEFT_TO_RIGHT = "left_to_right";
+constexpr char* UI_TEST_RIGHT_TO_LEFT = "right_to_left";
+constexpr char* UI_TEST_ULEFT_TO_LRIGHT = "uleft_to_lright";
+constexpr char* UI_TEST_LRIGHT_TO_ULEFT = "lright_to_uleft";
+constexpr char* UI_TEST_INCREASE_DRAG_TIME = "increase_drag_time";
+constexpr char* UI_TEST_DECREASE_DRAG_TIME = "decrease_drag_time";
+constexpr char* UI_TEST_SET_DRAGE_TIME = "set_drage_time";
+
 class UITestEventInjector : public UITest, public UIView::OnClickListener {
 public:
     UITestEventInjector() {}
@@ -78,7 +89,7 @@ private:
     void InnerTest(const char* title, bool touchable, bool draggable, bool dragParent,
         const char* btnTitle, UILabelButton* btn, TestEventInjectorView*& testView);
     void SetLastPos(UIView* view);
-    void SetUpButton(UILabelButton* btn, const char* title);
+    void SetUpButton(UILabelButton* btn, const char* title, const char* id);
     void SetUpScrollView();
     void IncreaseDragTime();
     void DecreaseDragTime();

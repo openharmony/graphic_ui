@@ -36,6 +36,17 @@ enum ImageScaleMode {
     SCALE_DOWN,
 };
 
+constexpr char* UI_TEST_ROTATE = "rotate";
+constexpr char* UI_TEST_ZOOM = "zoom";
+constexpr char* UI_TEST_TRANSLATION = "translation";
+constexpr char* UI_TEST_AUTO = "auto";
+constexpr char* UI_TEST_TILING = "tiling";
+constexpr char* UI_TEST_COVER = "cover";
+constexpr char* UI_TEST_CONTAIN = "contain";
+constexpr char* UI_TEST_FILL = "fill";
+constexpr char* UI_TEST_CENTER = "center";
+constexpr char* UI_TEST_SCALE_DOWN = "scale_down";
+
 class UITestTransform : public UITest, public UIView::OnClickListener {
 public:
     UITestTransform() {}
@@ -44,7 +55,7 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void SetUpButton(UILabelButton* btn, const char* title);
+    void SetUpButton(UILabelButton* btn, const char* title, const char* id);
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
@@ -57,7 +68,8 @@ public:
 private:
     void AddRadioGroup();
     UILabel* AddLable(int16_t x, int16_t y, const char* data);
-    UIRadioButton* AddRadioButton(Rect rect, const char* name, UICheckBox::OnChangeListener* listener);
+    UIRadioButton* AddRadioButton(Rect rect, const char* name,
+                                  UICheckBox::OnChangeListener* listener, const char* id);
     Rect GetRect(int16_t x, int16_t y, int16_t w, int16_t h) const
     {
         return Rect(x, y, x + w - 1, y + h - 1);
