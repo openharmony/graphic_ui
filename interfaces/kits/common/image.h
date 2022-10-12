@@ -151,7 +151,7 @@ public:
 
 protected:
     const ImageInfo* imageInfo_;
-    const char* path_;
+    char* path_;
 
 private:
 #if ENABLE_JPEG_AND_PNG

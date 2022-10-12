@@ -334,7 +334,7 @@ bool UITestChartPolyline::OnClick(UIView& view, const ClickEvent& event)
         curDataIndex_++;
         chart_->Invalidate();
     } else if (&view == deleteDataSerialBtn_) {
-        if (curDataIndex_ <= 0) {
+        if (curDataIndex_ == 0) {
             return true;
         }
         chart_->DeleteDataSerial(dataSerial_[curDataIndex_ - 1]);
