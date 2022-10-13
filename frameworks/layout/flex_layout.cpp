@@ -63,9 +63,6 @@ void FlexLayout::GetStartPos(const int16_t& length,
         interval = (length - validLengths[count]) / (childsNum[count] + 1);
         pos = interval;
     } else {
-        if (childsNum[count] == 1) {
-            return;
-        }
         interval = (length - validLengths[count]) / (childsNum[count] - 1);
         pos = 0;
     }

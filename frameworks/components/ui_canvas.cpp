@@ -1224,7 +1224,7 @@ void UICanvas::InitGfxMapBuffer(const BufferInfo& srcBuff, const Rect& rect)
 
     errno_t err = memset_s(gfxMapBuffer_->virAddr, buffSize, 0, buffSize);
     if (err != EOK) {
-        BaseGfxEngine::GetInstance()->FreeBuffer((uint8_t*)gfxMapBuffer_->virAddr, BUFFER_MAP_SURFACE);
+        BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t*>(gfxMapBuffer_->virAddr), BUFFER_MAP_SURFACE);
         GRAPHIC_LOGE("memset_s gfxMapBuffer_ fail");
         return;
     }
@@ -1246,7 +1246,7 @@ BufferInfo* UICanvas::UpdateMapBufferInfo(const BufferInfo& srcBuff, const Rect&
         uint32_t buffSize = gfxMapBuffer_->height * gfxMapBuffer_->stride;
         errno_t err = memset_s(gfxMapBuffer_->virAddr, buffSize, 0, buffSize);
         if (err != EOK) {
-            BaseGfxEngine::GetInstance()->FreeBuffer((uint8_t*)gfxMapBuffer_->virAddr, BUFFER_MAP_SURFACE);
+            BaseGfxEngine::GetInstance()->FreeBuffer(static_cast<uint8_t*>(gfxMapBuffer_->virAddr), BUFFER_MAP_SURFACE);
             GRAPHIC_LOGE("memset_s gfxMapBuffer_ fail");
         }
     }
