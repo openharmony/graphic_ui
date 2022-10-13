@@ -37,7 +37,7 @@ Image::~Image()
     ReInitImageInfo(nullptr, false);
 
     if (path_ != nullptr) {
-        UIFree(reinterpret_cast<void*>(const_cast<char*>(path_)));
+        UIFree(reinterpret_cast<void*>(path_));
         path_ = nullptr;
     }
     srcType_ = IMG_SRC_UNKNOWN;
@@ -177,7 +177,7 @@ bool Image::SetLiteSrc(const char* src)
 bool Image::SetSrc(const char* src)
 {
     if (path_ != nullptr) {
-        UIFree(reinterpret_cast<void*>(const_cast<char*>(path_)));
+        UIFree(reinterpret_cast<void*>(path_));
         path_ = nullptr;
     }
 
@@ -226,10 +226,10 @@ bool Image::PreParse(const char *src)
         return false;
     }
     if (path_ != nullptr) {
-        UIFree((void*)path_);
+        UIFree(reinterpret_cast<void*>(path_));
     }
     size_t strLen = strlen(src) + 1;
-    char* path = (char*)UIMalloc(strLen);
+    char* path = static_cast<char*>(UIMalloc(static_cast<uint32_t>(strLen)));
     if (strcpy_s(path, strLen, src) != EOK) {
         UIFree(reinterpret_cast<void*>(path));
         return false;

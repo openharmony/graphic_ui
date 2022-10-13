@@ -42,16 +42,6 @@ void UITestApp::Start()
     Init();
 }
 
-class BtnOnClickOnAutoTestListener : public UIView::OnClickListener {
-public:
-    BtnOnClickOnAutoTestListener() {}
-    virtual ~BtnOnClickOnAutoTestListener() {}
-
-    bool OnClick(UIView& view, const ClickEvent& event) override
-    {
-    }
-};
-
 void UITestApp::Init()
 {
     InitBackBtn();
@@ -76,7 +66,7 @@ void UITestApp::InitMainMenu()
             autoTestBtn_->Resize(163, 64); // 163: button width; 64: button height
             autoTestBtn_->SetPosition(Screen::GetInstance().GetWidth() - autoTestBtn_->GetWidth(), 0);
             autoTestBtn_->SetText("自动测试");
-            auto listern = new BtnOnClickOnAutoTestListener();
+            auto listern = new UIView::OnClickListener();
             autoTestBtn_->SetOnClickListener(listern);
             autoTestBtn_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 24); // 24: means font size
             autoTestBtn_->SetStyleForState(STYLE_BORDER_RADIUS, 0, UIButton::RELEASED);
