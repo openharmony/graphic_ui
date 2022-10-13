@@ -31,6 +31,10 @@ class BorderListener;
 class MarginListener;
 class PaddingListener;
 
+constexpr char* UI_TEST_MARGIN_BTN = "margin_btn";
+constexpr char* UI_TEST_BORDER_BTN = "border_btn";
+constexpr char* UI_TEST_PADDING_BTN = "padding_btn";
+
 class UITestBorderMarginPadding : public UITest {
 public:
     UITestBorderMarginPadding()
@@ -63,6 +67,7 @@ public:
     void UIKit_UITestBorderMarginPadding_Test_016();
     void UIKit_UITestBorderMarginPadding_Test_017();
     void UIKit_UITestBorderMarginPadding_Test_018();
+    void InitStyle();
     Style style_;
 
 private:

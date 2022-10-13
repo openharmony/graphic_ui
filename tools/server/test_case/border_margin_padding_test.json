@@ -1,0 +1,328 @@
+{
+	"testInfo": [
+        {
+            "className": "border_margin_padding_01",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_02",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -250],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_03",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -500],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_04",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -750],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_05",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -1000],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_06",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -1250],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_07",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -1500],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_08",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -1750],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_09",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -2000],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_10",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -2250],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "border_margin_padding_11",
+            "pageNav": ["Border_Margin_Padding"],
+            "testSteps": [
+			    {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -2500],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "margin_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "border_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+				{
+                    "viewID": "padding_btn",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+	]
+}

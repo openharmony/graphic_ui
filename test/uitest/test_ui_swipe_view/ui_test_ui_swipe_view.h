@@ -22,6 +22,34 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_HOR_001_BUTTON1 = "hor_001_button1";
+constexpr char* UI_TEST_HOR_001_BUTTON2 = "hor_001_button2";
+
+constexpr char* UI_TEST_HOR_002_BUTTON1 = "hor_002_button1";
+constexpr char* UI_TEST_HOR_002_BUTTON2 = "hor_002_button2";
+constexpr char* UI_TEST_HOR_002_BUTTON3 = "hor_002_button3";
+
+constexpr char* UI_TEST_HOR_003_BUTTON1 = "hor_003_button1";
+constexpr char* UI_TEST_HOR_003_BUTTON2 = "hor_003_button2";
+constexpr char* UI_TEST_HOR_003_BUTTON3 = "hor_003_button3";
+
+constexpr char* UI_TEST_VER_001_BUTTON1 = "ver_001_button1";
+constexpr char* UI_TEST_VER_001_BUTTON2 = "ver_001_button2";
+
+constexpr char* UI_TEST_VER_002_BUTTON1 = "ver_002_button1";
+constexpr char* UI_TEST_VER_002_BUTTON2 = "ver_002_button2";
+constexpr char* UI_TEST_VER_003_BUTTON3 = "ver_002_button3";
+
+constexpr char* UI_TEST_ADD_TO_HEAD = "add_to_head";
+constexpr char* UI_TEST_ADD_TO_TAIL = "add_to_tail";
+constexpr char* UI_TEST_ADD_TO_BACK_OF_HEAD = "add_to_back_of_head";
+constexpr char* UI_TEST_DELETE_HEAD = "delete_head";
+constexpr char* UI_TEST_DELETE_MIDDLE = "delete_middle";
+constexpr char* UI_TEST_DELETE_ALL = "delete_all";
+constexpr char* UI_TEST_SET_CYCLE = "set_cycle";
+constexpr char* UI_TEST_SWITCH_PAGES = "switch_pages";
+
+
 class UITestUISwipeView : public UITest, UIView::OnClickListener {
 public:
     UITestUISwipeView() {}
@@ -41,7 +69,7 @@ public:
     void UIKit_Swipe_View_Test_SetCurrentPage();
 
 private:
-    void SetUpButton(UILabelButton* btn, const char* title);
+    void SetUpButton(UILabelButton* btn, const char* title, const char* id);
     void SetLastPos(UIView* view);
     UIScrollView* container_ = nullptr;
     UISwipeView* currentSwipe_ = nullptr;

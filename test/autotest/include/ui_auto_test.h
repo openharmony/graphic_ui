@@ -21,6 +21,8 @@
 #include "ui_test_message.h"
 
 namespace OHOS {
+constexpr int WAIT_TIME_MUBLITE = 4;
+constexpr uint16_t DRAGE_DEFAULT_WAIT_TIME = 3000;
 class UIAutoTest {
 public:
     UIAutoTest();
