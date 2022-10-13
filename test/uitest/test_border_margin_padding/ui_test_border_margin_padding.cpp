@@ -141,8 +141,23 @@ void UITestBorderMarginPadding::SetUp()
     }
 
     UIToggleButton* marginBtn = new UIToggleButton();
+    if (marginBtn == nullptr) {
+        return;
+    }
+    marginBtn->SetViewId(UI_TEST_MARGIN_BTN);
+
     UIToggleButton* borderBtn = new UIToggleButton();
+    if (borderBtn == nullptr) {
+        return;
+    }
+    borderBtn->SetViewId(UI_TEST_BORDER_BTN);
+
     UIToggleButton* paddingBtn = new UIToggleButton();
+    if (paddingBtn == nullptr) {
+        return;
+    }
+    paddingBtn->SetViewId(UI_TEST_PADDING_BTN);
+
     UILabel* labelMargin = new UILabel();
     UILabel* labelBorder = new UILabel();
     UILabel* labelPadding = new UILabel();
@@ -226,6 +241,7 @@ void UITestBorderMarginPadding::SetUp()
         adapterData_->PushBack("BBB");
         adapterData_->PushBack("CCC");
     }
+    InitStyle();
 }
 
 void UITestBorderMarginPadding::TearDown()
@@ -300,6 +316,21 @@ void UITestBorderMarginPadding::ReloadTest()
     int16_t yAfter = listScroll_->GetHeight() * yBefor / heightBefor;
     scroll_->ScrollBy(0, yAfter);
     container_->Invalidate();
+}
+
+void UITestBorderMarginPadding::InitStyle()
+{
+    style_.SetStyle(STYLE_MARGIN_LEFT, 0);
+    style_.SetStyle(STYLE_MARGIN_TOP, 0);
+    style_.SetStyle(STYLE_MARGIN_RIGHT, 0);
+    style_.SetStyle(STYLE_MARGIN_BOTTOM, 0);
+
+    style_.SetStyle(STYLE_BORDER_WIDTH, 0);
+
+    style_.SetStyle(STYLE_PADDING_LEFT, 0);
+    style_.SetStyle(STYLE_PADDING_TOP, 0);
+    style_.SetStyle(STYLE_PADDING_RIGHT, 0);
+    style_.SetStyle(STYLE_PADDING_BOTTOM, 0);
 }
 
 const UIView* UITestBorderMarginPadding::GetTestView()

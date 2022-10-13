@@ -1,0 +1,244 @@
+{
+	"testInfo": [
+        {
+            "className": "swip_view_test_01",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "hor_001_button1",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_001_button2",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_001_button1",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_001_button2",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "swip_view_test_02",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "hor_002_button1",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_002_button2",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_002_button3",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_002_button3",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "swip_view_test_03",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -100],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_003_button1",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_003_button2",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_003_button3",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_003_button3",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "hor_003_button1",
+                    "eventID": 1,
+                    "eventValue": [-100, 0],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "swip_view_test_04",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "ver_001_button1",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_001_button2",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_001_button2",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "swip_view_test_05",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -300],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_002_button1",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_002_button2",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_002_button3",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_002_button1",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_002_button2",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ver_002_button3",
+                    "eventID": 1,
+                    "eventValue": [0, -200],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "swip_view_test_06",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -500],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "swip_view_test_07",
+            "pageNav": ["UISwipeView"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -630],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_to_head",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_to_head",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_to_tail",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_to_back_of_head",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "delete_head",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "delete_middle",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "delete_all",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}
