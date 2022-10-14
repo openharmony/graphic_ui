@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -338,6 +338,14 @@ public:
          * @version 1.0
          */
         virtual void OnPickerStoped(UIPicker& picker) {}
+        /**
+         * @brief Called when an item is selected during sliding. This function is implemented by applications. 
+         *
+         * @param picker Indicates the picker instance.
+         * @since 1.0
+         * @version 1.0
+         */
+        virtual void OnPickerChanged(UIPicker& picker) {}
     };
 
     /**

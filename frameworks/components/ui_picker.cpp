@@ -51,6 +51,9 @@ void PickerListScrollListener::OnItemSelected(int16_t index, UIView* view)
         lastSelectView_ = view;
         selectIndex_ = index;
         listView_->Invalidate();
+        if (pickerView_->pickerListener_) {
+            pickerView_->pickerListener_->OnPickerChanged(*pickerView_);
+        }
     }
 }
 
