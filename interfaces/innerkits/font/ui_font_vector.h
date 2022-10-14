@@ -87,17 +87,17 @@ private:
     };
     TtcInfo ttcInfos_[FONT_ID_MAX] = {};
     void SetFace(FaceInfo& faceInfo, uint32_t unicode) const;
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     void SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const;
 #endif
     uint8_t GetFontId(uint32_t unicode) const;
     uint32_t GetKey(uint8_t fontId, uint32_t size);
     int8_t LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Face face);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     int8_t LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle);
 #endif
     uint8_t IsGlyphFont(uint32_t unicode);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     void SetItaly(FT_GlyphSlot slot);
     void SetBold(uint8_t fontId);
 #endif

@@ -144,7 +144,7 @@ uint8_t UIFontVector::RegisterFontInfo(const UITextLanguageFontParam* fontsTable
     return count;
 }
 
-/* Note: when use ttc font file, freetype should export FT_Stream_New/FT_Stream_Free function*/
+// Note: when use ttc font file, freetype should export FT_Stream_New/FT_Stream_Free function
 uint8_t UIFontVector::RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
 {
     if ((ttcName == nullptr) || !freeTypeInited_) {
