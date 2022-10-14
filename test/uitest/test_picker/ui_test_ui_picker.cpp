@@ -123,11 +123,11 @@ void UITestUIPicker::UIKit_Picker_Test_Base_001()
     selectIndex_->SetPosition(positionX_ + 40, label->GetY() + g_blank); // 40: increase x-coordinate
     positionY_ += label->GetY() + g_blank;
     container_->Add(selectIndex_);
-    SetUpButton(setLoopBtn_, "开启循环 ");
-    SetUpButton(setLoopOffBtn_, "关闭循环 ");
-    SetUpButton(setSelectBtn_, "定位到第5个 ");
-    SetUpButton(setLeftToRightBtn_, "从左往右 ");
-    SetUpButton(setRightToLeftBtn_, "从右往左 ");
+    SetUpButton(setLoopBtn_, "开启循环 ", UI_TEST_START_LOOP);
+    SetUpButton(setLoopOffBtn_, "关闭循环 ", UI_TEST_STOP_LOOP);
+    SetUpButton(setSelectBtn_, "定位到第5个 ", UI_TEST_GO_TO_THE_FIFTH);
+    SetUpButton(setLeftToRightBtn_, "从左往右 ", UI_TEST_FROM_LEFT_TO_RIGHT);
+    SetUpButton(setRightToLeftBtn_, "从右往左 ", UI_TEST_FROM_RIGHT_TO_LEFT);
     container_->Add(picker1_);
     SetLastPos(picker1_);
 }
@@ -194,6 +194,7 @@ void UITestUIPicker::UIKit_Picker_Test_Time_Picker_001()
     setMarginBtn_->SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
     setMarginBtn_->SetOnClickListener(this);
     setMarginBtn_->SetText("增加margin");
+    setMarginBtn_->SetViewId(UI_TEST_PICKER_ADD_MARGIN);
 
     if (picker2_ == nullptr) {
         picker2_ = new UITimePicker();
@@ -241,9 +242,9 @@ bool UITestUIPicker::OnClick(UIView& view, const ClickEvent& event)
     return true;
 }
 
-void UITestUIPicker::SetUpButton(UILabelButton* btn, const char* title)
+void UITestUIPicker::SetUpButton(UILabelButton* btn, const char* title, const char* id)
 {
-    if (btn == nullptr) {
+    if (btn == nullptr || title == nullptr || id == nullptr) {
         return;
     }
     container_->Add(btn);
@@ -258,6 +259,7 @@ void UITestUIPicker::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+    btn->SetViewId(id);
     container_->Invalidate();
 }
 

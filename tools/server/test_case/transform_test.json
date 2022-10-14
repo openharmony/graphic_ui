@@ -1,0 +1,220 @@
+{
+	"testInfo": [
+        {
+            "className": "transform_test_01",
+            "pageNav": ["Transform"],
+            "testSteps": [
+                {
+                    "viewID": "rotate",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "auto",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "tiling",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "cover",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "contain",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "fill",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "center",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "scale_Down",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "transform_test_02",
+            "pageNav": ["Transform"],
+            "testSteps": [
+                {
+                    "viewID": "zoom",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "auto",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "tiling",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "cover",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "contain",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "fill",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "center",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "scale_down",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "transform_test_03",
+            "pageNav": ["Transform"],
+            "testSteps": [
+                {
+                    "viewID": "translation",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "auto",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "tiling",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "cover",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "contain",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "fill",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "center",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "scale_down",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "transform_test_04",
+            "pageNav": ["Transform"],
+            "testSteps": [
+                {
+                    "viewID": "rotate",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zoom",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "translation",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "translation",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zoom",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "rotate",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "rotate",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "scale_down",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

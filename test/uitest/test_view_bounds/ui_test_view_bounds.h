@@ -25,6 +25,7 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_SHOW_VIEW_BOUNDS = "show_view_bounds";
 class UITestViewBounds : public UITest {
 public:
     UITestViewBounds() {}

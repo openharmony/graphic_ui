@@ -1,0 +1,40 @@
+{
+	"testInfo": [
+        {
+            "className": "ui_picker_01",
+            "pageNav": ["UIPicker"],
+            "testSteps": [
+                {
+                    "viewID": "go_to_the_fifth",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "from_left_to_right",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "from_right_to_left",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_margin",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "add_margin",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

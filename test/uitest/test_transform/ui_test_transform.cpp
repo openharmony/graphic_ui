@@ -83,38 +83,38 @@ void UITestTransform::AddRadioGroup()
     int16_t y = 50;
     AddLable(lableX, y, "Auto");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::AUTO, this))->SetState(
+        "RB", new StateChangeListener(ImageScaleMode::AUTO, this), UI_TEST_AUTO)->SetState(
         UICheckBox::UICheckBoxState::SELECTED);
 
     y += STEP;
     AddLable(lableX, y, "Tiling");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::TILING, this));
+        "RB", new StateChangeListener(ImageScaleMode::TILING, this), UI_TEST_TILING);
 
     y += STEP;
     AddLable(lableX, y, "Cover");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::COVER, this));
+        "RB", new StateChangeListener(ImageScaleMode::COVER, this), UI_TEST_COVER);
 
     y += STEP;
     AddLable(lableX, y, "Contain");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::CONTAIN, this));
+        "RB", new StateChangeListener(ImageScaleMode::CONTAIN, this), UI_TEST_CONTAIN);
 
     y += STEP;
     AddLable(lableX, y, "Fill");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::FILL, this));
+        "RB", new StateChangeListener(ImageScaleMode::FILL, this), UI_TEST_FILL);
 
     y += STEP;
     AddLable(lableX, y, "Center");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::CENTER, this));
+        "RB", new StateChangeListener(ImageScaleMode::CENTER, this), UI_TEST_CENTER);
 
     y += STEP;
     AddLable(lableX, y, "Scale Down");
     AddRadioButton(GetRect(RADIO_X, y + RADIO_OFFSET, RADIO_SIZE, RADIO_SIZE),
-        "RB", new StateChangeListener(ImageScaleMode::SCALE_DOWN, this));
+        "RB", new StateChangeListener(ImageScaleMode::SCALE_DOWN, this), UI_TEST_SCALE_DOWN);
 }
 
 void UITestTransform::TearDown()
@@ -136,9 +136,9 @@ const UIView* UITestTransform::GetTestView()
     return container_;
 }
 
-void UITestTransform::SetUpButton(UILabelButton* btn, const char* title)
+void UITestTransform::SetUpButton(UILabelButton* btn, const char* title, const char* id)
 {
-    if (btn == nullptr) {
+    if (btn == nullptr || title == nullptr || id == nullptr) {
         return;
     }
     layout_->Add(btn);
@@ -152,24 +152,25 @@ void UITestTransform::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+    btn->SetViewId(id);
 }
 
 void UITestTransform::UIKit_Transform_Test_Rotate_001()
 {
     rotateBtn_ = new UILabelButton();
-    SetUpButton(rotateBtn_, "旋转");
+    SetUpButton(rotateBtn_, "旋转", UI_TEST_ROTATE);
 }
 
 void UITestTransform::UIKit_Transform_Test_Scale_002()
 {
     scaleBtn_ = new UILabelButton();
-    SetUpButton(scaleBtn_, "缩放");
+    SetUpButton(scaleBtn_, "缩放", UI_TEST_ZOOM);
 }
 
 void UITestTransform::UIKit_Transform_Test_Translate_003()
 {
     translateBtn_ = new UILabelButton();
-    SetUpButton(translateBtn_, "平移");
+    SetUpButton(translateBtn_, "平移", UI_TEST_TRANSLATION);
 }
 
 bool UITestTransform::OnClick(UIView& view, const ClickEvent& event)
@@ -256,7 +257,8 @@ UILabel* UITestTransform::AddLable(int16_t x, int16_t y, const char* data)
     return label;
 }
 
-UIRadioButton* UITestTransform::AddRadioButton(Rect rect, const char* name, UICheckBox::OnChangeListener* listener)
+UIRadioButton* UITestTransform::AddRadioButton(Rect rect, const char* name,
+                                               UICheckBox::OnChangeListener* listener, const char* id)
 {
     if (listener == nullptr || name == nullptr) {
         return nullptr;
@@ -265,6 +267,7 @@ UIRadioButton* UITestTransform::AddRadioButton(Rect rect, const char* name, UICh
     container_->Add(radioButton);
     radioButton->SetListener(listener);
     radioButton->SetPosition(rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight());
+    radioButton->SetViewId(id);
     if (radioButton->GetState() == UICheckBox::SELECTED) {
         listener->OnChange(UICheckBox::SELECTED);
     }

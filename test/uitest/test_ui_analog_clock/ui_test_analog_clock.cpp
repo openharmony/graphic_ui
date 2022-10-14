@@ -206,7 +206,7 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     if ((group == nullptr) || (curFace == nullptr) || (clock == nullptr)) {
         return;
     }
-    UILabelButton* button1 = SetUpButton("切换模式");
+    UILabelButton* button1 = SetUpButton("切换模式", UI_TEST_SWITCH_MODE_1);
     group->Add(button1);
     // 58: increase x-position; 48: y-position
     button1->SetPosition(curFace->GetWidth() + 58, 48, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -216,7 +216,7 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     }
     button1->SetOnClickListener(changeModeListener_);
 
-    UILabelButton* button2 = SetUpButton("左移");
+    UILabelButton* button2 = SetUpButton("左移", UI_TEST_SHIF_LEFT_1);
     group->Add(button2);
     // 58: increase x-position; 58: increase y-position
     button2->SetPosition(curFace->GetWidth() + 58, BUTTON_HEIGHT + 58, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -228,7 +228,7 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     }
     button2->SetOnClickListener(clickMoveLeftListener_);
 
-    UILabelButton* button3 = SetUpButton("右移");
+    UILabelButton* button3 = SetUpButton("右移", UI_TEST_SHIF_RIGHT_1);
     group->Add(button3);
     // 58: increase x-position; 148: y-position
     button3->SetPosition(curFace->GetWidth() + 58, 148, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -240,7 +240,7 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     }
     button3->SetOnClickListener(clickMoveRightListener_);
 
-    UILabelButton* button4 = SetUpButton("上移");
+    UILabelButton* button4 = SetUpButton("上移", UI_TEST_SHIF_UP_1);
     group->Add(button4);
     // 58: increase x-position; 198: y-position
     button4->SetPosition(curFace->GetWidth() + 58, 198, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -252,7 +252,7 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     }
     button4->SetOnClickListener(clickMoveTopListener_);
 
-    UILabelButton* button5 = SetUpButton("下移");
+    UILabelButton* button5 = SetUpButton("下移", UI_TEST_SHIF_DOWN_1);
     group->Add(button5);
     // 58: increase x-position; 248: y-position
     button5->SetPosition(curFace->GetWidth() + 58, 248, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -320,7 +320,7 @@ void UITestAnalogClock::CreateButtons002(UIViewGroup* group, UIImageView* curFac
     if ((group == nullptr) || (curFace == nullptr) || (clock == nullptr)) {
         return;
     }
-    UILabelButton* button1 = SetUpButton("切换模式");
+    UILabelButton* button1 = SetUpButton("切换模式", UI_TEST_SWITCH_MODE_2);
     group->Add(button1);
     // 58: increase x-coordinate; 48: y-coordinate
     button1->SetPosition(curFace->GetWidth() + 58, 48, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -330,7 +330,7 @@ void UITestAnalogClock::CreateButtons002(UIViewGroup* group, UIImageView* curFac
     }
     button1->SetOnClickListener(changeModeListener1_);
 
-    UILabelButton* button2 = SetUpButton("左移");
+    UILabelButton* button2 = SetUpButton("左移", UI_TEST_SHIF_LEFT_2);
     group->Add(button2);
     // 58: increase x-coordinate; 98: y-coordinate
     button2->SetPosition(curFace->GetWidth() + 58, 98, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -342,7 +342,7 @@ void UITestAnalogClock::CreateButtons002(UIViewGroup* group, UIImageView* curFac
     }
     button2->SetOnClickListener(clickMoveLeftListener1_);
 
-    UILabelButton* button3 = SetUpButton("右移");
+    UILabelButton* button3 = SetUpButton("右移", UI_TEST_SHIF_RIGHT_2);
     group->Add(button3);
     // 58: increase x-coordinate; 148: y-coordinate
     button3->SetPosition(curFace->GetWidth() + 58, 148, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -354,7 +354,7 @@ void UITestAnalogClock::CreateButtons002(UIViewGroup* group, UIImageView* curFac
     }
     button3->SetOnClickListener(clickMoveRightListener1_);
 
-    UILabelButton* button4 = SetUpButton("上移");
+    UILabelButton* button4 = SetUpButton("上移", UI_TEST_SHIF_UP_2);
     group->Add(button4);
     // 58: increase x-coordinate; 198: y-coordinate
     button4->SetPosition(curFace->GetWidth() + 58, 198, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -365,7 +365,7 @@ void UITestAnalogClock::CreateButtons002(UIViewGroup* group, UIImageView* curFac
             TestBtnOnClickMovePositionListener::MoveType::MOVE_TOP, 10)); // 10: move value
     }
     button4->SetOnClickListener(clickMoveTopListener1_);
-    UILabelButton* button5 = SetUpButton("下移");
+    UILabelButton* button5 = SetUpButton("下移", UI_TEST_SHIF_DOWN_2);
     group->Add(button5);
     // 58: increase x-coordinate; 248: y-coordinate
     button5->SetPosition(curFace->GetWidth() + 58, 248, BUTTON_WIDTH, BUTTON_HEIGHT);

@@ -1,0 +1,148 @@
+{
+	"testInfo": [
+        {
+            "className": "ui_analog_clock_test_01",
+            "pageNav": ["Analog_Clock"],
+            "testSteps": [
+                {
+                    "viewID": "shift_left_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_right_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_up_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_down_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "ui_analog_clock_test_02",
+            "pageNav": ["Analog_Clock"],
+            "testSteps": [
+                {
+                    "viewID": "switch_mode_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_left_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_right_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_up_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_down_1",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "ui_analog_clock_test_03",
+            "pageNav": ["Analog_Clock"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -600],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_left_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_right_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_up_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_down_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "ui_analog_clock_test_03",
+            "pageNav": ["Analog_Clock"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -600],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "switch_mode_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_left_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_right_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_up_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "shift_down_2",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

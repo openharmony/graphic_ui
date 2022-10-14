@@ -1,0 +1,34 @@
+{
+	"testInfo": [
+        {
+            "className": "ui_opacity_test_01",
+            "pageNav": ["Opacity"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -150],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -300],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -450],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -600],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}
