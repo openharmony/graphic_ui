@@ -191,14 +191,13 @@ void GifImageAnimator::DealGifImageData(const GifFileType* gifFileType,
     uint8_t colorIndex = 0;
     GifColorType* gifColorType = nullptr;
     uint32_t index = 0;
-    bool transparentColor = true;
-    int32_t loc = 0;
+
     for (int32_t x = 0; x < gifFileType->SHeight; x++) {
         for (int32_t y = 0; y < gifFileType->SWidth; y++) {
-            transparentColor = true;
+            bool transparentColor = true;
             if ((x >= gifImageDesc->Top) && (x < gifImageDesc->Top + gifImageDesc->Height) &&
                 (y >= gifImageDesc->Left) && (y < gifImageDesc->Left + gifImageDesc->Width)) {
-                loc = (x - gifImageDesc->Top) * gifImageDesc->Width + (y - gifImageDesc->Left);
+                int32_t loc = (x - gifImageDesc->Top) * gifImageDesc->Width + (y - gifImageDesc->Left);
                 colorIndex = savedImage->RasterBits[loc];
 
                 if ((gcb.DisposalMode != DISPOSE_DO_NOT) || (gcb.TransparentColor == NO_TRANSPARENT_COLOR) ||
