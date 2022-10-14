@@ -22,7 +22,7 @@
 #include "dock/key_input_device.h"
 
 namespace OHOS {
-#if USE_KEY
+#if defined(USE_KEY) && USE_KEY
 class KeyInput : public KeyInputDevice {
 public:
     KeyInput() : leftButtonDown_(false), lastX_(0), lastY_(0) {}

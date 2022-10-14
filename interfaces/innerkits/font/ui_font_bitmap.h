@@ -60,7 +60,7 @@ protected:
 private:
     uint8_t* SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
     int16_t GetWidthInFontId(uint32_t unicode, uint8_t fontId);
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     int8_t GetMultiGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
 #endif
     void CloseFontFd();

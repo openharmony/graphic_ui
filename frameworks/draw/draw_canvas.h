@@ -53,7 +53,7 @@ public:
                          const Style& style,
                          const bool& isStroke);
 
-#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG) && GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
     static void DoDrawShadow(BufferInfo& gfxDstBuffer,
                              void* param,
                              const Paint& paint,
@@ -76,7 +76,7 @@ public:
                               TransAffine& transform,
                               const bool& isStroke);
 
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     /**
      * Render gradient
      */
@@ -113,7 +113,7 @@ public:
                                           float& endRadius);
 #endif // GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 
-#if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
     /**
      * Render pattern mode
      */
@@ -154,10 +154,10 @@ public:
     template <class LineStyle> static void LineStyleCalc(DepictStroke<LineStyle>& strokeLineStyle, const Paint& paint)
     {
         strokeLineStyle.SetWidth(paint.GetStrokeWidth()); // Line style related
-#if GRAPHIC_ENABLE_LINECAP_FLAG
+#if defined(GRAPHIC_ENABLE_LINECAP_FLAG) && GRAPHIC_ENABLE_LINECAP_FLAG
         strokeLineStyle.SetLineCap(paint.GetLineCap());
 #endif
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
         strokeLineStyle.SetLineJoin(paint.GetLineJoin());
         if (paint.GetMiterLimit() > 0) {
             strokeLineStyle.SetMiterLimit(paint.GetMiterLimit());
@@ -165,7 +165,7 @@ public:
 #endif
     };
 
-#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+#if defined(GRAPHIC_ENABLE_DASH_GENERATE_FLAG) && GRAPHIC_ENABLE_DASH_GENERATE_FLAG
     /**
      * Set linedash style
      */
