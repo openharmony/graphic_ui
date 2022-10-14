@@ -234,7 +234,7 @@ HWTEST_F(UIEditTextTest, UIEditTextSetCursorColor_001, TestSize.Level1)
 HWTEST_F(UIEditTextTest, UIEditTextSetFont_001, TestSize.Level1)
 {
     UIEditText* editText = new UIEditText();
-    uint8_t fontId = editText->GetFontId();
+    uint16_t fontId = editText->GetFontId();
 
     const uint8_t fontSize = 20; // 20: font size for test
     editText->SetFont("error_font_name", fontSize);
