@@ -26,7 +26,7 @@ enum UITextWildcardStaticType : uint8_t { TEXT_STATIC_STR1 = 0, TEXT_STATIC_STR2
 
 struct UITextLanguageTextParam {
     uint16_t textId;
-    uint8_t fontId;
+    uint16_t fontId;
     uint8_t align : 2;  // UITextLanguageAlignment
     uint8_t direct : 1; // UITextLanguageDirect
     uint8_t shaping : 1;
@@ -240,7 +240,7 @@ struct BinHeader {
  * refer to ui_font.h
  */
 struct FontHeader {
-    uint8_t fontId;      // FONT_ID_OFFSET
+    uint16_t fontId;      // FONT_ID_OFFSET
     uint16_t glyphNum;   // GLYPH_NUM_OFFSET
     uint16_t fontHeight; // FONT_HEIGHT_OFFSET
     int16_t ascender;    // FONT_ASCEND_LEN
@@ -288,8 +288,8 @@ struct GlyphNode {
     uint32_t dataOff;  // GLYPH_DATA_OFF_OFFSET
     uint32_t kernOff;  // GLYPH_KERN_OFF_OFFSET
     uint16_t kernSize; // GLYPH_KERN_SIZE_OFFSET
-    uint8_t fontId;    // GLYPH_FONT_ID
-    uint8_t dataFlag;  // GLYPH_DATA_HEAD_FLAG
+    uint16_t fontId;    // GLYPH_FONT_ID
+    uint16_t dataFlag;  // GLYPH_DATA_HEAD_FLAG
 #if ENABLE_VECTOR_FONT
     TextStyle textStyle; // GLYPH_TEXT_STYLE
 #endif

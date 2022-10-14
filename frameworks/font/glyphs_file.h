@@ -36,15 +36,15 @@ public:
 
     int8_t GetFontVersion(const char* fontName, char* version, uint8_t len);
 
-    int16_t GetFontHeight(uint8_t fontId);
+    int16_t GetFontHeight(uint16_t fontId);
 
-    const FontHeader* GetFontHeader(uint8_t fontId);
+    const FontHeader* GetFontHeader(uint16_t fontId);
 
     int8_t GetBitmap(GlyphNode& node, BufferInfo& bufInfo);
 
     int8_t SetFile(const char* fontName, int32_t fp, uint32_t start);
 
-    int8_t GetNodeFromFile(uint32_t unicode, uint8_t fontId, GlyphNode& node);
+    int8_t GetNodeFromFile(uint32_t unicode, uint16_t fontId, GlyphNode& node);
 
     bool IsSameFile(const char* fontName);
 
@@ -60,7 +60,7 @@ private:
     };
 
     struct GlyphInfo {
-        uint8_t fontId;
+        uint16_t fontId;
         uint32_t glyphNodeSectionStart;
         uint32_t bitMapSectionStart;
         uint32_t fontIndexSectionStart;
@@ -69,7 +69,7 @@ private:
     };
 
     int8_t CacheInit();
-    int8_t GetGlyphInfo(uint8_t fontId, GlyphInfo& glyphInfo);
+    int8_t GetGlyphInfo(uint16_t fontId, GlyphInfo& glyphInfo);
     void SetFontName(const char* fontName);
 
     BinHeader binHeader_;

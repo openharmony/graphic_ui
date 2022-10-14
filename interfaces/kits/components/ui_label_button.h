@@ -270,7 +270,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint8_t fontId)
+    void SetFontId(uint16_t fontId)
     {
         InitLabelButtonText();
         labelButtonText_->SetFontId(fontId);
@@ -283,7 +283,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint8_t GetFontId()
+    uint16_t GetFontId()
     {
         InitLabelButtonText();
         return labelButtonText_->GetFontId();

@@ -39,7 +39,7 @@ public:
     int8_t GetSearchFontList(uint8_t fontListId, uint8_t **fontIds);
     void UpdateScript(UITextLanguageFontParam& fonts);
     bool IsNeedShaping(const char* text, uint8_t& ttfId, uint32_t& script);
-    uint8_t GetShapingFontId(const char* text, uint8_t fontId, uint8_t& ttfId, uint32_t& script);
+    uint8_t GetShapingFontId(const char* text, uint16_t fontId, uint8_t& ttfId, uint32_t& script);
 #if ENABLE_SHAPING
     uint32_t GetScriptByTtfId(uint8_t ttfId);
 #endif
@@ -56,7 +56,7 @@ private:
      *
      */
     ~UIMultiFontManager();
-    int8_t AddNewFont(uint8_t fontListId, uint8_t *fontIds, int8_t size, uint8_t fontId);
+    int8_t AddNewFont(uint8_t fontListId, uint8_t *fontIds, int8_t size, uint16_t fontId);
     int8_t UpdateFont(uint8_t fontListId, uint8_t *fontIds, uint8_t size);
     int8_t IsShapingLetter(uint32_t unicode, uint8_t& ttfId);
     struct FontIdNode {
