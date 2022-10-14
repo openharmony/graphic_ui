@@ -1,0 +1,100 @@
+{
+	"testInfo": [
+        {
+            "className": "ui_view_percent_test_01",
+            "pageNav": ["View_Percent"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -300],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "bigger",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "bigger",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "smaller",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "smaller",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "reset",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0,500],
+                    "saveCheckPoint": true
+                }
+            ]
+        }, 
+        {
+            "className": "ui_view_percent_test_02",
+            "pageNav": ["View_Percent"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0, -300],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "smaller",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "bigger",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "smaller",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "smaller",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "bigger",
+                    "eventID": 0,
+                    "eventValue": [],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0,500],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+    ]
+}

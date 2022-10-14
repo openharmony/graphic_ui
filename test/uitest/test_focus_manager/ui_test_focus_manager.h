@@ -24,6 +24,17 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_TOWRADS_LEFT = "towards_left";
+constexpr char* UI_TEST_TOWRADS_RIGHT = "towards_right";
+constexpr char* UI_TEST_TOWRADS_UP = "towards_up";
+constexpr char* UI_TEST_TOWRADS_DOWN = "towards_down";
+constexpr char* UI_TEST_2_FOCUSABLE = "2_focusable";
+constexpr char* UI_TEST_2_UNFOCUSABLE = "2_unfocusable";
+constexpr char* UI_TEST_4_INTERCEPT = "4_intercept";
+constexpr char* UI_TEST_4_CANCEL_INTERCEPT = "4_cancel_intercept";
+constexpr char* UI_TEST_RESET_FOCUS = "reset_focus";
+constexpr char* UI_TEST_CLEAR_FOCUS = "clear_focus";
+
 class UITestFocusManager : public UITest {
 public:
     UITestFocusManager() {}
@@ -39,7 +50,7 @@ private:
         const char* text, bool focusable);
     UIViewGroup* CreateTestUIViewGroup(UIViewGroup* parent, bool focusable, bool interceptFocus);
     UILabelButton* SetUpButton(const char* title, int16_t x, int16_t y, UIViewGroup* viewGroup,
-        UIView::OnClickListener* listener);
+        UIView::OnClickListener* listener, const char* id);
     UIScrollView* container_ = nullptr;
     UIView::OnFocusListener* testOnFocusListener_ = nullptr;
     UIView::OnClickListener* requestFocusByDirectionLeftListener_ = nullptr;

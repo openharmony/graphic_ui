@@ -27,6 +27,9 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_RESET = "reset";
+constexpr char* UI_TEST_BIGGER = "bigger";
+constexpr char* UI_TEST_SMALLER = "smaller";
 class UITestViewPercent : public UITest, public UIView::OnClickListener {
 public:
     UITestViewPercent() {}
@@ -37,8 +40,12 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
 private:
-    void SetUpButton(Layout& controller, UILabelButton& btn, const std::string title)
+    void SetUpButton(Layout& controller, UILabelButton& btn, const std::string title, const char* id)
     {
+        if (id == nullptr) {
+            return;
+        }
+
         controller.Add(&btn);
         btn.Resize(BUTTON_WIDHT1, BUTTON_HEIGHT1);
         btn.SetText(title.c_str());
@@ -50,6 +57,7 @@ private:
         btn.SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
         btn.SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
         btn.SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+        btn.SetViewId(id);
     }
     void InitView();
     void InitFlexLayout();

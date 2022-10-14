@@ -121,6 +121,7 @@ void UITestViewBounds::UIKitViewBoundsSetState001()
     toggle->SetHeight(50); // 50: height
     toggle->LayoutCenterOfParent();
     toggle->LayoutRightOfParent(5); // 5: offset
+    toggle->SetViewId(UI_TEST_SHOW_VIEW_BOUNDS);
     if (viewBoundsChangeListener_ != nullptr) {
         delete viewBoundsChangeListener_;
     }

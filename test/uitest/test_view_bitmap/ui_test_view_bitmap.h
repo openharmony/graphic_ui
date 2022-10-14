@@ -21,6 +21,9 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_COMPONENT_SCREENSHOT = "component_screenshot";
+constexpr char* UI_TEST_FULL_SCREEN_CAPTURE = "full_screen_capture";
+
 class UITestViewBitmap : public UITest {
 public:
     UITestViewBitmap() {}

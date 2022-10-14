@@ -150,29 +150,29 @@ void UITestChartPolyline::UIKit_ChartPolyline_Test_AddDataSerial_001()
 
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE;
     positionY_ = lastY_ + 10; // 10: increase y-coordinate
-    SetUpButton(addDataSerialBtn_, "添加数据 ");
+    SetUpButton(addDataSerialBtn_, "添加数据 ", UI_TEST_POLYLINE_ADD_DATA);
     positionX_ = addDataSerialBtn_->GetX() + addDataSerialBtn_->GetWidth() + g_blank;
     positionY_ = addDataSerialBtn_->GetY();
-    SetUpButton(deleteDataSerialBtn_, "删除数据 ");
+    SetUpButton(deleteDataSerialBtn_, "删除数据 ", UI_TEST_POLYLINE_DELETE_DATA);
     positionX_ = deleteDataSerialBtn_->GetX() + deleteDataSerialBtn_->GetWidth() + g_blank;
     positionY_ = deleteDataSerialBtn_->GetY();
-    SetUpButton(clearDataSerialBtn_, "清空数据 ");
+    SetUpButton(clearDataSerialBtn_, "清空数据 ", UI_TEST_POLYLINE_CLEAR_DATA);
 
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE;
-    SetUpButton(topPointBtn_, "最高点 ");
+    SetUpButton(topPointBtn_, "最高点 ", UI_TEST_POLYLINE_HIGHESET_POINT);
     positionX_ = topPointBtn_->GetX() + topPointBtn_->GetWidth() + g_blank;
     positionY_ = topPointBtn_->GetY();
-    SetUpButton(bottomPointBtn_, "最低点 ");
+    SetUpButton(bottomPointBtn_, "最低点 ", UI_TEST_POLYLINE_LOWEST_POINT);
     positionX_ = bottomPointBtn_->GetX() + bottomPointBtn_->GetWidth() + g_blank;
     positionY_ = bottomPointBtn_->GetY();
-    SetUpButton(headPointBtn_, "最新点 ");
+    SetUpButton(headPointBtn_, "最新点 ", UI_TEST_POLYLINE_NEW_POINT);
 }
 
 void UITestChartPolyline::UIKit_ChartPolyline_Test_EnableReverse_002()
 {
     reverseBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE;
-    SetUpButton(reverseBtn_, "翻转 ");
+    SetUpButton(reverseBtn_, "翻转 ", UI_TEST_POLYLINE_FLIP);
     SetLastPos(reverseBtn_);
 }
 
@@ -181,7 +181,7 @@ void UITestChartPolyline::UIKit_ChartPolyline_Test_SetGradientBottom_003()
     gradientBottomBtn_ = new UILabelButton();
     positionX_ = reverseBtn_->GetX() + reverseBtn_->GetWidth() + g_blank;
     positionY_ = reverseBtn_->GetY();
-    SetUpButton(gradientBottomBtn_, "填充底部位置 ");
+    SetUpButton(gradientBottomBtn_, "填充底部位置 ", UI_TEST_POLYLINE_FILL_BOTTOM);
     SetLastPos(gradientBottomBtn_);
 }
 namespace {
@@ -307,15 +307,15 @@ void UITestChartPolyline::UIKit_ChartPolyline_Test_AddPoints_004()
     // 2: half of screen width
     positionX_ = Screen::GetInstance().GetWidth() / 2 + VIEW_DISTANCE_TO_LEFT_SIDE;
     positionY_ = lastY_ + 10; // 10: increase y-coordinate
-    SetUpButton(addPointsBtn_, "添加点 ");
+    SetUpButton(addPointsBtn_, "添加点 ", UI_TEST_POLYLINE_ADD_POINT);
 
     positionX_ = addPointsBtn_->GetX() + addPointsBtn_->GetWidth() + g_blank;
     positionY_ = addPointsBtn_->GetY();
-    SetUpButton(smoothBtn_, "平滑化 ");
+    SetUpButton(smoothBtn_, "平滑化 ", UI_TEST_POLYLINE_SMOOTHING);
 
     positionX_ = smoothBtn_->GetX() + smoothBtn_->GetWidth() + g_blank;
     positionY_ = smoothBtn_->GetY();
-    SetUpButton(hidePointsBtn_, "隐藏点 ");
+    SetUpButton(hidePointsBtn_, "隐藏点 ", UI_TEST_POLYLINE_HIDE_POINT);
 }
 
 bool UITestChartPolyline::OnClick(UIView& view, const ClickEvent& event)
@@ -384,9 +384,9 @@ bool UITestChartPolyline::ClickExpand(UIView& view, UIChartDataSerial::PointStyl
     return true;
 }
 
-void UITestChartPolyline::SetUpButton(UILabelButton* btn, const char* title)
+void UITestChartPolyline::SetUpButton(UILabelButton* btn, const char* title, const char* id)
 {
-    if (btn == nullptr) {
+    if (btn == nullptr || title == nullptr || id == nullptr) {
         return;
     }
     container_->Add(btn);
@@ -401,6 +401,7 @@ void UITestChartPolyline::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+    btn->SetViewId(id);
     container_->Invalidate();
 }
 

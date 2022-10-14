@@ -25,6 +25,13 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_START_LOOP = "start_loop";
+constexpr char* UI_TEST_STOP_LOOP = "stop_loop";
+constexpr char* UI_TEST_GO_TO_THE_FIFTH = "go_to_the_fifth";
+constexpr char* UI_TEST_FROM_LEFT_TO_RIGHT = "from_left_to_right";
+constexpr char* UI_TEST_FROM_RIGHT_TO_LEFT = "from_right_to_left";
+constexpr char* UI_TEST_PICKER_ADD_MARGIN = "add_margin";
+
 class UITestUIPicker : public UITest, UIView::OnClickListener, UIPicker::SelectedListener,
     UITimePicker::SelectedListener {
 public:
@@ -43,7 +50,7 @@ public:
 
 private:
     void SetLastPos(UIView* view);
-    void SetUpButton(UILabelButton* btn, const char* title);
+    void SetUpButton(UILabelButton* btn, const char* title, const char* id);
     UILabelButton* setLoopBtn_ = nullptr;
     UILabelButton* setLoopOffBtn_ = nullptr;
     UILabelButton* setSelectBtn_ = nullptr;
