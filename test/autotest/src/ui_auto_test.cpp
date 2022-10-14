@@ -105,7 +105,7 @@ void UIAutoTest::DragViewToHead(const char* id) const
     Point endPoint;
     endPoint.x = 100; // 100 :end point x position;
     endPoint.y = 100; // 100 :end point y position;
-    EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 300); // 300: drag time
+    EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 100); // 100: drag time
     CompareTools::WaitSuspend();
 }
 
@@ -125,8 +125,10 @@ void UIAutoTest::DrageToView(const char* id, int16_t x, int16_t y) const
     Point endPoint;
     endPoint.x = x;
     endPoint.y = y;
-    EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 300); // 300: drag time
-    CompareTools::WaitSuspend();
+    EventInjector::GetInstance()->SetDragEvent(startPoint, endPoint, 100); // 100: drag time
+
+    uint16_t waitTime = std::abs((std::abs(x) > std::abs(y) ? x : y) * WAIT_TIME_MUBLITE) + DRAGE_DEFAULT_WAIT_TIME;
+    CompareTools::WaitSuspend(waitTime);
 }
 
 bool UIAutoTest::CompareByBinary(const char* fileName) const

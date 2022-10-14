@@ -100,10 +100,12 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonW, g_buttonH);
     button1->SetText("button1");
+    button1->SetViewId(UI_TEST_HOR_001_BUTTON1);
     swipe->Add(button1);
     UILabelButton* button2 = new UILabelButton();
     button2->SetPosition(0, 0, g_buttonW, g_buttonH);
     button2->SetText("button2");
+    button2->SetViewId(UI_TEST_HOR_001_BUTTON2);
     swipe->Add(button2);
     SetLastPos(swipe);
     positionY_ += g_swipeHorH;
@@ -129,14 +131,17 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonW, g_buttonH);
     button1->SetText("button1");
+    button1->SetViewId(UI_TEST_HOR_002_BUTTON1);
     swipe->Add(button1);
     UILabelButton* button2 = new UILabelButton();
     button2->SetPosition(0, 0, g_buttonW, g_buttonH);
     button2->SetText("button2");
+    button2->SetViewId(UI_TEST_HOR_002_BUTTON2);
     swipe->Add(button2);
     UILabelButton* button3 = new UILabelButton();
     button3->SetPosition(0, 0, g_buttonW, g_buttonH);
     button3->SetText("button3");
+    button3->SetViewId(UI_TEST_HOR_002_BUTTON3);
     swipe->Add(button3);
     SetLastPos(swipe);
     positionY_ += g_swipeHorH;
@@ -163,14 +168,17 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_003()
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonW, g_buttonH);
     button1->SetText("button1");
+    button1->SetViewId(UI_TEST_HOR_003_BUTTON1);
     swipe->Add(button1);
     UILabelButton* button2 = new UILabelButton();
     button2->SetPosition(0, 0, g_buttonW, g_buttonH);
     button2->SetText("button2");
+    button2->SetViewId(UI_TEST_HOR_003_BUTTON2);
     swipe->Add(button2);
     UILabelButton* button3 = new UILabelButton();
     button3->SetPosition(0, 0, g_buttonW, g_buttonH);
     button3->SetText("button3");
+    button3->SetViewId(UI_TEST_HOR_003_BUTTON3);
     swipe->Add(button3);
     SetLastPos(swipe);
     positionY_ += g_swipeHorH;
@@ -197,10 +205,12 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_001()
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonH, g_buttonW);
     button1->SetText("button1");
+    button1->SetViewId(UI_TEST_VER_001_BUTTON1);
     swipe->Add(button1);
     UILabelButton* button2 = new UILabelButton();
     button2->SetPosition(0, 0, g_buttonH, g_buttonW);
     button2->SetText("button2");
+    button2->SetViewId(UI_TEST_VER_001_BUTTON2);
     swipe->Add(button2);
     SetLastPos(swipe);
     positionY_ += g_swipeW + g_deltaCoordinateY;
@@ -227,14 +237,17 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_002()
     UILabelButton* button1 = new UILabelButton();
     button1->SetPosition(0, 0, g_buttonH, g_buttonW);
     button1->SetText("button1");
+    button1->SetViewId(UI_TEST_VER_002_BUTTON1);
     swipe->Add(button1);
     UILabelButton* button2 = new UILabelButton();
     button2->SetPosition(0, 0, g_buttonH, g_buttonW);
     button2->SetText("button2");
+    button2->SetViewId(UI_TEST_VER_002_BUTTON2);
     swipe->Add(button2);
     UILabelButton* button3 = new UILabelButton();
     button3->SetPosition(0, 0, g_buttonH, g_buttonW);
     button3->SetText("button3");
+    button2->SetViewId(UI_TEST_VER_003_BUTTON3);
     swipe->Add(button3);
     SetLastPos(swipe);
     positionY_ += g_swipeW;
@@ -280,12 +293,12 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Remove_001()
     }
 
     positionX_ = positionX_ + swipe->GetWidth() + 20; // 20: is interval between button and swipe
-    SetUpButton(addBtnInHead_, "增加至头部 ");
-    SetUpButton(addBtnInTail_, "增加至尾部 ");
-    SetUpButton(addBtnInMid_, "增加至头部后 ");
-    SetUpButton(removeHeadBtn_, "删除头部节点 ");
-    SetUpButton(removeMidBtn_, "删除中间节点 ");
-    SetUpButton(removeAllBtn_, "删除全部节点 ");
+    SetUpButton(addBtnInHead_, "增加至头部 ", UI_TEST_ADD_TO_HEAD);
+    SetUpButton(addBtnInTail_, "增加至尾部 ", UI_TEST_ADD_TO_TAIL);
+    SetUpButton(addBtnInMid_, "增加至头部后 ", UI_TEST_ADD_TO_BACK_OF_HEAD);
+    SetUpButton(removeHeadBtn_, "删除头部节点 ", UI_TEST_DELETE_HEAD);
+    SetUpButton(removeMidBtn_, "删除中间节点 ", UI_TEST_DELETE_MIDDLE);
+    SetUpButton(removeAllBtn_, "删除全部节点 ", UI_TEST_DELETE_ALL);
 
     SetLastPos(swipe);
 }
@@ -394,8 +407,8 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_SetCurrentPage()
 
     positionX_ = TEXT_DISTANCE_TO_LEFT_SIDE + swipe->GetWidth() + 20; // 20: is interval between button and swipe
     positionY_ += g_deltaCoordinateY2;
-    SetUpButton(loopBtn_, "设置循环 关 ");
-    SetUpButton(changePageBtn_, "切换页面 ");
+    SetUpButton(loopBtn_, "设置循环 关 ", UI_TEST_SET_CYCLE);
+    SetUpButton(changePageBtn_, "切换页面 ", UI_TEST_SWITCH_PAGES);
 }
 
 bool UITestUISwipeView::OnClick(UIView& view, const ClickEvent& event)
@@ -446,9 +459,9 @@ bool UITestUISwipeView::OnClick(UIView& view, const ClickEvent& event)
     return true;
 }
 
-void UITestUISwipeView::SetUpButton(UILabelButton* btn, const char* title)
+void UITestUISwipeView::SetUpButton(UILabelButton* btn, const char* title, const char* id)
 {
-    if (btn == nullptr) {
+    if (btn == nullptr || title == nullptr || id == nullptr) {
         return;
     }
     container_->Add(btn);
@@ -463,6 +476,7 @@ void UITestUISwipeView::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::RELEASED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::PRESSED);
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
+    btn->SetViewId(id);
     container_->Invalidate();
 }
 

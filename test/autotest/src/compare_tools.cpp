@@ -33,12 +33,13 @@ namespace OHOS {
 bool CompareTools::enableLog_ = false;
 char* CompareTools::logPath_ = nullptr;
 
-void CompareTools::WaitSuspend()
+void CompareTools::WaitSuspend(const uint16_t waitTime)
 {
+    uint16_t sleepTime = waitTime == 0 ? DEFAULT_WAIT_TIME_MS : waitTime;
 #ifdef _WIN32
-    Sleep(DEFAULT_WAIT_TIME_MS);
+    Sleep(sleepTime);
 #else
-    usleep(1000 * DEFAULT_WAIT_TIME_MS); // 1000: us to ms
+    usleep(1000 * sleepTime); // 1000: us to ms
 #endif // _WIN32
 }
 

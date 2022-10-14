@@ -26,7 +26,7 @@
 
 namespace OHOS {
 namespace {
-    constexpr uint16_t DEFAULT_WAIT_TIME_MS = 500;
+    constexpr uint16_t DEFAULT_WAIT_TIME_MS = 1000;
     constexpr size_t DEFAULT_FILE_NAME_MAX_LENGTH = 256;
     constexpr uint8_t BITMAP_HEADER_SIZE = 54;
 }
@@ -50,7 +50,7 @@ public:
         uint32_t biClrImportant;
     };
 
-    static void WaitSuspend();
+    static void WaitSuspend(const uint16_t waitTime = 0);
     static bool StrnCatPath(char* filePath, size_t pathMax, const char* fileName, size_t count);
     static bool CompareFile(const char* filePath, size_t length);
     static bool SaveFile(const char* filePath, size_t length);
