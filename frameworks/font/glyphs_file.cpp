@@ -155,7 +155,7 @@ int8_t GlyphsFile::SetFile(const char* fontName, int32_t fp, uint32_t start)
 
     fontNum_ = binHeader_.fontNum;
     fontHeaderSectionStart_ = start_ + sizeof(binHeader_);
-    int32_t size = sizeof(FontHeader) * fontNum_;
+    uint32_t size = sizeof(FontHeader) * fontNum_;
     fontIndexSectionStart_ = fontHeaderSectionStart_ + size;
 
     fontHeaderCache_ = reinterpret_cast<FontHeader*>(FontRamAllocator::GetInstance().Allocate(size));
