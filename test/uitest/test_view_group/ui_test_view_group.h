@@ -35,17 +35,17 @@ public:
     /**
      * @brief Test Add/Rmove Function
      */
-    void UIKit_ViewGroup_Test_AddRemove_001();
+    void UIKitViewGroupTestAddRemove001();
 
     /**
      * @brief Test add child multi time
      */
-    void UIKit_ViewGroup_Test_Add_Error_001();
+    void UIKitViewGroupTestAddError001();
 
     /**
      * @brief Test insert child multi time
      */
-    void UIKit_ViewGroup_Test_Insert_Error_001();
+    void UIKitViewGroupTestInsertError001();
 
 private:
     UIViewGroup* CreateTestCaseGroup() const;

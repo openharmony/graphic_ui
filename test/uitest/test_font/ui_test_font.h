@@ -99,7 +99,7 @@ public:
      */
     void UIKitFontTestLineHeight002();
 
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     /**
      * @brief Test multilingual display
      */

@@ -18,7 +18,7 @@
 #include "gfx_utils/list.h"
 #include "font/ui_font_header.h"
 namespace OHOS {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 class StyleSpan : public HeapBase {
 public:
     StyleSpan() {};

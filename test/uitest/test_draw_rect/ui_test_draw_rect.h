@@ -30,149 +30,149 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_DrawRect_Test_RectNoBorder_001();
-    void UIKit_DrawRect_Test_RectNoBorder_002();
-    void UIKit_DrawRect_Test_RectNoBorder_003();
-    void UIKit_DrawRect_Test_RectNoBorder_004();
-    void UIKit_DrawRect_Test_RectNoBorder_005();
-    void UIKit_DrawRect_Test_RectNoBorder_006();
-    void UIKit_DrawRect_Test_RectNoBorder_007();
-    void UIKit_DrawRect_Test_RectNoBorder_008();
-    void UIKit_DrawRect_Test_RectNoBorder_009();
-    void UIKit_DrawRect_Test_RectNoBorder_0010();
-    void UIKit_DrawRect_Test_RectBorderNoRadius_001();
-    void UIKit_DrawRect_Test_RectBorderNoRadius_002();
-    void UIKit_DrawRect_Test_RectBorderRadius_001();
-    void UIKit_DrawRect_Test_RectBorderRadius_002();
-    void UIKit_DrawRect_Test_RectBorderRadius_003();
-    void UIKit_DrawRect_Test_RectBorderRadius_004();
-    void UIKit_DrawRect_Test_RectBorderRadius_005();
-    void UIKit_DrawRect_Test_RectBorderRadius_006();
-    void UIKit_DrawRect_Test_RectBorderRadius_007();
-    void UIKit_DrawRect_Test_RectBorderRadius_008();
-    void UIKit_DrawRect_Test_RectBorderRadius_009();
-    void UIKit_DrawRect_Test_RectBorderRadius_010();
-    void UIKit_DrawRect_Test_RectBorderRadius_011();
+    void UIKitDrawRectTestRectNoBorder001();
+    void UIKitDrawRectTestRectNoBorder002();
+    void UIKitDrawRectTestRectNoBorder003();
+    void UIKitDrawRectTestRectNoBorder004();
+    void UIKitDrawRectTestRectNoBorder005();
+    void UIKitDrawRectTestRectNoBorder006();
+    void UIKitDrawRectTestRectNoBorder007();
+    void UIKitDrawRectTestRectNoBorder008();
+    void UIKitDrawRectTestRectNoBorder009();
+    void UIKitDrawRectTestRectNoBorder0010();
+    void UIKitDrawRectTestRectBorderNoRadius001();
+    void UIKitDrawRectTestRectBorderNoRadius002();
+    void UIKitDrawRectTestRectBorderRadius001();
+    void UIKitDrawRectTestRectBorderRadius002();
+    void UIKitDrawRectTestRectBorderRadius003();
+    void UIKitDrawRectTestRectBorderRadius004();
+    void UIKitDrawRectTestRectBorderRadius005();
+    void UIKitDrawRectTestRectBorderRadius006();
+    void UIKitDrawRectTestRectBorderRadius007();
+    void UIKitDrawRectTestRectBorderRadius008();
+    void UIKitDrawRectTestRectBorderRadius009();
+    void UIKitDrawRectTestRectBorderRadius010();
+    void UIKitDrawRectTestRectBorderRadius011();
 
     /**
      * @brief Test draw rect function
      */
-    void UIKit_DrawRect_Test_Rect_001();
+    void UIKitDrawRectTestRect001();
 
     /**
      * @brief Test draw rect background color
      */
-    void UIKit_DrawRect_Test_RectColor_001();
+    void UIKitDrawRectTestRectColor001();
 
     /**
      * @brief Test draw rect radius is 0
      */
-    void UIKit_DrawRect_Test_RectRadius_001();
+    void UIKitDrawRectTestRectRadius001();
 
     /**
      * @brief Test draw rect radius
      */
-    void UIKit_DrawRect_Test_RectRadius_002();
+    void UIKitDrawRectTestRectRadius002();
 
     /**
      * @brief Test draw rect radius equal width
      */
-    void UIKit_DrawRect_Test_RectRadius_003();
+    void UIKitDrawRectTestRectRadius003();
 
     /**
      * @brief Test draw rect radius equal width and height
      */
-    void UIKit_DrawRect_Test_RectRadius_004();
+    void UIKitDrawRectTestRectRadius004();
 
     /**
      * @brief Test draw rect opacity is not transparent
      */
-    void UIKit_DrawRect_Test_RectOpacity_001();
+    void UIKitDrawRectTestRectOpacity001();
 
     /**
      * @brief Test draw rect opacity is transparent
      */
-    void UIKit_DrawRect_Test_RectOpacity_002();
+    void UIKitDrawRectTestRectOpacity002();
 
     /**
      * @brief Test draw rect opacity with different value
      */
-    void UIKit_DrawRect_Test_RectOpacity_003();
+    void UIKitDrawRectTestRectOpacity003();
 
     /**
      * @brief Test draw rect border color with different value
      */
-    void UIKit_DrawRect_Test_RectBorderColor_001();
+    void UIKitDrawRectTestRectBorderColor001();
 
     /**
      * @brief Test draw rect border width is 0
      */
-    void UIKit_DrawRect_Test_RectBorderWidth_001();
+    void UIKitDrawRectTestRectBorderWidth001();
 
     /**
      * @brief Test draw rect border with different value
      */
-    void UIKit_DrawRect_Test_RectBorderWidth_002();
+    void UIKitDrawRectTestRectBorderWidth002();
 
     /**
      * @brief Test draw rect border opacity is not transparent
      */
-    void UIKit_DrawRect_Test_RectBorderOpacity_001();
+    void UIKitDrawRectTestRectBorderOpacity001();
 
     /**
      * @brief Test draw rect border opacity is transparent
      */
-    void UIKit_DrawRect_Test_RectBorderOpacity_002();
+    void UIKitDrawRectTestRectBorderOpacity002();
 
     /**
      * @brief Test draw rect border opacity with different value
      */
-    void UIKit_DrawRect_Test_RectBorderOpacity_003();
+    void UIKitDrawRectTestRectBorderOpacity003();
 
     /**
      * @brief Test draw rect padding is 0
      */
-    void UIKit_DrawRect_Test_RectPadding_001();
+    void UIKitDrawRectTestRectPadding001();
 
     /**
      * @brief Test draw rect padding with different value
      */
-    void UIKit_DrawRect_Test_RectPadding_002();
+    void UIKitDrawRectTestRectPadding002();
 
     /**
      * @brief Test draw rect margin is 0
      */
-    void UIKit_DrawRect_Test_RectMargin_001();
+    void UIKitDrawRectTestRectMargin001();
 
     /**
      * @brief Test draw rect margin is not 0
      */
-    void UIKit_DrawRect_Test_RectMargin_002();
+    void UIKitDrawRectTestRectMargin002();
 
     /**
      * @brief Test draw rect padding and margin is 0
      */
-    void UIKit_DrawRect_Test_RectPaddingMargin_001();
+    void UIKitDrawRectTestRectPaddingMargin001();
 
     /**
      * @brief Test draw rect padding and margin with different value
      */
-    void UIKit_DrawRect_Test_RectPaddingMargin_002();
+    void UIKitDrawRectTestRectPaddingMargin002();
 
     /**
      * @brief Test rect width is 0
      */
-    void UIKit_DrawRect_Test_RectWidthAndHeight_001();
+    void UIKitDrawRectTestRectWidthAndHeight001();
 
     /**
      * @brief Test rect height is 0
      */
-    void UIKit_DrawRect_Test_RectWidthAndHeight_002();
+    void UIKitDrawRectTestRectWidthAndHeight002();
 
     /**
      * @brief Test rect width and height is 0
      */
-    void UIKit_DrawRect_Test_RectWidthAndHeight_003();
+    void UIKitDrawRectTestRectWidthAndHeight003();
 
 private:
     UIViewGroup* CreateTestCaseGroup() const;

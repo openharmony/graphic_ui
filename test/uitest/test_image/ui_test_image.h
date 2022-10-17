@@ -27,7 +27,7 @@
 #endif
 
 namespace OHOS {
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
 class UITestImage : public UITest, public OHOS::UIView::OnClickListener {
 #else
 class UITestImage : public UITest {
@@ -39,34 +39,34 @@ public:
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;
-    void UIKit_UIImage_Test_SetImage_001();
-    void UIKit_UIImage_Test_SetImage_002();
-    void UIKit_UIImage_Test_SetImage_004();
-    void UIKit_UIImage_Test_SetImage_005();
-    void UIKit_UIImage_Test_SetImage_006();
-    void UIKit_UIImage_Test_SetImage_007();
-    void UIKit_UIImage_Test_SetImage_008();
-    void UIKit_UIImage_Test_SetImage_009();
-    void UIKit_UIImage_Test_SetImage_010();
-    void UIKit_UIImage_Test_SetImage_011();
-    void UIKit_UIImage_Test_SetImage_012();
-    void UIKit_UIImage_Test_SetImage_013();
-    void UIKit_UIImage_Test_SetImage_014();
-#if (ENABLE_GIF == 1)
-    void UIKit_UIImage_Test_SetImage_015();
-    void UIKit_UIImage_Test_SetImage_016();
+    void UIKitUIImageTestSetImage001();
+    void UIKitUIImageTestSetImage002();
+    void UIKitUIImageTestSetImage004();
+    void UIKitUIImageTestSetImage005();
+    void UIKitUIImageTestSetImage006();
+    void UIKitUIImageTestSetImage007();
+    void UIKitUIImageTestSetImage008();
+    void UIKitUIImageTestSetImage009();
+    void UIKitUIImageTestSetImage010();
+    void UIKitUIImageTestSetImage011();
+    void UIKitUIImageTestSetImage012();
+    void UIKitUIImageTestSetImage013();
+    void UIKitUIImageTestSetImage014();
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
+    void UIKitUIImageTestSetImage015();
+    void UIKitUIImageTestSetImage016();
 #endif
-    void UIKit_UIImage_Test_Uncompress_001();
-    void UIKit_UIImage_Test_Resize_001();
+    void UIKitUIImageTestUncompress001();
+    void UIKitUIImageTestResize001();
 
 private:
     const char* GetCharByImageSrcType(ImageSrcType srcType) const;
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     bool OnClick(UIView &view, const ClickEvent& event) override;
     void SetUpButton(UILabelButton* btn, const char* title);
 #endif
     UIScrollView* container_ = nullptr;
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     UIImageView* gifImageView_ = nullptr;
     UILabelButton* gifToGif_ = nullptr;
     UILabelButton* gifToJpeg_ = nullptr;

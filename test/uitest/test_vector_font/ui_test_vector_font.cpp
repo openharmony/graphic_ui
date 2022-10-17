@@ -76,27 +76,27 @@ void UITestVectorFont::InnerTestTitle(const char* title)
 const UIView* UITestVectorFont::GetTestView()
 {
 #if ENABLE_VECTOR_FONT
-    TestDrawText_ITALY_BOLD();
+    TestDrawTextITALYBOLD();
 #endif
-    Font_FontEngine_Vector_Test_CH_Lang_001();
-    Font_FontEngine_Vector_Test_CH_Lang_002();
-    Font_FontEngine_Vector_Test_JA_Lang_001();
-    Font_FontEngine_Vector_Test_JA_Lang_002();
-    Font_FontEngine_Vector_Test_KR_Lang_001();
-    Font_FontEngine_Vector_Test_VI_Lang_001();
+    FontFontEngineVectorTestCHLang001();
+    FontFontEngineVectorTestCHLang002();
+    FontFontEngineVectorTestJALang001();
+    FontFontEngineVectorTestJALang002();
+    FontFontEngineVectorTestKRLang001();
+    FontFontEngineVectorTestVILang001();
 #if ENABLE_MULTI_FONT
-    Font_FontEngine_MultiLanguage_Test_JA_Lang_001();
-    Font_FontEngine_MultiLanguage_Test_JA_Lang_002();
-    Font_FontEngine_MultiLanguage_Test_KR_Lang_001();
-    Font_FontEngine_MultiLanguage_Test_VI_Lang_001();
-    Font_FontEngine_MultiLanguage_Test_CS_Lang_001();
-    Font_FontEngine_MultiLanguage_Test_EL_Lang_001();
-    Font_FontEngine_MultiLanguage_Test_RO_Lang_001();
+    FontFontEngineMultiLanguageTestJALang001();
+    FontFontEngineMultiLanguageTestJALang002();
+    FontFontEngineMultiLanguageTestKRLang001();
+    FontFontEngineMultiLanguageTestVILang001();
+    FontFontEngineMultiLanguageTestCSLang001();
+    FontFontEngineMultiLanguageTestELLang001();
+    FontFontEngineMultiLanguageTestROLang001();
 #endif
     return container_;
 }
 
-void UITestVectorFont::Font_FontEngine_Vector_Test_CH_Lang_001()
+void UITestVectorFont::FontFontEngineVectorTestCHLang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("CH Language");
@@ -112,7 +112,7 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_CH_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_Vector_Test_CH_Lang_002()
+void UITestVectorFont::FontFontEngineVectorTestCHLang002()
 {
     if (container_ != nullptr) {
         InnerTestTitle("Multiline text");
@@ -127,7 +127,7 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_CH_Lang_002()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_Vector_Test_JA_Lang_001()
+void UITestVectorFont::FontFontEngineVectorTestJALang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("JA Language");
@@ -143,7 +143,7 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_JA_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_Vector_Test_JA_Lang_002()
+void UITestVectorFont::FontFontEngineVectorTestJALang002()
 {
     if (container_ != nullptr) {
         InnerTestTitle("JA Language");
@@ -159,7 +159,7 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_JA_Lang_002()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_Vector_Test_KR_Lang_001()
+void UITestVectorFont::FontFontEngineVectorTestKRLang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("KR Language");
@@ -175,7 +175,7 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_KR_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_Vector_Test_VI_Lang_001()
+void UITestVectorFont::FontFontEngineVectorTestVILang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("VI Language");
@@ -193,7 +193,7 @@ void UITestVectorFont::Font_FontEngine_Vector_Test_VI_Lang_001()
 }
 
 #if ENABLE_MULTI_FONT
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_JA_Lang_001()
+void UITestVectorFont::FontFontEngineMultiLanguageTestJALang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("CH+JA Language");
@@ -215,7 +215,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_JA_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_JA_Lang_002()
+void UITestVectorFont::FontFontEngineMultiLanguageTestJALang002()
 {
     if (container_ != nullptr) {
         InnerTestTitle("UnRegister JA Language");
@@ -230,7 +230,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_JA_Lang_002()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_KR_Lang_001()
+void UITestVectorFont::FontFontEngineMultiLanguageTestKRLang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("CH+KR Language");
@@ -252,7 +252,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_KR_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_VI_Lang_001()
+void UITestVectorFont::FontFontEngineMultiLanguageTestVILang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("CH+VI Language");
@@ -274,7 +274,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_VI_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_CS_Lang_001()
+void UITestVectorFont::FontFontEngineMultiLanguageTestCSLang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("CH+CS Language");
@@ -296,7 +296,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_CS_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_EL_Lang_001()
+void UITestVectorFont::FontFontEngineMultiLanguageTestELLang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("CH+EL Language");
@@ -318,7 +318,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_EL_Lang_001()
     }
 }
 
-void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_RO_Lang_001()
+void UITestVectorFont::FontFontEngineMultiLanguageTestROLang001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("RO Language");
@@ -341,7 +341,7 @@ void UITestVectorFont::Font_FontEngine_MultiLanguage_Test_RO_Lang_001()
 }
 #endif
 #if ENABLE_VECTOR_FONT
-void UITestVectorFont::TestDrawText_ITALY_BOLD()
+void UITestVectorFont::TestDrawTextITALYBOLD()
 {
     if (container_ != nullptr) {
         InnerTestTitle("Display bold italic bold_italic");

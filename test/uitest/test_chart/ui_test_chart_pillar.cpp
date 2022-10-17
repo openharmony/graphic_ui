@@ -87,14 +87,14 @@ void UITestChartPillar::TearDown()
 
 const UIView* UITestChartPillar::GetTestView()
 {
-    UIKit_ChartPillar_Test_AddDataSerial_001();
-    UIKit_ChartPillar_Test_EnableReverse_002();
-    UIKit_ChartPillar_Test_SetAxisLineColor_003();
-    UIKit_ChartPillar_Test_SetAxisLineVisible_004();
+    UIKitChartPillarTestAddDataSerial001();
+    UIKitChartPillarTestEnableReverse002();
+    UIKitChartPillarTestSetAxisLineColor003();
+    UIKitChartPillarTestSetAxisLineVisible004();
     return container_;
 }
 
-void UITestChartPillar::UIKit_ChartPillar_Test_AddDataSerial_001()
+void UITestChartPillar::UIKitChartPillarTestAddDataSerial001()
 {
     UILabel* label = GetTitleLabel("UIChartPillar效果 ");
     label->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, TEXT_DISTANCE_TO_TOP_SIDE);
@@ -132,14 +132,14 @@ void UITestChartPillar::UIKit_ChartPillar_Test_AddDataSerial_001()
     SetUpButton(clearDataSerialBtn_, "清空数据 ", UI_TEST_CLEAR_DATA);
 }
 
-void UITestChartPillar::UIKit_ChartPillar_Test_EnableReverse_002()
+void UITestChartPillar::UIKitChartPillarTestEnableReverse002()
 {
     reverseBtn_ = new UILabelButton();
     positionX_ = 48; // 48: x-coordinate
     SetUpButton(reverseBtn_, "翻转 ", UI_TEST_FLIP);
 }
 
-void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineColor_003()
+void UITestChartPillar::UIKitChartPillarTestSetAxisLineColor003()
 {
     setAxisColorBtn_ = new UILabelButton();
     positionX_ = reverseBtn_->GetX() + reverseBtn_->GetWidth() + g_blank;
@@ -147,7 +147,7 @@ void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineColor_003()
     SetUpButton(setAxisColorBtn_, "坐标轴颜色 ", UI_TEST_AXIS_COLOR);
 }
 
-void UITestChartPillar::UIKit_ChartPillar_Test_SetAxisLineVisible_004()
+void UITestChartPillar::UIKitChartPillarTestSetAxisLineVisible004()
 {
     setAxisVisibleBtn_ = new UILabelButton();
     positionX_ = setAxisColorBtn_->GetX() + setAxisColorBtn_->GetWidth() + g_blank;

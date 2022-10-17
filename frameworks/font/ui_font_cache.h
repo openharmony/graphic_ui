@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-/* 
+/*
  * Font cache is used for managing font bitmap.
  * Each bitmap is contained in a chunk block which can be searched quickly in a hash-table.
  * All the struct and memory block are force-aligned to ALIGNMENT_BYTES.
  * To make the most frequently used memroy hot, chunk blocks are managed with an easy lru algorithm.
  * Memory maps of font cache is shown below:
- * 
+ *
  *  aligned bitmapCache    ─────────►┌────────────────────┐
  *  (FONT_BITMAP_CACHE_SIZE)         │    HashTable       │
  *                                   │    (ListHead*32)   │

@@ -62,8 +62,8 @@ public:
     void CreateButtons001(UIViewGroup* group, UIImageView* curFace, UIAnalogClock* clock);
     void CreateButtons002(UIViewGroup* group, UIImageView* curFace, UIAnalogClock* clock);
 
-    void UIKit_TestLineHandAnalogClock_001();
-    void UIKit_TestImageHandAnalogClock_002();
+    void UIKitTestLineHandAnalogClock001();
+    void UIKitTestImageHandAnalogClock002();
 
 private:
     UIScrollView* container_ = nullptr;

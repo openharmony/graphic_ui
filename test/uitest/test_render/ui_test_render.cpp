@@ -34,8 +34,8 @@ void UITestRender::TearDown()
 
 const UIView* UITestRender::GetTestView()
 {
-    UIKit_Render_Test_Render_001();
-    UIKit_Render_Test_RenderMeasure_001();
+    UIKitRenderTestRender001();
+    UIKitRenderTestRenderMeasure001();
     return container_;
 }
 
@@ -72,7 +72,7 @@ UILabel* UITestRender::CreateTitleLabel() const
     return label;
 }
 
-void UITestRender::UIKit_Render_Test_Render_001()
+void UITestRender::UIKitRenderTestRender001()
 {
     if (container_ == nullptr) {
         return;
@@ -104,7 +104,7 @@ void UITestRender::UIKit_Render_Test_Render_001()
     container_->Add(group);
 }
 
-void UITestRender::UIKit_Render_Test_RenderMeasure_001()
+void UITestRender::UIKitRenderTestRenderMeasure001()
 {
     if (container_ == nullptr) {
         return;

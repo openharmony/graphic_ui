@@ -34,9 +34,9 @@ public:
     /**
      * @brief Test display dynamic text
      */
-    void UIKit_UILabel_Test_Display_001();
-    void UIKit_UILabel_Test_Display_002();
-    void UIKit_UILabel_Test_Display_003();
+    void UIKitUILabelTestDisplay001();
+    void UIKitUILabeTestDisplay002();
+    void UIKitUILabeTestDisplay003();
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void ExpandClick(UIView& view, const ClickEvent& event) const;

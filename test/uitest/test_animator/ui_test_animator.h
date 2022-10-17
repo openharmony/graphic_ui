@@ -72,7 +72,7 @@ protected:
 class UITestAnimator : public UITest, public UIView::OnClickListener, public SysInfo::OnFPSChangedListener {
 public:
     UITestAnimator() {}
-    ~UITestAnimator(){}
+    ~UITestAnimator() {}
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;
@@ -83,14 +83,14 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnFPSChanged(float newFPS) override;
 
-    void UIKit_Animator_Test_BackEasing_001();
-    void UIKit_Animator_Test_CircEasing_002();
-    void UIKit_Animator_Test_CubicEasing_003();
-    void UIKit_Animator_Test_SineEasing_004();
-    void UIKit_Animator_Test_QuadEasing_005();
-    void UIKit_Animator_Test_QuintEasing_006();
-    void UIKit_Animator_Test_LinearEasing_007();
-    void UIKit_Animator_Test_FPS_008();
+    void UIKitAnimatorTestBackEasing001();
+    void UIKitAnimatorTestCircEasing002();
+    void UIKitAnimatorTestCubicEasing003();
+    void UIKitAnimatorTestSineEasing004();
+    void UIKitAnimatorTestQuadEasing005();
+    void UIKitAnimatorTestQuintEasing006();
+    void UIKitAnimatorTestLinearEasing007();
+    void UIKitAnimatorTestFPS008();
 
 private:
     UIScrollView* container_ = nullptr;

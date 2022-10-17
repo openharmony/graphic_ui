@@ -44,9 +44,9 @@ public:
     void OnPickerStoped(UIPicker& picker) override;
     void OnTimePickerStoped(UITimePicker& picker) override;
     void CreatButtons();
-    void UIKit_Picker_Test_Base_001();
-    void UIKit_Picker_Test_Base_002();
-    void UIKit_Picker_Test_Time_Picker_001();
+    void UIKitPickerTestBase001();
+    void UIKitPickerTestBase002();
+    void UIKitPickerTestTimePicker001();
 
 private:
     void SetLastPos(UIView* view);

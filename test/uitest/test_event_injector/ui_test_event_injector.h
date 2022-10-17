@@ -49,16 +49,16 @@ public:
     const UIView* GetTestView() override;
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_Event_Injector_Click_Event_001();
-    void UIKit_Event_Injector_Drag_Event_002();
-    void UIKit_Event_Injector_Long_Press_Event_003();
-    void UIKit_Event_Injector_Key_Event_004();
-    void UIKit_Event_Injector_Up_to_Down_005();
-    void UIKit_Event_Injector_Down_to_Up_006();
-    void UIKit_Event_Injector_Left_to_Right_007();
-    void UIKit_Event_Injector_Right_to_Left_008();
-    void UIKit_Event_Injector_ULeft_to_LRight_009();
-    void UIKit_Event_Injector_LRight_to_ULeft_010();
+    void UIKitEventInjectorClickEvent001();
+    void UIKitEventInjectorDragEvent002();
+    void UIKitEventInjectorLongPressEvent003();
+    void UIKitEventInjectorKeyEvent004();
+    void UIKitEventInjectorUptoDown005();
+    void UIKitEventInjectorDowntoUp006();
+    void UIKitEventInjectorLefttoRight007();
+    void UIKitEventInjectorRighttoLeft008();
+    void UIKitEventInjectorULefttoLRight009();
+    void UIKitEventInjectorLRighttoULeft010();
 
 private:
     UIScrollView* container_ = nullptr;

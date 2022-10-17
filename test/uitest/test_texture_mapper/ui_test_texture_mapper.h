@@ -72,15 +72,15 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override;
     bool ExpandClick(UIView& view, const ClickEvent& event);
 
-    void UIKit_TextureMapper_Test_SetRotateEnd_001();
-    void UIKit_TextureMapper_Test_SetRotateStart_002();
-    void UIKit_TextureMapper_Test_SetScaleEnd_003();
-    void UIKit_TextureMapper_Test_SetScaleStart_004();
-    void UIKit_TextureMapper_Test_SetPivot_005();
-    void UIKit_TextureMapper_Test_Start_006();
-    void UIKit_TextureMapper_Test_Reset_007();
-    void UIKit_TextureMapper_Test_CancelAnimation_008();
-    void UIKit_TextureMapper_Test_SetAnimatorStopListener_009();
+    void UIKitTextureMapperTestSetRotateEnd001();
+    void UIKitTextureMapperTestSetRotateStart002();
+    void UIKitTextureMapperTestSetScaleEnd003();
+    void UIKitTextureMapperTestSetScaleStart004();
+    void UIKitTextureMapperTestSetPivot005();
+    void UIKitTextureMapperTestStart006();
+    void UIKitTextureMapperTestReset007();
+    void UIKitTextureMapperTestCancelAnimation008();
+    void UIKitTextureMapperTestSetAnimatorStopListener009();
 
 private:
     UIScrollView* container_ = nullptr;

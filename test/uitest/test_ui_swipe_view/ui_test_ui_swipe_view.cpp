@@ -62,23 +62,23 @@ void UITestUISwipeView::TearDown()
 
 const UIView* UITestUISwipeView::GetTestView()
 {
-    UIKit_Swipe_View_Test_Horizontal_001();
-    UIKit_Swipe_View_Test_Horizontal_002();
-    UIKit_Swipe_View_Test_Horizontal_003();
-    UIKit_Swipe_View_Test_Align_001(UISwipeView::ALIGN_LEFT);
-    UIKit_Swipe_View_Test_Align_001(UISwipeView::ALIGN_CENTER);
-    UIKit_Swipe_View_Test_Align_001(UISwipeView::ALIGN_RIGHT);
+    UIKitSwipeViewTestHorizontal001();
+    UIKitSwipeViewTestHorizontal002();
+    UIKitSwipeViewTestHorizontal003();
+    UIKitSwipeViewTestAlign001(UISwipeView::ALIGN_LEFT);
+    UIKitSwipeViewTestAlign001(UISwipeView::ALIGN_CENTER);
+    UIKitSwipeViewTestAlign001(UISwipeView::ALIGN_RIGHT);
 
-    UIKit_Swipe_View_Test_Ver_001();
-    UIKit_Swipe_View_Test_Ver_002();
-    UIKit_Swipe_View_Test_Remove_001();
+    UIKitSwipeViewTestVer001();
+    UIKitSwipeViewTestVer002();
+    UIKitSwipeViewTestRemove001();
 
-    UIKit_Swipe_View_Test_SetCurrentPage();
+    UIKitSwipeViewTestSetCurrentPage();
 
     return container_;
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
+void UITestUISwipeView::UIKitSwipeViewTestHorizontal001()
 {
     if (container_ == nullptr) {
         return;
@@ -111,7 +111,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_001()
     positionY_ += g_swipeHorH;
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
+void UITestUISwipeView::UIKitSwipeViewTestHorizontal002()
 {
     if (container_ == nullptr) {
         return;
@@ -147,7 +147,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_002()
     positionY_ += g_swipeHorH;
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_003()
+void UITestUISwipeView::UIKitSwipeViewTestHorizontal003()
 {
     if (container_ == nullptr) {
         return;
@@ -184,7 +184,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Horizontal_003()
     positionY_ += g_swipeHorH;
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_001()
+void UITestUISwipeView::UIKitSwipeViewTestVer001()
 {
     if (container_ == nullptr) {
         return;
@@ -216,7 +216,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_001()
     positionY_ += g_swipeW + g_deltaCoordinateY;
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_002()
+void UITestUISwipeView::UIKitSwipeViewTestVer002()
 {
     if (container_ == nullptr) {
         return;
@@ -253,7 +253,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Ver_002()
     positionY_ += g_swipeW;
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Remove_001()
+void UITestUISwipeView::UIKitSwipeViewTestRemove001()
 {
     if (container_ == nullptr) {
         return;
@@ -303,7 +303,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Remove_001()
     SetLastPos(swipe);
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode alignMode)
+void UITestUISwipeView::UIKitSwipeViewTestAlign001(UISwipeView::AlignMode alignMode)
 {
     static uint8_t divNum = 4;
     if (container_ == nullptr) {
@@ -362,7 +362,7 @@ void UITestUISwipeView::UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode a
     SetLastPos(swipe);
 }
 
-void UITestUISwipeView::UIKit_Swipe_View_Test_SetCurrentPage()
+void UITestUISwipeView::UIKitSwipeViewTestSetCurrentPage()
 {
     if (container_ == nullptr) {
         return;

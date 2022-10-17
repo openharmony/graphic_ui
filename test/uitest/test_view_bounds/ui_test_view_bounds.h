@@ -18,7 +18,7 @@
 
 #include "graphic_config.h"
 
-#if ENABLE_DEBUG
+#if defined(ENABLE_DEBUG) && ENABLE_DEBUG
 #include "components/ui_scroll_view.h"
 #include "components/ui_toggle_button.h"
 #include "components/ui_label.h"

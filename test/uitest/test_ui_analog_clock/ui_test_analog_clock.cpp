@@ -97,8 +97,8 @@ void UITestAnalogClock::TearDown()
 
 const UIView* UITestAnalogClock::GetTestView()
 {
-    UIKit_TestLineHandAnalogClock_001();
-    UIKit_TestImageHandAnalogClock_002();
+    UIKitTestLineHandAnalogClock001();
+    UIKitTestImageHandAnalogClock002();
     return container_;
 }
 
@@ -159,7 +159,7 @@ private:
     uint16_t grid_;
 };
 
-void UITestAnalogClock::UIKit_TestLineHandAnalogClock_001()
+void UITestAnalogClock::UIKitTestLineHandAnalogClock001()
 {
     if (container_ != nullptr) {
         UIViewGroup* group1 = new UIViewGroup();
@@ -265,7 +265,7 @@ void UITestAnalogClock::CreateButtons001(UIViewGroup* group, UIImageView* curFac
     button5->SetOnClickListener(clickMoveBottomListener_);
 }
 
-void UITestAnalogClock::UIKit_TestImageHandAnalogClock_002()
+void UITestAnalogClock::UIKitTestImageHandAnalogClock002()
 {
     if (container_ != nullptr) {
         UIViewGroup* group2 = new UIViewGroup();

@@ -44,13 +44,13 @@ public:
     const UIView* GetTestView() override;
     void Callback(UIView* view) override;
 
-    void UIKit_View_Scale_Rotate_Test_Label_001();
-    void UIKit_View_Scale_Rotate_Test_LabelButton_002();
-    void UIKit_View_Scale_Rotate_Test_Canvas_003();
-    void UIKit_View_Scale_Rotate_Test_UIBoxProgress_004();
-    void UIKit_View_Scale_Rotate_Test_UICircleProgress_005();
-    void UIKit_View_Scale_Rotate_Test_UIDigitalClock_006();
-    void UIKit_View_Scale_Rotate_Test_Group_007();
+    void UIKitViewScaleRotateTestLabel001();
+    void UIKitViewScaleRotateTestLabelButton002();
+    void UIKitViewScaleRotateTestCanvas003();
+    void UIKitViewScaleRotateTestUIBoxProgress004();
+    void UIKitViewScaleRotateTestUICircleProgress005();
+    void UIKitViewScaleRotateTestUIDigitalClock006();
+    void UIKitViewScaleRotateTestGroup007();
 
 private:
     const int16_t GROUP_WIDHT = 454;

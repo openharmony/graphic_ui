@@ -68,22 +68,22 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_ImageAnimator_Test_Start_001();
-    void UIKit_ImageAnimator_Test_Stop_002();
-    void UIKit_ImageAnimator_Test_Pause_003();
-    void UIKit_ImageAnimator_Test_Resume_004();
-    void UIKit_ImageAnimator_Test_SetImageAnimatorSrc_005();
-    void UIKit_ImageAnimator_Test_SetTickOfUpdate_006();
-    void UIKit_ImageAnimator_Test_SetSizeFixed_007();
-    void UIKit_ImageAnimator_Test_SetRepeat_008();
-    void UIKit_ImageAnimator_Test_SetReverse_009();
-    void UIKit_ImageAnimator_Test_SetAnimatorStopListener_010();
-    void UIKit_ImageAnimator_Test_SetRepeatTimes_011();
-    void UIKit_ImageAnimator_Test_SetFillMode_True_Forward_012();
-    void UIKit_ImageAnimator_Test_SetFillMode_True_Backward_013();
-    void UIKit_ImageAnimator_Test_SetFillMode_False_Forward_014();
-    void UIKit_ImageAnimator_Test_SetFillMode_False_Backward_015();
-    void UIKit_ImageAnimator_Test_SetImageInfo_016();
+    void UIKitImageAnimatorTestStart001();
+    void UIKitImageAnimatorTestStop002();
+    void UIKitImageAnimatorTestPause003();
+    void UIKitImageAnimatorTestResume004();
+    void UIKitImageAnimatorTestSetImageAnimatorSrc005();
+    void UIKitImageAnimatorTestSetTickOfUpdate006();
+    void UIKitImageAnimatorTestSetSizeFixed007();
+    void UIKitImageAnimatorTestSetRepeat008();
+    void UIKitImageAnimatorTestSetReverse009();
+    void UIKitImageAnimatorTestSetAnimatorStopListener010();
+    void UIKitImageAnimatorTestSetRepeatTimes011();
+    void UIKitImageAnimatorTestSetFillModeTrueForward012();
+    void UIKitImageAnimatorTestSetFillModeTrueBackward013();
+    void UIKitImageAnimatorTestSetFillModeFalseForward014();
+    void UIKitImageAnimatorTestSetFillModeFalseBackward015();
+    void UIKitImageAnimatorTestSetImageInfo016();
 
 private:
     void InitImageInfo();

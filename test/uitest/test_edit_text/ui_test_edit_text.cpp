@@ -66,11 +66,11 @@ void UITestEditText::TearDown()
 
 const UIView* UITestEditText::GetTestView()
 {
-    UIKit_UIEditText_Test_Display_001();
+    UIKitUIEditTextTestDisplay001();
     return container_;
 }
 
-void UITestEditText::UIKit_UIEditText_Test_Display_001()
+void UITestEditText::UIKitUIEditTextTestDisplay001()
 {
     if (container_ == nullptr) {
         return;

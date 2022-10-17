@@ -123,13 +123,13 @@ void UITestUIList::TearDown()
 
 const UIView* UITestUIList::GetTestView()
 {
-    UIKit_List_Init_Test_Full_Screen_001();
-    UIKit_List_Init_Test_halh_Screen_001();
-    UIKit_List_Scroll_Test_Blank_Set_001();
+    UIKitListInitTestFullScreen001();
+    UIKitListInitTesthalhScreen001();
+    UIKitListScrollTestBlankSet001();
     return container_;
 }
 
-void UITestUIList::UIKit_List_Init_Test_Full_Screen_001()
+void UITestUIList::UIKitListInitTestFullScreen001()
 {
     if (container_ == nullptr) {
         return;
@@ -155,7 +155,7 @@ void UITestUIList::UIKit_List_Init_Test_Full_Screen_001()
     container_->Add(list);
 }
 
-void UITestUIList::UIKit_List_Init_Test_halh_Screen_001()
+void UITestUIList::UIKitListInitTesthalhScreen001()
 {
     if (container_ == nullptr) {
         return;
@@ -287,7 +287,7 @@ void UITestUIList::SetControlButton()
     SetUpButton(setSwitchDirectionBtn_, "切换List方向");
 }
 
-void UITestUIList::UIKit_List_Scroll_Test_Blank_Set_001()
+void UITestUIList::UIKitListScrollTestBlankSet001()
 {
     if (container_ == nullptr) {
         return;

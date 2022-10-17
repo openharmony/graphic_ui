@@ -33,37 +33,37 @@ public:
     /**
      * @brief Test display arc text from 0 to 270 INSIDE
      */
-    void UIKit_UIArcLabel_Test_Display_001();
+    void UIKitUIArcLabelTestDisplay001();
 
     /**
      * @brief Test display arc text from 270 to 0 INSIDE
      */
-    void UIKit_UIArcLabel_Test_Display_002();
+    void UIKitUIArcLabelTestDisplay002();
 
     /**
      * @brief Test display arc text from 0 to 270 OUTSIDE
      */
-    void UIKit_UIArcLabel_Test_Display_003();
+    void UIKitUIArcLabelTestDisplay003();
 
     /**
      * @brief Test display arc text from 270 to 0 OUTSIDE
      */
-    void UIKit_UIArcLabel_Test_Display_004();
+    void UIKitUIArcLabelTestDisplay004();
 
     /**
      * @brief Test arc text align LEFT
      */
-    void UIKit_UIArcLabel_Test_Align_001();
+    void UIKitUIArcLabelTestAlign001();
 
     /**
      * @brief Test arc text align CENTER
      */
-    void UIKit_UIArcLabel_Test_Align_002();
+    void UIKitUIArcLabelTestAlign002();
 
     /**
      * @brief Test arc text align RIGHT
      */
-    void UIKit_UIArcLabel_Test_Align_003();
+    void UIKitUIArcLabelTestAlign003();
 
 private:
     UIScrollView* container_ = nullptr;

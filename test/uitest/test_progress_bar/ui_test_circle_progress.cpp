@@ -85,22 +85,22 @@ void UITestCircleProgress::TearDown()
 
 const UIView* UITestCircleProgress::GetTestView()
 {
-    UIKit_CircleProgress_Test_UICircleProgress_001();
-    UIKit_CircleProgress_Test_SetValue_002();
-    UIKit_CircleProgress_Test_SetImage_003();
-    UIKit_CircleProgress_Test_SetStyle_004();
-    UIKit_CircleProgress_Test_GetStyle_005();
-    UIKit_CircleProgress_Test_SetCapType_006();
-    UIKit_CircleProgress_Test_SetStep_007();
-    UIKit_CircleProgress_Test_SetRange_008();
-    UIKit_CircleProgress_Test_EnableBackground_009();
-    UIKit_CircleProgress_Test_SetCenter_010();
-    UIKit_CircleProgress_Test_SetRadius_011();
-    UIKit_CircleProgress_Test_SetLineWidth_012();
-    UIKit_CircleProgress_Test_SetImagePosition_013();
-    UIKit_CircleProgress_Test_SetLineColor_014();
-    UIKit_CircleProgress_Test_SetAngle_015();
-    UIKit_CircleProgress_Test_HideRoundCap_016();
+    UIKitCircleProgressTestUICircleProgress001();
+    UIKitCircleProgressTestSetValue002();
+    UIKitCircleProgressTestSetImage003();
+    UIKitCircleProgressTestSetStyle004();
+    UIKitCircleProgressTestGetStyle005();
+    UIKitCircleProgressTestSetCapType006();
+    UIKitCircleProgressTestSetStep007();
+    UIKitCircleProgressTestSetRange008();
+    UIKitCircleProgressTestEnableBackground009();
+    UIKitCircleProgressTestSetCenter010();
+    UIKitCircleProgressTestSetRadius011();
+    UIKitCircleProgressTestSetLineWidth012();
+    UIKitCircleProgressTestSetImagePosition013();
+    UIKitCircleProgressTestSetLineColor014();
+    UIKitCircleProgressTestSetAngle015();
+    UIKitCircleProgressTestHideRoundCap016();
 
     return container_;
 }
@@ -132,7 +132,7 @@ void UITestCircleProgress::SetUpButton(UILabelButton* btn, const char* title, in
     scroll_->Invalidate();
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_UICircleProgress_001()
+void UITestCircleProgress::UIKitCircleProgressTestUICircleProgress001()
 {
     resetBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -142,7 +142,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_UICircleProgress_001()
     SetUpButton(resetBtn_, "重置", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetRange_008()
+void UITestCircleProgress::UIKitCircleProgressTestSetRange008()
 {
     incMinProgressBtn_ = new UILabelButton();
     decMinProgressBtn_ = new UILabelButton();
@@ -162,7 +162,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetRange_008()
     SetUpButton(decMaxProgressBtn_, "上限-", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetValue_002()
+void UITestCircleProgress::UIKitCircleProgressTestSetValue002()
 {
     incProgressBtn_ = new UILabelButton();
     decProgressBtn_ = new UILabelButton();
@@ -175,7 +175,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetValue_002()
     SetUpButton(decProgressBtn_, "进度-", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetImage_003()
+void UITestCircleProgress::UIKitCircleProgressTestSetImage003()
 {
     imageBtn_ = new UILabelButton();
     noImageBtn_ = new UILabelButton();
@@ -188,7 +188,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetImage_003()
     SetUpButton(noImageBtn_, "取消图片", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetStyle_004()
+void UITestCircleProgress::UIKitCircleProgressTestSetStyle004()
 {
     setStyleBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -198,7 +198,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetStyle_004()
     SetUpButton(setStyleBtn_, "设置样式", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_GetStyle_005()
+void UITestCircleProgress::UIKitCircleProgressTestGetStyle005()
 {
     getStyleBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -208,7 +208,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_GetStyle_005()
     SetUpButton(getStyleBtn_, "设置样式", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetCapType_006()
+void UITestCircleProgress::UIKitCircleProgressTestSetCapType006()
 {
     roundCapBtn_ = new UILabelButton();
     noneCapBtn_ = new UILabelButton();
@@ -221,7 +221,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetCapType_006()
     SetUpButton(noneCapBtn_, "方形端点", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetStep_007()
+void UITestCircleProgress::UIKitCircleProgressTestSetStep007()
 {
     stepBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -231,7 +231,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetStep_007()
     SetUpButton(stepBtn_, "步长+", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_EnableBackground_009()
+void UITestCircleProgress::UIKitCircleProgressTestEnableBackground009()
 {
     enableBgBtn_ = new UILabelButton();
     disableBgBtn_ = new UILabelButton();
@@ -244,7 +244,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_EnableBackground_009()
     SetUpButton(disableBgBtn_, "隐藏背景", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetCenter_010()
+void UITestCircleProgress::UIKitCircleProgressTestSetCenter010()
 {
     centerXBtn_ = new UILabelButton();
     centerYBtn_ = new UILabelButton();
@@ -257,7 +257,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetCenter_010()
     SetUpButton(centerYBtn_, "圆心Y+", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetRadius_011()
+void UITestCircleProgress::UIKitCircleProgressTestSetRadius011()
 {
     incRadiusBtn_ = new UILabelButton();
     decRadiusBtn_ = new UILabelButton();
@@ -270,7 +270,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetRadius_011()
     SetUpButton(decRadiusBtn_, "半径-", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetLineWidth_012()
+void UITestCircleProgress::UIKitCircleProgressTestSetLineWidth012()
 {
     incWidthBtn_ = new UILabelButton();
     decWidthBtn_ = new UILabelButton();
@@ -283,7 +283,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetLineWidth_012()
     SetUpButton(decWidthBtn_, "线宽-", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetImagePosition_013()
+void UITestCircleProgress::UIKitCircleProgressTestSetImagePosition013()
 {
     imgPosXBtn_ = new UILabelButton();
     imgPosYBtn_ = new UILabelButton();
@@ -296,7 +296,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetImagePosition_013()
     SetUpButton(imgPosYBtn_, "图片Y+", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetLineColor_014()
+void UITestCircleProgress::UIKitCircleProgressTestSetLineColor014()
 {
     lineColorBtn_ = new UILabelButton();
     positionX_ = DELTA_X_COORDINATE_2;
@@ -306,7 +306,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetLineColor_014()
     SetUpButton(lineColorBtn_, "前景绿色", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_SetAngle_015()
+void UITestCircleProgress::UIKitCircleProgressTestSetAngle015()
 {
     incStartAngleBtn_ = new UILabelButton();
     decStartAngleBtn_ = new UILabelButton();
@@ -330,7 +330,7 @@ void UITestCircleProgress::UIKit_CircleProgress_Test_SetAngle_015()
     SetUpButton(swapAngleBtn_, "转换方向", positionX_, positionY_);
 }
 
-void UITestCircleProgress::UIKit_CircleProgress_Test_HideRoundCap_016()
+void UITestCircleProgress::UIKitCircleProgressTestHideRoundCap016()
 {
     showroundCap_ = new UILabelButton();
     unshowroundCap_ = new UILabelButton();

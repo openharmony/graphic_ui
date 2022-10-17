@@ -143,12 +143,12 @@ void UITestViewBitmap::TearDown()
 
 const UIView* UITestViewBitmap::GetTestView()
 {
-    UIKit_Bitmap_Test_GetViewBitmap_001();
-    UIKit_Bitmap_Test_GetScreenBitmap_001();
+    UIKitBitmapTestGetViewBitmap001();
+    UIKitBitmapTestGetScreenBitmap001();
     return container_;
 }
 
-void UITestViewBitmap::UIKit_Bitmap_Test_GetViewBitmap_001()
+void UITestViewBitmap::UIKitBitmapTestGetViewBitmap001()
 {
     UILabelButton* btn = new UILabelButton();
     container_->Add(btn);
@@ -166,7 +166,7 @@ void UITestViewBitmap::UIKit_Bitmap_Test_GetViewBitmap_001()
     btn->SetViewId(UI_TEST_COMPONENT_SCREENSHOT);
 }
 
-void UITestViewBitmap::UIKit_Bitmap_Test_GetScreenBitmap_001()
+void UITestViewBitmap::UIKitBitmapTestGetScreenBitmap001()
 {
     UILabelButton* btn = new UILabelButton();
     container_->Add(btn);
