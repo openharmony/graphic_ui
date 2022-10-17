@@ -40,14 +40,14 @@ public:
     int8_t GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize) override;
     int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize) override;
     uint8_t GetFontWeight(uint16_t fontId) override;
-    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
-        uint16_t fontId, uint8_t size)  const override;
+    uint8_t
+        GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const override;
     uint8_t RegisterFontInfo(const char* ttfName, uint8_t shaping = 0) override;
     uint8_t RegisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num) override;
     uint8_t UnregisterFontInfo(const char* ttfName) override;
     uint8_t UnregisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num) override;
-    uint8_t RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count) override;
-    uint8_t UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count) override;
+    uint8_t RegisterTtcFontInfo(const char* ttcName, const TtfInfo* ttfInfo, uint8_t count) override;
+    uint8_t UnregisterTtcFontInfo(const char* ttcName, const TtfInfo* ttfInfo, uint8_t count) override;
     const UITextLanguageFontParam* GetFontInfo(uint16_t fontId) const override;
     int32_t OpenVectorFont(uint8_t ttfId) override;
     bool IsColorEmojiFont(FT_Face &face);
@@ -55,13 +55,16 @@ public:
                            bool& isEmojiLarge, uint16_t fontId, uint8_t fontSize) override;
     uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                               uint16_t& letterIndex, SizeSpan* sizeSpans)  override;
-
+    bool GetTtfInfo(uint8_t ttfId, uint8_t* ttfBuffer, uint32_t ttfBufferSize, TtfHeader& ttfHeader) override;
+    void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen) override;
     bool IsEmojiFont(uint16_t fontId) override;
+
 private:
     static constexpr uint8_t FONT_ID_MAX = 0xFF;
+    static constexpr uint8_t FONT_TTC_MAX = 0x20;
     static constexpr uint8_t FONT_INVALID_TTF_ID = 0xFF;
     static constexpr uint8_t TTF_NAME_LEN_MAX = 128;
-    static constexpr uint8_t FONT_BPP_8 = 8;
+    static constexpr uint32_t FONT_BITMAP_CACHE_SIZE = 0x64000;
     UITextLanguageFontParam fontInfo_[FONT_ID_MAX] = {{0}};
     std::string ttfDir_;
     FT_Library ftLibrary_;
@@ -85,14 +88,14 @@ private:
         int advance;
         uint8_t buf[0];
     };
-    TtcInfo ttcInfos_[FONT_ID_MAX] = {};
+    TtcInfo ttcInfos_[FONT_TTC_MAX] = {};
     void SetFace(FaceInfo& faceInfo, uint32_t unicode) const;
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     void SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const;
 #endif
     uint16_t GetFontId(uint32_t unicode) const;
     uint32_t GetKey(uint16_t fontId, uint32_t size);
-    int8_t LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode, FT_Face face);
+    int8_t LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode);
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     int8_t LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle);
 #endif
@@ -103,6 +106,17 @@ private:
 #endif
     int8_t GetFaceInfo(uint16_t fontId, uint8_t fontSize, FaceInfo& faceInfo);
     uint16_t GetMaxSubLineHeight(uint16_t textNum, uint16_t loopNum, uint16_t maxHeight, uint16_t emojiNum);
+    bool GetTtfInfoFromTtf(uint8_t ttfId,
+                           uint8_t* ttfBuffer,
+                           uint32_t ttfBufferSize,
+                           TtfHeader& ttfHeader,
+                           UITextLanguageFontParam fontInfo);
+    bool GetTtfInfoFromTtc(uint8_t ttfId,
+                           uint8_t* ttfBuffer,
+                           uint32_t ttfBufferSize,
+                           TtfHeader& ttfHeader,
+                           UITextLanguageFontParam fontInfo);
+    void BitmapCacheInit();
 };
 } // namespace OHOS
 #endif
