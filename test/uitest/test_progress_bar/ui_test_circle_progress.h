@@ -35,22 +35,22 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_CircleProgress_Test_UICircleProgress_001();
-    void UIKit_CircleProgress_Test_SetValue_002();
-    void UIKit_CircleProgress_Test_SetImage_003();
-    void UIKit_CircleProgress_Test_SetStyle_004();
-    void UIKit_CircleProgress_Test_GetStyle_005();
-    void UIKit_CircleProgress_Test_SetCapType_006();
-    void UIKit_CircleProgress_Test_SetStep_007();
-    void UIKit_CircleProgress_Test_SetRange_008();
-    void UIKit_CircleProgress_Test_EnableBackground_009();
-    void UIKit_CircleProgress_Test_SetCenter_010();
-    void UIKit_CircleProgress_Test_SetRadius_011();
-    void UIKit_CircleProgress_Test_SetLineWidth_012();
-    void UIKit_CircleProgress_Test_SetImagePosition_013();
-    void UIKit_CircleProgress_Test_SetLineColor_014();
-    void UIKit_CircleProgress_Test_SetAngle_015();
-    void UIKit_CircleProgress_Test_HideRoundCap_016();
+    void UIKitCircleProgressTestUICircleProgress001();
+    void UIKitCircleProgressTestSetValue002();
+    void UIKitCircleProgressTestSetImage003();
+    void UIKitCircleProgressTestSetStyle004();
+    void UIKitCircleProgressTestGetStyle005();
+    void UIKitCircleProgressTestSetCapType006();
+    void UIKitCircleProgressTestSetStep007();
+    void UIKitCircleProgressTestSetRange008();
+    void UIKitCircleProgressTestEnableBackground009();
+    void UIKitCircleProgressTestSetCenter010();
+    void UIKitCircleProgressTestSetRadius011();
+    void UIKitCircleProgressTestSetLineWidth012();
+    void UIKitCircleProgressTestSetImagePosition013();
+    void UIKitCircleProgressTestSetLineColor014();
+    void UIKitCircleProgressTestSetAngle015();
+    void UIKitCircleProgressTestHideRoundCap016();
 
 private:
     UIScrollView* container_ = nullptr;

@@ -47,16 +47,16 @@ void UITestListLayout::TearDown()
 
 const UIView* UITestListLayout::GetTestView()
 {
-    UIKit_List_Vertical_Add_Test_Auto_Size_001();
-    UIKit_List_Vertical_Remove_Test_Auto_Size_001();
-    UIKit_List_Vertical_Remove_Test_Auto_Size_002();
-    UIKit_List_Hor_Add_Test_Auto_Size_001();
-    UIKit_List_Hor_Remove_Test_Auto_Size_001();
-    UIKit_List_Hor_Remove_Test_Auto_Size_002();
+    UIKitListVerticalAddTestAutoSize001();
+    UIKitListVerticalRemoveTestAutoSize001();
+    UIKitListVerticalRemoveTestAutoSize002();
+    UIKitListHorAddTestAutoSize001();
+    UIKitListHorRemoveTestAutoSize001();
+    UIKitListHorRemoveTestAutoSize002();
     return container_;
 }
 
-void UITestListLayout::UIKit_List_Vertical_Add_Test_Auto_Size_001()
+void UITestListLayout::UIKitListVerticalAddTestAutoSize001()
 {
     if (container_ == nullptr) {
         return;
@@ -97,7 +97,7 @@ void UITestListLayout::UIKit_List_Vertical_Add_Test_Auto_Size_001()
     SetLastPos(list);
 }
 
-void UITestListLayout::UIKit_List_Vertical_Remove_Test_Auto_Size_001()
+void UITestListLayout::UIKitListVerticalRemoveTestAutoSize001()
 {
     if (container_ == nullptr) {
         return;
@@ -124,7 +124,7 @@ void UITestListLayout::UIKit_List_Vertical_Remove_Test_Auto_Size_001()
     SetLastPos(list);
 }
 
-void UITestListLayout::UIKit_List_Vertical_Remove_Test_Auto_Size_002()
+void UITestListLayout::UIKitListVerticalRemoveTestAutoSize002()
 {
     if (container_ == nullptr) {
         return;
@@ -151,7 +151,7 @@ void UITestListLayout::UIKit_List_Vertical_Remove_Test_Auto_Size_002()
     SetLastPos(list);
 }
 
-void UITestListLayout::UIKit_List_Hor_Add_Test_Auto_Size_001()
+void UITestListLayout::UIKitListHorAddTestAutoSize001()
 {
     if (container_ == nullptr) {
         return;
@@ -177,7 +177,7 @@ void UITestListLayout::UIKit_List_Hor_Add_Test_Auto_Size_001()
     SetLastPos(list);
 }
 
-void UITestListLayout::UIKit_List_Hor_Remove_Test_Auto_Size_001()
+void UITestListLayout::UIKitListHorRemoveTestAutoSize001()
 {
     if (container_ == nullptr) {
         return;
@@ -204,7 +204,7 @@ void UITestListLayout::UIKit_List_Hor_Remove_Test_Auto_Size_001()
     SetLastPos(list);
 }
 
-void UITestListLayout::UIKit_List_Hor_Remove_Test_Auto_Size_002()
+void UITestListLayout::UIKitListHorRemoveTestAutoSize002()
 {
     if (container_ == nullptr) {
         return;

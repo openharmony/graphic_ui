@@ -34,18 +34,18 @@ public:
     /**
      * @brief Test draw line Function
      */
-    void UIKit_Draw_Line_Test_Line_001();
-    void UIKit_Draw_Line_Test_Line_002();
-    void UIKit_Draw_Line_Test_Line_003();
-    void UIKit_Draw_Line_Test_Line_004();
-    void UIKit_Draw_Line_Test_Line_005();
-    void UIKit_Draw_Line_Test_Line_006();
-    void UIKit_Draw_Line_Test_Line_007();
-    void UIKit_Draw_Line_Test_Line_008();
-    void UIKit_Draw_Line_Test_Line_009();
-    void UIKit_Draw_Line_Test_Line_010();
-    void UIKit_Draw_Line_Test_Line_011();
-    void UIKit_Draw_Line_Test_Line_012();
+    void UIKitDrawLineTestLine001();
+    void UIKitDrawLineTestLine002();
+    void UIKitDrawLineTestLine003();
+    void UIKitDrawLineTestLine004();
+    void UIKitDrawLineTestLine005();
+    void UIKitDrawLineTestLine006();
+    void UIKitDrawLineTestLine007();
+    void UIKitDrawLineTestLine008();
+    void UIKitDrawLineTestLine009();
+    void UIKitDrawLineTestLine010();
+    void UIKitDrawLineTestLine011();
+    void UIKitDrawLineTestLine012();
 
 private:
     UIViewGroup* CreateTestCaseGroup() const;

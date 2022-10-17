@@ -29,12 +29,12 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_List_Vertical_Add_Test_Auto_Size_001();
-    void UIKit_List_Vertical_Remove_Test_Auto_Size_001();
-    void UIKit_List_Vertical_Remove_Test_Auto_Size_002();
-    void UIKit_List_Hor_Add_Test_Auto_Size_001();
-    void UIKit_List_Hor_Remove_Test_Auto_Size_001();
-    void UIKit_List_Hor_Remove_Test_Auto_Size_002();
+    void UIKitListVerticalAddTestAutoSize001();
+    void UIKitListVerticalRemoveTestAutoSize001();
+    void UIKitListVerticalRemoveTestAutoSize002();
+    void UIKitListHorAddTestAutoSize001();
+    void UIKitListHorRemoveTestAutoSize001();
+    void UIKitListHorRemoveTestAutoSize002();
 
 private:
     void SetLastPos(UIView* view);

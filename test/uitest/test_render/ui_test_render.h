@@ -38,12 +38,12 @@ public:
     /**
      * @brief Test render Function
      */
-    void UIKit_Render_Test_Render_001();
+    void UIKitRenderTestRender001();
 
     /**
      * @brief Test render measure Function
      */
-    void UIKit_Render_Test_RenderMeasure_001();
+    void UIKitRenderTestRenderMeasure001();
 
 private:
     UIViewGroup* CreateTestCaseGroup() const;

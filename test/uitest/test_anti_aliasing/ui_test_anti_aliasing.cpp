@@ -38,9 +38,9 @@ void UITestAntiAliasing::TearDown()
 
 const UIView* UITestAntiAliasing::GetTestView()
 {
-    UIKit_Anti_Aliasing_Test_Rect_001();
-    UIKit_Anti_Aliasing_Test_Circle_001();
-    UIKit_Anti_Aliasing_Test_Line_001();
+    UIKitAntiAliasingTestRect001();
+    UIKitAntiAliasingTestCircle001();
+    UIKitAntiAliasingTestLine001();
     return container_;
 }
 
@@ -60,7 +60,7 @@ UILabel* UITestAntiAliasing::CreateTitleLabel() const
     return label;
 }
 
-void UITestAntiAliasing::UIKit_Anti_Aliasing_Test_Rect_001()
+void UITestAntiAliasing::UIKitAntiAliasingTestRect001()
 {
     if (container_ == nullptr) {
         return;
@@ -93,7 +93,7 @@ void UITestAntiAliasing::UIKit_Anti_Aliasing_Test_Rect_001()
     container_->Add(group);
 }
 
-void UITestAntiAliasing::UIKit_Anti_Aliasing_Test_Circle_001()
+void UITestAntiAliasing::UIKitAntiAliasingTestCircle001()
 {
     if (container_ == nullptr) {
         return;
@@ -130,7 +130,7 @@ void UITestAntiAliasing::UIKit_Anti_Aliasing_Test_Circle_001()
     container_->Add(group);
 }
 
-void UITestAntiAliasing::UIKit_Anti_Aliasing_Test_Line_001()
+void UITestAntiAliasing::UIKitAntiAliasingTestLine001()
 {
     if (container_ == nullptr) {
         return;

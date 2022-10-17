@@ -32,12 +32,12 @@ public:
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;
-    void UIKit_Rotate_Event_List_001();
-    void UIKit_Rotate_Event_Scroll_View_002();
-    void UIKit_Rotate_Event_Swipe_View_003();
-    void UIKit_Rotate_Event_Slider_004();
-    void UIKit_Rotate_Event_Time_Picker_005();
-    void UIKit_Rotate_Event_Picker_006();
+    void UIKitRotateEventList001();
+    void UIKitRotateEventScrollView002();
+    void UIKitRotateEventSwipeView003();
+    void UIKitRotateEventSlider004();
+    void UIKitRotateEventTimePicker005();
+    void UIKitRotateEventPicker006();
     bool OnPress(UIView& view, const PressEvent& event) override;
 
 private:

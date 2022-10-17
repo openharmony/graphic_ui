@@ -38,7 +38,7 @@
 #include "common/image.h"
 #include "components/ui_view.h"
 #include "gfx_utils/graphic_types.h"
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
 #include "animator/animator.h"
 #endif
 
@@ -281,7 +281,7 @@ public:
     {
         return imageResizeMode_;
     }
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     Animator* GetGifImageAnimator() const
     {
         return gifImageAnimator_;
@@ -325,7 +325,7 @@ protected:
 
 private:
     void ReMeasure() override;
-#if (ENABLE_GIF == 1)
+#if defined(ENABLE_GIF) && (ENABLE_GIF == 1)
     friend class GifImageAnimator;
     void AddAndStartGifAnimator();
     void RemoveAndStopGifAnimator();

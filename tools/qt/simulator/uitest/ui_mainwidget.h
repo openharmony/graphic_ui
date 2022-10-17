@@ -15,7 +15,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_MainWidget {
+class UiMainWidget {
 public:
     static void setupUi(QWidget* MainWidget)
     {
@@ -35,7 +35,7 @@ public:
 };
 
 namespace Ui {
-class MainWidget : public Ui_MainWidget {
+class MainWidget : public UiMainWidget {
 };
 } // namespace Ui
 

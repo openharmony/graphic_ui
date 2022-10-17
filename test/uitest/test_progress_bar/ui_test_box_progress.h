@@ -35,18 +35,18 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_BoxProgress_Test_UIBoxProgress_001();
-    void UIKit_BoxProgress_Test_SetRange_002();
-    void UIKit_BoxProgress_Test_SetValue_003();
-    void UIKit_BoxProgress_Test_SetImage_004();
-    void UIKit_BoxProgress_Test_SetStyle_005();
-    void UIKit_BoxProgress_Test_GetStyle_006();
-    void UIKit_BoxProgress_Test_SetCapType_007();
-    void UIKit_BoxProgress_Test_SetDirection_008();
-    void UIKit_BoxProgress_Test_EnableBackground_009();
-    void UIKit_BoxProgress_Test_SetStep_010();
-    void UIKit_BoxProgress_Test_SetValidSize_011();
-    void UIKit_BoxProgress_Test_SetBorderAndPadding_012();
+    void UIKitBoxProgressTestUIBoxProgress001();
+    void UIKitBoxProgressTestSetRange002();
+    void UIKitBoxProgressTestSetValue003();
+    void UIKitBoxProgressTestSetImage004();
+    void UIKitBoxProgressTestSetStyle005();
+    void UIKitBoxProgressTestGetStyle006();
+    void UIKitBoxProgressTestSetCapType007();
+    void UIKitBoxProgressTestSetDirection008();
+    void UIKitBoxProgressTestEnableBackground009();
+    void UIKitBoxProgressTestSetStep010();
+    void UIKitBoxProgressTestSetValidSize011();
+    void UIKitBoxProgressTestSetBorderAndPadding012();
 
 private:
     UIScrollView* container_ = nullptr;

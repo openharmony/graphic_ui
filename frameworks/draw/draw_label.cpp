@@ -89,7 +89,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
         uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, glyphNode, letterInfo.fontId, letterInfo.fontSize,
                                                  letterInfo.shapingId);
         if (fontMap != nullptr) {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
             if (TypedText::IsColourWord(letterInfo.letter, fontId, fontSize)) {
 #else
             uint8_t weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);

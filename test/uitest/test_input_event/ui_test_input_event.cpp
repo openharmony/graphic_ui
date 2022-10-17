@@ -255,103 +255,103 @@ void UITestInputEvent::TearDown()
 
 const UIView* UITestInputEvent::GetTestView()
 {
-    UIKit_Pointer_Input_Test_Dispatch_Simple_Event_001();
-    UIKit_Pointer_Input_Test_Dispatch_Simple_Event_002();
-    UIKit_Pointer_Input_Test_Dispatch_Drag_Event_001();
-    UIKit_Pointer_Input_Test_Dispatch_Drag_Event_002();
-    UIKit_Pointer_Input_Test_Dispatch_Drag_Event_003();
-    UIKit_Pointer_Input_Test_Dispatch_Key_Event_001();
-    UIKit_Pointer_Input_Test_Dispatch_InVisible_Event_001();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_001();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_002();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_003();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_004();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_005();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_006();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_007();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_008();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_009();
-    UIKit_Pointer_Input_Test_Dispatch_Bubble_010();
+    UIKitPointerInputTestDispatchSimpleEvent001();
+    UIKitPointerInputTestDispatchSimpleEvent002();
+    UIKitPointerInputTestDispatchDragEvent001();
+    UIKitPointerInputTestDispatchDragEvent002();
+    UIKitPointerInputTestDispatchDragEvent003();
+    UIKitPointerInputTestDispatchKeyEvent001();
+    UIKitPointerInputTestDispatchInVisibleEvent001();
+    UIKitPointerInputTestDispatchBubble001();
+    UIKitPointerInputTestDispatchBubble002();
+    UIKitPointerInputTestDispatchBubble003();
+    UIKitPointerInputTestDispatchBubble004();
+    UIKitPointerInputTestDispatchBubble005();
+    UIKitPointerInputTestDispatchBubble006();
+    UIKitPointerInputTestDispatchBubble007();
+    UIKitPointerInputTestDispatchBubble008();
+    UIKitPointerInputTestDispatchBubble009();
+    UIKitPointerInputTestDispatchBubble010();
     return container_;
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Simple_Event_001()
+void UITestInputEvent::UIKitPointerInputTestDispatchSimpleEvent001()
 {
     InnerTest("可点击对象事件测试 ", true, false, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Simple_Event_002()
+void UITestInputEvent::UIKitPointerInputTestDispatchSimpleEvent002()
 {
     InnerTest("不可点击对象事件测试 ", false, false, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Drag_Event_001()
+void UITestInputEvent::UIKitPointerInputTestDispatchDragEvent001()
 {
     InnerTest("可点击可拖拽dragparent测试 ", true, true, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Drag_Event_002()
+void UITestInputEvent::UIKitPointerInputTestDispatchDragEvent002()
 {
     InnerTest("可点击可拖拽非dragparent测试 ", true, true, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Drag_Event_003()
+void UITestInputEvent::UIKitPointerInputTestDispatchDragEvent003()
 {
     InnerTest("不可点击可拖拽测试 ", false, true, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_001()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble001()
 {
     positionY_ = 0;
     InnerBubbleTest("可点击有监听事件不消费冒泡测试 ", true, true, true, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_002()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble002()
 {
     InnerBubbleTest("可点击有监听事件消费冒泡测试 ", true, true, true, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_003()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble003()
 {
     InnerBubbleTest("可点击无监听事件不消费冒泡测试 ", true, true, false, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_004()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble004()
 {
     InnerBubbleTest("不可点击有监听事件消费冒泡测试 ", false, false, true, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_005()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble005()
 {
     InnerBubbleDragTest("子父可拖拽有监听事件不消费冒泡测试 ", true, true, true, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_006()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble006()
 {
     InnerBubbleDragTest("子父可拖拽有监听事件消费冒泡测试 ", true, true, true, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_007()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble007()
 {
     InnerBubbleDragTest("子父可拖拽无监听事件消费冒泡测试 ", true, true, false, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_008()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble008()
 {
     InnerBubbleDragTest("子父不可拖拽有监听事件消费冒泡测试 ", false, false, true, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_009()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble009()
 {
     InnerBubbleDragTest("子不可拖拽父可拖拽有监听事件消费冒泡测试 ", false, true, true, true);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Bubble_010()
+void UITestInputEvent::UIKitPointerInputTestDispatchBubble010()
 {
     InnerBubbleDragTest("子不可拖拽父可拖拽有监听事件不消费冒泡测试 ", false, true, true, false);
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Key_Event_001()
+void UITestInputEvent::UIKitPointerInputTestDispatchKeyEvent001()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();
@@ -381,7 +381,7 @@ void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_Key_Event_001()
     }
 }
 
-void UITestInputEvent::UIKit_Pointer_Input_Test_Dispatch_InVisible_Event_001()
+void UITestInputEvent::UIKitPointerInputTestDispatchInVisibleEvent001()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();

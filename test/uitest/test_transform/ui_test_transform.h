@@ -59,9 +59,9 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_Transform_Test_Rotate_001();
-    void UIKit_Transform_Test_Scale_002();
-    void UIKit_Transform_Test_Translate_003();
+    void UIKitTransformTestRotate001();
+    void UIKitTransformTestScale002();
+    void UIKitTransformTestTranslate003();
 
     void SetScaleMode(ImageScaleMode mode);
 

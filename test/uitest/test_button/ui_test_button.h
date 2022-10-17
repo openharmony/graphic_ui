@@ -33,40 +33,40 @@ public:
     /**
      * @brief Test Checkbox Function
      */
-    void UIKit_Check_Box_Test_001();
+    void UIKitCheckBoxTest001();
 
     /**
      * @brief Test Checkbox's SetImage Function
      */
-    void UIKit_Check_Box_Test_002() const;
+    void UIKitCheckBoxTest002() const;
 
     /**
      * @brief Test Radiobutton Function
      */
-    void UIKit_Radio_Button_Test_001();
+    void UIKitRadioButtonTest001();
 
     /**
      * @brief Test Radiobutton's SetImage Function
      */
-    void UIKit_Radio_Button_Test_002() const;
+    void UIKitRadioButtonTest002() const;
 
     /**
      * @brief Test Togglebutton Function
      */
-    void UIKit_Toggle_Button_Test_001();
+    void UIKitToggleButtonTest001();
 
     /**
      * @brief Test Togglebutton's SetImage Function
      */
-    void UIKit_Toggle_Button_Test_002();
+    void UIKitToggleButtonTest002();
 
     /**
      * @brief Test button Function
      */
-    void UIKit_Button_Test_001();
+    void UIKitButtonTest001();
 
 private:
-    void UIKit_Button_Test_002(UIScrollView* container, UIButton* button);
+    void UIKitButtonTest002(UIScrollView* container, UIButton* button);
     UIViewGroup* CreateButtonGroup(int16_t posX, int16_t posY, int16_t width, int16_t height,
                                     UICheckBox::OnChangeListener** listener,
                                     UIViewType type = UI_CHECK_BOX,

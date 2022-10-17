@@ -42,10 +42,10 @@ public:
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_ChartPillar_Test_AddDataSerial_001();
-    void UIKit_ChartPillar_Test_EnableReverse_002();
-    void UIKit_ChartPillar_Test_SetAxisLineColor_003();
-    void UIKit_ChartPillar_Test_SetAxisLineVisible_004();
+    void UIKitChartPillarTestAddDataSerial001();
+    void UIKitChartPillarTestEnableReverse002();
+    void UIKitChartPillarTestSetAxisLineColor003();
+    void UIKitChartPillarTestSetAxisLineVisible004();
 
 private:
     void SetLastPos(UIView* view);

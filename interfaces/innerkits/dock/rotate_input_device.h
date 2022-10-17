@@ -27,7 +27,7 @@ public:
     /** @brief Constructor */
     RotateInputDevice();
     /** @brief Destructor */
-    virtual ~RotateInputDevice(){}
+    virtual ~RotateInputDevice() {}
 
     void SetRotateInputThreshold(int16_t threshold)
     {

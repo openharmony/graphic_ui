@@ -154,12 +154,12 @@ void UITestVideo::InitTestButtons()
 const UIView* UITestVideo::GetTestView()
 {
     if (video_ == nullptr) {
-        UIKit_UIVideo_Test_SetVideo_001();
+        UIKitUIVideoTestSetVideo001();
     }
     return container_;
 }
 
-void UITestVideo::UIKit_UIVideo_Test_SetVideo_001()
+void UITestVideo::UIKitUIVideoTestSetVideo001()
 {
     if (container_ != nullptr) {
         if (video_ == nullptr) {

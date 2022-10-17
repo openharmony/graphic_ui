@@ -67,19 +67,19 @@ void UITestDigitalClock::InnerTestTitle(const char* title)
 
 const UIView* UITestDigitalClock::GetTestView()
 {
-    UIKit_UIDigitalClock_Test_Display_001();
-    UIKit_UIDigitalClock_Test_Display_002();
-    UIKit_UIDigitalClock_Test_SetColor();
-    UIKit_UIDigitalClock_Test_DisplayMode_001();
-    UIKit_UIDigitalClock_Test_DisplayMode_002();
-    UIKit_UIDigitalClock_Test_DisplayMode_003();
-    UIKit_UIDigitalClock_Test_DisplayMode_004();
-    UIKit_UIDigitalClock_Test_DisplayLeadingZero();
-    UIKit_UIDigitalClock_Test_SetOpacity();
+    UIKitUIDigitalClockTestDisplay001();
+    UIKitUIDigitalClockTestDisplay002();
+    UIKitUIDigitalClockTestSetColor();
+    UIKitUIDigitalClockTestDisplayMode001();
+    UIKitUIDigitalClockTestDisplayMode002();
+    UIKitUIDigitalClockTestDisplayMode003();
+    UIKitUIDigitalClockTestDisplayMode004();
+    UIKitUIDigitalClockTestDisplayLeadingZero();
+    UIKitUIDigitalClockTestSetOpacity();
     return container_;
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_Display_001()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplay001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("UIDigitalClock效果");
@@ -93,7 +93,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_Display_001()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_Display_002()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplay002()
 {
     if (container_ != nullptr) {
         InnerTestTitle("UIDigitalClock效果");
@@ -107,7 +107,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_Display_002()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_SetColor()
+void UITestDigitalClock::UIKitUIDigitalClockTestSetColor()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock颜色");
@@ -122,7 +122,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_SetColor()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_001()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplayMode001()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock仅显示小时、分钟 ");
@@ -137,7 +137,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_001()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_002()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplayMode002()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock 24小时制仅显示小时、分钟 ");
@@ -152,7 +152,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_002()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_003()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplayMode003()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock 12小时制 ");
@@ -167,7 +167,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_003()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_004()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplayMode004()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock 24小时制 ");
@@ -182,7 +182,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayMode_004()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayLeadingZero()
+void UITestDigitalClock::UIKitUIDigitalClockTestDisplayLeadingZero()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock不显示首位的0 ");
@@ -197,7 +197,7 @@ void UITestDigitalClock::UIKit_UIDigitalClock_Test_DisplayLeadingZero()
     }
 }
 
-void UITestDigitalClock::UIKit_UIDigitalClock_Test_SetOpacity()
+void UITestDigitalClock::UIKitUIDigitalClockTestSetOpacity()
 {
     if (container_ != nullptr) {
         InnerTestTitle("设置Digital Clock透明度 ");

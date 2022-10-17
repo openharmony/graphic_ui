@@ -37,54 +37,54 @@ void UITestDrawRect::TearDown()
 
 const UIView* UITestDrawRect::GetTestView()
 {
-    UIKit_DrawRect_Test_RectNoBorder_001();
-    UIKit_DrawRect_Test_RectNoBorder_002();
-    UIKit_DrawRect_Test_RectNoBorder_003();
-    UIKit_DrawRect_Test_RectNoBorder_004();
-    UIKit_DrawRect_Test_RectNoBorder_005();
-    UIKit_DrawRect_Test_RectNoBorder_006();
-    UIKit_DrawRect_Test_RectNoBorder_007();
-    UIKit_DrawRect_Test_RectNoBorder_008();
-    UIKit_DrawRect_Test_RectNoBorder_009();
-    UIKit_DrawRect_Test_RectNoBorder_0010();
-    UIKit_DrawRect_Test_RectBorderNoRadius_001();
-    UIKit_DrawRect_Test_RectBorderNoRadius_002();
-    UIKit_DrawRect_Test_RectBorderRadius_001();
-    UIKit_DrawRect_Test_RectBorderRadius_002();
-    UIKit_DrawRect_Test_RectBorderRadius_003();
-    UIKit_DrawRect_Test_RectBorderRadius_004();
-    UIKit_DrawRect_Test_RectBorderRadius_005();
-    UIKit_DrawRect_Test_RectBorderRadius_006();
-    UIKit_DrawRect_Test_RectBorderRadius_007();
-    UIKit_DrawRect_Test_RectBorderRadius_008();
-    UIKit_DrawRect_Test_RectBorderRadius_009();
-    UIKit_DrawRect_Test_RectBorderRadius_010();
-    UIKit_DrawRect_Test_RectBorderRadius_011();
+    UIKitDrawRectTestRectNoBorder001();
+    UIKitDrawRectTestRectNoBorder002();
+    UIKitDrawRectTestRectNoBorder003();
+    UIKitDrawRectTestRectNoBorder004();
+    UIKitDrawRectTestRectNoBorder005();
+    UIKitDrawRectTestRectNoBorder006();
+    UIKitDrawRectTestRectNoBorder007();
+    UIKitDrawRectTestRectNoBorder008();
+    UIKitDrawRectTestRectNoBorder009();
+    UIKitDrawRectTestRectNoBorder0010();
+    UIKitDrawRectTestRectBorderNoRadius001();
+    UIKitDrawRectTestRectBorderNoRadius002();
+    UIKitDrawRectTestRectBorderRadius001();
+    UIKitDrawRectTestRectBorderRadius002();
+    UIKitDrawRectTestRectBorderRadius003();
+    UIKitDrawRectTestRectBorderRadius004();
+    UIKitDrawRectTestRectBorderRadius005();
+    UIKitDrawRectTestRectBorderRadius006();
+    UIKitDrawRectTestRectBorderRadius007();
+    UIKitDrawRectTestRectBorderRadius008();
+    UIKitDrawRectTestRectBorderRadius009();
+    UIKitDrawRectTestRectBorderRadius010();
+    UIKitDrawRectTestRectBorderRadius011();
 
-    UIKit_DrawRect_Test_Rect_001();
-    UIKit_DrawRect_Test_RectColor_001();
-    UIKit_DrawRect_Test_RectRadius_001();
-    UIKit_DrawRect_Test_RectRadius_002();
-    UIKit_DrawRect_Test_RectRadius_003();
-    UIKit_DrawRect_Test_RectRadius_004();
-    UIKit_DrawRect_Test_RectOpacity_001();
-    UIKit_DrawRect_Test_RectOpacity_002();
-    UIKit_DrawRect_Test_RectOpacity_003();
-    UIKit_DrawRect_Test_RectBorderColor_001();
-    UIKit_DrawRect_Test_RectBorderWidth_001();
-    UIKit_DrawRect_Test_RectBorderWidth_002();
-    UIKit_DrawRect_Test_RectBorderOpacity_001();
-    UIKit_DrawRect_Test_RectBorderOpacity_002();
-    UIKit_DrawRect_Test_RectBorderOpacity_003();
-    UIKit_DrawRect_Test_RectPadding_001();
-    UIKit_DrawRect_Test_RectPadding_002();
-    UIKit_DrawRect_Test_RectMargin_001();
-    UIKit_DrawRect_Test_RectMargin_002();
-    UIKit_DrawRect_Test_RectPaddingMargin_001();
-    UIKit_DrawRect_Test_RectPaddingMargin_002();
-    UIKit_DrawRect_Test_RectWidthAndHeight_001();
-    UIKit_DrawRect_Test_RectWidthAndHeight_002();
-    UIKit_DrawRect_Test_RectWidthAndHeight_003();
+    UIKitDrawRectTestRect001();
+    UIKitDrawRectTestRectColor001();
+    UIKitDrawRectTestRectRadius001();
+    UIKitDrawRectTestRectRadius002();
+    UIKitDrawRectTestRectRadius003();
+    UIKitDrawRectTestRectRadius004();
+    UIKitDrawRectTestRectOpacity001();
+    UIKitDrawRectTestRectOpacity002();
+    UIKitDrawRectTestRectOpacity003();
+    UIKitDrawRectTestRectBorderColor001();
+    UIKitDrawRectTestRectBorderWidth001();
+    UIKitDrawRectTestRectBorderWidth002();
+    UIKitDrawRectTestRectBorderOpacity001();
+    UIKitDrawRectTestRectBorderOpacity002();
+    UIKitDrawRectTestRectBorderOpacity003();
+    UIKitDrawRectTestRectPadding001();
+    UIKitDrawRectTestRectPadding002();
+    UIKitDrawRectTestRectMargin001();
+    UIKitDrawRectTestRectMargin002();
+    UIKitDrawRectTestRectPaddingMargin001();
+    UIKitDrawRectTestRectPaddingMargin002();
+    UIKitDrawRectTestRectWidthAndHeight001();
+    UIKitDrawRectTestRectWidthAndHeight002();
+    UIKitDrawRectTestRectWidthAndHeight003();
     return container_;
 }
 
@@ -124,7 +124,7 @@ UIView* UITestDrawRect::CreateUIView() const
     return view;
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_001()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder001()
 {
     if (container_ == nullptr) {
         return;
@@ -150,7 +150,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_001()
     container_->Add(group);
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_002()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder002()
 {
     if (container_ == nullptr) {
         return;
@@ -177,7 +177,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_003()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder003()
 {
     if (container_ == nullptr) {
         return;
@@ -204,7 +204,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_003()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_004()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder004()
 {
     if (container_ == nullptr) {
         return;
@@ -231,7 +231,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_004()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_003", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_005()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder005()
 {
     if (container_ == nullptr) {
         return;
@@ -258,7 +258,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_005()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_004", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_006()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder006()
 {
     if (container_ == nullptr) {
         return;
@@ -285,7 +285,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_006()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_005", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_007()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder007()
 {
     if (container_ == nullptr) {
         return;
@@ -312,7 +312,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_007()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_006", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_008()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder008()
 {
     if (container_ == nullptr) {
         return;
@@ -339,7 +339,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_008()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_007", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_009()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder009()
 {
     if (container_ == nullptr) {
         return;
@@ -366,7 +366,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_009()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_008", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_0010()
+void UITestDrawRect::UIKitDrawRectTestRectNoBorder0010()
 {
     if (container_ == nullptr) {
         return;
@@ -393,7 +393,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectNoBorder_0010()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_009", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderNoRadius_001()
+void UITestDrawRect::UIKitDrawRectTestRectBorderNoRadius001()
 {
     if (container_ == nullptr) {
         return;
@@ -420,7 +420,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderNoRadius_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectNoBorder_0010", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderNoRadius_002()
+void UITestDrawRect::UIKitDrawRectTestRectBorderNoRadius002()
 {
     if (container_ == nullptr) {
         return;
@@ -447,7 +447,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderNoRadius_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderNoRadius_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_001()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius001()
 {
     if (container_ == nullptr) {
         return;
@@ -475,7 +475,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderNoRadius_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_002()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius002()
 {
     if (container_ == nullptr) {
         return;
@@ -503,7 +503,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_003()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius003()
 {
     if (container_ == nullptr) {
         return;
@@ -531,7 +531,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_003()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_004()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius004()
 {
     if (container_ == nullptr) {
         return;
@@ -559,7 +559,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_004()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_003", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_005()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius005()
 {
     if (container_ == nullptr) {
         return;
@@ -587,7 +587,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_005()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_004", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_006()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius006()
 {
     if (container_ == nullptr) {
         return;
@@ -615,7 +615,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_006()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_005", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_007()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius007()
 {
     if (container_ == nullptr) {
         return;
@@ -643,7 +643,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_007()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_006", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_008()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius008()
 {
     if (container_ == nullptr) {
         return;
@@ -671,7 +671,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_008()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_007", 10); // 10 : value
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_009()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius009()
 {
     if (container_ == nullptr) {
         return;
@@ -699,7 +699,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_009()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_008", 10); // 10 : value
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_010()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius010()
 {
     if (container_ == nullptr) {
         return;
@@ -727,7 +727,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_010()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_009", 10); // 10 : value
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_011()
+void UITestDrawRect::UIKitDrawRectTestRectBorderRadius011()
 {
     if (container_ == nullptr) {
         return;
@@ -754,7 +754,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderRadius_011()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_010", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_Rect_001()
+void UITestDrawRect::UIKitDrawRectTestRect001()
 {
     if (container_ == nullptr) {
         return;
@@ -780,7 +780,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_Rect_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderRadius_009", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectColor_001()
+void UITestDrawRect::UIKitDrawRectTestRectColor001()
 {
     if (container_ == nullptr) {
         return;
@@ -811,7 +811,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectColor_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_Rect_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_001()
+void UITestDrawRect::UIKitDrawRectTestRectRadius001()
 {
     if (container_ == nullptr) {
         return;
@@ -835,7 +835,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectColor_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_002()
+void UITestDrawRect::UIKitDrawRectTestRectRadius002()
 {
     if (container_ == nullptr) {
         return;
@@ -859,7 +859,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectRadius_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_003()
+void UITestDrawRect::UIKitDrawRectTestRectRadius003()
 {
     if (container_ == nullptr) {
         return;
@@ -883,7 +883,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_003()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectRadius_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_004()
+void UITestDrawRect::UIKitDrawRectTestRectRadius004()
 {
     if (container_ == nullptr) {
         return;
@@ -914,7 +914,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectRadius_004()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectRadius_003", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectOpacity_001()
+void UITestDrawRect::UIKitDrawRectTestRectOpacity001()
 {
     if (container_ == nullptr) {
         return;
@@ -937,7 +937,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectOpacity_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectRadius_004", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectOpacity_002()
+void UITestDrawRect::UIKitDrawRectTestRectOpacity002()
 {
     if (container_ == nullptr) {
         return;
@@ -960,7 +960,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectOpacity_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectOpacity_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectOpacity_003()
+void UITestDrawRect::UIKitDrawRectTestRectOpacity003()
 {
     if (container_ == nullptr) {
         return;
@@ -989,7 +989,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectOpacity_003()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectOpacity_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderColor_001()
+void UITestDrawRect::UIKitDrawRectTestRectBorderColor001()
 {
     if (container_ == nullptr) {
         return;
@@ -1021,7 +1021,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderColor_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectOpacity_003", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderWidth_001()
+void UITestDrawRect::UIKitDrawRectTestRectBorderWidth001()
 {
     if (container_ == nullptr) {
         return;
@@ -1044,7 +1044,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderWidth_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderColor_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderWidth_002()
+void UITestDrawRect::UIKitDrawRectTestRectBorderWidth002()
 {
     if (container_ == nullptr) {
         return;
@@ -1073,7 +1073,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderWidth_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderWidth_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderOpacity_001()
+void UITestDrawRect::UIKitDrawRectTestRectBorderOpacity001()
 {
     if (container_ == nullptr) {
         return;
@@ -1097,7 +1097,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderOpacity_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderWidth_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderOpacity_002()
+void UITestDrawRect::UIKitDrawRectTestRectBorderOpacity002()
 {
     if (container_ == nullptr) {
         return;
@@ -1121,7 +1121,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderOpacity_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderOpacity_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectBorderOpacity_003()
+void UITestDrawRect::UIKitDrawRectTestRectBorderOpacity003()
 {
     if (container_ == nullptr) {
         return;
@@ -1152,7 +1152,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectBorderOpacity_003()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderOpacity_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectPadding_001()
+void UITestDrawRect::UIKitDrawRectTestRectPadding001()
 {
     if (container_ == nullptr) {
         return;
@@ -1178,7 +1178,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectPadding_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectBorderOpacity_003", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectPadding_002()
+void UITestDrawRect::UIKitDrawRectTestRectPadding002()
 {
     if (container_ == nullptr) {
         return;
@@ -1218,7 +1218,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectPadding_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectPadding_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectMargin_001()
+void UITestDrawRect::UIKitDrawRectTestRectMargin001()
 {
     if (container_ == nullptr) {
         return;
@@ -1244,7 +1244,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectMargin_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectPadding_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectMargin_002()
+void UITestDrawRect::UIKitDrawRectTestRectMargin002()
 {
     if (container_ == nullptr) {
         return;
@@ -1279,7 +1279,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectMargin_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectMargin_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectPaddingMargin_001()
+void UITestDrawRect::UIKitDrawRectTestRectPaddingMargin001()
 {
     if (container_ == nullptr) {
         return;
@@ -1309,7 +1309,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectPaddingMargin_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectMargin_002", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectPaddingMargin_002()
+void UITestDrawRect::UIKitDrawRectTestRectPaddingMargin002()
 {
     if (container_ == nullptr) {
         return;
@@ -1352,7 +1352,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectPaddingMargin_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectPaddingMargin_001", 10); // 10 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectWidthAndHeight_001()
+void UITestDrawRect::UIKitDrawRectTestRectWidthAndHeight001()
 {
     if (container_ == nullptr) {
         return;
@@ -1376,7 +1376,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectWidthAndHeight_001()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectPaddingMargin_002", 20); // 20 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectWidthAndHeight_002()
+void UITestDrawRect::UIKitDrawRectTestRectWidthAndHeight002()
 {
     if (container_ == nullptr) {
         return;
@@ -1400,7 +1400,7 @@ void UITestDrawRect::UIKit_DrawRect_Test_RectWidthAndHeight_002()
     group->LayoutBottomToSibling("UIKit_DrawRect_Test_RectWidthAndHeight_001", 20); // 20 : offset size
 }
 
-void UITestDrawRect::UIKit_DrawRect_Test_RectWidthAndHeight_003()
+void UITestDrawRect::UIKitDrawRectTestRectWidthAndHeight003()
 {
     if (container_ == nullptr) {
         return;

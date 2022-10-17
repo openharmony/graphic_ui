@@ -59,14 +59,14 @@ public:
     const UIView* GetTestView() override;
     bool OnClick(UIView& view, const ClickEvent& event) override;
 
-    void UIKit_Swipe_View_Test_Horizontal_001();
-    void UIKit_Swipe_View_Test_Horizontal_002();
-    void UIKit_Swipe_View_Test_Horizontal_003();
-    void UIKit_Swipe_View_Test_Ver_001();
-    void UIKit_Swipe_View_Test_Ver_002();
-    void UIKit_Swipe_View_Test_Remove_001();
-    void UIKit_Swipe_View_Test_Align_001(UISwipeView::AlignMode alignMode);
-    void UIKit_Swipe_View_Test_SetCurrentPage();
+    void UIKitSwipeViewTestHorizontal001();
+    void UIKitSwipeViewTestHorizontal002();
+    void UIKitSwipeViewTestHorizontal003();
+    void UIKitSwipeViewTestVer001();
+    void UIKitSwipeViewTestVer002();
+    void UIKitSwipeViewTestRemove001();
+    void UIKitSwipeViewTestAlign001(UISwipeView::AlignMode alignMode);
+    void UIKitSwipeViewTestSetCurrentPage();
 
 private:
     void SetUpButton(UILabelButton* btn, const char* title, const char* id);

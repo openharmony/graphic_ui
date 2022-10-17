@@ -31,8 +31,8 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_ScrollBar_TEST_Scroll_view_001();
-    void UIKit_ScrollBar_TEST_List_001();
+    void UIKitScrollBarTESTScrollview001();
+    void UIKitScrollBarTESTList001();
 
 private:
     UIViewGroup* container_ = nullptr;
