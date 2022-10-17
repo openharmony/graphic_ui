@@ -70,7 +70,7 @@ int8_t GlyphsManager::GetFontVersion(const char* fontName, char* version, uint8_
     return INVALID_RET_VALUE;
 }
 
-const FontHeader* GlyphsManager::GetFontHeader(uint8_t fontId)
+const FontHeader* GlyphsManager::GetFontHeader(uint16_t fontId)
 {
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
         const FontHeader* tmp = glyphsFiles_[i]->GetFontHeader(fontId);
@@ -82,7 +82,7 @@ const FontHeader* GlyphsManager::GetFontHeader(uint8_t fontId)
     return nullptr;
 }
 
-const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint8_t fontId)
+const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint16_t fontId)
 {
     GlyphNode* node = glyphsCache_.GetNodeFromCache(unicode, fontId);
     if (node != nullptr) {
@@ -111,7 +111,7 @@ const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint8_t fontId)
     return node;
 }
 
-int16_t GlyphsManager::GetFontHeight(uint8_t fontId)
+int16_t GlyphsManager::GetFontHeight(uint16_t fontId)
 {
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
         int16_t height = glyphsFiles_[i]->GetFontHeight(fontId);
@@ -123,7 +123,7 @@ int16_t GlyphsManager::GetFontHeight(uint8_t fontId)
     return INVALID_RET_VALUE;
 }
 
-int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint8_t fontId)
+int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint16_t fontId)
 {
     const GlyphNode* node = GetGlyphNode(unicode, fontId);
     if (node == nullptr) {
@@ -132,7 +132,7 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint8_t fontId)
     return node->advance;
 }
 
-int8_t GlyphsManager::GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId)
+int8_t GlyphsManager::GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint16_t fontId)
 {
     GlyphNode* node = const_cast<GlyphNode *>(GetGlyphNode(unicode, fontId));
     if (node == nullptr) {

@@ -23,7 +23,7 @@ namespace OHOS {
 class UIFontAdaptor : public HeapBase {
 public:
     static uint32_t GetNextLineAndWidth(const char* txt,
-                                        uint8_t fontId,
+                                        uint16_t fontId,
                                         uint8_t fontSize,
                                         int16_t letterSpace,
                                         int16_t& maxWidth,
@@ -33,7 +33,7 @@ public:
                                         bool allBreak = false,
                                         uint16_t len = 0xFFFF);
 
-    static bool IsSameTTFId(uint8_t fontId, uint32_t unicode);
+    static bool IsSameTTFId(uint16_t fontId, uint32_t unicode);
 };
 } // namespace OHOS
 #endif // UI_FONT_ADAPTOR

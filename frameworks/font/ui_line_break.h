@@ -111,7 +111,7 @@ public:
 
     // 0xFFFF: unlimit the length until the end null.
     uint32_t GetNextLineAndWidth(const char* text,
-                                 uint8_t fontId,
+                                 uint16_t fontId,
                                  uint8_t fontSize,
                                  int16_t space,
                                  bool allBreak,
@@ -120,7 +120,7 @@ public:
                                  uint16_t& letterIndex,
                                  SizeSpan* sizeSpans,
                                  uint16_t len = 0xFFFF);
-    bool IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fontSize, int32_t& state);
+    bool IsBreakPos(uint32_t unicode, uint16_t fontId, uint8_t fontSize, int32_t& state);
 
 private:
     UILineBreakEngine()
@@ -131,7 +131,7 @@ private:
 
     void LoadRule();
     int16_t GetLetterWidth(uint32_t unicode, uint16_t& letterIndex, int16_t& maxHeight,
-                           uint8_t fontId, uint8_t fontSize, SizeSpan* sizeSpans);
+                           uint16_t fontId, uint8_t fontSize, SizeSpan* sizeSpans);
     static constexpr const int32_t LINE_BREAK_STATE_START = 1;
     static constexpr const int32_t LINE_BREAK_STATE_STOP = 0;
     bool initSuccess_;
