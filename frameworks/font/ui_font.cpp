@@ -16,6 +16,7 @@
 #include "font/ui_font.h"
 #include "common/text.h"
 #include "font/ui_font_cache.h"
+#include "font/font_ram_allocator.h"
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "font/ui_font_vector.h"
 #endif
@@ -66,8 +67,13 @@ void UIFont::SetFont(BaseFont* font)
     }
 }
 
+BaseFont* UIFont::GetFont()
+{
+    return instance_;
+}
+
 #if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-void UIFont::SetBitampFont(BaseFont* font)
+void UIFont::SetBitmapFont(BaseFont* font)
 {
     if (font == nullptr) {
         return;
@@ -87,10 +93,19 @@ UIFont* UIFont::GetBitmapInstance()
 }
 #endif
 
+void UIFont::SetFontFileOffset(uint32_t offset)
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    GetBitmapInstance()->GetFont()->SetFontFileOffset(offset);
+#else
+    instance_->SetFontFileOffset(offset);
+#endif
+}
+
 int8_t UIFont::SetCurrentLangId(uint8_t langId)
 {
 #if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-    GetBitmapInstance()->SetCurrentLangId(langId);
+    return GetBitmapInstance()->GetFont()->SetCurrentLangId(langId);
 #else
     return instance_->SetCurrentLangId(langId);
 #endif
@@ -99,16 +114,28 @@ int8_t UIFont::SetCurrentLangId(uint8_t langId)
 uint8_t UIFont::GetCurrentLangId() const
 {
 #if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-    return GetBitmapInstance()->GetCurrentLangId(langId);
+    return GetBitmapInstance()->GetFont()->GetCurrentLangId();
 #else
     return instance_->GetCurrentLangId();
+#endif
+}
+
+int8_t  UIFont::SetFontPath(const char* path, BaseFont::FontType type)
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    if (type == BaseFont::FontType::VECTOR_FONT) {
+        return instance_->SetFontPath(path, type);
+    }
+    return GetBitmapInstance()->GetFont()->SetFontPath(path, type);
+#else
+    return instance_->SetFontPath(path, type);
 #endif
 }
 
 int8_t UIFont::GetTextUtf8(uint16_t textId, uint8_t** utf8Addr, uint16_t& utf8Len) const
 {
 #if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-    return GetBitmapInstance()->GetTextUtf8(textId, utf8Addr, utf8Len);
+    return GetBitmapInstance()->GetFont()->GetTextUtf8(textId, utf8Addr, utf8Len);
 #else
     return instance_->GetTextUtf8(textId, utf8Addr, utf8Len);
 #endif
@@ -117,9 +144,30 @@ int8_t UIFont::GetTextUtf8(uint16_t textId, uint8_t** utf8Addr, uint16_t& utf8Le
 int8_t UIFont::GetTextParam(uint16_t textId, UITextLanguageTextParam& param) const
 {
 #if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-    return GetBitmapInstance()->GetTextParam(textId, param);
+    return GetBitmapInstance()->GetFont()->GetTextParam(textId, param);
 #else
     return instance_->GetTextParam(textId, param);
+#endif
+}
+
+int8_t UIFont::GetWildCardStaticStr(uint16_t textId,
+                                    UITextWildcardStaticType type,
+                                    uint8_t** strAddr,
+                                    uint16_t& strLen) const
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    return GetBitmapInstance()->GetFont()->GetWildCardStaticStr(textId, type, strAddr, strLen);
+#else
+    return instance_->GetWildCardStaticStr(textId, type, strAddr, strLen);
+#endif
+}
+
+int8_t UIFont::GetCodePoints(uint16_t textId, uint32_t** codePoints, uint16_t& codePointsNum) const
+{
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
+    return GetBitmapInstance()->GetFont()->GetCodePoints(textId, codePoints, codePointsNum);
+#else
+    return instance_->GetCodePoints(textId, codePoints, codePointsNum);
 #endif
 }
 

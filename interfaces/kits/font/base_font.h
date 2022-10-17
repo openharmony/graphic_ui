@@ -26,6 +26,7 @@ public:
     enum FontType : uint8_t {
         DYNAMIC_FONT = 0,
         STATIC_FONT = 1,
+        VECTOR_FONT = 2,
     };
 
     BaseFont() : ramAddr_(0), ramLen_(0) {}
@@ -65,6 +66,12 @@ public:
     {
         return -1;
     }
+
+    virtual bool GetTtfInfo(uint8_t ttfId, uint8_t* ttfBuffer, uint32_t bufferSize, TtfHeader& TtfHeader)
+    {
+        return -1;
+    }
+
     /**
      * @brief Get bitmap for specific unicode
      *
@@ -170,12 +177,12 @@ public:
         return 0;
     }
 
-    virtual uint8_t RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    virtual uint8_t RegisterTtcFontInfo(const char* ttcName, const TtfInfo* ttfInfo, uint8_t count)
     {
         return 0;
     }
 
-    virtual uint8_t UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    virtual uint8_t UnregisterTtcFontInfo(const char* ttcName, const TtfInfo* ttfInfo, uint8_t count)
     {
         return 0;
     }

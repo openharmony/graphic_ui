@@ -64,7 +64,7 @@ uint8_t UIFontBuilder::GetTotalLangId() const
 
 uint16_t UIFontBuilder::GetTotalFontId() const
 {
-    uint16_t fontIdMax = 0xFFFF;
+    uint16_t fontIdMax = 0xFF;
     if (!UIFont::GetInstance()->IsVectorFont()) {
         fontIdMax = totalFontId_;
     }
