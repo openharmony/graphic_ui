@@ -32,7 +32,7 @@ public:
      * @param size font size
      * @return int8_t Shaping mode
      */
-    uint16_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
+    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
     {
         return instance_->GetShapingFontId(text, ttfId, script, fontId, size);
     }
@@ -145,15 +145,17 @@ public:
         return instance_->OpenVectorFont(ttfId);
     }
 
+    bool GetTtfInfo(uint8_t ttfId, uint8_t* ttfBuffer, uint32_t bufferSize, TtfHeader& ttfHeader)
+    {
+        return instance_->GetTtfInfo(ttfId, ttfBuffer, bufferSize, ttfHeader);
+    }
+
     const UITextLanguageFontParam* GetFontInfo(uint16_t fontId) const
     {
         return instance_->GetFontInfo(fontId);
     }
 
-    int8_t SetFontPath(const char* path, BaseFont::FontType type)
-    {
-        return instance_->SetFontPath(path, type);
-    }
+    int8_t SetFontPath(const char* path, BaseFont::FontType type);
 
     int8_t GetFontVersion(BaseFont::FontType type, const char* path, char* version, uint8_t len) const
     {
@@ -170,12 +172,12 @@ public:
         return instance_->RegisterFontInfo(fontsTable, num);
     }
 
-    uint8_t RegisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    uint8_t RegisterTtcFontInfo(const char* ttcName, const TtfInfo* ttfInfo, uint8_t count)
     {
         return instance_->RegisterTtcFontInfo(ttcName, ttfInfo, count);
     }
 
-    uint8_t UnregisterTtcFontInfo(const char* ttcName, TtfInfo* ttfInfo, uint8_t count)
+    uint8_t UnregisterTtcFontInfo(const char* ttcName, const TtfInfo* ttfInfo, uint8_t count)
     {
         return instance_->UnregisterTtcFontInfo(ttcName, ttfInfo, count);
     }
@@ -193,15 +195,9 @@ public:
     int8_t GetTextParam(uint16_t textId, UITextLanguageTextParam& param) const;
 
     int8_t GetWildCardStaticStr(uint16_t textId, UITextWildcardStaticType type,
-        uint8_t** strAddr, uint16_t& strLen) const
-    {
-        return instance_->GetWildCardStaticStr(textId, type, strAddr, strLen);
-    }
+        uint8_t** strAddr, uint16_t& strLen) const;
 
-    int8_t GetCodePoints(uint16_t textId, uint32_t** codePoints, uint16_t& codePointsNum) const
-    {
-        return instance_->GetCodePoints(textId, codePoints, codePointsNum);
-    }
+    int8_t GetCodePoints(uint16_t textId, uint32_t** codePoints, uint16_t& codePointsNum) const;
 
     ColorMode GetColorType(uint16_t fontId)
     {
@@ -221,11 +217,9 @@ public:
 
     static UIFont* GetInstance();
     void SetFont(BaseFont* font);
+    BaseFont* GetFont();
 
-    void SetFontFileOffset(uint32_t offset)
-    {
-        instance_->SetFontFileOffset(offset);
-    }
+    void SetFontFileOffset(uint32_t offset);
 
     virtual uint16_t
         GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint16_t fontId, uint8_t fontSize)
@@ -247,7 +241,14 @@ public:
      *
      * @param font bitmap font
      */
-    void SetBitampFont(BaseFont* font);
+    void SetBitmapFont(BaseFont* font);
+
+    /**
+     * @brief Get bitmap font, only needed when using both vector font and bitmap font
+     *
+     * @return UIFont bitmap font instance
+     */
+    static UIFont* GetBitmapInstance();
 #endif
 
 private:
@@ -257,15 +258,6 @@ private:
      *
      */
     ~UIFont();
-
-#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-    /**
-     * @brief Get bitmap font, only needed when using both vector font and bitmap font
-     *
-     * @return UIFont bitmap font instance
-     */
-    static UIFont* GetBitmapInstance();
-#endif
 
     BaseFont* instance_;
     BaseFont* defaultInstance_;
