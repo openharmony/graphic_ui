@@ -46,7 +46,7 @@ void UIFontCache::UpdateLru(Bitmap* bitmap)
     ListAdd(&bitmap->lruHead, &lruList_);
 }
 
-uint8_t* UIFontCache::GetSpace(uint8_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle)
+uint8_t* UIFontCache::GetSpace(uint16_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle)
 {
     Bitmap* bitmap = nullptr;
 
@@ -93,7 +93,7 @@ void UIFontCache::PutSpace(uint8_t* addr)
     allocator_.Free(bitmap);
 }
 
-uint8_t* UIFontCache::GetBitmap(uint8_t fontId, uint32_t unicode, TextStyle textStyle)
+uint8_t* UIFontCache::GetBitmap(uint16_t fontId, uint32_t unicode, TextStyle textStyle)
 {
     Bitmap* bitmap = nullptr;
     ListHead* head = hashTable_ + fontId % FONT_CACHE_HASH_NR;

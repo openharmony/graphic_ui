@@ -42,7 +42,7 @@ public:
      *
      * @return uint16_t
      */
-    virtual uint16_t GetHeight(uint8_t fontId, uint8_t fontSize) = 0;
+    virtual uint16_t GetHeight(uint16_t fontId, uint8_t fontSize) = 0;
 
     /**
      * @brief Get font id
@@ -51,7 +51,7 @@ public:
      * @param size   0: invalid size
      * @return uint8_t
      */
-    virtual uint8_t GetFontId(const char* ttfName, uint8_t fontSize) const = 0;
+    virtual uint16_t GetFontId(const char* ttfName, uint8_t fontSize) const = 0;
 
     /**
      * @brief Get width
@@ -59,7 +59,7 @@ public:
      * @param unicode
      * @return int16_t
      */
-    virtual int16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize) = 0;
+    virtual int16_t GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize) = 0;
 
     virtual int32_t OpenVectorFont(uint8_t ttfId)
     {
@@ -71,7 +71,7 @@ public:
      * @param unicode
      * @return uint8_t*
      */
-    virtual uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize) = 0;
+    virtual uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize) = 0;
 
     /**
      * @brief Get font header
@@ -79,7 +79,7 @@ public:
      * @param fontHeader
      * @return int8_t
      */
-    virtual int8_t GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize) = 0;
+    virtual int8_t GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize) = 0;
 
     /**
      * @brief Get the glyph node
@@ -89,8 +89,8 @@ public:
      * @param isGlyph
      * @return int8_t
      */
-    virtual int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize) = 0;
-    virtual uint8_t GetFontWeight(uint8_t fontId) = 0;
+    virtual int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize) = 0;
+    virtual uint8_t GetFontWeight(uint16_t fontId) = 0;
 
     virtual int8_t SetCurrentLangId(uint8_t langId)
     {
@@ -112,7 +112,7 @@ public:
      * @param size [in] the font size
      * @return uint8_t: needShaping property
      */
-    virtual uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint8_t fontId, uint8_t size) const
+    virtual uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
     {
         return 0;
     }
@@ -150,12 +150,12 @@ public:
      * @param size [in] the font size
      * @return uint8_t: ttfId property
      */
-    virtual uint8_t GetFontTtfId(uint8_t fontId, uint8_t size) const
+    virtual uint8_t GetFontTtfId(uint16_t fontId, uint8_t size) const
     {
         return 0;
     }
 
-    virtual const UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const
+    virtual const UITextLanguageFontParam* GetFontInfo(uint16_t fontId) const
     {
         return nullptr;
     }
@@ -217,10 +217,10 @@ public:
     virtual void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen);
 
     virtual uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLarge,
-                                   uint8_t fontId, uint8_t fontSize) = 0;
-    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+                                   uint16_t fontId, uint8_t fontSize) = 0;
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                                       uint16_t& letterIndex, SizeSpan* sizeSpans) = 0;
-    virtual bool IsEmojiFont(uint8_t fontId) = 0;
+    virtual bool IsEmojiFont(uint16_t fontId) = 0;
 
 private:
     uintptr_t ramAddr_;

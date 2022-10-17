@@ -26,7 +26,7 @@ enum UITextWildcardStaticType : uint8_t { TEXT_STATIC_STR1 = 0, TEXT_STATIC_STR2
 
 struct UITextLanguageTextParam {
     uint16_t textId;
-    uint8_t fontId;
+    uint16_t fontId;
     uint8_t align : 2;  // UITextLanguageAlignment
     uint8_t direct : 1; // UITextLanguageDirect
     uint8_t shaping : 1;
@@ -240,7 +240,7 @@ struct BinHeader {
  * refer to ui_font.h
  */
 struct FontHeader {
-    uint8_t fontId;      // FONT_ID_OFFSET
+    uint16_t fontId;      // FONT_ID_OFFSET
     uint16_t glyphNum;   // GLYPH_NUM_OFFSET
     uint16_t fontHeight; // FONT_HEIGHT_OFFSET
     int16_t ascender;    // FONT_ASCEND_LEN

@@ -45,7 +45,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     GlyphNode glyphNode;
     while (i < labelLine.lineLength) {
         uint32_t letter = TypedText::GetUTF8Next(labelLine.text, i, i);
-        uint8_t fontId = labelLine.fontId;
+        uint16_t fontId = labelLine.fontId;
         uint8_t fontSize = labelLine.fontSize;
         if (labelLine.sizeSpans != nullptr && labelLine.sizeSpans[letterIndex].isSizeSpan) {
             fontId = labelLine.sizeSpans[letterIndex].fontId;
@@ -114,7 +114,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     return retOffsetY;
 }
 
-uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans)
 {
     if (sizeSpans == nullptr) {
@@ -143,7 +143,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                             const Rect& mask,
                             const char* text,
                             const Point& arcCenter,
-                            uint8_t fontId,
+                            uint16_t fontId,
                             uint8_t fontSize,
                             const ArcTextInfo arcTextInfo,
                             TextOrientation orientation,
@@ -206,7 +206,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
 
 void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
-                                     uint8_t fontId,
+                                     uint16_t fontId,
                                      uint8_t fontSize,
                                      uint32_t letter,
                                      const Point& pos,

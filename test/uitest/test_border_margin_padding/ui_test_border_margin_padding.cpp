@@ -337,21 +337,21 @@ const UIView* UITestBorderMarginPadding::GetTestView()
 {
     UIKitUITestBorderMarginPaddingTest001();
     UIKitUITestBorderMarginPaddingTest002();
-    UIKit_UITestBorderMarginPaddingTest003();
-    UIKit_UITestBorderMarginPaddingTest004();
-    UIKit_UITestBorderMarginPaddingTest005();
-    UIKit_UITestBorderMarginPaddingTest006();
-    UIKit_UITestBorderMarginPaddingTest007();
-    UIKit_UITestBorderMarginPaddingTest008();
-    UIKit_UITestBorderMarginPaddingTest009();
-    UIKit_UITestBorderMarginPaddingTest011();
-    UIKit_UITestBorderMarginPaddingTest012();
-    UIKit_UITestBorderMarginPaddingTest013();
-    UIKit_UITestBorderMarginPaddingTest014();
-    UIKit_UITestBorderMarginPaddingTest015();
-    UIKit_UITestBorderMarginPaddingTest016();
-    UIKit_UITestBorderMarginPaddingTest017();
-    UIKit_UITestBorderMarginPaddingTest018();
+    UIKitUITestBorderMarginPaddingTest003();
+    UIKitUITestBorderMarginPaddingTest004();
+    UIKitUITestBorderMarginPaddingTest005();
+    UIKitUITestBorderMarginPaddingTest006();
+    UIKitUITestBorderMarginPaddingTest007();
+    UIKitUITestBorderMarginPaddingTest008();
+    UIKitUITestBorderMarginPaddingTest009();
+    UIKitUITestBorderMarginPaddingTest011();
+    UIKitUITestBorderMarginPaddingTest012();
+    UIKitUITestBorderMarginPaddingTest013();
+    UIKitUITestBorderMarginPaddingTest014();
+    UIKitUITestBorderMarginPaddingTest015();
+    UIKitUITestBorderMarginPaddingTest016();
+    UIKitUITestBorderMarginPaddingTest017();
+    UIKitUITestBorderMarginPaddingTest018();
     return container_;
 }
 
@@ -386,7 +386,7 @@ void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest002()
     listScroll_->Add(view);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest003()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest003()
 {
     AddTitle("ArcLabel");
     UIArcLabel* view = new UIArcLabel();
@@ -399,7 +399,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest003()
     listScroll_->Add(view);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest004()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest004()
 {
     AddTitle("BoxProgress");
     UIBoxProgress* boxProgress = new UIBoxProgress();
@@ -411,7 +411,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest004()
     listScroll_->Add(boxProgress);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest005()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest005()
 {
     AddTitle("UIViewGroup");
     UIViewGroup* group = new UIViewGroup();
@@ -424,7 +424,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest005()
     group->Add(button);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest006()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest006()
 {
     AddTitle("UICanvas");
     UICanvas* canvas = new UICanvas();
@@ -454,7 +454,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest006()
     listScroll_->Add(canvas);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest007()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest007()
 {
     AddTitle("UIChart");
     chart_ = new UIChartPolyline();
@@ -482,7 +482,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest007()
 
     listScroll_->Add(chart_);
 }
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest008()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest008()
 {
     AddTitle("Button");
     UIViewGroup* group = new UIViewGroup();
@@ -535,7 +535,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest008()
     listScroll_->Add(group);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest009()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest009()
 {
     AddTitle("UICircleProgress");
     UICircleProgress* circleProgress = new UICircleProgress();
@@ -547,7 +547,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest009()
     listScroll_->Add(circleProgress);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest010()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest010()
 {
     AddTitle("UIImageAnimatorView");
     UIImageAnimatorView* imageAnimator = new UIImageAnimatorView();
@@ -558,7 +558,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest010()
     listScroll_->Add(imageAnimator);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest011()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest011()
 {
     AddTitle("UIImageView");
     UIImageView* imageView = new UIImageView();
@@ -569,7 +569,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest011()
     listScroll_->Add(imageView);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest012()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest012()
 {
     AddTitle("UILabelButton");
     UILabelButton* button = new UILabelButton();
@@ -603,7 +603,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest012()
     listScroll_->Add(button);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest013()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest013()
 {
     AddTitle("UIList");
     if (adapter_ == nullptr) {
@@ -620,7 +620,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest013()
     listScroll_->Add(list);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest014()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest014()
 {
     AddTitle("UIPicker");
     picker_ = new UIPicker();
@@ -634,7 +634,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest014()
     listScroll_->Add(picker_);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest015()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest015()
 {
     AddTitle("UIQrcode");
     UIQrcode* qrcode = new UIQrcode();
@@ -644,7 +644,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest015()
     listScroll_->Add(qrcode);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest016()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest016()
 {
     AddTitle("UIScroll");
     UIScrollView* scroll = new UIScrollView();
@@ -658,7 +658,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest016()
     scroll->Add(button);
     listScroll_->Add(scroll);
 }
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest017()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest017()
 {
     AddTitle("UISlider");
     UISlider* slider = new UISlider();
@@ -671,7 +671,7 @@ void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest017()
     listScroll_->Add(slider);
 }
 
-void UITestBorderMarginPadding::UIKit_UITestBorderMarginPaddingTest018()
+void UITestBorderMarginPadding::UIKitUITestBorderMarginPaddingTest018()
 {
     AddTitle("UISwipe");
     UISwipeView* swipe = new UISwipeView(UISwipeView::HORIZONTAL);

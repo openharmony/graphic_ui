@@ -63,7 +63,7 @@ int8_t GlyphsCache::CacheInit()
     return RET_VALUE_OK;
 }
 
-GlyphNode* GlyphsCache::GetNodeFromCache(uint32_t unicode, uint8_t fontId)
+GlyphNode* GlyphsCache::GetNodeFromCache(uint32_t unicode, uint16_t fontId)
 {
     GlyphNode* node = nullptr;
 
@@ -79,7 +79,7 @@ GlyphNode* GlyphsCache::GetNodeFromCache(uint32_t unicode, uint8_t fontId)
     return node;
 }
 
-GlyphNode* GlyphsCache::GetNodeCacheSpace(uint32_t unicode, uint8_t fontId)
+GlyphNode* GlyphsCache::GetNodeCacheSpace(uint32_t unicode, uint16_t fontId)
 {
     uint8_t font = fontId & FONT_HASH_MASK;
     uint8_t uc = unicode & UNICODE_HASH_MASK;

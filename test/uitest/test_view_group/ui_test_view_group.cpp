@@ -37,7 +37,6 @@ const UIView* UITestViewGroup::GetTestView()
     UIKitViewGroupTestAddRemove001();
     UIKitViewGroupTestAddError001();
     UIKitViewGroupTestInsertError001();
-
     return container_;
 }
 

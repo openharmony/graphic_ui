@@ -149,7 +149,7 @@ void Text::SetFont(const char* name, uint8_t size)
         return;
     }
     if (UIFont::GetInstance()->IsVectorFont()) {
-        uint8_t fontId = UIFont::GetInstance()->GetFontId(name);
+        uint16_t fontId = UIFont::GetInstance()->GetFontId(name);
         if ((fontId != UIFontBuilder::GetInstance()->GetTotalFontId()) &&
             ((fontId_ != fontId) || (fontSize_ != size))) {
             fontId_ = fontId;
@@ -157,7 +157,7 @@ void Text::SetFont(const char* name, uint8_t size)
             needRefresh_ = true;
         }
     } else {
-        uint8_t fontId = UIFont::GetInstance()->GetFontId(name, size);
+        uint16_t fontId = UIFont::GetInstance()->GetFontId(name, size);
         SetFontId(fontId);
     }
 }
@@ -194,7 +194,7 @@ void Text::SetFont(const char* name, uint8_t size, char*& destName, uint8_t& des
     }
 }
 
-void Text::SetFontId(uint8_t fontId)
+void Text::SetFontId(uint16_t fontId)
 {
     if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || ((fontId_ == fontId) && (fontSize_ != 0))) {
         GRAPHIC_LOGE("Text::SetFontId invalid fontId(%hhd)", fontId);
@@ -205,7 +205,7 @@ void Text::SetFontId(uint8_t fontId)
         return;
     }
     if (UIFont::GetInstance()->IsVectorFont()) {
-        uint8_t fontId = UIFont::GetInstance()->GetFontId(fontParam->ttfName);
+        uint16_t fontId = UIFont::GetInstance()->GetFontId(fontParam->ttfName);
         if ((fontId != UIFontBuilder::GetInstance()->GetTotalFontId()) && ((fontId_ != fontId) ||
             (fontSize_ != fontParam->size))) {
             fontId_ = fontId;
@@ -533,7 +533,7 @@ void Text::SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size)
         return;
     }
 #endif
-    uint8_t fontId = GetSpanFontIdBySize(size);
+    uint16_t fontId = GetSpanFontIdBySize(size);
 #if defined(ENABLE_VECTOR_FONT) && !ENABLE_VECTOR_FONT
     if (fontId == fontId_) {
         return;
@@ -585,7 +585,7 @@ uint8_t Text::GetSpanFontIdBySize(uint8_t size)
     }
 
     uint8_t ttfId = fontParam->ttfId;
-    for (uint8_t fontId = 0; fontId < UIFontBuilder::GetInstance()->GetTotalFontId(); fontId++) {
+    for (uint16_t fontId = 0; fontId < UIFontBuilder::GetInstance()->GetTotalFontId(); fontId++) {
         UITextLanguageFontParam* tempFontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
         if (tempFontParam == nullptr) {
             continue;
