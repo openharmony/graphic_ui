@@ -121,7 +121,7 @@ struct LineBackgroundColor : public HeapBase {
 struct SizeSpan {
     bool isSizeSpan;
     uint8_t size;
-    uint8_t fontId;
+    uint16_t fontId;
     int16_t height;
 };
 
@@ -205,7 +205,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint8_t fontId);
+    void SetFontId(uint16_t fontId);
 
     /**
      * @brief Obtains the font ID.
@@ -214,7 +214,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint8_t GetFontId() const
+    uint16_t GetFontId() const
     {
         return fontId_;
     }
@@ -518,7 +518,7 @@ protected:
 
     TextStyle* textStyles_;
     char* text_;
-    uint8_t fontId_;
+    uint16_t fontId_;
     uint8_t fontSize_; // Only the vector font library has a valid value.
     Point textSize_;
     bool needRefresh_ : 1;

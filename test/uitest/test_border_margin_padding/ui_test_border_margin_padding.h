@@ -51,22 +51,22 @@ public:
 
     void UIKitUITestBorderMarginPaddingTest001();
     void UIKitUITestBorderMarginPaddingTest002();
-    void UIKit_UITestBorderMarginPaddingTest003();
-    void UIKit_UITestBorderMarginPaddingTest004();
-    void UIKit_UITestBorderMarginPaddingTest005();
-    void UIKit_UITestBorderMarginPaddingTest006();
-    void UIKit_UITestBorderMarginPaddingTest007();
-    void UIKit_UITestBorderMarginPaddingTest008();
-    void UIKit_UITestBorderMarginPaddingTest009();
-    void UIKit_UITestBorderMarginPaddingTest010();
-    void UIKit_UITestBorderMarginPaddingTest011();
-    void UIKit_UITestBorderMarginPaddingTest012();
-    void UIKit_UITestBorderMarginPaddingTest013();
-    void UIKit_UITestBorderMarginPaddingTest014();
-    void UIKit_UITestBorderMarginPaddingTest015();
-    void UIKit_UITestBorderMarginPaddingTest016();
-    void UIKit_UITestBorderMarginPaddingTest017();
-    void UIKit_UITestBorderMarginPaddingTest018();
+    void UIKitUITestBorderMarginPaddingTest003();
+    void UIKitUITestBorderMarginPaddingTest004();
+    void UIKitUITestBorderMarginPaddingTest005();
+    void UIKitUITestBorderMarginPaddingTest006();
+    void UIKitUITestBorderMarginPaddingTest007();
+    void UIKitUITestBorderMarginPaddingTest008();
+    void UIKitUITestBorderMarginPaddingTest009();
+    void UIKitUITestBorderMarginPaddingTest010();
+    void UIKitUITestBorderMarginPaddingTest011();
+    void UIKitUITestBorderMarginPaddingTest012();
+    void UIKitUITestBorderMarginPaddingTest013();
+    void UIKitUITestBorderMarginPaddingTest014();
+    void UIKitUITestBorderMarginPaddingTest015();
+    void UIKitUITestBorderMarginPaddingTest016();
+    void UIKitUITestBorderMarginPaddingTest017();
+    void UIKitUITestBorderMarginPaddingTest018();
     void InitStyle();
     Style style_;
 

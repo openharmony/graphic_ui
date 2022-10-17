@@ -35,8 +35,8 @@ public:
     ~GlyphsCache();
 
     int8_t CacheInit();
-    GlyphNode* GetNodeFromCache(uint32_t unicode, uint8_t fontId);
-    GlyphNode* GetNodeCacheSpace(uint32_t unicode, uint8_t fontId);
+    GlyphNode* GetNodeFromCache(uint32_t unicode, uint16_t fontId);
+    GlyphNode* GetNodeCacheSpace(uint32_t unicode, uint16_t fontId);
 
 private:
     static constexpr uint8_t FONT_HASH_SHIFT = 3;

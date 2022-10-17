@@ -67,7 +67,7 @@ int8_t GlyphsFile::CacheInit()
     return RET_VALUE_OK;
 }
 
-int8_t GlyphsFile::GetNodeFromFile(uint32_t unicode, uint8_t fontId, GlyphNode& node)
+int8_t GlyphsFile::GetNodeFromFile(uint32_t unicode, uint16_t fontId, GlyphNode& node)
 {
     uint16_t idx = 0;
     uint32_t offset;
@@ -201,7 +201,7 @@ bool GlyphsFile::IsSameFile(const char* fontName)
     return (strcmp(fontName_, fontName + Offset) == 0);
 }
 
-int8_t GlyphsFile::GetGlyphInfo(uint8_t fontId, GlyphInfo& glyphInfo)
+int8_t GlyphsFile::GetGlyphInfo(uint16_t fontId, GlyphInfo& glyphInfo)
 {
     uint16_t fontIdx = 0;
     if (fontId > UIFontBuilder::GetInstance()->GetBitmapFontIdMax()) {
@@ -271,7 +271,7 @@ int8_t GlyphsFile::GetFontVersion(const char* fontName, char* version, uint8_t l
     return RET_VALUE_OK;
 }
 
-const FontHeader* GlyphsFile::GetFontHeader(uint8_t fontId)
+const FontHeader* GlyphsFile::GetFontHeader(uint16_t fontId)
 {
     GlyphInfo glyphInfo;
     int8_t ret = GetGlyphInfo(fontId, glyphInfo);
@@ -282,7 +282,7 @@ const FontHeader* GlyphsFile::GetFontHeader(uint8_t fontId)
     return glyphInfo.fontHeader;
 }
 
-int16_t GlyphsFile::GetFontHeight(uint8_t fontId)
+int16_t GlyphsFile::GetFontHeight(uint16_t fontId)
 {
     GlyphInfo glyphInfo;
     int8_t ret = GetGlyphInfo(fontId, glyphInfo);
