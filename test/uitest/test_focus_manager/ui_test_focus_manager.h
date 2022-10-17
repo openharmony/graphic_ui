@@ -17,7 +17,7 @@
 #define UI_TEST_FOCUS_MANAGER_H
 
 #include "graphic_config.h"
-#if ENABLE_FOCUS_MANAGER
+#if defined(ENABLE_FOCUS_MANAGER) && ENABLE_FOCUS_MANAGER
 #include "components/ui_label_button.h"
 #include "components/ui_scroll_view.h"
 #include "dock/focus_manager.h"
@@ -43,7 +43,7 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_Focus_Manager_Test_001();
+    void UIKitFocusManagerTest001();
 
 private:
     UIView* CreateTestUILabel(UIViewGroup* parent, int16_t x, int16_t y,

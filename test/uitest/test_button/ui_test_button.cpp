@@ -164,13 +164,13 @@ private:
 
 const UIView* UITestBUTTON::GetTestView()
 {
-    UIKit_Check_Box_Test_001();
-    UIKit_Radio_Button_Test_001();
-    UIKit_Toggle_Button_Test_001();
-    UIKit_Check_Box_Test_002();
-    UIKit_Radio_Button_Test_002();
-    UIKit_Toggle_Button_Test_002();
-    UIKit_Button_Test_001();
+    UIKitCheckBoxTest001();
+    UIKitRadioButtonTest001();
+    UIKitToggleButtonTest001();
+    UIKitCheckBoxTest002();
+    UIKitRadioButtonTest002();
+    UIKitToggleButtonTest002();
+    UIKitButtonTest001();
     return container_;
 }
 
@@ -214,7 +214,7 @@ UIViewGroup* UITestBUTTON::CreateButtonGroup(int16_t posX,
     return group;
 }
 
-void UITestBUTTON::UIKit_Check_Box_Test_001()
+void UITestBUTTON::UIKitCheckBoxTest001()
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -235,7 +235,7 @@ void UITestBUTTON::UIKit_Check_Box_Test_001()
     }
 }
 
-void UITestBUTTON::UIKit_Radio_Button_Test_001()
+void UITestBUTTON::UIKitRadioButtonTest001()
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -260,7 +260,7 @@ void UITestBUTTON::UIKit_Radio_Button_Test_001()
     }
 }
 
-void UITestBUTTON::UIKit_Toggle_Button_Test_001()
+void UITestBUTTON::UIKitToggleButtonTest001()
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -284,7 +284,7 @@ void UITestBUTTON::UIKit_Toggle_Button_Test_001()
         container_->Add(group2);
     }
 }
-void UITestBUTTON::UIKit_Check_Box_Test_002() const
+void UITestBUTTON::UIKitCheckBoxTest002() const
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -320,7 +320,7 @@ void UITestBUTTON::UIKit_Check_Box_Test_002() const
     }
 }
 
-void UITestBUTTON::UIKit_Radio_Button_Test_002() const
+void UITestBUTTON::UIKitRadioButtonTest002() const
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -356,7 +356,7 @@ void UITestBUTTON::UIKit_Radio_Button_Test_002() const
     }
 }
 
-void UITestBUTTON::UIKit_Toggle_Button_Test_002()
+void UITestBUTTON::UIKitToggleButtonTest002()
 {
     if (container_ != nullptr) {
         UILabel* label = new UILabel();
@@ -631,7 +631,7 @@ UILabelButton* GetTestUIButton(const char* buttonText, int16_t x, int16_t y, UIB
     return labelButton;
 }
 
-void UITestBUTTON::UIKit_Button_Test_002(UIScrollView* container, UIButton* button)
+void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
 {
     if ((container == nullptr) || (button == nullptr)) {
         return;
@@ -730,7 +730,7 @@ void UITestBUTTON::UIKit_Button_Test_002(UIScrollView* container, UIButton* butt
 #endif
 }
 
-void UITestBUTTON::UIKit_Button_Test_001()
+void UITestBUTTON::UIKitButtonTest001()
 {
     if (container_ != nullptr) {
         UILabel* label = GetTestUILabel("普通button功能效果");
@@ -798,7 +798,7 @@ void UITestBUTTON::UIKit_Button_Test_001()
         container_->Add(button6);
         container_->Add(button7);
 
-        UIKit_Button_Test_002(container_, button);
+        UIKitButtonTest002(container_, button);
     }
 }
 } // namespace OHOS

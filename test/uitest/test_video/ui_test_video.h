@@ -37,7 +37,7 @@ public:
     void InitTestButtons();
     void SetupTestButton(UILabelButton* button, const char* text);
     void DeleteTestButtons();
-    void UIKit_UIVideo_Test_SetVideo_001();
+    void UIKitUIVideoTestSetVideo001();
 
     class TestVideoListener : public UIVideo::VideoPlayerListener {
     public:

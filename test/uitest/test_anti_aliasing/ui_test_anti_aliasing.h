@@ -32,17 +32,17 @@ public:
     /**
      * @brief Test if rect anti-aliasing
      */
-    void UIKit_Anti_Aliasing_Test_Rect_001();
+    void UIKitAntiAliasingTestRect001();
 
     /**
      * @brief Test if circle anti-aliasing
      */
-    void UIKit_Anti_Aliasing_Test_Circle_001();
+    void UIKitAntiAliasingTestCircle001();
 
     /**
      * @brief Test if line anti-aliasing
      */
-    void UIKit_Anti_Aliasing_Test_Line_001();
+    void UIKitAntiAliasingTestLine001();
 
 private:
     UIViewGroup* CreateTestCaseGroup() const;

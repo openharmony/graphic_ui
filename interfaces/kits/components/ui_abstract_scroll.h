@@ -511,7 +511,7 @@ protected:
 
     void StartAnimator(int16_t dragDistanceX, int16_t dragDistanceY);
 
-    virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY){}
+    virtual void CalculateReboundDistance(int16_t& dragDistanceX, int16_t& dragDistanceY) {}
 
     int16_t GetMaxDelta() const;
 

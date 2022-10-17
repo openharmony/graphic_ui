@@ -49,10 +49,10 @@ public:
     bool OnClick(UIView& view, const ClickEvent& event) override;
     bool ClickExpand(UIView& view, UIChartDataSerial::PointStyle pointStyle);
 
-    void UIKit_ChartPolyline_Test_AddDataSerial_001();
-    void UIKit_ChartPolyline_Test_EnableReverse_002();
-    void UIKit_ChartPolyline_Test_SetGradientBottom_003();
-    void UIKit_ChartPolyline_Test_AddPoints_004();
+    void UIKitChartPolylineTestAddDataSerial001();
+    void UIKitChartPolylineTestEnableReverse002();
+    void UIKitChartPolylineTestSetGradientBottom003();
+    void UIKitChartPolylineTestAddPoints004();
 
 private:
     void SetLastPos(UIView* view);

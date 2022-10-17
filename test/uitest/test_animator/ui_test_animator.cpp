@@ -79,14 +79,14 @@ void UITestAnimator::TearDown()
 
 const UIView* UITestAnimator::GetTestView()
 {
-    UIKit_Animator_Test_BackEasing_001();
-    UIKit_Animator_Test_CircEasing_002();
-    UIKit_Animator_Test_CubicEasing_003();
-    UIKit_Animator_Test_SineEasing_004();
-    UIKit_Animator_Test_QuadEasing_005();
-    UIKit_Animator_Test_QuintEasing_006();
-    UIKit_Animator_Test_LinearEasing_007();
-    UIKit_Animator_Test_FPS_008();
+    UIKitAnimatorTestBackEasing001();
+    UIKitAnimatorTestCircEasing002();
+    UIKitAnimatorTestCubicEasing003();
+    UIKitAnimatorTestSineEasing004();
+    UIKitAnimatorTestQuadEasing005();
+    UIKitAnimatorTestQuintEasing006();
+    UIKitAnimatorTestLinearEasing007();
+    UIKitAnimatorTestFPS008();
     return container_;
 }
 
@@ -116,7 +116,7 @@ void UITestAnimator::SetUpButton(UILabelButton* btn, const char* title, int16_t 
     scroll_->Invalidate();
 }
 
-void UITestAnimator::UIKit_Animator_Test_BackEasing_001()
+void UITestAnimator::UIKitAnimatorTestBackEasing001()
 {
     backOvershootBtn_ = new UILabelButton();
     backEaseInBtn_ = new UILabelButton();
@@ -136,7 +136,7 @@ void UITestAnimator::UIKit_Animator_Test_BackEasing_001()
     SetUpButton(backEaseInOutBtn_, "BackEaseInOut", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_CircEasing_002()
+void UITestAnimator::UIKitAnimatorTestCircEasing002()
 {
     circEaseInBtn_ = new UILabelButton();
     circEaseOutBtn_ = new UILabelButton();
@@ -155,7 +155,7 @@ void UITestAnimator::UIKit_Animator_Test_CircEasing_002()
     SetUpButton(circEaseInOutBtn_, "CircEaseInOut", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_CubicEasing_003()
+void UITestAnimator::UIKitAnimatorTestCubicEasing003()
 {
     cubicEaseInBtn_ = new UILabelButton();
     cubicEaseOutBtn_ = new UILabelButton();
@@ -172,7 +172,7 @@ void UITestAnimator::UIKit_Animator_Test_CubicEasing_003()
     SetUpButton(cubicEaseInOutBtn_, "CubicEaseInOut", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_SineEasing_004()
+void UITestAnimator::UIKitAnimatorTestSineEasing004()
 {
     sineEaseInBtn_ = new UILabelButton();
     sineEaseOutBtn_ = new UILabelButton();
@@ -191,7 +191,7 @@ void UITestAnimator::UIKit_Animator_Test_SineEasing_004()
     SetUpButton(sineEaseInOutBtn_, "SineEaseInOut", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_QuadEasing_005()
+void UITestAnimator::UIKitAnimatorTestQuadEasing005()
 {
     quadEaseInBtn_ = new UILabelButton();
     quadEaseOutBtn_ = new UILabelButton();
@@ -208,7 +208,7 @@ void UITestAnimator::UIKit_Animator_Test_QuadEasing_005()
     SetUpButton(quadEaseInOutBtn_, "QuadEaseInOut", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_QuintEasing_006()
+void UITestAnimator::UIKitAnimatorTestQuintEasing006()
 {
     quintEaseInBtn_ = new UILabelButton();
     quintEaseOutBtn_ = new UILabelButton();
@@ -227,7 +227,7 @@ void UITestAnimator::UIKit_Animator_Test_QuintEasing_006()
     SetUpButton(quintEaseInOutBtn_, "QuintEaseInOut", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_LinearEasing_007()
+void UITestAnimator::UIKitAnimatorTestLinearEasing007()
 {
     linearEaseNoneBtn_ = new UILabelButton();
     positionX_ = TEXT_DISTANCE_TO_LEFT_SIDE;
@@ -237,7 +237,7 @@ void UITestAnimator::UIKit_Animator_Test_LinearEasing_007()
     SetUpButton(linearEaseNoneBtn_, "LinearEaseNone", positionX_, positionY_);
 }
 
-void UITestAnimator::UIKit_Animator_Test_FPS_008()
+void UITestAnimator::UIKitAnimatorTestFPS008()
 {
     fpsLabel_ = new UILabel();
     // 90:x-coordinate, 0:y-coordinate, 90:new width, 20:new height

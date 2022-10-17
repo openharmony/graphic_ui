@@ -29,15 +29,15 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_UIDigitalClock_Test_Display_001();
-    void UIKit_UIDigitalClock_Test_Display_002();
-    void UIKit_UIDigitalClock_Test_SetColor();
-    void UIKit_UIDigitalClock_Test_DisplayMode_001();
-    void UIKit_UIDigitalClock_Test_DisplayMode_002();
-    void UIKit_UIDigitalClock_Test_DisplayMode_003();
-    void UIKit_UIDigitalClock_Test_DisplayMode_004();
-    void UIKit_UIDigitalClock_Test_DisplayLeadingZero();
-    void UIKit_UIDigitalClock_Test_SetOpacity();
+    void UIKitUIDigitalClockTestDisplay001();
+    void UIKitUIDigitalClockTestDisplay002();
+    void UIKitUIDigitalClockTestSetColor();
+    void UIKitUIDigitalClockTestDisplayMode001();
+    void UIKitUIDigitalClockTestDisplayMode002();
+    void UIKitUIDigitalClockTestDisplayMode003();
+    void UIKitUIDigitalClockTestDisplayMode004();
+    void UIKitUIDigitalClockTestDisplayLeadingZero();
+    void UIKitUIDigitalClockTestSetOpacity();
 
 private:
     UIScrollView* container_ = nullptr;

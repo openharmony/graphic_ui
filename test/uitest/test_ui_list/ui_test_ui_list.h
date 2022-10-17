@@ -38,9 +38,9 @@ public:
     void OnScrollTop(int16_t index, UIView* view) override;
     void OnScrollBottom(int16_t index, UIView* view) override;
     void OnItemSelected(int16_t index, UIView* view) override;
-    void UIKit_List_Init_Test_Full_Screen_001();
-    void UIKit_List_Init_Test_halh_Screen_001();
-    void UIKit_List_Scroll_Test_Blank_Set_001();
+    void UIKitListInitTestFullScreen001();
+    void UIKitListInitTesthalhScreen001();
+    void UIKitListScrollTestBlankSet001();
 
 private:
     static constexpr int16_t ALINE_TIME_CHANGE_VALUE = 100;

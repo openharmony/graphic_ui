@@ -191,71 +191,71 @@ public:
     /**
      * @brief Test if dispatch press\release\longpress\cancel event act normal when target is touchable
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Simple_Event_001();
+    void UIKitPointerInputTestDispatchSimpleEvent001();
     /**
      * @brief Test if dispatch press\release\longpress\cancel\drag event act normal when target is untouchable
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Simple_Event_002();
+    void UIKitPointerInputTestDispatchSimpleEvent002();
     /**
      * @brief Test if dispatch drag event act normal when target is touchable and draggable and drag parent instead.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Drag_Event_001();
+    void UIKitPointerInputTestDispatchDragEvent001();
     /**
      * @brief Test if dispatch drag event act normal when target is touchable and draggable and not drag parent instead.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Drag_Event_002();
+    void UIKitPointerInputTestDispatchDragEvent002();
     /**
      * @brief Test if dispatch drag event act normal when target is untouchable but draggable.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Drag_Event_003();
+    void UIKitPointerInputTestDispatchDragEvent003();
     /**
      * @brief Test if dispatch drag event act normal when target is untouchable but draggable.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Key_Event_001();
+    void UIKitPointerInputTestDispatchKeyEvent001();
     /**
      * @brief Test if dispatch drag event act normal when target is untouchable but draggable.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_InVisible_Event_001();
+    void UIKitPointerInputTestDispatchInVisibleEvent001();
     /**
      * @brief Test click, release or longClick event bubble act normal when both of parent and child is triggered.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_001();
+    void UIKitPointerInputTestDispatchBubble001();
     /**
      * @brief Test click, release or longClick event bubble act normal when child is triggered but and parent not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_002();
+    void UIKitPointerInputTestDispatchBubble002();
     /**
      * @brief Test click, release or longClick event bubble act normal when child is triggered but and parent not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_003();
+    void UIKitPointerInputTestDispatchBubble003();
     /**
      * @brief Test click, release or longClick event bubble act normal when parent is triggered but and child not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_004();
+    void UIKitPointerInputTestDispatchBubble004();
     /**
      * @brief Test drag event bubble act normal when both of parent and child is triggered.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_005();
+    void UIKitPointerInputTestDispatchBubble005();
     /**
      * @brief Test drag event bubble act normal when child is triggered but and parent not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_006();
+    void UIKitPointerInputTestDispatchBubble006();
     /**
      * @brief Test drag event bubble act normal when child is triggered but and parent not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_007();
+    void UIKitPointerInputTestDispatchBubble007();
     /**
      * @brief Test drag event bubble act normal when both of parent and child is not triggered.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_008();
+    void UIKitPointerInputTestDispatchBubble008();
     /**
      * @brief Test drag event bubble act normal when parent is triggered but and child not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_009();
+    void UIKitPointerInputTestDispatchBubble009();
     /**
      * @brief Test drag event bubble act normal when parent is triggered but and child not.
      */
-    void UIKit_Pointer_Input_Test_Dispatch_Bubble_010();
+    void UIKitPointerInputTestDispatchBubble010();
 
 private:
     UIScrollView* container_ = nullptr;

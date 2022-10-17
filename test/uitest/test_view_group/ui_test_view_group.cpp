@@ -34,9 +34,9 @@ void UITestViewGroup::TearDown()
 
 const UIView* UITestViewGroup::GetTestView()
 {
-    UIKit_ViewGroup_Test_AddRemove_001();
-    UIKit_ViewGroup_Test_Add_Error_001();
-    UIKit_ViewGroup_Test_Insert_Error_001();
+    UIKitViewGroupTestAddRemove001();
+    UIKitViewGroupTestAddError001();
+    UIKitViewGroupTestInsertError001();
     return container_;
 }
 
@@ -71,7 +71,7 @@ UILabelButton* UITestViewGroup::CreateButton(const char* text, int16_t width, in
     return button;
 }
 
-void UITestViewGroup::UIKit_ViewGroup_Test_AddRemove_001()
+void UITestViewGroup::UIKitViewGroupTestAddRemove001()
 {
     if (container_ == nullptr) {
         return;
@@ -110,7 +110,7 @@ void UITestViewGroup::UIKit_ViewGroup_Test_AddRemove_001()
     container_->Add(group);
 }
 
-void UITestViewGroup::UIKit_ViewGroup_Test_Add_Error_001()
+void UITestViewGroup::UIKitViewGroupTestAddError001()
 {
     if (container_ == nullptr) {
         return;
@@ -150,7 +150,7 @@ void UITestViewGroup::UIKit_ViewGroup_Test_Add_Error_001()
     group->LayoutBottomToSibling("UIKit_ViewGroup_Test_AddRemove_001", 10); // 10: offset
 }
 
-void UITestViewGroup::UIKit_ViewGroup_Test_Insert_Error_001()
+void UITestViewGroup::UIKitViewGroupTestInsertError001()
 {
     if (container_ == nullptr) {
         return;

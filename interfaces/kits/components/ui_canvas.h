@@ -72,7 +72,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UICanvas() : startPoint_({0, 0}), vertices_(nullptr){}
+    UICanvas() : startPoint_({0, 0}), vertices_(nullptr) {}
 
     /**
      * @brief A destructor used to delete the <b>UICanvas</b> instance.
@@ -262,7 +262,7 @@ public:
      */
     void DrawArc(const Point& center, uint16_t radius, int16_t startAngle, int16_t endAngle, const Paint& paint);
 
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
     /**
      * @brief Draws an image.
      *
@@ -398,7 +398,7 @@ public:
      */
     void FillPath(const Paint& paint);
 
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     /*  Draw text on canvas */
     void StrokeText(const char* text, const Point& point, const FontStyle& fontStyle, const Paint& paint);
 #endif
@@ -593,7 +593,7 @@ protected:
                           const Rect& rect,
                           const Rect& invalidatedArea,
                           const Style& style);
-#if GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_IMAGE_FLAG) && GRAPHIC_ENABLE_DRAW_IMAGE_FLAG
     static void DoDrawImage(BufferInfo& gfxDstBuffer,
                             void* param,
                             const Paint& paint,
@@ -627,10 +627,10 @@ protected:
                            const Rect& invalidatedArea,
                            const Style& style);
 
-   static void  BlitMapBuffer(BufferInfo &gfxDstBuffer, BufferInfo& gfxMapBuffer,
+    static void  BlitMapBuffer(BufferInfo &gfxDstBuffer, BufferInfo& gfxMapBuffer,
                               Rect& textRect, TransformMap& transMap, const Rect& invalidatedArea);
 
-#if GRAPHIC_ENABLE_DRAW_TEXT_FLAG
+#if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     static void DoDrawText(BufferInfo& gfxDstBuffer, void* param, const Paint& paint, const Rect& rect,
                            const Rect& invalidatedArea, const Style& style);
 #endif
@@ -641,10 +641,10 @@ protected:
     static void LineStyleCalc(DepictStroke<LineStyle>& strokeLineStyle, const Paint& paint)
     {
         strokeLineStyle.SetWidth(paint.GetStrokeWidth()); // Line style related
-#if GRAPHIC_ENABLE_LINECAP_FLAG
+#if defined(GRAPHIC_ENABLE_LINECAP_FLAG) && GRAPHIC_ENABLE_LINECAP_FLAG
         strokeLineStyle.SetLineCap(paint.GetLineCap());
 #endif
-#if GRAPHIC_ENABLE_LINEJOIN_FLAG
+#if defined(GRAPHIC_ENABLE_LINEJOIN_FLAG) && GRAPHIC_ENABLE_LINEJOIN_FLAG
         strokeLineStyle.SetLineJoin(paint.GetLineJoin());
         if (paint.GetMiterLimit() > 0) {
             strokeLineStyle.SetMiterLimit(paint.GetMiterLimit());

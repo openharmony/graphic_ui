@@ -80,12 +80,12 @@ void UITestAdvancedLayout::TearDown()
 
 const UIView* UITestAdvancedLayout::GetTestView()
 {
-    UIKit_Layout_Test_FlexLayout_001();
-    UIKit_Layout_Test_GridLayout_001();
+    UIKitLayoutTestFlexLayout001();
+    UIKitLayoutTestGridLayout001();
     return container_;
 }
 
-void UITestAdvancedLayout::UIKit_Layout_Test_FlexLayout_001()
+void UITestAdvancedLayout::UIKitLayoutTestFlexLayout001()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();
@@ -144,7 +144,7 @@ void UITestAdvancedLayout::UIKit_Layout_Test_FlexLayout_001()
     }
 }
 
-void UITestAdvancedLayout::UIKit_Layout_Test_GridLayout_001()
+void UITestAdvancedLayout::UIKitLayoutTestGridLayout001()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();
