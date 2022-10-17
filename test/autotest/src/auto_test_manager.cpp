@@ -50,7 +50,7 @@ void AutoTestManager::SetUpTestCase()
 #endif
     EventInjector::GetInstance()->RegisterEventInjector(EventDataType::POINT_TYPE);
     EventInjector::GetInstance()->RegisterEventInjector(EventDataType::KEY_TYPE);
-#if ENABLE_WINDOW
+#if defined(ENABLE_WINDOW) && ENABLE_WINDOW
     Window* window = RootView::GetInstance()->GetBoundWindow();
     if (window != nullptr) {
         EventInjector::GetInstance()->SetWindowId(window->GetWindowId());

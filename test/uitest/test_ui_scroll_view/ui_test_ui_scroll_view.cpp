@@ -89,18 +89,18 @@ void UITestUIScrollView::TearDown()
 
 const UIView* UITestUIScrollView::GetTestView()
 {
-    UIKit_UIScrollView_Test_bar_001();
-    UIKit_UIScrollView_Test_bar_002();
-    UIKit_UIScrollView_Test_bar_003();
-    UIKit_UIScrollView_Test_bar_004();
-    UIKit_UIScrollView_Test_Scrollable_Set_001();
-    UIKit_UIScrollView_Test_Scrollable_Set_002();
-    UIKit_UIScrollView_Test_Scroll_Blank_Set_001();
-    UIKit_UIScrollView_Test_Scroll_listener_001();
+    UIKitUIScrollViewTestbar001();
+    UIKitUIScrollViewTestbar002();
+    UIKitUIScrollViewTestbar003();
+    UIKitUIScrollViewTestbar004();
+    UIKitUIScrollViewTestScrollableSet001();
+    UIKitUIScrollViewTestScrollableSet002();
+    UIKitUIScrollViewTestScrollBlankSet001();
+    UIKitUIScrollViewTestScrolllistener001();
     return container_;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_bar_001()
+void UITestUIScrollView::UIKitUIScrollViewTestbar001()
 {
     if (container_ == nullptr) {
         return;
@@ -128,7 +128,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_001()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_bar_002()
+void UITestUIScrollView::UIKitUIScrollViewTestbar002()
 {
     if (container_ == nullptr) {
         return;
@@ -153,7 +153,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_002()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_bar_003()
+void UITestUIScrollView::UIKitUIScrollViewTestbar003()
 {
     if (container_ == nullptr) {
         return;
@@ -183,7 +183,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_003()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_bar_004()
+void UITestUIScrollView::UIKitUIScrollViewTestbar004()
 {
     if (container_ == nullptr) {
         return;
@@ -208,7 +208,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_bar_004()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_Scrollable_Set_001()
+void UITestUIScrollView::UIKitUIScrollViewTestScrollableSet001()
 {
     if (container_ == nullptr) {
         return;
@@ -238,7 +238,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scrollable_Set_001()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_Scrollable_Set_002()
+void UITestUIScrollView::UIKitUIScrollViewTestScrollableSet002()
 {
     if (container_ == nullptr) {
         return;
@@ -266,7 +266,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scrollable_Set_002()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_Scroll_Blank_Set_001()
+void UITestUIScrollView::UIKitUIScrollViewTestScrollBlankSet001()
 {
     if (container_ == nullptr) {
         return;
@@ -294,7 +294,7 @@ void UITestUIScrollView::UIKit_UIScrollView_Test_Scroll_Blank_Set_001()
     positionY_ += g_scrollH;
 }
 
-void UITestUIScrollView::UIKit_UIScrollView_Test_Scroll_listener_001()
+void UITestUIScrollView::UIKitUIScrollViewTestScrolllistener001()
 {
     if (container_ == nullptr) {
         return;

@@ -32,7 +32,7 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_UIEditText_Test_Display_001();
+    void UIKitUIEditTextTestDisplay001();
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnChange(UIView& view, const char* value) override;

@@ -29,14 +29,14 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
 
-    void UIKit_UIScrollView_Test_bar_001();
-    void UIKit_UIScrollView_Test_bar_002();
-    void UIKit_UIScrollView_Test_bar_003();
-    void UIKit_UIScrollView_Test_bar_004();
-    void UIKit_UIScrollView_Test_Scrollable_Set_001();
-    void UIKit_UIScrollView_Test_Scrollable_Set_002();
-    void UIKit_UIScrollView_Test_Scroll_Blank_Set_001();
-    void UIKit_UIScrollView_Test_Scroll_listener_001();
+    void UIKitUIScrollViewTestbar001();
+    void UIKitUIScrollViewTestbar002();
+    void UIKitUIScrollViewTestbar003();
+    void UIKitUIScrollViewTestbar004();
+    void UIKitUIScrollViewTestScrollableSet001();
+    void UIKitUIScrollViewTestScrollableSet002();
+    void UIKitUIScrollViewTestScrollBlankSet001();
+    void UIKitUIScrollViewTestScrolllistener001();
 
 private:
     void SetLastPos(UIView* view);

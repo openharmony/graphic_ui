@@ -35,11 +35,11 @@ public:
     /**
      * @brief Test flex layout function.
      */
-    void UIKit_Layout_Test_FlexLayout_001();
+    void UIKitLayoutTestFlexLayout001();
     /**
      * @brief Test grid layout function.
      */
-    void UIKit_Layout_Test_GridLayout_001();
+    void UIKitLayoutTestGridLayout001();
 
     bool OnClick(UIView& view, const ClickEvent& event) override;
     void OnClickButton(const UIView& view);

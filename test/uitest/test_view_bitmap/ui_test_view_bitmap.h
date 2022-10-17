@@ -31,8 +31,8 @@ public:
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;
-    void UIKit_Bitmap_Test_GetViewBitmap_001();
-    void UIKit_Bitmap_Test_GetScreenBitmap_001();
+    void UIKitBitmapTestGetViewBitmap001();
+    void UIKitBitmapTestGetScreenBitmap001();
 private:
     UIScrollView* container_ = nullptr;
     UIImageView* viewBitmap_ = nullptr;

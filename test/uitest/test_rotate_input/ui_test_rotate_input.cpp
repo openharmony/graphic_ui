@@ -184,16 +184,16 @@ void UITestRotateInput::TearDown()
 
 const UIView* UITestRotateInput::GetTestView()
 {
-    UIKit_Rotate_Event_List_001();
-    UIKit_Rotate_Event_Scroll_View_002();
-    UIKit_Rotate_Event_Swipe_View_003();
-    UIKit_Rotate_Event_Slider_004();
-    UIKit_Rotate_Event_Time_Picker_005();
-    UIKit_Rotate_Event_Picker_006();
+    UIKitRotateEventList001();
+    UIKitRotateEventScrollView002();
+    UIKitRotateEventSwipeView003();
+    UIKitRotateEventSlider004();
+    UIKitRotateEventTimePicker005();
+    UIKitRotateEventPicker006();
     return container_;
 }
 
-void UITestRotateInput::UIKit_Rotate_Event_List_001()
+void UITestRotateInput::UIKitRotateEventList001()
 {
     if (container_ == nullptr) {
         return;
@@ -222,7 +222,7 @@ void UITestRotateInput::UIKit_Rotate_Event_List_001()
     SetLastPos(list_);
 }
 
-void UITestRotateInput::UIKit_Rotate_Event_Scroll_View_002()
+void UITestRotateInput::UIKitRotateEventScrollView002()
 {
     if (container_ == nullptr) {
         return;
@@ -252,7 +252,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Scroll_View_002()
     SetLastPos(scroll_);
 }
 
-void UITestRotateInput::UIKit_Rotate_Event_Swipe_View_003()
+void UITestRotateInput::UIKitRotateEventSwipeView003()
 {
     if (container_ == nullptr) {
         return;
@@ -302,7 +302,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Swipe_View_003()
     SetLastPos(swipe_);
 }
 
-void UITestRotateInput::UIKit_Rotate_Event_Slider_004()
+void UITestRotateInput::UIKitRotateEventSlider004()
 {
     if (container_ == nullptr) {
         return;
@@ -323,7 +323,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Slider_004()
     SetLastPos(slider_);
 }
 
-void UITestRotateInput::UIKit_Rotate_Event_Time_Picker_005()
+void UITestRotateInput::UIKitRotateEventTimePicker005()
 {
     if (container_ == nullptr) {
         return;
@@ -364,7 +364,7 @@ void UITestRotateInput::UIKit_Rotate_Event_Time_Picker_005()
     SetLastPos(timePicker_);
 }
 
-void UITestRotateInput::UIKit_Rotate_Event_Picker_006()
+void UITestRotateInput::UIKitRotateEventPicker006()
 {
     if (container_ == nullptr) {
         return;

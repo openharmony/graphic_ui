@@ -64,13 +64,13 @@ void UITestLabel::TearDown()
 
 const UIView* UITestLabel::GetTestView()
 {
-    UIKit_UILabel_Test_Display_001();
-    UIKit_UILabel_Test_Display_002();
-    UIKit_UILabel_Test_Display_003();
+    UIKitUILabelTestDisplay001();
+    UIKitUILabeTestDisplay002();
+    UIKitUILabeTestDisplay003();
     return container_;
 }
 
-void UITestLabel::UIKit_UILabel_Test_Display_001()
+void UITestLabel::UIKitUILabelTestDisplay001()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();
@@ -150,7 +150,7 @@ void UITestLabel::CreateLabels(UIViewGroup* uiViewGroup)
     positionX_ += 312;                                              // 312: increase y-coordinate
 }
 
-void UITestLabel::UIKit_UILabel_Test_Display_002()
+void UITestLabel::UIKitUILabeTestDisplay002()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();
@@ -184,7 +184,7 @@ void UITestLabel::UIKit_UILabel_Test_Display_002()
     }
 }
 
-void UITestLabel::UIKit_UILabel_Test_Display_003()
+void UITestLabel::UIKitUILabeTestDisplay003()
 {
     if (container_ != nullptr) {
         UIViewGroup* uiViewGroup = new UIViewGroup();

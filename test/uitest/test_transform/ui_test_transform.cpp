@@ -128,9 +128,9 @@ void UITestTransform::TearDown()
 
 const UIView* UITestTransform::GetTestView()
 {
-    UIKit_Transform_Test_Rotate_001();
-    UIKit_Transform_Test_Scale_002();
-    UIKit_Transform_Test_Translate_003();
+    UIKitTransformTestRotate001();
+    UIKitTransformTestScale002();
+    UIKitTransformTestTranslate003();
 
     layout_->LayoutChildren();
     return container_;
@@ -155,19 +155,19 @@ void UITestTransform::SetUpButton(UILabelButton* btn, const char* title, const c
     btn->SetViewId(id);
 }
 
-void UITestTransform::UIKit_Transform_Test_Rotate_001()
+void UITestTransform::UIKitTransformTestRotate001()
 {
     rotateBtn_ = new UILabelButton();
     SetUpButton(rotateBtn_, "旋转", UI_TEST_ROTATE);
 }
 
-void UITestTransform::UIKit_Transform_Test_Scale_002()
+void UITestTransform::UIKitTransformTestScale002()
 {
     scaleBtn_ = new UILabelButton();
     SetUpButton(scaleBtn_, "缩放", UI_TEST_ZOOM);
 }
 
-void UITestTransform::UIKit_Transform_Test_Translate_003()
+void UITestTransform::UIKitTransformTestTranslate003()
 {
     translateBtn_ = new UILabelButton();
     SetUpButton(translateBtn_, "平移", UI_TEST_TRANSLATION);

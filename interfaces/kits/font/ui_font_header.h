@@ -290,7 +290,7 @@ struct GlyphNode {
     uint16_t kernSize; // GLYPH_KERN_SIZE_OFFSET
     uint16_t fontId;    // GLYPH_FONT_ID
     uint16_t dataFlag;  // GLYPH_DATA_HEAD_FLAG
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     TextStyle textStyle; // GLYPH_TEXT_STYLE
 #endif
 };

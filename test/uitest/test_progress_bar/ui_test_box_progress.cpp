@@ -86,18 +86,18 @@ void UITestBoxProgress::TearDown()
 
 const UIView* UITestBoxProgress::GetTestView()
 {
-    UIKit_BoxProgress_Test_UIBoxProgress_001();
-    UIKit_BoxProgress_Test_SetRange_002();
-    UIKit_BoxProgress_Test_SetValue_003();
-    UIKit_BoxProgress_Test_SetImage_004();
-    UIKit_BoxProgress_Test_SetStyle_005();
-    UIKit_BoxProgress_Test_GetStyle_006();
-    UIKit_BoxProgress_Test_SetCapType_007();
-    UIKit_BoxProgress_Test_SetDirection_008();
-    UIKit_BoxProgress_Test_EnableBackground_009();
-    UIKit_BoxProgress_Test_SetStep_010();
-    UIKit_BoxProgress_Test_SetValidSize_011();
-    UIKit_BoxProgress_Test_SetBorderAndPadding_012();
+    UIKitBoxProgressTestUIBoxProgress001();
+    UIKitBoxProgressTestSetRange002();
+    UIKitBoxProgressTestSetValue003();
+    UIKitBoxProgressTestSetImage004();
+    UIKitBoxProgressTestSetStyle005();
+    UIKitBoxProgressTestGetStyle006();
+    UIKitBoxProgressTestSetCapType007();
+    UIKitBoxProgressTestSetDirection008();
+    UIKitBoxProgressTestEnableBackground009();
+    UIKitBoxProgressTestSetStep010();
+    UIKitBoxProgressTestSetValidSize011();
+    UIKitBoxProgressTestSetBorderAndPadding012();
 
     return container_;
 }
@@ -129,7 +129,7 @@ void UITestBoxProgress::SetUpButton(UILabelButton* btn, const char* title, int16
     scroll_->Invalidate();
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_UIBoxProgress_001()
+void UITestBoxProgress::UIKitBoxProgressTestUIBoxProgress001()
 {
     resetBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -139,7 +139,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_UIBoxProgress_001()
     SetUpButton(resetBtn_, "重置", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetRange_002()
+void UITestBoxProgress::UIKitBoxProgressTestSetRange002()
 {
     incMinProgressBtn_ = new UILabelButton();
     decMinProgressBtn_ = new UILabelButton();
@@ -159,7 +159,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetRange_002()
     SetUpButton(decMaxProgressBtn_, "上限-", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetValue_003()
+void UITestBoxProgress::UIKitBoxProgressTestSetValue003()
 {
     incProgressBtn_ = new UILabelButton();
     decProgressBtn_ = new UILabelButton();
@@ -172,7 +172,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetValue_003()
     SetUpButton(decProgressBtn_, "进度-", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetImage_004()
+void UITestBoxProgress::UIKitBoxProgressTestSetImage004()
 {
     imageBtn_ = new UILabelButton();
     noImageBtn_ = new UILabelButton();
@@ -185,7 +185,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetImage_004()
     SetUpButton(noImageBtn_, "取消图片", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetStyle_005()
+void UITestBoxProgress::UIKitBoxProgressTestSetStyle005()
 {
     setStyleBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -195,7 +195,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetStyle_005()
     SetUpButton(setStyleBtn_, "设置样式", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_GetStyle_006()
+void UITestBoxProgress::UIKitBoxProgressTestGetStyle006()
 {
     getStyleBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE2;
@@ -205,7 +205,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_GetStyle_006()
     SetUpButton(getStyleBtn_, "设置样式", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetCapType_007()
+void UITestBoxProgress::UIKitBoxProgressTestSetCapType007()
 {
     roundCapBtn_ = new UILabelButton();
     noneCapBtn_ = new UILabelButton();
@@ -218,7 +218,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetCapType_007()
     SetUpButton(noneCapBtn_, "方形端点", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetDirection_008()
+void UITestBoxProgress::UIKitBoxProgressTestSetDirection008()
 {
     dirL2RBtn_ = new UILabelButton();
     dirR2LBtn_ = new UILabelButton();
@@ -238,7 +238,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetDirection_008()
     SetUpButton(dirB2TBtn_, "从下到上", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_EnableBackground_009()
+void UITestBoxProgress::UIKitBoxProgressTestEnableBackground009()
 {
     enableBgBtn_ = new UILabelButton();
     disableBgBtn_ = new UILabelButton();
@@ -251,7 +251,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_EnableBackground_009()
     SetUpButton(disableBgBtn_, "隐藏背景", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetStep_010()
+void UITestBoxProgress::UIKitBoxProgressTestSetStep010()
 {
     stepBtn_ = new UILabelButton();
     positionX_ = DELTA_X_COORDINATE_2;
@@ -261,7 +261,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetStep_010()
     SetUpButton(stepBtn_, "步长+", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetValidSize_011()
+void UITestBoxProgress::UIKitBoxProgressTestSetValidSize011()
 {
     incWidthBtn_ = new UILabelButton();
     incHeightBtn_ = new UILabelButton();
@@ -282,7 +282,7 @@ void UITestBoxProgress::UIKit_BoxProgress_Test_SetValidSize_011()
     SetUpButton(decWidthBtn_, "box宽度-", positionX_, positionY_);
 }
 
-void UITestBoxProgress::UIKit_BoxProgress_Test_SetBorderAndPadding_012()
+void UITestBoxProgress::UIKitBoxProgressTestSetBorderAndPadding012()
 {
     borderIncBtn_ = new UILabelButton();
     borderDecBtn_ = new UILabelButton();

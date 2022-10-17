@@ -31,51 +31,51 @@ public:
     void SetUp() override;
     void TearDown() override;
     const UIView* GetTestView() override;
-    void Font_FontEngine_Vector_Test_CH_Lang_001();
-    void Font_FontEngine_Vector_Test_CH_Lang_002();
-    void Font_FontEngine_Vector_Test_JA_Lang_001();
-    void Font_FontEngine_Vector_Test_JA_Lang_002();
-    void Font_FontEngine_Vector_Test_KR_Lang_001();
-    void Font_FontEngine_Vector_Test_VI_Lang_001();
+    void FontFontEngineVectorTestCHLang001();
+    void FontFontEngineVectorTestCHLang002();
+    void FontFontEngineVectorTestJALang001();
+    void FontFontEngineVectorTestJALang002();
+    void FontFontEngineVectorTestKRLang001();
+    void FontFontEngineVectorTestVILang001();
 #if ENABLE_MULTI_FONT
     /**
      * @brief Test JA language
      */
-    void Font_FontEngine_MultiLanguage_Test_JA_Lang_001();
+    void FontFontEngineMultiLanguageTestJALang001();
 
     /**
      * @brief Test UnRegister JA language
      */
-    void Font_FontEngine_MultiLanguage_Test_JA_Lang_002();
+    void FontFontEngineMultiLanguageTestJALang002();
 
     /**
      * @brief Test KR language
      */
-    void Font_FontEngine_MultiLanguage_Test_KR_Lang_001();
+    void FontFontEngineMultiLanguageTestKRLang001();
 
     /**
      * @brief Test VI language
      */
-    void Font_FontEngine_MultiLanguage_Test_VI_Lang_001();
+    void FontFontEngineMultiLanguageTestVILang001();
 
     /**
      * @brief Test CS language
      */
-    void Font_FontEngine_MultiLanguage_Test_CS_Lang_001();
+    void FontFontEngineMultiLanguageTestCSLang001();
 
     /**
      * @brief Test EL language
      */
-    void Font_FontEngine_MultiLanguage_Test_EL_Lang_001();
+    void FontFontEngineMultiLanguageTestELLang001();
 
     /**
      * @brief Test RO language
      */
-    void Font_FontEngine_MultiLanguage_Test_RO_Lang_001();
+    void FontFontEngineMultiLanguageTestROLang001();
 #endif
 
 #if ENABLE_VECTOR_FONT
-    void TestDrawText_ITALY_BOLD();
+    void TestDrawTextITALYBOLD();
 #endif
 private:
     UIScrollView* container_ = nullptr;

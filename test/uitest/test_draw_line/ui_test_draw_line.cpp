@@ -41,18 +41,18 @@ void UITestDrawLine::TearDown()
 
 const UIView* UITestDrawLine::GetTestView()
 {
-    UIKit_Draw_Line_Test_Line_001();
-    UIKit_Draw_Line_Test_Line_002();
-    UIKit_Draw_Line_Test_Line_003();
-    UIKit_Draw_Line_Test_Line_004();
-    UIKit_Draw_Line_Test_Line_005();
-    UIKit_Draw_Line_Test_Line_006();
-    UIKit_Draw_Line_Test_Line_007();
-    UIKit_Draw_Line_Test_Line_008();
-    UIKit_Draw_Line_Test_Line_009();
-    UIKit_Draw_Line_Test_Line_010();
-    UIKit_Draw_Line_Test_Line_011();
-    UIKit_Draw_Line_Test_Line_012();
+    UIKitDrawLineTestLine001();
+    UIKitDrawLineTestLine002();
+    UIKitDrawLineTestLine003();
+    UIKitDrawLineTestLine004();
+    UIKitDrawLineTestLine005();
+    UIKitDrawLineTestLine006();
+    UIKitDrawLineTestLine007();
+    UIKitDrawLineTestLine008();
+    UIKitDrawLineTestLine009();
+    UIKitDrawLineTestLine010();
+    UIKitDrawLineTestLine011();
+    UIKitDrawLineTestLine012();
     return container_;
 }
 
@@ -84,7 +84,7 @@ UICanvas* UITestDrawLine::CreateCanvas() const
     return canvas;
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_001()
+void UITestDrawLine::UIKitDrawLineTestLine001()
 {
     if (container_ == nullptr) {
         return;
@@ -106,7 +106,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_001()
     container_->Add(group);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_002()
+void UITestDrawLine::UIKitDrawLineTestLine002()
 {
     if (container_ == nullptr) {
         return;
@@ -129,7 +129,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_002()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_001", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_003()
+void UITestDrawLine::UIKitDrawLineTestLine003()
 {
     if (container_ == nullptr) {
         return;
@@ -154,7 +154,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_003()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_002", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_004()
+void UITestDrawLine::UIKitDrawLineTestLine004()
 {
     if (container_ == nullptr) {
         return;
@@ -179,7 +179,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_004()
     group->LayoutBottomToSibling("UIKit_Draw_Line_Test_Line_001", 10); // 10 : offset size
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_005()
+void UITestDrawLine::UIKitDrawLineTestLine005()
 {
     if (container_ == nullptr) {
         return;
@@ -205,7 +205,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_005()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_004", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_006()
+void UITestDrawLine::UIKitDrawLineTestLine006()
 {
     if (container_ == nullptr) {
         return;
@@ -231,7 +231,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_006()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_005", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_007()
+void UITestDrawLine::UIKitDrawLineTestLine007()
 {
     if (container_ == nullptr) {
         return;
@@ -255,7 +255,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_007()
     group->LayoutBottomToSibling("UIKit_Draw_Line_Test_Line_004", 10); // 10 : offset size
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_008()
+void UITestDrawLine::UIKitDrawLineTestLine008()
 {
     if (container_ == nullptr) {
         return;
@@ -288,7 +288,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_008()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_007", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_009()
+void UITestDrawLine::UIKitDrawLineTestLine009()
 {
     if (container_ == nullptr) {
         return;
@@ -312,7 +312,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_009()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_008", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_010()
+void UITestDrawLine::UIKitDrawLineTestLine010()
 {
     if (container_ == nullptr) {
         return;
@@ -336,7 +336,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_010()
     group->LayoutBottomToSibling("UIKit_Draw_Line_Test_Line_007", 10); // 10 : offset size
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_011()
+void UITestDrawLine::UIKitDrawLineTestLine011()
 {
     if (container_ == nullptr) {
         return;
@@ -366,7 +366,7 @@ void UITestDrawLine::UIKit_Draw_Line_Test_Line_011()
     group->LayoutRightToSibling("UIKit_Draw_Line_Test_Line_010", DELTA_X);
 }
 
-void UITestDrawLine::UIKit_Draw_Line_Test_Line_012()
+void UITestDrawLine::UIKitDrawLineTestLine012()
 {
     if (container_ == nullptr) {
         return;

@@ -89,15 +89,15 @@ void UITestTextureMapper::TearDown()
 
 const UIView* UITestTextureMapper::GetTestView()
 {
-    UIKit_TextureMapper_Test_SetRotateEnd_001();
-    UIKit_TextureMapper_Test_SetRotateStart_002();
-    UIKit_TextureMapper_Test_SetScaleEnd_003();
-    UIKit_TextureMapper_Test_SetScaleStart_004();
-    UIKit_TextureMapper_Test_SetPivot_005();
-    UIKit_TextureMapper_Test_Start_006();
-    UIKit_TextureMapper_Test_Reset_007();
-    UIKit_TextureMapper_Test_CancelAnimation_008();
-    UIKit_TextureMapper_Test_SetAnimatorStopListener_009();
+    UIKitTextureMapperTestSetRotateEnd001();
+    UIKitTextureMapperTestSetRotateStart002();
+    UIKitTextureMapperTestSetScaleEnd003();
+    UIKitTextureMapperTestSetScaleStart004();
+    UIKitTextureMapperTestSetPivot005();
+    UIKitTextureMapperTestStart006();
+    UIKitTextureMapperTestReset007();
+    UIKitTextureMapperTestCancelAnimation008();
+    UIKitTextureMapperTestSetAnimatorStopListener009();
 
     layout_->LayoutChildren();
     return container_;
@@ -121,7 +121,7 @@ void UITestTextureMapper::SetUpButton(UILabelButton* btn, const char* title)
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_SetRotateEnd_001()
+void UITestTextureMapper::UIKitTextureMapperTestSetRotateEnd001()
 {
     incRotateEndBtn_ = new UILabelButton();
     SetUpButton(incRotateEndBtn_, "旋转结束角度+");
@@ -130,13 +130,13 @@ void UITestTextureMapper::UIKit_TextureMapper_Test_SetRotateEnd_001()
     SetUpButton(decRotateEndBtn_, "旋转结束角度-");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_SetRotateStart_002()
+void UITestTextureMapper::UIKitTextureMapperTestSetRotateStart002()
 {
     startAngleBtn_ = new UILabelButton();
     SetUpButton(startAngleBtn_, "旋转起始角度+");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_SetScaleEnd_003()
+void UITestTextureMapper::UIKitTextureMapperTestSetScaleEnd003()
 {
     incScaleEndBtn_ = new UILabelButton();
     SetUpButton(incScaleEndBtn_, "缩放结束比例+");
@@ -145,13 +145,13 @@ void UITestTextureMapper::UIKit_TextureMapper_Test_SetScaleEnd_003()
     SetUpButton(decScaleEndBtn_, "缩放结束比例-");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_SetScaleStart_004()
+void UITestTextureMapper::UIKitTextureMapperTestSetScaleStart004()
 {
     startScaleBtn_ = new UILabelButton();
     SetUpButton(startScaleBtn_, "缩放起始比例+");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_SetPivot_005()
+void UITestTextureMapper::UIKitTextureMapperTestSetPivot005()
 {
     incPivotBtn_ = new UILabelButton();
     SetUpButton(incPivotBtn_, "中心+");
@@ -169,25 +169,25 @@ void UITestTextureMapper::UIKit_TextureMapper_Test_SetPivot_005()
     SetUpButton(easingBtn_, "动效");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_Start_006()
+void UITestTextureMapper::UIKitTextureMapperTestStart006()
 {
     startBtn_ = new UILabelButton();
     SetUpButton(startBtn_, "启动动画");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_Reset_007()
+void UITestTextureMapper::UIKitTextureMapperTestReset007()
 {
     resetImageBtn_ = new UILabelButton();
     SetUpButton(resetImageBtn_, "显示原始图片");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_CancelAnimation_008()
+void UITestTextureMapper::UIKitTextureMapperTestCancelAnimation008()
 {
     cancelBtn_ = new UILabelButton();
     SetUpButton(cancelBtn_, "取消动画 ");
 }
 
-void UITestTextureMapper::UIKit_TextureMapper_Test_SetAnimatorStopListener_009()
+void UITestTextureMapper::UIKitTextureMapperTestSetAnimatorStopListener009()
 {
     listenerBtn_ = new UILabelButton();
     SetUpButton(listenerBtn_, "动画结束监听");

@@ -485,7 +485,7 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16
     if (!freeTypeInited_ || (faceInfo.face == nullptr) || (bitmapCache_ == nullptr)) {
         return INVALID_RET_VALUE;
     }
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode, glyphNode.textStyle);
 #else
     uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode);
@@ -513,7 +513,7 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16
     glyphNode.cols = faceInfo.face->glyph->bitmap.width;
     glyphNode.rows = faceInfo.face->glyph->bitmap.rows;
     glyphNode.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     SetFace(faceInfo, unicode, glyphNode.textStyle);
 #else
     SetFace(faceInfo, unicode);
@@ -572,7 +572,7 @@ void UIFontVector::SetBold(uint16_t fontId)
 {
     int32_t error;
     FT_GlyphSlot slot = ftFaces_[fontId]->glyph;
-    //some reasonable strength, copied from freeType
+    // some reasonable strength, copied from freeType
     FT_Pos xBold =
         FT_MulFix(ftFaces_[fontId]->units_per_EM, ftFaces_[fontId]->size->metrics.y_scale) / 24;
     FT_Pos yBold = xBold;

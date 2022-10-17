@@ -1206,7 +1206,7 @@ void UITestCanvas::RM008UIKitCanvasTest002()
     Paint paint;
     paint.SetStyle(Paint::GRADIENT);
     // 线性渐变
-#if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
+#if defined(GRAPHIC_ENABLE_GRADIENT_FILL_FLAG) && GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     paint.createLinearGradient(LINEARGRADIENT50, LINEARGRADIENT50, LINEARGRADIENT150, LINEARGRADIENT150);
     paint.addColorStop(0, Color::Yellow());
     paint.addColorStop(COLOR_STOP3, Color::White());

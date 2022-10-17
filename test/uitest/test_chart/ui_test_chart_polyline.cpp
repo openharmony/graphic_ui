@@ -106,15 +106,15 @@ void UITestChartPolyline::TearDown()
 
 const UIView* UITestChartPolyline::GetTestView()
 {
-    UIKit_ChartPolyline_Test_AddDataSerial_001();
-    UIKit_ChartPolyline_Test_EnableReverse_002();
-    UIKit_ChartPolyline_Test_SetGradientBottom_003();
-    UIKit_ChartPolyline_Test_AddPoints_004();
+    UIKitChartPolylineTestAddDataSerial001();
+    UIKitChartPolylineTestEnableReverse002();
+    UIKitChartPolylineTestSetGradientBottom003();
+    UIKitChartPolylineTestAddPoints004();
 
     return container_;
 }
 
-void UITestChartPolyline::UIKit_ChartPolyline_Test_AddDataSerial_001()
+void UITestChartPolyline::UIKitChartPolylineTestAddDataSerial001()
 {
     UILabel* label = new UILabel();
     container_->Add(label);
@@ -168,7 +168,7 @@ void UITestChartPolyline::UIKit_ChartPolyline_Test_AddDataSerial_001()
     SetUpButton(headPointBtn_, "最新点 ", UI_TEST_POLYLINE_NEW_POINT);
 }
 
-void UITestChartPolyline::UIKit_ChartPolyline_Test_EnableReverse_002()
+void UITestChartPolyline::UIKitChartPolylineTestEnableReverse002()
 {
     reverseBtn_ = new UILabelButton();
     positionX_ = VIEW_DISTANCE_TO_LEFT_SIDE;
@@ -176,7 +176,7 @@ void UITestChartPolyline::UIKit_ChartPolyline_Test_EnableReverse_002()
     SetLastPos(reverseBtn_);
 }
 
-void UITestChartPolyline::UIKit_ChartPolyline_Test_SetGradientBottom_003()
+void UITestChartPolyline::UIKitChartPolylineTestSetGradientBottom003()
 {
     gradientBottomBtn_ = new UILabelButton();
     positionX_ = reverseBtn_->GetX() + reverseBtn_->GetWidth() + g_blank;
@@ -263,7 +263,7 @@ protected:
     UIChartDataSerial* serial_;
 };
 
-void UITestChartPolyline::UIKit_ChartPolyline_Test_AddPoints_004()
+void UITestChartPolyline::UIKitChartPolylineTestAddPoints004()
 {
     UIViewGroup* uiViewGroup = new UIViewGroup();
     // 2: x-coordinate, half of screen width; 2: half of screen width; 470: screen height

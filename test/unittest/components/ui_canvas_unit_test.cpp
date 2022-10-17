@@ -804,7 +804,7 @@ HWTEST_F(UICanvasTest, UICanvasMiterLimit_003, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_DASH_GENERATE_FLAG
+#if defined(GRAPHIC_ENABLE_DASH_GENERATE_FLAG) && GRAPHIC_ENABLE_DASH_GENERATE_FLAG
 /**
  * @tc.name: UICanvasSetLineDash_001
  * @tc.desc: Verify SetLineDash function, equal.
@@ -1886,7 +1886,7 @@ HWTEST_F(UICanvasTest, UICanvasShadowBlur_002, TestSize.Level0)
 }
 #endif
 
-#if GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#if defined(GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG) && GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
 HWTEST_F(UICanvasTest, UICanvasShadowOffsetX_001, TestSize.Level1)
 {
     if (paint_ == nullptr) {

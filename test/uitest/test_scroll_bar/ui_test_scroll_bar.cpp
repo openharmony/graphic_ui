@@ -108,12 +108,12 @@ void UITestScrollBar::TearDown()
 
 const UIView* UITestScrollBar::GetTestView()
 {
-    UIKit_ScrollBar_TEST_Scroll_view_001();
-    UIKit_ScrollBar_TEST_List_001();
+    UIKitScrollBarTESTScrollview001();
+    UIKitScrollBarTESTList001();
     return container_;
 }
 
-void UITestScrollBar::UIKit_ScrollBar_TEST_Scroll_view_001()
+void UITestScrollBar::UIKitScrollBarTESTScrollview001()
 {
     UILabelButton* label1 = new UILabelButton();
     scrollView_->Add(label1);
@@ -165,7 +165,7 @@ void UITestScrollBar::UIKit_ScrollBar_TEST_Scroll_view_001()
     foreImg1_->SetPosition(0, 0);
 }
 
-void UITestScrollBar::UIKit_ScrollBar_TEST_List_001()
+void UITestScrollBar::UIKitScrollBarTESTList001()
 {
     adapter_->SetLineBreakMode(UILabel::LINE_BREAK_CLIP);
     adapter_->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);

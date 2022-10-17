@@ -71,9 +71,9 @@ void UITestUIPicker::TearDown()
 
 const UIView* UITestUIPicker::GetTestView()
 {
-    UIKit_Picker_Test_Base_001();
-    UIKit_Picker_Test_Base_002();
-    UIKit_Picker_Test_Time_Picker_001();
+    UIKitPickerTestBase001();
+    UIKitPickerTestBase002();
+    UIKitPickerTestTimePicker001();
     return container_;
 }
 
@@ -90,7 +90,7 @@ void UITestUIPicker::OnTimePickerStoped(UITimePicker& picker)
     selectTime_->Invalidate();
 }
 
-void UITestUIPicker::UIKit_Picker_Test_Base_001()
+void UITestUIPicker::UIKitPickerTestBase001()
 {
     if (container_ == nullptr) {
         return;
@@ -154,7 +154,7 @@ void UITestUIPicker::CreatButtons()
     }
 }
 
-void UITestUIPicker::UIKit_Picker_Test_Base_002()
+void UITestUIPicker::UIKitPickerTestBase002()
 {
     if (container_ == nullptr) {
         return;
@@ -179,7 +179,7 @@ void UITestUIPicker::UIKit_Picker_Test_Base_002()
     SetLastPos(picker3_);
 }
 
-void UITestUIPicker::UIKit_Picker_Test_Time_Picker_001()
+void UITestUIPicker::UIKitPickerTestTimePicker001()
 {
     if (container_ == nullptr) {
         return;

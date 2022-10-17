@@ -43,7 +43,7 @@
 #include "gfx_utils/vector.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font_header.h"
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "common/spannable_string.h"
 #endif
 
@@ -164,7 +164,7 @@ public:
      */
     virtual void SetText(const char* text);
 
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     /**
      * @brief Sets the SpannableString for this text.
      *

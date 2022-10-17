@@ -55,18 +55,18 @@ void UITestArcLabel::InnerTestTitle(const char* title, int16_t x, int16_t y) con
 
 const UIView* UITestArcLabel::GetTestView()
 {
-    UIKit_UIArcLabel_Test_Display_001();
-    UIKit_UIArcLabel_Test_Display_002();
-    UIKit_UIArcLabel_Test_Display_003();
-    UIKit_UIArcLabel_Test_Display_004();
+    UIKitUIArcLabelTestDisplay001();
+    UIKitUIArcLabelTestDisplay002();
+    UIKitUIArcLabelTestDisplay003();
+    UIKitUIArcLabelTestDisplay004();
 
-    UIKit_UIArcLabel_Test_Align_001();
-    UIKit_UIArcLabel_Test_Align_002();
-    UIKit_UIArcLabel_Test_Align_003();
+    UIKitUIArcLabelTestAlign001();
+    UIKitUIArcLabelTestAlign002();
+    UIKitUIArcLabelTestAlign003();
     return container_;
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Display_001()
+void UITestArcLabel::UIKitUIArcLabelTestDisplay001()
 {
     const char* title = "显示内部角度从0到270的弧形文本 ";
     // 0: start angle  270: end angle
@@ -74,21 +74,21 @@ void UITestArcLabel::UIKit_UIArcLabel_Test_Display_001()
                         VIEW_DISTANCE_TO_TOP_SIDE);
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Display_002()
+void UITestArcLabel::UIKitUIArcLabelTestDisplay002()
 {
     const char* title = "显示内部角度从0到-270的弧形文本 ";
     // 0: start angle  -270: end angle  100: y-coordinate
     TestArcLabelDisplay(title, 0, -270, TextOrientation::INSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 100);
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Display_003()
+void UITestArcLabel::UIKitUIArcLabelTestDisplay003()
 {
     const char* title = "显示外部角度从0到270的弧形文本 ";
     // 0: start angle  270: end angle  200: y-coordinate
     TestArcLabelDisplay(title, 0, 270, TextOrientation::OUTSIDE, VIEW_DISTANCE_TO_LEFT_SIDE, 200);
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Display_004()
+void UITestArcLabel::UIKitUIArcLabelTestDisplay004()
 {
     const char* title = "显示外部角度从0到-270的弧形文本 ";
     // 0: start angle  -270: end angle  300: y-coordinate
@@ -117,7 +117,7 @@ void UITestArcLabel::TestArcLabelDisplay(const char* title,
     }
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Align_001()
+void UITestArcLabel::UIKitUIArcLabelTestAlign001()
 {
     if (container_ != nullptr) {
         // 2: half of screen width
@@ -146,7 +146,7 @@ void UITestArcLabel::UIKit_UIArcLabel_Test_Align_001()
     }
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Align_002()
+void UITestArcLabel::UIKitUIArcLabelTestAlign002()
 {
     if (container_ != nullptr) {
         InnerTestTitle("弧形文本在0到90度之间居中对齐 ", positionX_, positionY_);
@@ -172,7 +172,7 @@ void UITestArcLabel::UIKit_UIArcLabel_Test_Align_002()
     }
 }
 
-void UITestArcLabel::UIKit_UIArcLabel_Test_Align_003()
+void UITestArcLabel::UIKitUIArcLabelTestAlign003()
 {
     if (container_ != nullptr) {
         InnerTestTitle("弧形文本在0到90度之间右对齐 ", positionX_, positionY_);

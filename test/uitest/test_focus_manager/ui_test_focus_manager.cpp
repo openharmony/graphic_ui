@@ -229,7 +229,7 @@ void UITestFocusManager::TearDown()
 
 const UIView* UITestFocusManager::GetTestView()
 {
-    UIKit_Focus_Manager_Test_001();
+    UIKitFocusManagerTest001();
     return container_;
 }
 
@@ -271,7 +271,7 @@ UIViewGroup* UITestFocusManager::CreateTestUIViewGroup(UIViewGroup* parent, bool
     return viewGroup;
 }
 
-void UITestFocusManager::UIKit_Focus_Manager_Test_001()
+void UITestFocusManager::UIKitFocusManagerTest001()
 {
     UILabel* label = new UILabel();
     container_->Add(label);
