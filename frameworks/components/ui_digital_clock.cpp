@@ -71,7 +71,7 @@ uint8_t UIDigitalClock::GetOpacity() const
     return opaScale_;
 }
 
-void UIDigitalClock::SetFontId(uint8_t fontId)
+void UIDigitalClock::SetFontId(uint16_t fontId)
 {
     SetStyle(STYLE_TEXT_FONT, fontId);
     InitTimeLabels();

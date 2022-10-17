@@ -27,7 +27,7 @@ UIFontBuilder* UIFontBuilder::GetInstance()
 }
 
 void UIFontBuilder::SetTextLangFontsTable(const UITextLanguageFontParam* uiTextLangFontsTable,
-                                          uint8_t totalFontId)
+                                          uint16_t totalFontId)
 {
     if ((uiTextLangFontsTable != nullptr) && (totalFontId > 0)) {
         uiTextLangFontsTable_ = const_cast<UITextLanguageFontParam*>(uiTextLangFontsTable);
@@ -49,7 +49,7 @@ void UIFontBuilder::SetMaxTextId(uint16_t totalTextId)
     totalTextId_ = totalTextId;
 }
 
-UITextLanguageFontParam* UIFontBuilder::GetTextLangFontsTable(uint8_t langFontId)
+UITextLanguageFontParam* UIFontBuilder::GetTextLangFontsTable(uint16_t langFontId)
 {
     if ((langFontId >= totalFontId_) || (uiTextLangFontsTable_ == nullptr)) {
         return nullptr;
@@ -62,16 +62,16 @@ uint8_t UIFontBuilder::GetTotalLangId() const
     return totalLangId_;
 }
 
-uint8_t UIFontBuilder::GetTotalFontId() const
+uint16_t UIFontBuilder::GetTotalFontId() const
 {
-    uint8_t fontIdMax = 0xFF;
+    uint16_t fontIdMax = 0xFFFF;
     if (!UIFont::GetInstance()->IsVectorFont()) {
         fontIdMax = totalFontId_;
     }
     return fontIdMax;
 }
 
-uint8_t UIFontBuilder::GetBitmapFontIdMax() const
+uint16_t UIFontBuilder::GetBitmapFontIdMax() const
 {
     return totalFontId_;
 }
