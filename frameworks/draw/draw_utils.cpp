@@ -91,12 +91,12 @@ namespace OHOS {
     (r1) = static_cast<uint8_t>((Alpha2 * (r2) + (1 - Alpha2) * Alpha1 * (r1)) / Alpha3); \
     (g1) = static_cast<uint8_t>((Alpha2 * (g2) + (1 - Alpha2) * Alpha1 * (g1)) / Alpha3); \
     (b1) = static_cast<uint8_t>((Alpha2 * (b2) + (1 - Alpha2) * Alpha1 * (b1)) / Alpha3); \
-    (a1) = static_cast<uint8_t>(Alpha3 * OPA_OPAQUE);
+    (a1) = static_cast<uint8_t>(Alpha3 * OPA_OPAQUE)
 
 #define COLOR_BLEND_RGB(r1, g1, b1, r2, g2, b2, a2)                                    \
     (r1) = (((r2) * (a2)) / OPA_OPAQUE) + (((r1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
     (g1) = (((g2) * (a2)) / OPA_OPAQUE) + (((g1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
-    (b1) = (((b2) * (a2)) / OPA_OPAQUE) + (((b1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE);
+    (b1) = (((b2) * (a2)) / OPA_OPAQUE) + (((b1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE)
 
 // 565
 #define COLOR_FILL_BLEND(d, dm, s, sm, a)                                                                           \
