@@ -576,7 +576,7 @@ private:
     bool touchable_;
 };
 
-#if DEFAULT_ANIMATION
+#if defined(DEFAULT_ANIMATION) && DEFAULT_ANIMATION
 class TestBtnAnimationListener : public UIView::OnClickListener {
 public:
     TestBtnAnimationListener(UIView* uiView, bool enableAnimation) : uiView_(uiView), enableAnimation_(enableAnimation)
@@ -708,8 +708,9 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     container->Add(button14);
     container->Add(button15);
 
-#if DEFAULT_ANIMATION
-    UILabelButton* button16 = GetTestUIButton("开启动效", 340, 1040, button); // 340: x-coordinate, 1040: y-coordinate
+#if defined(DEFAULT_ANIMATION) && DEFAULT_ANIMATION
+    // 340: x-coordinate, 1040: y-coordinate
+    UILabelButton* button16 = GetTestUIButton("开启动效", 340, 1040, button);
     if (enableAnimationListener_ == nullptr) {
         enableAnimationListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -717,7 +718,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button16->SetOnClickListener(enableAnimationListener_);
 
-    UILabelButton* button17 = GetTestUIButton("关闭动效", 340, 1090, button); // 340: x-coordinate, 1090: y-coordinate
+    // 340: x-coordinate, 1090: y-coordinate
+    UILabelButton* button17 = GetTestUIButton("关闭动效", 340, 1090, button);
     if (disableAnimationListener_ == nullptr) {
         disableAnimationListener_ = static_cast<UIView::OnClickListener*>(
             new TestBtnAnimationListener(reinterpret_cast<UIView*>(button), false));

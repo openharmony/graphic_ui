@@ -339,7 +339,7 @@ public:
          */
         virtual void OnPickerStoped(UIPicker& picker) {}
         /**
-         * @brief Called when an item is selected during sliding. This function is implemented by applications. 
+         * @brief Called when an item is selected during sliding. This function is implemented by applications.
          *
          * @param picker Indicates the picker instance.
          * @since 1.0
