@@ -23,10 +23,10 @@
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
-#if ENABLE_SHAPING
+#if defined(ENABLE_SHAPING) && ENABLE_SHAPING
 #include "font/ui_text_shaping.h"
 #endif
 
@@ -60,9 +60,10 @@ bool UIFontBitmap::IsVectorFont() const
     return false;
 }
 
-uint8_t UIFontBitmap::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
+uint8_t UIFontBitmap::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
+                                       uint16_t fontId, uint8_t size) const
 {
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     return UIMultiFontManager::GetInstance()->GetShapingFontId(text, fontId, ttfId, script);
 #else
     UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
@@ -157,7 +158,7 @@ int8_t UIFontBitmap::GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint
     return INVALID_RET_VALUE;
 }
 
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 int8_t UIFontBitmap::GetMultiGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId)
 {
     int8_t ret = GetGlyphNode(unicode, glyphNode, fontId);

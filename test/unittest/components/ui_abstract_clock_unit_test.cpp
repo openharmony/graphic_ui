@@ -27,7 +27,7 @@ namespace {
     const uint8_t INIT_HOUR = 24;
     const uint8_t INIT_MINUTE = 60;
     const uint8_t INIT_SECOND = 60;
-    const bool clockInit = 1;
+    const bool CLOCK_INT = 1;
 }
 
 class UIAbstractClockUnitTest : public testing::Test {

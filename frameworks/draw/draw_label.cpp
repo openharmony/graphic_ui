@@ -82,7 +82,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    labelLine.style.lineSpace_,
                                    havebackgroundColor,
                                    backgroundColor};
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
         glyphNode.textStyle = letterInfo.textStyle;
 #endif
         glyphNode.advance = 0;
