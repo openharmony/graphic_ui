@@ -24,7 +24,7 @@
 #include "gfx_utils/graphic_log.h"
 #include "graphic_config.h"
 #include "securec.h"
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
 
@@ -118,7 +118,7 @@ uint8_t UIFontVector::RegisterFontInfo(const char* ttfName, uint8_t shaping)
             if (IsColorEmojiFont(ftFaces_[j])) {
                 SetupColorFont(ftFaces_[j]);
             }
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
             UIMultiFontManager::GetInstance()->UpdateScript(fontInfo_[j]);
 #endif
             return j;
@@ -337,9 +337,10 @@ uint16_t UIFontVector::GetHeight(uint16_t fontId, uint8_t fontSize)
     return static_cast<uint16_t>(faceInfo.face->size->metrics.height / FONT_PIXEL_IN_POINT);
 }
 
-uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
+uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
+                                       uint16_t fontId, uint8_t size) const
 {
-#if ENABLE_MULTI_FONT
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     const UITextLanguageFontParam* fontParam1 = GetFontInfo(fontId);
     if (fontParam1 == nullptr) {
         return 0;
@@ -364,7 +365,7 @@ uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& scr
     }
     ttfId = fontParam1->ttfId;
 
-#if ENABLE_SHAPING
+#if defined(ENABLE_SHAPING) && ENABLE_SHAPING
     script = UIMultiFontManager::GetInstance()->GetScriptByTtfId(ttfId);
 #endif
     return fontParam1->shaping;
@@ -377,6 +378,7 @@ uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& scr
     return fontInfo->shaping;
 #endif
 }
+
 uint16_t UIFontVector::GetFontId(const char* ttfName, uint8_t fontSize) const
 {
     if (ttfName != nullptr) {
@@ -568,6 +570,7 @@ void UIFontVector::SetItaly(FT_GlyphSlot slot)
     FT_Outline  outline = slot->outline;
     FT_Outline_Transform(&outline, &matrix);
 }
+
 void UIFontVector::SetBold(uint16_t fontId)
 {
     int32_t error;
