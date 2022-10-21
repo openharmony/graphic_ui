@@ -367,6 +367,8 @@ struct UITextLanguageFontParam {
     uint8_t shaping;
     uint8_t ttfId; // auto create during registration for vector font
     const char* ttfName;
+    uint8_t ttfIndex;
+    uint8_t ttcIndex;
 }; // UITextLanguageFontParam
 
 struct TextIsoHeader {

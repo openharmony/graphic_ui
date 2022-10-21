@@ -14,6 +14,9 @@
  */
 
 #include "ui_test_font.h"
+
+#include "graphic_config.h"
+
 #include "common/screen.h"
 #if ENABLE_VECTOR_FONT
 #else
@@ -463,7 +466,7 @@ void UITestFont::UIKitFontMultiLanguage001()
 #if ENABLE_VECTOR_FONT
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(ROBOTO_CONDENSED_REGULAR);
-    uint8_t findPath[] = {UIFont::GetInstance()->GetFontId(SOURCE_HAN_SANS_SC_REGULAR)};
+    uint16_t findPath[] = {UIFont::GetInstance()->GetFontId(SOURCE_HAN_SANS_SC_REGULAR)};
     UIMultiFontManager::GetInstance()->SetSearchFontList(UIFont::GetInstance()->GetFontId(ROBOTO_CONDENSED_REGULAR),
                                                          findPath, sizeof(findPath));
 #else
@@ -639,7 +642,7 @@ void UITestFont::UIKitFontTestDisplayEmoji001()
     label->Resize(LABEL_WIDTH * 2, LABEL_HEIGHT * 3); // 2 : double; 3 : triple
     UIFont::GetInstance()->RegisterFontInfo(SOURCE_HAN_SANS_SC_REGULAR);
     UIFont::GetInstance()->RegisterFontInfo(DEFAULT_EMOJI_FILENAME);
-    label->SetFont(SOURCE_HAN_SANS_SC_REGULAR, FONT_EMOJI_SIZE);
+    label->SetFont(DEFAULT_EMOJI_FILENAME, FONT_EMOJI_SIZE);
     label->SetText("💋💋😂😂😂");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 3 + GAP; // 3 : triple
@@ -674,6 +677,11 @@ void UITestFont::UIKitFontTestDisplayEmoji002()
     label->SetText("轻量图形子系统💋💋😂😂");
     container_->Add(label);
     positionY_ += LABEL_HEIGHT * 6 + GAP; // 6 : six times
+#if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
+    uint8_t findPath[] = {UIFont::GetInstance()->GetFontId(DEFAULT_EMOJI_FILENAME, FONT_EMOJI_SIZE)};
+    UIMultiFontManager::GetInstance()->SetSearchFontList(
+        UIFont::GetInstance()->GetFontId(SOURCE_HAN_SANS_SC_REGULAR, FONT_EMOJI_SIZE), findPath, sizeof(findPath));
+#endif
 #else
     label->Resize(LABEL_WIDTH, LABEL_HEIGHT * 3); // 3 : triple
     label->SetFontId(F_SOURCEHANSANSSC_REGULAR_30_4);
