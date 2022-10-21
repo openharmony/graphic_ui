@@ -39,7 +39,7 @@ public:
     int8_t GetSearchFontList(uint8_t fontListId, uint8_t **fontIds);
     void UpdateScript(UITextLanguageFontParam& fonts);
     bool IsNeedShaping(const char* text, uint8_t& ttfId, uint32_t& script);
-    uint8_t GetShapingFontId(const char* text, uint16_t fontId, uint8_t& ttfId, uint32_t& script);
+    uint16_t GetShapingFontId(const char* text, uint16_t fontId, uint8_t& ttfId, uint32_t& script);
 #if ENABLE_SHAPING
     uint32_t GetScriptByTtfId(uint8_t ttfId);
 #endif
