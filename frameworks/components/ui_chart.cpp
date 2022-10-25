@@ -678,12 +678,21 @@ bool UIChartPolyline::GetLineCrossPoint(const Point& p1,
             }
         }
     }
+    if ((MATH_MIN(p1.x, p2.x) <= MATH_MAX(p3.x, p4.x)) && (MATH_MIN(p3.x, p4.x) <= MATH_MAX(p1.x, p2.x)) &&
+    (MATH_MIN(p1.y, p2.y) >= MATH_MAX(p3.y, p4.y)) && (MATH_MIN(p3.y, p4.y) <= MATH_MAX(p1.y, p2.y))) {
+        return enableReverse_ ? true : false;
+    }
     return false;
 }
 
 void UIChartPolyline::FindCrossPoints(const ChartLine& line, const ChartLine& polyLine, CrossPointSet& cross)
 {
     if (GetLineCrossPoint(line.start, line.end, polyLine.start, polyLine.end, cross.nextFirst)) {
+        if (enableReverse_ && (MATH_MIN(line.start.y, line.end.y) >= MATH_MAX(polyLine.start.y, polyLine.end.y))) {
+            cross.firstFind = true;
+            cross.secondFind = true;
+            return;
+        }
         if (!cross.firstFind) {
             /* first corss must on the line like "/" */
             if (polyLine.start.y < polyLine.end.y) {
