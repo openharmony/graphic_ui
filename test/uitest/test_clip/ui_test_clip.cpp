@@ -267,7 +267,6 @@ void UITestClip::UIKitClipTest004()
     CreateTitleLabel("贝塞尔曲线裁剪 ");
 
     ClipPath path;
-    // {50, 50}, {100, 50}, {100, 100}, {50, 100}: path points; {60, 110}, {80, 10}: control points of curve
     path.MoveTo({50, 50}).CurveTo({60, 110}, {80, 10}, {100, 50}).LineTo({100, 100}).LineTo({50, 100});
 
     UIImageView* imageView = CreateImageView();
@@ -282,7 +281,6 @@ void UITestClip::UIKitClipTest005()
     CreateTitleLabel("多边形裁剪 ");
 
     ClipPath path;
-    // {20, 70}, {50, 60}, {110, 80}, {110, 130}, {50, 100}, {20, 120}: path points
     path.MoveTo({20, 70}).LineTo({50, 60}).LineTo({110, 80}).LineTo({110, 130}).LineTo({50, 100}).LineTo({20, 120});
 
     UIImageView* imageView = CreateImageView();
