@@ -87,7 +87,7 @@ void Monitor::Flush(const Rect &rect)
 
 // assuming below are the memory pool
 static uint8_t g_fontMemBaseAddr[OHOS::MIN_FONT_PSRAM_LENGTH];
-#if define(ENABLE_ICU) && ENABLE_ICU
+#if defined(ENABLE_ICU) && ENABLE_ICU
 static uint8_t g_icuMemBaseAddr[OHOS::SHAPING_WORD_DICT_LENGTH];
 #endif
 
