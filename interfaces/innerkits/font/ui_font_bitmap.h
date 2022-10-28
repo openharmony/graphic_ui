@@ -29,7 +29,8 @@ public:
     UIFontBitmap(const UIFontBitmap&) = delete;
     UIFontBitmap& operator=(const UIFontBitmap&) noexcept = delete;
     bool IsVectorFont() const override;
-    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const override;
+    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
+                             uint16_t fontId, uint8_t size) const override;
     int8_t SetFontPath(const char* path, FontType type) override;
     uint16_t GetHeight(uint16_t fontId, uint8_t fontSize = 0) override;
     uint16_t GetFontId(const char* ttfName, uint8_t fontSize = 0) const override;
