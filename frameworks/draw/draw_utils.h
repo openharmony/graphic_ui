@@ -68,7 +68,7 @@ struct LabelLineInfo {
     const char* text;
     uint16_t length;
     uint16_t start;
-    uint16_t fontId;
+    uint8_t fontId;
     uint8_t fontSize;
     uint8_t txtFlag;
     UITextLanguageDirect direct;
@@ -94,7 +94,7 @@ struct LabelLetterInfo {
 
     const uint32_t& letter;
     UITextLanguageDirect direct;
-    uint16_t fontId;
+    uint8_t fontId;
     uint8_t shapingId;
     uint8_t fontSize;
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT

@@ -22,7 +22,7 @@
 #endif
 namespace OHOS {
 uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt,
-                                            uint16_t fontId,
+                                            uint8_t fontId,
                                             uint8_t fontSize,
                                             int16_t letterSpace,
                                             int16_t& maxWidth,
@@ -42,7 +42,7 @@ uint32_t UIFontAdaptor::GetNextLineAndWidth(const char* txt,
 #endif
 }
 
-bool UIFontAdaptor::IsSameTTFId(uint16_t fontId, uint32_t unicode)
+bool UIFontAdaptor::IsSameTTFId(uint8_t fontId, uint32_t unicode)
 {
 #if ENABLE_SHAPING
     return UITextShaping::IsSameTTFId(fontId, unicode);

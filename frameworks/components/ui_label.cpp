@@ -252,7 +252,7 @@ void UILabel::SetAlign(UITextLanguageAlignment horizontalAlign, UITextLanguageAl
     }
 }
 
-void UILabel::SetFontId(uint16_t fontId)
+void UILabel::SetFontId(uint8_t fontId)
 {
     InitLabelText();
     labelText_->SetFontId(fontId);
