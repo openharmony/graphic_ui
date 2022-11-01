@@ -253,7 +253,7 @@ public:
      *
      * @param fontId Indicates the font ID composed of font name and size.
      */
-    void SetFontId(uint16_t fontId);
+    void SetFontId(uint8_t fontId);
 
     /**
      * @brief Obtains the font ID composed of font name and size.

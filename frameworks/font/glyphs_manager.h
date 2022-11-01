@@ -35,15 +35,15 @@ public:
 
     int8_t GetFontVersion(const char* fontName, char* version, uint8_t len);
 
-    int16_t GetFontHeight(uint16_t fontId);
+    int16_t GetFontHeight(uint8_t fontId);
 
-    int16_t GetFontWidth(uint32_t unicode, uint16_t fontId);
+    int16_t GetFontWidth(uint32_t unicode, uint8_t fontId);
 
-    const FontHeader* GetFontHeader(uint16_t fontId);
+    const FontHeader* GetFontHeader(uint8_t fontId);
 
-    const GlyphNode* GetGlyphNode(uint32_t unicode, uint16_t fontId);
+    const GlyphNode* GetGlyphNode(uint32_t unicode, uint8_t fontId);
 
-    int8_t GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint16_t fontId);
+    int8_t GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId);
 
     int8_t SetFile(const char* fontName, int32_t fp, uint32_t start);
 

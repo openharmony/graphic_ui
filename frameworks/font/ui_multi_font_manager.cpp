@@ -30,8 +30,8 @@ UIMultiFontManager::UIMultiFontManager()
       bengaliTtfId_(0), topIndex_(0)
 {
     const UITextLanguageFontParam* fontParam = nullptr;
-    uint16_t totalFontId = UIFontBuilder::GetInstance()->GetTotalFontId();
-    for (uint16_t i = 0; i < totalFontId; i++) {
+    uint8_t totalFontId = UIFontBuilder::GetInstance()->GetTotalFontId();
+    for (uint8_t i = 0; i < totalFontId; i++) {
         fontParam = UIFont::GetInstance()->GetFontInfo(i);
         if (fontParam == nullptr) {
             continue;
@@ -57,7 +57,7 @@ UIMultiFontManager::UIMultiFontManager()
     if (fontIdIndex_ == nullptr) {
         return;
     }
-    for (uint16_t index = 0; index < totalFontId; index++) {
+    for (uint8_t index = 0; index < totalFontId; index++) {
         fontIdIndex_[index] = MAX_FONT_SEARCH_NUM;
     }
     for (uint8_t index = 0; index < MAX_FONT_SEARCH_NUM; index++) {
@@ -73,7 +73,7 @@ UIMultiFontManager::~UIMultiFontManager()
 }
 
 
-int8_t UIMultiFontManager::AddNewFont(uint8_t fontListId, uint8_t *fontIds, int8_t size, uint16_t fontId)
+int8_t UIMultiFontManager::AddNewFont(uint8_t fontListId, uint8_t *fontIds, int8_t size, uint8_t fontId)
 {
     fontNodes_[fontId].fontIds = static_cast<uint8_t *>(UIMalloc(size));
     if (fontNodes_[fontId].fontIds == nullptr) {
@@ -127,8 +127,8 @@ UIMultiFontManager* UIMultiFontManager::GetInstance()
 
 void UIMultiFontManager::ClearSearchFontList()
 {
-    uint16_t totalFontId = UIFontBuilder::GetInstance()->GetTotalFontId();
-    for (uint16_t index = 0; index < totalFontId; index++) {
+    uint8_t totalFontId = UIFontBuilder::GetInstance()->GetTotalFontId();
+    for (uint8_t index = 0; index < totalFontId; index++) {
         fontIdIndex_[index] = MAX_FONT_SEARCH_NUM;
     }
 
@@ -179,7 +179,7 @@ bool UIMultiFontManager::IsNeedShaping(const char *text, uint8_t &ttfId, uint32_
     return false;
 }
 
-uint16_t UIMultiFontManager::GetShapingFontId(const char* text, uint16_t fontId, uint8_t& ttfId, uint32_t& script)
+uint8_t UIMultiFontManager::GetShapingFontId(const char* text, uint8_t fontId, uint8_t& ttfId, uint32_t& script)
 {
     // the shaping font is in search list, then shapingFontId_ store the real shaping fontid
     const UITextLanguageFontParam* fontParam1 = UIFont::GetInstance()->GetFontInfo(fontId);

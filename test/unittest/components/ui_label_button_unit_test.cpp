@@ -196,7 +196,7 @@ HWTEST_F(UILabelButtonTest, UILabelButtonSetFontId_001, TestSize.Level0)
         EXPECT_NE(0, 0);
         return;
     }
-    const uint16_t fontId = 16;
+    const uint8_t fontId = 16;
     labelBtn_->SetFontId(fontId);
     if (!UIFont::GetInstance()->IsVectorFont()) {
         EXPECT_EQ(labelBtn_->GetFontId(), fontId);

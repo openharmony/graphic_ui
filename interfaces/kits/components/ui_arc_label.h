@@ -178,7 +178,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint16_t fontId);
+    void SetFontId(uint8_t fontId);
 
     /**
      * @brief Obtains the font ID composed of font name and size.
@@ -358,7 +358,7 @@ protected:
                              TextOrientation orientation);
 
     virtual Rect GetArcTextRect(const char* text,
-                                uint16_t fontId,
+                                uint8_t fontId,
                                 uint8_t fontSize,
                                 const Point& arcCenter,
                                 int16_t letterSpace,
