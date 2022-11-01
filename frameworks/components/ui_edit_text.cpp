@@ -249,7 +249,7 @@ const char* UIEditText::GetPlaceholder()
     }
 }
 
-void UIEditText::SetFontId(uint16_t fontId)
+void UIEditText::SetFontId(uint8_t fontId)
 {
     InitText();
     inputText_->SetFontId(fontId);

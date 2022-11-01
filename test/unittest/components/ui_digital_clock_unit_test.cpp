@@ -78,7 +78,7 @@ HWTEST_F(UIDigitalClockTest, UIDigitalClockSetFontId_001, TestSize.Level1)
         EXPECT_EQ(1, 0);
         return;
     }
-    const uint16_t fontId = 10;
+    const uint8_t fontId = 10;
     digitalClock_->SetFontId(fontId);
     EXPECT_EQ(digitalClock_->GetStyle(STYLE_TEXT_FONT), fontId);
 }

@@ -171,7 +171,7 @@ int8_t UIFont::GetCodePoints(uint16_t textId, uint32_t** codePoints, uint16_t& c
 #endif
 }
 
-uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize,
+uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize,
                            uint8_t shapingFont)
 {
     uint8_t* bitmap = nullptr;
@@ -207,7 +207,7 @@ uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t font
     return nullptr;
 }
 
-int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize)
+int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
 {
     int8_t result = instance_->GetGlyphNode(unicode, glyphNode, fontId, fontSize);
     if (result == RET_VALUE_OK) {
@@ -232,7 +232,7 @@ int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fon
     return INVALID_RET_VALUE;
 }
 
-uint16_t UIFont::GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize, uint8_t shapingId)
+uint16_t UIFont::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize, uint8_t shapingId)
 {
     int16_t result;
 #if ENABLE_MULTI_FONT
@@ -266,7 +266,7 @@ uint16_t UIFont::GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize, u
     return 0;
 }
 
-uint16_t UIFont::GetLineMaxHeight(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
+uint16_t UIFont::GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                                   uint16_t letterIndex, SizeSpan* sizeSpans)
 {
     return instance_->GetLineMaxHeight(text, lineLength, fontId, fontSize, letterIndex, sizeSpans);

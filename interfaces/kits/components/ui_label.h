@@ -329,7 +329,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint16_t fontId);
+    void SetFontId(uint8_t fontId);
 
     /**
      * @brief Obtains the font ID composed of font name and size.
@@ -338,7 +338,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint16_t GetFontId()
+    uint8_t GetFontId()
     {
         InitLabelText();
         return labelText_->GetFontId();
