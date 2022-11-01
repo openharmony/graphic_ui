@@ -62,16 +62,16 @@ uint8_t UIFontBuilder::GetTotalLangId() const
     return totalLangId_;
 }
 
-uint16_t UIFontBuilder::GetTotalFontId() const
+uint8_t UIFontBuilder::GetTotalFontId() const
 {
-    uint16_t fontIdMax = 0xFF;
+    uint8_t fontIdMax = 0xFF;
     if (!UIFont::GetInstance()->IsVectorFont()) {
         fontIdMax = totalFontId_;
     }
     return fontIdMax;
 }
 
-uint16_t UIFontBuilder::GetBitmapFontIdMax() const
+uint8_t UIFontBuilder::GetBitmapFontIdMax() const
 {
     return totalFontId_;
 }

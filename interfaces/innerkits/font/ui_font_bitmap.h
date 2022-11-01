@@ -30,44 +30,44 @@ public:
     UIFontBitmap& operator=(const UIFontBitmap&) noexcept = delete;
     bool IsVectorFont() const override;
     uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
-                             uint16_t fontId, uint8_t size) const override;
+                             uint8_t fontId, uint8_t size) const override;
     int8_t SetFontPath(const char* path, FontType type) override;
-    uint16_t GetHeight(uint16_t fontId, uint8_t fontSize = 0) override;
-    uint16_t GetFontId(const char* ttfName, uint8_t fontSize = 0) const override;
-    int16_t GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize = 0) override;
-    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize = 0) override;
-    int8_t GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize = 0) override;
-    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize = 0) override;
-    uint8_t GetFontWeight(uint16_t fontId) override;
+    uint16_t GetHeight(uint8_t fontId, uint8_t fontSize = 0) override;
+    uint8_t GetFontId(const char* ttfName, uint8_t fontSize = 0) const override;
+    int16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize = 0) override;
+    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize = 0) override;
+    int8_t GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize = 0) override;
+    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize = 0) override;
+    uint8_t GetFontWeight(uint8_t fontId) override;
     int8_t GetFontVersion(FontType type, const char* path, char* version, uint8_t len) override;
     int8_t SetCurrentLangId(uint8_t langId) override;
-    UITextLanguageFontParam* GetFontInfo(uint16_t fontId) const override;
+    UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const override;
     void SetFontFileOffset(uint32_t offset) override;
     uint16_t GetOffsetPosY(const char* text, uint16_t lineLength, bool& isEmoijLerge,
-                           uint16_t fontId, uint8_t fontSize) override;
-    uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
+                           uint8_t fontId, uint8_t fontSize) override;
+    uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
                               uint16_t& letterIndex, SizeSpan* sizeSpans) override;
-    bool IsEmojiFont(uint16_t fontId) override;
+    bool IsEmojiFont(uint8_t fontId) override;
     void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen) override;
 protected:
-    int8_t GetDynamicFontBitmap(uint32_t unicode, BufferInfo& bufInfo, uint16_t fontId);
-    uint8_t* GetCacheBitmap(uint16_t fontId, uint32_t unicode);
-    BufferInfo GetCacheBuffer(uint16_t fontId, uint32_t unicode, GlyphNode& glyphNode);
+    int8_t GetDynamicFontBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId);
+    uint8_t* GetCacheBitmap(uint8_t fontId, uint32_t unicode);
+    BufferInfo GetCacheBuffer(uint8_t fontId, uint32_t unicode, GlyphNode& glyphNode);
     void PutCacheSpace(uint8_t* addr);
-    int16_t GetDynamicFontWidth(uint32_t unicode, uint16_t fontId);
+    int16_t GetDynamicFontWidth(uint32_t unicode, uint8_t fontId);
     uint32_t offset_;
     GraphicMutex lock_;
 
 private:
-    uint8_t* SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId);
-    int16_t GetWidthInFontId(uint32_t unicode, uint16_t fontId);
+    uint8_t* SearchInFont(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
+    int16_t GetWidthInFontId(uint32_t unicode, uint8_t fontId);
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
-    int8_t GetMultiGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId);
+    int8_t GetMultiGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId);
 #endif
     void CloseFontFd();
     void BitmapCacheInit();
     static constexpr uint32_t FONT_BITMAP_CACHE_SIZE = 0x64000;
-    static constexpr uint16_t FONT_ID_MAX = 0xFFFF;
+    static constexpr uint8_t FONT_ID_MAX = 0xFF;
     static constexpr uint8_t TTF_NAME_LEN_MAX = 128;
     GlyphsManager dynamicFont_;
     UIFontCache* bitmapCache_;

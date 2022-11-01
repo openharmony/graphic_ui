@@ -225,7 +225,7 @@ HWTEST_F(UIArcLabelTest, UIArcLabelSetFontId_001, TestSize.Level1)
         EXPECT_EQ(1, 0);
         return;
     }
-    uint16_t fontId = 0;
+    uint8_t fontId = 0;
     arcLabel_->SetFontId(fontId);
     EXPECT_EQ(arcLabel_->GetFontId(), fontId);
 }

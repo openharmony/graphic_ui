@@ -218,7 +218,7 @@ HWTEST_F(UILabelTest, UILabelSetFont_001, TestSize.Level1)
         EXPECT_EQ(1, 0);
         return;
     }
-    uint16_t fontId = label_->GetFontId();
+    uint8_t fontId = label_->GetFontId();
 
     const uint8_t fontSize = 20;  // 20: font size for test
     label_->SetFont("error_font_name", fontSize);
@@ -293,7 +293,7 @@ HWTEST_F(UILabelTest, UILabelSetFontId_001, TestSize.Level0)
         EXPECT_NE(0, 0);
         return;
     }
-    const uint16_t fontId = 16;
+    const uint8_t fontId = 16;
     label_->SetFontId(fontId);
     if (!UIFont::GetInstance()->IsVectorFont()) {
         EXPECT_EQ(label_->GetFontId(), fontId);

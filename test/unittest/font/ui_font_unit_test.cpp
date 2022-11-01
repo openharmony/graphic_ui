@@ -229,7 +229,7 @@ HWTEST_F(UIFontTest, Graphic_Font_Test_GetShapingFontId_001, TestSize.Level1)
 {
     uint8_t ttfId = 0;
     uint32_t script = 0;
-    uint16_t fontId = UIFont::GetInstance()->GetShapingFontId("", ttfId, script, FONT_ID, 0);
+    uint8_t fontId = UIFont::GetInstance()->GetShapingFontId("", ttfId, script, FONT_ID, 0);
     EXPECT_EQ(fontId, 0);
 }
 

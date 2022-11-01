@@ -127,7 +127,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint16_t fontId)
+    void SetFontId(uint8_t fontId)
     {
         fontId_ = fontId;
         if (fontName_ != nullptr) {
@@ -266,7 +266,7 @@ private:
     UILabel* GetDynamicText(UIView* inView, int16_t index);
     UILabel* GetIntegerText(UIView* inView, int16_t index);
     void ClearDynamicText();
-    uint16_t fontId_;
+    uint8_t fontId_;
     char* fontName_;
     uint8_t fontSize_;
     int16_t width_;
