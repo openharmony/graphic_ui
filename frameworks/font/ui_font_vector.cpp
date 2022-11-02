@@ -288,19 +288,17 @@ bool UIFontVector::GetTtfInfo(uint8_t ttfId, uint8_t* ttfBuffer, uint32_t ttfBuf
             continue;
         }
         if (fontInfo_[i].ttfId == ttfId) {
-            // size value store ttc font index, if not equal FONT_ID_MAX, means ttc file
-            if (fontInfo_[i].size != FONT_ID_MAX) {
-                return GetTtfInfoFromTtc(ttfId, ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
+            if (fontInfo_[i].ttcIndex != FONT_TTC_MAX) {
+                return GetTtfInfoFromTtc(ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
             } else {
-                return GetTtfInfoFromTtf(ttfId, ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
+                return GetTtfInfoFromTtf(ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
             }
         }
     }
     return false;
 }
 
-bool UIFontVector::GetTtfInfoFromTtf(uint8_t ttfId,
-                                     uint8_t* ttfBuffer,
+bool UIFontVector::GetTtfInfoFromTtf(uint8_t* ttfBuffer,
                                      uint32_t ttfBufferSize,
                                      TtfHeader& ttfHeader,
                                      UITextLanguageFontParam fontInfo)
@@ -348,8 +346,7 @@ struct TtcHeader {
     uint16_t minor;
     int32_t numFonts;
 };
-bool UIFontVector::GetTtfInfoFromTtc(uint8_t ttfId,
-                                     uint8_t* ttfBuffer,
+bool UIFontVector::GetTtfInfoFromTtc(uint8_t* ttfBuffer,
                                      uint32_t ttfBufferSize,
                                      TtfHeader& ttfHeader,
                                      UITextLanguageFontParam fontInfo)
@@ -368,7 +365,7 @@ bool UIFontVector::GetTtfInfoFromTtc(uint8_t ttfId,
     }
 
     // read ttc header
-    TtcHeader header = {0};
+    TtcHeader header = {};
     static const FT_Frame_Field ttcHeaderFields[] = {
 #undef FT_STRUCTURE
 #define FT_STRUCTURE TtcHeader
@@ -689,13 +686,9 @@ uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_
 #endif
     if (bitmap != nullptr) {
         return bitmap + sizeof(Metric);
+    } else {
+        return nullptr;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-    SetFace(faceInfo, unicode, glyphNode.textStyle);
-#else
-    SetFace(faceInfo, unicode);
-#endif
-    return static_cast<uint8_t*>(faceInfo.face->glyph->bitmap.buffer);
 }
 
 bool UIFontVector::IsEmojiFont(uint16_t fontId)
@@ -819,7 +812,7 @@ uint8_t UIFontVector::IsGlyphFont(uint32_t unicode)
     }
 }
 
-void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode) const
+void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode)
 {
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     SetFace(faceInfo, unicode, TEXT_STYLE_NORMAL);
@@ -844,12 +837,13 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode) const
         if (memcpy_s(bitmap + sizeof(Metric), bitmapSize, faceInfo.face->glyph->bitmap.buffer, bitmapSize) != EOK) {
             return;
         }
+        ClearFontGlyph(faceInfo.face);
     }
 #endif
 }
 
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const
+void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle)
 {
     Metric f;
     f.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
@@ -871,9 +865,23 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textS
         if (memcpy_s(bitmap + sizeof(Metric), bitmapSize, faceInfo.face->glyph->bitmap.buffer, bitmapSize) != EOK) {
             return;
         }
+        ClearFontGlyph(faceInfo.face);
     }
 }
 #endif
+
+void UIFontVector::ClearFontGlyph(FT_Face face)
+{
+    if ((face != nullptr) && (face->glyph != nullptr)) {
+        // free unicode buffer immediately to save memory in multi font file load
+        // if not, it will be freed in next glyph load
+        ft_glyphslot_free_bitmap(face->glyph);
+        FT_Outline_Done(face->glyph->library, &face->glyph->outline);
+        if (face->glyph->internal != nullptr) {
+            FT_GlyphLoader_Reset(face->glyph->internal->loader);
+        }
+    }
+}
 
 inline uint32_t UIFontVector::GetKey(uint16_t fontId, uint32_t size)
 {
