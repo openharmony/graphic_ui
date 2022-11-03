@@ -36,10 +36,6 @@ The graphics UI directly calls the HAL API or uses the client provided by the Wi
 │   │   └── ohos                # OHOS platform adaptation
 │   ├── draw                    # Drawing logic
 │   ├── engines                 # Drawing engines
-│   │   ├── dfb
-│   │   ├── general
-│   │   ├── gpu_vglite
-│   │   └── software_zlite
 │   ├── events                  # Events
 │   ├── font                    # Fonts
 │   ├── imgdecode               # Image management
