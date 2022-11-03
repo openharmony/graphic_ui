@@ -31,7 +31,7 @@ if (ohos_kernel_type != "liteos_m") {
       "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
       "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/communication/broadcast",
       "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
-      "//foundation/multimedia/utils/lite/interfaces/kits",
+      "//foundation/multimedia/media_utils_lite/interfaces/kits",
     ]
     ldflags = [
       "-lstdc++",
