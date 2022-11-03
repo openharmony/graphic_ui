@@ -92,7 +92,7 @@ static_library("framework") {
     "../../tools",
     "../../interfaces",
     "../../frameworks",
-    "//foundation/multimedia/utils/lite/interfaces/kits",
+    "//foundation/multimedia/media_utils_lite/interfaces/kits",
     "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
   ]
 
@@ -115,7 +115,7 @@ static_library("auto_framework") {
     "../../tools",
     "../../interfaces",
     "../../frameworks",
-    "//foundation/multimedia/utils/lite/interfaces/kits",
+    "//foundation/multimedia/media_utils_lite/interfaces/kits",
     "//foundation/multimedia/media_lite/interfaces/kits/player_lite",
   ]
   defines = [ "ENABEL_UI_AUTO_TEST=1" ]
