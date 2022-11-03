@@ -36,10 +36,6 @@
 │   │   └── ohos                # ohos平台适配
 │   ├── draw                    # 绘制逻辑
 │   ├── engines                 # 绘制引擎
-│   │   ├── dfb
-│   │   ├── general
-│   │   ├── gpu_vglite
-│   │   └── software_zlite
 │   ├── events                  # 事件
 │   ├── font                    # 字体
 │   ├── imgdecode               # 图片管理
