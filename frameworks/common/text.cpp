@@ -196,10 +196,16 @@ void Text::SetFont(const char* name, uint8_t size, char*& destName, uint8_t& des
 
 void Text::SetFontId(uint16_t fontId)
 {
-    if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || ((fontId_ == fontId) && (fontSize_ != 0))) {
+    if (fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) {
         GRAPHIC_LOGE("Text::SetFontId invalid fontId(%hhd)", fontId);
         return;
     }
+
+    if ((fontId_ == fontId) && (fontSize_ != 0) && !UIFont::GetInstance()->IsVectorFont()) {
+        GRAPHIC_LOGD("Text::SetFontId same font has already set");
+        return;
+    }
+
     UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
     if (fontParam == nullptr) {
         return;
