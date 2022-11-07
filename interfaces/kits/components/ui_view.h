@@ -1497,11 +1497,12 @@ public:
     /**
      * @brief 获取当前视图的bitmap截图.请注意该接口会申请内存，请在需要释放时使用{@link ImageCacheFree()}接口.
      * @param info bitmap存储对象，获取的截图将被存到该引用中.
+     * @param colorMode 截图格式，默认状态下为带透明度的ARGB8888.
      * @return bitmap是否获取成功.
      * @since 5.0
      * @version 3.0
      */
-    bool GetBitmap(ImageInfo& bitmap);
+    bool GetBitmap(ImageInfo& bitmap, ColorMode colorMode = ARGB8888);
 
     bool IsOnViewTree();
 

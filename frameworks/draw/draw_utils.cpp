@@ -49,7 +49,7 @@ namespace OHOS {
 
 /* cover mode, src alpha is 255 */
 #define COLOR_FILL_COVER(d, dm, r2, g2, b2, sm)               \
-    if ((dm) == ARGB8888) {                                   \
+    if ((dm) == ARGB8888 || (dm) == XRGB8888) {               \
         reinterpret_cast<Color32*>(d)->alpha = OPA_OPAQUE;    \
         if (sm == RGB565) {                                   \
             reinterpret_cast<Color32*>(d)->red = (r2) << 3;   \
@@ -71,7 +71,7 @@ namespace OHOS {
             reinterpret_cast<Color24*>(d)->blue = (b2);       \
         }                                                     \
     } else if ((dm) == RGB565) {                              \
-        if ((sm) == ARGB8888 || (sm) == RGB888) {             \
+        if ((sm) == ARGB8888 || (sm) == RGB888 || (sm) == XRGB8888) {  \
             reinterpret_cast<Color16*>(d)->red = (r2) >> 3;   \
             reinterpret_cast<Color16*>(d)->green = (g2) >> 2; \
             reinterpret_cast<Color16*>(d)->blue = (b2) >> 3;  \
@@ -93,6 +93,12 @@ namespace OHOS {
     (b1) = static_cast<uint8_t>((Alpha2 * (b2) + (1 - Alpha2) * Alpha1 * (b1)) / Alpha3); \
     (a1) = static_cast<uint8_t>(Alpha3 * OPA_OPAQUE)
 
+#define COLOR_BLEND_XRGB(r1, g1, b1, a1, r2, g2, b2, a2)                               \
+    (r1) = (((r2) * (a2)) / OPA_OPAQUE) + (((r1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
+    (g1) = (((g2) * (a2)) / OPA_OPAQUE) + (((g1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
+    (b1) = (((b2) * (a2)) / OPA_OPAQUE) + (((b1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
+    (a1) = static_cast<uint8_t>(OPA_OPAQUE)
+
 #define COLOR_BLEND_RGB(r1, g1, b1, r2, g2, b2, a2)                                    \
     (r1) = (((r2) * (a2)) / OPA_OPAQUE) + (((r1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
     (g1) = (((g2) * (a2)) / OPA_OPAQUE) + (((g1) * (OPA_OPAQUE - (a2))) / OPA_OPAQUE); \
@@ -102,7 +108,7 @@ namespace OHOS {
 #define COLOR_FILL_BLEND(d, dm, s, sm, a)                                                                           \
     if ((dm) == ARGB8888) {                                                                                         \
         Color32* p = reinterpret_cast<Color32*>(d);                                                                 \
-        if ((sm) == ARGB8888) {                                                                                     \
+        if ((sm) == ARGB8888 || (sm) == XRGB8888) {                                                                 \
             Color32* sTmp = reinterpret_cast<Color32*>(s);                                                          \
             uint8_t alpha = (sTmp->alpha * (a)) / OPA_OPAQUE;                                                       \
             COLOR_BLEND_RGBA(p->red, p->green, p->blue, p->alpha, sTmp->red, sTmp->green, sTmp->blue, alpha);       \
@@ -114,9 +120,23 @@ namespace OHOS {
             COLOR_BLEND_RGBA(p->red, p->green, p->blue, p->alpha, (sTmp->red) << 3, (sTmp->green) << 2,             \
                              (sTmp->blue) << 3, a);                                                                 \
         }                                                                                                           \
+    } else if ((dm) == XRGB8888) {                                                                                  \
+        Color32* p = reinterpret_cast<Color32*>(d);                                                                 \
+        if ((sm) == ARGB8888 || (sm) == XRGB8888) {                                                                 \
+            Color32* sTmp = reinterpret_cast<Color32*>(s);                                                          \
+            uint8_t alpha = (sTmp->alpha * (a)) / OPA_OPAQUE;                                                       \
+            COLOR_BLEND_XRGB(p->red, p->green, p->blue, p->alpha, sTmp->red, sTmp->green, sTmp->blue, alpha);       \
+        } else if ((sm) == RGB888) {                                                                                \
+            Color24* sTmp = reinterpret_cast<Color24*>(s);                                                          \
+            COLOR_BLEND_XRGB(p->red, p->green, p->blue, p->alpha, sTmp->red, sTmp->green, sTmp->blue, a);           \
+        } else if ((sm) == RGB565) {                                                                                \
+            Color16* sTmp = reinterpret_cast<Color16*>(s);                                                          \
+            COLOR_BLEND_XRGB(p->red, p->green, p->blue, p->alpha, (sTmp->red) << 3, (sTmp->green) << 2,             \
+                             (sTmp->blue) << 3, a);                                                                 \
+        }                                                                                                           \
     } else if ((dm) == RGB888) {                                                                                    \
         Color24* p = reinterpret_cast<Color24*>(d);                                                                 \
-        if ((sm) == ARGB8888) {                                                                                     \
+        if ((sm) == ARGB8888 || (sm) == XRGB8888) {                                                                 \
             Color32* sTmp = reinterpret_cast<Color32*>(s);                                                          \
             uint8_t alpha = (sTmp->alpha * (a)) / OPA_OPAQUE;                                                       \
             COLOR_BLEND_RGB(p->red, p->green, p->blue, sTmp->red, sTmp->green, sTmp->blue, alpha);                  \
@@ -129,7 +149,7 @@ namespace OHOS {
         }                                                                                                           \
     } else if ((dm) == RGB565) {                                                                                    \
         Color16* p = reinterpret_cast<Color16*>(d);                                                                 \
-        if ((sm) == ARGB8888) {                                                                                     \
+        if ((sm) == ARGB8888 || (sm) == XRGB8888) {                                                                 \
             Color32* sTmp = reinterpret_cast<Color32*>(s);                                                          \
             uint8_t alpha = (sTmp->alpha * (a)) / OPA_OPAQUE;                                                       \
             COLOR_BLEND_RGB(p->red, p->green, p->blue, (sTmp->red) >> 3, (sTmp->green) >> 2, (sTmp->blue) >> 3,     \
@@ -208,6 +228,7 @@ uint8_t DrawUtils::GetPxSizeByColorMode(uint8_t colorMode)
         case TSC6:
         case TSC6A:
         case ARGB8888:
+        case XRGB8888:
             return 32; // 32: 32 bit
         case RGB888:
             return 24; // 24: 24 bit
@@ -236,6 +257,7 @@ uint8_t DrawUtils::GetByteSizeByColorMode(uint8_t colorMode)
 {
     switch (colorMode) {
         case ARGB8888:
+        case XRGB8888:
             return 4; // 4: 4 Byte
         case RGB888:
             return 3; // 3: 3 Byte
@@ -494,6 +516,7 @@ void DrawUtils::DrawImage(BufferInfo& gfxDstBuffer,
     Point dstPos = {maskedArea.GetLeft(), maskedArea.GetTop()};
     BlendOption blendOption;
     blendOption.opacity = opa;
+    blendOption.mode = BLEND_SRC_OVER;
     BaseGfxEngine::GetInstance()->Blit(gfxDstBuffer, dstPos, src, maskedArea, blendOption);
 }
 
@@ -1673,6 +1696,15 @@ void DrawUtils::DrawTriangleTrueColorNearest(const TriangleScanInfo& in, const C
                         }
                         break;
                     }
+                    case XRGB8888: {
+                        Color32 p32 = *(reinterpret_cast<Color32*>(&imgHead[px1]));
+                        if ((in.opaScale == OPA_OPAQUE) && (p32.alpha == OPA_OPAQUE)) {
+                            COLOR_FILL_COVER(screenBuffer, bufferMode, p32.red, p32.green, p32.blue, XRGB8888);
+                        } else {
+                            COLOR_FILL_BLEND(screenBuffer, bufferMode, &p32, XRGB8888, in.opaScale);
+                        }
+                        break;
+                    }
                     default:
                         return;
                 }
@@ -1733,12 +1765,12 @@ void DrawUtils::DrawTriangleTransformPart(BufferInfo& gfxDstBuffer, const Triang
     uint8_t pixelSize;
     DrawTriangleTransformFuc fuc;
     bool isTrueColor = (part.info.header.colorMode == ARGB8888) || (part.info.header.colorMode == RGB888) ||
-                       (part.info.header.colorMode == RGB565);
+                       (part.info.header.colorMode == RGB565) || (part.info.header.colorMode == XRGB8888);
     if (isTrueColor) {
         pixelSize = part.info.pxSize >> SHIFT_3;
         if (part.info.algorithm == TransformAlgorithm::NEAREST_NEIGHBOR) {
             fuc = DrawTriangleTrueColorNearest;
-        } else if (part.info.header.colorMode == ARGB8888) {
+        } else if (part.info.header.colorMode == ARGB8888 || part.info.header.colorMode == XRGB8888) {
             if (part.transMap.Is3DTransform()) {
                 fuc = Draw3DTriangleTrueColorBilinear8888;
             } else {
