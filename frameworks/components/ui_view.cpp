@@ -1273,7 +1273,7 @@ uint8_t UIView::GetMixOpaScale() const
     return opaMix;
 }
 
-bool UIView::GetBitmap(ImageInfo& imageInfo)
+bool UIView::GetBitmap(ImageInfo& imageInfo, ColorMode colorMode)
 {
     UIView* tempRenderSibling = nextRenderSibling_;
     nextRenderSibling_ = nullptr;
@@ -1284,7 +1284,7 @@ bool UIView::GetBitmap(ImageInfo& imageInfo)
     rect_.SetPosition(0, 0);
 
     Rect mask = GetRect();
-    BufferInfo bufInfo{mask, 0, nullptr, nullptr, 0, 0, ARGB8888, 0};
+    BufferInfo bufInfo{mask, 0, nullptr, nullptr, 0, 0, colorMode, 0};
     bufInfo.width = mask.GetWidth();
     bufInfo.height = mask.GetHeight();
     bufInfo.stride = bufInfo.width * DrawUtils::GetByteSizeByColorMode(bufInfo.mode);
