@@ -32,12 +32,21 @@ public:
     void TearDown() override;
     const UIView* GetTestView() override;
     void UIKitBitmapTestGetViewBitmap001();
+    void UIKitBitmapTestGetViewBitmap002();
+    void UIKitBitmapTestGetViewBitmap003();
+    void UIKitBitmapTestGetViewBitmap004();
     void UIKitBitmapTestGetScreenBitmap001();
 private:
     UIScrollView* container_ = nullptr;
     UIImageView* viewBitmap_ = nullptr;
+    UIImageView* viewBitmap2_ = nullptr;
+    UIImageView* viewBitmap3_ = nullptr;
+    UIImageView* viewBitmap4_ = nullptr;
     UIImageView* screenBitmap_ = nullptr;
     UIView::OnClickListener* viewBitmapListener_ = nullptr;
+    UIView::OnClickListener* viewBitmapListener2_ = nullptr;
+    UIView::OnClickListener* viewBitmapListener3_ = nullptr;
+    UIView::OnClickListener* viewBitmapListener4_ = nullptr;
     UIView::OnClickListener* screenBitmapListener_ = nullptr;
 };
 } // namespace OHOS
