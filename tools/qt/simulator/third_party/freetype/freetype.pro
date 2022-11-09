@@ -53,8 +53,13 @@ SOURCES += \
     ../../../../../../../../third_party/freetype/src/pshinter/pshinter.c \
     ../../../../../../../../third_party/freetype/src/psnames/psmodule.c \
     ../../../../../../../../third_party/freetype/src/raster/raster.c \
+    ../../../../../../../../third_party/freetype/src/sdf/ftbsdf.c \
+    ../../../../../../../../third_party/freetype/src/sdf/ftsdf.c \
+    ../../../../../../../../third_party/freetype/src/sdf/ftsdfcommon.c \
+    ../../../../../../../../third_party/freetype/src/sdf/ftsdfrend.c \
     ../../../../../../../../third_party/freetype/src/sfnt/sfnt.c \
     ../../../../../../../../third_party/freetype/src/smooth/smooth.c \
+    ../../../../../../../../third_party/freetype/src/svg/ftsvg.c \
     ../../../../../../../../third_party/freetype/src/truetype/truetype.c \
     ../../../../../../../../third_party/freetype/src/type1/type1.c \
     ../../../../../../../../third_party/freetype/src/type42/type42.c \
