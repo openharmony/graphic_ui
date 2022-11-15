@@ -85,6 +85,8 @@ public:
                          const Style& style,
                          OpacityType opacity,
                          uint8_t cap);
+						 
+    virtual void MemoryBarrier() {}
 
     virtual void DrawLine(BufferInfo& dst,
                           const Point& start,
