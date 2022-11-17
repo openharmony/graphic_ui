@@ -43,7 +43,7 @@ config("graphic_define_config") {
   if (defined(board_toolchain_type) && board_toolchain_type == "iccarm") {
     cflags = [
       "--diag_suppress",
-      "Pa093,Pa137,Pe161,Pe177,Pe186,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940",
+      "Pa093,Pa137,Pe161,Pe177,Pe186,Pa205,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940",
     ]
     cflags_cc = cflags
   }
