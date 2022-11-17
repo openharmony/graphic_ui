@@ -314,6 +314,7 @@ void RearrangeBitmap(BufferInfo& bufInfo, uint32_t fileSz)
             *(--rdestBuf) = *(--rsrcBuf);
         }
     }
+    BaseGfxEngine::GetInstance()->MemoryBarrier();
 }
 } // namespace
 
