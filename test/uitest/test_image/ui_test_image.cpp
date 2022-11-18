@@ -59,7 +59,9 @@ const UIView* UITestImage::GetTestView()
     UIKitUIImageTestSetImage001();
     UIKitUIImageTestSetImage002();
     UIKitUIImageTestSetImage004();
+#if defined(ENABLE_DEFAULT_CHECKBOX_IMAGE) && (ENABLE_DEFAULT_CHECKBOX_IMAGE == 1)
     UIKitUIImageTestSetImage005();
+#endif
     UIKitUIImageTestSetImage006();
     UIKitUIImageTestSetImage007();
     UIKitUIImageTestSetImage008();
@@ -163,6 +165,7 @@ void UITestImage::UIKitUIImageTestSetImage004()
     }
 }
 
+#if defined(ENABLE_DEFAULT_CHECKBOX_IMAGE) && (ENABLE_DEFAULT_CHECKBOX_IMAGE == 1)
 void UITestImage::UIKitUIImageTestSetImage005()
 {
     if (container_ != nullptr) {
@@ -192,6 +195,7 @@ void UITestImage::UIKitUIImageTestSetImage005()
         g_height += 100; // offset=100
     }
 }
+#endif // ENABLE_DEFAULT_CHECKBOX_IMAGE
 
 void UITestImage::UIKitUIImageTestSetImage006()
 {
