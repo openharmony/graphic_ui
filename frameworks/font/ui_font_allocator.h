@@ -26,6 +26,7 @@ class UIFontAllocator {
         uint32_t next;
         uint32_t prev;
         bool used;
+        uint32_t reserve;
     };
 
 public:
