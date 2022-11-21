@@ -544,6 +544,10 @@ void RootView::Render()
         invalidateRects_.Clear();
 #endif
 
+#if defined __linux__ || defined __LITEOS__ || defined __APPLE__
+        pthread_mutex_unlock(&lock_);
+#endif
+
 #if ENABLE_WINDOW
         if (boundWindow_) {
             boundWindow_->Flush();
@@ -551,10 +555,11 @@ void RootView::Render()
         }
 #endif
         BaseGfxEngine::GetInstance()->Flush(flushRect);
-    }
+    } else {
 #if defined __linux__ || defined __LITEOS__ || defined __APPLE__
     pthread_mutex_unlock(&lock_);
 #endif
+    }
 }
 
 void RootView::BlitMapBuffer(Rect& curViewRect, TransformMap& transMap, const Rect& invalidatedArea)
