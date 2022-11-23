@@ -61,7 +61,7 @@ ohos_static_library("ui_ide") {
     "//third_party/cJSON:cjson_static",
     "//third_party/freetype:freetype_static",
     "//third_party/harfbuzz:harfbuzz_static",
-    "//third_party/icu/icu4 c/source/common:icu_font",
+    "//third_party/icu/icu4c/source/common:icu_font",
     "//third_party/libjpeg-turbo:turbojpeg_static",
     "//third_party/libpng:libpng_static",
     "//third_party/qrcodegen:qrcodegen_static",
