@@ -283,5 +283,7 @@ lite_library("ui") {
     cflags_cc = cflags
   } else {
     defines = [ "ENABLE_ICU=1" ]
+    include_dirs +=
+        [ "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite" ]
   }
 }
