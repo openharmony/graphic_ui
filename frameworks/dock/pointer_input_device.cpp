@@ -314,12 +314,10 @@ void PointerInputDevice::UpdateEventViews(UIView* view)
     // invalid touchable and draggable view will be reset to nullptr
     if ((touchableView_ != nullptr) && RootView::FindSubView(*view, touchableView_)) {
         touchableView_ = nullptr;
-        lastPos_ = curPos_;
     }
 
     if ((draggableView_ != nullptr) && RootView::FindSubView(*view, draggableView_)) {
         draggableView_ = nullptr;
-        lastPos_ = curPos_;
         dragLastPos_ = curPos_;
         dragLen_ = {0, 0};
         dragStep_ = {0, 0};
