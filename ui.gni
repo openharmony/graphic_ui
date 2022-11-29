@@ -98,6 +98,7 @@ graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/draw/draw_triangle.cpp",
   "$GRAPHIC_UI_PATH/frameworks/draw/draw_utils.cpp",
   "$GRAPHIC_UI_PATH/frameworks/engines/gfx/gfx_engine_manager.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/engines/gfx/soft_engine.cpp",
   "$GRAPHIC_UI_PATH/frameworks/events/event.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/base_font.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/font_ram_allocator.cpp",

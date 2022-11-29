@@ -18,11 +18,11 @@
 
 #include <QtCore/qobject.h>
 
-#include "engines/gfx/gfx_engine_manager.h"
+#include "engines/gfx/soft_engine.h"
 #include "font/ui_font_header.h"
 
 namespace OHOS {
-class Monitor : public QObject, public BaseGfxEngine {
+class Monitor : public QObject, public SoftEngine {
     Q_OBJECT
 
 public:
