@@ -42,7 +42,9 @@ public:
     void UIKitUIImageTestSetImage001();
     void UIKitUIImageTestSetImage002();
     void UIKitUIImageTestSetImage004();
+#if defined(ENABLE_DEFAULT_CHECKBOX_IMAGE) && (ENABLE_DEFAULT_CHECKBOX_IMAGE == 1)
     void UIKitUIImageTestSetImage005();
+#endif
     void UIKitUIImageTestSetImage006();
     void UIKitUIImageTestSetImage007();
     void UIKitUIImageTestSetImage008();
