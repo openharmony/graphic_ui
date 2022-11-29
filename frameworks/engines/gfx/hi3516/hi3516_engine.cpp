@@ -44,6 +44,6 @@ void Hi3516GfxEngine::Fill(BufferInfo& dst,
         }
     }
 #endif
-    BaseGfxEngine::Fill(dst, fillArea, color, opacity);
+    SoftEngine::Fill(dst, fillArea, color, opacity);
 }
 }
