@@ -14,7 +14,9 @@
  */
 
 #include "default_resource/check_box_res.h"
+#include "graphic_config.h"
 namespace OHOS {
+#if defined(ENABLE_DEFAULT_CHECKBOX_IMAGE) && (ENABLE_DEFAULT_CHECKBOX_IMAGE == 1)
 const uint8_t CHECK_BOX_ON_MAP[] = {
     /* Pixel format: ARGB8888 */
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1376,4 +1378,5 @@ ImageInfo* GetCheckBoxOffInfo()
     g_checkBoxOff.data = CHECK_BOX_OFF_MAP;
     return &g_checkBoxOff;
 }
+#endif // ENABLE_DEFAULT_CHECKBOX_IMAGE
 }

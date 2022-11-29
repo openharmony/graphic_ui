@@ -46,8 +46,10 @@ UICheckBox::UICheckBox()
 {
     touchable_ = true;
     style_ = &(StyleDefault::GetBackgroundTransparentStyle());
+#if defined(ENABLE_DEFAULT_CHECKBOX_IMAGE) && (ENABLE_DEFAULT_CHECKBOX_IMAGE == 1)
     image_[UNSELECTED].SetSrc(GetCheckBoxOffInfo());
     image_[SELECTED].SetSrc(GetCheckBoxOnInfo());
+#endif
     ImageHeader header = {0};
     image_[UNSELECTED].GetHeader(header);
     Resize(header.width, header.height);
