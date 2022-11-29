@@ -22,6 +22,41 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_CHECKBOX_1 = "testCheckBox1";
+constexpr char* UI_TEST_CHECKBOX_2 = "testCheckBox2";
+constexpr char* UI_TEST_CHECKBOX_3 = "testCheckBox3";
+constexpr char* UI_TEST_RADIO_BUTTON_1 = "testRadioButton1";
+constexpr char* UI_TEST_RADIO_BUTTON_2 = "testRadioButton2";
+constexpr char* UI_TEST_RADIO_BUTTON_3 = "testRadioButton3";
+constexpr char* UI_TEST_TOGGLE_BUTTON_1 = "testToggleButton1";
+constexpr char* UI_TEST_TOGGLE_BUTTON_2 = "testToggleButton2";
+constexpr char* UI_TEST_TOGGLE_BUTTON_3 = "testToggleButton3";
+constexpr char* UI_TEST_CHECKBOX_SETIMAGE_1 = "checkBoxSetImage1";
+constexpr char* UI_TEST_CHECKBOX_SETIMAGE_2 = "checkBoxSetImage2";
+constexpr char* UI_TEST_CHECKBOX_SETIMAGE_3 = "checkBoxSetImage3";
+constexpr char* UI_TEST_CHECKBOX_SETIMAGE_4 = "checkBoxSetImage4";
+constexpr char* UI_TEST_RADIO_SETIMAGE_1 = "radioButtonSetImage1";
+constexpr char* UI_TEST_RADIO_SETIMAGE_2 = "radioButtonSetImage2";
+constexpr char* UI_TEST_TOGGLE_SETIMAGE_1 = "toggleButtonSetImage1";
+constexpr char* UI_TEST_TOGGLE_SETIMAGE_2 = "toggleButtonSetImage2";
+constexpr char* UI_TEST_BUTTON_1 = "enlarge";
+constexpr char* UI_TEST_BUTTON_2 = "narrow";
+constexpr char* UI_TEST_BUTTON_3 = "goLeft";
+constexpr char* UI_TEST_BUTTON_4 = "goRight";
+constexpr char* UI_TEST_BUTTON_5 = "goUp";
+constexpr char* UI_TEST_BUTTON_6 = "goDown";
+constexpr char* UI_TEST_BUTTON_7 = "hide";
+constexpr char* UI_TEST_BUTTON_8 = "display";
+constexpr char* UI_TEST_BUTTON_9 = "touchable";
+constexpr char* UI_TEST_BUTTON_10 = "untouchable";
+constexpr char* UI_TEST_BUTTON_11 = "white";
+constexpr char* UI_TEST_BUTTON_12 = "red";
+constexpr char* UI_TEST_BUTTON_13 = "resetColor";
+constexpr char* UI_TEST_BUTTON_14 = "resetAll";
+constexpr char* UI_TEST_BUTTON_15 = "animation";
+constexpr char* UI_TEST_BUTTON_16 = "noAnimation";
+constexpr char* UI_TEST_BUTTON_17 = "buttonWithImage";
+
 class UITestBUTTON : public UITest {
 public:
     UITestBUTTON() {}
@@ -69,6 +104,7 @@ private:
     void UIKitButtonTest002(UIScrollView* container, UIButton* button);
     UIViewGroup* CreateButtonGroup(int16_t posX, int16_t posY, int16_t width, int16_t height,
                                     UICheckBox::OnChangeListener** listener,
+                                    const char* id = nullptr,
                                     UIViewType type = UI_CHECK_BOX,
                                     const char* name = "aa");
     static constexpr int16_t CHANGE_SIZE = 10;

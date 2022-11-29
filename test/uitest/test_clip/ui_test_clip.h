@@ -27,6 +27,10 @@ constexpr char* UI_TEST_RADIUS_1 = "radius+1";
 constexpr char* UI_TEST_RADIUS_2 = "radius-1";
 constexpr char* UI_TEST_RADIUS_3 = "radius+5";
 constexpr char* UI_TEST_RADIUS_4 = "radius-5";
+constexpr char* UI_TEST_ARC_1 = "startAngle+1";
+constexpr char* UI_TEST_ARC_2 = "startAngle-1";
+constexpr char* UI_TEST_ARC_3 = "endAngle+1";
+constexpr char* UI_TEST_ARC_4 = "endAngle-1";
 class UITestClip : public UITest, public UIView::OnClickListener {
 public:
     UITestClip() {}
