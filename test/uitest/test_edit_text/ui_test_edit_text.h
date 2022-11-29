@@ -24,6 +24,11 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_EDIT_TEXT_1 = "editName";
+constexpr char* UI_TEST_EDIT_TEXT_2 = "inputName";
+constexpr char* UI_TEST_EDIT_TEXT_3 = "editPwd";
+constexpr char* UI_TEST_EDIT_TEXT_4 = "inputPwd";
+constexpr char* UI_TEST_EDIT_TEXT_5 = "redPwd";
 class UITestEditText : public UITest, public UIView::OnClickListener, public UIEditText::OnChangeListener {
 public:
     UITestEditText() {}

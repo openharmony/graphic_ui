@@ -179,6 +179,7 @@ UIViewGroup* UITestBUTTON::CreateButtonGroup(int16_t posX,
                                              int16_t width,
                                              int16_t height,
                                              UICheckBox::OnChangeListener** listener,
+                                             const char* id,
                                              UIViewType type,
                                              const char* name)
 {
@@ -204,6 +205,7 @@ UIViewGroup* UITestBUTTON::CreateButtonGroup(int16_t posX,
         checkBox->SetImages("", "");
     }
     group->Add(checkBox);
+    checkBox->SetViewId(id);
     checkBox->SetOnChangeListener(*listener);
     checkBox->SetPosition(100, 0, width, height); // 100: posX 0: posY
     if (checkBox->GetState() == UICheckBox::SELECTED) {
@@ -224,11 +226,11 @@ void UITestBUTTON::UIKitCheckBoxTest001()
         label->SetText("checkbox功能");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
         // 40: posX 35 posY 100 width 100 height
-        UIViewGroup* group = CreateButtonGroup(40, 35, 100, 100, &checkBoxChangeListener_);
+        UIViewGroup* group = CreateButtonGroup(40, 35, 100, 100, &checkBoxChangeListener_, UI_TEST_CHECKBOX_1);
         // 250: posX 35 posY 100 width 100 height
-        UIViewGroup* group1 = CreateButtonGroup(250, 35, 100, 100, &checkBoxChangeListener1_);
+        UIViewGroup* group1 = CreateButtonGroup(250, 35, 100, 100, &checkBoxChangeListener1_, UI_TEST_CHECKBOX_2);
         // 500: posX 35 posY 100 width 100 height
-        UIViewGroup* group2 = CreateButtonGroup(500, 35, 100, 100, &checkBoxChangeListener2_);
+        UIViewGroup *group2 = CreateButtonGroup(500, 35, 100, 100, &checkBoxChangeListener2_, UI_TEST_CHECKBOX_3);
         container_->Add(group);
         container_->Add(group1);
         container_->Add(group2);
@@ -246,14 +248,14 @@ void UITestBUTTON::UIKitRadioButtonTest001()
         label->SetText("radiobutton功能");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
         // 40: posX 160 posY 100 width 100 height
-        UIViewGroup* group =
-            CreateButtonGroup(40, 160, 100, 100, &radioChangeListener_, UIViewType::UI_RADIO_BUTTON, "bb");
+        UIViewGroup* group = CreateButtonGroup(40, 160, 100, 100, &radioChangeListener_, UI_TEST_RADIO_BUTTON_1,
+                                               UIViewType::UI_RADIO_BUTTON, "bb");
         // 250: posX 160 posY 100 width 100 height
-        UIViewGroup* group1 =
-            CreateButtonGroup(250, 160, 100, 100, &radioChangeListener1_, UIViewType::UI_RADIO_BUTTON, "bb");
+        UIViewGroup* group1 = CreateButtonGroup(250, 160, 100, 100, &radioChangeListener1_, UI_TEST_RADIO_BUTTON_2,
+                                                UIViewType::UI_RADIO_BUTTON, "bb");
         // 500: posX 160 posY 100 width 100 height
-        UIViewGroup* group2 =
-            CreateButtonGroup(500, 160, 100, 100, &radioChangeListener2_, UIViewType::UI_RADIO_BUTTON, "bb");
+        UIViewGroup* group2 = CreateButtonGroup(500, 160, 100, 100, &radioChangeListener2_, UI_TEST_RADIO_BUTTON_3,
+                                                UIViewType::UI_RADIO_BUTTON, "bb");
         container_->Add(group);
         container_->Add(group1);
         container_->Add(group2);
@@ -272,13 +274,14 @@ void UITestBUTTON::UIKitToggleButtonTest001()
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
 
         // 40: posX 300 posY 100 width 100 height
-        UIViewGroup* group = CreateButtonGroup(40, 300, 100, 100, &toggleChangeListener_, UIViewType::UI_TOGGLE_BUTTON);
+        UIViewGroup* group = CreateButtonGroup(40, 300, 100, 100, &toggleChangeListener_, UI_TEST_TOGGLE_BUTTON_1,
+                                               UIViewType::UI_TOGGLE_BUTTON);
         // 250: posX 300 posY 100 width 100 height
-        UIViewGroup* group1 =
-            CreateButtonGroup(250, 300, 100, 100, &toggleChangeListener1_, UIViewType::UI_TOGGLE_BUTTON);
+        UIViewGroup* group1 = CreateButtonGroup(250, 300, 100, 100, &toggleChangeListener1_, UI_TEST_TOGGLE_BUTTON_2,
+                                                UIViewType::UI_TOGGLE_BUTTON);
         // 500: posX 300 posY 100 width 100 height
-        UIViewGroup* group2 =
-            CreateButtonGroup(500, 300, 100, 100, &toggleChangeListener2_, UIViewType::UI_TOGGLE_BUTTON);
+        UIViewGroup* group2 = CreateButtonGroup(500, 300, 100, 100, &toggleChangeListener2_, UI_TEST_TOGGLE_BUTTON_3,
+                                                UIViewType::UI_TOGGLE_BUTTON);
         container_->Add(group);
         container_->Add(group1);
         container_->Add(group2);
@@ -299,19 +302,23 @@ void UITestBUTTON::UIKitCheckBoxTest002() const
         checkbox->SetPosition(30, 430); // 30: x-coordinate, 430: y-coordinate
         checkbox->SetWidth(130);        // 130: width
         checkbox->SetHeight(130);       // 130: height
+        checkbox->SetViewId(UI_TEST_CHECKBOX_SETIMAGE_1);
         checkbox->SetImages(BLUE_IMAGE_PATH, YELLOW_IMAGE_PATH);
 
         UICheckBox* checkbox2 = new UICheckBox();
         checkbox2->SetPosition(200, 430); // 200: x-coordinate, 430: y-coordinate
         checkbox2->SetWidth(130);         // 130: width
         checkbox2->SetHeight(130);        // 130: height
+        checkbox2->SetViewId(UI_TEST_CHECKBOX_SETIMAGE_2);
         checkbox2->SetImages(GREEN_IMAGE_PATH, RED_IMAGE_PATH);
 
         UICheckBox* checkbox3 = new UICheckBox();
         checkbox3->SetPosition(350, 430); // 350: x-coordinate, 430: y-coordinate
+        checkbox3->SetViewId(UI_TEST_CHECKBOX_SETIMAGE_3);
 
         UICheckBox* checkbox4 = new UICheckBox();
         checkbox4->SetPosition(450, 430); // 450: x-coordinate, 430: y-coordinate
+        checkbox4->SetViewId(UI_TEST_CHECKBOX_SETIMAGE_4);
 
         container_->Add(checkbox);
         container_->Add(checkbox2);
@@ -329,18 +336,21 @@ void UITestBUTTON::UIKitRadioButtonTest002() const
         label->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, 570, Screen::GetInstance().GetWidth(),
                            TITLE_LABEL_DEFAULT_HEIGHT);
         label->SetText("radiobutton SetImage功能");
+        label->SetViewId("radiobuttonLabel");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
 
         UIRadioButton* radioButton = new UIRadioButton("aaa");
         radioButton->SetPosition(30, 10); // 30: x-coordinate, 10: y-coordinate
         radioButton->SetWidth(130);       // 130: width
         radioButton->SetHeight(130);      // 130: height
+        radioButton->SetViewId(UI_TEST_RADIO_SETIMAGE_1);
         radioButton->SetImages(BLUE_IMAGE_PATH, YELLOW_IMAGE_PATH);
 
         UIRadioButton* radioButton2 = new UIRadioButton("aaa");
         radioButton2->SetPosition(200, 10); // 200: x-coordinate, 10: y-coordinate
         radioButton2->SetWidth(130);        // 130: width
         radioButton2->SetHeight(130);       // 130: height
+        radioButton2->SetViewId(UI_TEST_RADIO_SETIMAGE_2);
         radioButton2->SetImages(GREEN_IMAGE_PATH, RED_IMAGE_PATH);
 
         OHOS::UIViewGroup* viewGroup = new UIViewGroup();
@@ -365,6 +375,7 @@ void UITestBUTTON::UIKitToggleButtonTest002()
         label->SetPosition(TEXT_DISTANCE_TO_LEFT_SIDE, 740, Screen::GetInstance().GetWidth(),
                            TITLE_LABEL_DEFAULT_HEIGHT);
         label->SetText("togglebutton SetImage功能");
+        label->SetViewId("togglebuttonLabel");
         label->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
 
         UIToggleButton* togglebutton = new UIToggleButton();
@@ -373,6 +384,7 @@ void UITestBUTTON::UIKitToggleButtonTest002()
         togglebutton->SetState(true);
         togglebutton->SetWidth(130);  // 130: width
         togglebutton->SetHeight(130); // 130: height
+        togglebutton->SetViewId(UI_TEST_TOGGLE_SETIMAGE_1);
         togglebutton->SetImages(BLUE_IMAGE_PATH, YELLOW_IMAGE_PATH);
 
         UIToggleButton* togglebutton2 = new UIToggleButton();
@@ -381,6 +393,7 @@ void UITestBUTTON::UIKitToggleButtonTest002()
         togglebutton2->SetState(false);
         togglebutton2->SetWidth(130);  // 130: width
         togglebutton2->SetHeight(130); // 130: height
+        togglebutton2->SetViewId(UI_TEST_TOGGLE_SETIMAGE_2);
         togglebutton2->SetImages(GREEN_IMAGE_PATH, RED_IMAGE_PATH);
 
         container_->Add(togglebutton);
@@ -611,7 +624,7 @@ UILabel* GetTestUILabel(const char* titlename)
     return label;
 }
 
-UILabelButton* GetTestUIButton(const char* buttonText, int16_t x, int16_t y, UIButton* button)
+UILabelButton* GetTestUIButton(const char* buttonText, int16_t x, int16_t y, UIButton* button, const char* id)
 {
     if (buttonText == nullptr) {
         return nullptr;
@@ -622,6 +635,7 @@ UILabelButton* GetTestUIButton(const char* buttonText, int16_t x, int16_t y, UIB
     labelButton->SetPosition(x, y);
     labelButton->Resize(BUTTON_WIDHT1, BUTTON_HEIGHT1);
     labelButton->SetText(buttonText);
+    labelButton->SetViewId(id);
     labelButton->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
     labelButton->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::PRESSED);
     labelButton->SetStyleForState(STYLE_BORDER_RADIUS, BUTTON_STYLE_BORDER_RADIUS_VALUE, UIButton::INACTIVE);
@@ -636,7 +650,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     if ((container == nullptr) || (button == nullptr)) {
         return;
     }
-    UILabelButton* button8 = GetTestUIButton("隐藏", 430, 940, button); // 430: x-coordinate, 940: y-coordinate
+    UILabelButton* button8 =
+        GetTestUIButton("隐藏", 430, 940, button, UI_TEST_BUTTON_7); // 430: x-coordinate, 940: y-coordinate
     if (clickEnableVisiableListener_ == nullptr) {
         clickEnableVisiableListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -644,7 +659,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button8->SetOnClickListener(clickEnableVisiableListener_);
 
-    UILabelButton* button9 = GetTestUIButton("显示", 430, 990, button); // 430: x-coordinate, 990: y-coordinate
+    UILabelButton* button9 =
+        GetTestUIButton("显示", 430, 990, button, UI_TEST_BUTTON_8); // 430: x-coordinate, 990: y-coordinate
     if (clickDisableVisiableListener_ == nullptr) {
         clickDisableVisiableListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -652,7 +668,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button9->SetOnClickListener(clickDisableVisiableListener_);
 
-    UILabelButton* button10 = GetTestUIButton("可触摸 ", 520, 940, button); // 520: x-coordinate, 940: y-coordinate
+    UILabelButton* button10 =
+        GetTestUIButton("可触摸 ", 520, 940, button, UI_TEST_BUTTON_9); // 520: x-coordinate, 940: y-coordinate
     if (clickEnableTouchableListener_ == nullptr) {
         clickEnableTouchableListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -660,7 +677,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button10->SetOnClickListener(clickEnableTouchableListener_);
 
-    UILabelButton* button11 = GetTestUIButton("不可触摸", 520, 990, button); // 520: x-coordinate, 990: y-coordinate
+    UILabelButton* button11 =
+        GetTestUIButton("不可触摸", 520, 990, button, UI_TEST_BUTTON_10); // 520: x-coordinate, 990: y-coordinate
     if (clickDisableTouchableListener_ == nullptr) {
         clickDisableTouchableListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -668,14 +686,16 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button11->SetOnClickListener(clickDisableTouchableListener_);
 
-    UILabelButton* button12 = GetTestUIButton("变白", 160, 1040, button); // 160: x-coordinate, 1040: y-coordinate
+    UILabelButton* button12 =
+        GetTestUIButton("变白", 160, 1040, button, UI_TEST_BUTTON_11); // 160: x-coordinate, 1040: y-coordinate
     if (clickColorToWhiteListener_ == nullptr) {
         clickColorToWhiteListener_ = static_cast<UIView::OnClickListener*>(
             new TestBtnOnClickChangeColorListener(reinterpret_cast<UIView*>(button), 0xFF, 0xFF, 0xFF));
     }
     button12->SetOnClickListener(clickColorToWhiteListener_);
 
-    UILabelButton* button13 = GetTestUIButton("变红", 160, 1090, button); // 160: x-coordinate, 1090: y-coordinate
+    UILabelButton* button13 =
+        GetTestUIButton("变红", 160, 1090, button, UI_TEST_BUTTON_12); // 160: x-coordinate, 1090: y-coordinate
     if (clickColorToRedListener_ == nullptr) {
         clickColorToRedListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -683,7 +703,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button13->SetOnClickListener(clickColorToRedListener_);
 
-    UILabelButton* button14 = GetTestUIButton("色彩还原", 250, 1040, button); // 250: x-coordinate, 1040: y-coordinate
+    UILabelButton* button14 =
+        GetTestUIButton("色彩还原", 250, 1040, button, UI_TEST_BUTTON_13); // 250: x-coordinate, 1040: y-coordinate
     if (clickRevetColorListener_ == nullptr) {
         clickRevetColorListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -691,7 +712,8 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     }
     button14->SetOnClickListener(clickRevetColorListener_);
 
-    UILabelButton* button15 = GetTestUIButton("全部还原", 250, 1090, button); // 250: x-coordinate, 1090: y-coordinate
+    UILabelButton* button15 =
+        GetTestUIButton("全部还原", 250, 1090, button, UI_TEST_BUTTON_14); // 250: x-coordinate, 1090: y-coordinate
     if (clickRevetToOriginListener_ == nullptr) {
         clickRevetToOriginListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -710,7 +732,7 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
 
 #if defined(DEFAULT_ANIMATION) && DEFAULT_ANIMATION
     // 340: x-coordinate, 1040: y-coordinate
-    UILabelButton* button16 = GetTestUIButton("开启动效", 340, 1040, button);
+    UILabelButton* button16 = GetTestUIButton("开启动效", 340, 1040, button, UI_TEST_BUTTON_15);
     if (enableAnimationListener_ == nullptr) {
         enableAnimationListener_ =
             static_cast<UIView::OnClickListener*>(
@@ -719,7 +741,7 @@ void UITestBUTTON::UIKitButtonTest002(UIScrollView* container, UIButton* button)
     button16->SetOnClickListener(enableAnimationListener_);
 
     // 340: x-coordinate, 1090: y-coordinate
-    UILabelButton* button17 = GetTestUIButton("关闭动效", 340, 1090, button);
+    UILabelButton* button17 = GetTestUIButton("关闭动效", 340, 1090, button, UI_TEST_BUTTON_16);
     if (disableAnimationListener_ == nullptr) {
         disableAnimationListener_ = static_cast<UIView::OnClickListener*>(
             new TestBtnAnimationListener(reinterpret_cast<UIView*>(button), false));
@@ -743,22 +765,26 @@ void UITestBUTTON::UIKitButtonTest001()
         button->SetWidth(80);         // 80: width
         button->SetHeight(60);        // 60: height
         button->SetImageSrc(BLUE_IMAGE_PATH, YELLOW_IMAGE_PATH);
+        button->SetViewId(UI_TEST_BUTTON_17);
 
-        UILabelButton* button2 = GetTestUIButton("放大", 160, 940, button); // 160: x-coordinate, 940: y-coordinate
+        UILabelButton* button2 =
+            GetTestUIButton("放大", 160, 940, button, UI_TEST_BUTTON_1); // 160: x-coordinate, 940: y-coordinate
         if (clickBigListener_ == nullptr) {
             clickBigListener_ =
                 static_cast<UIView::OnClickListener*>(new TestBtnOnClickShapeChangeListener(button, CHANGE_SIZE));
         }
         button2->SetOnClickListener(clickBigListener_);
 
-        UILabelButton* button3 = GetTestUIButton("缩小", 160, 990, button); // 160: x-coordinate, 990: y-coordinate
+        UILabelButton* button3 =
+            GetTestUIButton("缩小", 160, 990, button, UI_TEST_BUTTON_2); // 160: x-coordinate, 990: y-coordinate
         if (clickSmallListener_ == nullptr) {
             clickSmallListener_ =
                 static_cast<UIView::OnClickListener*>(new TestBtnOnClickShapeChangeListener(button, -CHANGE_SIZE));
         }
         button3->SetOnClickListener(clickSmallListener_);
 
-        UILabelButton* button4 = GetTestUIButton("左移", 250, 940, button); // 250: x-coordinate, 940: y-coordinate
+        UILabelButton* button4 =
+            GetTestUIButton("左移", 250, 940, button, UI_TEST_BUTTON_3); // 250: x-coordinate, 940: y-coordinate
         if (clickLeftListener_ == nullptr) {
             clickLeftListener_ = static_cast<UIView::OnClickListener*>(new TestBtnOnClickPositionChangeListener(
                 reinterpret_cast<UIView*>(button),
@@ -766,7 +792,8 @@ void UITestBUTTON::UIKitButtonTest001()
         }
         button4->SetOnClickListener(clickLeftListener_);
 
-        UILabelButton* button5 = GetTestUIButton("右移", 250, 990, button); // 250: x-coordinate, 990: y-coordinate
+        UILabelButton* button5 =
+            GetTestUIButton("右移", 250, 990, button, UI_TEST_BUTTON_4); // 250: x-coordinate, 990: y-coordinate
         button5->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
         if (clickRightListener_ == nullptr) {
             clickRightListener_ = static_cast<UIView::OnClickListener*>(new TestBtnOnClickPositionChangeListener(
@@ -775,7 +802,8 @@ void UITestBUTTON::UIKitButtonTest001()
         }
         button5->SetOnClickListener(clickRightListener_);
 
-        UILabelButton* button6 = GetTestUIButton("上移", 340, 940, button); // 340: x-coordinate, 940: y-coordinate
+        UILabelButton* button6 =
+            GetTestUIButton("上移", 340, 940, button, UI_TEST_BUTTON_5); // 340: x-coordinate, 940: y-coordinate
         button6->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
         if (clickUpListener_ == nullptr) {
             clickUpListener_ = static_cast<UIView::OnClickListener*>(new TestBtnOnClickPositionChangeListener(
@@ -784,7 +812,8 @@ void UITestBUTTON::UIKitButtonTest001()
         }
         button6->SetOnClickListener(clickUpListener_);
 
-        UILabelButton* button7 = GetTestUIButton("下移", 340, 990, button); // 340: x-coordinate, 990: y-coordinate
+        UILabelButton* button7 =
+            GetTestUIButton("下移", 340, 990, button, UI_TEST_BUTTON_6); // 340: x-coordinate, 990: y-coordinate
         if (clickDownListener_ == nullptr) {
             clickDownListener_ = static_cast<UIView::OnClickListener*>(new TestBtnOnClickPositionChangeListener(
                 reinterpret_cast<UIView*>(button),
