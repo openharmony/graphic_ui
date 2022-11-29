@@ -185,6 +185,7 @@ lite_library("ui") {
     "frameworks/draw/draw_utils.cpp",
     "frameworks/engines/gfx/gfx_engine_manager.cpp",
     "frameworks/engines/gfx/hi3516/hi3516_engine.cpp",
+    "frameworks/engines/gfx/soft_engine.cpp",
     "frameworks/events/event.cpp",
     "frameworks/font/base_font.cpp",
     "frameworks/font/font_ram_allocator.cpp",

@@ -125,6 +125,7 @@ SOURCES += \
     ../../../../frameworks/dock/vibrator_manager.cpp \
     ../../../../frameworks/dock/virtual_input_device.cpp \
     ../../../../frameworks/engines/gfx/gfx_engine_manager.cpp \
+    ../../../../frameworks/engines/gfx/soft_engine.cpp \
     ../../../../frameworks/draw/clip_utils.cpp \
     ../../../../frameworks/draw/draw_arc.cpp \
     ../../../../frameworks/draw/draw_canvas.cpp \
@@ -252,6 +253,7 @@ HEADERS += \
     ../../../../interfaces/innerkits/dock/vibrator_manager.h \
     ../../../../interfaces/innerkits/font/ui_font_builder.h \
     ../../../../interfaces/innerkits/engines/gfx/gfx_engine_manager.h \
+    ../../../../interfaces/innerkits/engines/gfx/soft_engine.h \
     ../../../../interfaces/kits/animator/animator.h \
     ../../../../interfaces/kits/animator/easing_equation.h \
     ../../../../interfaces/kits/animator/interpolation.h \
