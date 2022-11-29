@@ -103,7 +103,6 @@ private:
     static constexpr uint8_t AGING_INTERVAL = 1;
     static constexpr uint8_t LIFE_GAIN_INTERVAL = 1;
     static constexpr uint16_t LIFE_LIMIT = 1000;
-    static constexpr uint8_t MAX_CACHE_ENTRY_NUM = 64;
 };
 } // namespace OHOS
 
