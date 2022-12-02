@@ -29,7 +29,7 @@ SOURCES += \
     ../../../../../../../../third_party/icu/icu4c/source/common/uinvchar.cpp \
     ../../../../../../../../third_party/icu/icu4c/source/common/ustring.cpp \
     ../../../../../../../../third_party/icu/icu4c/source/common/utf_impl.cpp \
-    ../../../../../../../../third_party/icu/icu4c/source/common/utrie2.cpp
+    ../../../../../../../../third_party/icu/icu4c/source/common/ucptrie.cpp
 
 INCLUDEPATH += \
     ../../../../../../../../third_party/icu/icu4c/source/common
