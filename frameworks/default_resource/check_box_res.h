@@ -19,7 +19,9 @@
 #include "gfx_utils/image_info.h"
 #include "gfx_utils/graphic_types.h"
 namespace OHOS {
+#if defined(ENABLE_DEFAULT_CHECKBOX_IMAGE) && (ENABLE_DEFAULT_CHECKBOX_IMAGE == 1)
 ImageInfo* GetCheckBoxOnInfo();
 ImageInfo* GetCheckBoxOffInfo();
+#endif
 } // namespace OHOS
 #endif // GRAPHIC_LITE_CHECK_BOX_RES_H
