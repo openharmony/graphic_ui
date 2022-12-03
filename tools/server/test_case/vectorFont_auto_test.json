@@ -1,0 +1,22 @@
+{
+	"testInfo": [
+        {
+            "className": "Font_FontEngine_Vector_Test_001",
+            "pageNav": ["Vector_Font"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0,-400],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+	]
+}

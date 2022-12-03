@@ -169,6 +169,7 @@ void CustomInputMethod::SetupView(KeyboardType type)
         container_->Add(inputTypeBtn_);
         inputTypeBtn_->Resize(100, 40); // 100: width, 40: height
         inputTypeBtn_->SetText("toggle");
+        inputTypeBtn_->SetViewId(UI_TEST_KEY_INPUT);
         inputTypeBtn_->LayoutRightToSibling("Input_edit_text_view", 10); // 10: offset
         inputTypeBtn_->SetOnClickListener(this);
         inputTypeBtn_->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE,
@@ -239,6 +240,7 @@ UILabelButton* CustomInputMethod::SetupButton(const char* title)
 {
     UILabelButton* keyBtn = new UILabelButton();
     keyBtn->SetText(title);
+    keyBtn->SetViewId(title);
     keyBtn->SetFont(DEFAULT_VECTOR_FONT_FILENAME, BUTTON_LABEL_SIZE);
     keyBtn->SetStyle(STYLE_MARGIN_LEFT, KEY_MARGIN_LEFT);
     keyBtn->SetOnClickListener(this);
