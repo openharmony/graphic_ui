@@ -43,7 +43,8 @@ const ZIndexBtn ZINDEX_BTN_GROUP[ZINDEX_BTN_NUM] = {{"zIndex->-1", -1}, {"zIndex
 const ZIndexView ZINDEX_VIEW_GROUP[ZINDEX_VIEW_NUM] = {
     {"zIndex=6", 6, Color::Blue()},      {"zIndex=4", 4, Color::Blue()},      {"zIndex=2", 2, Color::Blue()},
     {"A.zIndex=0", 0, Color::Magenta()}, {"B.zIndex=0", 0, Color::Magenta()}, {"C.zIndex=0", 0, Color::Magenta()}};
-
+const char* ZINDEX_BTN_VIEWID_GROUP[ZINDEX_BTN_NUM] = {"zIndex=-1", "zIndex=0", "zIndex=1", "zIndex=2",
+                                                       "zIndex=3", "zIndex=4", "zIndex=5", "zIndex=7"};
 const char* MODIFY_INSERT_HEAD = "InsertHead";
 const char* MODIFY_INSERT_TAIL = "InsertTail";
 const char* MODIFY_AFTER_ZINDEX_4 = "AfterZIndex=4";
@@ -119,13 +120,13 @@ UILabel* UITestViewZIndex::CreateZIndexLabel(const char* text, int16_t zIndex, C
     return label;
 }
 
-UILabelButton* UITestViewZIndex::CreateZIndexBtn(const char* text)
+UILabelButton* UITestViewZIndex::CreateZIndexBtn(const char* text, const char* viewId)
 {
     UILabelButton* btn = new UILabelButton();
     btn->Resize(120, 40);                           // 120: width 40:height
     btn->SetFont(DEFAULT_VECTOR_FONT_FILENAME, 15); // 15: font size
     btn->SetText(text);
-    btn->SetViewId(text);
+    btn->SetViewId(viewId);
     btn->SetOnClickListener(this);
     return btn;
 }
@@ -152,7 +153,7 @@ void UITestViewZIndex::ClickZIndexBtn(UIView& view)
     }
     const char* id = view.GetViewId();
     for (uint8_t i = 0; i < ZINDEX_BTN_NUM; i++) {
-        if (strcmp(id, ZINDEX_BTN_GROUP[i].text) == 0) {
+        if (strcmp(id, ZINDEX_BTN_VIEWID_GROUP[i]) == 0) {
             zIndexView->SetZIndex(ZINDEX_BTN_GROUP[i].zIndex);
         }
     }
@@ -314,13 +315,13 @@ void UITestViewZIndex::SetupZIndexBtn()
     group->Add(clickHint);
 
     for (uint8_t i = 0; i < ZINDEX_BTN_NUM; i++) {
-        UILabelButton* zIndexBtn = CreateZIndexBtn(ZINDEX_BTN_GROUP[i].text);
+        UILabelButton* zIndexBtn = CreateZIndexBtn(ZINDEX_BTN_GROUP[i].text, ZINDEX_BTN_VIEWID_GROUP[i]);
         group->Add(zIndexBtn);
         if (i == 0) {
             zIndexBtn->SetPosition(0, 50); // 50: offset y
         } else {
-            zIndexBtn->LayoutBottomToSibling(ZINDEX_BTN_GROUP[i - 1].text, BUTTON_OFFSET);
-            zIndexBtn->AlignLeftToSibling(ZINDEX_BTN_GROUP[i - 1].text);
+            zIndexBtn->LayoutBottomToSibling(ZINDEX_BTN_VIEWID_GROUP[i - 1], BUTTON_OFFSET);
+            zIndexBtn->AlignLeftToSibling(ZINDEX_BTN_VIEWID_GROUP[i - 1]);
         }
     }
 }
@@ -335,7 +336,7 @@ void UITestViewZIndex::SetupChildModifyBtn()
     group->LayoutRightToSibling(ID_ZINDEX_BUTTON_VG);
 
     for (uint8_t i = 0; i < ZINDEX_MODIFY_NUM; i++) {
-        UILabelButton* zIndexModifyBtn = CreateZIndexBtn(ZINDEX_MODIFY_GROUP[i]);
+        UILabelButton* zIndexModifyBtn = CreateZIndexBtn(ZINDEX_MODIFY_GROUP[i], ZINDEX_MODIFY_GROUP[i]);
         zIndexModifyBtn->SetWidth(150); // 150: width
         group->Add(zIndexModifyBtn);
         if (i == 0) {

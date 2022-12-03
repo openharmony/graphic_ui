@@ -25,6 +25,7 @@
 #include "ui_test.h"
 
 namespace OHOS {
+constexpr char* UI_TEST_KEY_INPUT = "toggle";
 enum class KeyboardType {
     LOW_CASE,
     UPPER_CASE,

@@ -1,17 +1,208 @@
 {
 	"testInfo": [
         {
-            "className": "clip_test_radius_01",
-            "pageNav": ["Clip"],
+            "className": "UIKit_Button_Test_001",
+            "pageNav": ["Button"],
             "testSteps": [
                 {
-                    "viewID": "radius+1",
+                    "viewID": "testCheckBox1",
                     "eventID": 0,
                     "eventValue": [1,2],
                     "saveCheckPoint": true
                 },
                 {
-                    "viewID": "radius-1",
+                    "viewID": "testCheckBox2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testCheckBox3",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testRadioButton1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testRadioButton2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testRadioButton3",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testToggleButton1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testToggleButton2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "testToggleButton3",
+                    "eventID": 0,
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "UIKit_Button_Test_002",
+            "pageNav": ["Button"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0,-350],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "checkBoxSetImage1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "checkBoxSetImage2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "checkBoxSetImage3",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "checkBoxSetImage4",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "radioButtonSetImage1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "radioButtonSetImage2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0,-350],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "toggleButtonSetImage1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "toggleButtonSetImage2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "UIKit_Button_Test_003",
+            "pageNav": ["Button"],
+            "testSteps": [
+                {
+                    "viewID": "graphic_ui_test_case_id",
+                    "eventID": 1,
+                    "eventValue": [0,-800],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "resetAll",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "enlarge",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "goLeft",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "goUp",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "resetAll",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "narrow",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "goRight",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "goDown",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "red",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "white",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "resetColor",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "touchable",
                     "eventID": 0,
                     "eventValue": [1,2],
                     "saveCheckPoint": true

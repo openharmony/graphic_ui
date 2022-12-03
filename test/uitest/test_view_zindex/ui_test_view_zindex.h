@@ -38,7 +38,7 @@ public:
 private:
     UILabel* CreateTitleLabel() const;
     UILabel* CreateZIndexLabel(const char* text, int16_t zIndex, ColorType color);
-    UILabelButton* CreateZIndexBtn(const char* text);
+    UILabelButton* CreateZIndexBtn(const char* text, const char* viewId);
     void SetupZIndexView();
     void SetupZIndexBtn();
     void SetupChildModifyBtn();

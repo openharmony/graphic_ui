@@ -1,0 +1,136 @@
+{
+	"testInfo": [
+        {
+            "className": "UIKit_ViewZIndex_Test_001",
+            "pageNav": ["View zIndex"],
+            "testSteps": [
+                {
+                    "viewID": "zIndex=2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=0",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=-1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=3",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=5",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=7",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=4",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                }
+            ]
+        },
+        {
+            "className": "UIKit_ViewZIndex_Test_002",
+            "pageNav": ["View zIndex"],
+            "testSteps": [
+                {
+                    "viewID": "zIndex=4",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "InsertHead",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "InsertTail",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "InsertHead",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "AfterZindex=4",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=0",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "InsertHead",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "AfterB.Zindex=0",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "Remove",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "Reset",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "zIndex=7",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "AnimateIn",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+	]
+}

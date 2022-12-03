@@ -209,14 +209,14 @@ void UITestClip::UIKitClipTest002()
     int16_t x = VIEW_DISTANCE_TO_LEFT_SIDE + BLOCK_WIDTH + GAP;
     int16_t y = positionY_;
     btnStartAngleInc_ = new UILabelButton();
-    SetUpButton(btnStartAngleInc_, "起始角度+", x, y);
+    SetUpButton(btnStartAngleInc_, "起始角度+", x, y, UI_TEST_ARC_1);
     btnStartAngleDec_ = new UILabelButton();
-    SetUpButton(btnStartAngleDec_, "起始角度-", x + BUTTON_WIDHT2 + GAP, y);
+    SetUpButton(btnStartAngleDec_, "起始角度-", x + BUTTON_WIDHT2 + GAP, y, UI_TEST_ARC_2);
     btnEndAngleInc_ = new UILabelButton();
     y += BUTTON_HEIGHT2 + GAP;
-    SetUpButton(btnEndAngleInc_, "结束角度+", x, y);
+    SetUpButton(btnEndAngleInc_, "结束角度+", x, y, UI_TEST_ARC_3);
     btnEndAngleDec_ = new UILabelButton();
-    SetUpButton(btnEndAngleDec_, "结束角度-", x + BUTTON_WIDHT2 + GAP, y);
+    SetUpButton(btnEndAngleDec_, "结束角度-", x + BUTTON_WIDHT2 + GAP, y, UI_TEST_ARC_4);
 
     ClipPath path;
     // {80, 80}: center; 50: radius

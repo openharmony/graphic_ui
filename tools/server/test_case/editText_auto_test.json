@@ -1,0 +1,309 @@
+{
+	"testInfo": [
+        {
+            "className": "UIKit_UIEditText_Test_Display_001",
+            "pageNav": ["EditText"],
+            "testSteps": [
+                {
+                    "viewID": "editText1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "o",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "h",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "o",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "s",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "editText2",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "shift",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "O",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "H",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "O",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "S",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "editText3",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "P",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "W",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "D",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "123",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "1",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "@",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "?",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "toggle",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "toggle",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "editText4",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "#+=",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": ">",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": ".",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "<",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "space",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "!",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "toggle",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "editText5",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },{
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "del",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "ABC",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "t",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "e",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "x",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "t",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                },
+                {
+                    "viewID": "toggle",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": false
+                },
+                {
+                    "viewID": "toggle",
+                    "eventID": 0,
+                    "eventValue": [1,2],
+                    "saveCheckPoint": true
+                }
+            ]
+        }
+	]
+}
