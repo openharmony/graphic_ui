@@ -101,9 +101,9 @@ void UILineBreakEngine::LoadRule()
     const RBBIDataHeader* rbbidh = reinterpret_cast<const RBBIDataHeader*>(dataInBytes + dh->dataHeader.headerSize);
     stateTbl_ = reinterpret_cast<const RBBIStateTable*>(reinterpret_cast<const char*>(rbbidh) + rbbidh->fFTable);
     status = U_ZERO_ERROR;
-    lineBreakTrie_ = reinterpret_cast<UCPTrie*>(
-        ucptrie_openFromBinary(UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_8, reinterpret_cast<const uint8_t*>(rbbidh) + rbbidh->fTrie,
-                                  rbbidh->fTrieLen, nullptr, &status));
+    lineBreakTrie_ = reinterpret_cast<UCPTrie*>(ucptrie_openFromBinary(UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_8,
+                                                reinterpret_cast<const uint8_t*>(rbbidh) + rbbidh->fTrie,
+                                                rbbidh->fTrieLen, nullptr, &status));
     if (status != U_ZERO_ERROR) {
         return;
     }
