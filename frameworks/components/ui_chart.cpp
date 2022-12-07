@@ -689,8 +689,21 @@ void UIChartPolyline::FindCrossPoints(const ChartLine& line, const ChartLine& po
 {
     if (GetLineCrossPoint(line.start, line.end, polyLine.start, polyLine.end, cross.nextFirst)) {
         if (enableReverse_ && (MATH_MIN(line.start.y, line.end.y) >= MATH_MAX(polyLine.start.y, polyLine.end.y))) {
-            cross.firstFind = true;
-            cross.secondFind = true;
+            if (!cross.firstFind) {
+                if (polyLine.start.y < polyLine.end.y) {
+                    cross.first = cross.nextFirst;
+                    cross.firstFind = false;
+                }
+            } else if (!cross.secondFind) {
+                if ((cross.first.x != cross.nextFirst.x) || (cross.first.y != cross.nextFirst.y)) {
+                    cross.second = cross.nextFirst;
+                    cross.secondFind = true;
+                    return;
+                }
+                if (polyLine.start.y > polyLine.end.y) {
+                    cross.firstFind = true;
+                }
+            }
             return;
         }
         if (!cross.firstFind) {
