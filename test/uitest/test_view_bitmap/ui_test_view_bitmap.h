@@ -35,7 +35,9 @@ public:
     void UIKitBitmapTestGetViewBitmap002();
     void UIKitBitmapTestGetViewBitmap003();
     void UIKitBitmapTestGetViewBitmap004();
+#if !(defined ENABLE_WINDOW && ENABLE_WINDOW)
     void UIKitBitmapTestGetScreenBitmap001();
+#endif
 private:
     UIScrollView* container_ = nullptr;
     UIImageView* viewBitmap_ = nullptr;
