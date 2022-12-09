@@ -301,7 +301,9 @@ const UIView* UITestViewBitmap::GetTestView()
     UIKitBitmapTestGetViewBitmap002();
     UIKitBitmapTestGetViewBitmap003();
     UIKitBitmapTestGetViewBitmap004();
+#if !(defined ENABLE_WINDOW && ENABLE_WINDOW)
     UIKitBitmapTestGetScreenBitmap001();
+#endif
     return container_;
 }
 
@@ -373,6 +375,7 @@ void UITestViewBitmap::UIKitBitmapTestGetViewBitmap004()
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
 }
 
+#if !(defined ENABLE_WINDOW && ENABLE_WINDOW)
 void UITestViewBitmap::UIKitBitmapTestGetScreenBitmap001()
 {
     UILabelButton* btn = new UILabelButton();
@@ -390,4 +393,5 @@ void UITestViewBitmap::UIKitBitmapTestGetScreenBitmap001()
     btn->SetStyleForState(STYLE_BACKGROUND_COLOR, BUTTON_STYLE_BACKGROUND_COLOR_VALUE, UIButton::INACTIVE);
     btn->SetViewId(UI_TEST_FULL_SCREEN_CAPTURE);
 }
+#endif
 } // namespace OHOS
