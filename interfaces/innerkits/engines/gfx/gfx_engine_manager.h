@@ -16,12 +16,11 @@
 #ifndef GRAPHIC_LITE_GFX_ENGINE_MANAGER_H
 #define GRAPHIC_LITE_GFX_ENGINE_MANAGER_H
 
+#include "gfx_utils/color.h"
 #include "gfx_utils/diagram/common/paint.h"
-#include "gfx_utils/geometry2d.h"
 #include "gfx_utils/graphic_buffer.h"
-#include "gfx_utils/graphic_math.h"
 #include "gfx_utils/graphic_types.h"
-#include "gfx_utils/heap_base.h"
+#include "gfx_utils/image_info.h"
 #include "gfx_utils/style.h"
 #include "gfx_utils/transform.h"
 
@@ -84,8 +83,8 @@ public:
                          const Rect& mask,
                          const Style& style,
                          OpacityType opacity,
-                         uint8_t cap);
-						 
+                         uint8_t cap) = 0;
+
     virtual void MemoryBarrier() {}
 
     virtual void DrawLine(BufferInfo& dst,
@@ -94,7 +93,7 @@ public:
                           const Rect& mask,
                           int16_t width,
                           ColorType color,
-                          OpacityType opacity);
+                          OpacityType opacity) = 0;
 
     virtual void DrawLetter(BufferInfo& gfxDstBuffer,
                             const uint8_t* fontMap,
@@ -102,7 +101,7 @@ public:
                             const Rect& subRect,
                             const uint8_t fontWeight,
                             const ColorType& color,
-                            const OpacityType opa);
+                            const OpacityType opa) = 0;
 
     virtual void DrawCubicBezier(BufferInfo& dst,
                                  const Point& start,
@@ -112,10 +111,10 @@ public:
                                  const Rect& mask,
                                  int16_t width,
                                  ColorType color,
-                                 OpacityType opacity);
+                                 OpacityType opacity) = 0;
 
     virtual void
-        DrawRect(BufferInfo& dst, const Rect& rect, const Rect& dirtyRect, const Style& style, OpacityType opacity);
+        DrawRect(BufferInfo& dst, const Rect& rect, const Rect& dirtyRect, const Style& style, OpacityType opacity) = 0;
 
     virtual void DrawTransform(BufferInfo& dst,
                                const Rect& mask,
@@ -123,36 +122,36 @@ public:
                                ColorType color,
                                OpacityType opacity,
                                const TransformMap& transMap,
-                               const TransformDataInfo& dataInfo);
+                               const TransformDataInfo& dataInfo) = 0;
 
     // x/y: center of a circle
-    virtual void ClipCircle(const ImageInfo* info, float x, float y, float radius);
+    virtual void ClipCircle(const ImageInfo* info, float x, float y, float radius) = 0;
 
     virtual void Blit(BufferInfo& dst,
                       const Point& dstPos,
                       const BufferInfo& src,
                       const Rect& subRect,
-                      const BlendOption& blendOption);
+                      const BlendOption& blendOption) = 0;
 
-    virtual void Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color, const OpacityType opacity);
+    virtual void Fill(BufferInfo& dst, const Rect& fillArea, const ColorType color, const OpacityType opacity) = 0;
 
     virtual void DrawPath(BufferInfo& dst,
                           void* param,
                           const Paint& paint,
                           const Rect& rect,
                           const Rect& invalidatedArea,
-                          const Style& style);
+                          const Style& style) = 0;
 
     virtual void FillPath(BufferInfo& dst,
                           void* param,
                           const Paint& paint,
                           const Rect& rect,
                           const Rect& invalidatedArea,
-                          const Style& style);
+                          const Style& style) = 0;
 
-    virtual uint8_t* AllocBuffer(uint32_t size, uint32_t usage);
+    virtual uint8_t* AllocBuffer(uint32_t size, uint32_t usage) = 0;
 
-    virtual void FreeBuffer(uint8_t* buffer, uint32_t usage);
+    virtual void FreeBuffer(uint8_t* buffer, uint32_t usage) = 0;
 
     virtual BufferInfo* GetFBBufferInfo()
     {
@@ -188,13 +187,8 @@ public:
         return baseEngine_;
     }
 
-    static void InitGfxEngine(BaseGfxEngine* gfxEngine = nullptr)
+    static void InitGfxEngine(BaseGfxEngine* gfxEngine)
     {
-        if (gfxEngine == nullptr) {
-            static BaseGfxEngine localGfxEngine;
-            baseEngine_ = &localGfxEngine;
-            return;
-        }
         baseEngine_ = gfxEngine;
     }
 

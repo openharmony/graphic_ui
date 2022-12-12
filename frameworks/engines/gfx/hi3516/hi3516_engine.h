@@ -16,10 +16,10 @@
 #ifndef GRAPHIC_LITE_HI3516_ENGINE_H
 #define GRAPHIC_LITE_HI3516_ENGINE_H
 
-#include "engines/gfx/gfx_engine_manager.h"
+#include "engines/gfx/soft_engine.h"
 
 namespace OHOS {
-class Hi3516GfxEngine : public BaseGfxEngine {
+class Hi3516GfxEngine : public SoftEngine {
 public:
     void Fill(BufferInfo& dst,
               const Rect& fillArea,
