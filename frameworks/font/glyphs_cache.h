@@ -39,7 +39,11 @@ public:
     GlyphNode* GetNodeCacheSpace(uint32_t unicode, uint16_t fontId);
 
 private:
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT ==1))
+    static constexpr uint8_t FONT_HASH_SHIFT = 1;
+#else
     static constexpr uint8_t FONT_HASH_SHIFT = 3;
+#endif
     static constexpr uint8_t FONT_HASH_NR = 1 << FONT_HASH_SHIFT;
     static constexpr uint32_t FONT_HASH_MASK = FONT_HASH_NR - 1;
     static constexpr uint8_t UNICODE_HASH_SHIFT = 6;

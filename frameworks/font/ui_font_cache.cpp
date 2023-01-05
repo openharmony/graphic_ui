@@ -73,7 +73,7 @@ uint8_t* UIFontCache::GetSpace(uint32_t fontId, uint32_t unicode, uint32_t size,
 
     bitmap->fontId = fontId;
     bitmap->unicode = unicode;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     bitmap->textStyle = textStyle;
 #endif
 
@@ -101,7 +101,7 @@ uint8_t* UIFontCache::GetBitmap(uint32_t fontId, uint32_t unicode, TextStyle tex
         bitmap = reinterpret_cast<struct Bitmap*>(reinterpret_cast<uint8_t*>(node) -
                                                   offsetof(struct Bitmap, hashHead));
         if ((bitmap->fontId == fontId) &&
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
             (bitmap->textStyle == textStyle) &&
 #endif
             (bitmap->unicode == unicode)) {
