@@ -75,7 +75,7 @@ void UITestVectorFont::InnerTestTitle(const char* title)
 
 const UIView* UITestVectorFont::GetTestView()
 {
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     TestDrawTextITALYBOLD();
 #endif
     FontFontEngineVectorTestCHLang001();
@@ -340,7 +340,7 @@ void UITestVectorFont::FontFontEngineMultiLanguageTestROLang001()
     }
 }
 #endif
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 void UITestVectorFont::TestDrawTextITALYBOLD()
 {
     if (container_ != nullptr) {
