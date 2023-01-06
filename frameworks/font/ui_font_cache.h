@@ -54,7 +54,7 @@ public:
         ListHead lruHead;
         uint32_t fontId; // bitmap font: fontId vector font: fontKey ttfId + fontsize
         uint32_t unicode;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
         TextStyle textStyle;
 #endif
         uint8_t data[];

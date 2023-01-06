@@ -20,6 +20,7 @@
 #include "ft2build.h"
 #include "freetype/freetype.h"
 #include "freetype/tttables.h"
+#include "font/glyphs_cache.h"
 #include "font/ui_font_cache.h"
 #include <memory>
 
@@ -72,6 +73,7 @@ private:
     uint8_t currentFontInfoNum_ = 0;
     bool freeTypeInited_;
     UIFontCache* bitmapCache_;
+    GlyphsCache glyphsCache_;
     struct FaceInfo {
         FT_Face face;
         uint32_t key;
@@ -90,17 +92,18 @@ private:
     };
     TtcInfo ttcInfos_[FONT_TTC_MAX] = {};
     void SetFace(FaceInfo& faceInfo, uint32_t unicode);
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     void SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle);
 #endif
     uint16_t GetFontId(uint32_t unicode) const;
     uint32_t GetKey(uint16_t fontId, uint32_t size);
-    int8_t LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode);
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+    int8_t LoadGlyphIntoFace(uint16_t& fontId, uint8_t fontSize, uint32_t unicode, GlyphNode& glyphNode);
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     int8_t LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle);
 #endif
+    void SaveGlyphNode(uint32_t unicode, uint32_t fontKey, Metric *metric);
     uint8_t IsGlyphFont(uint32_t unicode);
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     void SetItaly(FT_GlyphSlot slot);
     void SetBold(uint16_t fontId);
 #endif
@@ -114,7 +117,7 @@ private:
                            uint32_t ttfBufferSize,
                            TtfHeader& ttfHeader,
                            UITextLanguageFontParam fontInfo);
-    void BitmapCacheInit();
+    void FontCacheInit();
     void ClearFontGlyph(FT_Face face);
 };
 } // namespace OHOS
