@@ -40,7 +40,7 @@ Text::Text()
       horizontalAlign_(TEXT_ALIGNMENT_LEFT),
       verticalAlign_(TEXT_ALIGNMENT_TOP)
 {
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     textStyles_ = nullptr;
 #endif
     SetFont(DEFAULT_VECTOR_FONT_FILENAME, DEFAULT_VECTOR_FONT_SIZE);
@@ -52,7 +52,7 @@ Text::~Text()
         UIFree(text_);
         text_ = nullptr;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     if (textStyles_ != nullptr) {
         UIFree(textStyles_);
         textStyles_ = nullptr;
@@ -73,7 +73,7 @@ Text::~Text()
     }
 }
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 void Text::SetSpannableString(const SpannableString* spannableString)
 {
     SetText(spannableString->text_);
@@ -130,7 +130,7 @@ void Text::SetText(const char* text)
         text_ = nullptr;
         return;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     if (textStyles_ != nullptr) {
         UIFree(textStyles_);
         textStyles_ = nullptr;
@@ -334,7 +334,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
                                     0, opa, style, &text_[lineBegin], textLine_[i].lineBytes,
                                     lineBegin, fontId_, fontSize_, 0, static_cast<UITextLanguageDirect>(direct_),
                                     nullptr, baseLine_,
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
                                     textStyles_,
 #endif
                                     &backgroundColor_, &foregroundColor_, &linebackgroundColor_, sizeSpans_, 0};

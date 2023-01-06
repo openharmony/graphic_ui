@@ -43,7 +43,7 @@
 #include "gfx_utils/vector.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font_header.h"
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 #include "common/spannable_string.h"
 #endif
 
@@ -164,7 +164,7 @@ public:
      */
     virtual void SetText(const char* text);
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     /**
      * @brief Sets the SpannableString for this text.
      *
@@ -515,8 +515,9 @@ protected:
                                        SizeSpan* sizeSpans);
     uint8_t GetSpanFontIdBySize(uint8_t size);
     void InitSizeSpans();
-
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     TextStyle* textStyles_;
+#endif
     char* text_;
     uint16_t fontId_;
     uint8_t fontSize_; // Only the vector font library has a valid value.
