@@ -522,7 +522,7 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint16_t fontId, uint8_t fontSi
         hasColor = true;
     } else {
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
-        uint8_t* searchLists = nullptr;
+        uint16_t* searchLists = nullptr;
         int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
         if ((listSize > 0) && (searchLists != nullptr)) {
             int8_t currentIndex = 0;

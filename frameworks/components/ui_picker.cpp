@@ -362,7 +362,7 @@ uint16_t UIPicker::GetSelected() const
     return listListener_->GetSelectIndex();
 }
 
-void UIPicker::SetFontId(uint8_t backgroundFontId, uint8_t highlightFontId)
+void UIPicker::SetFontId(uint16_t backgroundFontId, uint16_t highlightFontId)
 {
     backgroundFontId_ = backgroundFontId;
     if (backgroundFontName_ != nullptr) {

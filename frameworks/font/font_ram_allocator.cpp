@@ -17,12 +17,7 @@
 #include "font/ui_font_header.h"
 
 namespace OHOS {
-FontRamAllocator::FontRamAllocator()
-    : ramAddr_(0),
-      ramLen_(0),
-      currentRamAddr_(0)
-{
-}
+FontRamAllocator::FontRamAllocator() : ramAddr_(0), ramLen_(0), currentRamAddr_(0), dynamicAddr_(0) {}
 FontRamAllocator::~FontRamAllocator() {}
 
 void FontRamAllocator::SetRamAddr(uintptr_t ramAddr, uint32_t ramLen)
@@ -62,6 +57,37 @@ void* FontRamAllocator::Allocate(uint32_t size)
 uint32_t FontRamAllocator::GetRamUsedLen()
 {
     return (currentRamAddr_ - ramAddr_);
+}
+
+void FontRamAllocator::ClearRam()
+{
+    if (dynamicAddr_) {
+        currentRamAddr_ = dynamicAddr_;
+        dynamicAddr_ = 0;
+        allocator_.SetRamAddr(0, 0);
+    }
+}
+
+void* FontRamAllocator::DynamicAllocate(uint32_t size)
+{
+    if (!dynamicAddr_) {
+        dynamicAddr_ = currentRamAddr_;
+        allocator_.SetRamAddr(reinterpret_cast<uint8_t*>(dynamicAddr_), ramLen_ - dynamicAddr_ + ramAddr_);
+        allocator_.SetMinChunkSize(4); // 4: min align size
+        currentRamAddr_ = ramAddr_ + ramLen_;
+    }
+
+    return allocator_.Allocate(size);
+}
+
+void FontRamAllocator::DynamicFree(void* addr)
+{
+    return allocator_.Free(addr);
+}
+
+uint32_t FontRamAllocator::GetMemSize(void* addr)
+{
+    return allocator_.GetSize(addr);
 }
 
 uint32_t FontRamAllocator::AlignUp(uint32_t addr)

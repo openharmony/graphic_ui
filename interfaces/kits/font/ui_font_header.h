@@ -296,6 +296,21 @@ struct GlyphNode {
 };
 
 /**
+ * @brief struct GlyphCacheNode for font
+ * refer to ui_font.h
+ */
+struct GlyphCacheNode {
+    GlyphNode node;
+    uint16_t cacheType;
+};
+
+enum GlyphCacheType : uint16_t {
+    CACHE_TYPE_NONE = 0, // default value
+    CACHE_TYPE_STATIC,   // static font
+    CACHE_TYPE_DYNAMIC,  // dynamic font
+};
+
+/**
  * @brief struct LangBinHeader for font
  * refer to ui_font.h
  */

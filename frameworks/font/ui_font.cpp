@@ -189,7 +189,7 @@ uint8_t* UIFont::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t font
         return bitmap;
     }
 #if ENABLE_MULTI_FONT
-    uint8_t* searchLists = nullptr;
+    uint16_t* searchLists = nullptr;
     int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
     int8_t currentIndex = 0;
     if ((searchLists == nullptr) || (listSize == 0)) {
@@ -215,7 +215,7 @@ int8_t UIFont::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fon
     }
 
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
-    uint8_t* searchLists = nullptr;
+    uint16_t* searchLists = nullptr;
     int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
     if ((searchLists == nullptr) || (listSize == 0)) {
         return INVALID_RET_VALUE;
@@ -249,7 +249,7 @@ uint16_t UIFont::GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize, u
     }
 
 #if ENABLE_MULTI_FONT
-    uint8_t* searchLists = nullptr;
+    uint16_t* searchLists = nullptr;
     int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
     if ((searchLists == nullptr) || (listSize == 0)) {
         return 0;

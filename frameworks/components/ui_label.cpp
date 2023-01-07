@@ -216,6 +216,12 @@ void UILabel::SetRelativeSizeSpan(uint16_t start, uint16_t end, float size)
     }
 }
 
+uint8_t UILabel::GetFontSize()
+{
+    InitLabelText();
+    return labelText_->GetFontSize();
+}
+
 void UILabel::SetLineBreakMode(const uint8_t lineBreakMode)
 {
     InitLabelText();
