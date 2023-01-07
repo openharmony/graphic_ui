@@ -111,6 +111,7 @@ graphic_ui_sources = [
   "$GRAPHIC_UI_PATH/frameworks/font/ui_font_bitmap.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/ui_font_builder.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/ui_font_cache.cpp",
+  "$GRAPHIC_UI_PATH/frameworks/font/ui_font_cache_manager.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/ui_font_vector.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/ui_line_break.cpp",
   "$GRAPHIC_UI_PATH/frameworks/font/ui_multi_font_manager.cpp",

@@ -29,8 +29,8 @@ public:
     UIFontBitmap(const UIFontBitmap&) = delete;
     UIFontBitmap& operator=(const UIFontBitmap&) noexcept = delete;
     bool IsVectorFont() const override;
-    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
-                             uint16_t fontId, uint8_t size) const override;
+    uint16_t
+        GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const override;
     int8_t SetFontPath(const char* path, FontType type) override;
     uint16_t GetHeight(uint16_t fontId, uint8_t fontSize = 0) override;
     uint16_t GetFontId(const char* ttfName, uint8_t fontSize = 0) const override;
@@ -38,6 +38,7 @@ public:
     uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize = 0) override;
     int8_t GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize = 0) override;
     int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize = 0) override;
+    int8_t GetGlyphNodeFromFile(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId);
     uint8_t GetFontWeight(uint16_t fontId) override;
     int8_t GetFontVersion(FontType type, const char* path, char* version, uint8_t len) override;
     int8_t SetCurrentLangId(uint8_t langId) override;
@@ -66,11 +67,9 @@ private:
 #endif
     void CloseFontFd();
     void BitmapCacheInit();
-    static constexpr uint32_t FONT_BITMAP_CACHE_SIZE = 0x64000;
-    static constexpr uint16_t FONT_ID_MAX = 0xFFFF;
+    static constexpr uint8_t FONT_ID_MAX = 0xFF;
     static constexpr uint8_t TTF_NAME_LEN_MAX = 128;
     GlyphsManager dynamicFont_;
-    UIFontCache* bitmapCache_;
     Graphic::Vector<int32_t> dynamicFontFd_;
 };
 } // namespce OHOS

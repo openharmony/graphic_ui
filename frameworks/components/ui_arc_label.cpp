@@ -98,7 +98,7 @@ void UIArcLabel::SetFontId(uint16_t fontId)
     }
 }
 
-uint8_t UIArcLabel::GetFontId()
+uint16_t UIArcLabel::GetFontId()
 {
     InitArcLabelText();
     return arcLabelText_->GetFontId();

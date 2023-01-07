@@ -168,7 +168,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint8_t backgroundFontId, uint8_t highlightFontId);
+    void SetFontId(uint16_t backgroundFontId, uint16_t highlightFontId);
 
     /**
      * @brief Sets the font name and size for the background text.

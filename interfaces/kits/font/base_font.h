@@ -119,7 +119,7 @@ public:
      * @param size [in] the font size
      * @return uint8_t: needShaping property
      */
-    virtual uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
+    virtual uint16_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
     {
         return 0;
     }

@@ -72,20 +72,19 @@ UIMultiFontManager::~UIMultiFontManager()
     fontIdIndex_ = nullptr;
 }
 
-
-int8_t UIMultiFontManager::AddNewFont(uint8_t fontListId, uint8_t *fontIds, int8_t size, uint16_t fontId)
+int8_t UIMultiFontManager::AddNewFont(uint16_t fontListId, uint16_t* fontIds, int8_t size, uint8_t fontIndex)
 {
-    fontNodes_[fontId].fontIds = static_cast<uint8_t *>(UIMalloc(size));
-    if (fontNodes_[fontId].fontIds == nullptr) {
-        return fontId;
+    fontNodes_[fontIndex].fontIds = static_cast<uint16_t*>(UIMalloc(size * sizeof(uint16_t)));
+    if (fontNodes_[fontIndex].fontIds == nullptr) {
+        return fontIndex;
     }
-    fontIdIndex_[fontListId] = fontId;
-    (void)memcpy_s(fontNodes_[fontId].fontIds, size, fontIds, size);
-    fontNodes_[fontId].size = size;
-    return fontId + 1;
+    fontIdIndex_[fontListId] = fontIndex;
+    (void)memcpy_s(fontNodes_[fontIndex].fontIds, size * sizeof(uint16_t), fontIds, size * sizeof(uint16_t));
+    fontNodes_[fontIndex].size = size;
+    return fontIndex + 1;
 }
 
-int8_t UIMultiFontManager::UpdateFont(uint8_t fontListId, uint8_t *fontIds, uint8_t size)
+int8_t UIMultiFontManager::UpdateFont(uint16_t fontListId, uint16_t* fontIds, uint8_t size)
 {
     uint8_t index = fontIdIndex_[fontListId];
     if (index < topIndex_) {
@@ -140,7 +139,7 @@ void UIMultiFontManager::ClearSearchFontList()
     topIndex_ = 0;
 }
 
-int8_t UIMultiFontManager::SetSearchFontList(uint8_t fontListId, uint8_t *fontIds, uint8_t size)
+int8_t UIMultiFontManager::SetSearchFontList(uint16_t fontListId, uint16_t* fontIds, uint8_t size)
 {
     if ((fontListId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontIds == nullptr) || (size == 0) ||
         (fontIdIndex_ == nullptr) || (topIndex_ >= MAX_FONT_SEARCH_NUM)) {
@@ -150,7 +149,7 @@ int8_t UIMultiFontManager::SetSearchFontList(uint8_t fontListId, uint8_t *fontId
     return UpdateFont(fontListId, fontIds, size);
 }
 
-int8_t UIMultiFontManager::GetSearchFontList(uint8_t fontListId, uint8_t **fontIds)
+int32_t UIMultiFontManager::GetSearchFontList(uint16_t fontListId, uint16_t** fontIds)
 {
     if ((fontListId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || (fontIds == nullptr) ||
         (fontIdIndex_ == nullptr) || (fontIdIndex_[fontListId] >= MAX_FONT_SEARCH_NUM)) {
@@ -190,10 +189,10 @@ uint16_t UIMultiFontManager::GetShapingFontId(const char* text, uint16_t fontId,
         if (!IsNeedShaping(text, ttfId, script)) {
             return 0; // 0 means  no need to shape
         }
-        uint8_t* searchLists = nullptr;
-        int8_t length = GetSearchFontList(fontId, &searchLists);
+        uint16_t* searchLists = nullptr;
+        int32_t length = GetSearchFontList(fontId, &searchLists);
         const UITextLanguageFontParam* fontParam2 = nullptr;
-        for (uint8_t i = 0; i < length; i++) {
+        for (uint16_t i = 0; i < length; i++) {
             fontParam2 = UIFont::GetInstance()->GetFontInfo(searchLists[i]);
             if (fontParam2 == nullptr) {
                 continue;
