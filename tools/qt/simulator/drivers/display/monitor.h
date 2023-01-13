@@ -26,7 +26,7 @@ class Monitor : public QObject, public SoftEngine {
     Q_OBJECT
 
 public:
-    Monitor() : defaultColor_ (0x44) {}
+    Monitor() : fontPsramBaseAddr_{0}, tftFb_{0}, animaterBuffer_{0}, defaultColor_ (0x44) {}
     virtual ~Monitor() {}
     static Monitor* GetInstance();
     void InitHal();
