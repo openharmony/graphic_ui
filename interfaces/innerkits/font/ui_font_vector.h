@@ -41,7 +41,7 @@ public:
     int8_t GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize) override;
     int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize) override;
     uint8_t GetFontWeight(uint16_t fontId) override;
-    uint8_t
+    uint16_t
         GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const override;
     uint8_t RegisterFontInfo(const char* ttfName, uint8_t shaping = 0) override;
     uint8_t RegisterFontInfo(const UITextLanguageFontParam* fontsTable, uint8_t num) override;
@@ -58,6 +58,7 @@ public:
                               uint16_t& letterIndex, SizeSpan* sizeSpans)  override;
     bool GetTtfInfo(uint8_t ttfId, uint8_t* ttfBuffer, uint32_t ttfBufferSize, TtfHeader& ttfHeader) override;
     void SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen) override;
+    int8_t SetCurrentLangId(uint8_t langId) override;
     bool IsEmojiFont(uint16_t fontId) override;
 
 private:
@@ -65,18 +66,16 @@ private:
     static constexpr uint8_t FONT_TTC_MAX = 0x20;
     static constexpr uint8_t FONT_INVALID_TTF_ID = 0xFF;
     static constexpr uint8_t TTF_NAME_LEN_MAX = 128;
-    static constexpr uint32_t FONT_BITMAP_CACHE_SIZE = 0x64000;
     UITextLanguageFontParam fontInfo_[FONT_ID_MAX] = {{}};
     std::string ttfDir_;
     FT_Library ftLibrary_;
     FT_Face ftFaces_[FONT_ID_MAX] = {0};
+    uint8_t fontSize_[FONT_ID_MAX] = {0};
     uint8_t currentFontInfoNum_ = 0;
     bool freeTypeInited_;
-    UIFontCache* bitmapCache_;
-    GlyphsCache glyphsCache_;
     struct FaceInfo {
         FT_Face face;
-        uint32_t key;
+        uint16_t key;
     };
     struct TtcInfo {
         const char* ttcName;
@@ -96,12 +95,12 @@ private:
     void SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle);
 #endif
     uint16_t GetFontId(uint32_t unicode) const;
-    uint32_t GetKey(uint16_t fontId, uint32_t size);
+    uint16_t GetKey(uint16_t fontId, uint8_t size);
     int8_t LoadGlyphIntoFace(uint16_t& fontId, uint8_t fontSize, uint32_t unicode, GlyphNode& glyphNode);
 #if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     int8_t LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle);
 #endif
-    void SaveGlyphNode(uint32_t unicode, uint32_t fontKey, Metric *metric);
+    void SaveGlyphNode(uint32_t unicode, uint16_t fontKey, Metric* metric);
     uint8_t IsGlyphFont(uint32_t unicode);
 #if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     void SetItaly(FT_GlyphSlot slot);
@@ -117,7 +116,6 @@ private:
                            uint32_t ttfBufferSize,
                            TtfHeader& ttfHeader,
                            UITextLanguageFontParam fontInfo);
-    void FontCacheInit();
     void ClearFontGlyph(FT_Face face);
 };
 } // namespace OHOS

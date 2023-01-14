@@ -187,7 +187,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint8_t GetFontId();
+    uint16_t GetFontId();
 
     /**
      * @brief Sets the font for this arc label.

@@ -64,9 +64,8 @@ void GraphicStartUp::InitFontEngine(uintptr_t cacheMemAddr,
                 GRAPHIC_LOGW("SetTtfName failed");
             }
         }
-    } else {
-        (void)uiFont->SetCurrentLangId(0); // set language
     }
+    (void)uiFont->SetCurrentLangId(0); // set language
 }
 
 void GraphicStartUp::InitLineBreakEngine(uintptr_t cacheMemAddr, uint32_t cacheMemLen, const char* path,

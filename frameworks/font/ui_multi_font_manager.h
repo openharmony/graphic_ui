@@ -35,8 +35,8 @@ public:
      */
     static UIMultiFontManager* GetInstance();
     void ClearSearchFontList();
-    int8_t SetSearchFontList(uint8_t fontListId, uint8_t *fontIds, uint8_t size);
-    int8_t GetSearchFontList(uint8_t fontListId, uint8_t **fontIds);
+    int8_t SetSearchFontList(uint16_t fontListId, uint16_t* fontIds, uint8_t size);
+    int32_t GetSearchFontList(uint16_t fontListId, uint16_t** fontIds);
     void UpdateScript(UITextLanguageFontParam& fonts);
     bool IsNeedShaping(const char* text, uint8_t& ttfId, uint32_t& script);
     uint16_t GetShapingFontId(const char* text, uint16_t fontId, uint8_t& ttfId, uint32_t& script);
@@ -56,12 +56,12 @@ private:
      *
      */
     ~UIMultiFontManager();
-    int8_t AddNewFont(uint8_t fontListId, uint8_t *fontIds, int8_t size, uint16_t fontId);
-    int8_t UpdateFont(uint8_t fontListId, uint8_t *fontIds, uint8_t size);
+    int8_t AddNewFont(uint16_t fontListId, uint16_t* fontIds, int8_t size, uint8_t fontIndex);
+    int8_t UpdateFont(uint16_t fontListId, uint16_t* fontIds, uint8_t size);
     int8_t IsShapingLetter(uint32_t unicode, uint8_t& ttfId);
     struct FontIdNode {
-        uint8_t* fontIds = nullptr;
-        int8_t size = 0;
+        uint16_t* fontIds = nullptr;
+        uint16_t size = 0;
     };
     static constexpr uint8_t DEFAULT_SHAPING_ID = 1;
     static constexpr const char *ARABIC_LANG = "Arabic";

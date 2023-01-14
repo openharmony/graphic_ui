@@ -31,6 +31,10 @@ void UIFontAllocator::SetRamAddr(uint8_t* ram, uint32_t size)
 
     struct Chunk* chunk = nullptr;
     ram_ = ram;
+    if (size <= sizeof(struct Chunk) * 2) { // 2 : head and tail two chunk
+        ramSize_ = 0;
+        return;
+    }
     ramSize_ = size - sizeof(struct Chunk) * 2; // head and tail two chunk
     chunk = reinterpret_cast<struct Chunk*>(ram_);
     chunk->next = size - sizeof(struct Chunk);
