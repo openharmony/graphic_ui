@@ -513,7 +513,7 @@ protected:
                                        uint8_t letterSpace, uint16_t& lineNum,
                                        uint16_t& letterIndex,
                                        SizeSpan* sizeSpans);
-    uint8_t GetSpanFontIdBySize(uint8_t size);
+    uint16_t GetSpanFontIdBySize(uint8_t size);
     void InitSizeSpans();
 #if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     TextStyle* textStyles_;

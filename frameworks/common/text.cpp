@@ -580,7 +580,7 @@ void Text::SetRelativeSizeSpan(uint16_t start, uint16_t end, float size)
     SetAbsoluteSizeSpan(start, end, absoluteSize);
 }
 
-uint8_t Text::GetSpanFontIdBySize(uint8_t size)
+uint16_t Text::GetSpanFontIdBySize(uint8_t size)
 {
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     return fontId_;

@@ -32,7 +32,7 @@ public:
      * @param size font size
      * @return int8_t Shaping mode
      */
-    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
+    uint16_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
     {
         return instance_->GetShapingFontId(text, ttfId, script, fontId, size);
     }
@@ -230,7 +230,7 @@ public:
     virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                                       uint16_t letterIndex, SizeSpan* sizeSpans);
 
-    bool IsEmojiFont(uint8_t fontid)
+    bool IsEmojiFont(uint16_t fontid)
     {
         return instance_->IsEmojiFont(fontid);
     }

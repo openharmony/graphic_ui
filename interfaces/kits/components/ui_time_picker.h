@@ -183,8 +183,8 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetTextStyle(uint8_t backgroundFontId,
-                      uint8_t highlightFontId,
+    void SetTextStyle(uint16_t backgroundFontId,
+                      uint16_t highlightFontId,
                       ColorType backgroundColor,
                       ColorType highlightColor);
 
@@ -344,8 +344,8 @@ private:
     uint16_t pickerWidth_;
     uint16_t itemsHeight_;
     int16_t xPos_;
-    uint8_t highlightFontId_;
-    uint8_t backgroundFontId_;
+    uint16_t highlightFontId_;
+    uint16_t backgroundFontId_;
     uint8_t backgroundFontSize_;
     uint8_t highlightFontSize_;
     char* backgroundFontName_;
