@@ -210,6 +210,8 @@ public:
                 return A4;
             case FONT_WEIGHT_8:
                 return A8;
+            case FONT_WEIGHT_32:
+                return ARGB8888;
             default:
                 return UNKNOWN;
         }
