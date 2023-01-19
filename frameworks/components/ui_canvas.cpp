@@ -243,23 +243,40 @@ void UICanvas::DrawCurve(const Point& startPoint,
 
 void UICanvas::DrawRect(const Point& startPoint, int16_t height, int16_t width, const Paint& paint)
 {
-    if (!paint.GetChangeFlag()) {
-        if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
-            DrawRectSetCmd(startPoint, height, width, paint, Paint::PaintStyle::STROKE_STYLE);
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
+        RectParam* rectParam = new RectParam;
+        if (rectParam == nullptr) {
+            GRAPHIC_LOGE("new RectParam fail");
+            return;
         }
+        rectParam->start = startPoint;
+        rectParam->height = height;
+        rectParam->width = width;
 
-        if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
-            DrawRectSetCmd(startPoint, height, width, paint, Paint::PaintStyle::FILL_STYLE);
+        DrawCmd cmd;
+        cmd.paint = paint;
+        cmd.param = rectParam;
+        cmd.DeleteParam = DeleteRectParam;
+        cmd.DrawGraphics = DoDrawRect;
+        drawCmdList_.PushBack(cmd);
+    }
+
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
+        RectParam* rectParam = new RectParam;
+        if (rectParam == nullptr) {
+            GRAPHIC_LOGE("new RectParam fail");
+            return;
         }
-    } else {
-        BeginPath();
-        MoveTo(startPoint);
-        LineTo({static_cast<int16_t>(startPoint.x + width), startPoint.y});
-        LineTo({static_cast<int16_t>(startPoint.x + width), static_cast<int16_t>(startPoint.y + height)});
-        LineTo({startPoint.x, static_cast<int16_t>(startPoint.y + height)});
-        ClosePath();
-        FillPath(paint);
-        DrawPath(paint);
+        rectParam->start = startPoint;
+        rectParam->height = height;
+        rectParam->width = width;
+
+        DrawCmd cmd;
+        cmd.paint = paint;
+        cmd.param = rectParam;
+        cmd.DeleteParam = DeleteRectParam;
+        cmd.DrawGraphics = DoFillRect;
+        drawCmdList_.PushBack(cmd);
     }
     Invalidate();
 }
