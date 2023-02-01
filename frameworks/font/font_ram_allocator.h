@@ -16,9 +16,10 @@
 #ifndef FONT_RAM_ALLOCATOR_H
 #define FONT_RAM_ALLOCATOR_H
 
+#include <cstdint>
+
 #include "font/ui_font_allocator.h"
 #include "gfx_utils/heap_base.h"
-#include <cstdint>
 
 namespace OHOS {
 class FontRamAllocator : public HeapBase {
