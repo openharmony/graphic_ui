@@ -68,13 +68,13 @@ struct LabelLineInfo {
     const char* text;
     uint16_t length;
     uint16_t start;
-    uint8_t fontId;
+    uint16_t fontId;
     uint8_t fontSize;
     uint8_t txtFlag;
     UITextLanguageDirect direct;
     uint32_t* codePoints;
     bool baseLine;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     TextStyle* textStyles;
 #endif
     List<BackgroundColor>*  backgroundColor;
@@ -94,10 +94,10 @@ struct LabelLetterInfo {
 
     const uint32_t& letter;
     UITextLanguageDirect direct;
-    uint8_t fontId;
+    uint16_t fontId;
     uint8_t shapingId;
     uint8_t fontSize;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     TextStyle textStyle;
 #endif
     bool baseLine;

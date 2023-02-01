@@ -18,6 +18,7 @@
 
 #include <stdint.h>
 
+#include "font/ui_font_header.h"
 #include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
@@ -49,6 +50,11 @@ public:
     void* Allocate(uint32_t size);
 
     void Free(void* addr);
+
+    static BufferInfo
+        GetCacheBuffer(uint16_t fontId, uint32_t unicode, ColorMode mode, GlyphNode& glyphNode, bool hasMetric);
+
+    static void RearrangeBitmap(BufferInfo& bufInfo, uint32_t fileSz, bool hasMetric);
 
 private:
     void CombineFree(Chunk* cache);

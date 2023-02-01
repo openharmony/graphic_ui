@@ -263,7 +263,7 @@ HWTEST_F(UILabelTest, UILabelOnPreDraw_001, TestSize.Level1)
     invalidatedArea = nullptr;
 }
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 /**
  * @tc.name: UILabelSetText_002
  * @tc.desc: Verify SetText function.
