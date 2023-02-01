@@ -53,7 +53,6 @@ public:
 protected:
     int8_t GetDynamicFontBitmap(uint32_t unicode, BufferInfo& bufInfo, uint16_t fontId);
     uint8_t* GetCacheBitmap(uint16_t fontId, uint32_t unicode);
-    BufferInfo GetCacheBuffer(uint16_t fontId, uint32_t unicode, GlyphNode& glyphNode);
     void PutCacheSpace(uint8_t* addr);
     int16_t GetDynamicFontWidth(uint32_t unicode, uint16_t fontId);
     uint32_t offset_;
