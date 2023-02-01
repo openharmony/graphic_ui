@@ -292,31 +292,6 @@ int16_t GlyphsFile::GetFontHeight(uint16_t fontId)
 
     return glyphInfo.fontHeader->fontHeight;
 }
-namespace {
-void RearrangeBitmap(BufferInfo& bufInfo, uint32_t fileSz)
-{
-    uint32_t word = bufInfo.width;
-    word = BIT_TO_BYTE(word * DrawUtils::GetPxSizeByColorMode(bufInfo.mode));
-    if (bufInfo.stride <= word) {
-        return;
-    }
-
-    uint8_t* bitmap = reinterpret_cast<uint8_t*>(bufInfo.virAddr);
-    uint32_t suffixLen = bufInfo.stride - word;
-    uint8_t* rdestBuf = bitmap + bufInfo.stride * bufInfo.height;
-    uint8_t* rsrcBuf = bitmap + fileSz;
-
-    /* Rearrange bitmap in local buffer */
-    for (uint32_t row = 0; row < bufInfo.height; row++) {
-        rdestBuf -= suffixLen;
-        (void)memset_s(rdestBuf, suffixLen, 0, suffixLen);
-        for (uint32_t i = 0; i < word; i++) {
-            *(--rdestBuf) = *(--rsrcBuf);
-        }
-    }
-    BaseGfxEngine::GetInstance()->MemoryBarrier();
-}
-} // namespace
 
 int8_t GlyphsFile::GetBitmap(GlyphNode& node, BufferInfo& bufInfo)
 {
@@ -345,7 +320,7 @@ int8_t GlyphsFile::GetBitmap(GlyphNode& node, BufferInfo& bufInfo)
         GRAPHIC_LOGE("GlyphsFile::GetBitmap read failed");
         return INVALID_RET_VALUE;
     }
-    RearrangeBitmap(bufInfo, size);
+    UIFontAllocator::RearrangeBitmap(bufInfo, size, false);
 
     node.dataFlag = node.fontId;
     return RET_VALUE_OK;

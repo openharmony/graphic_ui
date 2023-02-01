@@ -18,6 +18,7 @@
 
 #include <string>
 #include "graphic_config.h"
+#include "gfx_utils/common_macros.h"
 namespace OHOS {
 #pragma pack(1)
 #define BIT_TO_BYTE(x) (((x) + 0x7) >> 3)
@@ -411,6 +412,15 @@ struct FileCommonHeader {
 struct TtfInfo {
     const char* ttfName;
     uint8_t shaping;
+};
+
+struct UI_STRUCT_ALIGN Metric {
+    int left;
+    int top;
+    int cols;
+    int rows;
+    int advance;
+    uint8_t buf[0];
 };
 
 #pragma pack()
