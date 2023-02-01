@@ -40,7 +40,7 @@ Text::Text()
       horizontalAlign_(TEXT_ALIGNMENT_LEFT),
       verticalAlign_(TEXT_ALIGNMENT_TOP)
 {
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     textStyles_ = nullptr;
 #endif
     SetFont(DEFAULT_VECTOR_FONT_FILENAME, DEFAULT_VECTOR_FONT_SIZE);
@@ -52,7 +52,7 @@ Text::~Text()
         UIFree(text_);
         text_ = nullptr;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     if (textStyles_ != nullptr) {
         UIFree(textStyles_);
         textStyles_ = nullptr;
@@ -73,7 +73,7 @@ Text::~Text()
     }
 }
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 void Text::SetSpannableString(const SpannableString* spannableString)
 {
     SetText(spannableString->text_);
@@ -130,7 +130,7 @@ void Text::SetText(const char* text)
         text_ = nullptr;
         return;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     if (textStyles_ != nullptr) {
         UIFree(textStyles_);
         textStyles_ = nullptr;
@@ -149,7 +149,7 @@ void Text::SetFont(const char* name, uint8_t size)
         return;
     }
     if (UIFont::GetInstance()->IsVectorFont()) {
-        uint8_t fontId = UIFont::GetInstance()->GetFontId(name);
+        uint16_t fontId = UIFont::GetInstance()->GetFontId(name);
         if ((fontId != UIFontBuilder::GetInstance()->GetTotalFontId()) &&
             ((fontId_ != fontId) || (fontSize_ != size))) {
             fontId_ = fontId;
@@ -157,7 +157,7 @@ void Text::SetFont(const char* name, uint8_t size)
             needRefresh_ = true;
         }
     } else {
-        uint8_t fontId = UIFont::GetInstance()->GetFontId(name, size);
+        uint16_t fontId = UIFont::GetInstance()->GetFontId(name, size);
         SetFontId(fontId);
     }
 }
@@ -194,18 +194,24 @@ void Text::SetFont(const char* name, uint8_t size, char*& destName, uint8_t& des
     }
 }
 
-void Text::SetFontId(uint8_t fontId)
+void Text::SetFontId(uint16_t fontId)
 {
-    if ((fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) || ((fontId_ == fontId) && (fontSize_ != 0))) {
+    if (fontId >= UIFontBuilder::GetInstance()->GetTotalFontId()) {
         GRAPHIC_LOGE("Text::SetFontId invalid fontId(%hhd)", fontId);
         return;
     }
+
+    if ((fontId_ == fontId) && (fontSize_ != 0) && !UIFont::GetInstance()->IsVectorFont()) {
+        GRAPHIC_LOGD("Text::SetFontId same font has already set");
+        return;
+    }
+
     UITextLanguageFontParam* fontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
     if (fontParam == nullptr) {
         return;
     }
     if (UIFont::GetInstance()->IsVectorFont()) {
-        uint8_t fontId = UIFont::GetInstance()->GetFontId(fontParam->ttfName);
+        uint16_t fontId = UIFont::GetInstance()->GetFontId(fontParam->ttfName);
         if ((fontId != UIFontBuilder::GetInstance()->GetTotalFontId()) && ((fontId_ != fontId) ||
             (fontSize_ != fontParam->size))) {
             fontId_ = fontId;
@@ -328,7 +334,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
                                     0, opa, style, &text_[lineBegin], textLine_[i].lineBytes,
                                     lineBegin, fontId_, fontSize_, 0, static_cast<UITextLanguageDirect>(direct_),
                                     nullptr, baseLine_,
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
                                     textStyles_,
 #endif
                                     &backgroundColor_, &foregroundColor_, &linebackgroundColor_, sizeSpans_, 0};
@@ -533,7 +539,7 @@ void Text::SetAbsoluteSizeSpan(uint16_t start, uint16_t end, uint8_t size)
         return;
     }
 #endif
-    uint8_t fontId = GetSpanFontIdBySize(size);
+    uint16_t fontId = GetSpanFontIdBySize(size);
 #if defined(ENABLE_VECTOR_FONT) && !ENABLE_VECTOR_FONT
     if (fontId == fontId_) {
         return;
@@ -574,7 +580,7 @@ void Text::SetRelativeSizeSpan(uint16_t start, uint16_t end, float size)
     SetAbsoluteSizeSpan(start, end, absoluteSize);
 }
 
-uint8_t Text::GetSpanFontIdBySize(uint8_t size)
+uint16_t Text::GetSpanFontIdBySize(uint8_t size)
 {
 #if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
     return fontId_;
@@ -585,7 +591,7 @@ uint8_t Text::GetSpanFontIdBySize(uint8_t size)
     }
 
     uint8_t ttfId = fontParam->ttfId;
-    for (uint8_t fontId = 0; fontId < UIFontBuilder::GetInstance()->GetTotalFontId(); fontId++) {
+    for (uint16_t fontId = 0; fontId < UIFontBuilder::GetInstance()->GetTotalFontId(); fontId++) {
         UITextLanguageFontParam* tempFontParam = UIFontBuilder::GetInstance()->GetTextLangFontsTable(fontId);
         if (tempFontParam == nullptr) {
             continue;

@@ -43,7 +43,7 @@
 #include "gfx_utils/vector.h"
 #include "engines/gfx/gfx_engine_manager.h"
 #include "font/ui_font_header.h"
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 #include "common/spannable_string.h"
 #endif
 
@@ -121,7 +121,7 @@ struct LineBackgroundColor : public HeapBase {
 struct SizeSpan {
     bool isSizeSpan;
     uint8_t size;
-    uint8_t fontId;
+    uint16_t fontId;
     int16_t height;
 };
 
@@ -164,7 +164,7 @@ public:
      */
     virtual void SetText(const char* text);
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     /**
      * @brief Sets the SpannableString for this text.
      *
@@ -205,7 +205,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint8_t fontId);
+    void SetFontId(uint16_t fontId);
 
     /**
      * @brief Obtains the font ID.
@@ -513,12 +513,13 @@ protected:
                                        uint8_t letterSpace, uint16_t& lineNum,
                                        uint16_t& letterIndex,
                                        SizeSpan* sizeSpans);
-    uint8_t GetSpanFontIdBySize(uint8_t size);
+    uint16_t GetSpanFontIdBySize(uint8_t size);
     void InitSizeSpans();
-
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     TextStyle* textStyles_;
+#endif
     char* text_;
-    uint8_t fontId_;
+    uint16_t fontId_;
     uint8_t fontSize_; // Only the vector font library has a valid value.
     Point textSize_;
     bool needRefresh_ : 1;

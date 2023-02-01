@@ -50,7 +50,8 @@ public:
      */
     static UITextShaping* GetInstance();
 
-    static bool IsSameTTFId(uint8_t fontId, uint32_t unicode);
+    static bool IsSameTTFId(uint16_t fontId, uint32_t unicode);
+    void ClearTtfHeader();
 }; // class UITextShaping
 } // namespace OHOS
 #endif // ENABLE_SHAPING

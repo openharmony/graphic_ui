@@ -15,12 +15,13 @@
 
 #include "font/glyphs_manager.h"
 #include "font/ui_font_builder.h"
+#include "font/ui_font_cache_manager.h"
 #include "gfx_utils/file.h"
 #include "gfx_utils/graphic_log.h"
 #include "securec.h"
 
 namespace OHOS {
-GlyphsManager::GlyphsManager() {}
+GlyphsManager::GlyphsManager() : fileType_(0) {}
 
 GlyphsManager::~GlyphsManager()
 {
@@ -30,13 +31,8 @@ GlyphsManager::~GlyphsManager()
     }
 }
 
-int8_t GlyphsManager::SetFile(const char* fontName, int32_t fp, uint32_t start)
+int8_t GlyphsManager::SetFile(const char* fontName, int32_t fp, uint32_t start, uint16_t fileType)
 {
-    if (glyphsCache_.CacheInit() != RET_VALUE_OK) {
-        GRAPHIC_LOGE("GlyphsManager::SetFile cache init failed");
-        return INVALID_RET_VALUE;
-    }
-
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
         if (glyphsFiles_[i]->IsSameFile(fontName)) {
             GRAPHIC_LOGE("GlyphsManager::SetFile font name repeat");
@@ -57,6 +53,7 @@ int8_t GlyphsManager::SetFile(const char* fontName, int32_t fp, uint32_t start)
     }
 
     glyphsFiles_.PushBack(instance);
+    fileType_ = fileType;
     return RET_VALUE_OK;
 }
 
@@ -70,7 +67,7 @@ int8_t GlyphsManager::GetFontVersion(const char* fontName, char* version, uint8_
     return INVALID_RET_VALUE;
 }
 
-const FontHeader* GlyphsManager::GetFontHeader(uint8_t fontId)
+const FontHeader* GlyphsManager::GetFontHeader(uint16_t fontId)
 {
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
         const FontHeader* tmp = glyphsFiles_[i]->GetFontHeader(fontId);
@@ -82,13 +79,8 @@ const FontHeader* GlyphsManager::GetFontHeader(uint8_t fontId)
     return nullptr;
 }
 
-const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint8_t fontId)
+const GlyphNode* GlyphsManager::GetGlyphNodeFromFiles(uint32_t unicode, uint16_t fontId)
 {
-    GlyphNode* node = glyphsCache_.GetNodeFromCache(unicode, fontId);
-    if (node != nullptr) {
-        return node;
-    }
-
     int8_t ret = INVALID_RET_VALUE;
     GlyphNode nodeInfo;
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
@@ -103,15 +95,31 @@ const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint8_t fontId)
         return nullptr;
     }
 
-    node = glyphsCache_.GetNodeCacheSpace(unicode, fontId);
-    if (node != nullptr) {
-        *node = nodeInfo;
+    GlyphCacheNode* cacheNode = UIFontCacheManager::GetInstance()->GetNodeCacheSpace(unicode, fontId);
+    if (cacheNode != nullptr) {
+        cacheNode->node = nodeInfo;
+        cacheNode->cacheType = fileType_;
     }
 
-    return node;
+    return &(cacheNode->node);
 }
 
-int16_t GlyphsManager::GetFontHeight(uint8_t fontId)
+const GlyphNode* GlyphsManager::GetGlyphNode(uint32_t unicode, uint16_t fontId)
+{
+    GlyphCacheNode* cacheNode =
+        UIFontCacheManager::GetInstance()->GetNodeFromCache(unicode, fontId, GlyphCacheType::CACHE_TYPE_NONE);
+    if (cacheNode != nullptr) {
+        return &(cacheNode->node);
+    }
+
+    const GlyphNode* node = const_cast<GlyphNode*>(GetGlyphNodeFromFiles(unicode, fontId));
+    if (node != nullptr) {
+        return node;
+    }
+    return nullptr;
+}
+
+int16_t GlyphsManager::GetFontHeight(uint16_t fontId)
 {
     for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
         int16_t height = glyphsFiles_[i]->GetFontHeight(fontId);
@@ -123,7 +131,7 @@ int16_t GlyphsManager::GetFontHeight(uint8_t fontId)
     return INVALID_RET_VALUE;
 }
 
-int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint8_t fontId)
+int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint16_t fontId)
 {
     const GlyphNode* node = GetGlyphNode(unicode, fontId);
     if (node == nullptr) {
@@ -132,9 +140,19 @@ int16_t GlyphsManager::GetFontWidth(uint32_t unicode, uint8_t fontId)
     return node->advance;
 }
 
-int8_t GlyphsManager::GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint8_t fontId)
+int8_t GlyphsManager::GetBitmap(uint32_t unicode, BufferInfo& bufInfo, uint16_t fontId)
 {
-    GlyphNode* node = const_cast<GlyphNode *>(GetGlyphNode(unicode, fontId));
+    GlyphCacheNode* cacheNode = UIFontCacheManager::GetInstance()->GetNodeFromCache(unicode, fontId, fileType_);
+    if (cacheNode != nullptr && cacheNode->cacheType == fileType_) {
+        for (uint16_t i = 0; i < glyphsFiles_.Size(); i++) {
+            int8_t ret = glyphsFiles_[i]->GetBitmap(cacheNode->node, bufInfo);
+            if (ret == RET_VALUE_OK) {
+                return RET_VALUE_OK;
+            }
+        }
+    }
+
+    GlyphNode* node = const_cast<GlyphNode*>(GetGlyphNodeFromFiles(unicode, fontId));
     if (node == nullptr) {
         GRAPHIC_LOGE("GlyphsManager::GetBitmap node not found");
         return INVALID_RET_VALUE;

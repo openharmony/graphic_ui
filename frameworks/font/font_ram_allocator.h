@@ -17,6 +17,8 @@
 #define FONT_RAM_ALLOCATOR_H
 
 #include <cstdint>
+
+#include "font/ui_font_allocator.h"
 #include "gfx_utils/heap_base.h"
 
 namespace OHOS {
@@ -44,6 +46,11 @@ public:
     void SetRamAddr(uintptr_t ramAddr, uint32_t ramLen);
     void* Allocate(uint32_t size);
     uint32_t GetRamUsedLen();
+    void ClearRam();
+    void* DynamicAllocate(uint32_t size);
+    void DynamicFree(void* addr);
+    uint32_t GetMemSize(void* addr);
+
 private:
     uint32_t AlignUp(uint32_t addr);
     bool IsAligned(uint32_t addr);
@@ -51,6 +58,8 @@ private:
     uintptr_t ramAddr_;
     uint32_t ramLen_;
     uintptr_t currentRamAddr_;
+    uintptr_t dynamicAddr_;
+    UIFontAllocator allocator_;
 };
 } // namespace OHOS
 #endif /* FONT_RAM_ALLOCATOR_H */

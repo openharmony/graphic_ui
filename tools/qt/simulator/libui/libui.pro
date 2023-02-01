@@ -148,6 +148,7 @@ SOURCES += \
     ../../../../frameworks/font/ui_font_bitmap.cpp \
     ../../../../frameworks/font/ui_font_builder.cpp \
     ../../../../frameworks/font/ui_font_cache.cpp \
+    ../../../../frameworks/font/ui_font_cache_manager.cpp \
     ../../../../frameworks/font/ui_font_vector.cpp \
     ../../../../frameworks/font/ui_line_break.cpp \
     ../../../../frameworks/font/ui_multi_font_manager.cpp \

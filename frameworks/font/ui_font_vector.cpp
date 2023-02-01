@@ -31,6 +31,10 @@
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
+#if ENABLE_SHAPING
+#include "font/ui_text_shaping.h"
+#endif
+#include "font/ui_font_cache_manager.h"
 
 namespace OHOS {
 UIFontVector::UIFontVector()
@@ -47,7 +51,6 @@ UIFontVector::UIFontVector()
 #endif // _WIN32
     ftLibrary_ = nullptr;
     freeTypeInited_ = ((FT_Init_FreeType(&ftLibrary_) == 0) ? true : false);
-    bitmapCache_ = nullptr;
 }
 
 UIFontVector::~UIFontVector()
@@ -57,7 +60,6 @@ UIFontVector::~UIFontVector()
         freeTypeInited_ = false;
         UnregisterFontInfo(DEFAULT_VECTOR_FONT_FILENAME);
     }
-    delete bitmapCache_;
 }
 
 bool UIFontVector::IsColorEmojiFont(FT_Face& face)
@@ -165,10 +167,14 @@ uint8_t UIFontVector::RegisterTtcFontInfo(const char* ttcName, const TtfInfo* tt
             }
             ttcInfos_[i].ttcName = ttcName;
             args = {FT_OPEN_STREAM, nullptr, 0, nullptr, ttcInfos_[i].stream, nullptr, 0, nullptr};
-            while ((ttfIdx < FONT_ID_MAX) && fontInfo_[ttfIdx].ttfName != nullptr) {
-                ttfIdx++;
-            }
             for (uint8_t j = 0; j < count; j++) {
+                while ((ttfIdx < FONT_ID_MAX) && fontInfo_[ttfIdx].ttfName != nullptr) {
+                    ttfIdx++;
+                }
+
+                if (ttfIdx >= FONT_ID_MAX) {
+                    return FONT_INVALID_TTF_ID;
+                }
                 error = FT_Open_Face(ftLibrary_, &args, j, &ftFaces_[ttfIdx]);
                 if (error != 0) {
                     continue;
@@ -186,7 +192,6 @@ uint8_t UIFontVector::RegisterTtcFontInfo(const char* ttcName, const TtfInfo* tt
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
                 UIMultiFontManager::GetInstance()->UpdateScript(fontInfo_[ttfIdx]);
 #endif
-                ttfIdx++;
             }
             return i;
         }
@@ -204,10 +209,12 @@ uint8_t UIFontVector::UnregisterTtcFontInfo(const char* ttcName, const TtfInfo* 
     uint8_t i = 0;
     while (i < FONT_ID_MAX) {
         if ((ttcInfos_[i].ttcName != nullptr) && !strncmp(ttcInfos_[i].ttcName, ttcName, TTF_NAME_LEN_MAX)) {
-            FT_Stream_Free(ttcInfos_[i].stream, 1);
             for (uint8_t j = 0; j < count; j++) {
                 UnregisterFontInfo(ttfInfo[j].ttfName);
             }
+            FT_Stream_Free(ttcInfos_[i].stream, 1);
+            ttcInfos_[i].ttcName = nullptr;
+            ttcInfos_[i].stream = nullptr;
             return i;
         }
         i++;
@@ -239,6 +246,7 @@ uint8_t UIFontVector::UnregisterFontInfo(const char* ttfName)
                 fontInfo_[i].ttfName = nullptr;
                 FT_Done_Face(ftFaces_[i]);
                 ftFaces_[i] = nullptr;
+                fontSize_[i] = 0;
                 return static_cast<uint8_t>(i);
             }
             i++;
@@ -247,7 +255,7 @@ uint8_t UIFontVector::UnregisterFontInfo(const char* ttfName)
     return FONT_INVALID_TTF_ID;
 }
 
-const UITextLanguageFontParam* UIFontVector::GetFontInfo(uint8_t fontId) const
+const UITextLanguageFontParam* UIFontVector::GetFontInfo(uint16_t fontId) const
 {
     if (fontId < FONT_ID_MAX) {
         return static_cast<const UITextLanguageFontParam*>(&fontInfo_[fontId]);
@@ -288,19 +296,17 @@ bool UIFontVector::GetTtfInfo(uint8_t ttfId, uint8_t* ttfBuffer, uint32_t ttfBuf
             continue;
         }
         if (fontInfo_[i].ttfId == ttfId) {
-            // size value store ttc font index, if not equal FONT_ID_MAX, means ttc file
-            if (fontInfo_[i].size != FONT_ID_MAX) {
-                return GetTtfInfoFromTtc(ttfId, ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
+            if (fontInfo_[i].ttcIndex != FONT_TTC_MAX) {
+                return GetTtfInfoFromTtc(ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
             } else {
-                return GetTtfInfoFromTtf(ttfId, ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
+                return GetTtfInfoFromTtf(ttfBuffer, ttfBufferSize, ttfHeader, fontInfo_[i]);
             }
         }
     }
     return false;
 }
 
-bool UIFontVector::GetTtfInfoFromTtf(uint8_t ttfId,
-                                     uint8_t* ttfBuffer,
+bool UIFontVector::GetTtfInfoFromTtf(uint8_t* ttfBuffer,
                                      uint32_t ttfBufferSize,
                                      TtfHeader& ttfHeader,
                                      UITextLanguageFontParam fontInfo)
@@ -348,8 +354,7 @@ struct TtcHeader {
     uint16_t minor;
     int32_t numFonts;
 };
-bool UIFontVector::GetTtfInfoFromTtc(uint8_t ttfId,
-                                     uint8_t* ttfBuffer,
+bool UIFontVector::GetTtfInfoFromTtc(uint8_t* ttfBuffer,
                                      uint32_t ttfBufferSize,
                                      TtfHeader& ttfHeader,
                                      UITextLanguageFontParam fontInfo)
@@ -368,7 +373,7 @@ bool UIFontVector::GetTtfInfoFromTtc(uint8_t ttfId,
     }
 
     // read ttc header
-    TtcHeader header = {0};
+    TtcHeader header = {};
     static const FT_Frame_Field ttcHeaderFields[] = {
 #undef FT_STRUCTURE
 #define FT_STRUCTURE TtcHeader
@@ -441,7 +446,7 @@ bool UIFontVector::IsVectorFont() const
     return true;
 }
 
-uint8_t UIFontVector::GetFontWeight(uint8_t fontId)
+uint8_t UIFontVector::GetFontWeight(uint16_t fontId)
 {
     if (fontId >= FONT_ID_MAX) {
         return BPP_BIT_8;
@@ -459,10 +464,17 @@ int8_t UIFontVector::SetFontPath(const char* path, FontType type)
     return RET_VALUE_OK;
 }
 
-int8_t UIFontVector::GetFaceInfo(uint8_t fontId, uint8_t fontSize, FaceInfo& faceInfo)
+int8_t UIFontVector::GetFaceInfo(uint16_t fontId, uint8_t fontSize, FaceInfo& faceInfo)
 {
     if ((fontId >= FONT_ID_MAX) || (fontSize == 0)) {
         return INVALID_RET_VALUE;
+    }
+
+    faceInfo.key = GetKey(fontId, fontSize);
+    faceInfo.face = ftFaces_[fontId];
+
+    if (fontSize_[fontId] == fontSize) {
+        return RET_VALUE_OK;
     }
     const UITextLanguageFontParam* fontInfo = GetFontInfo(fontId);
     if ((fontInfo == nullptr) || (fontInfo->ttfName == nullptr)) {
@@ -472,9 +484,6 @@ int8_t UIFontVector::GetFaceInfo(uint8_t fontId, uint8_t fontSize, FaceInfo& fac
     if (!freeTypeInited_) {
         return INVALID_RET_VALUE;
     }
-
-    faceInfo.key = GetKey(fontId, fontSize);
-    faceInfo.face = ftFaces_[fontId];
 
     // Set the size
     int8_t ret;
@@ -487,24 +496,25 @@ int8_t UIFontVector::GetFaceInfo(uint8_t fontId, uint8_t fontSize, FaceInfo& fac
     if (ret != 0) {
         return INVALID_RET_VALUE;
     }
+    fontSize_[fontId] = fontSize;
     return RET_VALUE_OK;
 }
 
-uint16_t UIFontVector::GetHeight(uint8_t fontId, uint8_t fontSize)
+uint16_t UIFontVector::GetHeight(uint16_t fontId, uint8_t fontSize)
 {
     FaceInfo faceInfo;
     int8_t ret = GetFaceInfo(fontId, fontSize, faceInfo);
     if (ret != RET_VALUE_OK) {
         return INVALID_RET_VALUE;
     }
-    if (!freeTypeInited_ || (faceInfo.face == nullptr) || (bitmapCache_ == nullptr)) {
+    if (!freeTypeInited_ || (faceInfo.face == nullptr)) {
         return 0;
     }
     return static_cast<uint16_t>(faceInfo.face->size->metrics.height / FONT_PIXEL_IN_POINT);
 }
 
-uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
-                                       uint8_t fontId, uint8_t size) const
+uint16_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script,
+                                        uint16_t fontId, uint8_t size) const
 {
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
     const UITextLanguageFontParam* fontParam1 = GetFontInfo(fontId);
@@ -515,7 +525,7 @@ uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& scr
         if (!UIMultiFontManager::GetInstance()->IsNeedShaping(text, ttfId, script)) {
             return 0; // 0 means  no need to shape
         }
-        uint8_t* searchLists = nullptr;
+        uint16_t* searchLists = nullptr;
         int8_t length = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
         const UITextLanguageFontParam* fontParam2 = nullptr;
         for (uint8_t i = 0; i < length; i++) {
@@ -545,7 +555,7 @@ uint8_t UIFontVector::GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& scr
 #endif
 }
 
-uint8_t UIFontVector::GetFontId(const char* ttfName, uint8_t fontSize) const
+uint16_t UIFontVector::GetFontId(const char* ttfName, uint8_t fontSize) const
 {
     if (ttfName != nullptr) {
         int32_t i = 0;
@@ -560,7 +570,7 @@ uint8_t UIFontVector::GetFontId(const char* ttfName, uint8_t fontSize) const
     return FONT_ID_MAX;
 }
 
-uint8_t UIFontVector::GetFontId(uint32_t unicode) const
+uint16_t UIFontVector::GetFontId(uint32_t unicode) const
 {
     int32_t i = 0;
     uint8_t ttfId = ((unicode >> 24) & 0x1F); // 24: Whether 25 ~29 bit storage is ttfId 0x1F:5bit
@@ -577,44 +587,28 @@ uint8_t UIFontVector::GetFontId(uint32_t unicode) const
     return FONT_INVALID_TTF_ID;
 }
 
-int16_t UIFontVector::GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize)
+int16_t UIFontVector::GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize)
 {
     if ((fontId >= FONT_ID_MAX) || (fontSize == 0)) {
         return INVALID_RET_VALUE;
     }
 
-    if (!freeTypeInited_ || (bitmapCache_ == nullptr)) {
+    GlyphNode node;
+    int8_t ret = GetGlyphNode(unicode, node, fontId, fontSize);
+    if (ret != RET_VALUE_OK) {
         return INVALID_RET_VALUE;
     }
-
-    FaceInfo faceInfo = {};
-    faceInfo.key = GetKey(fontId, fontSize);
-    uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode);
-    if (bitmap != nullptr) {
-        return reinterpret_cast<Metric*>(bitmap)->advance;
-    }
-
-    int8_t ret = GetFaceInfo(fontId, fontSize, faceInfo);
-    if ((ret != RET_VALUE_OK) || (faceInfo.face == nullptr)) {
-        return INVALID_RET_VALUE;
-    }
-
-    int8_t error = LoadGlyphIntoFace(fontId, unicode);
-    if (error != RET_VALUE_OK) {
-        return INVALID_RET_VALUE;
-    }
-    SetFace(faceInfo, unicode);
-    return static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
+    return node.advance;
 }
 
-int8_t UIFontVector::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize)
+int8_t UIFontVector::GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize)
 {
     FaceInfo faceInfo;
     int8_t ret = GetFaceInfo(fontId, fontSize, faceInfo);
     if (ret != RET_VALUE_OK) {
         return INVALID_RET_VALUE;
     }
-    if (!freeTypeInited_ || (faceInfo.face == nullptr) || (bitmapCache_ == nullptr)) {
+    if (!freeTypeInited_ || (faceInfo.face == nullptr)) {
         return INVALID_RET_VALUE;
     }
 
@@ -624,20 +618,36 @@ int8_t UIFontVector::GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8
     return RET_VALUE_OK;
 }
 
-int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
+void UIFontVector::SaveGlyphNode(uint32_t unicode, uint16_t fontKey, Metric *metric)
 {
-    FaceInfo faceInfo;
-    int8_t ret = GetFaceInfo(fontId, fontSize, faceInfo);
-    if (ret != RET_VALUE_OK) {
-        return INVALID_RET_VALUE;
+    GlyphCacheNode* node = UIFontCacheManager::GetInstance()->GetNodeCacheSpace(unicode, fontKey);
+    if (node == nullptr) {
+        return;
     }
-    if (!freeTypeInited_ || (faceInfo.face == nullptr) || (bitmapCache_ == nullptr)) {
-        return INVALID_RET_VALUE;
+    node->node.left = metric->left;
+    node->node.top = metric->top;
+    node->node.cols = metric->cols;
+    node->node.rows = metric->rows;
+    node->node.advance = metric->advance;
+    node->node.unicode = unicode;
+    node->node.fontId = fontKey;
+}
+
+int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize)
+{
+    // get glyph from glyph cache
+    uint16_t fontKey = GetKey(fontId, fontSize);
+    GlyphCacheNode* cacheNode =
+        UIFontCacheManager::GetInstance()->GetNodeFromCache(unicode, fontKey, GlyphCacheType::CACHE_TYPE_NONE);
+    if (cacheNode != nullptr) {
+        glyphNode = cacheNode->node;
+        return RET_VALUE_OK;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-    uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode, glyphNode.textStyle);
+
+#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+    uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
 #else
-    uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode);
+    uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
 #endif
     if (bitmap != nullptr) {
         Metric* f = reinterpret_cast<Metric*>(bitmap);
@@ -647,58 +657,75 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_
         glyphNode.rows = f->rows;
         glyphNode.advance = f->advance;
         glyphNode.fontId = fontId;
+
+        SaveGlyphNode(unicode, fontKey, f);
         return RET_VALUE_OK;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-    int8_t error = LoadGlyphIntoFace(fontId, unicode, faceInfo.face, glyphNode.textStyle);
-#else
-    int8_t error = LoadGlyphIntoFace(fontId, unicode);
-#endif
+
+    FaceInfo faceInfo;
+    int8_t ret = GetFaceInfo(fontId, fontSize, faceInfo);
+    if (ret != RET_VALUE_OK) {
+        return INVALID_RET_VALUE;
+    }
+    if (faceInfo.face == nullptr) {
+        return INVALID_RET_VALUE;
+    }
+
+    int8_t error = LoadGlyphIntoFace(fontId, fontSize, unicode, glyphNode);
     if (error != RET_VALUE_OK) {
         return INVALID_RET_VALUE;
     }
 
-    glyphNode.left = faceInfo.face->glyph->bitmap_left;
-    glyphNode.top = faceInfo.face->glyph->bitmap_top;
-    glyphNode.cols = faceInfo.face->glyph->bitmap.width;
-    glyphNode.rows = faceInfo.face->glyph->bitmap.rows;
-    glyphNode.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
-    glyphNode.fontId = fontId;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-    SetFace(faceInfo, unicode, glyphNode.textStyle);
-#else
-    SetFace(faceInfo, unicode);
-#endif
     return RET_VALUE_OK;
 }
 
-uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize)
+uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize)
 {
-    if (GetGlyphNode(unicode, glyphNode, fontId, fontSize) != RET_VALUE_OK) {
-        return nullptr;
+    uint16_t fontKey = GetKey(fontId, fontSize);
+#if ENABLE_SPANNALBE_STRING
+    uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
+#else
+    uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
+#endif
+    if (bitmap != nullptr) {
+        Metric* f = reinterpret_cast<Metric*>(bitmap);
+        glyphNode.left = f->left;
+        glyphNode.top = f->top;
+        glyphNode.cols = f->cols;
+        glyphNode.rows = f->rows;
+        glyphNode.advance = f->advance;
+        glyphNode.fontId = fontId;
+        SaveGlyphNode(unicode, fontKey, f);
+        return bitmap + sizeof(Metric);
     }
+
     FaceInfo faceInfo;
     int8_t ret = GetFaceInfo(fontId, fontSize, faceInfo);
     if (ret != RET_VALUE_OK) {
         return nullptr;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-    uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode, glyphNode.textStyle);
+    if (faceInfo.face == nullptr) {
+        return nullptr;
+    }
+
+    int8_t error = LoadGlyphIntoFace(fontId, fontSize, unicode, glyphNode);
+    if (error != RET_VALUE_OK) {
+        return nullptr;
+    }
+
+#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+    bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
 #else
-    uint8_t* bitmap = bitmapCache_->GetBitmap(faceInfo.key, unicode);
+    bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
 #endif
     if (bitmap != nullptr) {
         return bitmap + sizeof(Metric);
+    } else {
+        return nullptr;
     }
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-    SetFace(faceInfo, unicode, glyphNode.textStyle);
-#else
-    SetFace(faceInfo, unicode);
-#endif
-    return static_cast<uint8_t*>(faceInfo.face->glyph->bitmap.buffer);
 }
 
-bool UIFontVector::IsEmojiFont(uint8_t fontId)
+bool UIFontVector::IsEmojiFont(uint16_t fontId)
 {
     if (fontId >= FONT_ID_MAX) {
         return false;
@@ -706,7 +733,7 @@ bool UIFontVector::IsEmojiFont(uint8_t fontId)
     return (fontInfo_[fontId].fontWeight >= 16); // 16: rgb color font
 }
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
 void UIFontVector::SetItaly(FT_GlyphSlot slot)
 {
     if (slot->format != FT_GLYPH_FORMAT_OUTLINE) {
@@ -723,7 +750,7 @@ void UIFontVector::SetItaly(FT_GlyphSlot slot)
     FT_Outline_Transform(&outline, &matrix);
 }
 
-void UIFontVector::SetBold(uint8_t fontId)
+void UIFontVector::SetBold(uint16_t fontId)
 {
     int32_t error;
     FT_GlyphSlot slot = ftFaces_[fontId]->glyph;
@@ -749,15 +776,14 @@ void UIFontVector::SetBold(uint8_t fontId)
 }
 #endif
 
-int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode)
+int8_t UIFontVector::LoadGlyphIntoFace(uint16_t& fontId, uint8_t fontSize, uint32_t unicode, GlyphNode& glyphNode)
 {
     int32_t error;
     if (IsGlyphFont(unicode) != 0) {
         if (fontId != GetFontId(unicode)) {
             return INVALID_RET_VALUE;
         }
-        unicode = unicode & (0xFFFFFF); // Whether 0 ~24 bit storage is unicode
-        error = FT_Load_Glyph(ftFaces_[fontId], unicode, FT_LOAD_RENDER);
+        error = FT_Load_Glyph(ftFaces_[fontId], unicode & (0xFFFFFF), FT_LOAD_RENDER);
     } else {
         if (IsEmojiFont(fontId)) {
             error = FT_Load_Char(ftFaces_[fontId], unicode, FT_LOAD_COLOR);
@@ -768,11 +794,28 @@ int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode)
     if ((error != 0) || (ftFaces_[fontId]->glyph->glyph_index == 0)) {
         return INVALID_RET_VALUE;
     }
+
+    FaceInfo faceInfo;
+    faceInfo.key = GetKey(fontId, fontSize);
+    faceInfo.face = ftFaces_[fontId];
+
+    glyphNode.left = faceInfo.face->glyph->bitmap_left;
+    glyphNode.top = faceInfo.face->glyph->bitmap_top;
+    glyphNode.cols = faceInfo.face->glyph->bitmap.width;
+    glyphNode.rows = faceInfo.face->glyph->bitmap.rows;
+    glyphNode.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
+    glyphNode.fontId = fontId;
+
+#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+    SetFace(faceInfo, unicode, glyphNode.textStyle);
+#else
+    SetFace(faceInfo, unicode);
+#endif
     return RET_VALUE_OK;
 }
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle)
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
+int8_t UIFontVector::LoadGlyphIntoFace(uint16_t& fontId, uint32_t unicode, FT_Face face, TextStyle textStyle)
 {
     int32_t error;
     if (IsGlyphFont(unicode) != 0) {
@@ -811,7 +854,7 @@ int8_t UIFontVector::LoadGlyphIntoFace(uint8_t& fontId, uint32_t unicode, FT_Fac
 
 uint8_t UIFontVector::IsGlyphFont(uint32_t unicode)
 {
-    uint8_t unicodeFontId = GetFontId(unicode);
+    uint16_t unicodeFontId = GetFontId(unicode);
     if (unicodeFontId == FONT_INVALID_TTF_ID) {
         return 0;
     } else {
@@ -819,37 +862,69 @@ uint8_t UIFontVector::IsGlyphFont(uint32_t unicode)
     }
 }
 
-void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode) const
+void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode)
 {
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
     SetFace(faceInfo, unicode, TEXT_STYLE_NORMAL);
 #else
-    Metric f;
-    f.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
-    f.left = faceInfo.face->glyph->bitmap_left;
-    f.top = faceInfo.face->glyph->bitmap_top;
-    f.cols = faceInfo.face->glyph->bitmap.width;
-    f.rows = faceInfo.face->glyph->bitmap.rows;
+    Metric* f = reinterpret_cast<Metric*>(UIMalloc(sizeof(Metric)));
+    if (f == nullptr) {
+        return;
+    }
+    f->advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
+    f->left = faceInfo.face->glyph->bitmap_left;
+    f->top = faceInfo.face->glyph->bitmap_top;
+    f->cols = faceInfo.face->glyph->bitmap.width;
+    f->rows = faceInfo.face->glyph->bitmap.rows;
 
-    int16_t pixSize = 1;
+    // cache glyph
+    SaveGlyphNode(unicode, faceInfo.key, f);
+
+    int16_t pixSize;
+    ColorMode mode;
     if (faceInfo.face->glyph->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
         pixSize = 0x04; // 4 Byte
+        mode = ARGB8888;
     }
-    uint32_t bitmapSize = faceInfo.face->glyph->bitmap.width * faceInfo.face->glyph->bitmap.rows * pixSize;
-    uint8_t* bitmap = bitmapCache_->GetSpace(faceInfo.key, unicode, bitmapSize + sizeof(Metric));
-    if (bitmap != nullptr) {
-        if (memcpy_s(bitmap, sizeof(Metric), &f, sizeof(Metric)) != EOK) {
+    else {
+        pixSize = 1;
+        mode = A8;
+    }
+
+    GlyphNode glyphNode;
+    glyphNode.left = f->left;
+    glyphNode.top = f->top;
+    glyphNode.cols = f->cols;
+    glyphNode.rows = f->rows;
+    glyphNode.advance = f->advance;
+    glyphNode.unicode = unicode;
+    glyphNode.fontId = faceInfo.key;
+    BufferInfo bufInfo = UIFontAllocator::GetCacheBuffer(faceInfo.key, unicode, mode, glyphNode, true);
+    uint32_t bitmapSize = bufInfo.stride * bufInfo.height;
+    uint32_t rawSize = glyphNode.cols * glyphNode.rows * pixSize;
+
+    if (bufInfo.virAddr != nullptr) {
+        if (memcpy_s(bufInfo.virAddr, sizeof(Metric), f, sizeof(Metric)) != EOK) {
+            UIFontCacheManager::GetInstance()->PutSpace(reinterpret_cast<uint8_t*>(bufInfo.virAddr));
+            UIFree(f);
             return;
         }
-        if (memcpy_s(bitmap + sizeof(Metric), bitmapSize, faceInfo.face->glyph->bitmap.buffer, bitmapSize) != EOK) {
+        if ((faceInfo.face->glyph->bitmap.buffer != nullptr) &&
+            (memcpy_s(reinterpret_cast<uint8_t*>(bufInfo.virAddr) + sizeof(Metric), bitmapSize,
+                      faceInfo.face->glyph->bitmap.buffer, rawSize) != EOK)) {
+            UIFontCacheManager::GetInstance()->PutSpace(reinterpret_cast<uint8_t*>(bufInfo.virAddr));
+            UIFree(f);
             return;
         }
+        UIFontAllocator::RearrangeBitmap(bufInfo, rawSize, true);
+        ClearFontGlyph(faceInfo.face);
     }
+    UIFree(f);
 #endif
 }
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle) const
+#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle)
 {
     Metric f;
     f.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
@@ -858,35 +933,56 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textS
     f.cols = faceInfo.face->glyph->bitmap.width;
     f.rows = faceInfo.face->glyph->bitmap.rows;
 
+    // cache glyph
+    SaveGlyphNode(unicode, faceInfo.key, &f);
+
     int16_t pixSize = 1;
     if (faceInfo.face->glyph->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
         pixSize = 0x04; // 4 Byte
     }
     uint32_t bitmapSize = faceInfo.face->glyph->bitmap.width * faceInfo.face->glyph->bitmap.rows * pixSize;
-    uint8_t* bitmap = bitmapCache_->GetSpace(faceInfo.key, unicode, bitmapSize + sizeof(Metric), textStyle);
+    // cache bitmap
+    uint8_t* bitmap =
+        UIFontCacheManager::GetInstance()->GetSpace(faceInfo.key, unicode, bitmapSize + sizeof(Metric), textStyle);
     if (bitmap != nullptr) {
         if (memcpy_s(bitmap, sizeof(Metric), &f, sizeof(Metric)) != EOK) {
+            UIFontCacheManager::GetInstance()->PutSpace(bitmap);
             return;
         }
         if (memcpy_s(bitmap + sizeof(Metric), bitmapSize, faceInfo.face->glyph->bitmap.buffer, bitmapSize) != EOK) {
+            UIFontCacheManager::GetInstance()->PutSpace(bitmap);
             return;
         }
+        ClearFontGlyph(faceInfo.face);
     }
 }
 #endif
 
-inline uint32_t UIFontVector::GetKey(uint8_t fontId, uint32_t size)
+void UIFontVector::ClearFontGlyph(FT_Face face)
 {
-    return ((static_cast<uint32_t>(fontId)) << 24) + size; // fontId store at the (24+1)th bit
+    if ((face != nullptr) && (face->glyph != nullptr)) {
+        // free unicode buffer immediately to save memory in multi font file load
+        // if not, it will be freed in next glyph load
+        ft_glyphslot_free_bitmap(face->glyph);
+        FT_Outline_Done(face->glyph->library, &face->glyph->outline);
+        if (face->glyph->internal != nullptr) {
+            FT_GlyphLoader_Reset(face->glyph->internal->loader);
+        }
+    }
+}
+
+inline uint16_t UIFontVector::GetKey(uint16_t fontId, uint8_t size)
+{
+    return ((static_cast<uint16_t>(fontId)) << 8) + size; // fontId store at the (8+1)th bit
 }
 
 uint16_t UIFontVector::GetOffsetPosY(const char* text,
                                      uint16_t lineLength,
                                      bool& isEmojiLarge,
-                                     uint8_t fontId,
+                                     uint16_t fontId,
                                      uint8_t fontSize)
 {
-    if (!freeTypeInited_ || (bitmapCache_ == nullptr)) {
+    if (!freeTypeInited_) {
         return INVALID_RET_VALUE;
     }
     uint32_t i = 0;
@@ -935,7 +1031,7 @@ uint16_t UIFontVector::GetOffsetPosY(const char* text,
 
 uint16_t UIFontVector::GetLineMaxHeight(const char* text,
                                         uint16_t lineLength,
-                                        uint8_t fontId,
+                                        uint16_t fontId,
                                         uint8_t fontSize,
                                         uint16_t& letterIndex,
                                         SizeSpan* sizeSpans)
@@ -1006,26 +1102,23 @@ void UIFontVector::SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen)
 {
     BaseFont::SetPsramMemory(psramAddr, psramLen);
     FontRamAllocator::GetInstance().SetRamAddr(psramAddr, psramLen);
-    BitmapCacheInit();
 }
 
-void UIFontVector::BitmapCacheInit()
+int8_t UIFontVector::SetCurrentLangId(uint8_t langId)
 {
-    if (bitmapCache_ != nullptr) {
-        return;
-    }
-
-#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
-    uint32_t cacheSize = FONT_BITMAP_CACHE_SIZE;
-#else
-    uint32_t cacheSize = GetRamLen();
+    FontRamAllocator::GetInstance().ClearRam();
+#if ENABLE_SHAPING
+    UITextShaping::GetInstance()->ClearTtfHeader();
 #endif
-    uint8_t* bitmapCacheAddr = reinterpret_cast<uint8_t*>(FontRamAllocator::GetInstance().Allocate(cacheSize));
-    if (bitmapCacheAddr == nullptr) {
-        GRAPHIC_LOGE("UIFontVector::BitmapCacheInit allocate failed");
-        return;
-    }
-    bitmapCache_ = new UIFontCache(bitmapCacheAddr, FONT_BITMAP_CACHE_SIZE);
-}
+    UIFontCacheManager::GetInstance()->ClearCacheFlag();
+    UIFontCacheManager::GetInstance()->BitmapCacheClear();
 
+    if (UIFontCacheManager::GetInstance()->GlyphsCacheInit() != RET_VALUE_OK) {
+        GRAPHIC_LOGE("UIFontCacheManager::GlyphsCacheInit init failed");
+        return INVALID_RET_VALUE;
+    }
+
+    UIFontCacheManager::GetInstance()->BitmapCacheInit();
+    return RET_VALUE_OK;
+}
 } // namespace OHOS
