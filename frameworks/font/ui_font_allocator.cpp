@@ -15,6 +15,10 @@
 
 #include "font/ui_font_allocator.h"
 
+#include "draw/draw_utils.h"
+#include "engines/gfx/gfx_engine_manager.h"
+#include "font/ui_font.h"
+#include "font/ui_font_cache_manager.h"
 #include "gfx_utils/graphic_buffer.h"
 
 namespace OHOS {
@@ -27,14 +31,19 @@ UIFontAllocator::~UIFontAllocator() {}
 
 void UIFontAllocator::SetRamAddr(uint8_t* ram, uint32_t size)
 {
-    UI_ADDR_ALIGN(ram, size);
-
-    struct Chunk* chunk = nullptr;
-    ram_ = ram;
     if (size <= sizeof(struct Chunk) * 2) { // 2 : head and tail two chunk
         ramSize_ = 0;
         return;
     }
+    if (ram == nullptr) {
+        ramSize_ = 0;
+        return;
+    }
+
+    UI_ADDR_ALIGN(ram, size);
+    ram_ = ram;
+
+    struct Chunk* chunk = nullptr;
     ramSize_ = size - sizeof(struct Chunk) * 2; // head and tail two chunk
     chunk = reinterpret_cast<struct Chunk*>(ram_);
     chunk->next = size - sizeof(struct Chunk);
@@ -165,5 +174,49 @@ void UIFontAllocator::Free(void* addr)
 
     freeSize_ += chunk->next - (reinterpret_cast<uint8_t*>(chunk) - ram_);
     CombineFree(chunk);
+}
+BufferInfo UIFontAllocator::GetCacheBuffer(uint16_t fontId,
+                                           uint32_t unicode,
+                                           ColorMode mode,
+                                           GlyphNode& glyphNode,
+                                           bool hasMetric)
+{
+    BufferInfo bufInfo{Rect(), 0, nullptr, nullptr, glyphNode.cols, glyphNode.rows, mode, 0};
+    bufInfo.stride = BIT_TO_BYTE(bufInfo.width * DrawUtils::GetPxSizeByColorMode(bufInfo.mode));
+
+    BaseGfxEngine::GetInstance()->AdjustLineStride(bufInfo);
+    uint32_t bitmapSize = bufInfo.stride * bufInfo.height;
+    if (hasMetric) {
+        bitmapSize += sizeof(Metric);
+    }
+    bufInfo.virAddr = reinterpret_cast<void*>(UIFontCacheManager::GetInstance()->GetSpace(fontId, unicode, bitmapSize));
+    return bufInfo;
+}
+
+void UIFontAllocator::RearrangeBitmap(BufferInfo& bufInfo, uint32_t fileSz, bool hasMetric)
+{
+    uint32_t word = bufInfo.width;
+    word = BIT_TO_BYTE(word * DrawUtils::GetPxSizeByColorMode(bufInfo.mode));
+    if (bufInfo.stride <= word) {
+        return;
+    }
+
+    uint8_t* bitmap = reinterpret_cast<uint8_t*>(bufInfo.virAddr);
+    if (hasMetric) {
+        bitmap += sizeof(Metric);
+    }
+    uint32_t suffixLen = bufInfo.stride - word;
+    uint8_t* rdestBuf = bitmap + bufInfo.stride * bufInfo.height;
+    uint8_t* rsrcBuf = bitmap + fileSz;
+
+    /* Rearrange bitmap in local buffer */
+    for (uint32_t row = 0; row < bufInfo.height; row++) {
+        rdestBuf -= suffixLen;
+        (void)memset_s(rdestBuf, suffixLen, 0, suffixLen);
+        for (uint32_t i = 0; i < word; i++) {
+            *(--rdestBuf) = *(--rsrcBuf);
+        }
+    }
+    BaseGfxEngine::GetInstance()->MemoryBarrier();
 }
 } // namespace OHOS

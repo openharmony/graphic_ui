@@ -867,35 +867,59 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode)
 #if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
     SetFace(faceInfo, unicode, TEXT_STYLE_NORMAL);
 #else
-    Metric f;
-    f.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
-    f.left = faceInfo.face->glyph->bitmap_left;
-    f.top = faceInfo.face->glyph->bitmap_top;
-    f.cols = faceInfo.face->glyph->bitmap.width;
-    f.rows = faceInfo.face->glyph->bitmap.rows;
+    Metric* f = reinterpret_cast<Metric*>(UIMalloc(sizeof(Metric)));
+    if (f == nullptr) {
+        return;
+    }
+    f->advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
+    f->left = faceInfo.face->glyph->bitmap_left;
+    f->top = faceInfo.face->glyph->bitmap_top;
+    f->cols = faceInfo.face->glyph->bitmap.width;
+    f->rows = faceInfo.face->glyph->bitmap.rows;
 
     // cache glyph
-    SaveGlyphNode(unicode, faceInfo.key, &f);
+    SaveGlyphNode(unicode, faceInfo.key, f);
 
-    int16_t pixSize = 1;
+    int16_t pixSize;
+    ColorMode mode;
     if (faceInfo.face->glyph->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
         pixSize = 0x04; // 4 Byte
+        mode = ARGB8888;
     }
-    uint32_t bitmapSize = faceInfo.face->glyph->bitmap.width * faceInfo.face->glyph->bitmap.rows * pixSize;
-    // cache bitmap
-    uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetSpace(faceInfo.key, unicode, bitmapSize + sizeof(Metric));
-    if (bitmap != nullptr) {
-        if (memcpy_s(bitmap, sizeof(Metric), &f, sizeof(Metric)) != EOK) {
-            UIFontCacheManager::GetInstance()->PutSpace(bitmap);
+    else {
+        pixSize = 1;
+        mode = A8;
+    }
+
+    GlyphNode glyphNode;
+    glyphNode.left = f->left;
+    glyphNode.top = f->top;
+    glyphNode.cols = f->cols;
+    glyphNode.rows = f->rows;
+    glyphNode.advance = f->advance;
+    glyphNode.unicode = unicode;
+    glyphNode.fontId = faceInfo.key;
+    BufferInfo bufInfo = UIFontAllocator::GetCacheBuffer(faceInfo.key, unicode, mode, glyphNode, true);
+    uint32_t bitmapSize = bufInfo.stride * bufInfo.height;
+    uint32_t rawSize = glyphNode.cols * glyphNode.rows * pixSize;
+
+    if (bufInfo.virAddr != nullptr) {
+        if (memcpy_s(bufInfo.virAddr, sizeof(Metric), f, sizeof(Metric)) != EOK) {
+            UIFontCacheManager::GetInstance()->PutSpace(reinterpret_cast<uint8_t*>(bufInfo.virAddr));
+            UIFree(f);
             return;
         }
         if ((faceInfo.face->glyph->bitmap.buffer != nullptr) &&
-            (memcpy_s(bitmap + sizeof(Metric), bitmapSize, faceInfo.face->glyph->bitmap.buffer, bitmapSize) != EOK)) {
-            UIFontCacheManager::GetInstance()->PutSpace(bitmap);
+            (memcpy_s(reinterpret_cast<uint8_t*>(bufInfo.virAddr) + sizeof(Metric), bitmapSize,
+                      faceInfo.face->glyph->bitmap.buffer, rawSize) != EOK)) {
+            UIFontCacheManager::GetInstance()->PutSpace(reinterpret_cast<uint8_t*>(bufInfo.virAddr));
+            UIFree(f);
             return;
         }
+        UIFontAllocator::RearrangeBitmap(bufInfo, rawSize, true);
         ClearFontGlyph(faceInfo.face);
     }
+    UIFree(f);
 #endif
 }
 

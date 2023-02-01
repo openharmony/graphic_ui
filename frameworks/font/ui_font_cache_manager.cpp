@@ -16,6 +16,7 @@
 #include "font/ui_font_cache_manager.h"
 #include "font/font_ram_allocator.h"
 #include "gfx_utils/graphic_log.h"
+#include "securec.h"
 
 namespace OHOS {
 UIFontCacheManager::UIFontCacheManager() : bitmapCache_(nullptr) {}
@@ -72,7 +73,10 @@ void UIFontCacheManager::BitmapCacheInit()
         return;
     }
 
-    memset(bitmapCacheAddr, 0, bitmapCacheSize_);
+    if (memset_s(bitmapCacheAddr, bitmapCacheSize_, 0, bitmapCacheSize_)!= EOK) {
+        GRAPHIC_LOGE("UIFontCacheManager::BitmapCacheInit memset failed");
+        return;
+    }
     bitmapCache_ = new UIFontCache(bitmapCacheAddr, bitmapCacheSize_);
 }
 

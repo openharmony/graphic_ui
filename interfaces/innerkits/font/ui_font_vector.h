@@ -81,14 +81,6 @@ private:
         const char* ttcName;
         FT_Stream stream;
     };
-    struct Metric {
-        int left;
-        int top;
-        int cols;
-        int rows;
-        int advance;
-        uint8_t buf[0];
-    };
     TtcInfo ttcInfos_[FONT_TTC_MAX] = {};
     void SetFace(FaceInfo& faceInfo, uint32_t unicode);
 #if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
