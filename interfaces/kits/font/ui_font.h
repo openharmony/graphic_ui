@@ -32,7 +32,7 @@ public:
      * @param size font size
      * @return int8_t Shaping mode
      */
-    uint8_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint8_t fontId, uint8_t size) const
+    uint16_t GetShapingFontId(char* text, uint8_t& ttfId, uint32_t& script, uint16_t fontId, uint8_t size) const
     {
         return instance_->GetShapingFontId(text, ttfId, script, fontId, size);
     }
@@ -46,7 +46,7 @@ public:
      * @param shapingId: [in] font shaping id
      * @return uint16_t: the letter width
      */
-    uint16_t GetWidth(uint32_t unicode, uint8_t fontId, uint8_t fontSize, uint8_t shapingId);
+    uint16_t GetWidth(uint32_t unicode, uint16_t fontId, uint8_t fontSize, uint8_t shapingId);
 
     /**
      * @brief Get height for specific font
@@ -56,7 +56,7 @@ public:
      *
      * @return uint16_t
      */
-    uint16_t GetHeight(uint8_t fontId, uint8_t fontSize)
+    uint16_t GetHeight(uint16_t fontId, uint8_t fontSize)
     {
         return instance_->GetHeight(fontId, fontSize);
     }
@@ -66,7 +66,7 @@ public:
      * @param fontId
      * @return uint8_t: fontWeight
      */
-    uint8_t GetFontWeight(uint8_t fontId)
+    uint8_t GetFontWeight(uint16_t fontId)
     {
         return instance_->GetFontWeight(fontId);
     }
@@ -77,7 +77,7 @@ public:
      * @param fontHeader
      * @return int8_t
      */
-    int8_t GetFontHeader(FontHeader& fontHeader, uint8_t fontId, uint8_t fontSize)
+    int8_t GetFontHeader(FontHeader& fontHeader, uint16_t fontId, uint8_t fontSize)
     {
         return instance_->GetFontHeader(fontHeader, fontId, fontSize);
     }
@@ -87,9 +87,9 @@ public:
      *
      * @param name
      * @param size
-     * @return uint8_t
+     * @return uint16_t
      */
-    uint8_t GetFontId(const char* name, uint8_t size = 0)
+    uint16_t GetFontId(const char* name, uint8_t size = 0)
     {
         return instance_->GetFontId(name, size);
     }
@@ -111,9 +111,9 @@ public:
      * @param unicode
      * @return uint8_t*
      */
-    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize, uint8_t shapingFont);
+    uint8_t* GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize, uint8_t shapingFont);
 
-    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint8_t fontId, uint8_t fontSize);
+    int8_t GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize);
 
     /**
      * @brief Indicates whether the current font library is a vector font library.
@@ -135,7 +135,7 @@ public:
 
     int8_t GetTextUtf8(uint16_t textId, uint8_t** utf8Addr, uint16_t& utf8Len) const;
 
-    uint8_t GetFontTtfId(uint8_t fontId, uint8_t size) const
+    uint8_t GetFontTtfId(uint16_t fontId, uint8_t size) const
     {
         return instance_->GetFontTtfId(fontId, size);
     }
@@ -150,7 +150,7 @@ public:
         return instance_->GetTtfInfo(ttfId, ttfBuffer, bufferSize, ttfHeader);
     }
 
-    const UITextLanguageFontParam* GetFontInfo(uint8_t fontId) const
+    const UITextLanguageFontParam* GetFontInfo(uint16_t fontId) const
     {
         return instance_->GetFontInfo(fontId);
     }
@@ -199,7 +199,7 @@ public:
 
     int8_t GetCodePoints(uint16_t textId, uint32_t** codePoints, uint16_t& codePointsNum) const;
 
-    ColorMode GetColorType(uint8_t fontId)
+    ColorMode GetColorType(uint16_t fontId)
     {
         switch (instance_->GetFontWeight(fontId)) {
             case FONT_WEIGHT_1:
@@ -224,15 +224,15 @@ public:
     void SetFontFileOffset(uint32_t offset);
 
     virtual uint16_t
-        GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint8_t fontId, uint8_t fontSize)
+        GetOffsetPosY(const char* text, uint16_t lineLength, bool& isAllEmoji, uint16_t fontId, uint8_t fontSize)
     {
         return instance_->GetOffsetPosY(text, lineLength, isAllEmoji, fontId, fontSize);
     }
 
-    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+    virtual uint16_t GetLineMaxHeight(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                                       uint16_t letterIndex, SizeSpan* sizeSpans);
 
-    bool IsEmojiFont(uint8_t fontid)
+    bool IsEmojiFont(uint16_t fontid)
     {
         return instance_->IsEmojiFont(fontid);
     }

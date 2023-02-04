@@ -34,9 +34,9 @@ public:
 
     uint8_t GetTotalLangId() const;
 
-    uint8_t GetTotalFontId() const;
+    uint16_t GetTotalFontId() const;
 
-    uint8_t GetBitmapFontIdMax() const;
+    uint16_t GetBitmapFontIdMax() const;
 
     uint16_t GetTotalTextId() const;
 
@@ -49,7 +49,7 @@ private:
     UIFontBuilder();
     ~UIFontBuilder() {}
     uint8_t totalLangId_;
-    uint8_t totalFontId_;
+    uint16_t totalFontId_;
     uint16_t totalTextId_;
 };
 }

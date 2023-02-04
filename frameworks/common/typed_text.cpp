@@ -25,7 +25,7 @@
 
 namespace OHOS {
 #ifndef _FONT_TOOL
-Point TypedText::GetTextSize(const char* text, uint8_t fontId, uint8_t fontSize, int16_t letterSpace,
+Point TypedText::GetTextSize(const char* text, uint16_t fontId, uint8_t fontSize, int16_t letterSpace,
                              int16_t lineHeight, int16_t maxWidth, int8_t lineSpace, SizeSpan* sizeSpans)
 {
     Point size{0, 0};
@@ -84,7 +84,7 @@ Point TypedText::GetTextSize(const char* text, uint8_t fontId, uint8_t fontSize,
 }
 
 Rect TypedText::GetArcTextRect(const char* text,
-                               uint8_t fontId,
+                               uint16_t fontId,
                                uint8_t fontSize,
                                const Point& arcCenter,
                                int16_t letterSpace,
@@ -168,7 +168,7 @@ void TypedText::GetArcLetterPos(const Point& arcCenter, uint16_t radius, float a
     posY = arcCenter.y - (static_cast<float>(radius) * Sin(angle + QUARTER_IN_DEGREE));
 }
 
-uint32_t TypedText::GetNextLine(const char* text, uint8_t fontId, uint8_t fontSize, int16_t letterSpace,
+uint32_t TypedText::GetNextLine(const char* text, uint16_t fontId, uint8_t fontSize, int16_t letterSpace,
                                 int16_t maxWidth)
 {
     uint32_t index = 0;
@@ -247,7 +247,7 @@ bool TypedText::GetWrapPoint(const char* text, uint32_t& breakPoint)
     return false;
 }
 
-int16_t TypedText::GetTextWidth(const char* text, uint8_t fontId, uint8_t fontSize, uint16_t length,
+int16_t TypedText::GetTextWidth(const char* text, uint16_t fontId, uint8_t fontSize, uint16_t length,
                                 int16_t letterSpace)
 {
     if ((text == nullptr) || (length == 0) || (length > strlen(text))) {
@@ -514,7 +514,7 @@ bool TypedText::IsEmojiBase(uint32_t codePoint)
     }
 }
 
-bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSize)
+bool TypedText::IsColourWord(uint32_t codePoint, uint16_t fontId, uint8_t fontSize)
 {
     bool hasColor = false;
     uint8_t weight = UIFont::GetInstance()->GetFontWeight(fontId);
@@ -522,7 +522,7 @@ bool TypedText::IsColourWord(uint32_t codePoint, uint8_t fontId, uint8_t fontSiz
         hasColor = true;
     } else {
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
-        uint8_t* searchLists = nullptr;
+        uint16_t* searchLists = nullptr;
         int8_t listSize = UIMultiFontManager::GetInstance()->GetSearchFontList(fontId, &searchLists);
         if ((listSize > 0) && (searchLists != nullptr)) {
             int8_t currentIndex = 0;

@@ -89,7 +89,7 @@ UITextLanguageDirect UIArcLabel::GetDirect()
     return arcLabelText_->GetDirect();
 }
 
-void UIArcLabel::SetFontId(uint8_t fontId)
+void UIArcLabel::SetFontId(uint16_t fontId)
 {
     InitArcLabelText();
     arcLabelText_->SetFontId(fontId);
@@ -98,7 +98,7 @@ void UIArcLabel::SetFontId(uint8_t fontId)
     }
 }
 
-uint8_t UIArcLabel::GetFontId()
+uint16_t UIArcLabel::GetFontId()
 {
     InitArcLabelText();
     return arcLabelText_->GetFontId();
@@ -141,7 +141,7 @@ void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                            arcLabelText_->GetFontSize(), arcTextInfo, orientation, *style_, opaScale);
 }
 
-Rect UIArcLabel::GetArcTextRect(const char* text, uint8_t fontId, uint8_t fontSize, const Point& arcCenter,
+Rect UIArcLabel::GetArcTextRect(const char* text, uint16_t fontId, uint8_t fontSize, const Point& arcCenter,
                                 int16_t letterSpace, TextOrientation orientation, const ArcTextInfo& arcTextInfo)
 {
     return TypedText::GetArcTextRect(text, fontId, fontSize, arcCenter, letterSpace, orientation, arcTextInfo);

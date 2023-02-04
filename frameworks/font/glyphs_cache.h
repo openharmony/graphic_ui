@@ -35,11 +35,16 @@ public:
     ~GlyphsCache();
 
     int8_t CacheInit();
-    GlyphNode* GetNodeFromCache(uint32_t unicode, uint8_t fontId);
-    GlyphNode* GetNodeCacheSpace(uint32_t unicode, uint8_t fontId);
+    void ClearCacheFlag();
+    GlyphCacheNode* GetNodeFromCache(uint32_t unicode, uint16_t fontKey, uint16_t cacheType);
+    GlyphCacheNode* GetNodeCacheSpace(uint32_t unicode, uint16_t fontId);
 
 private:
+#if (defined(ENABLE_MIX_FONT) && (ENABLE_MIX_FONT == 1))
     static constexpr uint8_t FONT_HASH_SHIFT = 3;
+#else
+    static constexpr uint8_t FONT_HASH_SHIFT = 4;
+#endif
     static constexpr uint8_t FONT_HASH_NR = 1 << FONT_HASH_SHIFT;
     static constexpr uint32_t FONT_HASH_MASK = FONT_HASH_NR - 1;
     static constexpr uint8_t UNICODE_HASH_SHIFT = 6;
@@ -48,7 +53,7 @@ private:
     static constexpr uint8_t NODE_HASH_SHIFT = 4;
     static constexpr uint8_t NODE_HASH_NR = 1 << NODE_HASH_SHIFT;
 
-    using CacheType = GlyphNode[FONT_HASH_NR][UNICODE_HASH_NR][NODE_HASH_NR];
+    using CacheType = GlyphCacheNode[FONT_HASH_NR][UNICODE_HASH_NR][NODE_HASH_NR];
     using CacheState = uint8_t[FONT_HASH_NR][UNICODE_HASH_NR];
 
     CacheType* nodeCache_;

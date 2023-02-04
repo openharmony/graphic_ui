@@ -23,10 +23,15 @@ UITextShaping* UITextShaping::GetInstance()
     return &instance;
 }
 
-bool UITextShaping::IsSameTTFId(uint8_t fontId, uint32_t unicode)
+bool UITextShaping::IsSameTTFId(uint16_t fontId, uint32_t unicode)
 {
     // Need to be implemented
     return false;
+}
+
+void UITextShaping::ClearTtfHeader(uint16_t fontId, uint32_t unicode)
+{
+    return;
 }
 } // namespace OHOS
 #endif /* ENABLE_SHAPING */
