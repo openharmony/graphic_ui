@@ -38,7 +38,7 @@
 #include "animator/animator.h"
 #include "common/text.h"
 #include "components/ui_view.h"
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 #include "common/spannable_string.h"
 #endif
 
@@ -188,7 +188,7 @@ public:
      */
     void SetText(const char* text);
 
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     /**
      * @brief Sets the SpannableString content for this label.
      *
@@ -329,7 +329,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint8_t fontId);
+    void SetFontId(uint16_t fontId);
 
     /**
      * @brief Obtains the font ID composed of font name and size.
@@ -338,7 +338,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    uint8_t GetFontId()
+    uint16_t GetFontId()
     {
         InitLabelText();
         return labelText_->GetFontId();
@@ -369,7 +369,7 @@ public:
      * @return Returns the scroll speed.
      */
     uint16_t GetRollSpeed() const;
-    
+
     /**
      * @brief Obtains the width of this text.
      *

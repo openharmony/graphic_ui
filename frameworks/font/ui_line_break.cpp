@@ -112,7 +112,7 @@ void UILineBreakEngine::LoadRule()
 }
 
 uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
-                                                uint8_t fontId,
+                                                uint16_t fontId,
                                                 uint8_t fontSize,
                                                 int16_t space,
                                                 bool allBreak,
@@ -172,7 +172,7 @@ uint32_t UILineBreakEngine::GetNextLineAndWidth(const char* text,
 }
 
 int16_t UILineBreakEngine::GetLetterWidth(uint32_t unicode, uint16_t& letterIndex, int16_t& height,
-                                          uint8_t fontId, uint8_t fontSize, SizeSpan* sizeSpans)
+                                          uint16_t fontId, uint8_t fontSize, SizeSpan* sizeSpans)
 {
     if (sizeSpans != nullptr && sizeSpans[letterIndex].isSizeSpan) {
         int16_t width = UIFont::GetInstance()->GetWidth(unicode, sizeSpans[letterIndex].fontId,
@@ -192,7 +192,7 @@ int16_t UILineBreakEngine::GetLetterWidth(uint32_t unicode, uint16_t& letterInde
     }
 }
 
-bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint8_t fontId, uint8_t fontSize, int32_t& state)
+bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint16_t fontId, uint8_t fontSize, int32_t& state)
 {
     if ((unicode > TypedText::MAX_UINT16_HIGH_SCOPE) || (stateTbl_ == nullptr) || (lineBreakTrie_ == nullptr)) {
         return true;

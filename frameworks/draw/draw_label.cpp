@@ -45,7 +45,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     GlyphNode glyphNode;
     while (i < labelLine.lineLength) {
         uint32_t letter = TypedText::GetUTF8Next(labelLine.text, i, i);
-        uint8_t fontId = labelLine.fontId;
+        uint16_t fontId = labelLine.fontId;
         uint8_t fontSize = labelLine.fontSize;
         if (labelLine.sizeSpans != nullptr && labelLine.sizeSpans[letterIndex].isSizeSpan) {
             fontId = labelLine.sizeSpans[letterIndex].fontId;
@@ -57,7 +57,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
 
         ColorType foregroundColor = labelLine.style.textColor_;
         GetForegroundColor(letterIndex, labelLine.foregroundColor, foregroundColor);
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
         TextStyle textStyle = TEXT_STYLE_NORMAL;
         if (labelLine.textStyles) {
             textStyle = labelLine.textStyles[letterIndex];
@@ -74,7 +74,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    fontId,
                                    0,
                                    fontSize,
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
                                    textStyle,
 #endif
                                    labelLine.baseLine,
@@ -82,20 +82,16 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
                                    labelLine.style.lineSpace_,
                                    havebackgroundColor,
                                    backgroundColor};
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
         glyphNode.textStyle = letterInfo.textStyle;
 #endif
         glyphNode.advance = 0;
         uint8_t* fontMap = fontEngine->GetBitmap(letterInfo.letter, glyphNode, letterInfo.fontId, letterInfo.fontSize,
                                                  letterInfo.shapingId);
         if (fontMap != nullptr) {
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
-            if (TypedText::IsColourWord(letterInfo.letter, fontId, fontSize)) {
-#else
             uint8_t weight = UIFont::GetInstance()->GetFontWeight(glyphNode.fontId);
             // 16: rgb565->16 rgba8888->32 font with rgba
             if (weight >= 16) {
-#endif
                 DrawUtils::GetInstance()->DrawColorLetter(gfxDstBuffer, letterInfo, fontMap, glyphNode);
             } else {
                 letterInfo.offsetY = labelLine.ellipsisOssetY == 0 ? offsetPosY : labelLine.ellipsisOssetY;
@@ -114,7 +110,7 @@ uint16_t DrawLabel::DrawTextOneLine(BufferInfo& gfxDstBuffer, const LabelLineInf
     return retOffsetY;
 }
 
-uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint8_t fontId, uint8_t fontSize,
+uint8_t DrawLabel::GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans)
 {
     if (sizeSpans == nullptr) {
@@ -143,7 +139,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
                             const Rect& mask,
                             const char* text,
                             const Point& arcCenter,
-                            uint8_t fontId,
+                            uint16_t fontId,
                             uint8_t fontSize,
                             const ArcTextInfo arcTextInfo,
                             TextOrientation orientation,
@@ -206,7 +202,7 @@ void DrawLabel::DrawArcText(BufferInfo& gfxDstBuffer,
 
 void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
-                                     uint8_t fontId,
+                                     uint16_t fontId,
                                      uint8_t fontSize,
                                      uint32_t letter,
                                      const Point& pos,
@@ -217,7 +213,7 @@ void DrawLabel::DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
     UIFont* fontEngine = UIFont::GetInstance();
     FontHeader head;
     GlyphNode node;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     node.textStyle = TEXT_STYLE_NORMAL;
 #endif
     if (fontEngine->GetFontHeader(head, fontId, fontSize) != 0) {

@@ -84,7 +84,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    void SetFontId(uint8_t fontId);
+    void SetFontId(uint16_t fontId);
 
     /**
      * @brief Sets the dynamic font for this digital clock.

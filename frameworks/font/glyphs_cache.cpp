@@ -17,6 +17,7 @@
 #include "font/font_ram_allocator.h"
 #include "font/ui_font_builder.h"
 #include "gfx_utils/graphic_log.h"
+#include "securec.h"
 
 namespace OHOS {
 GlyphsCache::GlyphsCache()
@@ -33,58 +34,69 @@ int8_t GlyphsCache::CacheInit()
         return RET_VALUE_OK;
     }
 
-    cacheStatus_ = reinterpret_cast<CacheState *>(FontRamAllocator::GetInstance().Allocate(sizeof(CacheState)));
+    cacheStatus_ = reinterpret_cast<CacheState*>(FontRamAllocator::GetInstance().DynamicAllocate(sizeof(CacheState)));
     if (cacheStatus_ == nullptr) {
         GRAPHIC_LOGE("GlyphsCache::CacheInit allocate cache status failed");
         return INVALID_RET_VALUE;
     }
 
-    for (int32_t font = 0; font < FONT_HASH_NR; font++) {
-        for (int32_t uc = 0; uc < UNICODE_HASH_NR; uc++) {
-            (*cacheStatus_)[font][uc] = 0;
-        }
+    if (memset_s(cacheStatus_, sizeof(CacheState), 0, sizeof(CacheState)) != EOK) {
+        GRAPHIC_LOGE("GlyphsCache::CacheInit init cache status failed");
+        return INVALID_RET_VALUE;
     }
 
-    nodeCache_ = reinterpret_cast<CacheType *>(FontRamAllocator::GetInstance().Allocate(sizeof(CacheType)));
+    nodeCache_ = reinterpret_cast<CacheType*>(FontRamAllocator::GetInstance().DynamicAllocate(sizeof(CacheType)));
     if (nodeCache_ == nullptr) {
         GRAPHIC_LOGE("GlyphsCache::CacheInit allocate node cache failed");
         return INVALID_RET_VALUE;
     }
 
-    for (int32_t font = 0; font < FONT_HASH_NR; font++) {
-        for (int32_t uc = 0; uc < UNICODE_HASH_NR; uc++) {
-            for (int32_t node = 0; node < NODE_HASH_NR; node++) {
-                (*nodeCache_)[font][uc][node].unicode = 0;
-            }
-        }
+    if (memset_s(nodeCache_, sizeof(CacheType), 0, sizeof(CacheType)) != EOK) {
+        GRAPHIC_LOGE("GlyphsCache::CacheInit init node cache failed");
+        return INVALID_RET_VALUE;
     }
 
     hasInit_ = true;
     return RET_VALUE_OK;
 }
 
-GlyphNode* GlyphsCache::GetNodeFromCache(uint32_t unicode, uint8_t fontId)
+void GlyphsCache::ClearCacheFlag()
 {
-    GlyphNode* node = nullptr;
+    hasInit_ = false;
+}
 
-    uint8_t font = fontId & FONT_HASH_MASK;
+GlyphCacheNode* GlyphsCache::GetNodeFromCache(uint32_t unicode, uint16_t fontKey, uint16_t cacheType)
+{
+    if (!hasInit_) {
+        return nullptr;
+    }
+
+    GlyphCacheNode* node = nullptr;
+
+    uint8_t font = (fontKey ^ unicode) & FONT_HASH_MASK;
     uint8_t uc = unicode & UNICODE_HASH_MASK;
     for (uint8_t i = 0; i < NODE_HASH_NR; i++) {
-        GlyphNode* p = &((*nodeCache_)[font][uc][i]);
-        if ((p->unicode == unicode) && (p->fontId == fontId)) {
-            node = p;
-            break;
+        GlyphCacheNode* p = &((*nodeCache_)[font][uc][i]);
+        if ((p->node.unicode == unicode) && (p->node.fontId == fontKey)) {
+            if (!cacheType || p->cacheType == cacheType) {
+                node = p;
+                break;
+            }
         }
     }
     return node;
 }
 
-GlyphNode* GlyphsCache::GetNodeCacheSpace(uint32_t unicode, uint8_t fontId)
+GlyphCacheNode* GlyphsCache::GetNodeCacheSpace(uint32_t unicode, uint16_t fontKey)
 {
-    uint8_t font = fontId & FONT_HASH_MASK;
+    if (!hasInit_) {
+        return nullptr;
+    }
+
+    uint8_t font = (fontKey ^ unicode) & FONT_HASH_MASK;
     uint8_t uc = unicode & UNICODE_HASH_MASK;
     uint8_t i = (*cacheStatus_)[font][uc];
-    GlyphNode* node = &((*nodeCache_)[font][uc][i]);
+    GlyphCacheNode* node = &((*nodeCache_)[font][uc][i]);
 
     i++;
     if (i >= NODE_HASH_NR) {

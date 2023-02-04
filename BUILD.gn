@@ -43,7 +43,7 @@ config("graphic_define_config") {
   if (defined(board_toolchain_type) && board_toolchain_type == "iccarm") {
     cflags = [
       "--diag_suppress",
-      "Pa084,Pa093,Pa137,Pe161,Pe177,Pe186,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940",
+      "Pa084,Pa093,Pa137,Pe161,Pe177,Pe186,Pe223,Pe226,Pe366,Pe367,Pe550,Pe940,Pe068",
     ]
     cflags_cc = cflags
   }
@@ -198,6 +198,7 @@ lite_library("ui") {
     "frameworks/font/ui_font_bitmap.cpp",
     "frameworks/font/ui_font_builder.cpp",
     "frameworks/font/ui_font_cache.cpp",
+    "frameworks/font/ui_font_cache_manager.cpp",
     "frameworks/font/ui_font_vector.cpp",
     "frameworks/font/ui_line_break.cpp",
     "frameworks/font/ui_multi_font_manager.cpp",

@@ -277,7 +277,7 @@ void UITimePicker::EnableSecond(bool state)
     RefreshTimePicker();
 }
 
-void UITimePicker::SetTextStyle(uint8_t backgroundFontId, uint8_t highlightFontId,
+void UITimePicker::SetTextStyle(uint16_t backgroundFontId, uint16_t highlightFontId,
     ColorType backgroundColor, ColorType highlightColor)
 {
     highlightFontId_ = highlightFontId;

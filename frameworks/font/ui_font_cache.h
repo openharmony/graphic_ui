@@ -54,7 +54,9 @@ public:
         ListHead lruHead;
         uint32_t fontId; // bitmap font: fontId vector font: fontKey ttfId + fontsize
         uint32_t unicode;
-#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
+        uint32_t reserve1;
+        uint32_t reserve2;
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
         TextStyle textStyle;
 #endif
         uint8_t data[];
@@ -64,9 +66,9 @@ public:
 
     ~UIFontCache();
 
-    uint8_t* GetSpace(uint32_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle = TEXT_STYLE_NORMAL);
+    uint8_t* GetSpace(uint16_t fontId, uint32_t unicode, uint32_t size, TextStyle textStyle = TEXT_STYLE_NORMAL);
     void PutSpace(uint8_t* addr);
-    uint8_t* GetBitmap(uint32_t fontId, uint32_t unicode, TextStyle textStyle = TEXT_STYLE_NORMAL);
+    uint8_t* GetBitmap(uint16_t fontId, uint32_t unicode, TextStyle textStyle = TEXT_STYLE_NORMAL);
 
 private:
     void UpdateLru(Bitmap* bitmap);
