@@ -26,6 +26,7 @@
 
 namespace OHOS {
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 struct ImageParam : public HeapBase {
     Point start;
     uint16_t height;
@@ -40,11 +41,13 @@ struct PathParam : public HeapBase {
     ImageParam* imageParam = nullptr;
     bool isStroke;
 };
+#endif
 
 class RenderBuffer;
 class RenderBase;
 class DrawCanvas : public HeapBase {
 public:
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     static void DoRender(BufferInfo& gfxDstBuffer,
                          void* param,
                          const Paint& paint,
@@ -62,7 +65,7 @@ public:
                              const Style& style,
                              const bool& isStroke);
 #endif
-
+#endif
     static void InitRenderAndTransform(BufferInfo& gfxDstBuffer,
                                        RenderBuffer& renderBuffer,
                                        const Rect& rect,
@@ -114,6 +117,7 @@ public:
 #endif // GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 
 #if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     /**
      * Render pattern mode
      */
@@ -123,6 +127,7 @@ public:
                               RenderBase& renBase,
                               FillBase& allocator,
                               const Rect& rect);
+#endif
 #endif // GRAPHIC_ENABLE_PATTERN_FILL_FLAG
 
     static void ChangeColor(Rgba8T& color, ColorType colorType, uint8_t alpha)
