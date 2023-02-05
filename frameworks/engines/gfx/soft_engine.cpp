@@ -121,7 +121,9 @@ void SoftEngine::DrawPath(BufferInfo& dst,
                           const Rect& invalidatedArea,
                           const Style& style)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     DrawCanvas::DoRender(dst, param, paint, rect, invalidatedArea, style, true);
+#endif
 }
 
 void SoftEngine::FillPath(BufferInfo& dst,
@@ -131,7 +133,9 @@ void SoftEngine::FillPath(BufferInfo& dst,
                           const Rect& invalidatedArea,
                           const Style& style)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     DrawCanvas::DoRender(dst, param, paint, rect, invalidatedArea, style, false);
+#endif
 }
 
 uint8_t* SoftEngine::AllocBuffer(uint32_t size, uint32_t usage)

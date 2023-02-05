@@ -306,6 +306,7 @@ HWTEST_F(UICanvasTest, UICanvasDrawCurve_001, TestSize.Level0)
     viewGroup->Remove(canvas_);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasBeginPath_001
  * @tc.desc: Verify BeginPath function, equal.
@@ -369,7 +370,7 @@ HWTEST_F(UICanvasTest, UICanvasLineTo_001, TestSize.Level0)
     EXPECT_EQ(end.x, LINE1_X);
     EXPECT_EQ(end.y, LINE1_Y);
 }
-
+#endif
 /**
  * @tc.name: UICanvasLineTo_002
  * @tc.desc: Verify LineTo function, equal.
@@ -400,6 +401,7 @@ HWTEST_F(UICanvasTest, UICanvasLineTo_002, TestSize.Level1)
 }
 
 #if defined(GRAPHIC_ENABLE_ARC_FLAG) && GRAPHIC_ENABLE_ARC_FLAG
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasArcTo_001
  * @tc.desc: Verify ArcTo function, equal.
@@ -427,6 +429,7 @@ HWTEST_F(UICanvasTest, UICanvasArcTo_001, TestSize.Level0)
     EXPECT_EQ(end.x, int16_t(CENTER_X + sinma));
     EXPECT_EQ(end.y, int16_t(CENTER_Y - cosma));
 }
+#endif
 
 /**
  * @tc.name: UICanvasArcTo_002
@@ -485,6 +488,7 @@ HWTEST_F(UICanvasTest, UICanvasArcTo_003, TestSize.Level1)
 }
 #endif
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasAddRect_001
  * @tc.desc: Verify AddRect function, equal.
@@ -508,7 +512,7 @@ HWTEST_F(UICanvasTest, UICanvasAddRect_001, TestSize.Level0)
     EXPECT_EQ(end.x, 0);
     EXPECT_EQ(end.y, 0);
 }
-
+#endif
 /**
  * @tc.name: UICanvasAddRect_002
  * @tc.desc: Verify AddRect function, equal.
@@ -535,6 +539,7 @@ HWTEST_F(UICanvasTest, UICanvasAddRect_002, TestSize.Level1)
     EXPECT_EQ(end.y, 0);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasClosePath_001
  * @tc.desc: Verify ClosePath function, equal.
@@ -560,7 +565,7 @@ HWTEST_F(UICanvasTest, UICanvasClosePath_001, TestSize.Level0)
     EXPECT_EQ(end.x, 0);
     EXPECT_EQ(end.y, 0);
 }
-
+#endif
 /**
  * @tc.name: UICanvasClosePath_002
  * @tc.desc: Verify ClosePath function, equal.
@@ -844,6 +849,7 @@ HWTEST_F(UICanvasTest, UICanvasSetLineDash_001, TestSize.Level0)
     EXPECT_EQ(paint_->IsLineDash(), 0);
 }
 #endif
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasStrokeRect_001
  * @tc.desc: Verify StrokeRect function, equal.
@@ -987,7 +993,6 @@ HWTEST_F(UICanvasTest, UICanvasDrawImage_001, TestSize.Level1)
     EXPECT_EQ(canvas_->GetStartPosition().y, IMAGE_Y);
     viewGroup->Remove(canvas_);
 }
-
 /**
  * @tc.name: UICanvasDrawImage_002
  * @tc.desc: Verify DrawImage function, equal.
@@ -1091,6 +1096,7 @@ HWTEST_F(UICanvasTest, UICanvasDrawImage_003, TestSize.Level1)
     viewGroup->Remove(canvas_);
 }
 #endif
+#endif // ENABLE_CANVAS_EXTEND
 
 #if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
 /**
@@ -1640,6 +1646,7 @@ HWTEST_F(UICanvasTest, UICanvasSetGlobalCompositeOperation_001, TestSize.Level0)
     EXPECT_EQ(paint_->GetGlobalCompositeOperation(), OHOS::COPY);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasSetGlobalCompositeOperation_002
  * @tc.desc: Verify SetGlobalCompositeOperation function, equal.
@@ -1678,6 +1685,7 @@ HWTEST_F(UICanvasTest, UICanvasSetGlobalCompositeOperation_002, TestSize.Level1)
 
     EXPECT_EQ(paint_->GetGlobalCompositeOperation(), OHOS::COPY);
 }
+#endif
 
 /**
  * @tc.name: UICanvasGetGlobalCompositeOperation_001
@@ -1700,6 +1708,7 @@ HWTEST_F(UICanvasTest, UICanvasGetGlobalCompositeOperation_001, TestSize.Level0)
     EXPECT_EQ(paint_->GetGlobalCompositeOperation(), OHOS::SOURCE_OVER);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 /**
  * @tc.name: UICanvasGetGlobalCompositeOperation_002
  * @tc.desc: Verify GetGlobalCompositeOperation function, equal.
@@ -1738,6 +1747,7 @@ HWTEST_F(UICanvasTest, UICanvasGetGlobalCompositeOperation_002, TestSize.Level1)
     canvas_->FillPath(*paint_);
     EXPECT_EQ(paint_->GetGlobalCompositeOperation(), OHOS::SOURCE_OVER);
 }
+#endif
 
 /**
  * @tc.name: UICanvasSave_001

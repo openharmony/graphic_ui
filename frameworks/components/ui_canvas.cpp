@@ -17,7 +17,6 @@
 
 #include "draw/clip_utils.h"
 #include "draw/draw_arc.h"
-#include "draw/draw_canvas.h"
 #include "draw/draw_image.h"
 #include "gfx_utils/graphic_log.h"
 #include "render/render_buffer.h"
@@ -25,6 +24,12 @@
 #include "render/render_scanline.h"
 
 namespace OHOS {
+UICanvas::UICanvasPath::~UICanvasPath()
+{
+    points_.Clear();
+    cmd_.Clear();
+    arcParam_.Clear();
+}
 
 BufferInfo* UICanvas::gfxMapBuffer_ = nullptr;
 
@@ -35,6 +40,7 @@ void RenderSolid(const Paint& paint,
 
 void UICanvas::BeginPath()
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     /* If the previous path is not added to the drawing linked list, it should be destroyed directly. */
     if (vertices_ != nullptr && vertices_->GetTotalVertices() == 0) {
         delete vertices_;
@@ -46,26 +52,68 @@ void UICanvas::BeginPath()
         GRAPHIC_LOGE("new UICanvasVertices fail");
         return;
     }
+#else
+    if (path_ != nullptr && path_->strokeCount_ == 0) {
+        delete path_;
+        path_ = nullptr;
+    }
+
+    path_ = new UICanvasPath();
+    if (path_ == nullptr) {
+        GRAPHIC_LOGE("new UICanvasPath fail");
+        return;
+    }
+#endif
 }
 
 void UICanvas::MoveTo(const Point& point)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (vertices_ == nullptr) {
         return;
     }
     vertices_->MoveTo(point.x, point.y);
+#else
+    if (path_ == nullptr) {
+        return;
+    }
+
+    path_->startPos_ = point;
+    /* If the previous command is also CMD_MOVE_TO, the previous command is overwritten. */
+    if ((path_->cmd_.Size() != 0) && (path_->cmd_.Tail()->data_ == CMD_MOVE_TO)) {
+        path_->points_.Tail()->data_ = point;
+        return;
+    }
+    path_->points_.PushBack(point);
+    path_->cmd_.PushBack(CMD_MOVE_TO);
+#endif
 }
 
 void UICanvas::LineTo(const Point& point)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (vertices_ == nullptr) {
         return;
     }
     vertices_->LineTo(point.x, point.y);
+#else
+    if (path_ == nullptr) {
+        return;
+    }
+
+    path_->points_.PushBack(point);
+    if (path_->cmd_.Size() == 0) {
+        path_->startPos_ = point;
+        path_->cmd_.PushBack(CMD_MOVE_TO);
+    } else {
+        path_->cmd_.PushBack(CMD_LINE_TO);
+    }
+#endif
 }
 
 void UICanvas::ArcTo(const Point& center, uint16_t radius, int16_t startAngle, int16_t endAngle)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (vertices_ == nullptr || startAngle == endAngle) {
         return;
     }
@@ -86,10 +134,55 @@ void UICanvas::ArcTo(const Point& center, uint16_t radius, int16_t startAngle, i
         largeArcFlag = true;
     }
     vertices_->ArcTo(radius, radius, angle, largeArcFlag, 1, float(center.x + sinma), float(center.y - cosma));
+#else
+    if (path_ == nullptr) {
+        return;
+    }
+
+    /*
+     * If there is no command before CMD_ARC, only the arc is drawn. If there is a command in front of
+     * CMD_ARC, the start point of arc must be connected to the end point of the path.
+     */
+    float sinma = radius * Sin(startAngle);
+    float cosma = radius * Sin(QUARTER_IN_DEGREE - startAngle);
+    if (path_->cmd_.Size() != 0) {
+        path_->points_.PushBack({MATH_ROUND(center.x + sinma), MATH_ROUND(center.y - cosma)});
+        path_->cmd_.PushBack(CMD_LINE_TO);
+    } else {
+        path_->startPos_ = {MATH_ROUND(center.x + sinma), MATH_ROUND(center.y - cosma)};
+    }
+
+    /* If the ARC scan range exceeds 360 degrees, the end point of the path is the position of the start angle. */
+    if (MATH_ABS(startAngle - endAngle) < CIRCLE_IN_DEGREE) {
+        sinma = radius * Sin(endAngle);
+        cosma = radius * Sin(QUARTER_IN_DEGREE - endAngle);
+    }
+    path_->points_.PushBack({MATH_ROUND(center.x + sinma), MATH_ROUND(center.y - cosma)});
+    path_->cmd_.PushBack(CMD_ARC);
+
+    int16_t start;
+    int16_t end;
+    if (startAngle > endAngle) {
+        start = endAngle;
+        end = startAngle;
+    } else {
+        start = startAngle;
+        end = endAngle;
+    }
+
+    DrawArc::GetInstance()->GetDrawRange(start, end);
+    ArcParam param;
+    param.center = center;
+    param.radius = radius;
+    param.startAngle = start;
+    param.endAngle = end;
+    path_->arcParam_.PushBack(param);
+#endif
 }
 
 void UICanvas::AddRect(const Point& point, int16_t height, int16_t width)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (vertices_ == nullptr) {
         return;
     }
@@ -106,23 +199,48 @@ void UICanvas::AddRect(const Point& point, int16_t height, int16_t width)
     if (fBottom > INT16_MAX) {
         bottom += setup;
     }
+
     MoveTo(point);
     LineTo({right, point.y});
     LineTo({right, bottom});
     LineTo({point.x, bottom});
+#else
+    if (path_ == nullptr) {
+        return;
+    }
+
+    MoveTo(point);
+    LineTo({static_cast<int16_t>(point.x + width), point.y});
+    LineTo({static_cast<int16_t>(point.x + width), static_cast<int16_t>(point.y + height)});
+    LineTo({point.x, static_cast<int16_t>(point.y + height)});
+
+#endif
     ClosePath();
 }
 
 void UICanvas::ClosePath()
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (vertices_ == nullptr) {
         return;
     }
     vertices_->ClosePolygon();
+#else
+    if ((path_ == nullptr) || (path_->cmd_.Size() == 0)) {
+        return;
+    }
+
+    path_->points_.PushBack(path_->startPos_);
+    path_->cmd_.PushBack(CMD_CLOSE);
+#endif
 }
 
 UICanvas::~UICanvas()
 {
+    if ((path_ != nullptr) && (path_->strokeCount_ == 0)) {
+        delete path_;
+        path_ = nullptr;
+    }
     void* param = nullptr;
     ListNode<DrawCmd>* curDraw = drawCmdList_.Begin();
     for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
@@ -140,6 +258,10 @@ UICanvas::~UICanvas()
 
 void UICanvas::Clear()
 {
+    if ((path_ != nullptr) && (path_->strokeCount_ == 0)) {
+        delete path_;
+        path_ = nullptr;
+    }
     void* param = nullptr;
     ListNode<DrawCmd>* curDraw = drawCmdList_.Begin();
     for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
@@ -155,7 +277,7 @@ void UICanvas::Clear()
     Invalidate();
 }
 
-void DeleteImageParam(void* param)
+void UICanvas::DeleteImageParam(void* param)
 {
     ImageParam* imageParam = static_cast<ImageParam*>(param);
     if (imageParam->image != nullptr) {
@@ -166,9 +288,10 @@ void DeleteImageParam(void* param)
     imageParam = nullptr;
 }
 
-void DeletePathParam(void* param)
+void UICanvas::DeletePathParam(void* param)
 {
     PathParam* pathParam = static_cast<PathParam*>(param);
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (pathParam->vertices != nullptr) {
         pathParam->vertices->FreeAll();
         pathParam->vertices = nullptr;
@@ -176,6 +299,12 @@ void DeletePathParam(void* param)
     if (pathParam->imageParam != nullptr) {
         DeleteImageParam(pathParam->imageParam);
     }
+#else
+    pathParam->path->strokeCount_--;
+    if (pathParam->path->strokeCount_ == 0) {
+        delete pathParam->path;
+    }
+#endif
     delete pathParam;
     pathParam = nullptr;
 }
@@ -243,6 +372,7 @@ void UICanvas::DrawCurve(const Point& startPoint,
 
 void UICanvas::DrawRect(const Point& startPoint, int16_t height, int16_t width, const Paint& paint)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (!paint.GetChangeFlag()) {
         if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
             DrawRectSetCmd(startPoint, height, width, paint, Paint::PaintStyle::STROKE_STYLE);
@@ -261,6 +391,43 @@ void UICanvas::DrawRect(const Point& startPoint, int16_t height, int16_t width, 
         FillPath(paint);
         DrawPath(paint);
     }
+#else
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
+        RectParam* rectParam = new RectParam;
+        if (rectParam == nullptr) {
+            GRAPHIC_LOGE("new RectParam fail");
+            return;
+        }
+        rectParam->start = startPoint;
+        rectParam->height = height;
+        rectParam->width = width;
+
+        DrawCmd cmd;
+        cmd.paint = paint;
+        cmd.param = rectParam;
+        cmd.DeleteParam = DeleteRectParam;
+        cmd.DrawGraphics = DoDrawRect;
+        drawCmdList_.PushBack(cmd);
+    }
+
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
+        RectParam* rectParam = new RectParam;
+        if (rectParam == nullptr) {
+            GRAPHIC_LOGE("new RectParam fail");
+            return;
+        }
+        rectParam->start = startPoint;
+        rectParam->height = height;
+        rectParam->width = width;
+
+        DrawCmd cmd;
+        cmd.paint = paint;
+        cmd.param = rectParam;
+        cmd.DeleteParam = DeleteRectParam;
+        cmd.DrawGraphics = DoFillRect;
+        drawCmdList_.PushBack(cmd);
+    }
+#endif
     Invalidate();
 }
 
@@ -288,6 +455,7 @@ void UICanvas::DrawRectSetCmd(const Point& startPoint, int16_t height, int16_t w
     drawCmdList_.PushBack(cmd);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void UICanvas::StrokeRect(const Point& startPoint, int16_t height, int16_t width, const Paint& paint)
 {
     if (!paint.GetChangeFlag()) {
@@ -331,9 +499,11 @@ void UICanvas::ClearRect(const Point& startPoint, int16_t height, int16_t width)
     ClosePath();
     FillPath(paint);
 }
+#endif
 
 void UICanvas::DrawCircle(const Point& center, uint16_t radius, const Paint& paint)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (paint.GetChangeFlag()) {
 #if defined(GRAPHIC_ENABLE_BEZIER_ARC_FLAG) && GRAPHIC_ENABLE_BEZIER_ARC_FLAG
         if (vertices_ == nullptr) {
@@ -366,7 +536,22 @@ void UICanvas::DrawCircle(const Point& center, uint16_t radius, const Paint& pai
         cmd.DrawGraphics = DoDrawCircle;
         drawCmdList_.PushBack(cmd);
     }
+#else
+    CircleParam* circleParam = new CircleParam;
+    if (circleParam == nullptr) {
+        GRAPHIC_LOGE("new CircleParam fail");
+        return;
+    }
+    circleParam->center = center;
+    circleParam->radius = radius;
 
+    DrawCmd cmd;
+    cmd.paint = paint;
+    cmd.param = circleParam;
+    cmd.DeleteParam = DeleteCircleParam;
+    cmd.DrawGraphics = DoDrawCircle;
+    drawCmdList_.PushBack(cmd);
+#endif
     Invalidate();
 }
 
@@ -376,6 +561,7 @@ void UICanvas::DrawSector(const Point& center,
                           int16_t endAngle,
                           const Paint& paint)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     BeginPath();
     MoveTo(center);
     ArcTo(center, radius, startAngle, endAngle);
@@ -386,16 +572,29 @@ void UICanvas::DrawSector(const Point& center,
     if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
         FillPath(paint);
     }
+#else
+    if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::FILL_STYLE) {
+        Paint innerPaint = paint;
+        innerPaint.SetStyle(Paint::PaintStyle::STROKE_STYLE);
+        innerPaint.SetStrokeWidth(radius);
+        innerPaint.SetStrokeColor(paint.GetFillColor());
+        radius >>= 1;
+        DrawArc(center, radius, startAngle, endAngle, innerPaint);
+    }
+#endif
 }
 
 void UICanvas::DrawArc(const Point& center, uint16_t radius, int16_t startAngle,
                        int16_t endAngle, const Paint& paint)
 {
     if (static_cast<uint8_t>(paint.GetStyle()) & Paint::PaintStyle::STROKE_STYLE) {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
         if (paint.GetChangeFlag()) {
             ArcTo(center, radius, startAngle, endAngle);
             DrawPath(paint);
-        } else {
+        } else
+#endif
+        {
             ArcParam* arcParam = new ArcParam;
             if (arcParam == nullptr) {
                 GRAPHIC_LOGE("new ArcParam fail");
@@ -535,6 +734,7 @@ void UICanvas::DrawImage(const Point& startPoint, const char* image,
 
 void UICanvas::DrawPath(const Paint& paint)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     if (vertices_ == nullptr) {
         return;
     }
@@ -572,6 +772,20 @@ void UICanvas::DrawPath(const Paint& paint)
         pathParam->imageParam = imageParam;
     }
 #endif
+#else
+    if ((path_ == nullptr) || (path_->cmd_.Size() == 0)) {
+        return;
+    }
+
+    path_->strokeCount_++;
+    PathParam* pathParam = new PathParam;
+    if (pathParam == nullptr) {
+        GRAPHIC_LOGE("new PathParam fail");
+        return;
+    }
+    pathParam->path = path_;
+    pathParam->count = path_->cmd_.Size();
+#endif
     DrawCmd cmd;
     cmd.paint = paint;
     cmd.param = pathParam;
@@ -581,6 +795,7 @@ void UICanvas::DrawPath(const Paint& paint)
     Invalidate();
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void UICanvas::FillPath(const Paint& paint)
 {
     if (vertices_ == nullptr) {
@@ -627,6 +842,7 @@ void UICanvas::FillPath(const Paint& paint)
     drawCmdList_.PushBack(cmd);
     Invalidate();
 }
+#endif
 
 void UICanvas::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 {
@@ -640,6 +856,7 @@ void UICanvas::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     if (!trunc.Intersect(trunc, coords)) {
         return;
     }
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     bool haveComposite = false;
     for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
         if (curDraw->data_.paint.HaveComposite()) {
@@ -650,7 +867,9 @@ void UICanvas::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
 
     if (haveComposite) {
         OnBlendDraw(gfxDstBuffer, trunc);
-    } else {
+    } else
+#endif
+    {
         curDraw = drawCmdList_.Begin();
         for (; curDraw != drawCmdList_.End(); curDraw = curDraw->next_) {
             param = curDraw->data_.param;
@@ -659,6 +878,7 @@ void UICanvas::OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea)
     }
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void OnBlendDrawPattern(ListNode<UICanvas::DrawCmd>* curDraw,
                         UICanvas::DrawCmd& drawCmd,
                         Rect& rect,
@@ -791,6 +1011,7 @@ void UICanvas::OnBlendDraw(BufferInfo& gfxDstBuffer, const Rect& trunc)
                            rasterizer, renBase, transform, pathParamBlend);
     }
 }
+#endif
 
 void UICanvas::GetAbsolutePosition(const Point& prePoint, const Rect& rect, const Style& style, Point& point)
 {
@@ -1071,7 +1292,94 @@ void UICanvas::DoDrawPath(BufferInfo& gfxDstBuffer,
                           const Rect& invalidatedArea,
                           const Style& style)
 {
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     BaseGfxEngine::GetInstance()->DrawPath(gfxDstBuffer, param, paint, rect, invalidatedArea, style);
+#else
+    if (param == nullptr) {
+        return;
+    }
+    PathParam* pathParam = static_cast<PathParam*>(param);
+    const UICanvasPath* path = pathParam->path;
+    if (path == nullptr) {
+        return;
+    }
+    Point pathEnd = {COORD_MIN, COORD_MIN};
+
+    ListNode<Point>* pointIter = path->points_.Begin();
+    ListNode<ArcParam>* arcIter = path->arcParam_.Begin();
+    ListNode<PathCmd>* iter = path->cmd_.Begin();
+    for (uint16_t i = 0; (i < pathParam->count) && (iter != path->cmd_.End()); i++, iter = iter->next_) {
+        switch (iter->data_) {
+            case CMD_MOVE_TO: {
+                pointIter = pointIter->next_;
+                break;
+            }
+            case CMD_LINE_TO: {
+                Point start = pointIter->prev_->data_;
+                Point end = pointIter->data_;
+                pointIter = pointIter->next_;
+                if ((start.x == end.x) && (start.y == end.y)) {
+                    break;
+                }
+
+                GetAbsolutePosition(start, rect, style, start);
+                GetAbsolutePosition(end, rect, style, end);
+                BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                                       paint.GetStrokeWidth(), paint.GetStrokeColor(), OPA_OPAQUE);
+                if ((pathEnd.x == start.x) && (pathEnd.y == start.y)) {
+                    DoDrawLineJoin(gfxDstBuffer, start, invalidatedArea, paint);
+                }
+                pathEnd = end;
+                break;
+            }
+            case CMD_ARC: {
+                ArcInfo arcInfo = {{0}};
+                arcInfo.imgPos = Point{0, 0};
+                arcInfo.startAngle = arcIter->data_.startAngle;
+                arcInfo.endAngle = arcIter->data_.endAngle;
+                Style drawStyle = StyleDefault::GetDefaultStyle();
+                drawStyle.lineWidth_ = static_cast<int16_t>(paint.GetStrokeWidth());
+                drawStyle.lineColor_ = paint.GetStrokeColor();
+                drawStyle.lineOpa_ = OPA_OPAQUE;
+                arcInfo.radius = arcIter->data_.radius + ((paint.GetStrokeWidth() + 1) >> 1);
+
+                GetAbsolutePosition(arcIter->data_.center, rect, style, arcInfo.center);
+                BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcInfo, invalidatedArea, drawStyle, OPA_OPAQUE,
+                                                      CapType::CAP_NONE);
+                if (pointIter != path->points_.Begin()) {
+                    DoDrawLineJoin(gfxDstBuffer, pathEnd, invalidatedArea, paint);
+                }
+
+                GetAbsolutePosition(pointIter->data_, rect, style, pathEnd);
+                pointIter = pointIter->next_;
+                arcIter = arcIter->next_;
+                break;
+            }
+            case CMD_CLOSE: {
+                Point start = pointIter->prev_->data_;
+                Point end = pointIter->data_;
+                GetAbsolutePosition(start, rect, style, start);
+                GetAbsolutePosition(end, rect, style, end);
+                if ((start.x != end.x) || (start.y != end.y)) {
+                    BaseGfxEngine::GetInstance()->DrawLine(gfxDstBuffer, start, end, invalidatedArea,
+                                                           paint.GetStrokeWidth(), paint.GetStrokeColor(), OPA_OPAQUE);
+                    if ((pathEnd.x == start.x) && (pathEnd.y == start.y)) {
+                        DoDrawLineJoin(gfxDstBuffer, start, invalidatedArea, paint);
+                    }
+                    pathEnd = end;
+                }
+
+                if ((pathEnd.x == end.x) && (pathEnd.y == end.y)) {
+                    DoDrawLineJoin(gfxDstBuffer, end, invalidatedArea, paint);
+                }
+                pointIter = pointIter->next_;
+                break;
+            }
+            default:
+                break;
+        }
+    }
+#endif
 }
 
 void UICanvas::DoFillPath(BufferInfo& gfxDstBuffer,
@@ -1264,6 +1572,7 @@ void UICanvas::DestroyMapBufferInfo()
     }
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void UICanvas::BlendRaster(const Paint& paint,
                            void* param,
                            RasterizerScanlineAntialias& blendRasterizer,
@@ -1333,4 +1642,5 @@ void UICanvas::BlendRaster(const Paint& paint,
     }
 #endif
 }
+#endif // ENABLE_CANVAS_EXTEND
 } // namespace OHOS
