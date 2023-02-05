@@ -29,6 +29,7 @@ DEFINES += QT_DEPRECATED_WARNINGS \
     "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1" \
     "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1" \
     "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1" \
+    "ENABLE_CANVAS_EXTEND=1" \
     "DEFAULT_ANIMATION=1"
 
 
@@ -148,6 +149,7 @@ SOURCES += \
     ../../../../frameworks/font/ui_font_bitmap.cpp \
     ../../../../frameworks/font/ui_font_builder.cpp \
     ../../../../frameworks/font/ui_font_cache.cpp \
+    ../../../../frameworks/font/ui_font_cache_manager.cpp \
     ../../../../frameworks/font/ui_font_vector.cpp \
     ../../../../frameworks/font/ui_line_break.cpp \
     ../../../../frameworks/font/ui_multi_font_manager.cpp \
