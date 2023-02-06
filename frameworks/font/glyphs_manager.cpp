@@ -96,10 +96,11 @@ const GlyphNode* GlyphsManager::GetGlyphNodeFromFiles(uint32_t unicode, uint16_t
     }
 
     GlyphCacheNode* cacheNode = UIFontCacheManager::GetInstance()->GetNodeCacheSpace(unicode, fontId);
-    if (cacheNode != nullptr) {
-        cacheNode->node = nodeInfo;
-        cacheNode->cacheType = fileType_;
+    if (cacheNode == nullptr) {
+        return nullptr;
     }
+    cacheNode->node = nodeInfo;
+    cacheNode->cacheType = fileType_;
 
     return &(cacheNode->node);
 }
