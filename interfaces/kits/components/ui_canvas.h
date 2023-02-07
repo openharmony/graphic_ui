@@ -72,7 +72,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    UICanvas() : startPoint_({0, 0}), vertices_(nullptr) {}
+    UICanvas() : startPoint_({0, 0}), vertices_(nullptr), path_(nullptr) {}
 
     /**
      * @brief A destructor used to delete the <b>UICanvas</b> instance.
@@ -197,6 +197,7 @@ public:
      */
     void DrawRect(const Point& startPoint, int16_t height, int16_t width, const Paint& paint);
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     /**
      * @brief Draws a rectangular path with no fill.
      * @param startPoint starting point
@@ -213,6 +214,7 @@ public:
      * @param width
      */
     void ClearRect(const Point& startPoint, int16_t height, int16_t width);
+#endif
 
     /**
      * @brief Draws a circle.
@@ -390,6 +392,7 @@ public:
      */
     void DrawPath(const Paint& paint);
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     /**
      * @brief Fill polygon path
      * @param paint fill paint
@@ -397,6 +400,7 @@ public:
      * @version 5.0
      */
     void FillPath(const Paint& paint);
+#endif
 
 #if defined(GRAPHIC_ENABLE_DRAW_TEXT_FLAG) && GRAPHIC_ENABLE_DRAW_TEXT_FLAG
     /*  Draw text on canvas */
@@ -429,7 +433,9 @@ public:
         return paint;
     }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     void OnBlendDraw(BufferInfo& gfxDstBuffer, const Rect& trunc);
+#endif
 
     void OnDraw(BufferInfo& gfxDstBuffer, const Rect& invalidatedArea) override;
 
@@ -442,6 +448,8 @@ public:
                         SpanBase& spanGen,
                         const Rect& rect,
                         bool isStroke);
+    static void DeleteImageParam(void* param);
+    static void DeletePathParam(void* param);
 protected:
     constexpr static uint8_t MAX_CURVE_WIDTH = 3;
 
@@ -475,6 +483,38 @@ protected:
         int16_t endAngle;
     };
 
+    enum PathCmd {
+        CMD_MOVE_TO,
+        CMD_LINE_TO,
+        CMD_ARC,
+        CMD_CLOSE,
+    };
+
+    class UICanvasPath : public HeapBase {
+    public:
+        UICanvasPath() : startPos_({ 0, 0 }), strokeCount_(0) {};
+        ~UICanvasPath();
+        List<Point> points_;
+        List<PathCmd> cmd_;
+        List<ArcParam> arcParam_;
+        Point startPos_;
+        uint16_t strokeCount_;
+    };
+
+#if (!(defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND))
+    struct PathParam : public HeapBase {
+        UICanvasPath* path;
+        uint16_t count;
+    };
+
+    struct ImageParam : public HeapBase {
+        Point start;
+        uint16_t height;
+        uint16_t width;
+        Image* image;
+    };
+#endif
+
     struct TextParam : public HeapBase {
         const char* text;
         Point position;
@@ -504,6 +544,7 @@ protected:
 
     Point startPoint_;
     UICanvasVertices* vertices_;
+    UICanvasPath* path_;
     List<DrawCmd> drawCmdList_;
     // Save historical modification information of paint
     List<Paint> paintStack_;

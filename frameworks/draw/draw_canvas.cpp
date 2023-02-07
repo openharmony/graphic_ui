@@ -32,6 +32,7 @@ void RenderSolid(const Paint& paint, RasterizerScanlineAntialias& rasterizer, Re
     RenderScanlinesAntiAliasSolid(rasterizer, scanline, renBase, color);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void DrawCanvas::DoRender(BufferInfo& gfxDstBuffer,
                           void* param,
                           const Paint& paint,
@@ -140,6 +141,7 @@ void DrawCanvas::DoDrawShadow(BufferInfo& gfxDstBuffer,
 #endif // GRAPHIC_ENABLE_BLUR_EFFECT_FLAG
 }
 #endif // GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG
+#endif // ENABLE_CANVAS_EXTEND
 
 void DrawCanvas::InitRenderAndTransform(BufferInfo& gfxDstBuffer,
                                         RenderBuffer& renderBuffer,
@@ -267,6 +269,7 @@ void DrawCanvas::BuildRadialGradientMatrix(const Paint& paint,
 #endif // GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
 
 #if defined(GRAPHIC_ENABLE_PATTERN_FILL_FLAG) && GRAPHIC_ENABLE_PATTERN_FILL_FLAG
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void DrawCanvas::RenderPattern(const Paint& paint,
                                void* param,
                                RasterizerScanlineAntialias& rasterizer,
@@ -286,6 +289,7 @@ void DrawCanvas::RenderPattern(const Paint& paint,
                                 rect.GetTop());
     RenderScanlinesAntiAlias(rasterizer, scanline, renBase, allocator, spanPattern);
 }
+#endif
 #endif // GRAPHIC_ENABLE_PATTERN_FILL_FLAG
 
 } // namespace OHOS
