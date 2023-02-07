@@ -644,7 +644,7 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16
         return RET_VALUE_OK;
     }
 
-#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
 #else
     uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
@@ -682,7 +682,7 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16
 uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize)
 {
     uint16_t fontKey = GetKey(fontId, fontSize);
-#if ENABLE_SPANNALBE_STRING
+#if ENABLE_SPANNABLE_STRING
     uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
 #else
     uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
@@ -713,7 +713,7 @@ uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_
         return nullptr;
     }
 
-#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
 #else
     bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
@@ -733,7 +733,7 @@ bool UIFontVector::IsEmojiFont(uint16_t fontId)
     return (fontInfo_[fontId].fontWeight >= 16); // 16: rgb color font
 }
 
-#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 void UIFontVector::SetItaly(FT_GlyphSlot slot)
 {
     if (slot->format != FT_GLYPH_FORMAT_OUTLINE) {
@@ -806,7 +806,7 @@ int8_t UIFontVector::LoadGlyphIntoFace(uint16_t& fontId, uint8_t fontSize, uint3
     glyphNode.advance = static_cast<uint16_t>(faceInfo.face->glyph->advance.x / FONT_PIXEL_IN_POINT);
     glyphNode.fontId = fontId;
 
-#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     SetFace(faceInfo, unicode, glyphNode.textStyle);
 #else
     SetFace(faceInfo, unicode);
@@ -864,7 +864,7 @@ uint8_t UIFontVector::IsGlyphFont(uint32_t unicode)
 
 void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode)
 {
-#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     SetFace(faceInfo, unicode, TEXT_STYLE_NORMAL);
 #else
     Metric* f = reinterpret_cast<Metric*>(UIMalloc(sizeof(Metric)));
@@ -923,7 +923,7 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode)
 #endif
 }
 
-#if defined(ENABLE_SPANNALBE_STRING) && ENABLE_SPANNALBE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
 void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode, TextStyle textStyle)
 {
     Metric f;
