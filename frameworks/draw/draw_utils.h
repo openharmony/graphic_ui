@@ -108,7 +108,7 @@ struct LabelLetterInfo {
 };
 
 struct TransformInitState {
-#if ENABLE_FIXED_POINT
+#if defined(ENABLE_FIXED_POINT) && ENABLE_FIXED_POINT
     // parameters below are Q15 fixed-point number
     int64_t verticalU;
     int64_t verticalV;
