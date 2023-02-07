@@ -40,21 +40,28 @@ void UITestCanvas::TearDown()
 const UIView* UITestCanvas::GetTestView()
 {
     UIKitCanvasTestDrawImage002();
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     RM008UIKitCanvasTest001();
     RM008UIKitCanvasTest002();
+#endif
     RM008UIKitCanvasTest003();
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     RM008UIKitCanvasTest004();
     RM008UIKitCanvasTest005();
     RM008UIKitCanvasTest006();
     RM008UIKitCanvasTest007();
     RM008UIKitCanvasShadowTest008();
+#endif
     RM009LineCapDrawPath();
     RM009LineJoinDrawPath();
     RM009LineDashDrawPath();
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     RM009StrokeAndClearRectDrawPath();
+#endif
     RM011StrokeText001();
     RM011CanvasScale001();
     RM011CanvasRotate001();
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
     RM012globalAlpha001();
     RM012SaveOrRestore002();
     RM012GlobalCompositeOperationSourceOver();
@@ -68,6 +75,7 @@ const UIView* UITestCanvas::GetTestView()
     RM012GlobalCompositeOperationLIGHTER();
     RM012GlobalCompositeOperationCopy();
     RM012GlobalCompositeOperationXOR();
+#endif
     UIKitCanvasTestDrawLine001();
     UIKitCanvasTestDrawLine002();
     UIKitCanvasTestDrawCurve001();
@@ -1144,6 +1152,7 @@ void UITestCanvas::RM009LineDashDrawPath()
 #endif
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void UITestCanvas::RM009StrokeAndClearRectDrawPath()
 {
     if (container_ == nullptr) {
@@ -1242,6 +1251,7 @@ void UITestCanvas::RM008UIKitCanvasTest002()
     canvas->ClosePath();
     canvas->FillPath(paint);
 }
+#endif
 
 void UITestCanvas::RM008UIKitCanvasTest003()
 {
@@ -1290,6 +1300,7 @@ void UITestCanvas::RM008UIKitCanvasTest003()
     canvas->DrawPath(paint);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void UITestCanvas::RM008UIKitCanvasTest004()
 {
     if (container_ == nullptr) {
@@ -1498,6 +1509,7 @@ void UITestCanvas::RM008UIKitCanvasShadowTest008()
 #endif
 }
 
+#endif
 void UITestCanvas::RM011StrokeText001()
 {
     CreateTitleLabel("RM011_StrokeText_多国文字加旋转放大");
@@ -1622,6 +1634,7 @@ void UITestCanvas::RM011CanvasRotate001()
     canvas->DrawPath(paint);
 }
 
+#if defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND
 void UITestCanvas::RM012globalAlpha001()
 {
     if (container_ == nullptr) {
@@ -1991,4 +2004,5 @@ void UITestCanvas::RM012SaveOrRestore002()
     paint = canvas->Restore();
     canvas->FillPath(paint);
 }
+#endif
 } // namespace OHOS
