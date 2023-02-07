@@ -73,6 +73,7 @@ config("graphic_define_config") {
   } else if (ohos_kernel_type == "liteos_m") {
     include_dirs += [ "//third_party/freetype/include" ]
     defines += [
+      "ENABLE_CANVAS_EXTEND=0",
       "GRAPHIC_ENABLE_DASH_GENERATE_FLAG=1",
       "GRAPHIC_ENABLE_BLUR_EFFECT_FLAG=1",
       "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1",
