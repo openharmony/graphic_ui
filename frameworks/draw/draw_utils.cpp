@@ -1900,12 +1900,17 @@ void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
     if ((width * newDataInfo.pxSize) % FONT_WEIGHT_8 != 0) {
         widthInByte++;
     }
-    uint8_t* newData = static_cast<uint8_t*>(UIMalloc(widthInByte * height));
+    ImageInfo imageinfo;
+    imageinfo.header.width = newDataInfo.header.width;
+    imageinfo.header.height = newDataInfo.header.height;
+    imageinfo.dataSize = widthInByte * height;
+    uint8_t* newData = static_cast<uint8_t*>(ImageCacheMalloc(imageinfo));
     if (newData == nullptr) {
         return;
     }
+    imageinfo.data = newData;
     if (memset_s(newData, widthInByte * height, 0, widthInByte * height) != EOK) {
-        UIFree(static_cast<void*>(newData));
+        ImageCacheFree(imageinfo);
         newData = nullptr;
         return;
     }
@@ -1915,7 +1920,7 @@ void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
     for (int i = 0; i < newDataInfo.header.height; ++i) {
         // 2 : double
         if (memcpy_s(tmp, widthInByte - diff * 2, data, widthInByte - diff * 2) != EOK) {
-            UIFree(static_cast<void*>(newData));
+        ImageCacheFree(imageinfo);
             newData = nullptr;
             return;
         }
@@ -1993,9 +1998,11 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     Rect trans = newTransMap.GetBoxRect();
     trans.SetX(trans.GetX() + position.x);
     trans.SetY(trans.GetY() + position.y);
+    ImageInfo imageinfo;
+    imageinfo.data = newDataInfo.data;
     if (!trans.Intersect(trans, mask)) {
         if (newDataInfo.data != dataInfo.data) {
-            UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(newDataInfo.data)));
+            ImageCacheFree(imageinfo);
         }
         return;
     }
@@ -2041,7 +2048,7 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
         DrawTriangleTransform(gfxDstBuffer, mask, position, color, opaScale, newTransMap, triangleInfo);
     }
     if (newDataInfo.data != dataInfo.data) {
-        UIFree(reinterpret_cast<void*>(const_cast<uint8_t*>(newDataInfo.data)));
+        ImageCacheFree(imageinfo);
     }
 }
 
