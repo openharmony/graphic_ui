@@ -125,7 +125,8 @@ void UIQrcode::SetImageInfo(qrcodegen::QrCode& qrcode)
     imageInfo_.header.width = width;
     imageInfo_.header.height = height;
     imageInfo_.header.colorMode = ARGB8888;
-    imageInfo_.dataSize = imageInfo_.header.width * imageInfo_.header.height * QRCODE_FACTOR_NUM;
+    width = UI_ALIGN_UP(width);
+    imageInfo_.dataSize = width * imageInfo_.header.height * QRCODE_FACTOR_NUM;
     if (imageInfo_.data != nullptr) {
         ImageCacheFree(imageInfo_);
         imageInfo_.data = nullptr;
@@ -158,6 +159,7 @@ void UIQrcode::FillQrCodeColor(qrcodegen::QrCode& qrcode)
     int32_t offsetX = (width - outFilePixelPrescaler * qrWidth) / 2;    // 2: half
     int32_t offsetY = (height - outFilePixelPrescaler * qrWidth) / 2;   // 2: half
 
+    width = UI_ALIGN_UP(width);
     uint8_t* destData = nullptr;
     int64_t oneLinePixel = width * QRCODE_FACTOR_NUM * outFilePixelPrescaler;
     int64_t oneLineOffsetPixel = (offsetY * width * QRCODE_FACTOR_NUM) + (offsetX * QRCODE_FACTOR_NUM);
@@ -180,8 +182,11 @@ void UIQrcode::FillQrCodeBackgroundColor()
     *(initColorData + 2) = backgroundColor_.red;   // 2: R channel
     *(initColorData + 3) = OPA_OPAQUE;             // 3: Alpha channel
 
+    uint32_t width = imageInfo_.header.width;
+    width = UI_ALIGN_UP(width);
+
     uint8_t* tempColorData = initColorData;
-    for (int16_t col = 1; col < imageInfo_.header.width; ++col) {
+    for (int16_t col = 1; col < width; ++col) {
         initColorData += QRCODE_FACTOR_NUM;
         if (memcpy_s(initColorData, QRCODE_FACTOR_NUM, tempColorData, QRCODE_FACTOR_NUM) != EOK) {
             GRAPHIC_LOGE("UIQrcode::FillQrCodeBackgroundColor memcpy_s failed!\n");
@@ -189,7 +194,7 @@ void UIQrcode::FillQrCodeBackgroundColor()
         }
     }
     initColorData = tempColorData;
-    int32_t deltaWidth = QRCODE_FACTOR_NUM * imageInfo_.header.width;
+    int32_t deltaWidth = QRCODE_FACTOR_NUM * width;
     for (int16_t row = 1; row < imageInfo_.header.height; ++row) {
         initColorData += deltaWidth;
         if (memcpy_s(initColorData, deltaWidth, tempColorData, deltaWidth) != EOK) {
@@ -201,8 +206,11 @@ void UIQrcode::FillQrCodeBackgroundColor()
 
 void UIQrcode::GetDestData(uint8_t* destData, int32_t outFilePixelPrescaler)
 {
+    uint32_t width = imageInfo_.header.width;
+    width = UI_ALIGN_UP(width);
+
     for (int32_t x = 0; x < outFilePixelPrescaler; ++x) {
-        uint8_t* tempData = destData + imageInfo_.header.width * QRCODE_FACTOR_NUM * x;
+        uint8_t* tempData = destData + width * QRCODE_FACTOR_NUM * x;
         for (int32_t y = 0; y < outFilePixelPrescaler; ++y) {
             *(tempData + 0) = qrColor_.blue;  // 0: B channel
             *(tempData + 1) = qrColor_.green; // 1: G channel
