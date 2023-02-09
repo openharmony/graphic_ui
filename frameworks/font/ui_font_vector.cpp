@@ -31,7 +31,7 @@
 #if defined(ENABLE_MULTI_FONT) && ENABLE_MULTI_FONT
 #include "font/ui_multi_font_manager.h"
 #endif
-#if ENABLE_SHAPING
+#if defined(ENABLE_SHAPING) && ENABLE_SHAPING
 #include "font/ui_text_shaping.h"
 #endif
 #include "font/ui_font_cache_manager.h"
@@ -682,7 +682,7 @@ int8_t UIFontVector::GetGlyphNode(uint32_t unicode, GlyphNode& glyphNode, uint16
 uint8_t* UIFontVector::GetBitmap(uint32_t unicode, GlyphNode& glyphNode, uint16_t fontId, uint8_t fontSize)
 {
     uint16_t fontKey = GetKey(fontId, fontSize);
-#if ENABLE_SPANNABLE_STRING
+#if defined(ENABLE_SPANNABLE_STRING) && ENABLE_SPANNABLE_STRING
     uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode, glyphNode.textStyle);
 #else
     uint8_t* bitmap = UIFontCacheManager::GetInstance()->GetBitmap(fontKey, unicode);
@@ -885,8 +885,7 @@ void UIFontVector::SetFace(FaceInfo& faceInfo, uint32_t unicode)
     if (faceInfo.face->glyph->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
         pixSize = 0x04; // 4 Byte
         mode = ARGB8888;
-    }
-    else {
+    } else {
         pixSize = 1;
         mode = A8;
     }
@@ -1107,7 +1106,7 @@ void UIFontVector::SetPsramMemory(uintptr_t psramAddr, uint32_t psramLen)
 int8_t UIFontVector::SetCurrentLangId(uint8_t langId)
 {
     FontRamAllocator::GetInstance().ClearRam();
-#if ENABLE_SHAPING
+#if defined(ENABLE_SHAPING) && ENABLE_SHAPING
     UITextShaping::GetInstance()->ClearTtfHeader();
 #endif
     UIFontCacheManager::GetInstance()->ClearCacheFlag();
