@@ -194,6 +194,9 @@ int16_t UILineBreakEngine::GetLetterWidth(uint32_t unicode, uint16_t& letterInde
 
 bool UILineBreakEngine::IsBreakPos(uint32_t unicode, uint16_t fontId, uint8_t fontSize, int32_t& state)
 {
+    if (TypedText::IsEmoji(unicode)) {
+        return true;
+    }
     if ((unicode > TypedText::MAX_UINT16_HIGH_SCOPE) || (stateTbl_ == nullptr) || (lineBreakTrie_ == nullptr)) {
         return true;
     }
