@@ -68,7 +68,7 @@ uint8_t* UIFontCache::GetSpace(uint16_t fontId, uint32_t unicode, uint32_t size,
 
     ListInit(&bitmap->hashHead);
     ListInit(&bitmap->lruHead);
-    ListAdd(&bitmap->hashHead, hashTable_ + fontId % FONT_CACHE_HASH_NR);
+    ListAdd(&bitmap->hashHead, hashTable_ + unicode % FONT_CACHE_HASH_NR);
     ListAdd(&bitmap->lruHead, &lruList_);
 
     bitmap->fontId = fontId;
@@ -96,7 +96,7 @@ void UIFontCache::PutSpace(uint8_t* addr)
 uint8_t* UIFontCache::GetBitmap(uint16_t fontId, uint32_t unicode, TextStyle textStyle)
 {
     Bitmap* bitmap = nullptr;
-    ListHead* head = hashTable_ + fontId % FONT_CACHE_HASH_NR;
+    ListHead* head = hashTable_ + unicode % FONT_CACHE_HASH_NR;
     for (ListHead* node = head->next; node != head; node = node->next) {
         bitmap = reinterpret_cast<struct Bitmap*>(reinterpret_cast<uint8_t*>(node) -
                                                   offsetof(struct Bitmap, hashHead));
