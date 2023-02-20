@@ -366,9 +366,9 @@ void UILabel::RemeasureForMarquee(int16_t textWidth)
     if (textWidth > rectWidth) {
         offsetX_ = GetRollStartPos();
         if (labelText_->GetDirect() == TEXT_DIRECT_RTL) {
-            labelText_->SetAlign(TEXT_ALIGNMENT_RIGHT);
+            labelText_->SetAlign(TEXT_ALIGNMENT_RIGHT, GetVerAlign());
         } else {
-            labelText_->SetAlign(TEXT_ALIGNMENT_LEFT);
+            labelText_->SetAlign(TEXT_ALIGNMENT_LEFT, GetVerAlign());
         }
         if (hasAnimator_) {
             static_cast<LabelAnimator*>(animator_.animator)->UpdateWidth(textWidth, rectWidth);
