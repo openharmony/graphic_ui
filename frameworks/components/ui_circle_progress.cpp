@@ -113,10 +113,8 @@ void UICircleProgress::DrawCommonCircle(BufferInfo& gfxDstBuffer, const Rect& in
         arcinfo.startAngle = startAngle;
         arcinfo.endAngle = endAngle;
         arcinfo.imgSrc = foregroundImage_;
-        if (startAngle != endAngle) {
-            BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcinfo, invalidatedArea, *foregroundStyle_, opaScale_,
-                                                  foregroundStyle_->lineCap_);
-        }
+        BaseGfxEngine::GetInstance()->DrawArc(gfxDstBuffer, arcinfo, invalidatedArea, *foregroundStyle_, opaScale_,
+                                              foregroundStyle_->lineCap_);
     }
 }
 
