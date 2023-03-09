@@ -131,7 +131,7 @@ struct TriangleEdge {
     TriangleEdge() {}
     TriangleEdge(int16_t x1, int16_t y1, int16_t duInt, int16_t dvInt);
     ~TriangleEdge();
-#if ENABLE_FIXED_POINT
+#if defined(ENABLE_FIXED_POINT) && ENABLE_FIXED_POINT
     // parameters below are Q15 fixed-point number
     int64_t curX = 0;
     int64_t curY = 0;
