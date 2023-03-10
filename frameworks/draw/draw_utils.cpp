@@ -1880,7 +1880,7 @@ BottomHalf:
     DrawTriangleTransformPart(gfxDstBuffer, part);
 }
 
-void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
+void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo, ImageInfo& imageinfo)
 {
     int16_t border = 1;          // 1 : border width
     int16_t offset = border * 2; // 2 : offset
@@ -1900,7 +1900,6 @@ void DrawUtils::AddBorderToImageData(TransformDataInfo& newDataInfo)
     if ((width * newDataInfo.pxSize) % FONT_WEIGHT_8 != 0) {
         widthInByte++;
     }
-    ImageInfo imageinfo;
     imageinfo.header.width = newDataInfo.header.width;
     imageinfo.header.height = newDataInfo.header.height;
     imageinfo.dataSize = widthInByte * height;
@@ -1983,6 +1982,7 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     if ((gfxDstBuffer.virAddr == nullptr) || (dataInfo.data == nullptr)) {
         return;
     }
+    ImageInfo imageinfo;
     TransformDataInfo newDataInfo = dataInfo;
     TransformMap newTransMap = transMap;
     // If the width and height of the rectangle of transMap are not equal to the width and height of the ImageHeader,
@@ -1990,7 +1990,7 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     if ((transMap.GetTransMapRect().GetWidth() == dataInfo.header.width) &&
         (transMap.GetTransMapRect().GetHeight() == dataInfo.header.height)) {
         // Add a border of transparency values to the data
-        AddBorderToImageData(newDataInfo);
+        AddBorderToImageData(newDataInfo, imageinfo);
         // Update the transMap according to new rect width and height
         UpdateTransMap(newDataInfo.header.width, newDataInfo.header.height, newTransMap);
     }
@@ -1998,7 +1998,6 @@ void DrawUtils::DrawTransform(BufferInfo& gfxDstBuffer,
     Rect trans = newTransMap.GetBoxRect();
     trans.SetX(trans.GetX() + position.x);
     trans.SetY(trans.GetY() + position.y);
-    ImageInfo imageinfo;
     imageinfo.data = newDataInfo.data;
     if (!trans.Intersect(trans, mask)) {
         if (newDataInfo.data != dataInfo.data) {
