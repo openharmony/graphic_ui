@@ -355,7 +355,7 @@ private:
 
     static OpacityType GetPxAlphaForAlphaImg(const TransformDataInfo& dataInfo, const Point& point);
 
-    static void AddBorderToImageData(TransformDataInfo& newDataInfo);
+    static void AddBorderToImageData(TransformDataInfo& newDataInfo, ImageInfo& imageinfo);
 
     static void UpdateTransMap(int16_t width, int16_t height, TransformMap& transMap);
 
