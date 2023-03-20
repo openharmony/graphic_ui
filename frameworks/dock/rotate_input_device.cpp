@@ -25,10 +25,14 @@ constexpr int16_t ROTATE_INPUT_THRESHOLD = 1;
 #else
 constexpr int16_t ROTATE_INPUT_THRESHOLD = 10;
 #endif
+constexpr uint8_t ROTATE_END_ZERO_COUNT = 2;
 }
 
 namespace OHOS {
-RotateInputDevice::RotateInputDevice() : rotateStart_(false), threshold_(ROTATE_INPUT_THRESHOLD), cachedRotation_(0) {}
+RotateInputDevice::RotateInputDevice()
+    : rotateStart_(false), threshold_(ROTATE_INPUT_THRESHOLD), cachedRotation_(0), zeroCount_(0)
+{
+}
 
 void RotateInputDevice::DispatchEvent(const DeviceData& data)
 {
@@ -65,9 +69,13 @@ void RotateInputDevice::DispatchEvent(const DeviceData& data)
     }
 
     if (data.rotate == 0 && rotateStart_) {
-        view->OnRotateEndEvent(0);
-        rotateStart_ = false;
-        GRAPHIC_LOGW("RotateInputDevice dispatched 0-value event!\n");
+        zeroCount_++;
+        if (zeroCount_ >= ROTATE_END_ZERO_COUNT) {
+            view->OnRotateEndEvent(0);
+            zeroCount_ = 0;
+            rotateStart_ = false;
+            GRAPHIC_LOGW("RotateInputDevice dispatched 0-value event!\n");
+        }
         return;
     }
     if (!rotateStart_) {

@@ -39,6 +39,7 @@ protected:
     bool rotateStart_;
     int16_t threshold_;
     int16_t cachedRotation_;
+    uint8_t zeroCount_;
 };
 } // namespace OHOS
 
