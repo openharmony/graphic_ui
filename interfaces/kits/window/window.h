@@ -122,7 +122,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    static void DestoryWindow(Window* window);
+    static void DestroyWindow(Window* window);
 
     /**
      * @brief Binds the <b>RootView</b> to this window.
