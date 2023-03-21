@@ -97,7 +97,7 @@ public:
      * @since 1.0
      * @version 1.0
      */
-    static bool DestoryWindowRootView(RootView* rootView)
+    static bool DestroyWindowRootView(RootView* rootView)
     {
         if (rootView == RootView::GetInstance()) {
             return false;

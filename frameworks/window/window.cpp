@@ -31,7 +31,7 @@ Window* Window::CreateWindow(const WindowConfig& config)
     return window;
 }
 
-void Window::DestoryWindow(Window* window)
+void Window::DestroyWindow(Window* window)
 {
     if (window != nullptr) {
         WindowImpl* windowImpl = reinterpret_cast<WindowImpl*>(window);

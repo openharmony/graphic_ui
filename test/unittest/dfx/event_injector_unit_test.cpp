@@ -204,7 +204,7 @@ void EventInjectorTest::TearDownTestCase(void)
 {
     isRepeat_ = false;
     pthread_join(mainTaskThread_, nullptr);
-    Window::DestoryWindow(window_);
+    Window::DestroyWindow(window_);
     DeleteChildren(layout_);
     layout_ = nullptr;
 
