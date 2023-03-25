@@ -215,7 +215,7 @@ private:
     void Layout();
     void LayoutButton();
     void CreateDialogWindow();
-    void DestoryWindow();
+    void DestroyWindow();
 
     bool isShowing_;
     bool enableAutoCancel_;

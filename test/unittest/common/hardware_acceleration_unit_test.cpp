@@ -142,7 +142,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareFill_001, TestSize.Level1)
 
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_testDevice->fillIn_, true);
-    Window::DestoryWindow(rootView->GetBoundWindow());
+    Window::DestroyWindow(rootView->GetBoundWindow());
 }
 #endif
 
@@ -173,7 +173,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareBlend_001, TestSize.Level0)
 
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_testDevice->blendIn_, true);
-    Window::DestoryWindow(rootView->GetBoundWindow());
+    Window::DestroyWindow(rootView->GetBoundWindow());
 }
 #endif
 
@@ -206,7 +206,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareBlend_002, TestSize.Level1)
 
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_testDevice->blendIn_, true);
-    Window::DestoryWindow(rootView->GetBoundWindow());
+    Window::DestroyWindow(rootView->GetBoundWindow());
 }
 #endif
 
@@ -243,7 +243,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareTransform_001, TestSize.Level0)
 
     TaskManager::GetInstance()->TaskHandler();
     EXPECT_EQ(g_testDevice->transformIn_, true);
-    Window::DestoryWindow(rootView->GetBoundWindow());
+    Window::DestroyWindow(rootView->GetBoundWindow());
 }
 #endif
 
@@ -285,7 +285,7 @@ HWTEST_F(HardwareAccelerationTest, HardwareTransform_002, TestSize.Level1)
     EXPECT_EQ(g_testDevice->fillIn_, false);
     EXPECT_EQ(g_testDevice->blendIn_, false);
     EXPECT_EQ(g_testDevice->transformIn_, false);
-    Window::DestoryWindow(rootView->GetBoundWindow());
+    Window::DestroyWindow(rootView->GetBoundWindow());
 }
 #endif
 } // namespace OHOS
