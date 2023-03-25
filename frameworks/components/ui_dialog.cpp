@@ -37,7 +37,7 @@ public:
     {
         bool ret = true;
         if (dialog_ != nullptr) {
-            dialog_->DestoryWindow();
+            dialog_->DestroyWindow();
             dialog_->isShowing_ = false;
         }
         if (onClickListener_ != nullptr) {
@@ -62,7 +62,7 @@ public:
         if ((dialog_ != nullptr) && (dialog_->dialogLayer_ != nullptr) &&
             !dialog_->dialogLayer_->GetRect().IsContains(event.GetCurrentPos())) {
             if (dialog_->enableAutoCancel_) {
-                dialog_->DestoryWindow();
+                dialog_->DestroyWindow();
                 dialog_->isShowing_ = false;
             }
             if (dialog_->onCancelListener_ != nullptr) {
@@ -141,7 +141,7 @@ UIDialog::~UIDialog()
         delete line2_;
         line2_ = nullptr;
     }
-    if ((windowRootView_ != nullptr) && !RootView::DestoryWindowRootView(windowRootView_)) {
+    if ((windowRootView_ != nullptr) && !RootView::DestroyWindowRootView(windowRootView_)) {
         windowRootView_ = nullptr;
     }
     if (dialogClickListener_ != nullptr) {
@@ -617,10 +617,10 @@ void UIDialog::EnableAutoCancel(bool enable)
     enableAutoCancel_ = enable;
 }
 
-void UIDialog::DestoryWindow()
+void UIDialog::DestroyWindow()
 {
     if (window_ != nullptr) {
-        Window::DestoryWindow(window_);
+        Window::DestroyWindow(window_);
         window_ = nullptr;
     }
 }
