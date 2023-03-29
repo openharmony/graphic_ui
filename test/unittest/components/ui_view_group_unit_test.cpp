@@ -169,11 +169,7 @@ HWTEST_F(UIViewGroupTest, Graphic_UIView_Test_GetChildrenRenderHead_001, TestSiz
 {
     UIViewGroup* viewGroup = new UIViewGroup();
     UIView* sibling = viewGroup->GetChildrenRenderHead();
-    if (sibling != nullptr) {
-        EXPECT_NE(0, 0);
-        return;
-    }
-    EXPECT_EQ(0, 0);
+    EXPECT_EQ(sibling, nullptr);
     delete viewGroup;
 }
 
