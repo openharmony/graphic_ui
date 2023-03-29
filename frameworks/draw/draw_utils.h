@@ -212,7 +212,8 @@ public:
     void DrawColorLetter(BufferInfo& gfxDstBuffer,
                          const LabelLetterInfo& letterInfo,
                          uint8_t* fontMap,
-                         GlyphNode node) const;
+                         GlyphNode node,
+                         uint8_t maxLetterSize) const;
     void DrawNormalLetter(BufferInfo& gfxDstBuffer,
                           const LabelLetterInfo& letterInfo,
                           uint8_t* fontMap,
