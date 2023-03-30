@@ -293,7 +293,8 @@ void DrawUtils::DrawPixel(BufferInfo& gfxDstBuffer,
 void DrawUtils::DrawColorLetter(BufferInfo& gfxDstBuffer,
                                 const LabelLetterInfo& letterInfo,
                                 uint8_t* fontMap,
-                                GlyphNode node) const
+                                GlyphNode node,
+                                uint8_t maxLetterSize) const
 {
     if (fontMap == nullptr) {
         return;
@@ -304,7 +305,7 @@ void DrawUtils::DrawColorLetter(BufferInfo& gfxDstBuffer,
     int16_t posX;
     int16_t posY;
     if (letterInfo.baseLine) {
-        posY = letterInfo.pos.y + letterInfo.offsetY;
+        posY = letterInfo.pos.y + maxLetterSize - node.top + letterInfo.offsetY;
     } else {
         FontHeader head;
         if (fontEngine->GetFontHeader(head, letterInfo.fontId, letterInfo.fontSize) != 0) {
