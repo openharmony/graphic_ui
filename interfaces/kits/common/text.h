@@ -138,6 +138,7 @@ class Text : public HeapBase {
 public:
     /** Invalid value for the ellipsis position */
     static constexpr uint16_t TEXT_ELLIPSIS_END_INV = 0xFFFF;
+    static constexpr uint16_t TEXT_ELLIPSIS_UNICODE = 0x2026;
 
     /**
      * @brief A constructor used to create a <b>Text</b> instance.
@@ -486,8 +487,7 @@ protected:
     static constexpr uint16_t MAX_LINE_COUNT = 50;
     static TextLine textLine_[MAX_LINE_COUNT];
 
-    static constexpr int16_t TEXT_ELLIPSIS_DOT_NUM = 3;
-    static constexpr const char* TEXT_ELLIPSIS = "...";
+    static constexpr const char* TEXT_ELLIPSIS = "…";
 
     virtual uint32_t GetTextStrLen();
 
