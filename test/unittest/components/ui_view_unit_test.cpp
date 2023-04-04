@@ -1193,19 +1193,11 @@ HWTEST_F(UIViewTest, Graphic_UIView_Test_GetNextRenderSibling_001, TestSize.Leve
 {
     UIView* view = new UIView();
     UIView* sibling = view->GetNextRenderSibling();
-    if (sibling != nullptr) {
-        EXPECT_NE(0, 0);
-        return;
-    }
-    EXPECT_EQ(0, 0);
+    EXPECT_EQ(sibling, nullptr);
 
     UIViewGroup* viewGroup = new UIViewGroup();
     sibling = viewGroup->GetNextRenderSibling();
-    if (sibling != nullptr) {
-        EXPECT_NE(0, 0);
-        return;
-    }
-    EXPECT_EQ(0, 0);
+    EXPECT_EQ(sibling, nullptr);
     delete view;
     delete viewGroup;
 }
