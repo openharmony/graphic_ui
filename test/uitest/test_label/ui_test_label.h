@@ -65,6 +65,9 @@ private:
     UILabelButton* labelDirectionBtn2_ = nullptr;
     UILabelButton* labelSizeBtn1_ = nullptr;
     UILabelButton* labelSizeBtn2_ = nullptr;
+    UILabelButton* labelLineHeightBtn1_ = nullptr;
+    UILabelButton* labelLineHeightBtn2_ = nullptr;
+    UILabelButton* labelLineHeightBtn3_ = nullptr;
 
     void InnerTestTitle(const char* title);
     UILabelButton* SetUpButton(const char* title, int16_t x, int16_t y, UIViewGroup* uiViewGroup,
