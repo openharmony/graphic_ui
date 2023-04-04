@@ -260,8 +260,8 @@ void Text::DrawEllipsis(BufferInfo& gfxDstBuffer, LabelLineInfo& labelLine, uint
 {
     labelLine.offset.x = 0;
     labelLine.text = TEXT_ELLIPSIS;
-    labelLine.lineLength = TEXT_ELLIPSIS_DOT_NUM;
-    labelLine.length = TEXT_ELLIPSIS_DOT_NUM;
+    labelLine.lineLength = 1;
+    labelLine.length = 1;
     DrawLabel::DrawTextOneLine(gfxDstBuffer, labelLine, letterIndex);
 }
 
@@ -406,13 +406,14 @@ uint16_t Text::GetLine(int16_t width, uint8_t letterSpace, uint16_t ellipsisInde
         lineNum++;
     }
     if ((lineNum != 0) && (ellipsisIndex != TEXT_ELLIPSIS_END_INV)) {
-        uint16_t ellipsisWidth = UIFont::GetInstance()->GetWidth('.', fontId_, fontSize_, 0) + letterSpace;
-        textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
+        uint16_t ellipsisWidth =
+            UIFont::GetInstance()->GetWidth(TEXT_ELLIPSIS_UNICODE, fontId_, fontSize_, 0) + letterSpace;
+        textLine_[lineNum - 1].linePixelWidth += ellipsisWidth;
         if (textLine_[lineNum - 1].linePixelWidth > width) {
-            int16_t newWidth = width - ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
+            int16_t newWidth = width - ellipsisWidth;
             maxLineBytes = CalculateLineWithEllipsis(begin, textLen, newWidth, letterSpace, lineNum, letterIndex,
                                                      sizeSpans_);
-            textLine_[lineNum - 1].linePixelWidth += ellipsisWidth * TEXT_ELLIPSIS_DOT_NUM;
+            textLine_[lineNum - 1].linePixelWidth += ellipsisWidth;
         }
     }
     return lineNum;
@@ -461,13 +462,13 @@ uint32_t Text::GetTextLine(uint32_t begin, uint32_t textLen, int16_t width, uint
 
 uint16_t Text::GetEllipsisIndex(const Rect& textRect, const Style& style)
 {
-    if ((textSize_.y <= textRect.GetHeight()) || (TypedText::GetUTF8CharacterSize(text_) <= TEXT_ELLIPSIS_DOT_NUM)) {
+    if (textSize_.y <= textRect.GetHeight()) {
         return TEXT_ELLIPSIS_END_INV;
     }
     UIFont* fontEngine = UIFont::GetInstance();
-    int16_t letterWidth = fontEngine->GetWidth('.', fontId_, fontSize_, 0) + style.letterSpace_;
+    int16_t letterWidth = fontEngine->GetWidth(TEXT_ELLIPSIS_UNICODE, fontId_, fontSize_, 0) + style.letterSpace_;
     Point p;
-    p.x = textRect.GetWidth() - letterWidth * TEXT_ELLIPSIS_DOT_NUM;
+    p.x = textRect.GetWidth() - letterWidth;
     p.y = textRect.GetHeight();
     int16_t height = style.lineHeight_;
     if (height == 0) {
