@@ -299,7 +299,7 @@ void Text::Draw(BufferInfo& gfxDstBuffer,
     uint16_t lineCount = GetLine(lineMaxWidth, style.letterSpace_, ellipsisIndex, maxLineBytes);
     int16_t lineHeight = style.lineHeight_;
     int16_t curLineHeight;
-    if (lineHeight == 0) {
+    if (lineHeight <= 0) {
         lineHeight = UIFont::GetInstance()->GetHeight(fontId_, fontSize_);
         lineHeight += style.lineSpace_;
     }
