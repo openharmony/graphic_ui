@@ -60,6 +60,9 @@ void UITestLabel::TearDown()
     labelDirectionBtn2_ = nullptr;
     labelSizeBtn1_ = nullptr;
     labelSizeBtn2_ = nullptr;
+    labelLineHeightBtn1_ = nullptr;
+    labelLineHeightBtn2_ = nullptr;
+    labelLineHeightBtn3_ = nullptr;
 }
 
 const UIView* UITestLabel::GetTestView()
@@ -179,6 +182,14 @@ void UITestLabel::UIKitUILabeTestDisplay002()
         label3->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
         labelDirectionBtn1_ = SetUpButton("左往右 ", 24, 240, uiViewGroup);  // 24: x-coordinate; 240: y-coordinate
         labelDirectionBtn2_ = SetUpButton("右往左 ", 116, 240, uiViewGroup); // 116: x-coordinate; 240: y-coordinate
+        UILabel* label4 = new UILabel();
+        uiViewGroup->Add(label4);
+        label4->SetPosition(24, 299, 288, 48); // 24: x-coordinate, 299: y-coordinate, 288: width; 48: height
+        label4->SetText("行高");
+        label4->SetFont(DEFAULT_VECTOR_FONT_FILENAME, FONT_DEFAULT_SIZE);
+        labelLineHeightBtn1_ = SetUpButton("行高20 ", 24, 336, uiViewGroup);  // 24: x-coordinate; 336: y-coordinate
+        labelLineHeightBtn2_ = SetUpButton("行高35 ", 116, 336, uiViewGroup); // 116: x-coordinate; 336: y-coordinate
+        labelLineHeightBtn3_ = SetUpButton("行高50 ", 208, 336, uiViewGroup); // 208: x-coordinate; 336: y-coordinate
         positionY_ += 384;                                                   // 384: increase x-coordinate
         positionX_ -= 312;                                                   // 312: increase y-coordinate
     }
@@ -270,6 +281,12 @@ void UITestLabel::ExpandClick(UIView& view, const ClickEvent& event) const
     } else if (&view == labelSizeBtn2_) {
         uiLabel->SetText("Test of 图形子系统，Test of 图形子系统 ");
         uiLabel->SetLineBreakMode(UILabel::LINE_BREAK_WRAP);
+    } else if (&view == labelLineHeightBtn1_) {
+        uiLabel->SetStyle(STYLE_LINE_HEIGHT, 20); // 20: lineHeight
+    } else if (&view == labelLineHeightBtn2_) {
+        uiLabel->SetStyle(STYLE_LINE_HEIGHT, 35); // 35: lineHeight
+    } else if (&view == labelLineHeightBtn3_) {
+        uiLabel->SetStyle(STYLE_LINE_HEIGHT, 50); // 50: lineHeight
     }
 }
 } // namespace OHOS
