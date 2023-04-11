@@ -26,8 +26,8 @@
     },
     "build": {
       "sub_component": [ 
-        "//foundation/graphic/ui:lite_ui",
-        "//foundation/graphic/ui/test/unittest:lite_graphic_ui_test" 
+        "//foundation/graphic/ui:ui_lite",
+        "//foundation/graphic/ui/test/unittest:arkui_ui_lite_test" 
       ],
       "inner_kits": [],
       "test": []

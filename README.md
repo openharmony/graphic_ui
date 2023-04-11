@@ -72,9 +72,9 @@ Platform Constraints
 
 ```
 # Generate the libui.so file in the out directory of the product folder through GN compilation.
-hb build -T //foundation/graphic/ui:lite_ui -f  #build libui.so
+hb build -T //foundation/graphic/ui:ui_lite -f  #build libui.so
 hb build -T //foundation/graphic/wms/test:sample_ui -f # build UI demo
-hb build -T //foundation/graphic/ui/test/unittest:lite_graphic_ui_test -f # build TDD testcases
+hb build -T //foundation/graphic/ui/test/unittest:arkui_ui_lite_test -f # build TDD testcases
 
 # To compile the Qt library, see the Qt simulator project at graphic/ui/tools/qt/simulator/simulator.pro.
 ```
