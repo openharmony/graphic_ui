@@ -17,7 +17,7 @@
 #define UI_TEST_VECTOR_FONT_H
 
 #include "graphic_config.h"
-#if ENABLE_VECTOR_FONT
+#if defined(ENABLE_VECTOR_FONT) && ENABLE_VECTOR_FONT
 #include "ui_test.h"
 #include "components/ui_scroll_view.h"
 #include "font/ui_font.h"
