@@ -20,7 +20,7 @@
 #include "graphic_config.h"
 #include "ui_test.h"
 
-#if ENABLE_WINDOW
+#if defined(ENABLE_WINDOW) && ENABLE_WINDOW
 namespace OHOS {
 class TestUIDialogButtonListener;
 class TestUIDialogOnCancelListener;
