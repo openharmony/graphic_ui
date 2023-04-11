@@ -13,12 +13,12 @@ import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/config/subsystem/graphic/config.gni")
 import("//build/lite/ndk/ndk.gni")
 
-lite_component("lite_ui") {
+lite_component("ui_lite") {
   features = [ ":ui" ]
   public_deps = features
 }
 
-ndk_lib("lite_ui_ndk") {
+ndk_lib("ui_lite_ndk") {
   lib_extension = ".so"
   deps = [ ":ui" ]
   head_files = [ "interfaces/kits" ]
@@ -248,9 +248,9 @@ lite_library("ui") {
     include_dirs = [ "frameworks" ]
     deps = [
       "//build/lite/config/component/cJSON:cjson_shared",
-      "//foundation/graphic/surface:lite_surface",
+      "//foundation/graphic/surface:surface_lite",
       "//foundation/graphic/utils:lite_graphic_hals",
-      "//foundation/graphic/wms:lite_wms",
+      "//foundation/graphic/wms:window_manager_lite",
       "//third_party/bounds_checking_function:libsec_shared",
       "//third_party/freetype:freetype",
       "//third_party/giflib:libgif",
@@ -276,7 +276,7 @@ lite_library("ui") {
     ldflags = [ "-Wl,-rpath-link=$ohos_root_path/$root_out_dir" ]
   }
 
-  public_deps = [ "//foundation/graphic/utils:lite_graphic_utils" ]
+  public_deps = [ "//foundation/graphic/utils:graphic_utils_lite" ]
   public_configs = [ ":graphic_define_config" ]
   if (board_toolchain_type != "iccarm") {
     cflags = [

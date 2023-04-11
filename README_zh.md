@@ -72,9 +72,9 @@
 
 ```
 # 通过gn编译，在out目录下对应产品的文件夹中生成图形库
-hb build -T //foundation/graphic/ui:lite_ui -f  # 编译libui.so
+hb build -T //foundation/graphic/ui:ui_lite -f  # 编译libui.so
 hb build -T //foundation/graphic/wms/test:sample_ui -f # 编译UI用例
-hb build -T //foundation/graphic/ui/test/unittest:lite_graphic_ui_test -f # 编译TDD用例
+hb build -T //foundation/graphic/ui/test/unittest:arkui_ui_lite_test -f # 编译TDD用例
 
 # 编译qt库可直接参考qt模拟器工程：graphic/ui/tools/qt/simulator/simulator.pro
 ```
