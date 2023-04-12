@@ -22,6 +22,9 @@
 #include "render/render_buffer.h"
 #include "render/render_pixfmt_rgba_blend.h"
 #include "render/render_scanline.h"
+#if ( (defined(ENABLE_CANVAS_EXTEND) && ENABLE_CANVAS_EXTEND) )
+    #include "draw/draw_canvas.h"
+#endif
 
 namespace OHOS {
 UICanvas::UICanvasPath::~UICanvasPath()
