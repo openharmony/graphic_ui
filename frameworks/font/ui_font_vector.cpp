@@ -207,7 +207,7 @@ uint8_t UIFontVector::UnregisterTtcFontInfo(const char* ttcName, const TtfInfo* 
     }
 
     uint8_t i = 0;
-    while (i < FONT_ID_MAX) {
+    while (i < FONT_TTC_MAX) {
         if ((ttcInfos_[i].ttcName != nullptr) && !strncmp(ttcInfos_[i].ttcName, ttcName, TTF_NAME_LEN_MAX)) {
             for (uint8_t j = 0; j < count; j++) {
                 UnregisterFontInfo(ttfInfo[j].ttfName);
