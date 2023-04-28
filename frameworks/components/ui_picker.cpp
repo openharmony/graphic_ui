@@ -364,6 +364,9 @@ uint16_t UIPicker::GetSelected() const
 
 void UIPicker::SetFontId(uint16_t backgroundFontId, uint16_t highlightFontId)
 {
+    if ((backgroundFontId == backgroundFontId_) && (highlightFontId == highlightFontId_)) {
+        return;
+    }
     backgroundFontId_ = backgroundFontId;
     if (backgroundFontName_ != nullptr) {
         UIFree(backgroundFontName_);
@@ -381,18 +384,31 @@ void UIPicker::SetFontId(uint16_t backgroundFontId, uint16_t highlightFontId)
 
 void UIPicker::SetBackgroundFont(const char* name, uint8_t size)
 {
+    if ((name != nullptr) && (backgroundFontName_ != nullptr)) {
+        if ((strcmp(name, backgroundFontName_) == 0) && (size == backgroundFontSize_)) {
+            return;
+        }
+    }
     Text::SetFont(name, size, backgroundFontName_, backgroundFontSize_);
     Refresh();
 }
 
 void UIPicker::SetHighlightFont(const char* name, uint8_t size)
 {
+    if ((name != nullptr) && (highlightFontName_ != nullptr)) {
+        if ((strcmp(name, highlightFontName_) == 0) && (size == highlightFontSize_)) {
+            return;
+        }
+    }
     Text::SetFont(name, size, highlightFontName_, highlightFontSize_);
     Refresh();
 }
 
 void UIPicker::SetTextColor(ColorType backgroundColor, ColorType highlightColor)
 {
+    if ((backgroundColor.full == backgroundColor_.full) && (highlightColor.full == highlightColor_.full)) {
+        return;
+    }
     backgroundColor_ = backgroundColor;
     highlightColor_ = highlightColor;
     Refresh();
@@ -400,6 +416,9 @@ void UIPicker::SetTextColor(ColorType backgroundColor, ColorType highlightColor)
 
 void UIPicker::SetItemHeight(int16_t height)
 {
+    if (height == itemsHeight_) {
+        return;
+    }
     if (height > 0) {
         itemsHeight_ = height;
         Refresh();
@@ -408,6 +427,9 @@ void UIPicker::SetItemHeight(int16_t height)
 
 void UIPicker::SetWidth(int16_t width)
 {
+    if (width == UIView::GetWidth()) {
+        return;
+    }
     if (width > 0) {
         UIView::SetWidth(width);
         isWidthSet_ = true;
@@ -417,6 +439,9 @@ void UIPicker::SetWidth(int16_t width)
 
 void UIPicker::SetHeight(int16_t height)
 {
+    if (height == UIView::GetHeight()) {
+        return;
+    }
     if (height > 0) {
         UIView::SetHeight(height);
         isHeightSet_ = true;
@@ -426,12 +451,18 @@ void UIPicker::SetHeight(int16_t height)
 
 void UIPicker::SetLoopState(bool state)
 {
+    if (state == list_.GetLoopState()) {
+        return;
+    }
     list_.SetLoopState(state);
     Refresh();
 }
 
 void UIPicker::SetDirect(UITextLanguageDirect direct)
 {
+    if (direct == direct_) {
+        return;
+    }
     direct_ = direct;
     Refresh();
 }
