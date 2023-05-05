@@ -98,10 +98,10 @@ static_library("framework") {
 
   public_deps = [
     "//build/lite/config/component/cJSON:cjson_shared",
-    "//foundation/graphic/ui:ui",
-    "//foundation/graphic/wms:wms_client",
+    "//foundation/arkui/ui_lite:ui",
+    "//foundation/window/window_manager_lite:wms_client",
   ]
-  configs += [ "//foundation/graphic/ui:graphic_define_config" ]
+  configs += [ "//foundation/arkui/ui_lite:graphic_define_config" ]
   public_configs = [ ":graphic_test_config" ]
 }
 
@@ -126,10 +126,10 @@ static_library("auto_framework") {
   ]
   public_deps = [
     "//build/lite/config/component/cJSON:cjson_shared",
-    "//foundation/graphic/ui:ui",
-    "//foundation/graphic/wms:wms_client",
+    "//foundation/arkui/ui_lite:ui",
+    "//foundation/window/window_manager_lite:wms_client",
   ]
-  configs += [ "//foundation/graphic/ui:graphic_define_config" ]
+  configs += [ "//foundation/arkui/ui_lite:graphic_define_config" ]
   public_configs = [ ":graphic_test_config" ]
 }
 

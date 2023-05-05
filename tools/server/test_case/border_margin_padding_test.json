@@ -29,7 +29,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -250],
                     "saveCheckPoint": true
@@ -59,7 +59,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -500],
                     "saveCheckPoint": true
@@ -89,7 +89,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -750],
                     "saveCheckPoint": true
@@ -119,7 +119,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -1000],
                     "saveCheckPoint": true
@@ -149,7 +149,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -1250],
                     "saveCheckPoint": true
@@ -179,7 +179,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -1500],
                     "saveCheckPoint": true
@@ -209,7 +209,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -1750],
                     "saveCheckPoint": true
@@ -239,7 +239,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -2000],
                     "saveCheckPoint": true
@@ -269,7 +269,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -2250],
                     "saveCheckPoint": true
@@ -299,7 +299,7 @@
             "pageNav": ["Border_Margin_Padding"],
             "testSteps": [
 			    {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -2500],
                     "saveCheckPoint": true

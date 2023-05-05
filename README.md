@@ -24,7 +24,7 @@ The graphics UI directly calls the HAL API or uses the client provided by the Wi
 ## Directory Structure<a name="section161941989596"></a>
 
 ```
-/foundation/graphic/ui
+/foundation/arkui/ui_lite
 ├── frameworks                  # Framework code
 │   ├── animator                # Animator module
 │   ├── common                  # Common module
@@ -53,7 +53,7 @@ The graphics UI directly calls the HAL API or uses the client provided by the Wi
 │   ├── framework
 │   │   ├── include             # Header files for the test framework
 │   │   └── src                 # Source code for the test framework
-│   ├── uitest                  # Display effect test (The executable program is in foundation/graphic/wms/test:sample_ui.)
+│   ├── uitest                  # Display effect test (The executable program is in foundation/window/window_manager_lite/test:sample_ui.)
 │   │   └── test_xxx            # Specific UI effect test
 │   └── unittest                # Unit testing
 │       └── xxx                 # Unit testing for a specific UI component
@@ -72,11 +72,11 @@ Platform Constraints
 
 ```
 # Generate the libui.so file in the out directory of the product folder through GN compilation.
-hb build -T //foundation/graphic/ui:ui_lite -f  #build libui.so
-hb build -T //foundation/graphic/wms/test:sample_ui -f # build UI demo
-hb build -T //foundation/graphic/ui/test/unittest:arkui_ui_lite_test -f # build TDD testcases
+hb build -T //foundation/arkui/ui_lite:ui_lite -f  #build libui.so
+hb build -T //foundation/indow/window_manager_lite/test:sample_ui -f # build UI demo
+hb build -T //foundation/arkui/ui_lite/test/unittest:arkui_ui_lite_test -f # build TDD testcases
 
-# To compile the Qt library, see the Qt simulator project at graphic/ui/tools/qt/simulator/simulator.pro.
+# To compile the Qt library, see the Qt simulator project at arkui/ui_lite/tools/qt/simulator/simulator.pro.
 ```
 
 ## Description<a name="section1312121216216"></a>
@@ -93,17 +93,17 @@ Components are classified into basic components and container components.
 
 ### Usage<a name="section129654513264"></a>
 
-For details about how to use components and APIs of graphics, see the examples provided in  **foundation/graphic/ui/test/uitest**.
+For details about how to use components and APIs of graphics, see the examples provided in  **foundation/arkui/ui_lite/test/uitest**.
 
--   The Qt project can be debugged in the Windows environment. [User Guide](https://gitee.com/openharmony/graphic_ui/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/%E5%8A%A0%E5%85%A5%E6%8C%87%E5%BC%95)
+-   The Qt project can be debugged in the Windows environment. [User Guide](https://gitee.com/openharmony/arkui_ui_lite/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/%E5%8A%A0%E5%85%A5%E6%8C%87%E5%BC%95)
 
     Project file path:
 
     ```
-    graphic/ui/tools/qt/simulator/simulator.pro
+    arkui/ui_lite/tools/qt/simulator/simulator.pro
     ```
 
--   For other debugging environments, you can run  **foundation/graphic/wms/test:sample\_ui**.
+-   For other debugging environments, you can run  **foundation/window/window_manager_lite/test:sample\_ui**.
 
     After the building is successful, the executable program  **out/\[product\_name\]/dev\_tools/bin/sample\_ui**  is obtained. You can run the program in an environment to view the display effect of a specific component.
 

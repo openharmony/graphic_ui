@@ -9,64 +9,83 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/ohos.gni")
-import("//foundation/graphic/ui/ui.gni")
-import("//foundation/graphic/utils/utils.gni")
-ohos_static_library("libupdater_layout") {
-  defines = [
-    "__LITEOS_M__",
-    "ENABLE_BITMAP_FONT = 0",
-    "ENABLE_ICU = 0",
-    "ENABLE_JPEG_AND_PNG = 1",
-    "ENABLE_MULTI_FONT = 0",
-    "ENABLE_SHAPING = 0",
-    "ENABLE_STATIC_FONT = 0",
-    "ENABLE_VECTOR_FONT = 1",
-  ]
+if (os_level == "standard") {
+  import("//build/ohos.gni")
+  import("//foundation/arkui/ui_lite/ui.gni")
+  import("//foundation/graphic/graphic_utils_lite/utils.gni")
 
-  sources = graphic_ui_sources + graphic_utils_sources
-  sources -= [
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_abstract_clock.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_abstract_scroll.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_abstract_scroll_bar.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_analog_clock.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_arc_label.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_arc_scroll_bar.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_axis.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_box_scroll_bar.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_canvas.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_chart.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_checkbox.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_circle_progress.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_dialog.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_digital_clock.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_list.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_picker.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_qrcode.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_radio_button.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_repeat_button.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_scroll_view.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_slider.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_surface_view.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_swipe_view.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_texture_mapper.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_time_picker.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/components/ui_toggle_button.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dfx/event_injector.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dfx/key_event_injector.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dfx/performance_task.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dfx/point_event_injector.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dfx/ui_dump_dom_tree.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dock/ohos/ohos_input_device.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dock/vibrator_manager.cpp",
-    "$GRAPHIC_UI_PATH/frameworks/dock/virtual_input_device.cpp",
-  ]
-  include_dirs = graphic_ui_include_dirs + graphic_utils_include_dirs
-  include_dirs += [ "//foundation/graphic/ui/frameworks" ]
-  deps = [
-    "//third_party/bounds_checking_function:libsec_static",
-    "//third_party/freetype:freetype_static",
-    "//third_party/libjpeg-turbo:turbojpeg_static",
-    "//third_party/libpng:libpng",
-  ]
+  config("libupdater_layout_header_files") {
+    visibility = [ ":*" ]
+    include_dirs = arkui_ui_lite_include_dirs + graphic_utils_include_dirs
+    include_dirs += [ "//foundation/arkui/ui_lite/frameworks" ]
+  }
+
+  ohos_shared_library("libupdater_layout") {
+    defines = [
+      "__LITEOS_M__",
+      "ENABLE_BITMAP_FONT = 0",
+      "ENABLE_ICU = 0",
+      "ENABLE_JPEG_AND_PNG = 1",
+      "ENABLE_MULTI_FONT = 0",
+      "ENABLE_SHAPING = 0",
+      "ENABLE_STATIC_FONT = 0",
+      "ENABLE_VECTOR_FONT = 1",
+    ]
+
+    sources = arkui_ui_lite_sources + graphic_utils_sources
+    sources -= [
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_abstract_clock.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_abstract_scroll.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_abstract_scroll_bar.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_analog_clock.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_arc_label.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_arc_scroll_bar.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_axis.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_box_scroll_bar.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_canvas.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_chart.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_checkbox.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_circle_progress.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_dialog.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_digital_clock.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_list.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_picker.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_qrcode.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_radio_button.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_repeat_button.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_scroll_view.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_slider.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_surface_view.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_swipe_view.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_texture_mapper.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_time_picker.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/components/ui_toggle_button.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dfx/event_injector.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dfx/key_event_injector.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dfx/performance_task.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dfx/point_event_injector.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dfx/ui_dump_dom_tree.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dock/ohos/ohos_input_device.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dock/vibrator_manager.cpp",
+      "$ARKUI_UI_LITE_PATH/frameworks/dock/virtual_input_device.cpp",
+    ]
+    include_dirs = arkui_ui_lite_include_dirs + graphic_utils_include_dirs
+    include_dirs += [ "//foundation/arkui/ui_lite/frameworks" ]
+
+    public_configs = [ ":libupdater_layout_header_files" ]
+
+    deps = [
+      "//third_party/bounds_checking_function:libsec_static",
+      "//third_party/freetype:freetype_static",
+      "//third_party/libjpeg-turbo:turbojpeg_static",
+      "//third_party/libpng:libpng",
+    ]
+
+    install_images = [ "updater" ]
+    part_name = "ui_lite"
+    subsystem_name = "arkui"
+  }
+} else {
+  group("libupdater_layout") {
+  }
 }
