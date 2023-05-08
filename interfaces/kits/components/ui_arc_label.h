@@ -328,6 +328,19 @@ public:
     }
 
     /**
+     * @brief Is it compatible with older versions.
+     *
+     * @param compatibilityMode Indicates compatible with older versions.
+     */
+    void SetCompatibilityMode(bool compatibilityMode)
+    {
+        if (compatibilityMode_ != compatibilityMode) {
+            compatibilityMode_ = compatibilityMode;
+            RefreshArcLabel();
+        }
+    }
+
+    /**
      * @brief Draws an arc text.
      *
      * @param invalidatedArea Indicates the area to draw.
@@ -338,6 +351,7 @@ public:
 
 protected:
     Text* arcLabelText_;
+    bool compatibilityMode_;
 
     virtual void InitArcLabelText()
     {

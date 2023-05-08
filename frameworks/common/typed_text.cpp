@@ -162,6 +162,22 @@ float TypedText::GetAngleForArcLen(float len,
     return (direct == TEXT_DIRECT_LTR) ? angle : -angle;
 }
 
+float TypedText::GetAngleForArcLen(uint16_t letterWidth, int16_t letterSpace, uint16_t radius)
+{
+    if (radius == 0) {
+        return 0.0f;
+    }
+    const int TWOX_COEFFICIENT = 2;
+    const float FLOATING_POINT_TWO = 2.0f;
+    float sinA = (letterWidth + letterSpace) / (FLOATING_POINT_TWO * radius);
+    float a = asin(sinA);
+    if (a >= -EPSINON && a <= EPSINON) {
+        return 0.0f;
+    }
+
+    return static_cast<float>(TWOX_COEFFICIENT * a * SEMICIRCLE_IN_DEGREE / UI_PI);
+}
+
 void TypedText::GetArcLetterPos(const Point& arcCenter, uint16_t radius, float angle, float& posX, float& posY)
 {
     posX = arcCenter.x + (static_cast<float>(radius) * Sin(angle));
