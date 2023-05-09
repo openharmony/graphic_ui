@@ -24,6 +24,7 @@
 namespace OHOS {
 UIArcLabel::UIArcLabel()
     : arcLabelText_(nullptr),
+      compatibilityMode_(true),
       needRefresh_(false),
       textSize_({0, 0}),
       radius_(0),
@@ -138,7 +139,8 @@ void UIArcLabel::DrawArcText(BufferInfo& gfxDstBuffer,
     center.x = arcTextInfo_.arcCenter.x + GetRect().GetX();
     center.y = arcTextInfo_.arcCenter.y + GetRect().GetY();
     DrawLabel::DrawArcText(gfxDstBuffer, mask, arcLabelText_->GetText(), center, arcLabelText_->GetFontId(),
-                           arcLabelText_->GetFontSize(), arcTextInfo, orientation, *style_, opaScale);
+                           arcLabelText_->GetFontSize(), arcTextInfo,
+                           orientation, *style_, opaScale, compatibilityMode_);
 }
 
 Rect UIArcLabel::GetArcTextRect(const char* text, uint16_t fontId, uint8_t fontSize, const Point& arcCenter,
@@ -173,8 +175,11 @@ void UIArcLabel::ReMeasure()
     int16_t arcTextWidth = textRect.GetWidth();
     int16_t arcTextHeight = textRect.GetHeight();
 
-    SetPosition(textRect.GetX(), textRect.GetY());
-    Resize(arcTextWidth, arcTextHeight);
+    if (compatibilityMode_) {
+        SetPosition(textRect.GetX(), textRect.GetY());
+        Resize(arcTextWidth, arcTextHeight);
+    }
+
     arcTextInfo_.arcCenter.x = arcCenter_.x - GetX() + style_->borderWidth_ + style_->paddingLeft_;
     arcTextInfo_.arcCenter.y = arcCenter_.y - GetY() + style_->borderWidth_ + style_->paddingTop_;
     textSize_.x = arcTextWidth;
@@ -189,7 +194,11 @@ void UIArcLabel::MeasureArcTextInfo()
         return;
     }
     uint16_t letterHeight = UIFont::GetInstance()->GetHeight(arcLabelText_->GetFontId(), arcLabelText_->GetFontSize());
-    arcTextInfo_.radius = ((orientation_ == TextOrientation::INSIDE) ? radius_ : (radius_ - letterHeight));
+    if (compatibilityMode_) {
+        arcTextInfo_.radius = ((orientation_ == TextOrientation::INSIDE) ? radius_ : (radius_ - letterHeight));
+    } else {
+        arcTextInfo_.radius = radius_;
+    }
     if (arcTextInfo_.radius == 0) {
         return;
     }
