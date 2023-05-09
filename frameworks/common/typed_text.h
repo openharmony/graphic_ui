@@ -74,6 +74,8 @@ public:
                                    UITextLanguageDirect direct,
                                    TextOrientation orientation);
 
+    static float GetAngleForArcLen(uint16_t letterWidth, int16_t letterSpace, uint16_t radius);
+
     static void GetArcLetterPos(const Point& arcCenter, uint16_t radius, float angle, float& posX, float& posY);
 
 #else  // _FONT_TOOL

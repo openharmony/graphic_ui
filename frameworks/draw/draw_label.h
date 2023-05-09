@@ -30,7 +30,21 @@ public:
 
     static void DrawArcText(BufferInfo& gfxDstBuffer, const Rect& mask, const char* text, const Point& arcCenter,
                             uint16_t fontId, uint8_t fontSize, const ArcTextInfo arcTextInfo,
-                            TextOrientation orientation, const Style& style, uint8_t opaScale);
+                            TextOrientation orientation, const Style& style, uint8_t opaScale, bool compatibilityMode);
+
+    static bool CalculateAngle(uint16_t letterWidth,
+                               uint16_t letterHeight,
+                               int16_t letterSpace,
+                               const ArcTextInfo arcTextInfo,
+                               bool xorFlag,
+                               uint32_t index,
+                               TextOrientation orientation,
+                               float& posX,
+                               float& posY,
+                               float& rotateAngle,
+                               float& angle,
+                               const Point& arcCenter,
+                               bool compatibilityMode);
 
     static void DrawLetterWithRotate(BufferInfo& gfxDstBuffer,
                                      const Rect& mask,
@@ -40,7 +54,8 @@ public:
                                      const Point& pos,
                                      int16_t rotateAngle,
                                      const ColorType& color,
-                                     OpacityType opaScale);
+                                     OpacityType opaScale,
+                                     bool compatibilityMode);
 
     static uint8_t GetLineMaxLetterSize(const char* text, uint16_t lineLength, uint16_t fontId, uint8_t fontSize,
                                         uint16_t letterIndex, SizeSpan* sizeSpans);
