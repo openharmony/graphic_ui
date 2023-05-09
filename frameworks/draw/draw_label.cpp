@@ -224,18 +224,15 @@ bool DrawLabel::CalculateAngle(uint16_t letterWidth,
         TypedText::GetArcLetterPos(arcCenter, arcTextInfo.radius, angle, posX, posY);
         angle += incrementAngle;
     } else {
-        if ((index == arcTextInfo.lineStart) && xorFlag) {
-            angle += TypedText::GetAngleForArcLen(letterWidth, letterSpace, arcTextInfo.radius);
-        }
         float incrementAngle = TypedText::GetAngleForArcLen(letterWidth, letterSpace, arcTextInfo.radius);
         if (incrementAngle >= -EPSINON && incrementAngle <= EPSINON) {
             return false;
         }
 
         float fineTuningAngle = incrementAngle / DIVIDER_BY_TWO;
-        rotateAngle = xorFlag ? (angle - SEMICIRCLE_IN_DEGREE - fineTuningAngle) : (angle + fineTuningAngle);
+        rotateAngle = xorFlag ? (angle + fineTuningAngle) : (angle - SEMICIRCLE_IN_DEGREE - fineTuningAngle);
         TypedText::GetArcLetterPos(arcCenter, arcTextInfo.radius, angle, posX, posY);
-        angle = xorFlag ? (angle - incrementAngle) : (angle + incrementAngle);
+        angle = xorFlag ? (angle + incrementAngle) : (angle - incrementAngle);
     }
 
     return true;
