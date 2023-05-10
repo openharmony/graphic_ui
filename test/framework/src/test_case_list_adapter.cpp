@@ -27,7 +27,7 @@ namespace {
 const uint16_t TESTCASE_BUTTON_HEIGHT = 64;
 const uint16_t STYLE_BORDER_WIDTH_VALUE = 4;
 const uint16_t STYLE_BORDER_RADIUS_VALUE = 12;
-const char* g_uiTestId = "graphic_ui_test_case_id";
+const char* g_uiTestId = "arkui_ui_lite_test_case_id";
 } // namespace
 
 uint16_t TestCaseListAdapter::GetCount()

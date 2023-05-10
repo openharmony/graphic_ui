@@ -5,25 +5,25 @@
             "pageNav": ["UIQrcode"],
             "testSteps": [
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -150],
                     "saveCheckPoint": true
                 },
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -300],
                     "saveCheckPoint": true
                 },
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -450],
                     "saveCheckPoint": true
                 },
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -600],
                     "saveCheckPoint": true
