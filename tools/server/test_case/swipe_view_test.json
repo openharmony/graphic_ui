@@ -65,7 +65,7 @@
             "pageNav": ["UISwipeView"],
             "testSteps": [
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -100],
                     "saveCheckPoint": true
@@ -131,7 +131,7 @@
             "pageNav": ["UISwipeView"],
             "testSteps": [
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -300],
                     "saveCheckPoint": true
@@ -179,7 +179,7 @@
             "pageNav": ["UISwipeView"],
             "testSteps": [
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -500],
                     "saveCheckPoint": true
@@ -191,7 +191,7 @@
             "pageNav": ["UISwipeView"],
             "testSteps": [
                 {
-                    "viewID": "graphic_ui_test_case_id",
+                    "viewID": "arkui_ui_lite_test_case_id",
                     "eventID": 1,
                     "eventValue": [0, -630],
                     "saveCheckPoint": true

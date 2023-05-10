@@ -15,7 +15,7 @@
 
 详情：
 1. 新增DFX维测能力：UIKit支持显示控件轮廓
-    代码路径: graphic_ui/interfaces/kits/dfx/ui_view_bounds.h；
+    代码路径: arkui_ui_lite/interfaces/kits/dfx/ui_view_bounds.h；
     
     使用方式：调用 SetShowState 控制是否显示边框
 
@@ -27,7 +27,7 @@
 
    抽象出一套绘制接口作为南向API，新芯片显示硬件加速能力需要实现这套接口。
 
-   代码路径：/foundation/graphic/ui/interfaces/innerkits/engines/gfx/gfx_engine_manager.h
+   代码路径：/foundation/arkui/ui_lite/interfaces/innerkits/engines/gfx/gfx_engine_manager.h
 
 4. 组件UIScrollView/UIList新增进度条功能，接口变更如下：
 

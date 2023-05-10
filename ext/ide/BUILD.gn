@@ -11,26 +11,26 @@
 
 import("//build/lite/config/subsystem/graphic/config.gni")
 import("//build/ohos.gni")
-import("//foundation/graphic/ui/ui.gni")
-import("//foundation/graphic/utils/utils.gni")
+import("//foundation/arkui/ui_lite/ui.gni")
+import("//foundation/graphic/graphic_utils_lite/utils.gni")
 
 config("graphic_public_config_ide") {
-  include_dirs = graphic_ui_include_dirs
+  include_dirs = arkui_ui_lite_include_dirs
   include_dirs += [
-    "$GRAPHIC_UI_PATH/frameworks",
-    "$GRAPHIC_UI_PATH/frameworks/dock",
-    "$GRAPHIC_UI_PATH/interfaces/innerkits/common",
-    "$GRAPHIC_UI_PATH/interfaces/innerkits/dock",
-    "$GRAPHIC_UI_PATH/interfaces/innerkits/font",
-    "$GRAPHIC_UI_PATH/interfaces/kits/animator",
-    "$GRAPHIC_UI_PATH/interfaces/kits/common",
-    "$GRAPHIC_UI_PATH/interfaces/kits/components",
-    "$GRAPHIC_UI_PATH/interfaces/kits/dfx",
-    "$GRAPHIC_UI_PATH/interfaces/kits/events",
-    "$GRAPHIC_UI_PATH/interfaces/kits/font",
-    "$GRAPHIC_UI_PATH/interfaces/kits/layout",
-    "$GRAPHIC_UI_PATH/interfaces/kits/themes",
-    "$GRAPHIC_UI_PATH/interfaces/kits/window",
+    "$ARKUI_UI_LITE_PATH/frameworks",
+    "$ARKUI_UI_LITE_PATH/frameworks/dock",
+    "$ARKUI_UI_LITE_PATH/interfaces/innerkits/common",
+    "$ARKUI_UI_LITE_PATH/interfaces/innerkits/dock",
+    "$ARKUI_UI_LITE_PATH/interfaces/innerkits/font",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/animator",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/common",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/components",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/dfx",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/events",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/font",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/layout",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/themes",
+    "$ARKUI_UI_LITE_PATH/interfaces/kits/window",
   ]
   defines = [
     "ENABLE_VECTOR_FONT=1",
@@ -54,8 +54,8 @@ config("graphic_config_ide") {
 }
 
 ohos_static_library("ui_ide") {
-  sources = graphic_ui_sources
-  include_dirs = [ "//foundation/graphic/surface/interfaces/kits" ]
+  sources = arkui_ui_lite_sources
+  include_dirs = [ "//foundation/graphic/surface_lite/interfaces/kits" ]
   deps = [
     "//third_party/bounds_checking_function:libsec_static",
     "//third_party/cJSON:cjson_static",
@@ -77,7 +77,7 @@ config("graphic_utils_public_config_ide") {
 
 ohos_static_library("graphic_utils_static_ide") {
   sources = graphic_utils_sources
-  include_dirs = [ "$GRAPHIC_UTILS_PATH/frameworks" ]
+  include_dirs = [ "$GRAPHIC_GRAPHIC_UTILS_LITE_PATH/frameworks" ]
   public_configs = [ ":graphic_utils_public_config_ide" ]
   deps = [ "//third_party/bounds_checking_function:libsec_static" ]
   configs = [ ":graphic_config_ide" ]

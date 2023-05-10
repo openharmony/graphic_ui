@@ -24,7 +24,7 @@
 ## 目录<a name="section161941989596"></a>
 
 ```
-/foundation/graphic/ui
+/foundation/arkui/ui_lite
 ├── frameworks                  # 框架代码
 │   ├── animator                # 动画模块
 │   ├── common                  # 公共模块
@@ -53,7 +53,7 @@
 │   ├── framework
 │   │   ├── include             # 测试框架头文件
 │   │   └── src                 # 测试框架源码
-│   ├── uitest                  # 显示效果测试(可执行程序在foundation/graphic/wms/test:sample_ui)
+│   ├── uitest                  # 显示效果测试(可执行程序在foundation/window/window_manager_lite/test:sample_ui)
 │   │   └── test_xxx            # 具体UI组件效果测试
 │   └── unittest                # 单元测试
 │       └── xxx                 # 具体UI组件单元测试
@@ -72,11 +72,11 @@
 
 ```
 # 通过gn编译，在out目录下对应产品的文件夹中生成图形库
-hb build -T //foundation/graphic/ui:ui_lite -f  # 编译libui.so
-hb build -T //foundation/graphic/wms/test:sample_ui -f # 编译UI用例
-hb build -T //foundation/graphic/ui/test/unittest:arkui_ui_lite_test -f # 编译TDD用例
+hb build -T //foundation/arkui/ui_lite:ui_lite -f  # 编译libui.so
+hb build -T //foundation/window/window_manager_lite/test:sample_ui -f # 编译UI用例
+hb build -T //foundation/arkui/ui_lite/test/unittest:arkui_ui_lite_test -f # 编译TDD用例
 
-# 编译qt库可直接参考qt模拟器工程：graphic/ui/tools/qt/simulator/simulator.pro
+# 编译qt库可直接参考qt模拟器工程：arkui/ui_lite/tools/qt/simulator/simulator.pro
 ```
 
 ## 说明<a name="section1312121216216"></a>
@@ -93,17 +93,17 @@ hb build -T //foundation/graphic/ui/test/unittest:arkui_ui_lite_test -f # 编译
 
 ### 使用说明<a name="section129654513264"></a>
 
-foundation/graphic/ui/test/uitest中提供了图形所有组件和功能接口的使用范例。
+foundation/arkui/ui_lite/test/uitest中提供了图形所有组件和功能接口的使用范例。
 
--   Windows环境可运行QT工程调试，详见[加入指引](https://gitee.com/openharmony/graphic_ui/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/%E5%8A%A0%E5%85%A5%E6%8C%87%E5%BC%95)
+-   Windows环境可运行QT工程调试，详见[加入指引](https://gitee.com/openharmony/arkui_ui_lite/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/%E5%8A%A0%E5%85%A5%E6%8C%87%E5%BC%95)
 
     工程文件路径：
 
     ```
-    graphic/ui/tools/qt/simulator/simulator.pro
+    arkui/ui_lite/tools/qt/simulator/simulator.pro
     ```
 
--   其他调试环境可以编译运行foundation/graphic/wms/test:sample\_ui
+-   其他调试环境可以编译运行foundation/window/window_manager_lite/test:sample\_ui
 
     编译成功后得到可执行程序out/\[product\_name\]/dev\_tools/bin/sample\_ui，在实际环境上运行即可观察对应组件显示效果。
 
@@ -112,10 +112,10 @@ foundation/graphic/ui/test/uitest中提供了图形所有组件和功能接口�
 
 [图形子系统](https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/%E5%9B%BE%E5%BD%A2%E5%AD%90%E7%B3%BB%E7%BB%9F.md)
 
-[graphic_wms](https://gitee.com/openharmony/graphic_wms/blob/master/README_zh.md)
+[window_window_manager_lite](https://gitee.com/openharmony/window_window_manager_lite/blob/master/README.md)
 
-[graphic_surface](https://gitee.com/openharmony/graphic_surface/blob/master/README_zh.md)
+[graphic_surface_lite](https://gitee.com/openharmony/graphic_surface_lite/blob/master/README.md)
 
-**graphic_ui**
+**arkui_ui_lite**
 
-[graphic_utils](https://gitee.com/openharmony/graphic_utils/blob/master/README_zh.md)
+[graphic_graphic_utils_lite](https://gitee.com/openharmony/graphic_graphic_utils_lite/blob/master/README.md)
